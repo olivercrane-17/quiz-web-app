@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| Status | v1.0, binding for all content work |
+| Status | v1.1, binding for all content work. Revised after review; the Review log at the end records each call |
 | Owner | Head of content (editor-in-chief) |
 | Date | 31 October 2026 |
-| Who reads it | Writer, estimator, fact-checker, editor, list-builder, scheduler and auditor agents, plus the owner |
+| Who reads it | Writer, estimator, fact-checker, editor, list-builder, scheduler, auditor and planter agents, plus the owner |
 | Inputs | [00-PROJECT-BRIEF.md](./00-PROJECT-BRIEF.md), [01-ENGINEERING-CONSTRAINTS.md](./01-ENGINEERING-CONSTRAINTS.md), [02-PRODUCT-DECISIONS.md](./02-PRODUCT-DECISIONS.md) (binding), [PRD.md](./PRD.md) §3.13, §3.18 and §4, [research/SYNTHESIS.md](./research/SYNTHESIS.md) §7, [research/07-content-excellence.md](./research/07-content-excellence.md), [research/gap-3-difficulty-before-players.md](./research/gap-3-difficulty-before-players.md) |
 
 This is the rulebook for every question we publish: the 1,500 practice items, the 360 Daily mysteries, the 120 encores, the 120 room-pack questions and the twelve closed answer lists. It tells writers what a good item looks like, checkers how to prove one right, the editor when to cut, and the scheduler what can run on which day.
@@ -24,38 +24,42 @@ This is the rulebook for every question we publish: the 1,500 practice items, th
 4. Global English: Oxford spelling, months spelled out, metric units with imperial where it helps, and no single country's local knowledge.
 5. Distractors are real confusions of the same kind as the answer. Never jokes, always definitely wrong.
 6. Every explanation adds a surprising fact in 35 words or fewer.
-7. Two independent checkers, blind to each other and to the writer's notes. Any doubt means cut or rewrite.
-8. Never invent a source or a URL. Evidence is a dataset record we downloaded, a search result we were given, or a checker's knowledge, labelled as such.
-9. Sealed content never lands in git in plain text. The repository is public.
+7. Two independent checkers, blind to each other and to the writer's notes, and a third check (pass D) on every Daily item before it freezes. Any doubt means cut or rewrite.
+8. Never invent a source or a URL. Evidence is a dataset record we downloaded, a search result we were given, a calculation anyone can re-run, or a checker's knowledge, labelled as such.
+9. Sealed content never lands in git in plain text, and nothing public points at it. The repository is public.
 10. Change the meaning, change the ID. IDs are never reused.
 
 ### 0.2 Roles
 
-One agent run holds one role on any given item. Where the orchestrator can choose models, checker B runs on a different model family or size from the writer, because shared models make shared mistakes ([SYNTHESIS §7.6](./research/SYNTHESIS.md)).
+One agent run holds one role on any given item. Where the orchestrator can choose models, checker B and the Daily auditor (pass D) run on a different model family or size from the writer, because shared models make shared mistakes ([SYNTHESIS §7.6](./research/SYNTHESIS.md)). Every check record names its model (§9.8), so an audit can confirm the rule held.
 
 | Role | Does | Never does |
 |---|---|---|
-| Writer | Drafts a batch, lists every claim, runs the lint, self-checks (§9.3) | Checks their own items, or sees checker records before both are complete |
+| Writer | Drafts a batch, lists every claim, runs the lint, self-checks (§9.3), files list requests for missing entities (§2.12) | Checks their own items, sees checker records before both are complete, or mints an entity id |
 | Estimator | Predicts difficulty from a blind packet (§8.5) | Edits text, or uses its own solve rate as difficulty |
-| Fact-checker A ("confirm") | Verifies every claim as a subject expert and gathers external evidence for the high-risk ones (§9.4) | Sees the writer's notes, checker B's record or the estimate; edits the item |
+| Fact-checker A ("confirm") | Verifies every claim as a subject expert and gathers external evidence for the high-risk ones (§9.4) | Sees the writer's notes, checker B's record or the estimate; asks for a packet stage before recording the one before; edits the item |
 | Fact-checker B ("refute") | Verifies every claim while trying to break the item (§9.4) | The same as checker A |
-| Editor | Style, balance, dedupe calls, resolving disagreements, accepting or cutting; owns the batch register and the myths list | Accepts an item a checker failed without new evidence; edits an item they wrote or checked |
-| List builder | Builds and checks the answer lists (§2.10) | Types a Wikidata id from memory |
-| Scheduler | Assembles Dailies and room packs, runs the day check (§10) | Schedules an item that isn't `active` |
-| Auditor | Runs the seeded audits (§9.10) | Audits a batch they wrote or checked |
+| Editor | Style, balance, dedupe calls, merging the checkers' claim lists, resolving disagreements, accepting or cutting, setting `reviewBy`; owns the batch register, the myths list and the reference files | Accepts an item a checker failed without new evidence; edits an item they wrote or checked |
+| List builder | Builds and checks the answer lists, mints every entity id, fills list requests (§2.10, §2.12), and works the queue of "My guess should have counted" reports (§9.10) | Types a Wikidata id from memory, or names a mystery, a mystery batch or a list request in an entry's `source` |
+| Scheduler | Assembles Dailies and room packs, runs the feasibility solver and the day check (§10) | Schedules an item that isn't `active`, or freezes a Daily before every item on it has passed D |
+| Auditor | Runs the seeded audits and pass D (§9.9, §9.10) | Audits or D-checks an item they wrote, checked, followed up or tiebroke |
+| Planter | Writes the planted items for a seeded audit (§9.10) | Writes or checks real items in the batches that audit samples, or puts a planted item anywhere under `content/` |
 
 ### 0.3 The pipeline
 
 | Step | Who | Output | Gate to the next step |
 |---|---|---|---|
-| 1. Draft | Writer | Item files, every item `draft` | Lint clean; claims listed |
-| 2. Self-check | Writer | `writerNotes` on every item | The §9.3 checklist is complete |
-| 3. Packets | Tooling | One blind packet per checker and estimator, each hashed | Packets exist |
+| 1. Draft | Writer | Item files, every item `draft` | Lint clean; claims listed; every entity id copied from a published list, or a list request filed for it (§2.12) |
+| 2. Self-check | Writer | `selfCheck` and `writerNotes` on every item | All eleven `selfCheck` codes are `true` (§9.3); the packet builder refuses anything less |
+| 3. Packets | Tooling | Staged blind packets for each checker, a single-stage packet for each estimator, every stage hashed (§9.4) | Packets exist |
 | 4. Estimate | Estimator | `predicted` on every item | None; runs beside step 5 |
 | 5. Check | Checkers A and B, in parallel | Two check records per item | Both records complete |
-| 6. Resolve | Editor | A decision per item (§9.7) | Every item accepted, rewritten or cut |
+| 6. Merge and resolve | Editor | The merged claim list, any follow-ups, and a decision per item (§9.7, §9.8) | Every item accepted, rewritten or cut |
 | 7. Accept | Editor, then the validator | `status: active` | The acceptance rule in §9.9 passes |
 | 8. Pack or schedule | Tooling and the scheduler | Practice packs, or entries in the sealed pool | §10 |
+| 9. Pass D | Auditor | A D record on every item of a scheduled Daily or spare set | §9.9, rule 7, before the Daily freezes (§10.7) |
+
+For a sealed batch, every step ends with `npm run content:seal` and a checkpoint commit of the envelopes, so losing the sandbox costs at most one step's work (§11.2).
 
 ---
 
@@ -100,7 +104,7 @@ Region rule for every category: everything at launch is tagged `global`, which m
 ### 1.4 Nature & Animals (`nat`)
 - **Covers:** living things and the natural world: animals, plants, fungi, ecosystems, evolution, fossils and dinosaurs.
 - **Subtopics:** mammals; birds; ocean life; insects and spiders; reptiles and amphibians; plants and fungi; dinosaurs and fossils; behaviour and senses.
-- **Fairness:** species from every continent, not just familiar northern ones. Common English names, with both where regions differ: the animal Europeans call an elk is the North American moose. No conservation status or population counts, because they change. Records ("fastest") only with a defined measure and solid evidence.
+- **Fairness:** species from every continent, well beyond the familiar northern ones. Common English names, with both where regions differ: the animal Europeans call an elk is the North American moose. No conservation status or population counts, because they change. Records ("fastest") only with a defined measure and solid evidence.
 
 ### 1.5 Film & TV (`film`)
 - **Covers:** films and TV series from anywhere, animation included, the people who make and star in them, awards, and how screen stories get made.
@@ -152,7 +156,7 @@ For mysteries the category is the clue angle and the answer type is the list. A 
 
 ## 2. Formats and exact schemas
 
-[ARCHITECTURE.md](./ARCHITECTURE.md) §5 owns file formats, validation and build outputs, and its §3.2 holds the TypeScript content types. This section restates those formats for writers and adds the fields the checking protocol needs. Additions are marked **+**. The validator refuses unknown keys, so Appendix A asks for every addition to go into the content schemas (`src/content/schema/`, ticket CNT-1) before the first batch is submitted.
+[ARCHITECTURE.md](./ARCHITECTURE.md) §5 owns file formats, validation and build outputs, and its §3.2 holds the TypeScript content types. This section restates those formats for writers and adds the fields the checking protocol needs. Additions are marked **+**. The validator refuses unknown keys, so every addition goes into the content schemas (`src/content/schema/`, ticket CNT-1) before the first batch is submitted; ARCHITECTURE §5.1.1 adopts them all, field for field.
 
 ### 2.1 Conventions
 
@@ -169,7 +173,8 @@ For mysteries the category is the clue angle and the answer type is the list. A 
 |---|---|---|
 | Practice item | `content/practice/<category-slug>/<id>.json` | Plaintext, because it ships to clients |
 | Answer list | `content/answer-lists/<type>.json` | Plaintext, because it ships to clients |
-| Mystery, encore, room pack, schedule, spare set | `content/.sealed-plain/<folder>/<id>.json`, with folders `mysteries`, `encores`, `room-packs`, `schedule` and `spares` | Only as encrypted envelopes, `content/sealed/<folder>/<id>.json.enc` (§11.2) |
+| Mystery, encore, room pack, schedule, spare set, challenge pack, list request, audit record | `content/.sealed-plain/<folder>/<id>.json`, with folders `mysteries`, `encores`, `room-packs`, `schedule`, `spares`, `challenge-packs` (none before 30 Dailies close, PRD §3.6.1), `list-requests` (§2.12) and `audits` (§9.10) | Only as encrypted envelopes, `content/sealed/<folder>/<id>.json.enc` (§11.2) |
+| Checker packets, planted audit items, downloaded datasets | `.cache/packets/`, `.cache/audits/<audit-id>/`, `.cache/datasets/<key>/` | Never: `.cache/` is git-ignored |
 
 ### 2.3 Fields every item carries
 
@@ -181,14 +186,15 @@ For mysteries the category is the clue angle and the answer type is the list. A 
 | `tags` | string[] | yes | 1 to 6 lowercase kebab-case tags |
 | `region` | `global` or `region:<code>` | yes | `global` for everything at launch |
 | `volatility` | `evergreen`, `slow` or `dated` | yes | §3.4. `fast` is never accepted |
-| `reviewBy` | ISO date or null | yes | Required for `slow`: at most 24 months after acceptance. Null otherwise |
-| `seededDifficulty` | integer 1 to 5 | yes | The writer's guess on the §8 scale. Encores carry it too (+), although ARCHITECTURE §3.2 leaves it off them |
-| `predicted` | object | from `checking` on | The estimator's output (§8.5). Writers leave it out |
+| `reviewBy` | ISO date or null | yes | Null in a draft. For a `slow` item the editor sets it at acceptance, at most 24 months after `verification.editor.decidedAt`, and the validator checks that bound; a writer may suggest a date in `writerNotes`. Null for `evergreen` and `dated` |
+| `seededDifficulty` | integer 1 to 5 | yes | The writer's guess on the §8 scale. Encores carry it too, as ARCHITECTURE §3.2 now does |
+| `predicted` | object | from `checking` on | The estimator's output (§8.5). Writers leave it out. Room questions carry it too (§2.9) |
 | `explanation` | string | yes | 35 words or fewer (§7) |
 | `learnMore` | string | yes | The search term for the "Learn more" Wikipedia search link, usually the answer's name. Never a URL (PRD §3.18.3) |
 | `counterintuitive` + | boolean | yes | True when the obvious answer is wrong (§3.1) |
 | `claims` + | Claim[] | yes | Every checkable statement in the item (§9.2) |
-| `writerNotes` + | string | no | What the writer checked and what they doubt. Stripped from checker packets |
+| `selfCheck` + | object | to leave `draft` | The eleven codes of §9.3, each `true`: `{ "lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true }`. `mystery` and `encore` are `true` on other kinds too: the writer confirms there is nothing of that kind to check. The packet builder refuses an item with a code missing or `false` |
+| `writerNotes` + | string | no | What the writer checked and what they doubt, in prose. Stripped from checker packets, so it never stands in for `selfCheck` |
 | `lintAllow` + | object[] | no | Editor-approved exceptions: `{ "rule": "C19", "text": "...", "reason": "..." }` |
 | `verification` | object | from `checking` on | The record in §9.8, whose shape is an addition (+) |
 
@@ -199,7 +205,7 @@ Mysteries and encores also carry `sourceLabels` (ARCHITECTURE §3.2), the reveal
 | Field | Type | Required | Rule |
 |---|---|---|---|
 | `stem` | string | yes | A question ending in "?", 120 characters or fewer (100 in rooms). Positive wording (§3.6) |
-| `answer` | string | yes | The one correct option. 60 characters or fewer; aim for 24 or fewer so the desktop 2 by 2 grid works (PRD §3.0.3) |
+| `answer` | string | yes | The one correct option. 60 characters or fewer; aim for under 24 (23 or fewer), because the desktop 2 by 2 grid appears only when every option is under 24 characters (PRD §3.0.3) |
 | `wrong` | string[] | yes | 3 wrong options, or 2 when a fourth would be filler (§4). Same length limits as `answer` |
 | `order` | `shuffle` or `ascending` | yes | `ascending` for numbers and dates, years included. Every option must then start with a number, and the engine sorts by it (PRD §3.3.2) |
 
@@ -225,6 +231,9 @@ Keep each batch's true/false items within one of an even split between true and 
 | `unit` + | string | yes | The unit of the values ("year", "km²", "° N", "protons") |
 | `values` + | `{ "a": number, "b": number }` | yes | The checked values the relation compares |
 | `valueDisplay` + | `{ "a": string, "b": string }` | yes | How the reveal shows them ("by 1096") |
+| `exactDates` + | `{ "a": "1962-10-05", "b": "1963-11-23" }` | when two year values are under 10 apart | The ISO dates of both events. Their years must equal `values`, and each side's label claim states its day in words. Omit it otherwise |
+
+The engine always shuffles which side shows first (ARCHITECTURE §3.2: comparisons ship with `order` set to shuffle), so a writer never balances `a` and `b` answers across a batch, and a side's letter never hints at the key.
 
 | Relation | Standard stem | Wins |
 |---|---|---|
@@ -238,25 +247,25 @@ Keep each batch's true/false items within one of an even split between true and 
 
 Values: dates are signed years (1969 is AD 1969, -30 is 30 BC, -420000000 is 420 million years ago). Latitudes are decimal degrees with south negative. East and west comparisons are not allowed, because longitude wraps.
 
-**Separation guard (lint C17).** Dates at least 10 years apart, or at least one calendar year apart when both are exact, undisputed days. Never the same year: that is a coin flip with no foothold. Quantities: the larger at least 1.1 times the smaller, except exact counts and defined values (atomic numbers, letters in an alphabet), where any difference works. Latitudes at least 0.5° apart, comparing city centres or named points, never whole countries.
+**Separation guard (lint C17).** Dates at least 10 years apart, or at least 365 days apart when both are exact, undisputed days recorded in `exactDates`. Never the same year: that is a coin flip with no foothold. Quantities: the larger at least 1.1 times the smaller, except exact counts and defined values (atomic numbers, letters in an alphabet), where any difference works. Latitudes at least 0.5° apart, comparing city centres or named points, never whole countries.
 
 ### 2.7 Mystery (`kind: "mystery"`)
 
 | Field | Type | Required | Rule |
 |---|---|---|---|
 | `answerType` | enum | yes | One of the twelve types in §2.10 |
-| `answer` | entity id | yes | An active entry in that type's list |
+| `answer` | entity id | yes | An active entry in that type's list, by the id its list builder minted (§2.12). A draft may hold a list request's id (`lr.`) until the request is filled |
 | `accepted` | entity id[] | yes, may be empty | Up to 2 genuine equivalents from the same list (PRD §4.1.1), each approved by the editor |
 | `clues` | string[4] | yes | Hardest first, each 140 characters or fewer (PRD §3.18.3). Rules in §5 |
 | `distractors` | entity id[3] | yes | Same list, distinct, none in `accepted`. With the answer they make the four clue-4 options, which the server shuffles per attempt |
 | `slot` | 1, 2 or 3 | yes | The difficulty: 1 is Mystery 1 (easy), 2 is Mystery 2 (medium), 3 is Mystery 3 (hard) |
 | `sourceLabels` | string[] | yes | §2.3 |
-| `likelyGuesses` + | entity id[] | yes | 6 to 12 entries players will plausibly type, mostly wrong ones. All must exist in the list (§5.3) |
-| `rivals` + | object[] | yes | At least 3, each `{ "id": "...", "ruledOutBy": [1, 3] }` and ruled out by at least one of clues 1 to 3. This is the uniqueness proof (§5.4) |
+| `likelyGuesses` + | entity id[] | yes | 6 to 12 entries players will plausibly type, mostly wrong ones, including every entity of the answer's list that a clue names (§5.2, rule 15). All must exist in the list (§5.3) |
+| `rivals` + | object[] | yes | At least 3, each `{ "id": "...", "ruledOutBy": [1, 3] }` and ruled out by at least one of clues 1 to 3. This is the uniqueness proof (§5.4), and the clues it names are the ones that pin the answer (§9.5.5) |
 | `giveawayTerms` + | string[] | yes, may be empty | Words beyond the name and aliases that would give the answer away ("kimjang" for kimchi). Banned from clues by lint C12 |
 | `seedSolveShares` + | number[4] or null | no | The writer's forecast of the cumulative share of typical adults solved by each clue (§8.3) |
 
-The four options on clue 4 are `answer` plus `distractors`. Aliases live on the answer-list entry, never on the mystery, so every mystery with the same answer shares them and the lint reads them from the list. The estimator's `predicted` for a mystery is `{ "solveByClue": [s1, s2, s3, s4], "spread": ..., "estimator": "v0" }`, with cumulative shares (Appendix A asks ARCHITECTURE to confirm "cumulative").
+The four options on clue 4 (or on clue `optionsFromClue`, if PRD Q3 moves them) are `answer` plus `distractors`. Aliases live on the answer-list entry, never on the mystery, so every mystery with the same answer shares them and the lint reads them from the list. The estimator's `predicted` for a mystery is `{ "solveByClue": [s1, s2, s3, s4], "spread": ..., "estimator": "v0" }`, with cumulative shares (ARCHITECTURE §3.2 confirms "cumulative") and the spread defined in §8.5.
 
 ### 2.8 Encore (`kind: "encore"`)
 
@@ -266,38 +275,40 @@ The four options on clue 4 are `answer` plus `distractors`. Aliases live on the 
 | `valueKind` | `quantity` or `year` | yes | |
 | `answer` | number | yes | The exact accepted value, already rounded to `decimals`. Positive. Years are whole numbers from 1 to 9999 (PRD §4.2.1) |
 | `decimals` | 0, 1 or 2 | yes | How many decimals players may type. 0 for years |
-| `unit` | string | yes | The unit word shown with the field and after numbers ("kilometres", "teeth", "years"). An empty string for years |
+| `unit` | string | yes | The unit word ("days", "teeth", "years"). An empty string for years |
+| `unitShort` | string | yes | What follows numbers in the preview and the reveal ("km", or the same as `unit`). An empty string for years (ARCHITECTURE §3.2) |
+| `unitLabel` | string | yes | What sits beside the field ("days", "times Earth's volume"). An empty string for years |
 | `bands` | `{ "bullseye": n, "close": n }` or null | yes | Null means the defaults: bullseye within 5% and close within 15% for quantities, within 2 and 5 years for years (memo §2). Overrides use the same units (a fraction, or years); the reason goes in `writerNotes` |
 | `sourceLabels` | string[] | yes | §2.3 |
 | `derivation` + | object or null | yes | For a number built from other facts: `formula`, `inputs` (each with `claimId`, `value`, `unit` and `what`), `unrounded` and `rounding`. Null for direct facts |
 
-The estimator's `predicted` for an encore (+) is `{ "pClose": ..., "pExact": ..., "spread": ..., "estimator": "v0" }` (§8.4).
+The estimator's `predicted` for an encore is `{ "pClose": ..., "pExact": ..., "spread": ..., "estimator": "v0" }` (§8.4), with the spread defined in §8.5.
 
 ### 2.9 Room packs
 
-A pack is one sealed file, `room-packs/<pack-id>.json`: `{ "id": "around-the-world", "title": "...", "theme": "...", "questions": [ ... ] }` (ARCHITECTURE §5.1). `questions` holds exactly 15 items in play order, so the last is the double-points finale. Each question is a sealed choice item: `kind: "choice"`, `format: "mc"`, the §2.4 fields and the §2.3 fields except `predicted`, with an id `r.<pack-id>.<NN>`.
+A pack is one sealed file, `room-packs/<pack-id>.json`: `{ "id": "around-the-world", "title": "...", "theme": "...", "questions": [ ... ] }` (ARCHITECTURE §5.1). `questions` holds exactly 15 items in play order, so the last is the double-points finale. Each question is a sealed choice item: `kind: "choice"`, `format: "mc"`, the §2.4 fields and every §2.3 field, `predicted` included, with an id `r.<pack-id>.<NN>`. The pack template bands questions by `predicted.p` (§10.9), and the release leaves `predicted` out of SQL (ARCHITECTURE §5.1.1).
 
-Room rules on top of §2.4: exactly 3 wrong options (the host screen shows four answers with letters and shapes), stems of 100 characters or fewer, options of 30 or fewer (aim for 24), and explanations of 25 words or fewer where possible, because the host screen reads them across a room.
+Room rules on top of §2.4: exactly 3 wrong options (the host screen shows four answers with letters and shapes), stems of 100 characters or fewer, options of 30 or fewer (aim for under 24), and explanations of 25 words or fewer where possible, because the host screen reads them across a room.
 
 ### 2.10 Closed answer lists
 
 A mystery's guesses can only be entries from its type's list (PRD §3.18.4). Lists are public: they ship to every client.
 
-**File fields** (ARCHITECTURE §5.1): `type` (the answer type), `version` (an ISO date, new for every published change), `provenance` (each source with `source`, `license` and `retrievedAt`) and `entities`. The build adds the normalized `keys` (ARCHITECTURE §5.5); writers never do.
+**File fields** (ARCHITECTURE §5.1): `type` (the answer type), `version` (an ISO date, new for every published change), `liveAt` + (the UTC date of the commit that first published this version, rule 5), `provenance` (each source with `source`, `license` and `retrievedAt`) and `entities`. The build adds the normalized `keys` (ARCHITECTURE §5.5); writers never do.
 
 **Entity fields.**
 
 | Field | Type | Required | Rule |
 |---|---|---|---|
-| `id` | entity id | yes | A Wikidata QID, or `x.<type>.<slug>` (§2.12). Never changes once anything references it |
+| `id` | entity id | yes | A Wikidata QID, or `x.<type>.<slug>` (§2.12), minted by the list builder and nobody else. Never changes once anything references it |
 | `name` | string | yes | The canonical name players type |
 | `display` | string | yes | What suggestions and clue-4 options show: `name` plus the type's qualifier when the rule calls for one |
 | `aliases` | string[] | yes | Other names a player might type: other spellings (Aluminum), former names (Constantinople), short forms (UK), native names and transliterations (Gisaengchung). Diacritic-free copies are unnecessary, because matching strips diacritics (PRD §4.1.3) |
 | `popularity` | integer | yes | Wikidata sitelink count, which breaks ties in suggestion ranking (PRD §4.1.3). 0 until the enrichment job fills it, so ties fall to alphabetical order meanwhile |
 | `qualifier` + | object | yes | The type's facts behind `display` (table below). Every person, TV series and music artist also carries a short `descriptor` |
-| `source` + | string | yes | Where the entry came from: a dataset key with its locator, or a list batch id |
+| `source` + | string | yes | Where the entry came from: a dataset key with its locator, or a list batch id. Never a mystery id, a mystery batch or a list request, because the file is public (§11.2) |
 | `status` + | `active` or `retired` | yes | Retired entries stay in the file, so old guesses still resolve |
-| `addedIn` + | ISO date | yes | The list `version` that added the entry (freeze rule below) |
+| `addedIn` + | ISO date | yes | The `liveAt` of the version that added the entry (freeze rule below) |
 | `wikidataId` + | string or null | no | A QID found later for an `x.` entity. The `id` itself never changes |
 | `replacedBy` + | entity id or null | no | For merged duplicates |
 
@@ -305,7 +316,7 @@ A mystery's guesses can only be entries from its type's list (PRD §3.18.4). Lis
 
 | `type` | File | Player line | Minimum | Target | `display` rule | `qualifier` |
 |---|---|---|---|---|---|---|
-| `country` | `country.json` | a country | 190 | about 250 | The CLDR 49 English short name, with editor overrides for awkward forms ("Congo - Kinshasa" becomes "Democratic Republic of the Congo"). CLDR variants become aliases | `iso_a2` |
+| `country` | `country.json` | a country | 190 | about 250 | The CLDR 49 English short name, with the overrides below. CLDR forms and variants become aliases | `iso_a2` |
 | `city` | `city.json` | a city | 300 | 500 | "Name, Country", with the country's display name | `country`, `admin1` |
 | `person` | `person.json` | a person | 1,000 | 3,000 | The name most English sources use, plus a bracketed descriptor only when two entries share a name ("Michael Collins (astronaut)") | `descriptor`, `born` |
 | `film` | `film.json` | a film | 500 | 1,500 | "Title (Year)", year of first release | `year` |
@@ -316,23 +327,36 @@ A mystery's guesses can only be entries from its type's list (PRD §3.18.4). Lis
 | `landmark` | `landmark.json` | a landmark | 200 | 400 | "Name, Country", built or natural | `country` |
 | `music_artist` | `music_artist.json` | a musician or band | 500 | 1,500 | The name, plus a descriptor only on a collision inside the list | `descriptor`, `kind` (`solo`, `band`, `composer`) |
 | `dish` | `dish.json` | a dish or drink | 200 | 400 | Common English name, with other English names as aliases | `origin` (ISO code or null) |
-| `sport` | `sport.json` | a sport or game | 100 | 200 | Common English name; association football is "Football (soccer)" | none |
+| `sport` | `sport.json` | a sport or game | 100 | 200 | Common English name; association football is "Association football", with Football, Soccer and "Football (soccer)" as aliases | none |
+
+**Display overrides.** Outside the types whose qualifier always shows (films, books, cities, landmarks), no display form carries a bracket, a spaced hyphen or a qualifier such as "SAR China", because a lone bracket among the clue-4 options points at the key (rule 6). CLDR 49's short names break that in seven places (checked in `cldr-localenames-full` 49.0.0), so the country list gives six of them a new display and keeps every CLDR form as an alias:
+
+| `iso_a2` | CLDR short name | Display | Aliases besides the CLDR forms |
+|---|---|---|---|
+| MM | Myanmar (Burma) | Myanmar | Burma |
+| CD | Congo - Kinshasa (variant: Congo (DRC)) | Democratic Republic of the Congo | DR Congo, DRC |
+| CG | Congo - Brazzaville (variant: Congo (Republic)) | Republic of the Congo | Congo-Brazzaville |
+| HK | Hong Kong SAR China | Hong Kong | |
+| MO | Macao SAR China | Macao | Macau |
+| PS | Palestinian Territories | Palestine | |
+
+Rule 7 keeps Palestine out of answers and options. The seventh, "Cocos (Keeling) Islands", keeps its official name, because rule 7 keeps territories out of answers and options too. Lint C28 checks that the four display forms of every mystery's options agree on brackets and qualifiers.
 
 **List rules.**
 1. One entity, one list. People famous mainly for music go in `music_artist`; everyone else goes in `person`.
 2. Lists are global and stable. They are never filtered per Daily, so the list itself gives nothing away (PRD §3.18.4).
-3. Size: at least 30 entries to serve Mystery 1 and 100 to serve Mysteries 2 and 3 (PRD §3.18.4). Every list reaches the table's minimum before launch.
-4. Coverage beats size. Every scheduled mystery's answer, distractors, rivals and likely guesses must be active entries. A player who types a sensible wrong guess and sees "No matches" thinks the game is broken.
-5. Freeze. An entry can be a scheduled answer only 30 days after the list version that added it went live, and each new list version adds at least 20 entries, so no single new entry stands out in a diff of the public file.
-6. Qualifiers. Films, books, cities and landmarks always show theirs. People, TV series and music artists show a descriptor only on a collision. If any clue-4 option shows a descriptor, all four must (Appendix A, item 6), and writers pick distractors whose display forms match the answer's form. An answer that is the only option with a bracket is a giveaway.
-7. Places whose sovereignty is disputed are guessable entries, but never answers or distractors, and never the subject of a question about status.
+3. Size: at least 100 entries to serve any Mystery slot (PRD §3.18.4). Every list reaches the table's minimum before launch.
+4. Coverage beats size. Every scheduled mystery's answer, distractors, rivals and likely guesses must be active entries. A player who types a sensible wrong guess and sees "No matches" thinks the game is broken. A writer who needs a missing entity files a list request (§2.12), and the mystery stays `draft` until a published version holds it.
+5. Freeze. The repository is public, so a list version goes live with the commit that first publishes it: that commit's UTC date on the public branch is the version's `liveAt`, and every entry the version adds carries `addedIn` equal to it. The list builder writes both on the day of the commit, and in CI, where git history is available, the validator fails a list whose `liveAt` differs from that commit's date. An entry can be a scheduled answer only when the Daily's date is at least 30 days after its `addedIn` (lint C14). So that no diff narrows a batch's answers: a version that adds entries adds at least 100, or every entry still missing from the list's target if fewer remain; additions land in their own commit, never in one that adds or changes sealed envelopes; and the entries a mystery batch needs join the next regular version mixed with entries no mystery needs, never as a small set of their own. A version that only fixes aliases, displays or retirements may be any size.
+6. Qualifiers. Films, books, cities and landmarks always show theirs. People, TV series and music artists show a descriptor only on a collision. If any clue-4 option shows a descriptor, the server labels all four (ARCHITECTURE §5.5), writers pick distractors whose display forms match the answer's form, and lint C28 checks the four agree. An answer that is the only option with a bracket is a giveaway.
+7. Places whose sovereignty is disputed are guessable entries, but never answers or distractors, and never the subject of a question about status. Under the line "a country", territories that aren't sovereign states (Hong Kong, Macao, Greenland, Puerto Rico) are guessable entries too, never answers or distractors.
 8. ISO codes are not aliases, except the forms people really type (UK, US, USA, UAE).
 9. Avoid aliases that normalize to another entry's name unless the two are true namesakes.
-10. Each list ships as hashed static JSON of 80 KB gzipped or less (PRD §8.1). Each list's `provenance` feeds `/credits` (§9.5.1).
+10. Each list ships as hashed static JSON of 80 KB gzipped or less (PRD §8.1), measured on every build (ARCHITECTURE §5.5). A synthetic 3,000-entry person list comes to about 64 KB, but if the real `person` list passes 80 KB before reaching its target, the content lead lowers that target in the table above rather than split the list. Each list's `provenance` feeds `/credits` (§9.5.1).
 
 ### 2.11 Schedule records
 
-Schedules follow ARCHITECTURE §5.1: one sealed file per month, `schedule/<yyyy-mm>.json`, holding `{ "track": "main", "dailies": [ { "date": "2026-12-01", "rounds": [ { "type": "mystery", "difficulty": "easy", "contentId": "m.geo.0103" }, ... ] } ] }`. Daily numbers are never authored; they come from `DAILY_EPOCH`. Each daily also carries `status` + (`assembled`, `frozen` or `published`, §10.7), `predictedPoints` + (the sum of its mysteries' predicted expected points, §8.3) and `dayCheck` + (the §10.6 record: checker, date, issues, verdict). The 20 spare sets live in `spares/` with the same round records and no date.
+Schedules follow ARCHITECTURE §5.1: one sealed file per month, `schedule/<yyyy-mm>.json`, holding `{ "track": "main", "dailies": [ { "date": "2026-12-01", "rounds": [ { "type": "mystery", "difficulty": "easy", "contentId": "m.geo.0103" }, ... ] } ] }`. Daily numbers are never authored; they come from `DAILY_EPOCH`. Each daily also carries `status` + (`assembled`, `frozen` or `published`, §10.7), `predictedPoints` + (the sum of its mysteries' predicted expected points, §8.3), `dayCheck` + (the §10.6 record: `checker`, `checkedAt`, `issues` and `verdict`) and `spareOrder` + (the spare set ids ranked for that date, §10.7). The authored `status` is advisory, a note of what the scheduler last did: the database alone decides what is frozen, and a release refuses to change a frozen Daily (ARCHITECTURE §8.7). The 20 spare sets live in `spares/<id>.json`, one file each (ids `spare.<NN>`, §2.12), holding the set's `id`, its `track` and the same round records, with no date. A Daily can move to `frozen` only when every item on it carries a passing pass D record for its date (§9.9, rule 7).
 
 ### 2.12 IDs
 
@@ -344,47 +368,59 @@ IDs are stable: never renumbered and never reused. The patterns are ARCHITECTURE
 | Mystery | `m.<cat>.b<BB>` | `m.<cat>.<BB><SS>` | `m.hist.0207` |
 | Encore | `e.b<BB>` | `e.<BB><SS>` | `e.0104` |
 | Room question | `r.<pack-id>.b01` | `r.<pack-id>.<NN>`, NN from 01 to 89 | `r.around-the-world.12` |
+| Spare set | None: the scheduler numbers them | `spare.<NN>` (ARCHITECTURE §2.4) | `spare.07` |
+| List request | The mystery batch that needs it | `lr.<batch>.<NN>`, sealed (§2.12 below) | `lr.m.hist.b02.03` |
 | Answer entity | `l.<type>.b<BB>` | A Wikidata QID, or `x.<type>.<slug>` | `x.city.cordoba-ar` |
 | Fixture | | Prefixed `fx.` (ARCHITECTURE §5.6) | |
 
 - `<cat>` is the category code from §1 and `<pack-id>` the pack id from §10.9.
-- Agent ids: `w-` writer, `es-` estimator, `fc-` checker, `ed-` editor, `lb-` list builder, `sc-` scheduler, `au-` auditor, each followed by the run id.
+- Agent ids: `w-` writer, `es-` estimator, `fc-` checker, `ed-` editor, `lb-` list builder, `sc-` scheduler, `au-` auditor, `pl-` planter, each followed by the run id.
 - Batch `00` (`p.geo.0001` to `p.geo.0099` and so on) and room sequences 90 to 99 are reserved for the examples in this guide. The validator rejects them anywhere under `content/`.
-- Entity ids. Use a QID only when it was copied from a dataset record that carries one (MoMA's `Wiki QID`) or written by the enrichment job (§9.5.1). Otherwise use `x.<type>.<slug>`. Never type a QID from memory. Once any item references an entity, its id never changes; a QID found later goes in `wikidataId`.
+- **Entity ids belong to list builders.** Only a list builder mints one, so a writer and a list builder working in parallel can never give one entity two ids. Writers copy active ids from the published list file. For anything missing they file a list request, `lr.<batch>.<NN>`, with the name, the qualifier and the evidence (a dataset record or a search result), in the sealed `list-requests` folder, because a request names a mystery's answer or guesses. The draft may hold the request's id until the list builder fills it; the entity then joins the next regular list version (§2.10, rule 5), and C14 refuses any `lr.` id from `checking` on.
+- **When the dataset record behind an entry carries a QID** (MoMA's `Wiki QID`), that QID is the id: mandatory, not a choice. An entry may also take a QID the enrichment job matched before the entry was first referenced (§9.5.1). Otherwise the id is `x.<type>.<slug>`. Never type a QID from memory. Once any item references an entity, its id never changes; a QID found later goes in `wikidataId`.
 - Slugs: lowercase ASCII, diacritics transliterated, words joined by hyphens, plus the type's disambiguator: a city's ISO country code (`x.city.cordoba-es`), a film's year (`x.film.heat-1995`), a book's author surname (`x.book.frankenstein-shelley`), a TV series' country (`x.tv_series.the-office-us`) and a descriptor for people who share a name (`x.person.michael-collins-astronaut`).
-- **Change the meaning, change the ID.** Before acceptance, edit freely. After acceptance, a wording fix that changes no claim keeps the ID, and git history records the change. A changed key or a different question gets a new ID in a new batch, and the old one is `retired`. The one exception: a sealed item that has already been played keeps its ID and logs the correction, so attempts and rescoring still point at it (PRD §3.13.4).
+- **Change the meaning, change the ID.** Before acceptance, edit freely. After acceptance, a wording fix that changes no claim keeps the ID; the change goes in `verification.corrections` (§9.8), and §9.7 says which checks it needs. A changed key or a different question gets a new ID in a new batch, and the old one is `retired`. The one exception: a sealed item that has already been played keeps its ID and logs the correction in `verification.corrections`, so attempts and rescoring still point at it (PRD §3.13.4).
 
 ### 2.13 Machine checks (the content lint)
 
-`npm run content:check` (ARCHITECTURE §5.2) runs these on every save. "Error" blocks; "warn" needs the editor to clear it or record a `lintAllow`. L1 to L8 are the creator-lint rules in PRD §3.9.4, which are warnings for players' quizzes and errors for ours. The checks beyond ARCHITECTURE §5.2 are listed in Appendix A for CNT-1.
+`npm run content:check` (ARCHITECTURE §5.2) runs these on every save. "Error" blocks; "warn" needs the editor to clear it or record a `lintAllow`. L1 to L8 are the creator-lint rules in PRD §3.9.4, which are warnings for players' quizzes and errors for ours. Their triggers carry over and their messages don't: our findings print only the id, rule code and path (Messages, below), while a message such as L7's "Tie it to a fixed year, like 'in 2010'." is copy for quiz creators, and C09 checks more time words than L7 does. ARCHITECTURE §5.2 adopts this whole table, and CNT-2 builds it (C01 is CNT-1's schemas).
+
+**Player-facing text** means the fields a player can see: `stem`, the options (`answer` and `wrong`), `a`, `b`, `clues`, `question`, `unit`, `unitShort`, `unitLabel`, `valueDisplay`, `explanation`, `learnMore`, and a room pack's `title` and `theme`. The text rules below run on those fields only. Of them, C08 and C11 also run on claims and `writerNotes`; C25 to C27 read claims by design. A claim may name "football" to explain a distractor, as r.game-on.90's does, and no player ever reads it, so it never warns.
+
+**`optionsFromClue`.** C12 and C13 read `optionsFromClue` from `src/config/shared.json` (4 at launch; PRD Q3 may move it to 3). Clues before it are typed against, so they get C12's typing rules; clues from it on sit beside the four options, so they get C13's display rule. Whenever the value changes, every sealed item is re-linted, and an item that now fails is rewritten (a new ID if the meaning changes) or swapped out of its Daily before its date.
 
 | ID | Applies to | Check | Severity |
 |---|---|---|---|
 | C01 | all | Schema valid for its file type | error |
 | C02 | all | Explanation of 35 words or fewer (whitespace-separated tokens) | error |
 | C03 | mc, tf, comparison | Stem of 120 characters or fewer; 100 in rooms | error |
-| C04 | mc | Option over 60 characters (30 in rooms) is an error; over 24 is a warning | error, warn |
+| C04 | mc | Option over 60 characters (30 in rooms) is an error; 24 or more is a warning, because it rules out the desktop 2 by 2 grid (PRD §3.0.3) | error, warn |
 | C05 | mc | "All of the above", "none of the above", "both of these" or "neither" as an option (L1) | error |
 | C06 | stems, tf statements | "not", "never", "except" or "isn't" as words (L2); warning in clues | error |
 | C07 | mc | Answer longest by more than 50% and more than 15 characters (L3) | error |
-| C08 | all text | Numeric dates such as 03/04/2025 or 2025-04-03 (L6) | error |
-| C09 | all text | Time words: current, currently, latest, now, today, this year, recent, recently, newest, reigning, so far, to date, as of (L7 and more) | error |
-| C10 | all text | A US spelling from `content/reference/spelling.json` outside the proper-noun allowlist | warn |
-| C11 | all text | En dash, em dash, double space, URL, HTML or Markdown | error |
-| C12 | mystery | A clue over 140 characters, or a clue containing the answer's name, an alias, a significant word of either (4 or more letters, not a stopword), a word that begins with one, or a giveaway term. A clue word sharing its first four letters with a significant word is a warning | error, warn |
-| C13 | mystery | Clue 4 contains any significant word of the answer's display form, qualifier included | error |
-| C14 | mystery | Answer, distractors, rivals and likely guesses exist and are active; distractors distinct and of the same type; the answer older than the freeze | error |
-| C15 | encore | Positive answer; a year is a whole number from 1 to 9999; `decimals` from 0 to 2 and matching `answer`; a quantity of 20 or more unless `bands` is overridden; no temperature or ambiguous units | error |
+| C08 | player-facing text, claims, `writerNotes` | Numeric dates such as 03/04/2025 or 2025-04-03 (L6) | error |
+| C09 | player-facing text | Time words: current, currently, latest, now, today, this year, recent, recently, newest, reigning, so far, to date, as of (L7 and more) | error |
+| C10 | player-facing text | A US spelling from `content/reference/spelling.json` outside the proper-noun allowlist | warn |
+| C11 | player-facing text, claims, `writerNotes` | En dash, em dash, double space, URL, HTML or Markdown | error |
+| C12 | mystery | Any clue over 140 characters. In clues before `optionsFromClue`: the answer's name, an alias, a significant word of either (4 or more letters, not a stopword), a word that begins with one, or a giveaway term; and the **suggestion probe**, which runs the engine's own `suggest()` (ARCHITECTURE §4.7: word prefixes, and one-edit typos from 5 characters) against the real list on every clue word and each of its prefixes of 3 or more letters, and fails when the answer or an accepted id comes back in the top 6 (`SUGGESTION_COUNT`) | error |
+| C13 | mystery | A clue from `optionsFromClue` on contains a significant word of the answer's display form, qualifier included | error |
+| C14 | mystery | Answer, accepted ids, distractors, rivals and likely guesses exist in a published version and are active; no `lr.` request ids from `checking` on; distractors distinct and of the same type; for a scheduled mystery, the Daily's date at least 30 days after the answer's `addedIn` | error |
+| C15 | encore | Positive answer; a year is a whole number from 1 to 9999; `decimals` from 0 to 2 and matching `answer`; a quantity of 21 or more unless `bands` is overridden; `unitShort` and `unitLabel` present (empty for years); no temperature or ambiguous units. A unit on the measured list in `content/reference/units.json` (length, area, mass, speed) marks the encore as measured: at most 1 per encore batch, 12 in the bank (§6, rule 3) | error |
 | C16 | tf | `tfKind` matches `answer`; the statement has no "?" | error |
-| C17 | comparison | The answer wins under the relation; the separation guard (§2.6) | error |
+| C17 | comparison | The answer wins under the relation; the separation guard (§2.6); when the two years are under 10 apart, `exactDates` is present, its years equal `values`, and each side's label claim states its day | error |
 | C18 | mc | `ascending` options all start with a number; no duplicate options (case and spacing ignored) | error |
-| C19 | all | A superlative or "first" word (first, only, largest, biggest, oldest, tallest, longest, most, highest, fastest, record) without a high-risk claim | warn |
-| C20 | all text | The bare word "football" without "(soccer)" or "American" (§3.3) | warn |
-| C21 | all text | Ambiguous units: ton, tons, gallon, ounce, pint, cup, calorie; °C or °F in an encore | error in encores, warn elsewhere |
-| C22 | all | A near-duplicate of an item in the bank or in this guide | warn; the editor decides |
-| C23 | all text | A term on the shared slur list (PRD §3.9.4) | error |
+| C19 | player-facing text | A superlative or "first" word with no high-risk claim behind it: first, only, record, most, least, best, worst, and the "-est" words in `content/reference/superlatives.json` (largest, biggest, smallest, oldest, youngest, tallest, highest, lowest, longest, shortest, fastest, slowest, hottest, coldest, deepest, heaviest, lightest and their kin). Exempt: the standard stems of §2.6 ("Which came first?", "Which was invented first?", "Which was completed first?"), "only" followed by a number (after "about" or "around", if present) or by "a few", and "most of" | warn |
+| C20 | player-facing text | The bare word "football", not part of "association football", "football (soccer)" or a named code such as "American football" (§3.3) | warn |
+| C21 | player-facing text | An ambiguous unit after a number ("3 cups", "2 tons": ton, gallon, ounce, pint, cup, calorie and their plurals), or as an encore's `unit`; °C or °F in an encore | error in encores, warn elsewhere |
+| C22 | all | A near-duplicate of an item in the bank or of an example in this guide: a warning the editor decides on, except that in a sealed pool a hit against a §12 example is an error. It also reads `content/reference/example-denylist.json`: a sealed mystery whose answer is one of the ten §12.7 answers is an error, and a sealed encore whose answer and unit equal one of the §12.9 values is a warning the editor clears only if it measures something else | warn, error |
+| C23 | player-facing text | A term on the shared slur list (PRD §3.9.4) | error |
 | C24 | ids | ID pattern, batch registered to this writer, no reserved example IDs under `content/` | error |
 | C25 | claims | A hit on `content/reference/myths.json` | warn; the checker decides |
+| C26 | claims | **The risk floor.** A claim must be `high` when its text holds a digit or a number word (zero to twenty, the tens, hundred, thousand, million, billion and their plurals, dozen, half), quotation marks around a word or phrase, a superlative from C19's list, "only", "first", "invented", "named after", "comes from" or "means"; when it is the key claim of a counterintuitive item (for a comparison, both label claims); and when it is a clue, value or input claim in a sealed pool. Three things don't count: a number word capitalized mid-sentence, which belongs to a title (The Four Seasons); digits that only number clues ("contradicts clues 1 and 4"); and "most of", which is a quantity, not a superlative. Uniqueness claims are exempt, because the rival search proves them (§5.4). Writers may raise risk, never set it below this floor | error |
+| C27 | stems, clues, claims | **The capital rule.** "Capital" in the same stem, clue or claim as a country in `content/reference/capitals-excluded.json` (by name or alias), or any clue containing "capital" in a mystery whose answer is a listed country (§3.4) | error |
+| C28 | mystery | The four options, labelled as the server would label them (display forms, or `option_label` on all four when any carries a descriptor, ARCHITECTURE §5.5), agree: all carry a bracket or qualifier of the same kind, or none does | error |
+
+**Messages.** Every finding names the item id, the rule code and the field path (`m.film.0107 C12 clues[1]`), and for a sealed file nothing else ever prints (ARCHITECTURE §5.4). Sealed lint output is never pasted into a pull request, an issue or a commit message (§11.2).
 
 ---
 
@@ -423,7 +459,7 @@ The rules: colour, centre, metre, litre, theatre; organize and realize, but anal
 
 **Words.** Pick words everyone knows ("film", "phone"). For food and everyday words that differ, give both names the first time: aubergine (eggplant), courgette (zucchini), coriander (cilantro), prawns (shrimp), crisps (potato chips), chips (French fries), biscuits (cookies), sweets (candy). Avoid words whose meaning changes by country: pants, first floor, public school, jumper. A billion is a thousand million.
 
-**Football.** Never write the bare word. Name the competition ("the men's FIFA World Cup"), or write "football (soccer)" for the association game and "American football" for the gridiron one (lint C20).
+**Football.** Never write the bare word. Name the competition ("the men's FIFA World Cup"), or write "football (soccer)" for the association game and "American football" for the gridiron one (lint C20). The sport list's display is "Association football", which has no bracket to stand out among options (§2.10).
 
 **Dates and numbers.** "3 April 1968", never 03/04/1968 (lint C08). "The 1990s", "the 19th century", "around 2560 BC", "AD 79". Digits for numbers, a comma between thousands (1,250), a point for decimals.
 
@@ -446,22 +482,30 @@ The models drafting our content know little after mid-2026, and the bank has to 
 | Class | Meaning | `reviewBy` | Example |
 |---|---|---|---|
 | `evergreen` | Can't change: laws of nature, settled history, who made a work | null | "Dalí painted The Persistence of Memory" |
-| `slow` | True now and stable, but could drift | At most 24 months after acceptance | "MoMA has held it since 1934" |
+| `slow` | True now and stable, but could drift | Set by the editor at acceptance, at most 24 months later (§2.3) | "MoMA has held it since 1934" |
 | `dated` | The year sits in the text, so the fact can't expire | null | "In 1998 Titanic won 11 Academy Awards" |
 | `fast` | Changes within months | Never accepted | "The current Formula 1 champion" |
 
-**Things that changed recently and catch writers out:** Kazakhstan's capital became Nur-Sultan in 2019 and Astana again in 2022; Swaziland became Eswatini in 2018; Pluto became a dwarf planet in 2006; Indonesia is moving its capital; Croatia adopted the euro in 2023; Saturn's count of known moons has changed several times since 2019.
+**Things that changed recently and catch writers out:** Kazakhstan's capital became Nur-Sultan in 2019 and Astana again in 2022; Burundi moved its capital from Bujumbura to Gitega in 2019; Swaziland became Eswatini in 2018; Pluto became a dwarf planet in 2006; Indonesia is moving its capital; Croatia adopted the euro in 2023; Saturn's count of known moons has changed several times since 2019.
 
-**No capital questions** for countries with more than one capital or a disputed one (Bolivia, South Africa, the Netherlands, Sri Lanka, Malaysia, Côte d'Ivoire, Tanzania, Benin, Eswatini, Israel), or whose capital moved or was renamed since 1990 (Kazakhstan, Myanmar, Nigeria, Indonesia). The countries file we checked even lists three capitals for South Africa (§9.5.1).
+**No capital question unless the capital is single and settled.** No stem, clue or claim asks for or states a country's capital when the country has more than one capital, a disputed one or none in law; when its capital moved, was renamed or was announced to move since 1990; or when the pinned countries file disagrees with a Tier A source about it. (CLDR names countries but holds no capitals, so for capitals the comparison is with the body that owns the fact.) The pinned file shows why the rule exists: it already gives Gitega for Burundi and Ciudad de la Paz for Equatorial Guinea, so a writer can "confirm" a changed capital against it exactly as a checker would (§9.5.1). The list lives in `content/reference/capitals-excluded.json`, one entry per country with its reason, and lint C27 refuses any stem, clue or claim that pairs "capital" with a listed country. Its launch contents:
+
+| Reason | Countries |
+|---|---|
+| More than one capital, a disputed one, or none in law | Benin, Bolivia, Côte d'Ivoire, Eswatini, Israel, Malaysia, Montenegro, Nauru, the Netherlands, Palestine, South Africa, Sri Lanka, Switzerland, Yemen |
+| Moved or renamed since 1990 | Germany (Bonn to Berlin, 1990), Nigeria (Lagos to Abuja, 1991), Tanzania (Dar es Salaam to Dodoma, 1996), Kazakhstan (Almaty to Akmola in 1997, then renamed Astana, Nur-Sultan and Astana again), Myanmar (Yangon to Naypyidaw, 2005), Palau (Koror to Ngerulmud, 2006), Burundi (Bujumbura to Gitega, 2019) |
+| A move announced or under way | Egypt (a new administrative capital east of Cairo), Equatorial Guinea (Malabo to Ciudad de la Paz), Indonesia (Jakarta to Nusantara), South Sudan (Juba to Ramciel) |
+
+The editor adds a country the moment one qualifies. Every claim that names a country's current capital, the key of "Which city is the capital of Australia?" among them, carries both the dataset record and a Tier A or B web result before acceptance (§9.9, rule 3).
 
 ### 3.5 Superlatives and "first" claims
 
-These go wrong more often than anything else ([07 §7](./research/07-content-excellence.md)), so they are high-risk claims that need external evidence (§9.2).
+These go wrong more often than anything else ([07 §7](./research/07-content-excellence.md)), so they are high-risk claims that need external evidence, and lint C26 refuses to let one be marked standard (§9.2).
 
 - **Name the measure and the scope:** "highest above sea level", "largest by area", "the hottest surface of any planet". Venus has the hottest surface, but Jupiter's interior is far hotter, so "the hottest planet" is ambiguous.
 - **Turn a contested first into a documented event.** "Who invented the telephone?" has rival answers. "Who received the US patent for the telephone in March 1876?" has one.
 - **Date every record.** "The world's tallest building when it opened in 2010", never "the world's tallest building".
-- **"Only" over a living set is a record.** "The only person to win Nobel Prizes in two sciences" could be overtaken; "the first person to win two Nobel Prizes, in 1911" can't.
+- **"Only" over a living set is a record.** "The only person to win Nobel Prizes in two sciences" could be overtaken; "the first person to win two Nobel Prizes, in 1911" can't. "Only" over a fixed set is still a superlative in disguise: "Mongolia borders only Russia and China" is one claim about every other country, so it is high-risk too.
 - **Prefer bounded claims.** "Less than 5 km apart" survives a slightly different measurement; "3.8 km apart" may not. Write the claim at the precision you can defend (the precision ladder, §9.2).
 
 ### 3.6 Fair play
@@ -488,7 +532,7 @@ The audience is 13 and over (memo §8), and rooms run at office parties, so:
 
 ### 3.8 Length and readability
 
-Stems at most 120 characters (aim for 100), options aim for 24 characters, clues at most 140, explanations at most 35 words. One idea per stem. No double negatives or nested clauses. Everything must read well aloud, because read-aloud mode and screen readers speak it (PRD §3.12), so prefer words to symbols wherever both fit.
+Stems at most 120 characters (aim for 100), options aim for under 24 characters, clues at most 140, explanations at most 35 words. One idea per stem. No double negatives or nested clauses. Everything must read well aloud, because read-aloud mode and screen readers speak it (PRD §3.12), so prefer words to symbols wherever both fit.
 
 ---
 
@@ -517,7 +561,7 @@ A mystery is one answer, an answer-type line ("The answer is a country"), four c
 
 ### 5.1 What each clue does
 
-Shares below are cumulative: the share of typical adults (§8.1) who have solved it by that clue. They are typical shapes, not rules. The rule is the expected-points window in §8.3, and these shapes land inside it.
+Shares below are cumulative: the share of typical adults (§8.1) who have solved it by that clue. They are typical shapes, not rules. The rule is the expected-points window in §8.3. These shapes land inside the PRD's bands (PRD §4.1.6), not necessarily inside the tighter assembly windows: at the bottom of every range they sum to 3.04, 2.42 and 1.80, below the windows' floors of 3.2, 2.5 and 1.9, so a ladder pitched at the low end of every clue is in band yet too hard to schedule.
 
 | Clue | Job | Mystery 1 (easy) | Mystery 2 (medium) | Mystery 3 (hard) |
 |---|---|---|---|---|
@@ -535,23 +579,25 @@ Shares below are cumulative: the share of typical adults (§8.1) who have solved
 3. **Clue 1 should point to one answer on its own,** the quiz-bowl standard, so an early guess is knowledge, not a gamble. **Clues 1 to 3 together must fit exactly one list entry**, proved by `rivals` (§5.4).
 4. **Each clue narrows.** The set of plausible answers shrinks at every step, and the predicted cumulative solve share rises at every clue.
 5. **Clue 4 is easy:** the most famous fact, without the name.
-6. **No clue gives the answer away in text.** No clue contains the answer's name, an alias, a significant word from either, or a giveaway term (lint C12). Watch prefixes: the suggestion box matches the start of names and words (PRD §4.1.3), so "Parisians" gives away Paris, "Constantine" gives away Istanbul through its alias Constantinople, and "kimjang" gives away kimchi. List such words in `giveawayTerms`.
-7. **Clue 4 contains no word of the answer's display form,** qualifier included (lint C13), because the four options show display forms. "Mary Shelley's novel" on clue 4 would point straight at "Frankenstein (Mary Shelley)".
+6. **No clue gives the answer away in text.** In the clues players type against (those before `optionsFromClue`, so clues 1 to 3 at launch), nothing contains the answer's name, an alias, a significant word from either, or a giveaway term (lint C12). Watch prefixes and near misses: the suggestion box matches the start of any word and, from 5 characters, anything one edit away (PRD §4.1.3), so "Parisians" gives away Paris, "Constantine" gives away Istanbul through its alias Constantinople, "kimjang" gives away kimchi, and "Mexico" surfaces the axolotl's alias "Mexican walking fish", because "mexica" is one letter from "mexico". C12's suggestion probe runs the real matcher over every clue word, so it catches what the eye misses. List such words in `giveawayTerms`.
+7. **The clues beside the options contain no word of the answer's display form,** qualifier included (lint C13): clue 4 at launch, clues 3 and 4 if PRD Q3 moves the options up, because the four options show display forms. "Mary Shelley's novel" on clue 4 would point straight at "Frankenstein (Mary Shelley)".
 8. **No time-sensitive clue** (§3.4). Dated clues are fine.
 9. **Each clue is 140 characters or fewer,** one or two short sentences, readable aloud. Pronouns ("it", "she") are fine. A clue may build on the one before, but must stay true on its own.
 10. **The recognition floor.** Most players must recognize the answer among the four options. Hard mysteries are hard because their clues go deep, never because the answer is obscure.
-11. **The answer, distractors, rivals and likely guesses are active list entries,** and the answer has passed the 30-day freeze (§2.10).
+11. **The answer, distractors, rivals and likely guesses are active list entries,** by the ids the list builder minted, and the answer has passed the 30-day freeze (§2.10).
 12. **The category is the clue angle; the answer type is the list** (§1.13).
 13. **No clue relies on images, audio, video or the player's location.**
 14. **Pronouns and gender.** Clues that say "she" make male distractors useless, so choose distractors that fit the pronoun.
+15. **A clue that names another entity of the answer's list** (by name or by one of its aliases) must make plain that it isn't the answer, as "Its singer..." or "after hydrogen" does, and that entity goes in `likelyGuesses` and in `rivals` with the clue that rules it out. Otherwise the clue doesn't name it. Players type the first name they read, and a wrong guess costs a clue.
+16. **Each clue claim restates its clue exactly** (§9.2): the clue's own words, with the answer's name in place of "it", "she" or "this ...". It keeps the clue's precision and hedges ("about 20 minutes", never "20 minutes"), adds nothing, and drops nothing. The one addition allowed is a bracketed name, so the claim can be checked: for something the clue describes without naming, as in "(Bohemian Rhapsody)", or for the answer as it was called at the clue's date, as in "Istanbul (then Constantinople)". Any further fact is its own claim.
 
 ### 5.3 Likely guesses and coverage
 
-List 6 to 12 entries that players will plausibly type at clues 1 to 3, most of them wrong: the neighbours, the famous alternatives, and the guess clue 1 seems to invite. Every one must exist in the list. This does three jobs. Players never meet "No matches" for a sensible guess, the "most common wrong guess" line has real candidates (PRD §4.1.5), and the list builder knows what to add before the mystery can be scheduled.
+List 6 to 12 entries that players will plausibly type at clues 1 to 3, most of them wrong: the neighbours, the famous alternatives, the guess clue 1 seems to invite, and any entity a clue names (rule 15). Every one must exist in the list, by its minted id; a missing one becomes a list request (§2.12). This does three jobs. Players never meet "No matches" for a sensible guess, the "most common wrong guess" line has real candidates (PRD §4.1.5), and the list builder knows what to add before the mystery can be scheduled.
 
 ### 5.4 Uniqueness: the rival search
 
-Writers do this before submitting, and both checkers repeat it blind.
+Writers do this before submitting. Both checkers repeat it blind, with the list file in the first stage of their packets (§9.4), and pass D repeats it against the list version that will ship on the Daily's date (§9.9, rule 7).
 
 1. Read clue 1 alone. Write down every list entry that fits it. If more than one fits, tighten clue 1.
 2. Add clue 2, then clue 3, and strike every candidate that no longer fits.
@@ -565,7 +611,7 @@ Mary Shelley began Frankenstein during the 1816 ghost-story contest at Lake Gene
 - The three distractors come from the same list as the answer.
 - **Plausible at a glance:** the same era, region, field or fame, and matching the clue's pronoun.
 - **Definitely wrong:** each distractor contradicts at least one of the four clues, and no distractor fits all four. A distractor may fit some clues; that is what makes it tempting (the Who also played Live Aid at Wembley).
-- **Parallel display forms:** never let the answer be the only option with a bracket or a qualifier (§2.10, rule 6).
+- **Parallel display forms:** never let the answer be the only option with a bracket or a qualifier (§2.10, rule 6; lint C28).
 - A distractor that was a Daily answer in the last 7 days should not appear (§10.5).
 
 ### 5.6 The mystery explanation
@@ -580,16 +626,16 @@ The Encore ends every Daily. It scores no points but breaks ties, so its job is 
 
 1. **Stable numbers.** Values that can't move: counts in a design (squares on a chessboard), historical durations, astronomical and geographical constants, and dated facts. No populations, prices, records or current counts, and nothing that an antenna, a resurvey, a renovation or a redefinition can change: the Eiffel Tower's official height has changed several times as antennas were added.
 2. **One definition.** If two reputable sources give different values, the encore fails. While writing this guide a search for the Louvre pyramid's pane count turned up 673 (the Louvre's figure) and 689 (attributed to I. M. Pei's office), so that encore is out (§12.10). Lengths and areas with competing definitions (canals, coastlines, rivers, countries with overseas territories) are out unless the question names the definition.
-3. **Unambiguous units.** The question names its unit or asks for a count. Metric units; never tons, gallons, ounces, calories or "degrees" (lint C21).
-4. **A true zero.** Bands use relative error, so quantities must sit on a scale with a real zero: counts, lengths, masses, durations, speeds, ratios. Never °C or °F, where "10% off" means nothing. Dates use `valueKind: year`.
-5. **Big enough.** Quantity answers of 20 or more, so a 5% bullseye allows at least ±1. Smaller answers need a `bands` override with a reason, or a different question. Years run from 1 to 9999 (PRD §4.2.1), so no BC years.
-6. **Interesting to estimate.** A typical adult can get within a factor of three by reasoning, few know it exactly (predicted exact share under 5%, never over 10%), and the reveal surprises.
-7. **Lookup resistance is welcome, not required.** A derived number (a ratio, a sum) resists a quick search (SYNTHESIS §7.5). Every input is its own verified claim, and the arithmetic goes in `derivation`.
+3. **Unit-free by preference, and never ambiguous.** The question names its unit or asks for a count. Prefer counts, ratios, durations and years, which every player estimates in the same terms. A length, area, mass or speed is allowed only when the quantity is equally familiar in metric everywhere (a 400 m running track is; the height of Mount Everest isn't, for players who think in feet), and such measured encores are at most 1 in 10: one per batch, 12 in the bank (lint C15, §11.4). A unit that the question supplies rather than asks for, such as a walking speed, comes in both systems. Never tons, gallons, ounces, calories or "degrees" (lint C21).
+4. **A true zero.** The error is a ratio: max(guess, answer) / min(guess, answer) - 1 (PRD §4.2.2), so a guess twice the answer and one half of it are both 100% off. A ratio means something only on a scale with a real zero: counts, lengths, masses, durations, speeds, ratios. Never °C or °F, where "10% off" means nothing. Dates use `valueKind: year` and score in years off.
+5. **Big enough.** Quantity answers of 21 or more, so the 5% bullseye holds at least one whole number on each side of the answer (at 20, a guess of 19 is 5.3% off). Smaller answers need a `bands` override with a reason, or a different question. Years run from 1 to 9999 (PRD §4.2.1), so no BC years.
+6. **Interesting to estimate.** A typical adult can get within a factor of three by reasoning, few know it exactly (predicted exact share under 5%, never over 10%), and the reveal surprises. **The likeliest round guess misses the bullseye.** Name it in `writerNotes` with its error: for a quantity, the round number players anchor on (40,000 for an Equator of 40,075 km is 0.2% off, so that question fails); for a year, the nearest decade (1900 for the first Michelin Guide is exact, so that one fails too, and in practice any year ending in 0, 1, 2, 8 or 9 fails, because its decade is 2 years away or less). A round anchor inside the bullseye gives thousands of players the same near-perfect score, and mass near-ties stop the Encore breaking ties (rule 9).
+7. **Lookup resistance is welcome, not required.** A derived number (a ratio, a sum) is often harder to search for and rewards reasoning (SYNTHESIS §7.5), unless the number is itself famous ("1.3 million Earths"). Every input is its own verified claim, and the arithmetic goes in `derivation`.
 8. **Store the precision the evidence supports.** The Sun's volume is "about 1.3 million" times Earth's: store 1,300,000, not 1,302,097.
 9. **Years are at most a quarter of encores** (30 of 120). Skip years everybody knows exactly, such as the Moon landing, because exact ties stop the Encore breaking ties.
 10. **Bands.** The defaults suit almost everything. Override only with a written reason, and never widen a bullseye beyond 10%.
 11. **The explanation shows the way there** (the reasoning, or the surprise), plus the other unit where it helps.
-12. **Equally guessable everywhere.** "How many US states are there?" is a count Americans learn at school, so it fails the global rule.
+12. **Equally guessable everywhere.** "How many US states are there?" is a count Americans learn at school, so it fails the global rule. A length asked in kilometres fails it more quietly: it favours players who think in metric over those who think in miles (rule 3).
 
 ---
 
@@ -599,7 +645,7 @@ Feedback that explains beat feedback that shows the right answer, which beat rig
 
 - **35 words or fewer**, counted as whitespace-separated tokens, numbers included (lint C02). Room explanations aim for 25.
 - It shows after right and wrong answers, so it must work for both.
-- **It adds a surprising, verifiable fact.** It never just restates the key. "The capital of Australia is Canberra" is a restatement; "Sydney and Melbourne both wanted the title, so the constitution put the capital in New South Wales but at least 100 miles from Sydney" earns its place.
+- **It adds a surprising, verifiable fact.** It never just restates the key. "The capital of Australia is Canberra" is a restatement; "Sydney and Melbourne both wanted the title, so the constitution put the capital on land granted by New South Wales, at least 100 miles from Sydney" earns its place.
 - For a counterintuitive item, it defuses the most likely wrong pick.
 - **Every fact in it is a claim** (role `explanation`), checked exactly like the key.
 - No URLs, no "according to", no source names unless they are part of the fact. "Learn more" carries further reading through `learnMore`.
@@ -652,7 +698,7 @@ An encore's band comes from the predicted share of typical adults landing inside
 From gap 3's recommendation, run by estimator agents, never by writers:
 - **Five independent estimates per item**, each from a blind packet and a different angle: fame of the answer across countries; school exposure; distractor pull (or, for mysteries, clue depth); recency and memorability; reach outside the US and UK.
 - **Each returns** *p* for practice and room items, s1 to s4 for mysteries, or the close and exact shares for encores.
-- **Combine** by taking the median on the logit scale. The spread is the standard deviation of the five logits. Store both, with the estimator version.
+- **Combine** by taking the median on the logit scale, share by share (the medians of non-decreasing ladders are non-decreasing, so s1 to s4 stay in order). **Spread** measures how far the five disagree on the number that matters for each kind: for practice and room items, the standard deviation of the five logits of *p*; for mysteries, the standard deviation of the five estimators' expected points (each one's s1 + s2 + s3 + s4, §8.3); for encores, the standard deviation of the five logits of `pClose`. Store the combined values and the spread, with the estimator version.
 - **Shapes** (`predicted`, ARCHITECTURE §3.2): practice and rooms `{ "p": 0.68, "spread": 0.41, "estimator": "v0" }`; mysteries `{ "solveByClue": [0.3, 0.5, 0.8, 0.97], "spread": 0.35, "estimator": "v0" }`, whose expected points are the sum of the four shares; encores (+) `{ "pClose": 0.31, "pExact": 0.02, "spread": 0.5, "estimator": "v0" }`.
 - **The band follows the estimate.** Practice and room bands come from `predicted.p` (PRD §3.3.3), and a mystery whose prediction lands in another window moves to another `slot`. The editor then moves the item to another cell of the batch plan. Nobody rewrites text to chase a number.
 - **AI solve rates are never difficulty.** Agents answer most trivia, so their success says almost nothing about people (gap 3).
@@ -661,19 +707,20 @@ From gap 3's recommendation, run by estimator agents, never by writers:
 
 ### 8.6 After launch: how play recalibrates
 
-- **Data.** Practice first attempts, uploaded in batches (PRD §3.3.1), and eligible ranked Daily runs (PRD §4.3.6).
+- **Eligible answers.** For a practice item: a player's first attempt, counted only when the calibration view accepts it (ARCHITECTURE §8.12, `item_stats`): the identity already holds 20 or more rated answers, its practice record is at least a day old, its IP subject has counted fewer than 3 answers on that item that day, and it isn't low trust. For a Daily item: ranked runs with no honest-play flag (PRD §4.3.6). Archive, challenge and repeat plays never count. The practice upload needs no secret (a registered device sends one only so its answers count toward report weight, PRD §3.13.3), so these rules, not a credential, are what keep one client from moving an item.
+- **Safeguards** (SYNTHESIS §7.10). Only a player's first rated attempt at an item counts. Flagged and low-trust identities, and identities with under 20 rated answers, are ignored. Each player's influence is capped: one answer per item, ever, inside ARCHITECTURE's daily upload limits. Answers from runs in a category the player picked count half, because people choose the categories they are good at. An item with open reports, a pull or a pending re-check is frozen at its last estimate until the matter closes. The database's calibration view marks open reports and pulls as `disputed`; pending re-checks live on the content side, so the weekly content run adds those holds itself (ARCHITECTURE §8.12).
 - **The weekly re-tune** (Mondays, automated). Fit logit(observed) = a + b × logit(predicted) on items with 100 or more eligible answers; add shrunken category offsets once a category has 8 such items; re-score every item. New *p* values ship with the next practice pack build, which moves items between bands automatically, because bands read the current *p* (PRD §3.3.3). The sealed pool is re-scored and Dailies beyond the freeze re-assembled (gap 3).
 - **Mysteries** swap predicted solve shares for observed ones once 100 eligible runs exist. The clue where the crowd actually solves shows which rung was mis-pitched.
 - **Editor flags** (SYNTHESIS §7.10): success above 95% or below 10%; strong players missing an item more often than weak ones (often a wrong key or ambiguous wording, so the item is re-checked at once); a distractor drawing under 5% of picks; reports above 1% of plays; a mystery whose most common wrong guess takes more than 30% of wrong guesses, which may mean that entity fits a clue.
 - **Alarms** (gap 3): a Daily's mean more than 1.0 point from its prediction; an Easy practice item under 65%; a Mystery 1 with observed expected points under 2.6, or a Mystery 3 over 2.8.
-- **What writers do with it.** The weekly content run reads the calibration report, re-checks and fixes flagged items, replaces dead distractors, and writes Hard items first, because 25 Hard items per category last only two and a half Hard runs.
+- **What writers do with it.** The weekly content run reads the calibration report, re-checks and fixes flagged items, replaces dead distractors, and writes Hard items first, because 20 to 31 Hard items per category (§11.4) last two or three Hard runs.
 - **Estimator v1** trains on our own data once 1,000 practice items have 100 first attempts each (gap 3).
 
 ---
 
 ## 9. Verification protocol
 
-Our writers and checkers are AI agents, mostly without open web access. The decisions memo replaces "two web sources and a stored quote per item" with two independent checkers, datasets for structured facts, WebSearch only for genuinely uncertain items, and cutting whatever stays uncertain (memo §10). This section turns that into mechanics.
+Our writers and checkers are AI agents, mostly without open web access. The decisions memo replaces "two web sources and a stored quote per item" with two independent checkers, datasets for structured facts, WebSearch only for genuinely uncertain items, and cutting whatever stays uncertain (memo §10). It also asks for zero known errors in scheduled Dailies (memo §13), and every player sees every Daily clue on the reveal, so Daily items carry the strictest rules in the bank and a third check of their own, pass D. This section turns all of that into mechanics.
 
 ### 9.1 Principles
 
@@ -688,43 +735,59 @@ An atomic claim is one checkable statement. The key, each distractor's wrongness
 
 | Field | Type | Rule |
 |---|---|---|
-| `id` | string | `c1`, `c2` and so on, unique in the item. Checker additions use `x1`, `x2` |
+| `id` | string | `c1`, `c2` and so on from the writer, unique in the item. Additions carry the pass that made them, so two blind checkers can't both write an `x1`: `xA1`, `xA2` from checker A, `xB1` from checker B, `xT1` from a tiebreak, `xD1` from pass D |
 | `role` | enum | `key`, `distractor`, `clue`, `explanation`, `uniqueness`, `value`, `input` or `label` (a comparison item's value) |
 | `ref` | string, optional | Which part: `clue:2`, `distractor:Sydney`, `item:1` |
-| `text` | string | One statement, in plain words |
-| `risk` | `standard` or `high` | |
-| `riskReason` | enum, when high | `number`, `date`, `superlative`, `first`, `quotation`, `etymology`, `record`, `recent_change` or `checker_doubt` |
+| `text` | string | One statement, in plain words. A clue claim restates its clue exactly (§5.2, rule 16) |
+| `risk` | `standard` or `high` | Never below lint C26's floor |
+| `riskReason` | enum, when high | `number`, `date`, `superlative`, `only`, `first`, `quotation`, `etymology`, `record`, `recent_change`, `counterintuitive`, `sealed_pool` or `checker_doubt`. C26's other triggers map onto these: "invented" to `first`; "named after", "comes from" and "means" to `etymology` |
 
-**High-risk claims need external evidence** (a dataset or a web result) in at least one confirming check: specific numbers and measurements beyond everyday knowledge; exact dates, and years of events that aren't world-famous; superlatives and "only"; firsts and inventions; quotations; etymologies and name origins; anything that changed in recent years; and any claim either checker rates below certain. An encore's value is always high-risk.
+**The risk floor.** Labels used to be self-assessed, and two same-family checkers' knowledge can pass a standard claim, so an under-labelled claim is the cheapest way for an error into the bank. Lint C26 therefore sets a floor no writer can go under: a digit or a number word, quotation marks, a superlative, "only", "first", "invented", "named after", "comes from" or "means" makes a claim high-risk; so does being the key claim of a counterintuitive item, or a clue, value or input claim in a sealed pool. Writers may raise risk, never lower it. Beyond the floor, a claim is high-risk when it gives an exact date or a year of an event that isn't world-famous, a measurement beyond everyday knowledge, anything that changed in recent years, or anything either checker rates below certain. An encore's value is always high-risk.
+
+**High-risk claims need external evidence** (a dataset, a web result, or a calculation for a pure conversion, §9.5.4) in at least one confirming check. Sealed Daily pools need more (§9.5.5).
+
+**When evidence runs out.** A high-risk claim that can't get external evidence within its batch's search caps (§9.5.2) moves down the precision ladder or is cut. It is never relabelled standard.
 
 **The precision ladder.** When evidence for an exact figure is missing, step down: exact ("3.8 km") to approximate ("about 4 km") to bounded ("less than 5 km") to dropping it. Write each claim at the precision you can defend.
 
 ### 9.3 Writer self-check
 
-Every box gets ticked in `writerNotes` before submission:
+Tooling can't read a ticked box in prose, so the checklist is a field. Before submission the writer sets each of these eleven codes in `selfCheck` to `true` (§2.3), and keeps any commentary in `writerNotes`. The packet builder refuses an item whose `selfCheck` lacks a code or holds a `false`.
 
-1. The lint is clean.
-2. Every claim is listed, with its risk set honestly.
-3. Structured facts are checked against a dataset (§9.5.1) wherever one covers them, with the locator noted.
-4. The rival test is done (§3.2): each distractor argued for, the key argued against.
-5. Volatility is set; no time words; nothing depends on knowledge newer than mid-2026.
-6. Regional check: a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago.
-7. Spelling and style (§3.3): Oxford spelling, no time words, no en or em dashes, an explanation of 35 words or fewer.
-8. Every claim is screened against `content/reference/myths.json`.
-9. Mysteries: rival search, likely guesses, list coverage, giveaway terms and the clue-4 display check.
-10. Encores: unit, stability, true zero, and the derivation's arithmetic done twice.
-11. Doubts are written down. An item the writer can't stand behind is dropped, not left for the checkers to catch. Writers may use WebSearch inside the batch's budget for genuinely uncertain claims.
+| # | Code | What the writer confirms |
+|---|---|---|
+| 1 | `lint` | The lint is clean |
+| 2 | `claims` | Every claim is listed, with its risk at or above lint C26's floor and set honestly beyond it |
+| 3 | `datasets` | Structured facts are checked against a dataset (§9.5.1) wherever one covers them, with the locator noted |
+| 4 | `rivalTest` | The rival test is done (§3.2): each distractor argued for, the key argued against |
+| 5 | `volatility` | Volatility is set; no time words; nothing depends on knowledge newer than mid-2026 |
+| 6 | `regional` | A player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago |
+| 7 | `style` | Spelling and style (§3.3): Oxford spelling, no time words, no en or em dashes, an explanation of 35 words or fewer |
+| 8 | `myths` | Every claim is screened against `content/reference/myths.json` |
+| 9 | `mystery` | Mysteries: rival search, likely guesses, list coverage by minted ids, giveaway terms, rule 15 for named entities, clue claims that restate their clues, and the display checks |
+| 10 | `encore` | Encores: unit, stability, true zero, the likeliest round guess outside the bullseye, and the derivation's arithmetic done twice |
+| 11 | `doubts` | Doubts are written down in `writerNotes`. An item the writer can't stand behind is dropped, not left for the checkers to catch. Writers may use WebSearch inside their own cap for genuinely uncertain claims (§9.5.2) |
 
 ### 9.4 Fact-checker passes A and B
 
-**Independence.** Each checker is a separate agent run with no shared context. Each receives a blind packet built by tooling: the item's text (options in random order, the key withheld until after the cold solve), its category and answer type. Never the writer's notes or evidence, never the estimate, never the other checker's record. The packet is hashed into `packetSha256`, so the record proves what the checker saw.
+**Independence.** Each checker is a separate agent run with no shared context. Each receives its own blind packet from the packet tool (`npm run content:packets`, ARCHITECTURE §5.8). No stage of a packet holds the writer's notes or `selfCheck`, the estimate, or the other checker's record.
+
+**Staged packets.** One agent run receives its packet in stages. The tool serves the next stage only after the run's check record holds the cold-solve entry for the stage before, and it hashes each stage as it serves it:
+
+| Stage | Multiple choice, true/false, comparison, room question | Mystery | Encore |
+|---|---|---|---|
+| 1 | The stem and the options in shuffled order (true/false: the statement; comparison: the stem and both labels), and the category | The answer-type line, clue 1, the category, and the answer list file for the type, in the version that will ship | The question, the unit and the category |
+| 2 to 4 | None | One clue per stage: clue 2, then 3, then 4. The four options, in shuffled order, arrive with clue `optionsFromClue` | None |
+| Final | The key and the writer's claims | The key, accepted ids, distractors, rivals, likely guesses, giveaway terms and the writer's claims | The answer, bands, derivation and the writer's claims |
+
+No stage before the final one holds a claim, because the claims state the key. `packetSha256` stores every stage's hash in order, and `stagesServedAt` the time each was served, so the record proves what the checker saw and when. A cold-solve entry written after the next stage was served makes the record invalid. Estimator packets have a single stage: the item with its key, and nothing else.
 
 **Briefs.** Checker A confirms: verify every claim as a subject expert would, and gather dataset or web evidence for every high-risk claim. Checker B refutes: try to break the item by finding a second defensible answer, an outdated fact, a regional misreading, a trick reading or a giveaway. Both verify every claim.
 
-1. **Cold solve, before seeing the key.** Multiple choice, true/false and comparison: answer it and rate your confidence. Mystery: reveal one clue at a time, and at each clue record your guess and every candidate you would consider. Encore: give an estimate and say how you got it. A cold miss, or more than one candidate left after clue 3, is a red flag the checker must explain in `issues` as ambiguity or as a gap in their own knowledge. A cold solve never feeds difficulty.
-2. **Claims.** Extract your own claim list, merge it with the writer's, and give each claim a verdict (`confirmed`, `refuted` or `uncertain`), a method (`dataset`, `web` or `knowledge`) and its evidence (§9.5).
-3. **Issues.** Record each problem with its type (`ambiguity`, `second_answer`, `outdated`, `regional`, `trick`, `giveaway`, `wording`, `sensitivity` or `style`) and severity (`blocker`, `fix` or `note`).
-4. **Verdict.** `pass` when every claim is confirmed and nothing is a blocker; `revise` when a fixable issue exists and no claim is refuted; `fail` when any claim is refuted or any blocker stands.
+1. **Cold solve, stage by stage.** Multiple choice, true/false and comparison: answer it and rate your confidence. Mystery: at each clue record your guess and every candidate you would consider, checking candidates against the list file, before asking for the next clue. Encore: give an estimate and say how you got it. A cold miss, or more than one candidate left after clue 3, is a red flag the checker must explain in `issues` as ambiguity or as a gap in their own knowledge. A cold solve never feeds difficulty.
+2. **Claims.** After the final stage, extract your own claim list and compare it with the writer's. Give every claim a verdict (`confirmed`, `refuted` or `uncertain`) and its evidence entries, each typed by kind (§9.5, §9.8). Add the claims the writer missed under your pass's prefix (`xA1` or `xB1`), with role, text and risk.
+3. **Issues.** Record each problem with its type (`ambiguity`, `second_answer`, `outdated`, `regional`, `trick`, `giveaway`, `wording`, `sensitivity`, `style` or `checker_doubt`) and severity (`blocker`, `fix` or `note`).
+4. **Verdict.** `pass` when every claim is confirmed and nothing is a blocker. `fail` when any claim is refuted or any blocker stands. `revise` in every other case: a fixable issue, or any claim left `uncertain`, which also gets an issue of type `checker_doubt` naming it. So an uncertain claim with nothing refuted and no blocker is always `revise`, never a gap between the three.
 
 Checkers never edit the item, never paste the item's text into a search to find a quiz site with the answer, and never treat another trivia site as evidence.
 
@@ -751,9 +814,9 @@ Download each dataset once, pin it to a commit or package version, and record it
 
 | Key | Where | Licence | Good for | Traps we found |
 |---|---|---|---|---|
-| `mledoze-countries` | `mledoze/countries` at `6031f5d`, `countries.json` (npm `world-countries` 5.1.0) | ODbL 1.0 | ISO codes, capitals, borders, landlocked status, region, area, alternative spellings | Marks Vatican City as a UN member, so it counts 194 members instead of 193 (the Holy See is an observer). Spells Mongolia's capital "Ulan Bator". Lists three capitals for South Africa. Lacks "Czech Republic" among Czechia's spellings. France's area is metropolitan France only (551,695 km²) |
+| `mledoze-countries` | `mledoze/countries` at `6031f5d`, `countries.json` (npm `world-countries` 5.1.0) | ODbL 1.0 | ISO codes, capitals, borders, landlocked status, region, area, alternative spellings | Marks Vatican City as a UN member, so it counts 194 members instead of 193 (the Holy See is an observer). Spells Mongolia's capital "Ulan Bator". Gives a changed or planned capital where most players learned the old one: Gitega for Burundi (moved from Bujumbura in 2019), Ngerulmud for Palau (moved from Koror in 2006), Ciudad de la Paz for Equatorial Guinea (most references and players still say Malabo). Gives one capital where there are several or none in law: Colombo for Sri Lanka (the official capital is Sri Jayawardenepura Kotte), Lobamba alone for Eswatini, Sucre alone for Bolivia, Yaren for Nauru; yet lists three for South Africa. Lacks "Czech Republic" among Czechia's spellings. France's area is metropolitan France only (551,695 km²). Every capital value above was read from the pinned file (sha256 `0d92fb23...`) on 31 October 2026 |
 | `cldr-territories` | `unicode-org/cldr-json` at `7d2b9cb`, `cldr-json/cldr-localenames-full/main/en/territories.json` (npm `cldr-localenames-full` 49.0.0) | Unicode-3.0 | English display names and their variants: Côte d'Ivoire and Ivory Coast, Czechia and Czech Republic, Eswatini and Swaziland, Türkiye and Turkey | Some names need overrides ("Congo - Kinshasa"). Uses curly apostrophes |
-| `ptable` | `Bowserinator/Periodic-Table-JSON` at `a78c7a4`, `PeriodicTableJSON.json` | CC BY-SA 3.0, built from Wikipedia | Atomic numbers, symbols, groups, periods, phase at room temperature | Includes element 119, "Ununennium", which has not been discovered. Spells "Cesium" (IUPAC: caesium). Credits shared discoveries to one person (oxygen to Scheele alone). Predicted properties of superheavy elements look like measured ones |
+| `ptable` | `Bowserinator/Periodic-Table-JSON` at `a78c7a4`, `PeriodicTableJSON.json` | CC BY-SA 3.0, built from Wikipedia | Checking single facts: atomic numbers, symbols, groups, periods, phase at room temperature. Never copied into the shipped element list (§11.4), and never independent of a Wikipedia source (§9.5.2) | Includes element 119, "Ununennium", which has not been discovered. Spells "Cesium" (IUPAC: caesium). Credits shared discoveries to one person (oxygen to Scheele alone). Predicted properties of superheavy elements look like measured ones |
 | `geonames-cities` | npm `cities.json` 1.1.65, 171,094 places from GeoNames | CC BY 4.0 | City coordinates and country codes, so "further north" comparisons can be checked | Homonyms: two places called Cusco in Peru. Match on name, country and `admin1` together |
 | `worldcup` | `openfootball/worldcup.json` at `516d382`, one file per tournament | Public domain | Men's World Cup results and finals | Men's tournaments only. Finals settled after extra time or on penalties need the full score fields |
 | `moma-artists` | `MuseumofModernArt/collection` at `51a140d`, `Artists.json`, stored in Git LFS (fetch through `media.githubusercontent.com`) | CC0, credit requested | Artist names, birth and death years, nationality, Wikidata QIDs, ULAN ids | Nationality is MoMA's convention: Max Ernst is listed as French |
@@ -764,41 +827,63 @@ Download each dataset once, pin it to a commit or package version, and record it
 | `corpora` | `dariusk/corpora` | CC0 | Brainstorming list candidates (animals, foods) | Not authoritative, so never evidence |
 | Wikidata | Through the enrichment job only; blocked from the sandbox | CC0 | QIDs, sitelinks, labels and aliases for answer lists | Anyone can edit it, so it is a candidate source and never a fact-checker ([07 §11](./research/07-content-excellence.md)) |
 
-**Using a dataset well.** Record the file, the locator (`cca3=AUS`) and the exact excerpt. Cross-check a high-risk dataset fact against a second source, because one bad flag in the most popular countries file shows how errors sit quietly in famous data. Prefer CC0 and public-domain data when building anything we ship. ODbL and BY-SA data are for checking single facts, never for copying substantial parts into shipped files without the owner's say-so ([07 §11](./research/07-content-excellence.md); not legal advice). GeoNames data needs credit if we ship it.
+**Using a dataset well.** Record the file, the locator (`cca3=AUS`) and the exact excerpt. Cross-check a high-risk dataset fact against a second source, because one bad flag in the most popular countries file shows how errors sit quietly in famous data. Prefer CC0 and public-domain data when building anything we ship. ODbL and BY-SA data are for checking single facts, never for copying substantial parts into shipped files without the owner's say-so, recorded in the batch register ([07 §11](./research/07-content-excellence.md); not legal advice). That is why the element list is written by its list builder from IUPAC's published table and only checked against `ptable`. GeoNames data needs credit if we ship it.
 
-**The enrichment job** (for Platform to build). A GitHub Actions job, which can reach hosts the sandbox can't (SYNTHESIS §9, row 27), queries Wikidata for each list entry by name and qualifier and writes candidates to `content/answer-lists/_wikidata/`. The list builder accepts a match only when the label and the qualifier agree (a film's year, a book's author, a city's country). Until the job exists, entities keep `x.` ids and `popularity` stays 0, except QIDs copied from datasets that carry them.
+**The enrichment job** (ARCHITECTURE ticket ENR-1). A GitHub Actions job, which can reach hosts the sandbox can't (SYNTHESIS §9, row 27), queries Wikidata for each list entry by name and qualifier and writes candidates to `content/answer-lists/_wikidata/`. The list builder accepts a match only when the label and the qualifier agree (a film's year, a book's author, a city's country). Until the job exists, entities keep `x.` ids and `popularity` stays 0, except where a dataset record carries a QID, which then is the id (§2.12).
 
 #### 9.5.2 WebSearch
 
-Use it only for genuinely uncertain claims: a high-risk claim no dataset covers, a claim a checker rates below certain, or a report re-check (§9.10). Web pages themselves are mostly blocked from the sandbox, so don't build a check around fetching them.
+Use it only for genuinely uncertain claims: a high-risk claim no dataset covers, a claim a checker rates below certain, a Daily claim that needs a second source (§9.5.5), or a report re-check (§9.10). Web pages themselves are mostly blocked from the sandbox, so don't build a check around fetching them.
 
-- **What the tool gives you:** a list of result titles and URLs, plus a written summary. It does not give page text. Record the query, the result list exactly as returned, the summary sentences that state the claim (verbatim), and the tiers of the results the summary relies on.
+- **What the tool gives you:** a list of result titles and URLs, then a prose summary. It returns no page text and no machine-readable link from a summary sentence to a result. Sometimes the prose names the result it drew on ("PEO: Its 'Canberra from above' page welcomes readers to Canberra, the capital city of Australia", from the search in §12.15); often it names its sources only as a group, or not at all. Record the query, the result list exactly as returned, and the summary sentences that state the claim, verbatim.
+- **Attribution decides what a call is worth.** When the summary attributes the sentence to a named result, record that result as `citedResult` (title, URL and tier), and the call counts as one source at that result's tier. Otherwise the call counts as one source at the lowest tier among the results the summary could have relied on. A summary built from a Tier C page therefore never passes just because a Tier A URL sits somewhere in the list.
 - **Tiers.** A: the body that owns the fact (a government or parliament, a UN agency, a standards body such as IUPAC or the IAU, the museum that holds the object, the organization that awards the prize, a peer-reviewed paper, a national statistics office). B: established reference works and quality press (Britannica, Wikipedia, national broadcasters, major newspapers). C: everything else, which never counts: blogs, listicles, fact sites, forums, AI-written pages and every other quiz or trivia site.
-- **When a web check confirms a claim:** the summary states it plainly, at least one listed result is Tier A or B, and the summary reports no conflict. A Daily key or an encore value needs two Tier A or B results, or one plus a dataset.
+- **When a web check confirms a claim:** the summary states it plainly, the call counts as Tier A or B under the attribution rule, and the summary reports no conflict.
+- **Independent sources.** Two sources are independent when different publishers stand behind them. Never two Wikipedia pages, never Wikipedia and data built from it (`ptable` is), and never two results of one call: one WebSearch call is one source however many URLs it lists. A two-source rule (§9.5.5) needs two calls with differently worded queries whose counted sources come from different publishers, or one call plus a dataset record from another publisher.
 - **Conflicts fail the claim as written.** Rewrite to what every source agrees on, or cut. Our pane-count search for the Louvre pyramid is the example (§6, rule 2).
-- **Budgets per batch** (caps, not targets): practice 10, mystery 15, encore 12, room 8, answer list 5. Every search is counted in the check record (`searchesUsed`). A batch that needs more has too many fragile claims, so rewrite it toward robust facts.
+- **Budgets are per role, per batch.** The writer, checker A and checker B each have their own cap; tiebreaks and follow-ups are counted against the batch separately, and pass D against the Daily it clears. The editor sets each batch's caps when opening it, from the M1 content spike's measured figure: high-risk claims per item, by pool, that no dataset covered (PRD §9.3; §11.6 below). Checker A's cap is that figure times the batch's drafts, plus a fifth; the writer's and checker B's are each a quarter of A's. Until the spike reports, the starting figures are 1.5 per practice item, 6 per mystery (pinning clues need two sources each), 3 per encore and 1 per room question. Caps are limits, not targets, and every search is counted in its record (`searchesUsed`) and in the register (§11.3).
+- **Out of budget never means relabelled.** A high-risk claim that can't get external evidence within the cap moves down the precision ladder or is cut (§9.2). A batch that keeps hitting its caps has too many fragile claims, so the next one is written toward facts the datasets cover.
 
 #### 9.5.3 Knowledge
 
-A checker's own knowledge may confirm a standard-risk claim. The checker restates the fact in their own words, names the basis (`textbook`, `reference` or `everyday`) and gives a confidence. Only `certain` confirms. Knowledge alone never confirms a high-risk claim: a checker may record a knowledge verdict on one, but the claim counts as confirmed only when at least one of the two checks also carries dataset or web evidence for it (§9.9). Because the checkers can't see each other, the job is assigned: checker A gathers external evidence for every high-risk claim, and checker B searches only for claims it doubts.
+A checker's own knowledge may confirm a standard-risk claim. The checker restates the fact in their own words, names the basis (`textbook`, `reference` or `everyday`) and gives a confidence. Only `certain` confirms. Knowledge alone never confirms a high-risk claim: a checker may record a knowledge verdict on one, but the claim counts as confirmed only when at least one of the two checks also carries external evidence for it (§9.9). Because the checkers can't see each other, the job is assigned: checker A gathers external evidence for every high-risk claim, and checker B searches only for claims it doubts. One claim may carry several entries of different kinds (a dataset record for one half and knowledge for the other), and each is labelled for what it is.
+
+#### 9.5.4 Calculation
+
+A calculation entry confirms a unit conversion, or arithmetic on other claims that are themselves confirmed (a derived encore value from its inputs). It records the expression, the result, the claims it uses and the constants it needs, and constants come only from `content/reference/units.json`, which holds exact definitions such as 1 mile = 1.609344 km. The validator re-runs every calculation. It never confirms a fact about the world on its own: "100 miles is about 160 km" passes on one, while "the Equator is about 40,075 km long" needs a dataset or a search. This is what keeps §3.3's dual units affordable once C26 makes every number high-risk.
+
+#### 9.5.5 What a Daily item needs
+
+A wrong clue is a Daily error under memo §13, and every player sees all four clues on the reveal, so sealed Daily pools (mysteries, encores, and anything scheduled into a Daily) add these rules to the ones above:
+- **Every clue, value and input claim** carries dataset or web evidence in at least one confirming check (C26 already makes them high-risk). A derived value is the one exception: its calculation from evidenced inputs stands in (§9.5.4).
+- **Two independent external sources** (§9.5.2) back every clue claim that pins the answer, meaning any clue a rival's `ruledOutBy` names; any number, date or "only" in any clue, clue 4 included; and every encore value. A derived value counts as having two when each of its inputs has two and the validator reproduces the arithmetic.
+- **A claim naming a country's current capital** carries the dataset record and a Tier A or B web result, as everywhere (§3.4).
+- **Pass D** then re-verifies all of it, against the list version that will ship, before the Daily freezes (§9.9, rule 7).
 
 ### 9.6 Never invent a source
 
 - A URL may appear in our files only when it came verbatim from a tool result in that session or from the dataset manifest, and never in player-facing text.
 - Never cite a book, page, museum label or dictionary entry you didn't retrieve. Writing "as listed in Britannica" without a result is fabrication.
-- Never type a Wikidata id, ISBN, catalogue number or coordinate from memory and present it as evidence.
+- Never type a Wikidata id, ISBN, catalogue number or coordinate from memory and present it as evidence. A QID used as an entity id comes from the record its entry's `source` names.
 - A fabricated source fails the whole batch. The editor rejects it, fresh checkers re-check every item in it, and the incident goes in the batch register.
 - The "Learn more" link is generated from `learnMore` as a Wikipedia search. Nobody types it.
 
 ### 9.7 How the editor resolves disagreements
 
+**First, merge.** Each checker added claims blind (§9.2), so neither has seen the other's additions. Once both records are in, the editor builds the merged claim list: the writer's claims plus every addition, with any addition that repeats an existing claim marked as a duplicate of it (`verification.merge`, §9.8). Every claim that only one check confirmed, which includes every surviving addition, goes in a short follow-up packet (the item and those claims) to a run with the other pass's brief: checker B's for an `xA` claim, checker A's for an `xB` claim, never the claim's author, the writer or the editor. The editor may send it to a tiebreak T instead. The follow-up's verdict stands in for the missing check on those claims.
+
+**Then resolve.**
+
 | Checker A | Checker B | The editor |
 |---|---|---|
-| pass | pass | Reviews style and balance, then accepts or asks for wording. A wording change that touches no claim keeps both checks; a changed claim gets two fresh checks |
-| pass | revise (either way round) | Applies or rejects the fix. Changed claims get two fresh checks |
-| pass | fail (either way round) | Reads both records. A real problem means cut or rewrite. If the failing checker misread the item, the editor orders a tiebreak: a third blind checker (pass `T`) on the disputed claims, with external evidence required. Accepts only if it passes |
+| pass | pass | Reviews style and balance, then accepts or asks for a change, under the re-check rule below |
+| pass | revise (either way round) | Applies the fix, under the re-check rule, or rejects it. A rejected revise needs a tiebreak T on the disputed issue, and the item can be accepted only if T passes |
+| revise | revise | Applies both fixes under the re-check rule, or rejects one, which needs a T as above |
+| pass | fail (either way round) | Reads both records. A real problem means cut or rewrite. If the failing checker misread the item, the editor orders a tiebreak T on the disputed claims, with external evidence required, and accepts only if it passes |
 | fail | fail | Cuts, or reopens it as a new draft with a new ID |
-| Any claim `uncertain` | | Gets external evidence on that claim, or cuts |
+| Any `checker_doubt` issue | | Gets external evidence on that claim, through a follow-up or a T, or cuts |
+
+**The re-check rule.** Small edits change meaning ("above sea level", "by area"), so nothing player-facing changes on the editor's say-so alone. Any change to the stem, options, `a`, `b`, clues, `question`, `unit` or key needs a fresh refute check (pass B, a new run) on the whole item and a re-lint. A changed claim anywhere needs two fresh checks on that claim. Only spelling or punctuation fixes in the explanation keep both checks as they stand. After acceptance, every change also goes in `verification.corrections` (§9.8).
 
 The editor never overrules a refuted claim by judgment alone, never adds a fact during resolution without checks, and records every decision with its reason.
 
@@ -809,51 +894,67 @@ The `verification` object on each item:
 | Field | Type | Rule |
 |---|---|---|
 | `checks` | CheckRecord[2] | Passes A and B |
+| `merge` + | object | The editor's merge (§9.7): `mergedAt`, `editor`, `claims` (every claim id in the merged list with who added it: `writer`, `A`, `B`, `T` or `D`), `duplicates` (`[{ "id": "xB2", "sameAs": "c3" }]`) and `sentToFollowUp` (claim ids) |
+| `followUps` + | CheckRecord[] | One per follow-up run: a CheckRecord with `pass` set to the brief it ran under (`A` or `B`), `followUpFor` (the claim ids it was sent), `coldSolve` null, and results for those claims only |
 | `tiebreak` | CheckRecord or null | Pass T, when §9.7 calls for one |
 | `editor` | object | `editor` (agent id), `decision` (`accept`, `rewrite` or `cut`), `reason`, `decidedAt` |
-| `dedupe` | object | `checkedAt`, `nearestId`, `score`, `verdict` (`unique`, `related_ok` or `duplicate`) |
+| `dailyChecks` + | CheckRecord[] | Pass D records, one for each Daily date or spare set the item cleared (§9.9, rule 7) |
+| `dedupe` | object | `checkedAt`, `nearestId`, `score`, `verdict` (`unique`, `related_ok` or `duplicate`). In a plaintext file whose nearest item is sealed, `nearestId` is the string `"sealed"` and `score` is null, so nothing public names a sealed id or how close it is (§11.2) |
 | `mythsScreen` | object | `checkedAt`, `hits` (array) |
 | `lint` | object | `version`, `passed`, `warnings` |
 | `rechecks` | object[] | Later report and freshness re-checks (§9.10), each a CheckRecord plus `trigger` |
+| `corrections` + | object[] | Every change after acceptance: `date`, `change` (what changed, in plain words), `reason`, and `rechecks` (indexes into `rechecks` or `followUps` that cleared it). A played sealed item keeps its ID and logs its correction here (§2.12) |
 
 **CheckRecord**
 
 | Field | Type | Rule |
 |---|---|---|
 | `checker` | string | Agent id |
-| `pass` | `A`, `B` or `T` | |
-| `brief` | `confirm`, `refute` or `tiebreak` | |
-| `packetSha256` | string | Hash of the blind packet received |
+| `model` + | string | The model the run used, so an audit can confirm §0.2's model-family rule |
+| `pass` | `A`, `B`, `T` or `D` | |
+| `brief` | `confirm`, `refute`, `tiebreak` or `daily` | |
+| `packetSha256` | string[] | One hash per stage served, in order (§9.4) |
+| `stagesServedAt` + | ISO timestamps[] | When each stage was served, in the same order |
 | `startedAt`, `finishedAt` | ISO timestamps | |
-| `coldSolve` | object | Multiple choice, true/false and comparison: `answerGiven`, `confidence` (`low`, `medium` or `high`), `matchedKey`. Mystery: `perClue`, a list of `{ "clue", "guess", "candidates" }`. Encore: `estimate`, `reasoning` |
-| `claimResults` | object[] | One per claim: `claimId`, `verdict`, `method`, `evidence`, `note` |
+| `coldSolve` | object or null | Multiple choice, true/false and comparison: `answerGiven`, `confidence` (`low`, `medium` or `high`), `matchedKey`, `recordedAt`. Mystery: `perClue`, a list of `{ "clue", "guess", "candidates", "recordedAt" }`. Encore: `estimate`, `reasoning`, `recordedAt`. Each `recordedAt` falls before the next stage's `stagesServedAt` |
+| `claimResults` | object[] | One per claim: `claimId`, `verdict`, `evidence` (an array of typed entries, empty when the verdict rests on nothing), `note`. A checker's own addition also carries `addedClaim`: `{ "role", "ref", "text", "risk", "riskReason" }` |
 | `issues` | object[] | `type`, `severity`, `note` |
-| `searchesUsed` | integer | Counts against the batch budget |
+| `searchesUsed` | integer | Counts against the role's cap (§9.5.2) |
+| `forDate` + | ISO date or null | Pass D only: the Daily the check cleared, or null for a spare set |
+| `listVersions` + | object | Pass D only: the version of each answer list it checked against, by type |
 | `verdict` | `pass`, `revise` or `fail` | |
 
-**Evidence**, by method:
+**Evidence entries**, by kind. A claim may carry several, of different kinds:
 - Dataset: `{ "kind": "dataset", "dataset": "<manifest key>", "version": "<commit or npm version>", "file", "locator", "excerpt", "retrievedAt" }`
-- Web: `{ "kind": "web", "query", "results": [{ "title", "url" }], "summaryExcerpt", "tiers", "conflictReported", "retrievedAt" }`
+- Web: `{ "kind": "web", "query", "results": [{ "title", "url" }], "summaryExcerpt", "citedResult": { "title", "url", "tier" } or null, "tiers", "conflictReported", "retrievedAt" }`. `tiers` lists the tiers of the results the summary could have relied on; the call counts at `citedResult.tier`, or at the lowest of `tiers` when `citedResult` is null (§9.5.2)
 - Knowledge: `{ "kind": "knowledge", "basis", "restatement", "confidence" }`
+- Calculation: `{ "kind": "calculation", "expression", "result", "constants": ["<names from units.json>"], "claimIds": ["<claims it uses>"] }` (§9.5.4)
 
 §12.15 shows a filled-in record.
 
 ### 9.9 The acceptance rule
 
 The validator refuses `status: active` unless all of these hold:
-1. Two check records, passes A and B, by two different checkers, neither of whom is the writer or the editor.
-2. Both verdicts are `pass`, or a tiebreak passed under §9.7.
-3. Every claim is confirmed in both checks. Every high-risk claim has dataset or web evidence in at least one confirming check. A Daily key or an encore value has two independent external sources.
+1. Two check records, passes A and B, by two different checkers, neither of whom is the writer or the editor. Every follow-up and tiebreak is by a checker who is none of the writer, the editor or the claim's author.
+2. Both verdicts are `pass`; or one is `pass` and a passing tiebreak T stands in for the other check's `revise` or `fail` (§9.7).
+3. Every claim in the merged list (§9.8) is confirmed in both checks, a follow-up standing in for the check that lacked it. Every high-risk claim has dataset, web or calculation evidence in at least one confirming check. Every claim naming a country's current capital has the dataset record and a Tier A or B web result (§3.4). Sealed Daily pools also meet §9.5.5: evidence on every clue, value and input claim, and two independent external sources for every pinning clue, every number, date or "only" in a clue, and every encore value.
 4. Mysteries: both checks confirm the uniqueness claim, and neither found a rival that fits clues 1 to 3.
 5. No open blocker. Lint passed. Dedupe verdict `unique` or `related_ok`. Myths screen clean.
-6. The editor's decision is `accept`.
+6. The editor's decision is `accept`. For a `slow` item, `reviewBy` is set and falls at most 24 months after `editor.decidedAt`.
+
+**For scheduled sealed items, one more** (every mystery and encore in a scheduled Daily or a spare set):
+
+7. **A passing pass D.** After the Daily is assembled and before it freezes, an auditor who didn't write, check, follow up or tiebreak the item, on a different model family or size where one is available, re-verifies every clue and value claim with external evidence under §9.5.5 and repeats the rival search against the list versions that will ship on that date. The record goes in `dailyChecks`, with `forDate` (or null for a spare set) and `listVersions`; it stays valid for another date only while those list versions are unchanged. A D that fails pulls the item from that Daily and sends it back to the editor. The scheduler and the validator refuse to freeze a Daily, or to list a spare set, without a passing D on every item, and refuse any sealed item scheduled on or after its `reviewBy`.
 
 ### 9.10 Audits and re-checks
 
-- **Seeded blind audit** (before launch, then monthly). A separate auditor re-checks 300 random practice items and 60 sealed Daily items, mixed with 20 to 30 planted bad items: a wrong key, an ambiguous stem, an outdated fact, a second defensible answer, a right distractor, an invented source. The audit counts only if it catches at least 95% of the planted items. Zero confirmed errors among 300 practice items then bounds the practice error rate below about 1% at 95% confidence (SYNTHESIS §7.6). Any confirmed real error sends that writer's whole batch back for a full re-check (PRD §9.1, R4).
+- **Seeded blind audit** (before launch, then monthly). A separate auditor re-checks at least 400 random practice items and 60 sealed Daily items, mixed with at least 25 planted bad items. A planter agent (§0.2) writes the planted items, and at least half of them are subtle: a date a few years off, a number 10 to 20% off, a misattributed quotation, a folk etymology stated as fact, a fact that changed since 2019, a second answer that holds in one region. The rest may be blatant: a wrong key, an ambiguous stem, a right distractor, an invented source. Planted items live only in a git-ignored audit folder, `.cache/audits/<audit-id>/`, never anywhere under `content/`, so none can reach a pack. Every item in the audit, real or planted, reaches the auditor under an opaque packet id, so no id tells the two apart.
+- **What a passing audit proves.** It counts only if the auditor catches at least 24 of 25 planted items, or 96% when more are planted. Detection is measured, not perfect: catching 24 of 25 shows a detection rate of at least about 82% at 95% confidence (one-sided Clopper-Pearson), so zero confirmed errors among 400 real items bounds the practice error rate below about 0.9%. With perfect detection the bound would be 0.75%. The old plan's 300 items with 95% of 20 to 30 plants caught gives only about 1.2 to 1.3%, as SYNTHESIS §7.6 itself says. Agent-planted errors run more blatant than real ones, which flatters measured detection; that is why half the plants must be subtle. Zero errors among 60 Daily items bounds the Daily rate only below about 5%, so the Daily's protection is pass D on every scheduled item (§9.9, rule 7), not this sample.
+- **The audit record**, `content/sealed/audits/<audit-id>.json.enc`, sealed because it lists sealed ids. It holds the audit id and date; the auditor's and planter's ids and models; every sampled item's id with the auditor's verdict; each planted item's opaque id, defect type and subtlety, and whether the auditor caught it, never its text; the counts of planted and caught items; and each confirmed real error with links to its re-checks. PRD R4 and AC-CNT-05 read these counts, which the `content-sealed` job checks.
+- **After a confirmed real error,** that writer's whole batch goes back for a full re-check (PRD §9.1, R4), and a fresh audit runs on a new random sample, so a repaired batch never certifies itself.
 - **Owner spot check:** 50 random Daily items before 1.0 (SYNTHESIS §12, decision 14).
-- **Report re-checks.** When reports trigger review (PRD §3.13.3), a fresh checker re-verifies the reported claims with external evidence. WebSearch is always allowed here, because a reported claim is uncertain by definition. Voids and key changes then follow PRD §3.13.4, and the re-check goes in `rechecks`.
-- **Freshness.** An item reaching its `reviewBy` date gets a single fresh check. A failure retires it.
+- **Report re-checks.** When reports trigger review (PRD §3.13.3), a fresh checker re-verifies the reported claims with external evidence. WebSearch is always allowed here, because a reported claim is uncertain by definition. Voids and key changes then follow PRD §3.13.4, and the re-check goes in `rechecks`. A "My guess should have counted" report also lands in the list builder's queue (`private.list_builder_queue`, grouped by answer type and guessed entity, ARCHITECTURE §8.4): a missing alias goes into the next list version, and a genuine equivalent, once both checks confirm it, becomes an accepted id that the owner adds after play with `admin_add_accepted`, which rescores earlier guesses of it (PRD §3.13.3).
+- **Freshness.** An item reaching its `reviewBy` date gets a single fresh check. A failure retires it. A sealed item is never scheduled on or after its `reviewBy` (§9.9, rule 7).
 
 ---
 
@@ -867,25 +968,27 @@ A v1 Daily is `[mystery easy, mystery medium, mystery hard, encore]` (memo §2),
 
 - **Assembly windows** on predicted expected points (§8.3): Mystery 1 from 3.2 to 3.6, Mystery 2 from 2.5 to 2.9, Mystery 3 from 1.9 to 2.3. They sit inside the PRD's bands so estimate error rarely pushes a slot out of its band (gap 3).
 - **The Daily's predicted total** runs from 7.8 to 8.6 points, near the PRD's "about 8 of 12". For the first seven Dailies it runs from 8.2 to 8.8, leaning easy while the estimator's bias is unknown.
-- Mystery 1 comes from the lowest-spread third of eligible easy mysteries, because a misjudged opener hurts most. High-spread items go to Mystery 2.
+- Mystery 1 comes from the lowest-spread third of eligible easy mysteries (spread as §8.5 defines it for mysteries: how far the five estimators disagree on expected points), because a misjudged opener hurts most. High-spread items go to Mystery 2.
 - Prefer encores with a predicted close share between 20% and 50%.
 
 ### 10.3 Spread within a Daily
 
 - Three different categories, and three different answer types.
 - The encore's category differs from all three mysteries' categories.
-- No item names or clues another item's answer that day, and no two share a theme tag.
+- No item's text, clue-4 options or distractors name or clue another item's answer that day, and no two items share a theme tag.
 - At least one of the four items is counterintuitive.
 - Everything is `global`.
 
 ### 10.4 Spread within a week
 
 In any 7 consecutive Dailies:
-- No category appears on two consecutive days. Each category appears at most twice in the mystery slots, and every category appears at least once in any 6 consecutive Dailies (the PRD's "roughly every 4 days").
-- Film & TV, Music or Food & Drink appears in at least 4 of the 7 (PRD §3.18.2).
+- No category appears in the mystery slots on two consecutive days. Each category appears at most twice in the mystery slots, and every category appears in a mystery slot at least once in any 6 consecutive Dailies (PRD §3.18.2; SYNTHESIS §7.4 asks for "every three or four days").
+- Film & TV, Music or Food & Drink appears in a mystery slot in at least 4 of the 7 (PRD §3.18.2).
 - No answer type appears more than 4 times.
 - At most 2 year-kind encores.
 - A free tag appears at most twice.
+
+The Encore doesn't count toward any category rule above, as PRD §3.18.2 says for the Film & TV, Music or Food & Drink rule. Its own rules are the year-kind limit and §10.3's different category.
 
 ### 10.5 Repeats
 
@@ -894,15 +997,17 @@ In any 7 consecutive Dailies:
 - An entity that was an answer in the last 7 days is not used as a distractor.
 - Daily items never appear in practice packs or room packs, and no practice or room item covers the same fact as a Daily item.
 
+**Prove it fits before the writing ends.** The pool has no slack to spare: 100 scheduled Dailies and 20 spare sets need 360 mysteries, exactly 10 per slot per category, and §10.3 to §10.5 interact with the answer-type quotas in §11.4 in ways nobody can check by eye. So the scheduler runs a constraint solver (a complete backtracking search, as CNT-3 builds, or an integer program: any exact method that can prove infeasibility) over every rule in §10.3 to §10.5 and the quotas, on all 100 dates and 20 spare sets at once. It runs on the accepted pool after every mystery and encore wave, with the batch plans' quotas standing in for items not yet written, and on the full pool before wave 3's writing ends (§11.5). An infeasible run is reported at once with the rules that clash, while the next batches can still change their answer types or categories. Accepted reserves (the 11th and 12th items of a mystery batch) stay in the pool as slack.
+
 ### 10.6 The day check
 
-After assembly, a fresh checker plays the whole Daily cold, all four rounds, and reports cross-item giveaways, theme collisions, tone, and anything that reads oddly across time zones. A Daily is "today" somewhere for about 50 hours (PRD glossary), so no text says "today". The result goes in the schedule record's `dayCheck`.
+After assembly, a fresh checker plays the whole Daily cold, all four rounds, and reports cross-item giveaways, theme collisions, tone, and anything that reads oddly across time zones. A Daily is "today" somewhere for about 50 hours (PRD glossary), so no text says "today". The result goes in the schedule record's `dayCheck`. The day check looks for problems between items; it is not a fact check. Pass D is the fact check (§9.9, rule 7).
 
 ### 10.7 Locking and spare days
 
-- Keep 14 days assembled. Freeze each Daily 3 days ahead in the first month and 7 days ahead after two calm weeks. Re-assemble the rest after each Monday re-tune, so week-one lessons reach week two (gap 3).
+- Keep 14 days assembled. Freeze each Daily 3 days ahead at first and 7 days ahead once two calm weeks have passed, and only once every item on it has a passing pass D for that date and none is scheduled on or after its `reviewBy` (§9.9, rule 7). The database applies this as one rule in its config: the switch from 3 days to 7 is set to `DAILY_EPOCH` plus 28 days, and the owner moves it once two calm weeks have passed (ARCHITECTURE §8.7). The database alone decides what is frozen; a schedule file's `status` is advisory (§2.11). Re-assemble the rest after each Monday re-tune, so week-one lessons reach week two (gap 3).
 - The runway alarm sounds below 30 scheduled Dailies (PRD §3.18.2).
-- **20 spare sets** (20 mysteries per slot plus 20 encores) obey every rule above. If a scheduled Daily can't publish, a spare fills the date automatically.
+- **20 spare sets** (20 mysteries per slot plus 20 encores). Each set obeys §10.3 and the bank-wide repeat rules on its own, and each item carries a passing D before the set is listed. The week rules of §10.4 and the date-based rules of §10.5 depend on neighbours a spare doesn't have yet, so for every scheduled date the scheduler stores a `spareOrder` (§2.11): the spare sets ranked by how few of those rules each would break against that date's actual neighbours, ties going to the predicted points nearest the date's own. If a scheduled Daily can't publish, the first unused spare in its date's order fills it automatically, and an alert to the content queue names every rule it breaks.
 
 ### 10.8 Holidays
 
@@ -923,7 +1028,7 @@ Room packs are the sealed pool for host rooms (memo §6; PRD §3.18.2): eight th
 | `game-on` | Game On | Sports and games played worldwide | Sport & Games 15 | Olympic history, football (soccer), chess, board games |
 | `all-sorts` | All Sorts | General knowledge across the rest | Science & Tech 3, Books & Literature 3, Art & Design 3, Language & Words 3, Society & Culture 3 | planets, novels, inventors, words |
 
-**Pack template.** 6 easy, 6 medium and 3 hard.
+**Pack template.** 6 easy, 6 medium and 3 hard, banded by each question's `predicted.p` (§8.2, §2.9).
 - Positions 1 to 3: easy, to warm the room up.
 - Positions 4 to 14: the other 3 easy, 5 medium and 3 hard. Never two hard in a row, and at least one hard at position 8 or later.
 - Position 15: the finale, announced on every screen as double points (PRD §3.8.3). Medium, with the pack's best reveal. A very hard finale turns double points into a lottery.
@@ -932,7 +1037,7 @@ Room packs are the sealed pool for host rooms (memo §6; PRD §3.18.2): eight th
 - Multiple choice with four options only. No true/false: a 50% guess swings timed scores.
 - Stems of 100 characters or fewer and options of 30 or fewer, because the host screen is read across a room (PRD §3.8.6).
 - No fact shared with a practice or Daily item. Practice packs sit on every phone in the room, so a shared fact is a shared answer key.
-- No answer repeated inside a pack. Party-safe tone (§3.7).
+- No answer repeated inside a pack, and no option in a pack equal to another question's key in that pack: "Jordan" offered as a river a few questions after Jordan the country was an answer hands the room a hint. No question names or clues another's answer. Party-safe tone (§3.7).
 
 ---
 
@@ -940,14 +1045,15 @@ Room packs are the sealed pool for host rooms (memo §6; PRD §3.18.2): eight th
 
 ### 11.1 Layout under `content/`
 
-The tree follows ARCHITECTURE §2.1. Files marked (guide) are the content team's working files that this guide adds.
+The tree follows ARCHITECTURE §2.1. Files marked (guide) are the content team's working files that this guide adds; (ENR-1) marks the enrichment workflow's output.
 
 ```
 content/
   categories.json              The twelve categories from section 1
   practice/<category-slug>/    One practice item per file, p.<cat>.<BBSS>.json (ships to clients)
   answer-lists/<type>.json     Closed answer lists with aliases and provenance (ships to clients)
-  sealed/                      Encrypted envelopes only: mysteries/, encores/, room-packs/, schedule/, spares/
+  sealed/                      Encrypted envelopes only: mysteries/, encores/, room-packs/, schedule/, spares/,
+                               challenge-packs/, list-requests/, audits/
   .sealed-plain/               Git-ignored plaintext workspace for sealed files (11.2)
   fixtures/                    Fake fx. content for the mock backend and tests (ARCHITECTURE 5.6)
   batches.json                 (guide) The batch register (11.3)
@@ -955,18 +1061,26 @@ content/
   reference/myths.json         (guide) Known false "facts" every claim is screened against
   reference/spelling.json      (guide) US to Oxford spelling pairs and the proper-noun allowlist (lint C10)
   reference/stopwords.json     (guide) Words the giveaway lint ignores (lint C12)
+  reference/superlatives.json  (guide) The superlative words C19 and C26 look for
+  reference/capitals-excluded.json  (guide) Countries with no single, settled capital, each with its reason (3.4, lint C27)
+  reference/units.json         (guide) Exact unit definitions for calculations, and the measured-unit list (9.5.4, lint C15)
+  reference/example-denylist.json   (guide) This guide's mystery answers and encore values, barred from v1 Dailies (lint C22)
   calibration/                 (guide) Estimator output and weekly re-tune reports, by item id only
-  answer-lists/_wikidata/      (guide) Enrichment job output, never edited by hand
+  answer-lists/_wikidata/      (ENR-1) Enrichment job output, never edited by hand
+.cache/                        Git-ignored: packets/, audits/<audit-id>/ (planted items), datasets/<key>/
 ```
 
-ARCHITECTURE §2.1 also lists `compositions.json`, `safety/`, `names/`, `category-pages/` and `monthly-packs.json`, which other teams own.
+ARCHITECTURE §2.1 also lists `compositions.json`, `safety/`, `names/`, `category-pages/` and `monthly-packs.json`, which other teams own, and `OPS.md`, the weekly content run's runbook (CNT-3), which whoever runs that run follows.
 
 ### 11.2 Sealed content stays out of git in plain text
 
 The repository is public: its raw files were readable without credentials when checked on 31 October 2026. Anything committed is published, and a single plaintext mystery would hand out a Daily answer (constraint 4; PRD §8.4). ARCHITECTURE §5.4 settles the mechanism: sealed files are AES-256-GCM envelopes in `content/sealed/`, plaintext lives only in the git-ignored `content/.sealed-plain/`, and releases reach Postgres through MCP.
 
-- **The guard.** Before writing any sealed file, run `git check-ignore -q content/.sealed-plain/probe.json`. If it fails, stop and tell the editor. On 31 October 2026 it failed, because the `.gitignore` entry arrives with ticket PLT-1. Sealed writing also waits for the content key and the `content:seal` script (ticket SQL-3). Practice items and answer lists don't wait.
-- **The workflow.** `npm run content:unseal` decrypts into `content/.sealed-plain/`. Writers and checkers work there. `npm run content:seal` encrypts every changed file back into `content/sealed/` at each checkpoint, because the workspace dies with the sandbox. Never copy plaintext anywhere else, including the scratchpad, logs, messages or commit text.
+- **The guard.** Before writing any sealed file, run `git check-ignore -q content/.sealed-plain/probe.json`. If it fails, stop and tell the editor. It failed when this guide was first written and passed on 31 October 2026 once the `.gitignore` entry landed, but run it anyway: a later edit to `.gitignore` could undo it.
+- **The key-escrow check comes first.** Sealed work starts only after it passes: the content key exists outside the repository, a copy sits in `private.key_escrow`, and the copy read back through MCP decrypts every envelope with `npm run content:unseal -- --verify` (ARCHITECTURE §5.4). The key file lives only in the sandbox, so until the escrow is proven, losing the sandbox would take the key and, with it, every envelope ever sealed. Practice items and answer lists don't wait.
+- **The workflow.** `npm run content:unseal` decrypts into `content/.sealed-plain/`. Writers and checkers work there. At the end of every pipeline step for a sealed batch (§0.3), run `npm run content:seal`, which encrypts every changed file back into `content/sealed/`, and the orchestrator commits the envelopes, because the workspace dies with the sandbox. Never copy plaintext anywhere else, including the scratchpad, logs, messages or commit text.
+- **Messages.** `content:check` and the lint print only the item id, the rule code and the field path for a sealed file (ARCHITECTURE §5.4's output rule). Sealed lint output is never pasted into a pull request, an issue or a commit message, not even after redacting it by hand: the `content-sealed` job's logs are public, and so is everything posted to GitHub.
+- **Nothing public points at sealed content.** Plaintext files never name a sealed id: a practice item whose nearest duplicate is sealed records `nearestId` as `"sealed"` (§9.8). A list entry's `source` never names a mystery, a mystery batch or a list request, and list requests themselves are sealed (§2.12). List additions land in their own commits of at least 100 entries, never in a commit that adds or changes sealed envelopes (§2.10, rule 5): a commit that added 20 entities beside a new mystery batch's envelopes would narrow that batch's answers to those 20.
 - **Test fixtures** for the mock backend and E2E tests are invented `fx.` items (ARCHITECTURE §5.6), never real scheduled content.
 - **This guide is public too,** which is one more reason its examples can never be scheduled.
 
@@ -981,9 +1095,17 @@ The repository is public: its raw files were readable without credentials when c
 | `category`, `packId` or `answerType` | What the batch covers |
 | `writer` | The one agent run allowed to create IDs in it |
 | `status` | `open`, `submitted`, `checking` or `closed` |
-| `plan` | Planned counts by difficulty and format (§11.4) |
+| `plan` | Planned counts by difficulty and format, or by slot and answer type (§11.4) |
 | `accepted`, `cut` | Counts at close |
 | `lastSequence` | Highest sequence number issued; IDs above it are invalid |
+| `searchCaps` + | Search caps by role (`writer`, `A`, `B`), set by the editor at opening (§9.5.2) |
+| `searchesUsed` + | Searches by role, summed from the check records, plus tiebreaks and follow-ups |
+| `highRiskClaims` + | High-risk claims in the merged claim lists of the batch's accepted items, counted at close |
+| `externallyEvidenced` + | How many of those carry dataset, web or calculation evidence in a confirming check. The two counts must match before the batch closes. A batch whose share of high-risk claims sits well below its pool's spike figure gets the auditor's look for under-labelling |
+| `bandCounts` + | Practice batches, after estimation: accepted items per band by `predicted.p` (§11.4) |
+| `typeCounts` + | Mystery batches: accepted items per answer type, against the category's quota (§11.4) |
+| `measuredEncores` + | Encore batches: accepted encores with a length, area, mass or speed unit, at most 1 (§6, rule 3) |
+| `approvals` + | Anything the owner approved for this batch, such as copying licensed data into a shipped file (§9.5.1) |
 | `incidents` | Fabricated sources and audit failures, with dates |
 
 ### 11.4 Batch plans
@@ -1001,7 +1123,7 @@ Writers draft about 20% more than the plan (30 for a 25-item batch), because som
 | `p.<cat>.b05` | `p.<cat>.0501` up | 10 | 10 | 5 | 20 | 2 | 3 |
 | Per category | | 50 | 50 | 25 | 100 | 12 | 13 |
 
-Difficulty here means the band of `seededDifficulty`: 1 and 2 are easy, 3 and 4 medium, 5 hard (§8.2). Each practice batch covers at least four of its category's subtopics, and no subtopic takes more than 30% of a category. About a quarter of each batch is counterintuitive.
+Writers plan by `seededDifficulty` (1 and 2 easy, 3 and 4 medium, 5 hard, §8.2), but the product bands by predicted *p* (PRD §3.3.3), and the estimator often disagrees with the writer. So once a batch is estimated, the editor records its band counts by *p* in the register (`bandCounts`) and reassigns items to plan cells by *p*, as §8.5 already does for mystery slots. Before launch every category must hold, by *p*, 44 to 56 Easy, 44 to 56 Medium and 20 to 31 Hard items: PRD AC-CNT-04's 40/40/20 split within 5 points on 125 items, with the Hard floor raised to 20 so a Hard run of 10 never runs dry in two sessions. Scale the counts to a category's real size. Top-up batches fill any band below its floor before anything else, Hard first. Each practice batch covers at least four of its category's subtopics, and no subtopic takes more than 30% of a category. About a quarter of each batch is counterintuitive.
 
 **Mysteries: 36 batches of 10, three per category.** Three slot templates: A is 4 easy, 3 medium and 3 hard; B is 3, 4 and 3; C is 3, 3 and 4. Each category gets all three, which totals 10 per slot per category, and each wave totals 40 per slot.
 
@@ -1013,7 +1135,41 @@ Difficulty here means the band of `seededDifficulty`: 1 and 2 are easy, 3 and 4 
 
 A mystery batch uses at least two answer types wherever its category allows more than one, and no answer is repeated anywhere in the bank. Draft 12 to land 10.
 
-**Encores: 12 batches of 10, two categories of five each.** IDs run `e.0101` to `e.1210`. At most 3 year-kind encores per batch, 30 in all.
+**Answer-type quotas.** No type may hold more than 4 of the 21 mystery slots in any 7 Dailies (§10.4), which caps any one type near 70 of the 360, and `person` is open to eight categories, so unplanned writing would overshoot it. The bank therefore follows this plan, which sums to 30 per category and 360 in all. Batches stay within 2 of each figure, the register tracks the running totals (`typeCounts`), and the solver checks them after every wave (§10.5).
+
+| Category | Answer types (of 30) |
+|---|---|
+| Geography | country 12, city 10, landmark 8 |
+| History | person 8, city 8, country 7, landmark 7 |
+| Science & Tech | element 20, person 10 |
+| Nature & Animals | animal 24, landmark 6 |
+| Film & TV | film 18, person 6, tv_series 6 |
+| Music | music_artist 24, city 6 |
+| Art & Design | landmark 19, person 11 |
+| Books & Literature | book 22, person 8 |
+| Sport & Games | sport 15, country 6, person 5, city 4 |
+| Food & Drink | dish 20, country 6, city 4 |
+| Language & Words | country 6, city 4, animal 4, dish 4, person 3, element 3, film 2, book 2, sport 2 |
+| Society & Culture | country 7, person 6, city 5, landmark 4, sport 4, dish 4 |
+
+| Type | Plan | Floor | Ceiling |
+|---|---|---|---|
+| `person` | 57 | 50 | 60 |
+| `country` | 44 | 38 | 50 |
+| `landmark` | 44 | 38 | 50 |
+| `city` | 41 | 35 | 50 |
+| `animal` | 28 | 24 | 35 |
+| `dish` | 28 | 24 | 35 |
+| `book` | 24 | 20 | 30 |
+| `music_artist` | 24 | 20 | 30 |
+| `element` | 23 | 18 | 25 |
+| `sport` | 21 | 16 | 25 |
+| `film` | 20 | 16 | 30 |
+| `tv_series` | 6 | 4 | 10 |
+
+The ceilings stop any type crowding the week rules; small lists get low ones because their recognizable answers run out first (a list of 118 elements holds perhaps 40 that most adults would know among four options). The floors keep enough types in play for three different answer types a day and no more than 4 of one in a week.
+
+**Encores: 12 batches of 10, two categories of five each.** IDs run `e.0101` to `e.1210`. At most 3 year-kind encores per batch, 30 in all, and at most 1 measured encore (a length, area, mass or speed) per batch, 12 in all (§6, rule 3).
 
 | Batch | Categories | Batch | Categories |
 |---|---|---|---|
@@ -1031,9 +1187,9 @@ A mystery batch uses at least two answer types wherever its category allows more
 | List | Minimum | Batches | Domains and sources |
 |---|---|---|---|
 | `country` | 190 | `l.country.b01` | All, from CLDR 49 names checked against `mledoze-countries` |
-| `element` | 118 | `l.element.b01` | All 118 confirmed elements, from `ptable` numbers and IUPAC names |
+| `element` | 118 | `l.element.b01` | All 118 confirmed elements, written by the list builder from IUPAC's published periodic table (names, symbols and numbers) and checked fact by fact against `ptable`, so no CC BY-SA data ships (§9.5.1) |
 | `city` | 300 | `l.city.b01` to `b03` | By continent, checked against `geonames-cities` |
-| `person` | 1,000 | `l.person.b01` to `b10` | Science and invention; exploration; history and politics before 2001; art and architecture (QIDs from `moma-artists`); literature; film and TV; sport; philosophy and religion; society and economics; a mixed batch of famous names |
+| `person` | 1,000 | `l.person.b01` to `b10` | Science and invention; exploration; history and politics before 2001; art and architecture (with MoMA's QID as the id wherever `moma-artists` carries one); literature; film and TV; sport; philosophy and religion; society and economics; a mixed batch of famous names |
 | `film` | 500 | `l.film.b01` to `b05` | By decade and region |
 | `tv_series` | 200 | `l.tv_series.b01` to `b02` | By region |
 | `book` | 300 | `l.book.b01` to `b03` | Classics, world literature, children's books |
@@ -1043,7 +1199,7 @@ A mystery batch uses at least two answer types wherever its category allows more
 | `dish` | 200 | `l.dish.b01` to `b02` | Dishes, then drinks |
 | `sport` | 100 | `l.sport.b01` | Sports, then games of every kind |
 
-Lists keep growing toward their targets after launch, in versions of 20 or more entries (§2.10, rule 5).
+Lists keep growing toward their targets after launch, in versions of 100 or more entries, or whatever remains to the target (§2.10, rule 5).
 
 ### 11.5 Waves
 
@@ -1051,16 +1207,16 @@ Content production runs beside the build from week one (PRD §9.3).
 
 | Wave | Lands by | Practice | Mysteries | Encores | Rooms | Lists and tooling |
 |---|---|---|---|---|---|---|
-| 0 | Start of M2 | | | | | Schemas, validator and lint, packet builder, dataset manifest, myths list, batch register, the sealed-storage mechanism (§11.2); country and element lists complete |
-| 1 | M2 exit | `p.<cat>.b01` and `b02` in every category: 600 items | `m.<cat>.b01` in every category: 120, which is 40 Dailies' worth | `e.b01` to `e.b04`: 40 | | Every list at 100 or more entries, covering every wave 1 mystery |
-| 2 | M4 exit | `b03` and `b04`: 600 | `b02`: 120 | `e.b05` to `e.b08`: 40 | All eight packs: 120 | Lists growing toward their minimums |
-| 3 | M5 | `b05` plus top-ups: 300 | `b03`: 120 | `e.b09` to `e.b12`: 40 | Replacements | Every list at its minimum; the seeded audit; 100 Dailies and 20 spare sets scheduled |
+| 0 | M2's first build wave (ARCHITECTURE Wave 3) | | | | | Schemas, validator and lint, the staged packet tool, dataset manifest, reference files and batch register (CNT-1 and CNT-2, Wave 3); the sealed-storage mechanism and the key-escrow check (§11.2) earlier, from CNT-0 in Wave 1; country and element lists complete |
+| 1 | M2 exit | `p.<cat>.b01` and `b02` in every category: 600 items | `m.<cat>.b01` in every category: 120, which is 40 Dailies' worth | `e.b01` to `e.b04`: 40 | | Every list at 100 or more entries, covering every wave 1 mystery through regular versions committed apart from any envelopes (§11.2); the solver's first run |
+| 2 | M4 exit | `b03` and `b04`: 600 | `b02`: 120 | `e.b05` to `e.b08`: 40 | All eight packs: 120 | Lists growing toward their minimums; the solver's second run |
+| 3 | M5 | `b05` plus top-ups: 300 | `b03`: 120 | `e.b09` to `e.b12`: 40 | Replacements | Every list at its minimum; the solver's full-pool run before wave 3's writing ends; band floors met by *p*; the seeded audit; 100 Dailies and 20 spare sets scheduled, with pass D ahead of each freeze |
 
 Wave 1 covers the M2 exit criterion of 30 scheduled Dailies and 600 practice items through the full process (PRD §9.3), with room to spare.
 
 ### 11.6 Throughput
 
-The M1 content spike measures verified items per agent-day for each type (PRD §9.3, SYNTHESIS §7.1). Waves are sized from that figure. If throughput falls short, shrink practice first and never the protocol, and never go below 100 practice items per category.
+The M1 content spike measures verified items per agent-day for each type (PRD §9.3, SYNTHESIS §7.1), and, by pool, the high-risk claims per item that no dataset covers, which sets the search caps (§9.5.2). Waves are sized from those figures. If throughput falls short, shrink practice first and never the protocol, and never go below 100 practice items per category.
 
 ---
 
@@ -1068,8 +1224,8 @@ The M1 content spike measures verified items per agent-day for each type (PRD §
 
 ### 12.0 How to read them
 
-- **They are teaching material, not bank content.** Their IDs use the reserved batch 00 (room questions use sequences 90 to 99), which the validator rejects anywhere under `content/`, and the dedupe check reads this guide, so none can slip into the bank. They are public, so the mysteries and encores could never be scheduled anyway.
-- **Each GOOD example is a complete writer submission:** every field a writer fills, claims included. `verification` is missing because writers never fill it; §12.15 shows a filled one.
+- **They are teaching material, not bank content.** Their IDs use the reserved batch 00 (room questions use sequences 90 to 99), which the validator rejects anywhere under `content/`, and the dedupe check reads this guide, so none can slip into the bank. They are public, so no mystery or encore like them may ever be scheduled: lint C22 makes a sealed near-copy of a §12 example an error, and `content/reference/example-denylist.json` bars the ten §12.7 answers and the ten §12.9 encore values from v1 Dailies.
+- **Each GOOD example is a complete writer submission:** every field a writer fills, claims included, except `selfCheck`, which is the same eleven `true` codes on every submission (§2.3) and is left out to save space. A real submission without it is refused. `verification` is missing because writers never fill it; §12.15 shows a filled one. Entity ids are the ones a list builder would mint (§2.12): a real writer copies them from the published list file.
 - The facts were picked for stability. Structured ones were checked against the pinned datasets and a few precise figures with WebSearch while writing this guide (Appendix B), but no example has been through §9. A writer who wants one in the bank writes a fresh item and sends it through the protocol.
 - Each GOOD example ends with "Why it works". Each BAD example gives the item, what is wrong, and the fix.
 
@@ -1091,22 +1247,22 @@ The M1 content spike measures verified items per agent-day for each type (PRD §
   "answer": "Canberra",
   "wrong": ["Sydney", "Melbourne", "Perth"],
   "order": "shuffle",
-  "explanation": "Sydney and Melbourne both wanted the title, so the constitution put the capital in New South Wales but at least 100 miles (about 160 km) from Sydney.",
+  "explanation": "Sydney and Melbourne both wanted the title, so the constitution put the capital on land granted by New South Wales, at least 100 miles (about 160 km) from Sydney.",
   "learnMore": "Canberra",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "Canberra is the capital of Australia."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "counterintuitive", "text": "Canberra is the capital of Australia."},
     {"id": "c2", "role": "distractor", "risk": "standard", "text": "Sydney, Melbourne and Perth are state capitals, not the national capital."},
     {
       "id": "c3",
       "role": "explanation",
       "risk": "high",
       "riskReason": "number",
-      "text": "Section 125 of the Australian Constitution puts the seat of government in New South Wales, not less than 100 miles from Sydney."
+      "text": "Section 125 of the Australian Constitution requires the seat of government to be on territory in New South Wales granted to the Commonwealth, at least 100 miles from Sydney."
     },
     {"id": "c4", "role": "explanation", "risk": "standard", "text": "Sydney and Melbourne were rivals to be the national capital."},
-    {"id": "c5", "role": "explanation", "risk": "standard", "text": "100 miles is about 160 km."}
+    {"id": "c5", "role": "explanation", "risk": "high", "riskReason": "number", "text": "100 miles is about 160 km."}
   ],
-  "writerNotes": "c1 checked in mledoze-countries (cca3=AUS, capital). Sydney is the obvious wrong pick, so counterintuitive is true."
+  "writerNotes": "c1 checked in mledoze-countries (cca3=AUS, capital); as a capital key it also needs a Tier A or B web result (§3.4). Sydney is the obvious wrong pick, so counterintuitive is true, which makes c1 high under C26. c5 is a pure conversion, so a calculation can confirm it (§9.5.4)."
 }
 ```
 Why it works: the most tempting wrong answer is the first distractor, and the explanation defuses it with a fact most players never knew.
@@ -1130,7 +1286,7 @@ Why it works: the most tempting wrong answer is the first distractor, and the ex
   "explanation": "Settlers from Tyre, in modern Lebanon, founded Carthage. Rome destroyed it in 146 BC and later rebuilt it; its ruins stand in the suburbs of Tunis.",
   "learnMore": "Carthage",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "The ruins of ancient Carthage are in Tunisia, near Tunis."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "counterintuitive", "text": "The ruins of ancient Carthage are in Tunisia, near Tunis."},
     {"id": "c2", "role": "distractor", "risk": "standard", "text": "Carthage's ruins are not in Lebanon, Libya or Egypt."},
     {"id": "c3", "role": "explanation", "risk": "standard", "text": "Carthage was founded by Phoenician settlers from Tyre, a city in modern Lebanon."},
     {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Rome destroyed Carthage in 146 BC."},
@@ -1199,9 +1355,9 @@ Why it works: three honest options instead of four with a filler, and an explana
   "explanation": "Two hearts pump blood through the gills and a third sends it round the body. The blood is blue because it carries oxygen on copper-based haemocyanin.",
   "learnMore": "Octopus",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "An octopus has three hearts."},
-    {"id": "c2", "role": "distractor", "risk": "standard", "text": "An octopus does not have one, two or eight hearts."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "Two branchial hearts pump blood through the gills, and one systemic heart pumps it round the body."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "number", "text": "An octopus has three hearts."},
+    {"id": "c2", "role": "distractor", "risk": "high", "riskReason": "number", "text": "An octopus does not have one, two or eight hearts."},
+    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Two branchial hearts pump blood through the gills, and one systemic heart pumps it round the body."},
     {"id": "c4", "role": "explanation", "risk": "standard", "text": "Octopus blood is blue because its oxygen carrier, haemocyanin, contains copper."}
   ]
 }
@@ -1227,7 +1383,7 @@ Why it works: numbers in ascending order, a distractor borrowed from the famous 
   "explanation": "Hayao Miyazaki co-founded Ghibli in 1985 and named it after a hot Saharan wind, hoping to blow a new wind through Japanese animation.",
   "learnMore": "Studio Ghibli",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "Spirited Away (2001) was made by Studio Ghibli."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "date", "text": "Spirited Away (2001) was made by Studio Ghibli."},
     {"id": "c2", "role": "distractor", "risk": "standard", "text": "Toei Animation, Madhouse and Sunrise are Japanese animation studios that did not make Spirited Away."},
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Studio Ghibli was founded in 1985, with Hayao Miyazaki among its founders."},
     {
@@ -1280,7 +1436,7 @@ Why it works: four Baroque composers with names of similar length, so the key do
   "tags": ["surrealism", "paintings"],
   "region": "global",
   "volatility": "slow",
-  "reviewBy": "2028-11-01",
+  "reviewBy": null,
   "seededDifficulty": 2,
   "counterintuitive": false,
   "stem": "Which artist painted The Persistence of Memory (1931), with its melting clocks?",
@@ -1290,15 +1446,15 @@ Why it works: four Baroque composers with names of similar length, so the key do
   "explanation": "The famous canvas is small, only about 24 by 33 cm. New York's Museum of Modern Art has held it since 1934.",
   "learnMore": "The Persistence of Memory",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "Salvador Dalí painted The Persistence of Memory in 1931."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "date", "text": "Salvador Dalí painted The Persistence of Memory in 1931."},
     {"id": "c2", "role": "distractor", "risk": "standard", "text": "Magritte, Miró and Ernst did not paint The Persistence of Memory."},
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "The painting measures about 24 by 33 cm."},
     {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "date", "text": "The Museum of Modern Art in New York has held the painting since 1934."}
   ],
-  "writerNotes": "Volatility is slow because c4 depends on where the painting is kept. Artist records checked in moma-artists (ConstituentID 1364)."
+  "writerNotes": "Volatility is slow because c4 depends on where the painting is kept, so reviewBy stays null until the editor sets it at acceptance; I suggest the full 24 months. Artist records checked in moma-artists (ConstituentID 1364)."
 }
 ```
-Why it works: four real Surrealists, a surprising size, and a `slow` volatility class with a review date because a location can change.
+Why it works: four real Surrealists, a surprising size, and a `slow` volatility class, which gets a review date at acceptance because a location can change.
 
 ```json
 {
@@ -1312,22 +1468,23 @@ Why it works: four real Surrealists, a surprising size, and a `slow` volatility 
   "reviewBy": null,
   "seededDifficulty": 2,
   "counterintuitive": false,
-  "stem": "Which novel opens with the line 'Call me Ishmael'?",
+  "stem": "Which novel's first chapter opens with the line 'Call me Ishmael'?",
   "answer": "Moby-Dick",
   "wrong": ["Treasure Island", "Robinson Crusoe", "The Old Man and the Sea"],
   "order": "shuffle",
   "explanation": "Herman Melville's 1851 novel sold poorly, and he died in 1891 largely forgotten as a novelist. Its reputation took off in the 1920s.",
   "learnMore": "Moby-Dick",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "high", "riskReason": "quotation", "text": "Moby-Dick opens with the sentence 'Call me Ishmael.'"},
-    {"id": "c2", "role": "distractor", "risk": "standard", "text": "Treasure Island, Robinson Crusoe and The Old Man and the Sea do not open with 'Call me Ishmael'."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "quotation", "text": "The first chapter of Moby-Dick opens with the sentence 'Call me Ishmael.'"},
+    {"id": "c2", "role": "distractor", "risk": "standard", "text": "None of Treasure Island, Robinson Crusoe and The Old Man and the Sea is narrated by a character called Ishmael."},
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Moby-Dick was published in 1851 and sold poorly."},
     {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Melville died in 1891, largely forgotten as a novelist."},
-    {"id": "c5", "role": "explanation", "risk": "standard", "text": "Interest in Melville revived strongly in the 1920s."}
-  ]
+    {"id": "c5", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Interest in Melville revived strongly in the 1920s."}
+  ],
+  "writerNotes": "The stem says 'first chapter' because the book itself opens with its Etymology and Extracts sections; the famous line opens Chapter 1, Loomings."
 }
 ```
-Why it works: every distractor is another famous sea story, so knowing "it's about the sea" isn't enough.
+Why it works: every distractor is another famous sea story, so knowing "it's about the sea" isn't enough, and the stem is worded for the pedant who has read the Extracts.
 
 ```json
 {
@@ -1350,7 +1507,7 @@ Why it works: every distractor is another famous sea story, so knowing "it's abo
   "claims": [
     {"id": "c1", "role": "key", "risk": "standard", "text": "Saffron is the dried stigmas of the saffron crocus, Crocus sativus."},
     {"id": "c2", "role": "distractor", "risk": "standard", "text": "Turmeric, paprika and cardamom do not come from crocus stigmas."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "Each saffron crocus flower has three stigmas, harvested by hand."},
+    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Each saffron crocus flower has three stigmas, harvested by hand."},
     {"id": "c4", "role": "explanation", "risk": "standard", "text": "Turmeric is the dried, ground rhizome of a plant in the ginger family."}
   ]
 }
@@ -1419,7 +1576,7 @@ Why it works: a Hard item with a foothold. Players who don't know Čapek can sti
   "explanation": "The wall is only a few metres wide and the Moon is about 384,000 km away. Even from low orbit, astronauts say it is very hard to spot unaided.",
   "learnMore": "Great Wall of China",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "The Great Wall cannot be seen from the Moon with the naked eye."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "counterintuitive", "text": "The Great Wall cannot be seen from the Moon with the naked eye."},
     {"id": "c2", "role": "explanation", "risk": "standard", "text": "The wall is mostly a few metres wide."},
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "The Moon's average distance from Earth is about 384,000 km."},
     {"id": "c4", "role": "explanation", "risk": "standard", "text": "Astronauts in low Earth orbit report that the wall is very hard to see without aid."}
@@ -1449,7 +1606,7 @@ Why it works: a myth many people believe, made specific ("from the Moon", "with 
     {"id": "c1", "role": "key", "risk": "high", "riskReason": "date", "text": "Cleopatra's lifetime is closer to 1969 than to the building of the Great Pyramid."},
     {"id": "c2", "role": "explanation", "risk": "high", "riskReason": "date", "text": "The Great Pyramid of Giza was completed around 2560 BC."},
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Cleopatra died in 30 BC."},
-    {"id": "c4", "role": "explanation", "risk": "standard", "text": "The first crewed Moon landing was in 1969."}
+    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "date", "text": "The first crewed Moon landing was in 1969."}
   ]
 }
 ```
@@ -1473,7 +1630,7 @@ Why it works: the margin is centuries wide, so the key holds whatever date you t
   "explanation": "Experiments have trained goldfish to push levers or respond to sounds for food, and they kept the trick for months.",
   "learnMore": "Goldfish",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "Goldfish memory lasts far longer than three seconds."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "number", "text": "Goldfish memory lasts far longer than three seconds."},
     {"id": "c2", "role": "explanation", "risk": "standard", "text": "Goldfish have been trained to push levers and to respond to sounds for food."},
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Trained goldfish kept the learned behaviour for months."}
   ]
@@ -1507,7 +1664,7 @@ Why it works: a myth stated plainly, with an explanation that shows how we know.
       "text": "At their closest point, between the Diomede Islands, Russia and the United States are less than 5 km apart."
     },
     {"id": "c2", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Big Diomede and Little Diomede are about 3.8 km apart."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "The International Date Line runs between the two islands."}
+    {"id": "c3", "role": "explanation", "risk": "standard", "text": "The International Date Line runs between Big Diomede and Little Diomede."}
   ],
   "writerNotes": "The stem uses the bounded claim, so the key survives small differences in measurement. The exact figure sits in the explanation as its own high-risk claim."
 }
@@ -1642,7 +1799,7 @@ Why it works: misquotations make good myths, and every quotation is treated as a
   "explanation": "There is no evidence of foul play. The rumour spread in Vienna in the 1820s and inspired Pushkin's 1830 play Mozart and Salieri, and later Peter Shaffer's Amadeus.",
   "learnMore": "Antonio Salieri",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "There is no evidence that Salieri poisoned Mozart."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "counterintuitive", "text": "There is no evidence that Salieri poisoned Mozart."},
     {"id": "c2", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Rumours that Salieri poisoned Mozart circulated in Vienna in the 1820s."},
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Pushkin wrote Mozart and Salieri in 1830."},
     {"id": "c4", "role": "explanation", "risk": "standard", "text": "Peter Shaffer's Amadeus drew on the poisoning legend."}
@@ -1672,7 +1829,8 @@ Why it works: it corrects a story drama made famous, and it treats a real person
     {
       "id": "c1",
       "role": "key",
-      "risk": "standard",
+      "risk": "high",
+      "riskReason": "date",
       "text": "Orthodox churches that use the Julian calendar, such as the Russian Orthodox Church, celebrate Christmas on 7 January in the Gregorian calendar."
     },
     {
@@ -1715,7 +1873,7 @@ Why it works: a festival fact explained through the calendar, respectfully and w
   "seededDifficulty": 4,
   "counterintuitive": true,
   "stem": "Which came first?",
-  "a": "Teaching at Oxford University",
+  "a": "Teaching at Oxford",
   "b": "The founding of Tenochtitlan",
   "answer": "a",
   "relation": "earlier",
@@ -1791,8 +1949,8 @@ Why it works: a dataset-checkable surprise. Most players pick New York, so it is
   "explanation": "Mercury has 80 protons and gold 79, so they sit side by side in the periodic table. Alchemists who hoped to turn one into the other were one proton away.",
   "learnMore": "Mercury (element)",
   "claims": [
-    {"id": "c1", "role": "label", "ref": "a", "risk": "standard", "text": "Gold's atomic number is 79."},
-    {"id": "c2", "role": "label", "ref": "b", "risk": "standard", "text": "Mercury's atomic number is 80."},
+    {"id": "c1", "role": "label", "ref": "a", "risk": "high", "riskReason": "number", "text": "Gold's atomic number is 79."},
+    {"id": "c2", "role": "label", "ref": "b", "risk": "high", "riskReason": "number", "text": "Mercury's atomic number is 80."},
     {"id": "c3", "role": "explanation", "risk": "standard", "text": "Alchemists tried to turn mercury and other metals into gold."}
   ],
   "writerNotes": "Checked in ptable (number 79 Gold, number 80 Mercury). A gap of one is allowed because atomic numbers are exact."
@@ -1808,7 +1966,7 @@ Why it works: the separation guard allows a one-unit gap for exact values, and t
   "category": "nat",
   "tags": ["sharks", "fossils"],
   "region": "global",
-  "volatility": "evergreen",
+  "volatility": "slow",
   "reviewBy": null,
   "seededDifficulty": 4,
   "counterintuitive": true,
@@ -1834,10 +1992,10 @@ Why it works: the separation guard allows a one-unit gap for exact values, and t
       "text": "Sharks existed long before the first dinosaurs, which appeared about 230 million years ago."
     }
   ],
-  "writerNotes": "Older shark-like scales of about 450 million years are disputed, so the item uses the undisputed figure, which still wins by about 30 million years."
+  "writerNotes": "Older shark-like scales of about 450 million years are disputed, so the item uses the undisputed figure, which still wins by about 30 million years. Volatility is slow because 'the oldest known trees' is a record a new fossil find can move; the editor sets reviewBy at acceptance."
 }
 ```
-Why it works: it uses the conservative figure for each side, so the answer holds under every date on offer.
+Why it works: it uses the conservative figure for each side, so the answer holds under every date on offer, and the `slow` class makes sure somebody looks again before a new find can flip it.
 
 ```json
 {
@@ -1860,6 +2018,7 @@ Why it works: it uses the conservative figure for each side, so the answer holds
   "unit": "year",
   "values": {"a": 1962, "b": 1963},
   "valueDisplay": {"a": "5 October 1962", "b": "23 November 1963"},
+  "exactDates": {"a": "1962-10-05", "b": "1963-11-23"},
   "explanation": "Doctor Who's first episode aired on 23 November 1963, the day after President Kennedy was shot, and the BBC showed it again a week later.",
   "learnMore": "Dr. No (film)",
   "claims": [
@@ -1868,7 +2027,7 @@ Why it works: it uses the conservative figure for each side, so the answer holds
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "date", "text": "President Kennedy was shot on 22 November 1963."},
     {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "date", "text": "The BBC repeated the first episode a week later, before episode two."}
   ],
-  "writerNotes": "Only a year apart, which the separation guard allows because both dates are exact, documented days."
+  "writerNotes": "Only a year apart, which the separation guard allows because exactDates records both documented days, 414 days apart, and c1 and c2 state them."
 }
 ```
 Why it works: two exact dates a year apart, each famous enough to reason about, and a reveal that ties the show to a moment in history.
@@ -1879,39 +2038,32 @@ Why it works: two exact dates a year apart, each famous enough to reason about, 
   "status": "draft",
   "format": "comparison",
   "category": "sport",
-  "tags": ["inventions", "ball-games"],
+  "tags": ["tennis", "olympics"],
   "region": "global",
   "volatility": "evergreen",
   "reviewBy": null,
-  "seededDifficulty": 3,
-  "counterintuitive": false,
-  "stem": "Which was invented first?",
-  "a": "Basketball",
-  "b": "Volleyball",
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "stem": "Which came first?",
+  "a": "The first Wimbledon Championships",
+  "b": "The first modern Olympic Games",
   "answer": "a",
   "relation": "earlier",
-  "measure": "year invented",
+  "measure": "year first held",
   "unit": "year",
-  "values": {"a": 1891, "b": 1895},
-  "valueDisplay": {"a": "1891", "b": "1895"},
-  "explanation": "James Naismith devised basketball in Springfield, Massachusetts, in 1891. Four years later William G. Morgan created volleyball, first called mintonette, in nearby Holyoke.",
-  "learnMore": "Volleyball",
+  "values": {"a": 1877, "b": 1896},
+  "valueDisplay": {"a": "July 1877", "b": "April 1896"},
+  "explanation": "The All England Club held its first championship in July 1877, with men's singles only. The first modern Olympics opened in Athens in April 1896, 19 years later.",
+  "learnMore": "Wimbledon Championships",
   "claims": [
-    {
-      "id": "c1",
-      "role": "label",
-      "ref": "a",
-      "risk": "high",
-      "riskReason": "first",
-      "text": "James Naismith invented basketball in Springfield, Massachusetts, in December 1891."
-    },
-    {"id": "c2", "role": "label", "ref": "b", "risk": "high", "riskReason": "first", "text": "William G. Morgan created volleyball in Holyoke, Massachusetts, in 1895."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "Volleyball was first called mintonette."}
+    {"id": "c1", "role": "label", "ref": "a", "risk": "high", "riskReason": "date", "text": "The first Wimbledon Championships were held in July 1877."},
+    {"id": "c2", "role": "label", "ref": "b", "risk": "high", "riskReason": "date", "text": "The first modern Olympic Games opened in Athens in April 1896."},
+    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "only", "text": "The All England Club's first championship, in 1877, had a men's singles event only."}
   ],
-  "writerNotes": "Four years apart, which the separation guard allows because both inventions are documented to exact days."
+  "writerNotes": "Nineteen years apart, so no exactDates are needed. The ancient Games pull guesses toward the Olympics, which is why counterintuitive is true."
 }
 ```
-Why it works: two sports invented by single, documented people, so the "first" claims are as safe as firsts get.
+Why it works: the Olympic name carries an ancient pedigree, so most players pick it, and 19 years of margin keep the answer safe from any quibble about dates.
 
 ```json
 {
@@ -1973,6 +2125,7 @@ Why it works: the right answer feels impossible until the explanation makes it o
   "unit": "year",
   "values": {"a": 1886, "b": 1889},
   "valueDisplay": {"a": "dedicated 28 October 1886", "b": "opened 31 March 1889"},
+  "exactDates": {"a": "1886-10-28", "b": "1889-03-31"},
   "explanation": "Gustave Eiffel's company designed the iron framework inside the statue, dedicated in New York in 1886. His tower opened in Paris three years later, in 1889.",
   "learnMore": "Statue of Liberty",
   "claims": [
@@ -1980,7 +2133,7 @@ Why it works: the right answer feels impossible until the explanation makes it o
     {"id": "c2", "role": "label", "ref": "b", "risk": "high", "riskReason": "date", "text": "The Eiffel Tower opened on 31 March 1889."},
     {"id": "c3", "role": "explanation", "risk": "standard", "text": "Gustave Eiffel's company engineered the statue's internal iron framework."}
   ],
-  "writerNotes": "Three years apart, which the separation guard allows because both dates are exact, documented days."
+  "writerNotes": "Three years apart, which the separation guard allows because exactDates records both documented days and c1 and c2 state them."
 }
 ```
 Why it works: the link between the two answers is the surprise, and both dates are exact.
@@ -2009,8 +2162,8 @@ Why it works: the link between the two answers is the surprise, and both dates a
   "explanation": "Cyrillic borrowed many shapes from Greek, which is why Russian Г and П match Greek Γ and Π. It added letters for Slavic sounds Greek lacks, such as Ш.",
   "learnMore": "Cyrillic script",
   "claims": [
-    {"id": "c1", "role": "label", "ref": "a", "risk": "standard", "text": "The modern Greek alphabet has 24 letters."},
-    {"id": "c2", "role": "label", "ref": "b", "risk": "standard", "text": "The modern Russian alphabet has 33 letters."},
+    {"id": "c1", "role": "label", "ref": "a", "risk": "high", "riskReason": "number", "text": "The modern Greek alphabet has 24 letters."},
+    {"id": "c2", "role": "label", "ref": "b", "risk": "high", "riskReason": "number", "text": "The modern Russian alphabet has 33 letters."},
     {"id": "c3", "role": "explanation", "risk": "standard", "text": "Many Cyrillic letters, including Г and П, derive from Greek letters."},
     {"id": "c4", "role": "explanation", "risk": "standard", "text": "Cyrillic added letters such as Ш for Slavic sounds that Greek lacks."}
   ]
@@ -2112,11 +2265,11 @@ Ladders are listed hardest clue first. `seedSolveShares` is the writer's forecas
   "learnMore": "Titanic (1997 film)",
   "claims": [
     {"id": "c1", "role": "uniqueness", "risk": "standard", "text": "Titanic (1997) is the only film in the list that fits clues 1 to 3."},
-    {"id": "c2", "role": "clue", "ref": "clue:1", "risk": "standard", "text": "James Cameron wrote and directed Titanic, released in 1997."},
+    {"id": "c2", "role": "clue", "ref": "clue:1", "risk": "high", "riskReason": "date", "text": "James Cameron wrote and directed Titanic, and it was released in 1997."},
     {"id": "c3", "role": "clue", "ref": "clue:2", "risk": "high", "riskReason": "number", "text": "Titanic won 11 Academy Awards, including Best Picture."},
-    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "standard", "text": "Céline Dion sang the film's theme song, My Heart Will Go On."},
-    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "standard", "text": "Leonardo DiCaprio and Kate Winslet play lovers aboard the Titanic on its maiden voyage."},
-    {"id": "c6", "role": "distractor", "risk": "standard", "text": "Avatar (2009), Pearl Harbor (2001) and The Poseidon Adventure (1972) each contradict clues 1 and 2."},
+    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "high", "riskReason": "sealed_pool", "text": "Céline Dion sang Titanic's theme song, My Heart Will Go On."},
+    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "high", "riskReason": "sealed_pool", "text": "In Titanic, Leonardo DiCaprio and Kate Winslet play lovers aboard a liner on its doomed maiden voyage."},
+    {"id": "c6", "role": "distractor", "risk": "standard", "text": "Avatar, Pearl Harbor and The Poseidon Adventure each contradict clues 1 and 2."},
     {
       "id": "c7",
       "role": "explanation",
@@ -2146,15 +2299,16 @@ Why it works: an easy ladder in which clue 1 is still the hardest step, two riva
   "answer": "x.music_artist.queen",
   "accepted": [],
   "clues": [
-    "Its singer, born Farrokh Bulsara in Zanzibar, took the stage name Freddie Mercury.",
-    "Its 1975 single, nearly six minutes long, has an operatic middle section.",
-    "It played a famous 20-minute set at Live Aid at Wembley Stadium in 1985.",
+    "Its singer was born Farrokh Bulsara in Zanzibar.",
+    "In 1975 it released a nearly six-minute single with an operatic middle section.",
+    "It played a set of about 20 minutes at Live Aid at Wembley Stadium in 1985.",
     "This British rock group recorded both We Will Rock You and We Are the Champions."
   ],
   "distractors": ["x.music_artist.the-rolling-stones", "x.music_artist.led-zeppelin", "x.music_artist.the-who"],
   "slot": 1,
   "sourceLabels": [],
   "likelyGuesses": [
+    "x.music_artist.freddie-mercury",
     "x.music_artist.the-beatles",
     "x.music_artist.the-rolling-stones",
     "x.music_artist.led-zeppelin",
@@ -2165,23 +2319,25 @@ Why it works: an easy ladder in which clue 1 is still the hardest step, two riva
     "x.music_artist.deep-purple"
   ],
   "rivals": [
+    {"id": "x.music_artist.freddie-mercury", "ruledOutBy": [1]},
     {"id": "x.music_artist.the-who", "ruledOutBy": [1, 2]},
     {"id": "x.music_artist.u2", "ruledOutBy": [1, 2]},
     {"id": "x.music_artist.david-bowie", "ruledOutBy": [1, 2]}
   ],
   "giveawayTerms": [],
-  "seedSolveShares": [0.6, 0.85, 0.93, 0.99],
+  "seedSolveShares": [0.5, 0.8, 0.93, 0.99],
   "explanation": "Guitarist Brian May finished a PhD in astrophysics in 2007, more than 30 years after pausing his studies when the band took off.",
   "learnMore": "Queen (band)",
   "claims": [
     {"id": "c1", "role": "uniqueness", "risk": "standard", "text": "Queen is the only music artist in the list that fits clues 1 to 3."},
-    {"id": "c2", "role": "clue", "ref": "clue:1", "risk": "standard", "text": "Freddie Mercury, Queen's singer, was born Farrokh Bulsara in Zanzibar."},
+    {"id": "c2", "role": "clue", "ref": "clue:1", "risk": "high", "riskReason": "sealed_pool", "text": "Queen's singer was born Farrokh Bulsara in Zanzibar."},
     {
       "id": "c3",
       "role": "clue",
       "ref": "clue:2",
-      "risk": "standard",
-      "text": "Bohemian Rhapsody, released in 1975, runs almost six minutes and includes an operatic section."
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In 1975 Queen released a nearly six-minute single (Bohemian Rhapsody) with an operatic middle section."
     },
     {
       "id": "c4",
@@ -2191,7 +2347,14 @@ Why it works: an easy ladder in which clue 1 is still the hardest step, two riva
       "riskReason": "number",
       "text": "Queen played a set of about 20 minutes at Live Aid at Wembley Stadium in 1985."
     },
-    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "standard", "text": "Queen recorded We Will Rock You and We Are the Champions."},
+    {
+      "id": "c5",
+      "role": "clue",
+      "ref": "clue:4",
+      "risk": "high",
+      "riskReason": "sealed_pool",
+      "text": "Queen, a British rock group, recorded both We Will Rock You and We Are the Champions."
+    },
     {"id": "c6", "role": "distractor", "risk": "standard", "text": "The Rolling Stones, Led Zeppelin and The Who each contradict clues 1, 2 and 4."},
     {
       "id": "c7",
@@ -2201,10 +2364,10 @@ Why it works: an easy ladder in which clue 1 is still the hardest step, two riva
       "text": "Brian May completed a PhD in astrophysics in 2007, decades after pausing his studies."
     }
   ],
-  "writerNotes": "Display is 'Queen' without '(band)': no other entry in the music list shares the name, and a bracket only on the key would stand out among the clue-4 options."
+  "writerNotes": "Clue 1 names nobody, but 'Farrokh Bulsara' is an alias of Freddie Mercury's own music_artist entry, so rule 15 applies: 'Its singer' makes plain he isn't the answer, and he sits in likelyGuesses and rivals, ruled out by clue 1. Clue 2 says 'In 1975 it released' rather than 'Its 1975 single', because Queen released more than one single that year. Reports of the Live Aid set run from 20 to 22 minutes, hence 'about 20'. Display is 'Queen' without '(band)': no other entry in the music list shares the name, and a bracket only on the key would stand out among the clue-4 options."
 }
 ```
-Why it works: three Live Aid acts as rivals, so clue 3 alone isn't enough, and the display form stays parallel with the distractors.
+Why it works: the singer's own entry sits among the rivals because clue 1 points at him, three Live Aid acts make clue 3 alone not enough, and the display form stays parallel with the distractors.
 
 ```json
 {
@@ -2222,7 +2385,7 @@ Why it works: three Live Aid acts as rivals, so clue 3 alone isn't enough, and t
   "answer": "x.element.helium",
   "accepted": [],
   "clues": [
-    "Astronomers spotted it in sunlight during an 1868 eclipse, 27 years before it was found on Earth.",
+    "Astronomers spotted it in sunlight during an 1868 eclipse, 27 years before chemists isolated it on Earth.",
     "It stays liquid at normal pressure even at absolute zero, the only element that does.",
     "It is the second most abundant element in the universe, after hydrogen.",
     "This light gas makes party balloons float and gives voices a squeaky sound."
@@ -2257,15 +2420,15 @@ Why it works: three Live Aid acts as rivals, so clue 3 alone isn't enough, and t
       "ref": "clue:1",
       "risk": "high",
       "riskReason": "date",
-      "text": "Helium was detected in the Sun's spectrum during the 1868 eclipse and first isolated on Earth in 1895."
+      "text": "Astronomers spotted helium in sunlight during an 1868 eclipse, 27 years before chemists isolated it on Earth."
     },
     {
       "id": "c3",
       "role": "clue",
       "ref": "clue:2",
       "risk": "high",
-      "riskReason": "superlative",
-      "text": "Helium is the only element that does not solidify at normal pressure, even near absolute zero."
+      "riskReason": "only",
+      "text": "Helium stays liquid at normal pressure even at absolute zero, the only element that does."
     },
     {
       "id": "c4",
@@ -2279,13 +2442,15 @@ Why it works: three Live Aid acts as rivals, so clue 3 alone isn't enough, and t
       "id": "c5",
       "role": "clue",
       "ref": "clue:4",
-      "risk": "standard",
-      "text": "Helium is lighter than air, lifts party balloons, and makes voices sound higher when breathed in."
+      "risk": "high",
+      "riskReason": "sealed_pool",
+      "text": "Helium, a light gas, makes party balloons float and gives voices a squeaky sound."
     },
     {"id": "c6", "role": "distractor", "risk": "standard", "text": "Hydrogen, neon and argon each contradict clues 1, 2 and 3."},
     {"id": "c7", "role": "explanation", "risk": "high", "riskReason": "etymology", "text": "The name helium comes from the Greek helios, the Sun."},
-    {"id": "c8", "role": "explanation", "risk": "standard", "text": "Most of Earth's helium comes from radioactive decay and is extracted from natural gas."}
-  ]
+    {"id": "c8", "role": "explanation", "risk": "standard", "text": "Most of Earth's helium forms through radioactive decay underground and is extracted from natural gas."}
+  ],
+  "writerNotes": "Clue 1 says 'isolated', not 'found': common references credit Luigi Palmieri with seeing helium's spectral line in Vesuvius lava in 1881 to 1882, so 'found on Earth' 27 years after 1868 would be contestable, while chemists isolating it in 1895 isn't. Clue 3 names hydrogen, which sits in likelyGuesses and rivals (rule 15)."
 }
 ```
 Why it works: hydrogen is the perfect distractor, plausible on clue 4 alone and ruled out by three clues, and the explanation keeps the etymology for the reveal.
@@ -2341,11 +2506,25 @@ Why it works: hydrogen is the perfect distractor, plausible on clue 4 alone and 
       "ref": "clue:1",
       "risk": "high",
       "riskReason": "date",
-      "text": "Ottoman forces under Mehmed II captured Constantinople in 1453, and he made it his capital."
+      "text": "Mehmed II made Istanbul (then Constantinople) his capital after his army captured it in 1453."
     },
-    {"id": "c3", "role": "clue", "ref": "clue:2", "risk": "high", "riskReason": "date", "text": "The Hagia Sophia was completed in 537 as a Christian cathedral."},
-    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "standard", "text": "Istanbul lies on both sides of the Bosporus, in Europe and Asia."},
-    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "standard", "text": "Istanbul is home to the Grand Bazaar and the Blue Mosque."},
+    {"id": "c3", "role": "clue", "ref": "clue:2", "risk": "high", "riskReason": "date", "text": "Istanbul's Hagia Sophia was completed in 537 as a Christian cathedral."},
+    {
+      "id": "c4",
+      "role": "clue",
+      "ref": "clue:3",
+      "risk": "high",
+      "riskReason": "sealed_pool",
+      "text": "Istanbul straddles Europe and Asia on either side of the Bosporus strait."
+    },
+    {
+      "id": "c5",
+      "role": "clue",
+      "ref": "clue:4",
+      "risk": "high",
+      "riskReason": "sealed_pool",
+      "text": "Istanbul, a city on the Bosporus, is home to the Grand Bazaar and the Blue Mosque."
+    },
     {"id": "c6", "role": "distractor", "risk": "standard", "text": "Ankara, Athens and Rome each contradict clues 1, 2 and 3."},
     {"id": "c7", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Constantine refounded Byzantium as his capital, Constantinople, in 330."},
     {"id": "c8", "role": "explanation", "risk": "high", "riskReason": "date", "text": "The Republic of Turkey made Ankara its capital in 1923."}
@@ -2379,8 +2558,9 @@ Why it works: the giveaway terms catch the prefix trap through the aliases, and 
   "distractors": ["Q46408", "x.person.tamara-de-lempicka", "Q233207"],
   "slot": 2,
   "sourceLabels": [],
-  "likelyGuesses": ["x.person.diego-rivera", "Q46408", "Q233207", "x.person.remedios-varo", "x.person.tamara-de-lempicka", "x.person.maria-izquierdo"],
+  "likelyGuesses": ["Q171128", "Q46408", "Q233207", "x.person.remedios-varo", "x.person.tamara-de-lempicka", "x.person.maria-izquierdo"],
   "rivals": [
+    {"id": "Q171128", "ruledOutBy": [1, 3]},
     {"id": "x.person.remedios-varo", "ruledOutBy": [1, 2, 3]},
     {"id": "Q233207", "ruledOutBy": [1, 2, 3]},
     {"id": "x.person.maria-izquierdo", "ruledOutBy": [1, 2, 3]}
@@ -2396,8 +2576,8 @@ Why it works: the giveaway terms catch the prefix trap through the aliases, and 
       "role": "clue",
       "ref": "clue:1",
       "risk": "high",
-      "riskReason": "date",
-      "text": "Kahlo was badly injured in a bus accident in 1925, aged 18, and began painting during her recovery."
+      "riskReason": "number",
+      "text": "A bus crash at 18 left Frida Kahlo with lifelong injuries, and she began painting while recovering in bed."
     },
     {
       "id": "c3",
@@ -2405,24 +2585,25 @@ Why it works: the giveaway terms catch the prefix trap through the aliases, and 
       "ref": "clue:2",
       "risk": "high",
       "riskReason": "date",
-      "text": "Kahlo's family home in Coyoacán, the Blue House, opened as a museum in 1958."
+      "text": "Frida Kahlo's family home in Coyoacán, the Blue House, opened as a museum in 1958."
     },
-    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "standard", "text": "Kahlo married Diego Rivera twice."},
+    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "high", "riskReason": "sealed_pool", "text": "Frida Kahlo married the muralist Diego Rivera twice."},
     {
       "id": "c5",
       "role": "clue",
       "ref": "clue:4",
-      "risk": "standard",
-      "text": "Kahlo was a Mexican painter known for self-portraits showing joined eyebrows and flowers in her hair."
+      "risk": "high",
+      "riskReason": "sealed_pool",
+      "text": "Frida Kahlo, a Mexican painter, is known for self-portraits with joined eyebrows and flowers in her hair."
     },
     {"id": "c6", "role": "distractor", "risk": "standard", "text": "Georgia O'Keeffe, Tamara de Lempicka and Leonora Carrington each contradict clues 1, 3 and 4."},
     {"id": "c7", "role": "explanation", "risk": "standard", "text": "Kahlo and Rivera lived in connected studio-houses in San Ángel, joined by a bridge."},
     {"id": "c8", "role": "explanation", "risk": "standard", "text": "Kahlo's work drew on Mexican folk art, including retablos."}
   ],
-  "writerNotes": "Distractors are all women painters of the same era, because the clues say 'she'. Birth and death years and the Wikidata QID checked in moma-artists (ConstituentID 2963, Q5588)."
+  "writerNotes": "Distractors are all women painters of the same era, because the clues say 'she'. Clue 3 names Diego Rivera, whose own entry is in likelyGuesses and rivals: 'She married' makes plain he isn't the answer, and clue 1's 'her' rules him out too (rule 15). Every id with a QID comes from moma-artists, which carries one for Kahlo (ConstituentID 2963, Q5588), Rivera (4942, Q171128), O'Keeffe (4360, Q46408) and Carrington (993, Q233207); MoMA has no QID for Remedios Varo and no record for Lempicka or Izquierdo, so those keep x. ids."
 }
 ```
-Why it works: the distractors match the clue's pronoun, era, field and fame, so clue 4 still asks for knowledge, and the category comes from the clue angle (art), not the list (person).
+Why it works: the distractors match the clue's pronoun, era, field and fame, so clue 4 still asks for knowledge; the husband the clues name is a rival, not a trap; and the category comes from the clue angle (art), not the list (person).
 
 ```json
 {
@@ -2473,13 +2654,27 @@ Why it works: the distractors match the clue's pronoun, era, field and fame, so 
       "ref": "clue:1",
       "risk": "high",
       "riskReason": "date",
-      "text": "Mary Shelley, aged 18, began Frankenstein during the 1816 ghost-story contest at the Villa Diodati by Lake Geneva."
+      "text": "Frankenstein's author began it aged 18, during a ghost-story contest at a villa by Lake Geneva in 1816."
     },
     {"id": "c3", "role": "clue", "ref": "clue:2", "risk": "high", "riskReason": "date", "text": "Frankenstein was first published anonymously in London on 1 January 1818."},
-    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "standard", "text": "Its subtitle is The Modern Prometheus, and Prometheus stole fire from the gods."},
-    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "standard", "text": "In the novel a young scientist creates a living creature and abandons it."},
+    {
+      "id": "c4",
+      "role": "clue",
+      "ref": "clue:3",
+      "risk": "high",
+      "riskReason": "sealed_pool",
+      "text": "Frankenstein's subtitle names the Titan (Prometheus) who stole fire from the gods for humankind."
+    },
+    {
+      "id": "c5",
+      "role": "clue",
+      "ref": "clue:4",
+      "risk": "high",
+      "riskReason": "sealed_pool",
+      "text": "In Frankenstein, a Gothic novel, a young scientist builds a living creature and then abandons it."
+    },
     {"id": "c6", "role": "distractor", "risk": "standard", "text": "Dracula, The Picture of Dorian Gray and The Invisible Man each contradict clues 1, 2 and 3."},
-    {"id": "c7", "role": "explanation", "risk": "standard", "text": "Mary Shelley was 20 when Frankenstein was published."},
+    {"id": "c7", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Mary Shelley was 20 when Frankenstein was published."},
     {"id": "c8", "role": "explanation", "risk": "standard", "text": "The creature is never given a name; Victor Frankenstein is its maker."}
   ],
   "writerNotes": "John Polidori's The Vampyre came out of the same 1816 contest, so 'aged 18' is what makes clue 1 unique: Polidori was 20. The alias 'Frankenstein; or, The Modern Prometheus' is why clue 3 describes Prometheus without naming him."
@@ -2511,10 +2706,11 @@ Why it works: the uniqueness detail ("aged 18") rules out a real rival from the 
   "distractors": ["x.sport.draughts", "x.sport.shogi", "x.sport.go"],
   "slot": 2,
   "sourceLabels": [],
-  "likelyGuesses": ["x.sport.draughts", "x.sport.shogi", "x.sport.xiangqi", "x.sport.go", "x.sport.backgammon", "x.sport.mahjong"],
+  "likelyGuesses": ["x.sport.draughts", "x.sport.shogi", "x.sport.xiangqi", "x.sport.chaturanga", "x.sport.go", "x.sport.backgammon", "x.sport.mahjong"],
   "rivals": [
     {"id": "x.sport.shogi", "ruledOutBy": [1, 3]},
     {"id": "x.sport.xiangqi", "ruledOutBy": [1, 3]},
+    {"id": "x.sport.chaturanga", "ruledOutBy": [2, 3]},
     {"id": "x.sport.draughts", "ruledOutBy": [1, 2, 3]}
   ],
   "giveawayTerms": ["checkmate"],
@@ -2528,8 +2724,8 @@ Why it works: the uniqueness detail ("aged 18") rules out a real rival from the 
       "role": "clue",
       "ref": "clue:1",
       "risk": "high",
-      "riskReason": "date",
-      "text": "The queen gained its modern long-range moves in Europe in the late 15th century."
+      "riskReason": "superlative",
+      "text": "Chess's most powerful piece gained its long-range moves in Europe in the late 1400s."
     },
     {
       "id": "c3",
@@ -2537,15 +2733,22 @@ Why it works: the uniqueness detail ("aged 18") rules out a real rival from the 
       "ref": "clue:2",
       "risk": "high",
       "riskReason": "date",
-      "text": "Chess developed from chaturanga, played in India by about the 6th century."
+      "text": "Chess grew from chaturanga, a game played in India by about the 6th century."
     },
-    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "high", "riskReason": "date", "text": "IBM's Deep Blue beat world champion Garry Kasparov in a match in 1997."},
-    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "standard", "text": "Chess pieces include kings, queens, bishops and knights, played on a 64-square board."},
+    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "high", "riskReason": "date", "text": "In 1997 IBM's Deep Blue computer beat world champion Garry Kasparov at chess."},
+    {
+      "id": "c5",
+      "role": "clue",
+      "ref": "clue:4",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In chess, players move kings, queens, bishops and knights on a board of 64 squares."
+    },
     {"id": "c6", "role": "distractor", "risk": "standard", "text": "Draughts, shogi and go each contradict clues 1, 3 and 4."},
-    {"id": "c7", "role": "explanation", "risk": "standard", "text": "In chaturanga the counsellor, the queen's forerunner, moved one square diagonally."},
-    {"id": "c8", "role": "explanation", "risk": "standard", "text": "The new form of the game was nicknamed 'mad queen' chess."}
+    {"id": "c7", "role": "explanation", "risk": "high", "riskReason": "number", "text": "In chaturanga the counsellor, the queen's forerunner, moved one square diagonally."},
+    {"id": "c8", "role": "explanation", "risk": "high", "riskReason": "quotation", "text": "The new form of the game was nicknamed 'mad queen' chess."}
   ],
-  "writerNotes": "Shogi and xiangqi also descend from chaturanga, so clue 2 alone is not unique; clue 1 and clue 3 rule them out."
+  "writerNotes": "Shogi and xiangqi also descend from chaturanga, so clue 2 alone is not unique; clue 1 and clue 3 rule them out. Clue 2 names chaturanga, which has its own entry in the sport list, so it sits in likelyGuesses and rivals: 'grew from' makes plain it isn't the answer (rule 15)."
 }
 ```
 Why it works: draughts shares the 64-square board and its crowned kings, so clue 4 still asks the player to know the pieces.
@@ -2558,7 +2761,7 @@ Why it works: draughts shares the 64-square board and its crowned kings, so clue
   "category": "geo",
   "tags": ["asia", "landlocked", "steppe"],
   "region": "global",
-  "volatility": "evergreen",
+  "volatility": "slow",
   "reviewBy": null,
   "seededDifficulty": 5,
   "counterintuitive": false,
@@ -2592,23 +2795,30 @@ Why it works: draughts shares the 64-square board and its crowned kings, so clue
       "ref": "clue:1",
       "risk": "high",
       "riskReason": "superlative",
-      "text": "Ulaanbaatar has the lowest average annual temperature of any national capital."
+      "text": "Mongolia's capital has the coldest average yearly temperature of any national capital."
     },
-    {"id": "c3", "role": "clue", "ref": "clue:2", "risk": "standard", "text": "The Gobi Desert covers much of southern Mongolia."},
+    {"id": "c3", "role": "clue", "ref": "clue:2", "risk": "high", "riskReason": "sealed_pool", "text": "The Gobi Desert covers much of Mongolia's southern half."},
     {
       "id": "c4",
       "role": "clue",
       "ref": "clue:3",
       "risk": "high",
       "riskReason": "date",
-      "text": "Genghis Khan united the Mongol tribes in 1206 and founded the Mongol Empire."
+      "text": "Genghis Khan united Mongolia's tribes in 1206 and began an empire from there."
     },
-    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "standard", "text": "Many Mongolian herders live in gers, and Mongolia borders only Russia and China."},
+    {
+      "id": "c5",
+      "role": "clue",
+      "ref": "clue:4",
+      "risk": "high",
+      "riskReason": "only",
+      "text": "Many herders in Mongolia live in round felt tents called gers, and Mongolia's only neighbours are Russia and China."
+    },
     {"id": "c6", "role": "distractor", "risk": "standard", "text": "Kazakhstan, Kyrgyzstan and Nepal each contradict clues 1, 3 and 4."},
     {"id": "c7", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Ulaanbaatar lies about 1,350 metres above sea level."},
     {"id": "c8", "role": "explanation", "risk": "standard", "text": "Kazakhstan borders Russia, China, Kyrgyzstan, Uzbekistan and Turkmenistan."}
   ],
-  "writerNotes": "Borders checked in mledoze-countries: MNG borders CHN and RUS; KAZ borders CHN, KGZ, RUS, TKM and UZB. The same file spells the capital 'Ulan Bator', so the city list carries both spellings."
+  "writerNotes": "Borders checked in mledoze-countries: MNG borders CHN and RUS; KAZ borders CHN, KGZ, RUS, TKM and UZB. The same file spells the capital 'Ulan Bator', so the city list carries both spellings. Volatility is slow because clue 1 is a climate record, which a warming trend could one day shift; the editor sets reviewBy at acceptance, and the item can't be scheduled on or after it. Clue 4 names Russia and China, both in likelyGuesses and rivals (rule 15)."
 }
 ```
 Why it works: a hard clue 1 that experts know, a Kazakhstan distractor that fits half the story, and an answer every player recognizes on clue 4.
@@ -2629,10 +2839,10 @@ Why it works: a hard clue 1 that experts know, a Kazakhstan distractor that fits
   "answer": "x.animal.axolotl",
   "accepted": [],
   "clues": [
-    "In the wild it lives only in the canals of Xochimilco, remnants of the lakes around the Aztec capital.",
+    "It is native to the lakes of the basin where the Aztecs built their capital, Tenochtitlan.",
     "It keeps its feathery external gills as an adult instead of changing form like most salamanders.",
     "It can regrow lost limbs, and even parts of its heart and brain.",
-    "In 2021 Mexico put this smiling, often pink salamander on a new 50-peso banknote."
+    "In 2021 Mexico put this smiling salamander on a new 50-peso banknote."
   ],
   "distractors": ["x.animal.olm", "x.animal.fire-salamander", "x.animal.chinese-giant-salamander"],
   "slot": 3,
@@ -2654,20 +2864,27 @@ Why it works: a hard clue 1 that experts know, a Kazakhstan distractor that fits
       "role": "clue",
       "ref": "clue:1",
       "risk": "high",
-      "riskReason": "superlative",
-      "text": "Wild axolotls live only in the canals of Xochimilco, remnants of the lake system around Tenochtitlan, in modern Mexico City."
+      "riskReason": "sealed_pool",
+      "text": "The axolotl is native to the lakes of the basin where the Aztecs built their capital, Tenochtitlan."
     },
-    {"id": "c3", "role": "clue", "ref": "clue:2", "risk": "standard", "text": "Axolotls keep their external gills into adulthood, unlike most salamanders."},
-    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "standard", "text": "Axolotls can regenerate limbs and parts of the heart and brain."},
-    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "high", "riskReason": "date", "text": "Mexico issued a new 50-peso banknote showing an axolotl in 2021."},
+    {
+      "id": "c3",
+      "role": "clue",
+      "ref": "clue:2",
+      "risk": "high",
+      "riskReason": "sealed_pool",
+      "text": "The axolotl keeps its feathery external gills as an adult instead of changing form like most salamanders."
+    },
+    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "high", "riskReason": "sealed_pool", "text": "The axolotl can regrow lost limbs, and even parts of its heart and brain."},
+    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "high", "riskReason": "date", "text": "In 2021 Mexico put the axolotl, a smiling salamander, on a new 50-peso banknote."},
     {"id": "c6", "role": "distractor", "risk": "standard", "text": "The olm, the fire salamander and the Chinese giant salamander each contradict clues 1 and 4."},
     {"id": "c7", "role": "explanation", "risk": "high", "riskReason": "etymology", "text": "The word axolotl comes from Nahuatl and is often linked to the god Xolotl."},
     {"id": "c8", "role": "explanation", "risk": "standard", "text": "Axolotls regenerate tissue without scarring, which makes them important in research."}
   ],
-  "writerNotes": "The aliases 'Mexican walking fish' and 'ajolote' stay out of every clue, and so does the word 'Mexico' in clues 1 to 3: its first letters match the alias in the suggestion box (lint C12 warns on it). Clue 4 may say Mexico, because by then players pick from options. The olm keeps its gills too, which makes it the expert's distractor."
+  "writerNotes": "Clue 1 gives the native range, which can't change, not where the animal survives in the wild today, which conservation keeps changing (§1.4). The aliases 'Mexican walking fish' and 'ajolote' stay out of every clue, and so does the word 'Mexico' in clues 1 to 3: typing it surfaces 'Mexican walking fish', since 'mexica' is one letter from 'mexico', and C12's suggestion probe fails on that. Clue 4 may say Mexico while optionsFromClue is 3 or 4, because players pick from options there. 'Often pink' is gone from clue 4: wild axolotls are mostly dark, so the phrase would need evidence of its own and tells players nothing they need. The olm keeps its gills too, which makes it the expert's distractor."
 }
 ```
-Why it works: each clue is true of several salamanders on its own, but the clues together fit one, and the dated banknote clue cannot go stale.
+Why it works: clues 2 and 3 fit other salamanders as well (the olm keeps its gills, and many salamanders regrow limbs), clues 1 and 4 fit only one, and both the native range and the dated banknote are facts that can't go stale.
 
 ```json
 {
@@ -2711,14 +2928,21 @@ Why it works: each clue is true of several salamanders on its own, but the clues
       "ref": "clue:1",
       "risk": "high",
       "riskReason": "date",
-      "text": "In 2013 UNESCO inscribed kimjang, the communal making of kimchi each autumn, as intangible cultural heritage."
+      "text": "In 2013 UNESCO listed the custom of families making kimchi together each autumn as intangible heritage."
     },
-    {"id": "c3", "role": "clue", "ref": "clue:2", "risk": "standard", "text": "Kimchi is made by salting and fermenting vegetables, most often Chinese cabbage and radish."},
-    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "standard", "text": "Kimchi's red colour usually comes from gochugaru, dried chilli flakes."},
-    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "standard", "text": "Kimchi is a staple side dish served with most Korean meals."},
+    {
+      "id": "c3",
+      "role": "clue",
+      "ref": "clue:2",
+      "risk": "high",
+      "riskReason": "sealed_pool",
+      "text": "Kimchi is made by salting and fermenting vegetables, most often Chinese cabbage and radish."
+    },
+    {"id": "c4", "role": "clue", "ref": "clue:3", "risk": "high", "riskReason": "sealed_pool", "text": "Kimchi's red colour usually comes from gochugaru, dried chilli flakes."},
+    {"id": "c5", "role": "clue", "ref": "clue:4", "risk": "high", "riskReason": "sealed_pool", "text": "Kimchi, a spicy fermented cabbage, is served with almost every Korean meal."},
     {"id": "c6", "role": "distractor", "risk": "standard", "text": "Sauerkraut, bibimbap and tteokbokki each contradict clues 1 and 2."},
     {"id": "c7", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Chilli peppers reached Korea around the late 16th century."},
-    {"id": "c8", "role": "explanation", "risk": "standard", "text": "There are hundreds of kinds of kimchi, made from vegetables including radish and cucumber."}
+    {"id": "c8", "role": "explanation", "risk": "high", "riskReason": "number", "text": "There are hundreds of kinds of kimchi, made from vegetables including radish and cucumber."}
   ],
   "writerNotes": "'Kimjang' begins like 'kimchi', so typing it would surface the answer: it is a giveaway term and clue 1 describes the custom instead."
 }
@@ -2757,6 +2981,8 @@ Why it works: the prefix trap is caught before a player could use it, and clue 4
   "answer": 1300000,
   "decimals": 0,
   "unit": "times",
+  "unitShort": "times",
+  "unitLabel": "times Earth's volume",
   "bands": null,
   "sourceLabels": [],
   "derivation": {
@@ -2774,11 +3000,12 @@ Why it works: the prefix trap is caught before a player could use it, and clue 4
     {"id": "c1", "role": "value", "risk": "high", "riskReason": "number", "text": "The Sun's volume is about 1.3 million times Earth's."},
     {"id": "c2", "role": "input", "risk": "high", "riskReason": "number", "text": "The Sun's nominal radius is 695,700 km."},
     {"id": "c3", "role": "input", "risk": "high", "riskReason": "number", "text": "Earth's mean radius is 6,371 km."},
-    {"id": "c4", "role": "explanation", "risk": "standard", "text": "The Sun's radius is about 109 times Earth's."}
-  ]
+    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "number", "text": "The Sun's radius is about 109 times Earth's."}
+  ],
+  "writerNotes": "The round anchor, 1 million, is 30% off, outside the bullseye. '1.3 million Earths' is a stock figure, so some players will know it exactly; the estimator's exact share decides whether too many do (rule 6)."
 }
 ```
-Why it works: a derived number that resists a quick search, with the arithmetic in the record and an explanation that teaches the cube rule.
+Why it works: a derived number players can reason toward from the 109-times radius, with the arithmetic in the record and an explanation that teaches the cube rule. It isn't lookup-resistant ("1.3 million Earths" is a stock answer), and rule 7 doesn't ask it to be.
 
 ```json
 {
@@ -2790,26 +3017,43 @@ Why it works: a derived number that resists a quick search, with the arithmetic 
   "region": "global",
   "volatility": "evergreen",
   "reviewBy": null,
-  "seededDifficulty": 3,
+  "seededDifficulty": 4,
   "counterintuitive": false,
-  "question": "How long is the Equator, in kilometres?",
+  "question": "How many days would it take to walk once around the Equator at 5 km (3 miles) an hour, without stopping?",
   "valueKind": "quantity",
-  "answer": 40075,
+  "answer": 334,
   "decimals": 0,
-  "unit": "kilometres",
+  "unit": "days",
+  "unitShort": "days",
+  "unitLabel": "days",
   "bands": null,
   "sourceLabels": [],
-  "derivation": null,
-  "explanation": "Earth bulges at the Equator, so a loop through both poles is about 67 km shorter. In miles, the Equator is roughly 24,900.",
+  "derivation": {
+    "formula": "40,075 km / 5 km an hour / 24 hours a day",
+    "inputs": [
+      {"claimId": "c2", "value": 40075, "unit": "km", "what": "Earth's equatorial circumference"}
+    ],
+    "unrounded": 333.96,
+    "rounding": "nearest whole day"
+  },
+  "explanation": "At 5 km an hour, day and night, the 40,075 km (24,900-mile) loop takes about 8,000 hours. Walking 8 hours a day instead, it would take nearly two years and nine months.",
   "learnMore": "Equator",
   "claims": [
-    {"id": "c1", "role": "value", "risk": "high", "riskReason": "number", "text": "Earth's equatorial circumference is about 40,075 km."},
-    {"id": "c2", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Earth's circumference through the poles is about 40,008 km, roughly 67 km less."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "40,075 km is about 24,900 miles."}
-  ]
+    {"id": "c1", "role": "value", "risk": "high", "riskReason": "number", "text": "Walking nonstop at 5 km an hour, one trip around the Equator would take about 334 days."},
+    {"id": "c2", "role": "input", "risk": "high", "riskReason": "number", "text": "Earth's equatorial circumference is about 40,075 km."},
+    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "40,075 km is about 24,900 miles, and 5 km is about 3 miles."},
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "At 5 km an hour, 40,075 km takes about 8,000 hours, which at 8 hours a day is nearly two years and nine months."
+    }
+  ],
+  "writerNotes": "The likeliest round guess is a year, 365 days, which is 9.3% off: close, not a bullseye; 300 is 11% off. Players who know the Equator is about 40,000 km and do the sum reach 333, a bullseye they earned. Only the Equator's length is a fact to check, because the question supplies the speed. It gives that speed in both systems, so an imperial reasoner (24,900 miles at 3 miles an hour) lands on 346, within 4% (rule 3). c3 and c4 are conversions and arithmetic, so calculations confirm them (§9.5.4)."
 }
 ```
-Why it works: a stable physical constant with one definition, and the explanation gives the miles for players who think in them.
+Why it works: a duration every player estimates in the same unit, built on one stable constant, with the speed in both systems so metric and imperial reasoners start level (§6, rules 3 and 12). The final design's Encore screen asks the same question. Asked as "How long is the Equator, in kilometres?" it would fail twice: it favours players who think in metric, and the round guess of 40,000 is 0.2% off.
 
 ```json
 {
@@ -2828,6 +3072,8 @@ Why it works: a stable physical constant with one definition, and the explanatio
   "answer": 116,
   "decimals": 0,
   "unit": "years",
+  "unitShort": "years",
+  "unitLabel": "years",
   "bands": null,
   "sourceLabels": [],
   "derivation": {
@@ -2845,12 +3091,12 @@ Why it works: a stable physical constant with one definition, and the explanatio
     {"id": "c1", "role": "value", "risk": "high", "riskReason": "number", "text": "The Hundred Years' War lasted 116 years."},
     {"id": "c2", "role": "input", "risk": "high", "riskReason": "date", "text": "The Hundred Years' War began in 1337."},
     {"id": "c3", "role": "input", "risk": "high", "riskReason": "date", "text": "The Hundred Years' War ended in 1453."},
-    {"id": "c4", "role": "explanation", "risk": "standard", "text": "The name 'Hundred Years' War' was given by later historians."}
+    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "quotation", "text": "The name 'Hundred Years' War' was given by later historians."}
   ],
-  "writerNotes": "The naive guess of 100 is 13.8% off, inside the close band, which feels fair: the name nearly gets you there."
+  "writerNotes": "The naive guess, and the likeliest round one, is 100: 16% off under the symmetric error (116 / 100 - 1, PRD §4.2.2), just outside the close band. So the name's anchor earns nothing, and players who know the dates pull ahead."
 }
 ```
-Why it works: the name plants a number that is close but not right, so the reveal lands as a surprise.
+Why it works: the name plants a round number that misses even the close band, so the reveal lands as a surprise.
 
 ```json
 {
@@ -2858,36 +3104,39 @@ Why it works: the name plants a number that is close but not right, so the revea
   "kind": "encore",
   "status": "draft",
   "category": "sport",
-  "tags": ["chess", "puzzles"],
+  "tags": ["shogi", "puzzles"],
   "region": "global",
   "volatility": "evergreen",
   "reviewBy": null,
   "seededDifficulty": 5,
   "counterintuitive": true,
-  "question": "Counting every size from 1×1 up to 8×8, how many squares are on a chessboard?",
+  "question": "Counting every size from 1 by 1 up to 9 by 9, how many squares are on a shogi board?",
   "valueKind": "quantity",
-  "answer": 204,
+  "answer": 285,
   "decimals": 0,
   "unit": "squares",
+  "unitShort": "squares",
+  "unitLabel": "squares",
   "bands": null,
   "sourceLabels": [],
   "derivation": {
-    "formula": "8² + 7² + 6² + 5² + 4² + 3² + 2² + 1²",
+    "formula": "9² + 8² + 7² + 6² + 5² + 4² + 3² + 2² + 1²",
     "inputs": [
-      {"claimId": "c2", "value": 8, "unit": "squares per side", "what": "size of a chessboard"}
+      {"claimId": "c2", "value": 9, "unit": "squares per side", "what": "size of a shogi board"}
     ],
-    "unrounded": 204,
+    "unrounded": 285,
     "rounding": "none"
   },
-  "explanation": "There are 64 squares of 1×1, 49 of 2×2, 36 of 3×3 and so on: the square numbers from 64 down to 1 add up to 204.",
-  "learnMore": "Chessboard",
+  "explanation": "There are 81 squares of 1 by 1, 64 of 2 by 2, 49 of 3 by 3 and so on: the square numbers from 81 down to 1 add up to 285.",
+  "learnMore": "Shogi",
   "claims": [
-    {"id": "c1", "role": "value", "risk": "high", "riskReason": "number", "text": "An 8 by 8 board contains 204 squares of all sizes."},
-    {"id": "c2", "role": "input", "risk": "standard", "text": "A chessboard is 8 squares by 8 squares."}
-  ]
+    {"id": "c1", "role": "value", "risk": "high", "riskReason": "number", "text": "A 9 by 9 board contains 285 squares of all sizes."},
+    {"id": "c2", "role": "input", "risk": "high", "riskReason": "number", "text": "A shogi board is 9 squares by 9 squares."}
+  ],
+  "writerNotes": "The obvious answer, 81, is 252% off. The likeliest round guess, 300, is 5.3% off, just outside the bullseye. A shogi board, not a chessboard: 'a chessboard holds 204 squares' is a stock puzzle answer many players know exactly, and the round guess of 200 sits 2% from 204, inside the bullseye (rule 6). The question states the board's size, so no shogi knowledge is needed."
 }
 ```
-Why it works: nobody can look it up faster than they can reason it out, the obvious answer (64) is far off, and the explanation shows the method.
+Why it works: a count anyone can work out in their head, an obvious answer (81) that is far off, and an explanation that shows the method. It isn't lookup-proof and doesn't need to be (rule 7): reasoning gets there as fast as a search.
 
 ```json
 {
@@ -2895,31 +3144,34 @@ Why it works: nobody can look it up faster than they can reason it out, the obvi
   "kind": "encore",
   "status": "draft",
   "category": "nat",
-  "tags": ["dogs", "teeth"],
+  "tags": ["pigs", "teeth"],
   "region": "global",
   "volatility": "evergreen",
   "reviewBy": null,
   "seededDifficulty": 4,
   "counterintuitive": false,
-  "question": "How many teeth does an adult dog have?",
+  "question": "How many teeth does an adult pig have?",
   "valueKind": "quantity",
-  "answer": 42,
+  "answer": 44,
   "decimals": 0,
   "unit": "teeth",
+  "unitShort": "teeth",
+  "unitLabel": "teeth",
   "bands": null,
   "sourceLabels": [],
   "derivation": null,
-  "explanation": "Puppies have 28 milk teeth, and adult dogs have 42, ten more than a full adult human set of 32. Cats get by with 30.",
-  "learnMore": "Dog anatomy",
+  "explanation": "Adult pigs have 44 teeth, two more than an adult dog and 12 more than a full human set of 32, wisdom teeth included. Piglets start with 28 milk teeth.",
+  "learnMore": "Pig",
   "claims": [
-    {"id": "c1", "role": "value", "risk": "high", "riskReason": "number", "text": "An adult dog normally has 42 teeth."},
-    {"id": "c2", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Puppies have 28 deciduous teeth."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "A full adult human set, wisdom teeth included, is 32 teeth."},
-    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "number", "text": "An adult cat normally has 30 teeth."}
-  ]
+    {"id": "c1", "role": "value", "risk": "high", "riskReason": "number", "text": "An adult pig normally has 44 teeth."},
+    {"id": "c2", "role": "explanation", "risk": "high", "riskReason": "number", "text": "An adult dog normally has 42 teeth."},
+    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "A full adult human set, wisdom teeth included, is 32 teeth."},
+    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Piglets have 28 deciduous teeth."}
+  ],
+  "writerNotes": "The likeliest round guesses, 40 and 50, are 10% and 14% off: close, not bullseyes. A dog was the first choice, but its 42 teeth sit exactly 5% from a guess of 40, a bullseye for the round number (rule 6). Most players start from the human 32."
 }
 ```
-Why it works: a familiar animal and an unfamiliar number, with a human count every player can anchor on.
+Why it works: a familiar animal and an unfamiliar number, with a human count every player can anchor on, and no round number inside the bullseye.
 
 ```json
 {
@@ -2938,6 +3190,8 @@ Why it works: a familiar animal and an unfamiliar number, with a human count eve
   "answer": 46,
   "decimals": 0,
   "unit": "columns",
+  "unitShort": "columns",
+  "unitLabel": "columns",
   "bands": null,
   "sourceLabels": [],
   "derivation": {
@@ -2955,8 +3209,9 @@ Why it works: a familiar animal and an unfamiliar number, with a human count eve
     {"id": "c1", "role": "value", "risk": "high", "riskReason": "number", "text": "The Parthenon's outer colonnade had 46 columns."},
     {"id": "c2", "role": "input", "risk": "high", "riskReason": "number", "text": "The Parthenon had 8 columns across each end."},
     {"id": "c3", "role": "input", "risk": "high", "riskReason": "number", "text": "The Parthenon had 17 columns along each side, corners included."},
-    {"id": "c4", "role": "explanation", "risk": "standard", "text": "The Parthenon's columns lean slightly inward, one of its optical refinements."}
-  ]
+    {"id": "c4", "role": "explanation", "risk": "standard", "text": "The Parthenon's columns lean slightly inward, as part of its optical refinements."}
+  ],
+  "writerNotes": "The round guesses, 50 and 40, are 9% and 15% off: close, not bullseyes."
 }
 ```
 Why it works: "as built" fixes the definition despite the ruins, and a player who pictures the temple can reason toward the count.
@@ -2978,6 +3233,8 @@ Why it works: "as built" fixes the definition despite the ruins, and a player wh
   "answer": 47,
   "decimals": 0,
   "unit": "strings",
+  "unitShort": "strings",
+  "unitLabel": "strings",
   "bands": null,
   "sourceLabels": [],
   "derivation": null,
@@ -2988,7 +3245,7 @@ Why it works: "as built" fixes the definition despite the ruins, and a player wh
     {"id": "c2", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Its range is about six and a half octaves."},
     {"id": "c3", "role": "explanation", "risk": "standard", "text": "On a pedal harp the C strings are red and the F strings black or dark blue."}
   ],
-  "writerNotes": "'Concert grand' pins the count: smaller pedal harps have fewer strings."
+  "writerNotes": "'Concert grand' pins the count: smaller pedal harps have fewer strings. The round guess, 50, is 6.4% off, outside the bullseye."
 }
 ```
 Why it works: wide guesses, almost no exact answers, and a reveal players can see in their heads next time they watch an orchestra.
@@ -3010,6 +3267,8 @@ Why it works: wide guesses, almost no exact answers, and a reveal players can se
   "answer": 1937,
   "decimals": 0,
   "unit": "",
+  "unitShort": "",
+  "unitLabel": "",
   "bands": null,
   "sourceLabels": [],
   "derivation": null,
@@ -3017,10 +3276,11 @@ Why it works: wide guesses, almost no exact answers, and a reveal players can se
   "learnMore": "Snow White and the Seven Dwarfs (1937 film)",
   "claims": [
     {"id": "c1", "role": "value", "risk": "high", "riskReason": "date", "text": "Snow White and the Seven Dwarfs premiered in 1937."},
-    {"id": "c2", "role": "explanation", "risk": "standard", "text": "Before release the film was nicknamed 'Disney's Folly'."},
+    {"id": "c2", "role": "explanation", "risk": "high", "riskReason": "quotation", "text": "Before release the film was nicknamed 'Disney's Folly'."},
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "date", "text": "It premiered in Los Angeles on 21 December 1937."},
     {"id": "c4", "role": "explanation", "risk": "standard", "text": "Profits from the film helped fund Disney's studio in Burbank."}
-  ]
+  ],
+  "writerNotes": "The nearest decade, 1940, is 3 years off: close, not a bullseye. The nickname in c2 is a quotation, so it needs external evidence like any other."
 }
 ```
 Why it works: a year most people place within a decade or two and few know exactly, which is what a tiebreaker needs.
@@ -3042,6 +3302,8 @@ Why it works: a year most people place within a decade or two and few know exact
   "answer": 1755,
   "decimals": 0,
   "unit": "",
+  "unitShort": "",
+  "unitLabel": "",
   "bands": null,
   "sourceLabels": [],
   "derivation": null,
@@ -3052,7 +3314,8 @@ Why it works: a year most people place within a decade or two and few know exact
     {"id": "c2", "role": "explanation", "risk": "high", "riskReason": "number", "text": "The dictionary defined about 42,000 words."},
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "Johnson worked on it for about nine years, with a few assistants."},
     {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "quotation", "text": "Johnson defined a lexicographer as 'a harmless drudge'."}
-  ]
+  ],
+  "writerNotes": "The round anchors, 1750 and 1760, are both 5 years off: at the edge of the close band, outside the bullseye."
 }
 ```
 Why it works: the foothold is the 18th century, and the quotation gives the reveal a laugh.
@@ -3069,24 +3332,33 @@ Why it works: the foothold is the 18th century, and the quotation gives the reve
   "reviewBy": null,
   "seededDifficulty": 4,
   "counterintuitive": false,
-  "question": "In what year was the first Michelin Guide published?",
+  "question": "In what year did the Michelin Guide award its first restaurant stars?",
   "valueKind": "year",
-  "answer": 1900,
+  "answer": 1926,
   "decimals": 0,
   "unit": "",
+  "unitShort": "",
+  "unitLabel": "",
   "bands": null,
   "sourceLabels": [],
   "derivation": null,
-  "explanation": "Tyre makers André and Édouard Michelin gave it away free to encourage driving. Its restaurant stars came later: the first in 1926.",
+  "explanation": "Tyre makers André and Édouard Michelin gave the first guide away in 1900 to get people driving. Single stars arrived in 1926, and the three-star scale in the early 1930s.",
   "learnMore": "Michelin Guide",
   "claims": [
-    {"id": "c1", "role": "value", "risk": "high", "riskReason": "first", "text": "The first Michelin Guide was published in 1900."},
-    {"id": "c2", "role": "explanation", "risk": "standard", "text": "The Michelin brothers, André and Édouard, ran a tyre company and gave the first guides away."},
-    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "first", "text": "The guide awarded its first restaurant stars in 1926."}
-  ]
+    {"id": "c1", "role": "value", "risk": "high", "riskReason": "first", "text": "The Michelin Guide awarded its first restaurant stars in 1926."},
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "André and Édouard Michelin, who ran a tyre company, gave the first Michelin Guide away free in 1900 to encourage driving."
+    },
+    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "date", "text": "The Michelin Guide's three-star scale was introduced in the early 1930s."}
+  ],
+  "writerNotes": "The decades either side, 1920 and 1930, are 6 and 4 years off: outside the bullseye. The obvious version, 'In what year was the first Michelin Guide published?', fails rule 6, because its answer, 1900, is itself the round guess."
 }
 ```
-Why it works: players guess from the age of motoring, and the link between tyres and fine dining is the surprise.
+Why it works: players reason forward from the age of motoring, the decades either side miss the bullseye (rule 6), and the link between tyres and fine dining is the surprise.
 
 ### 12.10 Encores: five bad examples
 
@@ -3135,7 +3407,7 @@ Why it works: players guess from the age of motoring, and the link between tyres
   ]
 }
 ```
-Why it works (`around-the-world`, position 3): a short stem a host can read in one breath, four neighbouring countries, and a 17-word reveal.
+Why it works (`around-the-world`, position 3): a short stem a host can read in one breath, Jordan and three countries from the same region, and a 16-word reveal.
 
 ```json
 {
@@ -3152,19 +3424,19 @@ Why it works (`around-the-world`, position 3): a short stem a host can read in o
   "counterintuitive": false,
   "stem": "Which river flows through Baghdad?",
   "answer": "Tigris",
-  "wrong": ["Euphrates", "Jordan", "Nile"],
+  "wrong": ["Euphrates", "Indus", "Nile"],
   "order": "shuffle",
   "explanation": "The Tigris and Euphrates frame Mesopotamia, 'the land between the rivers'. Baghdad stands on the Tigris; ancient Babylon stood on the Euphrates.",
   "learnMore": "Tigris",
   "claims": [
     {"id": "c1", "role": "key", "risk": "standard", "text": "Baghdad lies on the Tigris."},
-    {"id": "c2", "role": "distractor", "risk": "standard", "text": "The Euphrates, the Jordan and the Nile do not flow through Baghdad."},
+    {"id": "c2", "role": "distractor", "risk": "standard", "text": "The Euphrates, the Indus and the Nile do not flow through Baghdad."},
     {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "etymology", "text": "Mesopotamia means 'land between the rivers'."},
     {"id": "c4", "role": "explanation", "risk": "standard", "text": "Ancient Babylon stood on the Euphrates."}
   ]
 }
 ```
-Why it works (`around-the-world`, position 6): the Euphrates is the near miss, and the reveal hands the room a fact to argue about.
+Why it works (`around-the-world`, position 6): the Euphrates is the near miss, and the reveal hands the room a fact to argue about. The fourth option is the Indus, not the Jordan, because Jordan is the key of the Petra question earlier in the pack (§10.9).
 
 ```json
 {
@@ -3225,7 +3497,7 @@ Why it works (`back-in-time`, position 8): options in the same form and of simil
       "riskReason": "quotation",
       "text": "In Star Wars (1977), General Dodonna says the line before the attack on the Death Star."
     },
-    {"id": "c4", "role": "explanation", "risk": "standard", "text": "Fans celebrate 4 May as Star Wars Day."}
+    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "date", "text": "Fans celebrate 4 May as Star Wars Day."}
   ]
 }
 ```
@@ -3251,9 +3523,9 @@ Why it works (`screen-time`, position 2): an early warm-up everyone can answer, 
   "explanation": "It is named after the London street of the EMI studio where they made it, and it was the last album the Beatles recorded together.",
   "learnMore": "Abbey Road",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "The Beatles released Abbey Road in 1969."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "date", "text": "The Beatles released Abbey Road in 1969."},
     {"id": "c2", "role": "distractor", "risk": "standard", "text": "The Rolling Stones, the Kinks and the Who did not release Abbey Road."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "The album is named after Abbey Road, the London street of the EMI studio where it was recorded."},
+    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "etymology", "text": "The album is named after Abbey Road, the London street of the EMI studio where it was recorded."},
     {
       "id": "c4",
       "role": "explanation",
@@ -3286,10 +3558,10 @@ Why it works (`sound-check`, position 1): position 1 is the easiest question in 
   "explanation": "Its fur only looks white: each hair is hollow and see-through, and scatters light. In zoos, algae inside the hairs have turned some bears green.",
   "learnMore": "Polar bear",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "A polar bear's skin is black."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "counterintuitive", "text": "A polar bear's skin is black."},
     {"id": "c2", "role": "distractor", "risk": "standard", "text": "A polar bear's skin is not white, pink or grey."},
     {"id": "c3", "role": "explanation", "risk": "standard", "text": "Polar bear hairs are hollow and translucent, and look white because they scatter light."},
-    {"id": "c4", "role": "explanation", "risk": "standard", "text": "Algae growing in the hollow hairs have turned zoo polar bears green."}
+    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "counterintuitive", "text": "Algae growing in the hollow hairs have turned zoo polar bears green."}
   ]
 }
 ```
@@ -3343,8 +3615,8 @@ Why it works (`kitchen-table`, position 5): one confident answer for most of the
   "explanation": "Nobody knows for sure why. A popular theory links it to l'œuf, French for 'the egg', but there is little evidence.",
   "learnMore": "Tennis scoring system",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "In tennis, a score of zero is called 'love'."},
-    {"id": "c2", "role": "distractor", "risk": "standard", "text": "'Nil' (football), 'duck' (cricket) and 'zilch' are not tennis terms for zero."},
+    {"id": "c1", "role": "key", "risk": "high", "riskReason": "quotation", "text": "In tennis, a score of zero is called 'love'."},
+    {"id": "c2", "role": "distractor", "risk": "high", "riskReason": "quotation", "text": "'Nil' (football), 'duck' (cricket) and 'zilch' are not tennis terms for zero."},
     {
       "id": "c3",
       "role": "explanation",
@@ -3355,7 +3627,7 @@ Why it works (`kitchen-table`, position 5): one confident answer for most of the
   ]
 }
 ```
-Why it works (`game-on`, position 7): every distractor is a real word for zero from another game, and the explanation is honest about an uncertain origin rather than repeating a tidy story.
+Why it works (`game-on`, position 7): two distractors are words for zero from other games and the third is everyday slang, so every option sounds like a score, and the explanation is honest about an uncertain origin rather than repeating a tidy story.
 
 ```json
 {
@@ -3374,14 +3646,15 @@ Why it works (`game-on`, position 7): every distractor is a real word for zero f
   "answer": "Tim Berners-Lee",
   "wrong": ["Vint Cerf", "Alan Turing", "Bill Gates"],
   "order": "shuffle",
-  "explanation": "Working at CERN near Geneva, he wanted physicists to share documents easily. The first website went live in 1991, explaining what the web was.",
+  "explanation": "Working at CERN near Geneva, he wanted physicists to share documents easily. CERN released the web's software free for anyone in 1993.",
   "learnMore": "Tim Berners-Lee",
   "claims": [
     {"id": "c1", "role": "key", "risk": "high", "riskReason": "date", "text": "Tim Berners-Lee proposed the World Wide Web at CERN in 1989."},
     {"id": "c2", "role": "distractor", "risk": "standard", "text": "Vint Cerf, Alan Turing and Bill Gates did not propose the World Wide Web."},
     {"id": "c3", "role": "explanation", "risk": "standard", "text": "Berners-Lee wanted a way for physicists to share documents."},
-    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "first", "text": "The first website went live in 1991 and described the web project itself."}
-  ]
+    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "date", "text": "CERN released the World Wide Web software free for anyone to use in 1993."}
+  ],
+  "writerNotes": "The explanation names a documented release, not 'the first website': sources split between December 1990, when CERN's first page was served, and August 1991, when the project was announced and opened to outsiders (§3.5)."
 }
 ```
 Why it works (`all-sorts`, position 4): Vint Cerf, a real pioneer of the internet, is the expert's trap, and the web-versus-internet distinction is the lesson.
@@ -3530,7 +3803,7 @@ Why it works (`all-sorts`, position 15): a medium finale with the pack's best re
     "aliases": ["Aluminum"],
     "popularity": 0,
     "qualifier": {"symbol": "Al", "number": 13},
-    "source": "ptable@a78c7a4 number=13",
+    "source": "l.element.b01",
     "status": "active",
     "addedIn": "2026-11-01",
     "wikidataId": null,
@@ -3577,9 +3850,9 @@ Why it works (`all-sorts`, position 15): a medium finale with the pack's best re
   },
   {
     "id": "x.sport.association-football",
-    "name": "Football (soccer)",
-    "display": "Football (soccer)",
-    "aliases": ["Association football", "Soccer", "Football"],
+    "name": "Association football",
+    "display": "Association football",
+    "aliases": ["Football", "Soccer", "Football (soccer)"],
     "popularity": 0,
     "qualifier": {},
     "source": "l.sport.b01",
@@ -3600,11 +3873,13 @@ Why it works (`all-sorts`, position 15): a medium finale with the pack's best re
 | The Office (UK) | A collision descriptor, because The Office (US) shares the title |
 | One Hundred Years of Solitude | The author is always shown; the original Spanish title and the numeral form are aliases |
 | Orca | Both common names, so neither group of players is marked wrong |
-| Aluminium | The IUPAC spelling, with the US spelling as an alias; number and symbol from the pinned periodic table |
+| Aluminium | The IUPAC spelling, with the US spelling as an alias. The list builder wrote the entry from IUPAC's table and checked the number and symbol against `ptable`, so the source is the list batch and no CC BY-SA data ships (§9.5.1) |
 | Angkor Wat, Cambodia | Landmarks always carry their country |
 | Björk | Diacritics kept in the display; the full name as an alias |
 | Gazpacho | A dish with one name in every English variety, so no aliases are needed |
-| Football (soccer) | The football rule from §3.3 applied to a list entry, with every name players type |
+| Association football | A display with no bracket, so it can stand among clue-4 options without pointing at itself, and every name players type as an alias, the §3.3 form included (§2.10) |
+
+Every example carries `addedIn` equal to the `liveAt` of the version that added it, and that version's file wraps them as `{ "type", "version", "liveAt", "provenance", "entities" }` (§2.10).
 
 ### 12.14 Answer-list entries: five bad examples
 
@@ -3615,176 +3890,206 @@ Why it works (`all-sorts`, position 15): a medium finale with the pack's best re
 3. **One person in two lists.** "Wolfgang Amadeus Mozart" in both `person.json` and `music_artist.json`.
    *Wrong:* a mystery's answer type decides which ID counts, so a player who picks the twin from the other list can never match. *Fix:* one entity, one list (§2.10, rule 1); Mozart belongs in `music_artist`.
 4. **A Wikidata id typed from memory.** `{"id": "Q12345", "name": "..."}`, with the QID typed by a writer.
-   *Wrong:* nobody can verify it, it may point at another entity, and it would corrupt suggestion ranking. *Fix:* an `x.` id until the enrichment job finds the QID, or a QID copied from a dataset that carries one, with its locator (§2.12, §9.6).
+   *Wrong:* nobody can verify it, it may point at another entity, and it would corrupt suggestion ranking. Writers mint no ids at all. *Fix:* an id the list builder mints: the dataset's QID when the record carries one, which is then mandatory, or an `x.` id until the enrichment job finds one (§2.12, §9.6).
 5. **A list too small to hide anything.** A `planet` list of 8 entries used for a medium mystery.
-   *Wrong:* typing "M" shows two of the eight, so the suggestion box all but solves it. *Fix:* never under 30 entries; under 100 only for Mystery 1 (PRD §3.18.4), so planets go elsewhere or don't run as mysteries.
+   *Wrong:* typing "M" shows two of the eight, so the suggestion box all but solves it. *Fix:* never under 100 entries for any slot (PRD §3.18.4), so planets go elsewhere or don't run as mysteries.
 
 ### 12.15 A filled-in verification record
 
-This is the `verification` object for the Canberra item in §12.1, to show the format. The dataset values and the search results are real lookups made on 31 October 2026 while writing this guide. Agent ids and timestamps are placeholders, as are the packet hashes, and the `results` list keeps four of the eighteen results the search returned; a real record keeps all of them.
+This is the `verification` object for the Canberra item in §12.1, to show the format. The dataset values and the search results are real lookups made on 31 October 2026 while writing and revising this guide. Agent ids, models, timestamps and packet hashes are placeholders, and each `results` list keeps four of the seventeen results its search returned, in the order returned; a real record keeps all of them. The two searches show both attribution cases of §9.5.2. The first summary names the page its sentence came from, so the call counts at that page's tier. The second names its sources only as a group, so it counts at the lowest tier it could have relied on.
 
 ```json
 {
   "checks": [
     {
       "checker": "fc-a1b2c3",
+      "model": "<model of run A>",
       "pass": "A",
       "brief": "confirm",
-      "packetSha256": "<sha256 of packet A>",
+      "packetSha256": ["<sha256 of stage 1>", "<sha256 of the final stage>"],
+      "stagesServedAt": ["2026-11-02T10:00:00Z", "2026-11-02T10:01:30Z"],
       "startedAt": "2026-11-02T10:00:00Z",
-      "finishedAt": "2026-11-02T10:06:00Z",
-      "coldSolve": {"answerGiven": "Canberra", "confidence": "high", "matchedKey": true},
+      "finishedAt": "2026-11-02T10:09:00Z",
+      "coldSolve": {"answerGiven": "Canberra", "confidence": "high", "matchedKey": true, "recordedAt": "2026-11-02T10:01:00Z"},
       "claimResults": [
         {
           "claimId": "c1",
           "verdict": "confirmed",
-          "method": "dataset",
-          "evidence": {
-            "kind": "dataset",
-            "dataset": "mledoze-countries",
-            "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
-            "file": "countries.json",
-            "locator": "cca3=AUS",
-            "excerpt": "\"capital\": [\"Canberra\"]",
-            "retrievedAt": "2026-10-31"
-          },
-          "note": ""
+          "evidence": [
+            {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=AUS",
+              "excerpt": "\"capital\": [\"Canberra\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            {
+              "kind": "web",
+              "query": "\"Canberra is the capital\" of Australia Parliamentary Education Office OR National Capital Authority",
+              "results": [
+                {"title": "www.nca.gov.au", "url": "https://www.nca.gov.au/sites/default/files/primary%20education%20kit%20teacher%27s%20notes.pdf"},
+                {"title": "Canberra from above", "url": "https://peo.gov.au/understand-our-parliament/parliament-house/canberra-from-above"},
+                {"title": "Canberra fly-over", "url": "https://peo.gov.au/understand-our-parliament/parliament-house/canberra-fly-over"},
+                {"title": "Checked content", "url": "https://solarspell-dls.sfis.asu.edu/mea/wikipedia/wp/c/Canberra.htm"}
+              ],
+              "summaryExcerpt": "PEO: Its \"Canberra from above\" page welcomes readers to Canberra, the capital city of Australia, located on Ngunnawal and Ngambri country.",
+              "citedResult": {
+                "title": "Canberra from above",
+                "url": "https://peo.gov.au/understand-our-parliament/parliament-house/canberra-from-above",
+                "tier": "A"
+              },
+              "tiers": ["A", "B", "C"],
+              "conflictReported": false,
+              "retrievedAt": "2026-10-31"
+            }
+          ],
+          "note": "A capital key, so it carries the dataset record and a Tier A or B result (§3.4). The summary also drew on Wikipedia mirrors and travel guides, but it attributes this sentence to the Parliamentary Education Office's page, so the call counts at Tier A."
         },
         {
           "claimId": "c2",
           "verdict": "confirmed",
-          "method": "dataset",
-          "evidence": {
-            "kind": "dataset",
-            "dataset": "mledoze-countries",
-            "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
-            "file": "countries.json",
-            "locator": "cca3=AUS",
-            "excerpt": "\"capital\": [\"Canberra\"]",
-            "retrievedAt": "2026-10-31"
-          },
-          "note": "The national capital list holds only Canberra. That Sydney, Melbourne and Perth are state capitals is standard knowledge."
+          "evidence": [
+            {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=AUS",
+              "excerpt": "\"capital\": [\"Canberra\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sydney, Melbourne and Perth are the capitals of New South Wales, Victoria and Western Australia.",
+              "confidence": "certain"
+            }
+          ],
+          "note": "The dataset covers the half about the national capital; the state capitals rest on knowledge, which a standard claim allows."
         },
         {
           "claimId": "c3",
           "verdict": "confirmed",
-          "method": "web",
-          "evidence": {
-            "kind": "web",
-            "query": "Australian Constitution section 125 seat of government New South Wales \"not less than one hundred miles from Sydney\"",
-            "results": [
-              {"title": "Section 125 of the Constitution of Australia", "url": "https://en.wikipedia.org/wiki/Section_125_of_the_Constitution_of_Australia"},
-              {
-                "title": "constitution heading image",
-                "url": "https://peo.gov.au/understand-our-parliament/how-parliament-works/the-australian-constitution/the-australian-constitution-online/chapter-vii"
-              },
-              {"title": "aph.gov.au", "url": "https://aph.gov.au/About_Parliament/Senate/Practice_and_Procedure/Constitution/chapter7"},
-              {"title": "Commonwealth of Australia Constitution Act 1900 (UK)", "url": "https://www.foundingdocs.gov.au/item-sdid-122.html"}
-            ],
-            "summaryExcerpt": "Section 125 requires the seat of the Commonwealth government to be in New South Wales and at least 100 miles from Sydney.",
-            "tiers": ["A", "B"],
-            "conflictReported": false,
-            "retrievedAt": "2026-10-31"
-          },
-          "note": ""
+          "evidence": [
+            {
+              "kind": "web",
+              "query": "Australian Constitution section 125 seat of government \"territory which shall have been granted to or acquired by the Commonwealth\" \"one hundred miles from Sydney\"",
+              "results": [
+                {"title": "Section 125 of the Constitution of Australia", "url": "https://en.wikipedia.org/wiki/Section_125_of_the_Constitution_of_Australia"},
+                {
+                  "title": "constitution heading image",
+                  "url": "https://peo.gov.au/understand-our-parliament/how-parliament-works/the-australian-constitution/the-australian-constitution-online/chapter-vii"
+                },
+                {"title": "Commonwealth of Australia Constitution Act 1900 (UK)", "url": "https://www.foundingdocs.gov.au/item-sdid-122.html"},
+                {"title": "Opinion Number. 207", "url": "https://legalopinions.ags.gov.au/legalopinion/opinion-207"}
+              ],
+              "summaryExcerpt": "By section 125 of that Act the territory must be situated in New South Wales not less than 100 miles from Sydney, contain an area of not less than 100 square miles, and any Crown lands within it shall be granted to the Commonwealth without any payment therefor.",
+              "citedResult": null,
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-10-31"
+            }
+          ],
+          "note": "The summary names its sources only as a group (the Wikipedia article, the government's legal opinions, foundingdocs.gov.au and Parliament of Australia papers), so the call counts as one source at Tier B: enough for a high-risk practice claim, though not as a second source for a Daily clue."
         },
         {
           "claimId": "c4",
           "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Sydney and Melbourne competed to be the federal capital, and Canberra was a compromise site between them.",
-            "confidence": "certain"
-          },
+          "evidence": [
+            {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sydney and Melbourne competed to be the federal capital, and Canberra was a compromise site between them.",
+              "confidence": "certain"
+            }
+          ],
           "note": ""
         },
         {
           "claimId": "c5",
           "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "everyday",
-            "restatement": "A mile is about 1.609 km, so 100 miles is about 161 km.",
-            "confidence": "certain"
-          },
-          "note": ""
+          "evidence": [
+            {"kind": "calculation", "expression": "100 × 1.609344", "result": 160.9344, "constants": ["mile"], "claimIds": []}
+          ],
+          "note": "A pure conversion, so a calculation confirms it (§9.5.4)."
         }
       ],
       "issues": [],
-      "searchesUsed": 1,
+      "searchesUsed": 2,
       "verdict": "pass"
     },
     {
       "checker": "fc-d4e5f6",
+      "model": "<model of run B, another family>",
       "pass": "B",
       "brief": "refute",
-      "packetSha256": "<sha256 of packet B>",
+      "packetSha256": ["<sha256 of stage 1>", "<sha256 of the final stage>"],
+      "stagesServedAt": ["2026-11-02T10:01:00Z", "2026-11-02T10:02:10Z"],
       "startedAt": "2026-11-02T10:01:00Z",
-      "finishedAt": "2026-11-02T10:05:00Z",
-      "coldSolve": {"answerGiven": "Canberra", "confidence": "high", "matchedKey": true},
+      "finishedAt": "2026-11-02T10:06:00Z",
+      "coldSolve": {"answerGiven": "Canberra", "confidence": "high", "matchedKey": true, "recordedAt": "2026-11-02T10:02:00Z"},
       "claimResults": [
         {
           "claimId": "c1",
           "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "textbook",
-            "restatement": "Canberra is the capital of Australia and the home of its federal parliament.",
-            "confidence": "certain"
-          },
-          "note": "Rival test: Sydney is the largest city and Melbourne was the temporary seat of government until 1927, but neither is the capital."
+          "evidence": [
+            {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Canberra is the capital of Australia and the home of its federal parliament.",
+              "confidence": "certain"
+            }
+          ],
+          "note": "Rival test: Sydney is the largest city and Melbourne was the temporary seat of government until 1927, but neither is the capital. High-risk (a counterintuitive key, C26), so it counts only with check A's external evidence (§9.9)."
         },
         {
           "claimId": "c2",
           "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "textbook",
-            "restatement": "Sydney, Melbourne and Perth are the capitals of New South Wales, Victoria and Western Australia.",
-            "confidence": "certain"
-          },
+          "evidence": [
+            {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sydney, Melbourne and Perth are the capitals of New South Wales, Victoria and Western Australia.",
+              "confidence": "certain"
+            }
+          ],
           "note": ""
         },
         {
           "claimId": "c3",
           "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Section 125 places the seat of government in New South Wales, at least 100 miles from Sydney.",
-            "confidence": "certain"
-          },
-          "note": "High-risk: needs external evidence in the other check to count (9.9)."
+          "evidence": [
+            {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Section 125 places the seat of government in New South Wales, at least 100 miles from Sydney, on territory granted to the Commonwealth.",
+              "confidence": "certain"
+            }
+          ],
+          "note": "High-risk: counts only with external evidence in the other check (§9.9)."
         },
         {
           "claimId": "c4",
           "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "The Sydney and Melbourne rivalry led to a new, separate capital.",
-            "confidence": "certain"
-          },
+          "evidence": [
+            {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Sydney and Melbourne rivalry led to a new, separate capital.",
+              "confidence": "certain"
+            }
+          ],
           "note": ""
         },
         {
           "claimId": "c5",
           "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "everyday",
-            "restatement": "100 miles is roughly 161 km.",
-            "confidence": "certain"
-          },
-          "note": ""
+          "evidence": [
+            {"kind": "knowledge", "basis": "everyday", "restatement": "100 miles is roughly 161 km.", "confidence": "certain"}
+          ],
+          "note": "High-risk under C26; check A's calculation carries it."
         }
       ],
       "issues": [
@@ -3794,17 +4099,33 @@ This is the `verification` object for the Canberra item in §12.1, to show the f
       "verdict": "pass"
     }
   ],
+  "merge": {
+    "mergedAt": "2026-11-02T10:55:00Z",
+    "editor": "ed-g7h8i9",
+    "claims": [
+      {"id": "c1", "addedBy": "writer"},
+      {"id": "c2", "addedBy": "writer"},
+      {"id": "c3", "addedBy": "writer"},
+      {"id": "c4", "addedBy": "writer"},
+      {"id": "c5", "addedBy": "writer"}
+    ],
+    "duplicates": [],
+    "sentToFollowUp": []
+  },
+  "followUps": [],
   "tiebreak": null,
   "editor": {
     "editor": "ed-g7h8i9",
     "decision": "accept",
-    "reason": "Both checks pass. c1 and c3 carry external evidence. Style clean.",
+    "reason": "Both checks pass, and neither added a claim, so nothing needs a follow-up. c1 carries the dataset record and a Tier A result, c3 a Tier B result and c5 a calculation. Style clean.",
     "decidedAt": "2026-11-02T11:00:00Z"
   },
+  "dailyChecks": [],
   "dedupe": {"checkedAt": "2026-11-02T10:10:00Z", "nearestId": null, "score": 0.0, "verdict": "unique"},
   "mythsScreen": {"checkedAt": "2026-11-02T10:10:00Z", "hits": []},
-  "lint": {"version": "1.0", "passed": true, "warnings": []},
-  "rechecks": []
+  "lint": {"version": "1.1", "passed": true, "warnings": []},
+  "rechecks": [],
+  "corrections": []
 }
 ```
 
@@ -3814,22 +4135,28 @@ This is the `verification` object for the Canberra item in §12.1, to show the f
 
 | # | Topic | The inputs say | This guide | Who acts |
 |---|---|---|---|---|
-| 1 | Sealed content in a public repository | Answers sealed (constraint 4); everything reproducible from the repo (memo §10); envelopes in `content/sealed/` with a git-ignored plaintext workspace (ARCHITECTURE §5.4) | Follows ARCHITECTURE §5.4, adds the `git check-ignore` guard, and holds sealed writing until the `.gitignore` entry and the content key exist (§11.2). On 31 October 2026 `content/.sealed-plain/` was not yet ignored | PLT-1 (`.gitignore`), SQL-3 (key and seal scripts) |
-| 2 | "About our questions" copy | Questions "accepted only after two independent checks against stored sources" (PRD §3.14) | Under memo §10, standard claims can pass on two checkers' knowledge, so "against stored sources" overstates. Suggested: "Questions are drafted with AI assistance. Each one is accepted only after two independent checks, and any fact that is uncertain or easy to get wrong is checked against published data or sources." | Product manager |
-| 3 | What a void re-checks | Voids follow a re-check of "the stored source passages" (PRD §3.13.3) | A fresh checker re-verifies the reported claims with external evidence; WebSearch is always allowed for reports (§9.10) | Product manager, to align the PRD wording |
+| 1 | Sealed content in a public repository | Answers sealed (constraint 4); everything reproducible from the repo (memo §10); envelopes in `content/sealed/` with a git-ignored plaintext workspace (ARCHITECTURE §5.4) | Follows ARCHITECTURE §5.4 and adds: the `git check-ignore` guard (passing since the `.gitignore` entry landed); no sealed work before the key-escrow check passes; sealing and a checkpoint commit at the end of every pipeline step; redacted messages never pasted into GitHub; and nothing public that points at sealed content, list commits included (§2.10, §11.2) | CNT-0 alone (key, escrow and seal scripts); SQL-3 (the release); the orchestrator (checkpoint commits) |
+| 2 | "About our questions" copy | Questions "accepted only after two independent checks against stored sources" (PRD §3.14) | Under memo §10, standard claims can pass on two checkers' knowledge, so "against stored sources" overstates. Suggested: "Questions are drafted with AI assistance. Each one is accepted only after two independent checks, and any fact that is uncertain or easy to get wrong is checked against published data or sources." | Done: PRD §3.14 uses this wording |
+| 3 | What a void re-checks | Voids follow a re-check of "the stored source passages" (PRD §3.13.3) | A fresh checker re-verifies the reported claims with external evidence; WebSearch is always allowed for reports (§9.10) | Done: PRD §3.13.3 says the same |
 | 4 | The reveal's sources line | `sourceLabels` on mysteries and encores (PRD §3.1.4, ARCHITECTURE §3.2) | Filled by the editor from evidence records (dataset publishers, Tier A and B site names), empty when a key rests on knowledge alone, never invented (§2.3) | Editor |
-| 5 | Entity ids | Every list entry carries a Wikidata id (PRD §3.18.4); QIDs as ids, `x.<type>.<slug>` otherwise (ARCHITECTURE §2.4) | QIDs only from datasets that carry them or the enrichment job, never from memory. An id never changes once referenced, so a QID found later goes in `wikidataId` (+). `popularity` stays 0 until enrichment, and ties fall to alphabetical order (§2.10, §2.12, §9.5.1) | Platform: the enrichment job; CNT-1: `wikidataId` |
-| 6 | Qualifiers on clue-4 options | Displays such as "Marie Curie (physicist)" and "Queen (band)" (PRD §3.18.4) | A key that is the only option with a bracket is a giveaway. Descriptors only on collisions, and when any of the four options shows one, the engine shows them on all four (§2.10, rule 6) | Engineering (option renderer); content stores descriptors |
+| 5 | Entity ids | Every list entry carries a Wikidata id (PRD §3.18.4); QIDs as ids, `x.<type>.<slug>` otherwise (ARCHITECTURE §2.4) | Only list builders mint ids, and a dataset record's QID is mandatory where it carries one; writers copy ids from published lists and file sealed list requests for anything missing. QIDs never come from memory. An id never changes once referenced, so a QID found later goes in `wikidataId` (+). `popularity` stays 0 until enrichment, and ties fall to alphabetical order (§2.10, §2.12, §9.5.1) | Done in PRD §3.18.4 and §4.1.3. ENR-1 builds the enrichment job; CNT-1 the `wikidataId` field, `lr.` ids and the `list-requests` folder |
+| 6 | Qualifiers on clue-4 options | Displays such as "Marie Curie (physicist)" and "Queen (band)" (PRD §3.18.4) | A key that is the only option with a bracket is a giveaway. Descriptors only on collisions, and when any of the four options shows one, the server shows them on all four (ARCHITECTURE §5.5). Lint C28 checks the four agree, and six CLDR country names get bracket-free displays, as does association football (§2.10) | Done: PRD §3.18.4 now shows "Queen", with "Queen (band)" as an option label, and ARCHITECTURE §5.5 builds the labels; content stores descriptors and overrides |
 | 7 | Mysteries in every category | Twelve categories and twelve lists (PRD §3.18) | Category is the clue angle and answer type the list, so Language & Words and Society & Culture use existing lists (§1.13). `artwork` and `language` lists proposed for 1.1 | Content lead, for 1.1 |
-| 8 | Credits | Wikidata (CC0) for answer lists (PRD §3.14) | Also CLDR (Unicode licence), plus GeoNames (CC BY 4.0), MoMA and Tate (CC0, credit requested) wherever their data ships | Whoever writes `/credits` |
-| 9 | Repeats | No Daily item repeats within a year (PRD §3.18.2) | Adds: no answer entity repeats within 60 days, and no recent answer as a distractor (§10.5) | Scheduler |
+| 8 | Credits | Wikidata (CC0) for answer lists (PRD §3.14) | Also CLDR (Unicode licence), plus GeoNames (CC BY 4.0), MoMA and Tate (CC0, credit requested) wherever their data ships | Done: PRD §3.14 lists them from each list's `provenance` |
+| 9 | Repeats | No Daily item repeats within a year (PRD §3.18.2) | Adds: no answer entity repeats within 60 days, and no recent answer as a distractor (§10.5) | Done: PRD §3.18.2 adds the 60-day rule; the scheduler applies both |
 | 10 | Mystery difficulty | Expected-points bands (PRD §4.1.6) | Buffered assembly windows, the expected-points identity, and an easy lean for the first seven Dailies (§8.3, §10.2) | Scheduler |
-| 11 | Encore details | Bands and decimals (memo §2, PRD §4.2) | Answers of 20 or more, true-zero scales only, at most a quarter years, conflicting sources fail (§6) | Writers |
+| 11 | Encore details | Bands and decimals (memo §2); the symmetric error `max(g, a) / min(g, a) - 1` (PRD §4.2.2) | Answers of 21 or more under that error; true-zero scales only; unit-free by preference, with at most 1 measured encore in 10; the likeliest round guess outside the bullseye; at most a quarter years; conflicting sources fail (§6) | Writers |
 | 12 | Numbers the inputs left open | 80/10/10 format mix; 8 packs of 15 (PRD §3.18.2) | 100/12/13 per category; pack themes and a pack template (§1, §10.9) | Editor |
 | 13 | Formats | The brief says "mcq" and "truefalse"; ARCHITECTURE §3.2 and §5 set `mc` and `tf`, camelCase fields and one item per file | This guide follows ARCHITECTURE throughout and marks its additions with + | Everyone |
-| 14 | Schema additions (+) | The validator refuses unknown keys (ARCHITECTURE §5.2) | Items: `counterintuitive`, `claims`, `writerNotes`, `lintAllow`, the `verification` object of §9.8, and statuses `draft`, `checking`, `cut` and `retired` besides `active`. True/false: `tfKind`. Comparison: `relation`, `measure`, `unit`, `values`, `valueDisplay`. Mystery: `likelyGuesses`, `rivals`, `giveawayTerms`, `seedSolveShares`. Encore: `seededDifficulty`, `predicted` (`pClose`, `pExact`) and `derivation`, because the memo gives every item a difficulty (memo §11). List entities: `qualifier`, `source`, `status`, `addedIn`, `wikidataId`, `replacedBy`. Schedule dailies: `status`, `predictedPoints`, `dayCheck` | CNT-1 |
-| 15 | Checks beyond ARCHITECTURE §5.2 | §5.2 covers shape, length, options, numeric dates and pool rules | Lint C06, C07, C09 (more time words), C10, C11, C12 (giveaway terms and prefixes), C13, C14 (coverage and freeze), C17 (separation guard) and C19 to C25. C03 is an error here, a warning in §5.2 | CNT-1 |
-| 16 | `predicted.solveByClue` | Four numbers (ARCHITECTURE §3.2) | Read as cumulative shares, so expected points are their sum (§8.3) | ARCHITECTURE owner, to confirm |
+| 14 | Schema additions (+) | The validator refuses unknown keys (ARCHITECTURE §5.2) | Items: `counterintuitive`, `claims`, `selfCheck`, `writerNotes`, `lintAllow`, the `verification` object of §9.8, and statuses `draft`, `checking`, `cut` and `retired` besides `active`. Claims: pass-prefixed addition ids (`xA1`) and the `riskReason` values `only`, `counterintuitive` and `sealed_pool`. Verification: `merge`, `followUps`, `dailyChecks`, `corrections`; CheckRecord `model`, `packetSha256` as an array, `stagesServedAt`, `recordedAt` on cold solves, `addedClaim`, evidence as typed arrays with `citedResult` and the `calculation` kind, pass `D` with `forDate` and `listVersions`. True/false: `tfKind`. Comparison: `relation`, `measure`, `unit`, `values`, `valueDisplay`, `exactDates`. Mystery: `likelyGuesses`, `rivals`, `giveawayTerms`, `seedSolveShares`. Encore: `predicted` (`pClose`, `pExact`) and `derivation`. Room questions keep `predicted`. Lists: `liveAt`; entities `qualifier`, `source`, `status`, `addedIn`, `wikidataId`, `replacedBy`. Schedule dailies: `status`, `predictedPoints`, `dayCheck`, `spareOrder`. Sealed folders `list-requests` and `audits`. Register: `searchCaps`, `searchesUsed`, `highRiskClaims`, `externallyEvidenced`, `bandCounts`, `typeCounts`, `measuredEncores`, `approvals` | ARCHITECTURE §5.1.1 adopts every one; CNT-1 builds the schemas |
+| 15 | Checks beyond ARCHITECTURE §5.2 | §5.2 covers shape, length, options, numeric dates and pool rules | Lint C06, C07, C09 (more time words), C10, C11, C12 (giveaway terms, and the suggestion probe through the engine's own `suggest()`), C13, C14 (coverage and the freeze from `addedIn`), C17 (separation guard and `exactDates`), C19 to C25, C26 (the risk floor), C27 (excluded capitals) and C28 (option display parity); C22 as an error for sealed near-copies of §12 examples; C12 and C13 read `optionsFromClue`; text rules run on player-facing fields only | ARCHITECTURE §5.2 now lists all of them; CNT-2 builds them |
+| 16 | `predicted.solveByClue` | Four numbers (ARCHITECTURE §3.2) | Read as cumulative shares, so expected points are their sum (§8.3); ARCHITECTURE §3.2 now says so | Done |
+| 17 | Zero known errors in scheduled Dailies | Memo §13; PRD R4 and AC-CNT-01 | Every clue, value and input claim externally evidenced; two independent sources for pinning clues, numbers, dates and "only" in clues, and every encore value (§9.5.5); and pass D on every scheduled item before its Daily freezes (§9.9, rule 7) | Done: PRD §3.18.3, §3.18.5 and AC-CNT-01; ARCHITECTURE §5.2 and §8.7 (the freeze gate, `dailyChecks`) |
+| 18 | The seeded audit | 300 practice items, 95% of 20 to 30 plants caught (SYNTHESIS §7.6; PRD R4, AC-CNT-05) | At least 400 items and 25 plants, at least 24 caught, half the plants subtle, a separate planter, opaque packet ids, plants kept out of `content/`, a sealed audit record, and a fresh audit after any real error (§9.10) | Done: ARCHITECTURE §5.8 and CNT-2 (`content:audit`, the `audits` folder); PRD R4 and AC-CNT-05 cite the record and its sizes |
+| 19 | Calibration safeguards | SYNTHESIS §7.10; ARCHITECTURE §8.12's calibration view | Eligible answers defined to match the view, plus half weight for self-picked categories and frozen estimates for disputed items (§8.6) | Done: ARCHITECTURE §7.2 (`selfPicked` in practice uploads) and §8.12 (low-trust and disputed exclusions); the weekly run adds re-check holds |
+| 20 | Spare days | "A spare fills the date automatically" (PRD §3.18.2) | The scheduler ranks spares per date in `spareOrder`, and the database takes the first unused one with an alert (§10.7) | Done: ARCHITECTURE §8.7 fills from `spare_order`, and PRD §3.18.2 describes it |
+| 21 | Daily feasibility | Week rules and pool sizes (PRD §3.18.2) | Bank-wide answer-type quotas and a constraint solver over §10.3 to §10.5 before wave 3's writing ends (§10.5, §11.4) | Scheduler |
+| 22 | Staged packets | `content:packets` builds packets "with the staged clue reveal" (ARCHITECTURE §5.8) | Stages for every format, the list file in a mystery's first stage, claims only in the final stage, a hash and a timestamp per stage, and no stage before the previous cold-solve entry (§9.4) | CNT-2 |
 
 ## Appendix B. Sources
 
@@ -3858,3 +4185,58 @@ This is the `verification` object for the Canberra item in §12.1, to show the f
 - Sharks and trees: [Discover Wildlife](https://www.discoverwildlife.com/prehistoric-life/are-sharks-older-than-trees), [EarthDate](https://earthdate.org/node/1142)
 - The axolotl banknote: [Keesing Technologies](https://platform.keesingtechnologies.com/mexico-launches-new-50-pesos-banknote/), [Infobae](https://www.infobae.com/en/2022/04/06/the-award-winning-ticket-of-the-axolotl-is-quoted-between-300-thousand-and-up-to-half-a-million-pesos-online)
 - Australian Constitution, section 125: [Parliament of Australia](https://aph.gov.au/About_Parliament/Senate/Practice_and_Procedure/Constitution/chapter7), [Parliamentary Education Office](https://peo.gov.au/understand-our-parliament/how-parliament-works/the-australian-constitution/the-australian-constitution-online/chapter-vii), [Wikipedia, Section 125](https://en.wikipedia.org/wiki/Section_125_of_the_Constitution_of_Australia)
+
+**Lookups and searches run while revising this guide** (31 October 2026):
+- Canberra as Australia's capital, for §12.15: [Parliamentary Education Office, "Canberra from above"](https://peo.gov.au/understand-our-parliament/parliament-house/canberra-from-above)
+- Section 125's granted territory, for §12.15: [Australian Government Solicitor, opinion 207](https://legalopinions.ags.gov.au/legalopinion/opinion-207), [Commonwealth of Australia Constitution Act 1900 (UK)](https://www.foundingdocs.gov.au/item-sdid-122.html), [Wikipedia, Section 125](https://en.wikipedia.org/wiki/Section_125_of_the_Constitution_of_Australia)
+- From the pinned copies in `.cache/datasets/`: the `capital` field of 30 countries in `mledoze-countries` (file hash checked against the manifest), the MoMA records and QIDs for Frida Kahlo, Diego Rivera, Georgia O'Keeffe, Leonora Carrington and Remedios Varo, and every CLDR 49 short name with a bracket or a qualifier
+- The final design's Encore screen ([docs/design/final/index.html](./design/final/index.html)) for the walking question in e.0002
+
+## Review log
+
+*31 October 2026.* This revision applies all 39 corrections from the content review: the 20 majors and all 19 minors. None is rejected. Two overlapped and are merged into one rule, some are adopted with an adjustment, and some offered a choice. The table records each of those calls; every other correction is applied as written.
+
+| Correction | What this revision does | Why |
+|---|---|---|
+| A list-level `liveAt` (minor), and defining "went live" for a public repository (major) | Merged. `liveAt` is the UTC date of the commit that first publishes a list version, written at commit time and checked against git history in CI; `addedIn` equals it; the 30-day freeze runs from `addedIn` to the Daily's date (§2.10, rule 5). The "version plus 7 days" alternative isn't used | The two agree on the field and differ on its value. A commit date is exact and checkable, while a 7-day guess is neither |
+| List additions in commits of at least 100 entries | Applied, with two exceptions: a final top-up to a list's target may be smaller, and a version that only fixes aliases, displays or retirements may be any size. The old floor of 20 per version is gone (§2.10, §11.4) | Without the exceptions, no list could ever reach an exact target, and an alias fix would wait for 99 unrelated entities |
+| The capital rule | Applied with one adjustment: CLDR names countries but holds no capitals, so "the dataset disagrees with CLDR or a Tier A source" becomes "with a Tier A source". Applying the general rule also lists Germany (1990), Tanzania (1996), Montenegro, Switzerland, Nauru and Yemen (§3.4). The five dataset values were confirmed in the pinned file, along with Sucre alone for Bolivia and Yaren for Nauru, now in the traps | The comparison has to be with something that holds capitals. The extra countries meet the rule as the review worded it |
+| Lint C26, the risk floor | Applied, with four clarifications so the floor stays honest: number words capitalized mid-sentence belong to titles (The Four Seasons), digits that only number clues don't count, "most of" is a quantity, and uniqueness claims are exempt because the rival search proves them. `only` gets its own `riskReason`, beside new `counterintuitive` and `sealed_pool` values. Every example claim now meets the floor, the eleven the review listed included | Without them, every distractor claim ("contradicts clues 1 and 2") and every title with a number in it would need a search. Where a claim held no number at all, it was reworded rather than relabelled (p.geo.0002 c3, e.0006 c4) |
+| Search caps per role, sized from the spike | Applied: caps are per role, per batch, set by a formula on the spike's measured figure, with starting figures until it reports (§9.5.2) | The review asked for caps sized from a measurement that doesn't exist yet, so the formula carries starting values that the spike replaces |
+| Namespaced checker additions | Applied. A follow-up goes to a run with the other pass's brief, not literally to the same checker (§9.7) | Agent runs end with their check, so "the other checker" can only be a new run under that brief |
+| The Equator encore | Rewritten as a duration, the walking question of the final design's Encore screen, with the speed given in both systems (e.0002). Rule 4 now states PRD §4.2.2's symmetric error, and rule 5's minimum moves from 20 to 21, since under that error a guess of 19 is 5.3% off an answer of 20 | The design already uses this form. The threshold follows from the error the PRD adopted |
+| Rewriting m.nat.0001's clue 1 | Applied with a different clue: the suggested "native to the lakes of the Valley of Mexico" contains "Mexico", which the new C12 fails through the alias "Mexican walking fish", so the clue names the basin where the Aztecs built Tenochtitlan. m.geo.0001 and p.nat.0003 are marked `slow` rather than dated | Dating the record to "1991 to 2020 averages" would need evidence for those normals in particular; `slow` with a review date is honest at no cost |
+| Freddie Mercury in m.music.0001 | Both options at once: clue 1 is rewritten as suggested, and his entry joins `likelyGuesses` and `rivals`, because "Farrokh Bulsara" is an alias of that entry, so rule 15 applies to the new clue too. Clue 2 now says "In 1975 it released", since Queen released more than one single that year | The suggested clue still names him through his alias |
+| Shuffling comparison sides | The guide states that the engine shuffles them (ARCHITECTURE §3.2), so there is no batch-balance rule. p.sport.0002 is replaced by a pair 19 years apart rather than patched with invention days | The exact day an invention happened is rarely undisputed, which is the very thing the separation guard's exception needs |
+| The round-number rule | Applied; e.0002 and e.0010 are replaced as asked. Applying the rule to every example also replaced e.0004 (the round guess 200 sits 2% from a chessboard's 204, so it moved to a shogi board) and e.0005 (40 sits exactly 5% from a dog's 42, so it moved to a pig) | The examples have to pass the rules they teach |
+| The football display | "Association football" is the display, with Football, Soccer and "Football (soccer)" as aliases, rather than barring the entry from options. CLDR's seventh bracketed form, "Cocos (Keeling) Islands", keeps its official name | A sport that can't be a distractor would be a hole in the list. Territories never reach the options anyway (§2.10, rule 7) |
+| The example denylist | Applied. A sealed mystery with a listed answer is an error, while an encore matching a listed value and unit is a warning the editor clears only if it measures something else (lint C22) | The same number can measure a different thing; an answer entity can't |
+| The calibration safeguards | Applied in §8.6. Two of them, half weight for self-picked categories and frozen estimates for disputed items, need fields ARCHITECTURE's calibration view lacks, so Appendix A, item 19, hands them over | The guide can define the rule but not the view |
+| The lint's message rule | Applied, with the field path kept beside the item id and rule code (§2.13, §11.2) | ARCHITECTURE §5.4's output rule already prints the path, and a path reveals no content |
+| The audit bound: a bigger audit, or an honest 1.3% | The bigger audit: at least 400 items and 25 plants, at least 24 caught, half of them subtle (§9.10) | It keeps the practice bound near 0.9% instead of conceding 1.3% |
+| Room questions' difficulty field | `predicted` stays on room sources, and the pack template bands by *p* (§2.9, §10.9) | ARCHITECTURE §5.1.1 already does this, and the PRD's bands read *p* |
+| The element list's licence | Written by the list builder from IUPAC's table and checked against `ptable`, rather than copied with the owner's approval (§9.5.1, §11.4) | No approval is needed, and the entry's source becomes its own list batch |
+
+**Changes beyond the list, made for consistency.**
+- Encores carry `unitShort` and `unitLabel` in §2.8 and in every example, because ARCHITECTURE §3.2 and §5.2 require them.
+- List rule 3 now asks for 100 entries for any Mystery slot, as PRD §3.18.4 does; the guide still said 30 for Mystery 1.
+- `selfCheck` is required to leave `draft`, not in a draft, so §12's examples still pass as CNT-1's schema fixtures (ARCHITECTURE, CNT-1 acceptance).
+- §2.12's id table gains spare sets (`spare.07`, ARCHITECTURE §2.4) and list requests (`lr.`).
+- C19's superlative list moves to `content/reference/superlatives.json` and gains the words it missed, such as "coldest" and "hottest"; C26 reads the same list.
+- Calculation evidence (§9.5.4), with exact constants in `content/reference/units.json`, because C26 makes every dual-unit conversion high-risk and §3.3 asks for dual units.
+- Territories that aren't sovereign states are never answers or distractors under the line "a country" (§2.10, rule 7).
+- `spareOrder` in the schedule records carries the spare-selection rule to the database (§2.11, §10.7).
+- The sealed folders gain `list-requests` and `audits`, and list `challenge-packs`, which ARCHITECTURE §5.1.1 already has (§2.2).
+- The axolotl's clue 4 drops "often pink": wild axolotls are mostly dark.
+- §1.4's fairness line is reworded to fit the house style.
+
+**Cross-doc consistency pass (31 October 2026).** The technical program manager reconciled this guide with the revised PRD and ARCHITECTURE. Changes here:
+- The desktop 2 by 2 grid needs every option under 24 characters (PRD §3.0.3), so writers aim for 23 or fewer and C04 warns from 24 (§2.4, §2.9, §2.13, §3.8).
+- A schedule file's `status` is advisory: the database decides what is frozen, by one config rule whose switch date the owner moves (§2.11, §10.7, ARCHITECTURE §8.7). `dayCheck` now names its fields.
+- ARCHITECTURE §5.2 adopts the whole lint table and CNT-2 builds it, while the L-rule messages stay creator copy (§2.13).
+- The practice upload's optional secret and the database's `disputed` mark are described as ARCHITECTURE builds them, with re-check holds added by the weekly run (§8.6).
+- The enrichment job is ticket ENR-1 (§9.5.1, §11.1, Appendix A item 5), and CNT-0 alone owns the key, escrow and seal scripts (Appendix A item 1).
+- The list builder works the "My guess should have counted" queue (§0.2, §9.10).
+- The person list's target comes down if the real list passes 80 KB (§2.10, rule 10), and `OPS.md` joins the files other teams own (§11.1).
+- Spare-set files name their `id` and `track` (§2.11), and content wave 0 lands on ARCHITECTURE's schedule: the tooling in Wave 3, sealing and the key escrow in Wave 1 (§11.5).
+- Appendix A items 2, 3, 5, 6, 8, 9 and 17 to 20 are marked done, and items 14 and 15 point at ARCHITECTURE §5.1.1 and §5.2.

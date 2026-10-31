@@ -1,0 +1,697 @@
+{
+  "version": 1,
+  "note": "Pinned open datasets for fact-checking (CONTENT_GUIDE §9.5.1). Fetch them with npm run content:datasets; files land in .cache/datasets/<key>/. Datasets are evidence, never the truth: read each entry's knownIssues.",
+  "datasets": [
+    {
+      "key": "mledoze-countries",
+      "title": "World countries in JSON (mledoze/countries)",
+      "license": "ODbL-1.0",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "mledoze/countries",
+      "evidence": true,
+      "use": "ISO codes, capitals, borders, landlocked status, region, area and alternative spellings. Check single facts only. Do not copy substantial parts into shipped files.",
+      "knownIssues": [
+        "Vatican City is marked unMember: true, so it counts 194 UN members instead of 193 (the Holy See is an observer)",
+        "The capital of Mongolia is spelled 'Ulan Bator'",
+        "Lists three capitals for South Africa",
+        "altSpellings lack 'Czech Republic'",
+        "France's area is metropolitan France only (551,695 km²)"
+      ],
+      "kind": "github",
+      "repo": "mledoze/countries",
+      "commit": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+      "files": [
+        {
+          "path": "countries.json",
+          "url": "https://raw.githubusercontent.com/mledoze/countries/6031f5df137c41c76d180c55a0782185ae3ed05b/countries.json",
+          "sha256": "0d92fb23b43ae080bd439f5dc5d61a8845395fdd0af1479b433c59fe079bd6fd",
+          "bytes": 1398004
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/mledoze/countries/6031f5df137c41c76d180c55a0782185ae3ed05b/LICENSE",
+          "sha256": "a221a27af5e4ef5a9cecce097c718c28f1aaf7d368cb57c994aa447c68d9defc",
+          "bytes": 25313
+        }
+      ]
+    },
+    {
+      "key": "cldr-territories",
+      "title": "CLDR English territory names (unicode-org/cldr-json)",
+      "license": "Unicode-3.0",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "Unicode CLDR",
+      "evidence": true,
+      "use": "English display names of countries and territories, with their variants (Côte d'Ivoire and Ivory Coast, Czechia and Czech Republic). The basis of the country list's display forms (§2.10).",
+      "knownIssues": [
+        "Some names need editor overrides ('Congo - Kinshasa')",
+        "Uses curly apostrophes"
+      ],
+      "kind": "github",
+      "repo": "unicode-org/cldr-json",
+      "commit": "7d2b9cb11cec08f4d333ad73209deb3df0711c3b",
+      "files": [
+        {
+          "path": "territories.json",
+          "url": "https://raw.githubusercontent.com/unicode-org/cldr-json/7d2b9cb11cec08f4d333ad73209deb3df0711c3b/cldr-json/cldr-localenames-full/main/en/territories.json",
+          "sha256": "1326fb3bcdf8b8cf63df73ea02ea7f8bf7a8362cbb60bd12bcdb53f3ad22bf04",
+          "bytes": 10190
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/unicode-org/cldr-json/7d2b9cb11cec08f4d333ad73209deb3df0711c3b/LICENSE",
+          "sha256": "220ba0e1c43b99530d2d5bdb892a99dca0989414f51ab695ecd90163eaa1ec3b",
+          "bytes": 2033
+        }
+      ]
+    },
+    {
+      "key": "cldr-languages",
+      "title": "CLDR English language names (unicode-org/cldr-json)",
+      "license": "Unicode-3.0",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "Unicode CLDR",
+      "evidence": true,
+      "use": "English names of languages and their codes, for Language & Words items.",
+      "knownIssues": [
+        "Names only: says nothing about speaker numbers, which change and stay out of the bank (§1.11)"
+      ],
+      "kind": "github",
+      "repo": "unicode-org/cldr-json",
+      "commit": "7d2b9cb11cec08f4d333ad73209deb3df0711c3b",
+      "files": [
+        {
+          "path": "languages.json",
+          "url": "https://raw.githubusercontent.com/unicode-org/cldr-json/7d2b9cb11cec08f4d333ad73209deb3df0711c3b/cldr-json/cldr-localenames-full/main/en/languages.json",
+          "sha256": "6180f817207decbc0f9cd0deb34ed0bad3256ff4d03c3c4252706285e8636b88",
+          "bytes": 21049
+        }
+      ]
+    },
+    {
+      "key": "ptable",
+      "title": "Periodic table in JSON (Bowserinator/Periodic-Table-JSON)",
+      "license": "CC-BY-SA-3.0",
+      "licenseNote": "Built from Wikipedia",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "Periodic-Table-JSON",
+      "evidence": true,
+      "use": "Atomic numbers, symbols, groups, periods and phase at room temperature. Check single facts only. Do not copy substantial parts into shipped files.",
+      "knownIssues": [
+        "Includes element 119, 'Ununennium', which has not been discovered",
+        "Spells 'Cesium' (IUPAC: caesium)",
+        "Credits shared discoveries to one person (oxygen to Scheele alone)",
+        "Predicted properties of superheavy elements look like measured ones"
+      ],
+      "kind": "github",
+      "repo": "Bowserinator/Periodic-Table-JSON",
+      "commit": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+      "files": [
+        {
+          "path": "PeriodicTableJSON.json",
+          "url": "https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/a78c7a48fe7235cebd6153161a9e7fa70f0cfb30/PeriodicTableJSON.json",
+          "sha256": "05e478cb1192c5bbfad8d9600fd3b4c7902c0966ad5d0408bfcc4d5092424c0d",
+          "bytes": 340343
+        },
+        {
+          "path": "LICENSE.md",
+          "url": "https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/a78c7a48fe7235cebd6153161a9e7fa70f0cfb30/LICENSE.md",
+          "sha256": "f9addd595dfab08de0c6fc611a05a75eefc1473d5c58559d5e5c010743c7a567",
+          "bytes": 2113
+        }
+      ]
+    },
+    {
+      "key": "geonames-cities",
+      "title": "Cities of the world from GeoNames (npm cities.json)",
+      "license": "CC-BY-4.0",
+      "licenseNote": "GeoNames data; credit GeoNames if anything derived from it ships",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "GeoNames",
+      "evidence": true,
+      "use": "City coordinates, country codes and admin1 codes, so 'further north' comparisons and city qualifiers can be checked.",
+      "knownIssues": [
+        "Homonyms: two places called Cusco in Peru. Match on name, country and admin1 together"
+      ],
+      "kind": "npm",
+      "package": "cities.json",
+      "version": "1.1.65",
+      "tarball": "https://registry.npmjs.org/cities.json/-/cities.json-1.1.65.tgz",
+      "integrity": "sha512-V3BR0kpwFG0OA5Pvsc5sF1/ENtKyweeFIDhyRIoF8p7UTZWxbfiyHXzpy/v0TxYZOHgD4ykXGWVHqUt56IwDFg==",
+      "files": [
+        {
+          "path": "cities.json",
+          "member": "package/cities.json",
+          "sha256": "9026f0201668325205be9e6299c317b3aad10d1b5f584524fdee718ee70282a3",
+          "bytes": 17144661
+        },
+        {
+          "path": "admin1.json",
+          "member": "package/admin1.json",
+          "sha256": "4011dadf37f7398d3f10a627184ec738c3c89782d167a26ab63f3b4b8a079631",
+          "bytes": 150392
+        },
+        {
+          "path": "LICENSE",
+          "member": "package/LICENSE",
+          "sha256": "95df2e9564862e51d69683a899b6dcc8218d577057bdf67322880769ff85f29e",
+          "bytes": 18649
+        }
+      ]
+    },
+    {
+      "key": "world-cities",
+      "title": "World cities with a population of 15,000 or more (datasets/world-cities)",
+      "license": "CC-BY-4.0",
+      "licenseNote": "GeoNames data (datapackage.json); the repository's scripts are MIT",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "GeoNames",
+      "evidence": true,
+      "use": "Names, countries and first-level divisions of larger cities, for building the city list. No coordinates: use geonames-cities for those.",
+      "knownIssues": [
+        "The population cut-off was applied when the file was generated; populations themselves never belong in the bank"
+      ],
+      "kind": "github",
+      "repo": "datasets/world-cities",
+      "commit": "73c9f54ab9f305168c76d0802db151e30a157b28",
+      "files": [
+        {
+          "path": "world-cities.csv",
+          "url": "https://raw.githubusercontent.com/datasets/world-cities/73c9f54ab9f305168c76d0802db151e30a157b28/data/world-cities.csv",
+          "sha256": "d9f4173d48d50f58430e34215510b9a22f9e142354bb90f1f08e5a93964cff02",
+          "bytes": 1335245
+        },
+        {
+          "path": "datapackage.json",
+          "url": "https://raw.githubusercontent.com/datasets/world-cities/73c9f54ab9f305168c76d0802db151e30a157b28/datapackage.json",
+          "sha256": "cf63b2d46733a90765fe4ceaeb81f0dc00910ed5ecb3cc64a6d79b6ac28eadf4",
+          "bytes": 3227
+        }
+      ]
+    },
+    {
+      "key": "country-codes",
+      "title": "Country codes: ISO, ITU, FIFA, IOC and more (datasets/country-codes)",
+      "license": "ODC-PDDL-1.0 AND CC-BY-4.0",
+      "licenseNote": "PDDL covers the maintainers' selection; the Capital, Continent, TLD, Languages and Geoname ID columns are GeoNames (CC BY 4.0); the UNTERM columns come from a source that does not allow redistribution",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "datasets/country-codes",
+      "evidence": true,
+      "use": "Cross-checking ISO, FIFA and IOC codes, calling codes, TLDs and currencies. Check single facts only. Do not copy substantial parts into shipped files.",
+      "knownIssues": [
+        "Mixed licences by column: never ship the UNTERM columns",
+        "Currencies change (Croatia moved to the euro in 2023)"
+      ],
+      "kind": "github",
+      "repo": "datasets/country-codes",
+      "commit": "2d84034a0cae19ea5444b78c2131304a5c7f4bb9",
+      "files": [
+        {
+          "path": "country-codes.csv",
+          "url": "https://raw.githubusercontent.com/datasets/country-codes/2d84034a0cae19ea5444b78c2131304a5c7f4bb9/data/country-codes.csv",
+          "sha256": "bb199ebc9636b9872705e8216f1f849359f136a7668ebfa23a3c58048462ab92",
+          "bytes": 133991
+        },
+        {
+          "path": "datapackage.yml",
+          "url": "https://raw.githubusercontent.com/datasets/country-codes/2d84034a0cae19ea5444b78c2131304a5c7f4bb9/datapackage.yml",
+          "sha256": "0e0b4f2ad58e9fb2a1e635e43f31c45cb09321ae7c974dfc22c003cbded85eef",
+          "bytes": 13295
+        }
+      ]
+    },
+    {
+      "key": "language-codes",
+      "title": "ISO 639 language codes and IETF tags (datasets/language-codes)",
+      "license": "ODC-PDDL-1.0 AND Unicode-3.0",
+      "licenseNote": "Unicode-3.0 applies to ietf-language-tags.csv; the reuse terms of the Library of Congress ISO 639-2 list are unclear",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "datasets/language-codes",
+      "evidence": true,
+      "use": "Language names and ISO 639 codes. Check single facts only. Do not copy substantial parts into shipped files.",
+      "knownIssues": ["Codes and names only; nothing about speakers"],
+      "kind": "github",
+      "repo": "datasets/language-codes",
+      "commit": "620566f38e5104eb93ef486d0e53b8b1cd4066ab",
+      "files": [
+        {
+          "path": "language-codes.csv",
+          "url": "https://raw.githubusercontent.com/datasets/language-codes/620566f38e5104eb93ef486d0e53b8b1cd4066ab/data/language-codes.csv",
+          "sha256": "34e9dde2efbb37abd8c24d47a8693063579f706836fbe694557ecdbf1bfc53f2",
+          "bytes": 3242
+        },
+        {
+          "path": "language-codes-full.csv",
+          "url": "https://raw.githubusercontent.com/datasets/language-codes/620566f38e5104eb93ef486d0e53b8b1cd4066ab/data/language-codes-full.csv",
+          "sha256": "72735a905b71b9779344429a2a50ce973990e09186cc2a43b927769a1ab635e9",
+          "bytes": 20928
+        },
+        {
+          "path": "ietf-language-tags.csv",
+          "url": "https://raw.githubusercontent.com/datasets/language-codes/620566f38e5104eb93ef486d0e53b8b1cd4066ab/data/ietf-language-tags.csv",
+          "sha256": "7ab61fa426d9b347164406288dec8cbd94e1f57009d295e21ee61930d4604bbb",
+          "bytes": 30301
+        },
+        {
+          "path": "datapackage.json",
+          "url": "https://raw.githubusercontent.com/datasets/language-codes/620566f38e5104eb93ef486d0e53b8b1cd4066ab/datapackage.json",
+          "sha256": "0707a4c829726a26d43eb8b7b3d1dc3db58a9864a9102dcade6de746806fae0f",
+          "bytes": 6416
+        }
+      ]
+    },
+    {
+      "key": "currency-codes",
+      "title": "ISO 4217 currency codes (datasets/currency-codes)",
+      "license": "ODC-PDDL-1.0",
+      "licenseNote": "Covers the maintainers' selection and formatting; no licence was found for the underlying ISO 4217 lists",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "datasets/currency-codes",
+      "evidence": true,
+      "use": "Currency names and codes, including withdrawn ones with their withdrawal dates. Current currencies are 'slow' facts at best.",
+      "knownIssues": [
+        "Currencies change (Croatia moved to the euro in 2023): date any currency fact"
+      ],
+      "kind": "github",
+      "repo": "datasets/currency-codes",
+      "commit": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+      "files": [
+        {
+          "path": "codes-all.csv",
+          "url": "https://raw.githubusercontent.com/datasets/currency-codes/31cfa1380316ecc8a213fd6e17ec46cea49a3991/data/codes-all.csv",
+          "sha256": "c4b6829a966f0564e77dc6c2d100d268cce61b30f7637bf3d5ec626b0393407f",
+          "bytes": 17853
+        },
+        {
+          "path": "datapackage.json",
+          "url": "https://raw.githubusercontent.com/datasets/currency-codes/31cfa1380316ecc8a213fd6e17ec46cea49a3991/datapackage.json",
+          "sha256": "4d375be4a155aeaa9fe080d8d84d231046b541bdb5667679d5ee5c5347d6886f",
+          "bytes": 3376
+        }
+      ]
+    },
+    {
+      "key": "iso-3166-regions",
+      "title": "ISO 3166 countries with UN M49 regions (lukes/ISO-3166-Countries-with-Regional-Codes)",
+      "license": "CC-BY-SA-4.0",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "ISO-3166-Countries-with-Regional-Codes",
+      "evidence": true,
+      "use": "UN M49 region and sub-region of each country, for the continent balance rules (§1.1). Check single facts only. Do not copy substantial parts into shipped files.",
+      "knownIssues": [
+        "Last updated June 2024",
+        "Region assignments follow the UN M49 standard, not every school's continent model"
+      ],
+      "kind": "github",
+      "repo": "lukes/ISO-3166-Countries-with-Regional-Codes",
+      "commit": "145f1ad3caff212ed25f42b0ee2c8b92a75af895",
+      "files": [
+        {
+          "path": "all.json",
+          "url": "https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/145f1ad3caff212ed25f42b0ee2c8b92a75af895/all/all.json",
+          "sha256": "e1434e42786484b1841082a0a16cf27208691443dc6440d125ad81d49007ea42",
+          "bytes": 65317
+        },
+        {
+          "path": "LICENSE.md",
+          "url": "https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/145f1ad3caff212ed25f42b0ee2c8b92a75af895/LICENSE.md",
+          "sha256": "e9c7458d87ae87ffd92460a0903e4fb5ff5f1e6070d2f2ee3b247cc63cb4bf45",
+          "bytes": 214
+        }
+      ]
+    },
+    {
+      "key": "worldcup",
+      "title": "Men's FIFA World Cup results 1930 to 2022 (openfootball/worldcup.json)",
+      "license": "Public domain",
+      "licenseNote": "The README dedicates the schema, data and scripts to the public domain",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "openfootball",
+      "evidence": true,
+      "use": "Men's World Cup matches, scores and finals, for dated facts ('won the 2010 World Cup').",
+      "knownIssues": [
+        "Men's tournaments only",
+        "Finals settled after extra time or on penalties need the full score fields",
+        "The repository also holds 2026 files, left out here: the 2026 tournament is past the writers' knowledge horizon"
+      ],
+      "kind": "github",
+      "repo": "openfootball/worldcup.json",
+      "commit": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+      "files": [
+        {
+          "path": "1930/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1930/worldcup.json",
+          "sha256": "18c20a8b6ef63b08a77369f12b6767405834e11486d0133a678d68387c996b42",
+          "bytes": 7475
+        },
+        {
+          "path": "1934/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1934/worldcup.json",
+          "sha256": "ae5054f25ba25b4032a8c1e7ad21d7eca7d8f1c7c093bd822a8bd82ae7a26e7d",
+          "bytes": 6900
+        },
+        {
+          "path": "1938/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1938/worldcup.json",
+          "sha256": "d87c839e395e7322a11e42ca5513be05be8eaac34727178c24be3fdb610d5b8a",
+          "bytes": 8060
+        },
+        {
+          "path": "1950/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1950/worldcup.json",
+          "sha256": "145c6be968653d5e826601f7b83d65427be8db73c136811db2384de8fcc84dc4",
+          "bytes": 8955
+        },
+        {
+          "path": "1954/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1954/worldcup.json",
+          "sha256": "089b2a6cdd39d903ee31390829c40b46e42958698c815d13f9131f954ad43943",
+          "bytes": 4960
+        },
+        {
+          "path": "1958/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1958/worldcup.json",
+          "sha256": "c0c2b2628c015d9e727f8bcd7a498148c879eefc0a1bfaad4726cac0fe21a123",
+          "bytes": 6496
+        },
+        {
+          "path": "1962/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1962/worldcup.json",
+          "sha256": "a459fefc54db91ceedb813dda09b4cdebf1c39ee6869d3a5fdd8a9e7022b5be9",
+          "bytes": 6169
+        },
+        {
+          "path": "1966/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1966/worldcup.json",
+          "sha256": "2ed22b695808e588bf954ffe9fca33a86fe0883e825a01fe8399041ea35d0709",
+          "bytes": 6036
+        },
+        {
+          "path": "1970/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1970/worldcup.json",
+          "sha256": "6291d3ab67405bbfa7962bbd1039c23945530f582d0eba8cb17eb32d55576468",
+          "bytes": 6105
+        },
+        {
+          "path": "1974/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1974/worldcup.json",
+          "sha256": "2a117c62d94e5a516decce6026fd1976d291ad648c9612fe22ca57cd8c10a043",
+          "bytes": 7317
+        },
+        {
+          "path": "1978/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1978/worldcup.json",
+          "sha256": "8fa2136edf5bf48b86e66cd4f23df3e40d961c4630752bd61616b6b13bdae4c8",
+          "bytes": 7652
+        },
+        {
+          "path": "1982/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1982/worldcup.json",
+          "sha256": "09e239bbe5878cfdcf41e64f1925e73d90cce13426f87ca8a8c6a3fb309be134",
+          "bytes": 10098
+        },
+        {
+          "path": "1986/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1986/worldcup.json",
+          "sha256": "66592b1c3f6eebbf45d80dafa44770c5620497e38391f03669c743399ee09155",
+          "bytes": 10083
+        },
+        {
+          "path": "1990/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1990/worldcup.json",
+          "sha256": "72178e69a54155b2793f60f93a46e5f596045cca041d04646ca0f15edaee5828",
+          "bytes": 10434
+        },
+        {
+          "path": "1994/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1994/worldcup.json",
+          "sha256": "5b547fc28ffbfa057ca0ad21093716380a7628a845b56d1681dbc2e3370721e2",
+          "bytes": 9648
+        },
+        {
+          "path": "1998/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/1998/worldcup.json",
+          "sha256": "6f3c10cf74f0cc5d7e9d37defc4e2841672b525b02f7416524772af0e5403acc",
+          "bytes": 12150
+        },
+        {
+          "path": "2002/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/2002/worldcup.json",
+          "sha256": "87514351fa080435594635870732ddc3e31b23a29f097f1f18916011b9cfaa20",
+          "bytes": 12158
+        },
+        {
+          "path": "2006/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/2006/worldcup.json",
+          "sha256": "5fbf1b945c34e5ec796161b9d62cea288a99e9132612bb028c731bf2a88550cc",
+          "bytes": 14002
+        },
+        {
+          "path": "2010/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/2010/worldcup.json",
+          "sha256": "a02429be186ba377d4099c79ee00ec57fe1b1926b7b34fc786c4cc671777efb3",
+          "bytes": 13809
+        },
+        {
+          "path": "2014/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/2014/worldcup.json",
+          "sha256": "a68c6150fca6e37b5e9ff2eba3100ad47241a5c1f6d518a8fabb555260c371a0",
+          "bytes": 24953
+        },
+        {
+          "path": "2018/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/2018/worldcup.json",
+          "sha256": "6af380e875cc52fe12073ab7862fbe8d3e5505ee029cb84d8b5480bf6d603d11",
+          "bytes": 25333
+        },
+        {
+          "path": "2022/worldcup.json",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/2022/worldcup.json",
+          "sha256": "f4f0499c30076bc8e3702f400765900797fb22212a32aaa8137e1dfc49449a68",
+          "bytes": 25358
+        },
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/openfootball/worldcup.json/516d3825c3bd23fdc298c4014e84bde78f2d4965/README.md",
+          "sha256": "5d400055034c9740df2f5c5cae603bec2d8c901c2b9f73e70459f57487fa2876",
+          "bytes": 14235
+        }
+      ]
+    },
+    {
+      "key": "nobel-prizes",
+      "title": "Nobel Prizes 1901 to 2022 (iaseth/nobel-prize-data, a copy of the Nobel Prize API v1)",
+      "license": "MIT",
+      "licenseNote": "The repository's licence; the records are a May 2023 copy of the official Nobel Prize API v1 prize.json",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "Nobel Prize API",
+      "evidence": true,
+      "use": "Laureates by year and category, with motivations and shares. Dated facts only ('won the 1911 Nobel Prize in Chemistry').",
+      "knownIssues": [
+        "Stops at the 2022 prizes",
+        "Motivations are quoted with typographic quotation marks inside the strings",
+        "Years are strings"
+      ],
+      "kind": "github",
+      "repo": "iaseth/nobel-prize-data",
+      "commit": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+      "files": [
+        {
+          "path": "prize.json",
+          "url": "https://raw.githubusercontent.com/iaseth/nobel-prize-data/63e8e44bbc64601ead58cc4a5e66d202e97f4916/data/v1/prize.json",
+          "sha256": "f41dbdb73db5ef419c16d63eef33f7c720ba3b205ebc56951553e2f6fde1391d",
+          "bytes": 225107
+        },
+        {
+          "path": "LICENSE.md",
+          "url": "https://raw.githubusercontent.com/iaseth/nobel-prize-data/63e8e44bbc64601ead58cc4a5e66d202e97f4916/LICENSE.md",
+          "sha256": "bea50d538c5cc0f06cf2db6944f25c4efb6fc529139cda929958e1fb4de86d73",
+          "bytes": 1062
+        }
+      ]
+    },
+    {
+      "key": "nobel-laureates-2016",
+      "title": "Nobel laureates with birth and death details, to 2016 (NobelDB/NobelDB-Data)",
+      "license": "Apache-2.0",
+      "licenseNote": "The repository's licence; the records are a late-2016 copy of the Nobel Prize API v1 laureate.json",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "Nobel Prize API",
+      "evidence": true,
+      "use": "Laureates' birth and death dates and places, gender and affiliations. Cross-check anything high-risk against nobel-prizes or a web source.",
+      "knownIssues": [
+        "Stops at the 2016 prizes",
+        "Places use period names with modern ones in brackets ('Prussia (now Germany)')",
+        "A laureate who has died since 2016 shows no death date"
+      ],
+      "kind": "github",
+      "repo": "NobelDB/NobelDB-Data",
+      "commit": "de9a728322674c076b3321157c85500f665b4721",
+      "files": [
+        {
+          "path": "laureate.json",
+          "url": "https://raw.githubusercontent.com/NobelDB/NobelDB-Data/de9a728322674c076b3321157c85500f665b4721/data/raw/laureate.json",
+          "sha256": "5b054a8661b4d7c8072e04c4bbd3799321378e131ee832f242c3ab225a5b92d2",
+          "bytes": 437759
+        },
+        {
+          "path": "LICENSE",
+          "url": "https://raw.githubusercontent.com/NobelDB/NobelDB-Data/de9a728322674c076b3321157c85500f665b4721/LICENSE",
+          "sha256": "e671f4a038b0e15e43a6517b46c2cb6a41287550b1e1bca109e7be2015e2d396",
+          "bytes": 11465
+        }
+      ]
+    },
+    {
+      "key": "olympic-editions",
+      "title": "Olympic Games editions and medal tables, 1896 to 2026 (moderndive/olympicAthletes)",
+      "license": "CC-BY-4.0",
+      "licenseNote": "Credit the package, the rgriff23 Olympic_history data and Olympedia",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "Olympedia via olympicAthletes",
+      "evidence": true,
+      "use": "Host cities, years, seasons and dates of every Games, and per-edition medal tables.",
+      "knownIssues": [
+        "City names in local spelling ('Athina')",
+        "Includes the 1906 Intercalated Games, which the IOC does not recognise",
+        "The notes column is free text, never evidence",
+        "Medal tables can change after doping reallocations: date any medal count",
+        "Editions after mid-2026 are past the writers' knowledge horizon"
+      ],
+      "kind": "github",
+      "repo": "moderndive/olympicAthletes",
+      "commit": "a8de42ee765a875dce97d4d45309585d38b978b8",
+      "files": [
+        {
+          "path": "edition_metadata.csv",
+          "url": "https://raw.githubusercontent.com/moderndive/olympicAthletes/a8de42ee765a875dce97d4d45309585d38b978b8/data-raw/edition_metadata.csv",
+          "sha256": "e88aee31e035916872ec70821fd3a7ece35202260d820613c7040a22e5cb2731",
+          "bytes": 8848
+        },
+        {
+          "path": "medal_table_summary.csv",
+          "url": "https://raw.githubusercontent.com/moderndive/olympicAthletes/a8de42ee765a875dce97d4d45309585d38b978b8/data-raw/medal_table_summary.csv",
+          "sha256": "a3deb5cbe400acfd06dbf0b9e36689c79765cafe6db1deacda313d72e307c5ac",
+          "bytes": 111968
+        },
+        {
+          "path": "DESCRIPTION",
+          "url": "https://raw.githubusercontent.com/moderndive/olympicAthletes/a8de42ee765a875dce97d4d45309585d38b978b8/DESCRIPTION",
+          "sha256": "da0e904ad42dcf4e216c1421483fd26cd691f7046d0abb4d5fea7d45be96fd76",
+          "bytes": 1230
+        }
+      ]
+    },
+    {
+      "key": "moma-artists",
+      "title": "Museum of Modern Art artists (MuseumofModernArt/collection)",
+      "license": "CC0-1.0",
+      "licenseNote": "MoMA asks for credit",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "Museum of Modern Art",
+      "evidence": true,
+      "use": "Artist names, birth and death years, nationality, Wikidata QIDs and ULAN ids. QIDs here may be copied into answer lists with their locator (§2.12).",
+      "knownIssues": [
+        "Nationality is MoMA's convention: Max Ernst is listed as French",
+        "Stored in Git LFS, so the file comes from media.githubusercontent.com at the pinned commit"
+      ],
+      "kind": "github",
+      "repo": "MuseumofModernArt/collection",
+      "commit": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+      "files": [
+        {
+          "path": "Artists.json",
+          "url": "https://media.githubusercontent.com/media/MuseumofModernArt/collection/51a140dae6e6d9bc91f6d711f662df60c80b4f8a/Artists.json",
+          "sha256": "bc6a0f649e9c4befca2d4220d0c63d34f78b027ae931953b4b45374248da4f8d",
+          "bytes": 3613344
+        },
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/MuseumofModernArt/collection/51a140dae6e6d9bc91f6d711f662df60c80b4f8a/README.md",
+          "sha256": "97060e9a0362aa913c550e2dba25c4981d18a5b5e4e0a32ebd0e970622b7424d",
+          "bytes": 4361
+        }
+      ]
+    },
+    {
+      "key": "tate-artists",
+      "title": "Tate collection artists (tategallery/collection)",
+      "license": "CC0-1.0",
+      "licenseNote": "Tate asks for credit",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "Tate",
+      "evidence": true,
+      "use": "Artists' dates and places of birth and death.",
+      "knownIssues": [
+        "Places in local languages ('Polska')",
+        "Not updated since October 2020"
+      ],
+      "kind": "github",
+      "repo": "tategallery/collection",
+      "commit": "a51d8afc988ed083557e2950f4d0b644e7719f4a",
+      "files": [
+        {
+          "path": "artist_data.csv",
+          "url": "https://raw.githubusercontent.com/tategallery/collection/a51d8afc988ed083557e2950f4d0b644e7719f4a/artist_data.csv",
+          "sha256": "b4a3cb051fe6ee93073e8a57ab600c449c37f64d9ea8135efb15d56e76299be2",
+          "bytes": 482311
+        },
+        {
+          "path": "README.md",
+          "url": "https://raw.githubusercontent.com/tategallery/collection/a51d8afc988ed083557e2950f4d0b644e7719f4a/README.md",
+          "sha256": "8ef26c79f02012706c2c5d67763301e3d3f6b80eb4352fb545eb224cc25d725b",
+          "bytes": 8386
+        }
+      ]
+    },
+    {
+      "key": "natural-earth",
+      "title": "Natural Earth vector data, GeoJSON (nvkelso/natural-earth-vector)",
+      "license": "Public domain",
+      "licenseNote": "Natural Earth data is in the public domain",
+      "retrievedAt": "2026-10-31",
+      "sourceLabel": "Natural Earth",
+      "evidence": true,
+      "use": "Country shapes and attributes, rivers, lakes, populated places and named physical regions.",
+      "knownIssues": [
+        "Its own naming conventions, at three scales (10m, 50m, 110m)",
+        "Population fields are estimates for a year and never belong in the bank"
+      ],
+      "kind": "github",
+      "repo": "nvkelso/natural-earth-vector",
+      "commit": "ca96624a56bd078437bca8184e78163e5039ad19",
+      "files": [
+        {
+          "path": "ne_110m_admin_0_countries.geojson",
+          "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson",
+          "sha256": "6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f",
+          "bytes": 838726
+        },
+        {
+          "path": "ne_50m_rivers_lake_centerlines.geojson",
+          "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_50m_rivers_lake_centerlines.geojson",
+          "sha256": "f286e0ce978fde999ca2d7a78c764be08542e19b63cded52b05c12d5173ccc51",
+          "bytes": 827318
+        },
+        {
+          "path": "ne_50m_lakes.geojson",
+          "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_50m_lakes.geojson",
+          "sha256": "d350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52",
+          "bytes": 876018
+        },
+        {
+          "path": "ne_110m_populated_places_simple.geojson",
+          "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_populated_places_simple.geojson",
+          "sha256": "0dbd25c9ad8bd797ddf164b067f563be5c16be2c002254eb594862377963f9dc",
+          "bytes": 166071
+        },
+        {
+          "path": "ne_50m_geography_regions_points.geojson",
+          "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_50m_geography_regions_points.geojson",
+          "sha256": "203f19b6b690d4d1f6f2fd9a71ff0c93c2e31bc34c21f93a12ccf336f5b5ef4a",
+          "bytes": 190845
+        }
+      ]
+    }
+  ]
+}

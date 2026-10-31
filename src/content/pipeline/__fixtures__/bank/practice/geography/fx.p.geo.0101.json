@@ -1,0 +1,192 @@
+{
+  "id": "fx.p.geo.0101",
+  "status": "active",
+  "category": "geo",
+  "tags": ["fixtures", "rivers"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Halvessan players carve the flute from a heron bone washed up on the shore, a custom the town dates to 1204.",
+  "learnMore": "Halvessa spring festival (fixture)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "A bone flute opens the Halvessa spring festival."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "No brass horn, hand drum or reed pipe opens the festival."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Halvessa dates the bone-flute custom to 1204."
+    }
+  ],
+  "writerNotes": "Invented fixture. Checked against nothing: it is not a real fact.",
+  "format": "mc",
+  "stem": "Which instrument opens the spring festival in the fixture town of Halvessa?",
+  "answer": "Bone flute",
+  "wrong": ["Brass horn", "Hand drum", "Reed pipe"],
+  "order": "shuffle",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-fx-alpha",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "54f2d6f4b712e4dfd389fbb3c3bb8ceb3afe513f0aead482b3c3a6da974eec3c",
+        "startedAt": "2026-11-02T10:00:00Z",
+        "finishedAt": "2026-11-02T10:05:00Z",
+        "coldSolve": {
+          "answerGiven": "Bone flute",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Restated: A bone flute opens the Halvessa spring festival.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Restated: No brass horn, hand drum or reed pipe opens the festival.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "fixture.json",
+              "locator": "fixture=c3",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-fx-bravo",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f61efe25892dc80172f7dd52bc011ee92956d6f391a8c5bfb83e0d61828d11cf",
+        "startedAt": "2026-11-02T10:00:00Z",
+        "finishedAt": "2026-11-02T10:05:00Z",
+        "coldSolve": {
+          "answerGiven": "Bone flute",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Restated: A bone flute opens the Halvessa spring festival.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Restated: No brass horn, hand drum or reed pipe opens the festival.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "fixture.json",
+              "locator": "fixture=c3",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-fx-estimator",
+        "at": "2026-11-02T09:00:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-fx-editor",
+      "decision": "accept",
+      "reason": "Both fixture checks pass; external evidence on every high-risk claim and every pinning clue.",
+      "decidedAt": "2026-11-03T09:00:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-03T09:00:00Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-03T09:00:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "predicted": {
+    "p": 0.71,
+    "spread": 0.38,
+    "estimator": "v0"
+  }
+}

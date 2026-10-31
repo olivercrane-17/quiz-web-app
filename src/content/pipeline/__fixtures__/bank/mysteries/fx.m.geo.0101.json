@@ -1,0 +1,407 @@
+{
+  "id": "fx.m.geo.0101",
+  "status": "active",
+  "category": "geo",
+  "tags": ["fixtures", "invented-countries"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The heron on the flag nests by the Vellum, so all four clues point to the same river valley.",
+  "learnMore": "Arvenna (fixture)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "uniqueness",
+      "risk": "standard",
+      "text": "Only Arvenna fits clues 1 to 3."
+    },
+    {
+      "id": "c2",
+      "role": "clue",
+      "ref": "clue:1",
+      "risk": "standard",
+      "text": "The Arvennan flag shows a silver heron above three waves."
+    },
+    {
+      "id": "c3",
+      "role": "clue",
+      "ref": "clue:2",
+      "risk": "standard",
+      "text": "The Arvennan calendar has thirteen months."
+    },
+    {
+      "id": "c4",
+      "role": "clue",
+      "ref": "clue:3",
+      "risk": "standard",
+      "text": "Cindral, the capital of Arvenna, lies on the Vellum."
+    },
+    {
+      "id": "c5",
+      "role": "clue",
+      "ref": "clue:4",
+      "risk": "standard",
+      "text": "Cindral has seven bridges."
+    },
+    {
+      "id": "c6",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Belloria, Cassova and Dravenor contradict clues 1 to 3."
+    },
+    {
+      "id": "c7",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Herons nest along the Vellum."
+    }
+  ],
+  "writerNotes": "Invented fixture.",
+  "kind": "mystery",
+  "answerType": "country",
+  "answer": "fx.x.country.arvenna",
+  "accepted": [],
+  "clues": [
+    "Its fixture flag shows a silver heron above three blue waves.",
+    "Its calendar has thirteen months of 28 days.",
+    "The Vellum river runs through its capital, Cindral.",
+    "This invented fixture country is the home of the seven bridges of Cindral."
+  ],
+  "distractors": [
+    "fx.x.country.belloria",
+    "fx.x.country.cassova",
+    "fx.x.country.dravenor"
+  ],
+  "slot": 1,
+  "sourceLabels": [],
+  "likelyGuesses": [
+    "fx.x.country.belloria",
+    "fx.x.country.cassova",
+    "fx.x.country.dravenor",
+    "fx.x.country.elmaris",
+    "fx.x.country.fendara",
+    "fx.x.country.gorlund"
+  ],
+  "rivals": [
+    {
+      "id": "fx.x.country.belloria",
+      "ruledOutBy": [1, 2]
+    },
+    {
+      "id": "fx.x.country.cassova",
+      "ruledOutBy": [2, 3]
+    },
+    {
+      "id": "fx.x.country.elmaris",
+      "ruledOutBy": [1, 3]
+    }
+  ],
+  "giveawayTerms": ["Arvennan"],
+  "seedSolveShares": [0.5, 0.8, 0.92, 0.98],
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-fx-alpha",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1697bb541b97b09d8717ee72b8e67d2b96f42350a6ec993284d065827111563a",
+        "startedAt": "2026-11-02T10:00:00Z",
+        "finishedAt": "2026-11-02T10:05:00Z",
+        "coldSolve": {
+          "perClue": [
+            {
+              "clue": 1,
+              "guess": "fx.x.country.arvenna",
+              "candidates": ["fx.x.country.arvenna"]
+            },
+            {
+              "clue": 2,
+              "guess": "fx.x.country.arvenna",
+              "candidates": ["fx.x.country.arvenna"]
+            },
+            {
+              "clue": 3,
+              "guess": "fx.x.country.arvenna",
+              "candidates": ["fx.x.country.arvenna"]
+            },
+            {
+              "clue": 4,
+              "guess": "fx.x.country.arvenna",
+              "candidates": ["fx.x.country.arvenna"]
+            }
+          ]
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Restated: Only Arvenna fits clues 1 to 3.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "fixture.json",
+              "locator": "fixture=c2",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "fixture.json",
+              "locator": "fixture=c3",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "fixture.json",
+              "locator": "fixture=c4",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "fixture.json",
+              "locator": "fixture=c5",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Restated: Belloria, Cassova and Dravenor contradict clues 1 to 3.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c7",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Restated: Herons nest along the Vellum.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-fx-bravo",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "580cddf62b5cc5f28dafe4d7b5e460bbaf4ecdbe86a273bb6e9d0a3174615f93",
+        "startedAt": "2026-11-02T10:00:00Z",
+        "finishedAt": "2026-11-02T10:05:00Z",
+        "coldSolve": {
+          "perClue": [
+            {
+              "clue": 1,
+              "guess": "fx.x.country.arvenna",
+              "candidates": ["fx.x.country.arvenna"]
+            },
+            {
+              "clue": 2,
+              "guess": "fx.x.country.arvenna",
+              "candidates": ["fx.x.country.arvenna"]
+            },
+            {
+              "clue": 3,
+              "guess": "fx.x.country.arvenna",
+              "candidates": ["fx.x.country.arvenna"]
+            },
+            {
+              "clue": 4,
+              "guess": "fx.x.country.arvenna",
+              "candidates": ["fx.x.country.arvenna"]
+            }
+          ]
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Restated: Only Arvenna fits clues 1 to 3.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "fixture.json",
+              "locator": "fixture=c2",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "fixture.json",
+              "locator": "fixture=c3",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "fixture.json",
+              "locator": "fixture=c4",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "fixture.json",
+              "locator": "fixture=c5",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Restated: Belloria, Cassova and Dravenor contradict clues 1 to 3.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c7",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Restated: Herons nest along the Vellum.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-fx-estimator",
+        "at": "2026-11-02T09:00:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-fx-editor",
+      "decision": "accept",
+      "reason": "Both fixture checks pass; external evidence on every high-risk claim and every pinning clue.",
+      "decidedAt": "2026-11-03T09:00:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-03T09:00:00Z",
+      "nearestId": "fx.r.fx-party.02",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-03T09:00:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "predicted": {
+    "solveByClue": [0.5, 0.8, 0.92, 0.98],
+    "spread": 0.31,
+    "estimator": "v0"
+  }
+}

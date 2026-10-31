@@ -115,3 +115,18 @@ noun). Trademark search is not possible from here, so the launch report flags it
    pass through MCP, and the real-backend CI job passes.
 6. Persona playtests complete every Must flow without confusion; their top issues fixed.
 7. Security review passes: no secrets in the client, rate limits on write RPCs, input validation everywhere.
+
+## 14. Addendum after the spec review (31 October 2026)
+These override the PRD and ARCHITECTURE where they differ.
+1. **Time zones and zone hops (replaces AC-STK-09's 20-hour rule).** The server accepts a Daily for local date D only
+   when D is within one day of the server's UTC date (D in [utc_today - 1, utc_today + 1]). Streak credit requires D to
+   be later than the player's last credited Daily date, so a device clock or zone change can never backfill a missed
+   day (that is what free repair and freezes are for). A run whose device zone changed since the player's previous
+   Daily is kept out of the crowd's numbers (honest-play flag) but still earns streak credit. No 20-hour rule.
+   Rewrite AC-STK-09 to test exactly this.
+2. **The Daily is online-only** (sealed, server-validated). Signed off.
+3. **Content calls approved:** 12 categories; challenge packs only once 30 past Dailies exist; a 120-second
+   "Relaxed Blitz" option.
+4. **Supabase migrations must apply unattended** (see the new section in 01-ENGINEERING-CONSTRAINTS.md). Where the
+   architecture's security baseline uses REVOKE, DROP or ALTER ROLE, achieve the same guarantee by construction (private
+   schema without grants, only deliberate RPCs in public) and list anything truly unavoidable in the launch report.

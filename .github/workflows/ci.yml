@@ -54,6 +54,17 @@ jobs:
       - name: Unit tests
         run: npm test
 
+      # Schemas and lint over content/ and its fixtures (CNT-1, ARCHITECTURE
+      # §5.7). Sealed content is not decrypted here: its messages never quote
+      # item text, but the key is only for the content-sealed job.
+      - name: Content check
+        run: npm run content:check
+
+      # Envelopes only in content/sealed/, and no plaintext workspace, cache or
+      # key tracked (SQL-3, ARCHITECTURE §5.4).
+      - name: Secret scan
+        run: npm run check:secrets
+
       # Same command Vercel runs, with the default (real) backend config.
       - name: Build
         run: npm run build

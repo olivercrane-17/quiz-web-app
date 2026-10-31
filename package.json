@@ -20,7 +20,20 @@
     "check:bundle": "node scripts/check-bundle-budget.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run lint && npm run typecheck && npm run test"
+    "check:secrets": "node scripts/checks/secret-scan.mjs",
+    "content:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/check.ts",
+    "content:packet": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/packet.ts",
+    "content:record": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/record.ts",
+    "content:estimate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/estimate.ts",
+    "content:decide": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/decide.ts",
+    "content:dedupe": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/dedupe.ts",
+    "content:datasets": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=UNDICI-EHPA --use-env-proxy scripts/content/datasets.ts",
+    "content:batch": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/batch.ts",
+    "content:keygen": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/keygen.ts",
+    "content:seal": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/seal.ts",
+    "content:unseal": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/unseal.ts",
+    "content:stats": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/stats.ts",
+    "check": "npm run check:secrets && npm run lint && npm run typecheck && npm run test"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",
@@ -50,6 +63,7 @@
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
     "vite": "8.3.5",
-    "vitest": "5.0.5"
+    "vitest": "5.0.5",
+    "zod": "4.6.7"
   }
 }

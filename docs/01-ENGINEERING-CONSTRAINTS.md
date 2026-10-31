@@ -37,3 +37,18 @@ These are hard facts about our platform access. The architecture must respect th
    (no open chat, no free-text visible to strangers without moderation).
 10. **Free-tier aware.** Respect Supabase free plan and Vercel Hobby limits (connections, realtime messages, DB size,
     function invocations). Prefer static generation and client-side work.
+
+## Supabase MCP confirmation prompts (learned 31 October 2026)
+The Supabase MCP server asks a human to confirm statements it considers destructive (observed with `DROP POLICY` and
+`REVOKE` in a migration). Nobody is present to answer during autonomous work, so the call times out and blocks.
+Every migration, seed and SQL test must therefore be written so it applies unattended:
+- No `DROP`, `REVOKE`, `TRUNCATE`, `ALTER ... DROP/RENAME`, `ALTER ROLE`, or `DELETE` without a narrow `WHERE` in
+  migrations or loaders. Use `create ... if not exists`, `create or replace function`, `insert ... on conflict do
+  update`, and new migration files instead of rewriting old objects.
+- Least privilege by construction instead of by revocation: all tables and internal functions live in the `private`
+  schema, which API roles cannot use (a new schema grants USAGE only to its owner) and PostgREST does not expose.
+  Only deliberate API functions (SECURITY DEFINER, `set search_path = ''`) live in `public`, where Supabase's default
+  privileges already let `anon` execute them. Never create tables or views in `public`.
+- SQL tests run inside `begin; ... rollback;` so they leave nothing behind and need no cleanup deletes.
+- If a destructive change is truly unavoidable, write it as a separate migration and list it in the launch report for
+  the owner to apply.

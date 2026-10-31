@@ -175,3 +175,12 @@ next-env.d.ts
 
 # Agent worktrees
 .claude/worktrees/
+
+# Content pipeline (CONTENT_GUIDE §11.2, ARCHITECTURE §5.4). The secret scan
+# (npm run check:secrets) fails if any of these is ever tracked.
+# Plaintext workspace for sealed content. Envelopes live in content/sealed/.
+content/.sealed-plain/
+# Blind packets, downloaded datasets and other tool caches.
+.cache/
+# Sealed release SQL, applied through MCP and never committed.
+supabase/.generated/

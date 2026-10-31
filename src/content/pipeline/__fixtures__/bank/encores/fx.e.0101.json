@@ -1,0 +1,174 @@
+{
+  "id": "fx.e.0101",
+  "status": "active",
+  "category": "geo",
+  "tags": ["fixtures", "bridges"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The keepers added 12 steps in 1890 when the lamp room was raised above the spray.",
+  "learnMore": "Gorlund lighthouse (fixture)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "value",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "212 steps lead up the Gorlund lighthouse."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Twelve steps were added in 1890."
+    }
+  ],
+  "writerNotes": "Invented fixture.",
+  "kind": "encore",
+  "question": "How many steps lead up to the fixture lighthouse of Gorlund?",
+  "valueKind": "quantity",
+  "answer": 212,
+  "decimals": 0,
+  "unit": "steps",
+  "unitShort": "steps",
+  "unitLabel": "steps",
+  "bands": null,
+  "sourceLabels": [],
+  "derivation": null,
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-fx-alpha",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "eec55afc74aa5145d0baa91ad354c317a60c9a3f5a98ecb352488451418b3fa4",
+        "startedAt": "2026-11-02T10:00:00Z",
+        "finishedAt": "2026-11-02T10:05:00Z",
+        "coldSolve": {
+          "estimate": 169.60000000000002,
+          "reasoning": "Seven in the city and a few dozen upstream."
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "fixture.json",
+              "locator": "fixture=c1",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "fixture.json",
+              "locator": "fixture=c2",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-fx-bravo",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "41fc959397948b6954dc0cba6c72c32f5a89381325aa7d7d29928dd2130b40d8",
+        "startedAt": "2026-11-02T10:00:00Z",
+        "finishedAt": "2026-11-02T10:05:00Z",
+        "coldSolve": {
+          "estimate": 169.60000000000002,
+          "reasoning": "Seven in the city and a few dozen upstream."
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "fixture.json",
+              "locator": "fixture=c1",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "fixture.json",
+              "locator": "fixture=c2",
+              "excerpt": "invented excerpt for a fixture",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-fx-estimator",
+        "at": "2026-11-02T09:00:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-fx-editor",
+      "decision": "accept",
+      "reason": "Both fixture checks pass; external evidence on every high-risk claim and every pinning clue.",
+      "decidedAt": "2026-11-03T09:00:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-03T09:00:00Z",
+      "nearestId": "fx.m.geo.0101",
+      "score": 0.16,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-03T09:00:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "predicted": {
+    "pClose": 0.28,
+    "pExact": 0.02,
+    "spread": 0.45,
+    "estimator": "v0"
+  }
+}
