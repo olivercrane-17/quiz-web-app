@@ -145,3 +145,11 @@ The shared web-search budget cannot supply two independent external sources for 
 The 30-day "addedIn" freeze exists so a small list diff can never hint at an upcoming answer. The first published
 version of each list (the launch baseline, thousands of entries added at once) cannot narrow anything, so its entries
 are eligible as answers immediately. The freeze applies to every entry added after the baseline version.
+
+## 17. Owner answers (31 October 2026)
+- Supabase: use project `zcodouduyvxwefxebvmv`. The owner will remove the old `NEXT_PUBLIC_SUPABASE_*` variables
+  (project `wjyrysepifthbgbimqzw`) from the cloud environment and point Vercel at the new project.
+- Vercel: not confirmed as connected. Treat it as not connected; the launch report carries the import and env steps.
+- Content key: delivered to the owner as a file to keep in a password manager and add as the `QZ_CONTENT_KEY` GitHub
+  secret. The database escrow table exists (migration applied) but holds no key, because session policy blocks reading
+  the key into the transcript. Sealed content released to the database is the second copy.
