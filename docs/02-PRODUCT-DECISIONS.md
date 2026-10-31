@@ -140,3 +140,8 @@ The shared web-search budget cannot supply two independent external sources for 
   dataset or web evidence in a confirming check. Writers should build hard clues from well-documented facts and use the
   precision ladder rather than lean on exact figures.
 - Pass D (final pre-freeze re-check) and the seeded audit remain mandatory before a Daily is scheduled.
+
+## 16. Answer-list freeze at launch (overrides CONTENT_GUIDE §2.10 rule 5 / lint C14 for the baseline)
+The 30-day "addedIn" freeze exists so a small list diff can never hint at an upcoming answer. The first published
+version of each list (the launch baseline, thousands of entries added at once) cannot narrow anything, so its entries
+are eligible as answers immediately. The freeze applies to every entry added after the baseline version.
