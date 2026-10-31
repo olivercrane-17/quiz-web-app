@@ -153,3 +153,6 @@ are eligible as answers immediately. The freeze applies to every entry added aft
 - Content key: delivered to the owner as a file to keep in a password manager and add as the `QZ_CONTENT_KEY` GitHub
   secret. The database escrow table exists (migration applied) but holds no key, because session policy blocks reading
   the key into the transcript. Sealed content released to the database is the second copy.
+- `QZ_CONTENT_KEY` is a GitHub **environment** secret in the environment `content-sealed` (deployment branches limited
+  to `main` and `claude/sleepy-hamilton-p0f789`, no required reviewers). The `content-sealed` CI job must declare
+  `environment: content-sealed`; no other job may reference the secret.
