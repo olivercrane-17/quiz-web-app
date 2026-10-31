@@ -1,0 +1,57 @@
+{
+  "id": "fx.p.geo.0105",
+  "status": "draft",
+  "category": "geo",
+  "tags": ["fixtures", "rivers"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The Vellum flows 412 km from the Ashen Hills, while the Corran runs 268 km from Lake Ostry.",
+  "learnMore": "Vellum river (fixture)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "standard",
+      "text": "The Vellum: 412 km."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "standard",
+      "text": "The Corran: 268 km."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Vellum flows 412 km from the Ashen Hills, while the Corran runs 268 km from Lake Ostry."
+    }
+  ],
+  "writerNotes": "Invented fixture for tests, the mock backend and the e2e track (ARCHITECTURE 5.6). Not a real fact; never scheduled on the main track.",
+  "format": "comparison",
+  "stem": "Which is longer?",
+  "a": "The Vellum",
+  "b": "The Corran",
+  "answer": "a",
+  "relation": "longer",
+  "measure": "length",
+  "unit": "km",
+  "values": {
+    "a": 412,
+    "b": 268
+  },
+  "valueDisplay": {
+    "a": "412 km",
+    "b": "268 km"
+  },
+  "predicted": {
+    "p": 0.56,
+    "spread": 0.2,
+    "estimator": "fixture"
+  }
+}
