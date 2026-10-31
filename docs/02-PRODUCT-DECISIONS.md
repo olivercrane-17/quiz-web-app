@@ -130,3 +130,13 @@ These override the PRD and ARCHITECTURE where they differ.
 4. **Supabase migrations must apply unattended** (see the new section in 01-ENGINEERING-CONSTRAINTS.md). Where the
    architecture's security baseline uses REVOKE, DROP or ALTER ROLE, achieve the same guarantee by construction (private
    schema without grants, only deliberate RPCs in public) and list anything truly unavoidable in the launch report.
+
+## 15. Verification evidence for Daily items (overrides CONTENT_GUIDE §9.9 rule 3)
+The shared web-search budget cannot supply two independent external sources for every Daily clue. So:
+- An encore value needs at least one external source (dataset or web).
+- A mystery's pinning clues and key must be confirmed by both independent checks (checker B runs on a different
+  model from the writer and checker A). Knowledge confirmations count only at "certain" confidence.
+- Any claim marked high-risk (numbers, dates, firsts, superlatives, quotations, etymologies, recent change) still needs
+  dataset or web evidence in a confirming check. Writers should build hard clues from well-documented facts and use the
+  precision ladder rather than lean on exact figures.
+- Pass D (final pre-freeze re-check) and the seeded audit remain mandatory before a Daily is scheduled.

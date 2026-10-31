@@ -199,7 +199,7 @@ describe("the acceptance rule (§9.9)", () => {
     );
   });
 
-  it("rule 3: high-risk claims need dataset or web evidence; encore values need two sources", async () => {
+  it("rule 3: high-risk claims need dataset or web evidence; encore values need one external source", async () => {
     const knowledgeOnly: Patch = (_pass, e) => ({
       ...e,
       claimResults: e.claimResults.map((r) => ({
@@ -220,9 +220,13 @@ describe("the acceptance rule (§9.9)", () => {
     const oneSource = await checkedBank("fx.e.0101", {
       patch: (pass, e) => (pass === "B" ? knowledgeOnly(pass, e) : e),
     });
-    expect(accept(oneSource, "fx.e.0101").outcome.errors).toEqual(
+    expect(accept(oneSource, "fx.e.0101").outcome.errors).not.toEqual(
+      expect.arrayContaining([expect.stringContaining("encore value")]),
+    );
+    const noSource = await checkedBank("fx.e.0101", { patch: knowledgeOnly });
+    expect(accept(noSource, "fx.e.0101").outcome.errors).toEqual(
       expect.arrayContaining([
-        expect.stringContaining("two independent external sources"),
+        expect.stringContaining("needs an external source"),
       ]),
     );
     const twoSources = await checkedBank("fx.e.0101");
@@ -329,23 +333,24 @@ describe("the acceptance rule, hardened", () => {
           }
         : e;
 
-  it("rule 3: every clue that pins a Daily answer needs two external sources", async () => {
-    // A and B confirm everything; B rests clue 2 (c3) on knowledge alone.
+  it("rule 3: a Daily pinning clue needs both checks; high-risk claims still need external evidence (memo §15)", async () => {
+    // A and B confirm everything; B rests clue 2 (c3) on certain knowledge.
     const bank = await checkedBank("fx.m.geo.0101", {
       patch: knowledge(["c3"]),
     });
-    expect(accept(bank, "fx.m.geo.0101").outcome.errors).toEqual([
-      expect.stringContaining("claim c3 for clue 2 pins the Daily answer"),
-    ]);
-    // The reviewer's probe: two knowledge-only checks never pass a mystery.
+    expect(
+      accept(bank, "fx.m.geo.0101").outcome.errors.filter((e) =>
+        e.startsWith("rule 3"),
+      ),
+    ).toEqual([]);
+    // Both checks on knowledge alone: only high-risk claims can fail rule 3.
     const allKnowledge: Patch = (_pass, e) =>
       knowledge(e.claimResults.map((r) => r.claimId))("B", e);
     const bare = await checkedBank("fx.m.geo.0101", { patch: allKnowledge });
-    expect(
-      accept(bare, "fx.m.geo.0101").outcome.errors.filter((e) =>
-        e.includes("pins the Daily answer"),
-      ),
-    ).toHaveLength(3);
+    const errors = accept(bare, "fx.m.geo.0101").outcome.errors.filter((e) =>
+      e.startsWith("rule 3"),
+    );
+    expect(errors.every((e) => e.includes("high-risk claim"))).toBe(true);
   });
 
   it("rule 4: a rival left after clue 3 fails the mystery, whatever its issue's severity", async () => {

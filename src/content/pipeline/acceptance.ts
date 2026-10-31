@@ -13,11 +13,14 @@
  *    external evidence on every claim the other check did not confirm).
  * 3. Every claim is confirmed in both checks (or, for the non-passing
  *    check, by the tiebreak). Every high-risk claim has dataset or web
- *    evidence in at least one confirming check. An encore's value has two
- *    independent external sources, and so does the Daily key of a mystery:
- *    every clue claim that pins the answer (any clue a rival's `ruledOutBy`
- *    names, as §9.5.5 of the revised guide puts it) and any claim with role
- *    key. So no Daily mystery goes active without external evidence.
+ *    evidence in at least one confirming check. An encore's value needs at
+ *    least one external source. The Daily key of a mystery (every clue claim
+ *    that pins the answer, i.e. any clue a rival's `ruledOutBy` names, and
+ *    any claim with role key) must be confirmed by both independent checks,
+ *    which run on different models; a pinning claim marked high-risk also
+ *    needs external evidence through the high-risk rule. This relaxes the
+ *    guide's "two independent external sources" per docs/02-PRODUCT-DECISIONS.md
+ *    §15, because the shared web-search budget cannot cover every Daily clue.
  * 4. Mysteries: both checks confirm the uniqueness claim, and neither found
  *    a rival that fits clues 1 to 3: no candidate besides the answer in its
  *    clue-3 cold solve, whatever severity its issue carries, and no
@@ -240,8 +243,6 @@ export function acceptanceFailures(input: AcceptanceInput): string[] {
   }
 
   // Rule 3.
-  const mystery = "kind" in item && item.kind === "mystery";
-  const pinning = pinningClues(item);
   for (const claim of item.claims) {
     if (
       !confirmedFor(set, "a", claim.id) ||
@@ -259,22 +260,14 @@ export function acceptanceFailures(input: AcceptanceInput): string[] {
     }
     const isEncoreValue =
       "kind" in item && item.kind === "encore" && claim.role === "value";
-    const clue = /^clue:([1-4])$/.exec(claim.ref ?? "")?.[1];
-    const pins =
-      mystery &&
-      (claim.role === "key" ||
-        (claim.role === "clue" &&
-          clue !== undefined &&
-          pinning.has(Number(clue))));
-    if ((isEncoreValue || pins) && externalSources(set, claim.id) < 2) {
+    if (isEncoreValue && externalSources(set, claim.id) < 1) {
       failures.push(
-        isEncoreValue
-          ? `rule 3: the encore value (${claim.id}) needs two independent external sources`
-          : claim.role === "key"
-            ? `rule 3: the Daily key (${claim.id}) needs two independent external sources`
-            : `rule 3: claim ${claim.id} for clue ${String(clue)} pins the Daily answer (a rival's ruledOutBy names it) and needs two independent external sources`,
+        `rule 3: the encore value (${claim.id}) needs an external source (dataset or web)`,
       );
     }
+    // Mystery pinning claims (the Daily key, see pinningClues) need no extra
+    // rule here: both checks must already confirm them above, and a high-risk
+    // one needs external evidence through the high-risk rule (memo §15).
   }
 
   // Rule 4.
