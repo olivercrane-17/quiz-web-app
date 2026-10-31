@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en-GB" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Knewt: warm editorial exploration</title>
+<meta name="description" content="Exploration A for the daily trivia app: warm editorial direction, five screens in light and dark.">
+<link rel="preload" href="fonts/fraunces-latin-full-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Icon sprite: 24 px grid, 2 px stroke, round caps and joins -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <!-- The mark: a newt curled into a question mark. Head = ball terminal, tail = stem, the dot stays a dot. -->
+  <symbol id="mark" viewBox="0 0 48 48">
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--mark-body, var(--eft))">
+      <path d="M17.6 9.4 L13.2 6.1 M21.6 9.3 L22.8 13.2 M34.4 19.6 L39 21.6 M31 21.6 L28.6 17.4" stroke-width="2.6"/>
+      <path d="M15 15 C15 8.6 20 5.4 25.2 5.4 C31.6 5.4 35.8 9.6 35.8 14.9 C35.8 20.2 32 22.7 28.8 24.7 C26 26.5 24.6 28.3 24.6 31.2" stroke-width="6.6"/>
+      <path d="M24.6 30.4 C24.6 32.6 24.9 34 25.8 35.2" stroke-width="4.2"/>
+    </g>
+    <g style="fill: var(--mark-body, var(--eft))">
+      <circle cx="13" cy="5.9" r="1.9"/><circle cx="23" cy="13.6" r="1.9"/><circle cx="39.3" cy="21.8" r="1.9"/><circle cx="28.4" cy="17" r="1.9"/>
+      <ellipse cx="14.6" cy="15.6" rx="5.3" ry="5"/>
+    </g>
+    <circle cx="13.2" cy="14.4" r="1.25" style="fill: var(--mark-eye, #1D1A16)"/>
+    <circle cx="24.6" cy="42" r="3.8" style="fill: var(--mark-dot, var(--ink))"/>
+  </symbol>
+  <symbol id="i-tally" viewBox="0 0 24 24"><path d="M6.5 5v14M10.5 5v14M14.5 5v14M18.5 5v14"/><path d="M3.5 16.5l17.5-9" /></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.8l4.8 4.7L19.5 7"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h14.5M13.5 6.5L19 12l-5.5 5.5"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9.5 5.5L16 12l-6.5 6.5"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3.5 7.5h10M18.5 7.5h2M3.5 16.5h2.5M10.5 16.5h10"/><circle cx="16" cy="7.5" r="2.5"/><circle cx="8.2" cy="16.5" r="2.5"/></symbol>
+  <symbol id="i-sound-off" viewBox="0 0 24 24"><path d="M3.5 9.5h3.2L11.5 5v14l-4.8-4.5H3.5z"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5"/></symbol>
+  <symbol id="i-watch" viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.5M9.5 2.5h5M18.6 6.4l1.4-1.4"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3.5v11M7.8 7.6L12 3.5l4.2 4.1"/><path d="M8 10.5H6.5a1.5 1.5 0 0 0-1.5 1.5v7a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5H16"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9M9.5 4.5L12 6.5l2.5-2M9.5 19.5l2.5-2 2.5 2"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3c.6 4.6 2.4 7.3 8 9-5.6 1.7-7.4 4.4-8 9-.6-4.6-2.4-7.3-8-9 5.6-1.7 7.4-4.4 8-9z"/></symbol>
+  <symbol id="i-today" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-cards" viewBox="0 0 24 24"><rect x="7.5" y="6.5" width="12.5" height="14.5" rx="2.2"/><path d="M4 16.5V5.2A2.2 2.2 0 0 1 6.2 3h8.3"/></symbol>
+  <symbol id="i-group" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.8 20c.4-3.6 2.9-6 6.2-6s5.8 2.4 6.2 6"/><circle cx="17" cy="9.5" r="2.6"/><path d="M16.4 14.1c2.7-.2 4.5 1.8 4.8 4.9"/></symbol>
+  <symbol id="i-stats" viewBox="0 0 24 24"><path d="M5.5 20v-7M12 20V5M18.5 20v-10" stroke-width="2.6"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 21V4M5.5 4.5h11l-2.2 3.8 2.2 3.8h-11"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M3.5 5.5c2.8-1.3 5.6-1.3 8.5.5 2.9-1.8 5.7-1.8 8.5-.5v13c-2.8-1.3-5.6-1.3-8.5.5-2.9-1.8-5.7-1.8-8.5-.5z"/><path d="M12 6v13"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></symbol>
+  <symbol id="i-shift" viewBox="0 0 24 24"><path d="M12 4l7.5 8h-4v7h-7v-7h-4z" stroke-width="1.7"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M8.5 5.5H20a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H8.5L2.5 12z" stroke-width="1.7"/><path d="M11.5 9.5l5 5M16.5 9.5l-5 5" stroke-width="1.7"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" stroke-width="1.6"/><path d="M3.5 12h17M12 3.5c2.5 2.4 3.6 5.2 3.6 8.5S14.5 18.1 12 20.5C9.5 18.1 8.4 15.3 8.4 12S9.5 5.9 12 3.5z" stroke-width="1.6"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" stroke-width="1.6"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke-width="1.6"/></symbol>
+</svg>
+
+<div id="stage"></div>
+
+<!-- =========================== Screen 1: Home =========================== -->
+<template id="tpl-home">
+<div class="screen screen--home">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Knewt, home">
+      <svg class="brand__mark" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="brand__word" aria-hidden="true">knewt</span>
+    </a>
+    <div class="topbar__end">
+      <a class="streakchip" href="#" aria-label="12-day streak. See this week"><svg class="i" aria-hidden="true"><use href="#i-tally"/></svg><span>12</span></a>
+      <button class="iconbtn" aria-label="Settings"><svg class="i"><use href="#i-sliders"/></svg></button>
+    </div>
+  </header>
+
+  <main class="home">
+    <div class="home__intro">
+      <p class="dateline">Saturday 31 October</p>
+      <h1 class="home__hello">Good morning.</h1>
+    </div>
+
+    <section class="ticket" aria-labelledby="t-title">
+      <div class="ticket__body">
+        <div class="ticket__top"><span class="kicker">Today's Daily</span><span class="ticket__no" aria-label="Number 42">No. 42</span></div>
+        <h2 class="ticket__title" id="t-title">Three Mysteries <em>and an Encore</em></h2>
+        <ol class="cases" aria-label="What you will be guessing">
+          <li class="case"><span class="case__n" aria-hidden="true">1</span><span class="case__t">City</span></li>
+          <li class="case"><span class="case__n" aria-hidden="true">2</span><span class="case__t">Person</span></li>
+          <li class="case"><span class="case__n" aria-hidden="true">3</span><span class="case__t">Film</span></li>
+          <li class="case case--encore"><span class="case__n" aria-hidden="true">E</span><span class="case__t">Number</span></li>
+        </ol>
+      </div>
+      <div class="ticket__stub">
+        <p class="ticket__meta"><span>About 4 minutes</span><span>No countdown</span></p>
+        <button class="btn btn--primary btn--block">Play today's Daily <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
+    </section>
+
+    <section class="card practice" aria-labelledby="p-title">
+      <div class="practice__text">
+        <h2 class="practice__title" id="p-title">Practice</h2>
+        <p>Ten questions on anything. Works offline.</p>
+      </div>
+      <button class="btn btn--secondary btn--sm">Quick play</button>
+      <ul class="topics" aria-label="Or pick a topic">
+        <li><a class="chip" href="#">Mixed</a></li>
+        <li><a class="chip" href="#">Science</a></li>
+        <li><a class="chip" href="#">History</a></li>
+        <li><a class="chip" href="#">Geography</a></li>
+        <li><a class="chip" href="#">Film &amp; TV</a></li>
+      </ul>
+    </section>
+    <section class="card weekcard" aria-labelledby="w-title">
+      <div class="weekcard__head"><h2 class="weekcard__title" id="w-title">This week</h2><span class="weekcard__streak"><strong>12</strong> days in a row</span></div>
+      <ol class="week" aria-label="Monday to Friday played, today still to play">
+        <li class="is-done"><span class="week__d">M</span><span class="week__dot"><svg class="i i--xs"><use href="#i-check"/></svg></span></li>
+        <li class="is-done"><span class="week__d">T</span><span class="week__dot"><svg class="i i--xs"><use href="#i-check"/></svg></span></li>
+        <li class="is-done"><span class="week__d">W</span><span class="week__dot"><svg class="i i--xs"><use href="#i-check"/></svg></span></li>
+        <li class="is-done"><span class="week__d">T</span><span class="week__dot"><svg class="i i--xs"><use href="#i-check"/></svg></span></li>
+        <li class="is-done"><span class="week__d">F</span><span class="week__dot"><svg class="i i--xs"><use href="#i-check"/></svg></span></li>
+        <li class="is-today"><span class="week__d">Today</span><span class="week__dot"></span></li>
+        <li class="is-future"><span class="week__d">S</span><span class="week__dot"></span></li>
+      </ol>
+      <p class="streak__note"><span><svg class="i i--sm" aria-hidden="true"><use href="#i-snow"/></svg>1 freeze ready</span><span>Play today for <strong>day 13</strong></span></p>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="Main">
+    <a class="tab is-active" href="#" aria-current="page"><svg class="i" aria-hidden="true"><use href="#i-today"/></svg><span>Today</span></a>
+    <a class="tab" href="#"><svg class="i" aria-hidden="true"><use href="#i-cards"/></svg><span>Practice</span></a>
+    <a class="tab" href="#"><svg class="i" aria-hidden="true"><use href="#i-group"/></svg><span>Groups</span></a>
+    <a class="tab" href="#"><svg class="i" aria-hidden="true"><use href="#i-stats"/></svg><span>Stats</span></a>
+  </nav>
+</div>
+</template>
+
+<!-- =========================== Screen 2: Mystery =========================== -->
+<template id="tpl-mystery">
+<div class="screen screen--mystery">
+  <div class="app-area">
+    <header class="topbar">
+      <button class="iconbtn" aria-label="Leave the Daily. Your progress is saved"><svg class="i"><use href="#i-x"/></svg></button>
+      <ol class="dprog" aria-label="Daily progress">
+        <li class="is-solved"><svg class="i i--sm" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">Mystery 1, solved</span></li>
+        <li class="is-current" aria-current="step"><span aria-hidden="true">2</span><span class="sr-only">Mystery 2, playing now</span></li>
+        <li><span aria-hidden="true">3</span><span class="sr-only">Mystery 3</span></li>
+        <li class="is-encore"><span aria-hidden="true">E</span><span class="sr-only">Encore</span></li>
+      </ol>
+      <button class="watch" aria-label="Stopwatch: 1 minute 12 seconds. Hide stopwatch"><svg class="i i--sm" aria-hidden="true"><use href="#i-watch"/></svg><span class="digits" data-v="1:12" aria-hidden="true">1:12</span></button>
+    </header>
+
+    <div class="mys-head">
+      <div>
+        <p class="kicker">Mystery 2 of 3</p>
+        <h1 class="mys-head__title" tabindex="-1">A person</h1>
+      </div>
+      <div class="scale" role="img" aria-label="Worth 3 points if you solve it now. 4, 3, 2 or 1 by clue.">
+        <ol class="scale__steps" aria-hidden="true"><li class="is-gone">4</li><li class="is-now">3</li><li>2</li><li>1</li></ol>
+        <span class="scale__label" aria-hidden="true">points now</span>
+      </div>
+    </div>
+
+    <ol class="ladder" aria-label="Clues">
+      <li class="rung is-past">
+        <span class="rung__n" aria-hidden="true">1</span>
+        <div class="rung__body">
+          <p class="rung__clue"><span class="sr-only">Clue 1: </span>Her 1843 notes ran three times longer than the article they explained.</p>
+          <p class="miss"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg><span class="sr-only">You guessed</span><s>Mary Shelley</s></p>
+        </div>
+      </li>
+      <li class="rung is-current">
+        <span class="rung__n" aria-hidden="true">2</span>
+        <div class="rung__body rung__card">
+          <span class="rung__new" aria-hidden="true">New</span>
+          <p class="rung__clue"><span class="sr-only">Clue 2, new: </span>Her father was a famous Romantic poet she never knew.</p>
+        </div>
+      </li>
+      <li class="rung is-locked">
+        <span class="rung__n" aria-hidden="true">3</span>
+        <div class="rung__body">
+          <button class="rung__reveal">Next clue <span>then worth 2</span></button>
+        </div>
+      </li>
+    </ol>
+
+    <div class="guess">
+      <div class="combo">
+        <svg class="i i--lead" aria-hidden="true"><use href="#i-search"/></svg>
+        <label class="combo__label" for="g1">Your guess</label>
+        <input class="combo__input" id="g1" type="text" value="Ada" role="combobox" aria-expanded="true" aria-controls="lb1" aria-autocomplete="list" aria-activedescendant="lb1-0" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="go">
+        <span class="combo__caret" aria-hidden="true"></span>
+        <button class="combo__clear" aria-label="Clear guess"><svg class="i"><use href="#i-x"/></svg></button>
+      </div>
+      <ul class="listbox" id="lb1" role="listbox" aria-label="People matching Ada">
+        <li role="option" id="lb1-0" aria-selected="true" class="is-active"><span><mark>Ada</mark> Lovelace</span><span class="go" aria-hidden="true">Guess <svg class="i"><use href="#i-arrow"/></svg></span></li>
+        <li role="option" id="lb1-1" aria-selected="false"><span><mark>Ada</mark> Yonath</span></li>
+        <li role="option" id="lb1-2" aria-selected="false"><span><mark>Ada</mark>m Smith</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="kbd" aria-hidden="true">
+    <div class="kbd__row"><span class="kbd__k">q</span><span class="kbd__k">w</span><span class="kbd__k">e</span><span class="kbd__k">r</span><span class="kbd__k">t</span><span class="kbd__k">y</span><span class="kbd__k">u</span><span class="kbd__k">i</span><span class="kbd__k">o</span><span class="kbd__k">p</span></div>
+    <div class="kbd__row kbd__row--2"><span class="kbd__k">a</span><span class="kbd__k">s</span><span class="kbd__k">d</span><span class="kbd__k">f</span><span class="kbd__k">g</span><span class="kbd__k">h</span><span class="kbd__k">j</span><span class="kbd__k">k</span><span class="kbd__k">l</span></div>
+    <div class="kbd__row kbd__row--3"><span class="kbd__k kbd__k--fn"><svg class="i"><use href="#i-shift"/></svg></span><span class="kbd__k">z</span><span class="kbd__k">x</span><span class="kbd__k">c</span><span class="kbd__k">v</span><span class="kbd__k">b</span><span class="kbd__k">n</span><span class="kbd__k">m</span><span class="kbd__k kbd__k--fn"><svg class="i"><use href="#i-back"/></svg></span></div>
+    <div class="kbd__row"><span class="kbd__k kbd__k--fn kbd__k--num">123</span><span class="kbd__k kbd__k--space">space</span><span class="kbd__k kbd__k--go">go</span></div>
+    <div class="kbd__bottom"><svg class="i"><use href="#i-globe"/></svg><svg class="i"><use href="#i-mic"/></svg></div>
+    <span class="kbd__home"></span>
+  </div>
+</div>
+</template>
+
+<!-- =========================== Screen 3: Practice, just answered =========================== -->
+<template id="tpl-practice">
+<div class="screen screen--practice">
+  <header class="topbar">
+    <button class="iconbtn" aria-label="End practice"><svg class="i"><use href="#i-x"/></svg></button>
+    <div class="topbar__title"><span>Practice</span><strong>Space</strong></div>
+    <button class="iconbtn" aria-label="Sound is off. Turn sound on"><svg class="i"><use href="#i-sound-off"/></svg></button>
+  </header>
+  <ol class="segs" aria-label="Question 4 of 10. 3 right, 1 wrong">
+    <li class="is-right"><svg class="i"><use href="#i-check"/></svg></li>
+    <li class="is-right"><svg class="i"><use href="#i-check"/></svg></li>
+    <li class="is-right"><svg class="i"><use href="#i-check"/></svg></li>
+    <li class="is-wrong is-current"><svg class="i"><use href="#i-x"/></svg></li>
+    <li></li><li></li><li></li><li></li><li></li><li></li>
+  </ol>
+
+  <main class="q">
+    <p class="kicker">Question 4 of 10</p>
+    <h1 class="q__stem" tabindex="-1">Which planet rolls around the Sun on its side?</h1>
+    <ol class="opts">
+      <li><button class="opt is-wrong" aria-disabled="true"><span class="opt__badge"><span class="opt__letter" aria-hidden="true">A</span><svg class="i opt__icon" aria-hidden="true"><use href="#i-x"/></svg><span class="sr-only">A.</span></span><span class="opt__text"><span class="strike">Venus</span></span><span class="opt__tag">Your answer</span></button></li>
+      <li><button class="opt is-correct" aria-disabled="true"><span class="opt__badge"><span class="opt__letter" aria-hidden="true">B</span><svg class="i opt__icon" aria-hidden="true"><use href="#i-check"/></svg><span class="sr-only">B.</span></span><span class="opt__text">Uranus</span><span class="opt__tag"><svg class="i i--xs" aria-hidden="true"><use href="#i-check"/></svg>Correct answer</span></button></li>
+      <li><button class="opt is-dim" aria-disabled="true"><span class="opt__badge"><span class="opt__letter">C</span></span><span class="opt__text">Neptune</span></button></li>
+      <li><button class="opt is-dim" aria-disabled="true"><span class="opt__badge"><span class="opt__letter">D</span></span><span class="opt__text">Saturn</span></button></li>
+    </ol>
+  </main>
+
+  <p class="sr-only" role="status">Not quite. You chose Venus. The answer is Uranus.</p>
+  <section class="sheet" aria-labelledby="why-title">
+    <span class="sheet__grab" aria-hidden="true"></span>
+    <p class="sheet__verdict"><span class="badge" aria-hidden="true"><svg class="i"><use href="#i-x"/></svg></span>Not quite</p>
+    <h2 class="sheet__title" id="why-title">It's Uranus.</h2>
+    <p class="sheet__why"><span class="hl">Uranus</span> is tipped over by about 98 degrees, so it rolls around the Sun on its side. Venus is odd too: it spins backwards, very slowly.</p>
+    <div class="sheet__meta">
+      <span class="crowd"><span class="crowd__bar" style="--v:58%"><i></i></span>58% got this</span>
+      <a href="#"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg>Learn more</a>
+      <a href="#"><svg class="i" aria-hidden="true"><use href="#i-flag"/></svg>Report</a>
+    </div>
+    <button class="btn btn--primary btn--block">Continue</button>
+  </section>
+</div>
+</template>
+
+<!-- =========================== Screen 4: Daily results =========================== -->
+<template id="tpl-results">
+<div class="screen screen--results">
+  <header class="topbar">
+    <button class="iconbtn" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button>
+    <div class="topbar__title"><strong>Daily No. 42</strong><span>Saturday 31 October</span></div>
+    <button class="iconbtn" aria-label="Your stats"><svg class="i"><use href="#i-stats"/></svg></button>
+  </header>
+
+  <main class="res">
+    <p class="bestfact"><svg class="i i--fill" aria-hidden="true"><use href="#i-spark"/></svg>New best streak: 13 days</p>
+
+    <section class="card scorecard" aria-label="Your score">
+      <div class="scorecard__top">
+        <div>
+          <p class="score"><span class="score__n">9</span><span class="score__of">/12</span></p>
+          <p class="score__label">points</p>
+        </div>
+        <div class="pct">
+          <p class="pct__big">Top 29%</p>
+          <p class="pct__label">so far today. You beat 71% of players.</p>
+        </div>
+      </div>
+      <figure class="dist">
+        <div class="dist__head"><figcaption class="dist__title">How everyone did</figcaption><span>4,812 players</span></div>
+        <div class="bars" role="img" aria-label="Scores so far: most players got 6 to 9. You got 9.">
+          <i style="--h:5.7"></i><i style="--h:11.1"></i><i style="--h:21.2"></i><i style="--h:35.5"></i><i style="--h:53"></i><i style="--h:73.5"></i><i style="--h:89.9"></i><i style="--h:100"></i><i style="--h:96.1"></i><i class="you" style="--h:83.1"></i><i style="--h:67"></i><i style="--h:55.9"></i><i style="--h:32.5"></i>
+        </div>
+        <div class="axis" aria-hidden="true"><span class="t">0</span><span>1</span><span>2</span><span class="t">3</span><span>4</span><span>5</span><span class="t">6</span><span>7</span><span>8</span><span class="t">9</span><span>10</span><span>11</span><span class="t">12</span></div>
+      </figure>
+    </section>
+
+    <ol class="ledger" aria-label="Your mysteries">
+      <li class="lrow">
+        <span class="lrow__n" aria-hidden="true">1</span>
+        <div class="lrow__main"><span class="lrow__type">A city</span><strong class="lrow__ans">Lisbon</strong><span class="lrow__crowd">31% got it on clue 1, like you</span></div>
+        <div class="lrow__end"><span class="lrow__pts">+4</span><span class="sqs" role="img" aria-label="Solved on clue 1"><i class="sq sq--hit"><svg class="i"><use href="#i-check"/></svg></i><i class="sq"></i><i class="sq"></i><i class="sq"></i></span></div>
+      </li>
+      <li class="lrow">
+        <span class="lrow__n" aria-hidden="true">2</span>
+        <div class="lrow__main"><span class="lrow__type">A person</span><strong class="lrow__ans">Ada Lovelace</strong><span class="lrow__crowd">Most players needed clue 3</span></div>
+        <div class="lrow__end"><span class="lrow__pts">+3</span><span class="sqs" role="img" aria-label="Solved on clue 2"><i class="sq sq--used"><svg class="i"><use href="#i-x"/></svg></i><i class="sq sq--hit"><svg class="i"><use href="#i-check"/></svg></i><i class="sq"></i><i class="sq"></i></span></div>
+      </li>
+      <li class="lrow">
+        <span class="lrow__n" aria-hidden="true">3</span>
+        <div class="lrow__main"><span class="lrow__type">A film</span><strong class="lrow__ans">Spirited Away</strong><span class="lrow__crowd">58% solved it</span></div>
+        <div class="lrow__end"><span class="lrow__pts">+2</span><span class="sqs" role="img" aria-label="Solved on clue 3"><i class="sq sq--used"><svg class="i"><use href="#i-x"/></svg></i><i class="sq sq--used"><svg class="i"><use href="#i-x"/></svg></i><i class="sq sq--hit"><svg class="i"><use href="#i-check"/></svg></i><i class="sq"></i></span></div>
+      </li>
+      <li class="lrow lrow--encore">
+        <span class="lrow__n" aria-hidden="true">E</span>
+        <div class="lrow__main"><span class="lrow__type">Encore · walking the Equator</span><strong class="lrow__ans">334 days</strong><span class="lrow__crowd">You said 320, so 4% off</span></div>
+        <div class="lrow__end">
+          <span class="bull"><svg class="i" aria-hidden="true"><use href="#i-target"/></svg>Bullseye</span>
+          <div class="nline" role="img" aria-label="Bullseye: within 5% of 334. You said 320.">
+            <span class="nline__band nline__band--close" style="left:7%; width:86%"></span>
+            <span class="nline__band nline__band--bull" style="left:35.7%; width:28.6%"></span>
+            <span class="nline__track"></span>
+            <span class="nline__mark nline__mark--ans" style="left:50%"><i></i></span>
+            <span class="nline__mark nline__mark--you" style="left:38%"><i></i></span>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </main>
+
+  <footer class="dock">
+    <div class="dock__btns">
+      <button class="btn btn--secondary"><svg class="i" aria-hidden="true"><use href="#i-share"/></svg>Share</button>
+      <button class="btn btn--primary">Done for today</button>
+    </div>
+    <p class="dock__next">Next Daily in <span class="digits-inline">9h 41m</span> · <a href="#">Practice while you wait</a></p>
+  </footer>
+</div>
+</template>
+
+<!-- =========================== Screen 5: Share preview image =========================== -->
+<template id="tpl-share">
+<div class="share" role="img" aria-label="Knewt Daily number 42: 9 out of 12. Encore 4% off. Top 29% so far today.">
+  <svg class="share__newt" aria-hidden="true"><use href="#mark"/></svg>
+  <div class="share__behind" aria-hidden="true"></div>
+  <div class="share__card">
+    <div class="share__top">
+      <div class="brand"><svg class="brand__mark" aria-hidden="true"><use href="#mark"/></svg><span class="brand__word">knewt</span></div>
+      <p class="share__no">Daily No. 42</p>
+    </div>
+    <p class="share__date">Saturday 31 October</p>
+    <div class="share__mid">
+      <p class="share__score">9<span>/12</span></p>
+      <div class="share__grid">
+        <div class="share__row"><i class="tile tile--hit"><svg class="i"><use href="#i-check"/></svg></i><i class="tile"></i><i class="tile"></i><i class="tile"></i></div>
+        <div class="share__row"><i class="tile tile--used"><svg class="i"><use href="#i-x"/></svg></i><i class="tile tile--hit"><svg class="i"><use href="#i-check"/></svg></i><i class="tile"></i><i class="tile"></i></div>
+        <div class="share__row"><i class="tile tile--used"><svg class="i"><use href="#i-x"/></svg></i><i class="tile tile--used"><svg class="i"><use href="#i-x"/></svg></i><i class="tile tile--hit"><svg class="i"><use href="#i-check"/></svg></i><i class="tile"></i></div>
+      </div>
+    </div>
+    <div class="share__foot">
+      <span class="pill"><svg class="i" aria-hidden="true"><use href="#i-target"/></svg>Encore 4% off</span>
+      <span class="pill">Top 29% so far today</span>
+    </div>
+  </div>
+  <p class="share__url">Play today's Daily at <strong>knewt.app</strong></p>
+</div>
+</template>
+
+<script>
+(function () {
+  const q = new URLSearchParams(location.search);
+  const screen = q.get('screen');
+  const stage = document.getElementById('stage');
+  const SCREENS = [['home', 'Home'], ['mystery', 'Mystery, typing a guess'], ['practice', 'Practice, just answered'], ['results', 'Daily results']];
+
+  function digits(root) {
+    root.querySelectorAll('.digits[data-v]').forEach((el) => {
+      el.innerHTML = [...el.dataset.v].map((c) => `<span${/\d/.test(c) ? '' : ' class="sep"'}>${c}</span>`).join('');
+    });
+  }
+  function caret(root) {
+    const ctx = document.createElement('canvas').getContext('2d');
+    root.querySelectorAll('.combo').forEach((combo) => {
+      const input = combo.querySelector('input');
+      const cs = getComputedStyle(input);
+      ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+      combo.style.setProperty('--caret-x', (ctx.measureText(input.value).width + 2) + 'px');
+    });
+  }
+  function mount(parent, id) {
+    parent.appendChild(document.getElementById('tpl-' + id).content.cloneNode(true));
+  }
+  function finish(root) { digits(root); document.fonts.ready.then(() => caret(root)); }
+
+  if (q.has('animate')) document.body.classList.add('animate');
+  if (q.has('reduce')) document.body.classList.add('reduce-motion');
+  if (q.has('t')) {
+    const at = Number(q.get('t'));
+    document.fonts.ready.then(() => requestAnimationFrame(() => requestAnimationFrame(() => {
+      for (const anim of document.getAnimations()) { anim.pause(); anim.currentTime = at; }
+      document.documentElement.dataset.frozen = String(at);
+    })));
+  }
+
+  if (screen) {
+    document.documentElement.dataset.theme = q.get('theme') || 'light';
+    document.body.classList.add('single');
+    if (screen === 'share') document.body.classList.add('share-mode');
+    if (q.has('reflow')) document.body.classList.add('reflow');
+    mount(stage, screen);
+    finish(stage);
+    return;
+  }
+
+  // Gallery: every screen in both themes, plus the share image
+  document.body.classList.add('gallery');
+  const head = document.createElement('header');
+  head.className = 'gallery__head';
+  head.innerHTML = '<h1><svg width="52" height="52" aria-hidden="true"><use href="#mark"/></svg>knewt</h1><p>Exploration A, warm editorial. Screens at 390 by 844 in light and dark, and the 1200 by 630 share image.</p>';
+  stage.appendChild(head);
+  for (const theme of ['light', 'dark']) {
+    const row = document.createElement('div');
+    row.className = 'gallery__row';
+    for (const [id, label] of SCREENS) {
+      const cell = document.createElement('div');
+      cell.innerHTML = `<p class="gallery__label">${label} · ${theme}</p>`;
+      const frame = document.createElement('div');
+      frame.className = 'frame';
+      frame.dataset.theme = theme;
+      mount(frame, id);
+      cell.appendChild(frame);
+      row.appendChild(cell);
+    }
+    stage.appendChild(row);
+  }
+  const shareRow = document.createElement('div');
+  shareRow.className = 'gallery__row';
+  shareRow.innerHTML = '<div><p class="gallery__label">Share preview image · 1200 by 630, shown at half size</p><div class="frame frame--share" data-theme="light"></div></div>';
+  stage.appendChild(shareRow);
+  mount(shareRow.querySelector('.frame--share'), 'share');
+  finish(stage);
+})();
+</script>
+</body>
+</html>

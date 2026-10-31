@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knewt motion frames</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { background: #E7DFD2; color: #1D1A16; padding: 40px 48px 48px; }
+  h1 { font-family: var(--font-display); font-variation-settings: var(--display-axes); font-weight: 700; font-size: 34px; letter-spacing: -0.02em; }
+  h2 { font-family: var(--font-display); font-variation-settings: var(--display-axes); font-weight: 650; font-size: 24px; margin: 30px 0 4px; }
+  .lede { font-size: 16px; color: #4E463D; max-width: 80ch; margin-top: 6px; }
+  .strip { display: flex; gap: 16px; margin-top: 14px; align-items: flex-start; }
+  .cell { display: flex; flex-direction: column; gap: 8px; }
+  .win { position: relative; overflow: hidden; border-radius: 18px; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08), 0 18px 30px -22px rgb(60 35 10 / 0.6); background: #F5EFE4; }
+  .win iframe { position: absolute; left: 0; border: 0; width: 390px; height: 844px; transform-origin: 0 0; }
+  .full { width: 195px; height: 422px; }
+  .full iframe { top: 0; transform: scale(0.5); }
+  .crop { width: 293px; height: 218px; }
+  .crop iframe { top: -40px; transform: scale(0.75); }
+  .cap b { display: block; font-size: 15px; font-weight: 800; }
+  .cap span { display: block; font-size: 13px; font-weight: 600; color: #4E463D; line-height: 1.35; max-width: 26ch; }
+  .ruler { margin-top: 10px; height: 26px; position: relative; max-width: 1250px; }
+  .ruler::before { content: ""; position: absolute; left: 0; right: 0; top: 12px; height: 2px; background: #8A7F70; }
+  .ruler i { position: absolute; top: 4px; width: 2px; height: 18px; background: #1D1A16; }
+  .ruler em { position: absolute; top: -2px; font-style: normal; font-size: 12px; font-weight: 800; transform: translateX(6px); }
+</style>
+</head>
+<body>
+  <h1>Motion, frame by frame</h1>
+  <p class="lede">Frames are the real CSS timelines in index.html, paused at the time shown (append <code>?animate&amp;t=480</code> to any screen URL). Under reduced motion every step below becomes a 120 ms cross-fade with no movement.</p>
+
+  <h2>The answer reveal (practice)</h2>
+  <div class="strip" id="answer"></div>
+
+  <h2>The clue reveal (Mystery, after a wrong guess)</h2>
+  <div class="strip" id="clue"></div>
+
+<script>
+  const answer = [
+    [0, 'Press', 'The tile sinks 2 px on pointerdown. Nothing commits until release.'],
+    [150, 'Lock-in', 'Ink border. The choice is in, not yet judged.'],
+    [480, 'Reveal', 'Fills land, the wrong pick shakes 6 px, twice.'],
+    [900, 'Settled', 'The pencil strike is drawn and the labels are in.'],
+    [1380, 'The why', 'The sheet rises over empty space, so nothing shifts.'],
+    [1700, 'Waiting', 'It stays until the player taps Continue.'],
+  ];
+  const clue = [
+    [90, 'Miss logged', 'The wrong guess pops into clue 1 as a struck chip.'],
+    [250, 'Rail inks down', 'The ladder fills from rung 1 to rung 2.'],
+    [430, 'Clue unfolds', 'Clue 2 opens out of the rail while the marker slides from 4 to 3.'],
+    [760, 'Settled', 'The 4 is struck, 3 points are on offer, the New tag lands.'],
+  ];
+  const cell = (parent, cls, screen, t, title, text) => {
+    const c = document.createElement('div');
+    c.className = 'cell';
+    c.innerHTML = `<div class="win ${cls}"><iframe title="${title} at ${t} ms" src="index.html?screen=${screen}&theme=light&animate=1&t=${t}"></iframe></div>` +
+      `<p class="cap"><b>${t} ms · ${title}</b><span>${text}</span></p>`;
+    parent.appendChild(c);
+  };
+  answer.forEach(([t, a, b]) => cell(document.getElementById('answer'), 'full', 'practice', t, a, b));
+  clue.forEach(([t, a, b]) => cell(document.getElementById('clue'), 'crop', 'mystery', t, a, b));
+</script>
+</body>
+</html>
