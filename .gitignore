@@ -147,3 +147,31 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# ---------------------------------------------------------------------------
+# Project additions (Next.js, Vercel, testing)
+# ---------------------------------------------------------------------------
+
+# Next.js: generated on every dev, build and typegen run.
+# See https://nextjs.org/docs/app/api-reference/config/typescript#next-env-dts
+next-env.d.ts
+
+# Local env files. ".env" and ".env.*" above already cover these, and
+# ".env.example" stays tracked. Listed explicitly for clarity.
+.env*.local
+
+# Playwright
+/playwright-report/
+/test-results/
+/blob-report/
+/playwright/.cache/
+
+# Vercel CLI
+.vercel
+
+# OS and editor noise
+.DS_Store
+*.pem
+
+# Agent worktrees
+.claude/worktrees/
