@@ -239,11 +239,10 @@ of. `AGENTS.md` says the same and is maintained by `next dev`; commit it as is.
 
 ## CI
 
-`.github/workflows/ci.yml` runs on pull requests, on pushes to `main` and on
-manual dispatch. A pull request covers its branch, so a pushed branch without
-one gets no run: open a draft pull request, or start the workflow by hand
-(`gh workflow run CI --ref <branch>`). A newer push cancels the stale run for
-the same pull request (never on `main`). Two jobs run in parallel on Node 22
+`.github/workflows/ci.yml` runs on every pushed branch, on pull requests and on
+manual dispatch. A branch with an open pull request therefore runs twice, which
+is free on a public repo. A newer push cancels the stale run for the same
+branch or pull request (never on `main`). Two jobs run in parallel on Node 22
 with the npm cache:
 
 1. **verify:** `npm ci`, lint, format check, typecheck, unit tests, build,

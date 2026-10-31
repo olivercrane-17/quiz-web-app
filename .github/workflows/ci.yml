@@ -1,12 +1,12 @@
 name: CI
 
-# Pull requests cover branch work, so pushes only trigger a run on main.
-# Running on every pushed branch as well would test each pull request push
-# twice. For a branch without a pull request, open a draft one or start the
-# workflow by hand (workflow_dispatch).
+# Every pushed branch gets a run, because feature branches are often pushed
+# without a pull request and workflow_dispatch only works once this file is on
+# the default branch. Pull requests from forks are covered by pull_request.
+# A branch with an open pull request runs twice; the repo is public, so the
+# extra minutes are free.
 on:
   push:
-    branches: [main]
   pull_request:
   workflow_dispatch:
 
