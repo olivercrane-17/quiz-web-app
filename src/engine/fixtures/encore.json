@@ -1,6 +1,6 @@
 {
   "$comment": [
-    "Encore parity table (ARCHITECTURE §4.13): every row of PRD §4.2.4, parse failures, years, and the exact boundaries (21 against 20 and 20 against 21 at exactly 5%, 23 against 20 at exactly 15%, 1,045 against 1,000 reading 5% off, 2 and 5 years).",
+    "Encore parity table (ARCHITECTURE §4.13): every row of PRD §4.2.4, parse failures, years, and the exact boundaries (21 against 20 and 20 against 21 at exactly 5%, 23 against 20 at exactly 15%, 1,045 against 1,000 reading 5% off, every error under 1% reading under 1% off on the exact ratio before rounding, so 1,005 and 1,009 against 1,000 read under 1% off and 1,010 reads 1% off, 2 and 5 years).",
     "parse: what the player types, read by the engine's parseEncoreInput (SQL never sees text). Each row gives the parsed value and its preview, or the error.",
     "judge: a locked-in number against an answer. Engine (scoring/encore.ts, the encore plugin) and SQL (round_judge_encore, from SQL-5) must agree on display and band exactly; value is the float an EncoreError carries, rounded to 7 places for the comparison.",
     "values: numbers the judge receives and must refuse (round_judge_encore re-checks them; the plugin answers invalid_input).",
@@ -123,6 +123,35 @@
       "valueKind": "quantity",
       "value": 1250,
       "preview": "1,250"
+    },
+    {
+      "id": "full-width-separators",
+      "typed": "１，２５０．５",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 1250.5,
+      "preview": "1,250.5"
+    },
+    {
+      "id": "superscript-digit",
+      "typed": "10²",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_number"
+    },
+    {
+      "id": "circled-digits",
+      "typed": "①②",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_number"
+    },
+    {
+      "id": "mathematical-digits",
+      "typed": "𝟏𝟐",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_number"
     },
     {
       "id": "grouping-ignored",
@@ -470,7 +499,7 @@
       "bands": null,
       "answer": 1000,
       "guess": 1005,
-      "display": "1% off",
+      "display": "under 1% off",
       "band": "bullseye",
       "value": 0.005
     },
@@ -484,6 +513,50 @@
       "display": "under 1% off",
       "band": "bullseye",
       "value": 0.004
+    },
+    {
+      "id": "just-under-one-percent",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 1009,
+      "display": "under 1% off",
+      "band": "bullseye",
+      "value": 0.009
+    },
+    {
+      "id": "half-a-percent-below",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 995,
+      "display": "under 1% off",
+      "band": "bullseye",
+      "value": 0.0050251
+    },
+    {
+      "id": "one-percent",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 1010,
+      "display": "1% off",
+      "band": "bullseye",
+      "value": 0.01
+    },
+    {
+      "id": "just-over-one-percent-below",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 990,
+      "display": "1% off",
+      "band": "bullseye",
+      "value": 0.010101
     },
     {
       "id": "just-under-999",

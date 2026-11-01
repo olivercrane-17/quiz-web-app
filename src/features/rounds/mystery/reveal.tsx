@@ -14,7 +14,8 @@
  * guess was made "You guessed ...", the rest "Not needed"), the
  * explanation, the sources line when the item has source labels, the crowd
  * chart, Learn more, the heart and report actions, and Continue. Focus
- * lands on the answer heading (AC-DLY-18).
+ * lands on the answer heading (AC-DLY-18), and Enter there continues (PRD
+ * §3.0.3), so the keyboard never has to tab past the actions.
  */
 import { useEffect, useRef } from "react";
 
@@ -32,6 +33,7 @@ import { CrossIcon } from "@/ui/icons";
 import type { PlaySettings } from "../contracts";
 import { MYSTERY_COPY } from "./copy";
 import { CrowdChart } from "./crowd";
+import { continueOnEnter, focusTargetProps } from "./focus";
 import { ArrowRightIcon, TickIcon } from "./icons";
 import { RoundKicker } from "./kicker";
 import {
@@ -122,6 +124,7 @@ export function MysteryRevealCard({
     <section
       data-reveal="mystery"
       data-solved-on={reveal.solvedOn ?? "missed"}
+      onKeyDown={continueOnEnter(onContinue)}
       className={cx(
         "flex flex-col py-2",
         enter("card", settings.reducedMotion),
@@ -153,7 +156,7 @@ export function MysteryRevealCard({
             {copy.missed}
           </span>
         )}
-        <span className={cx("text-[15px] font-bold", TONE.ink2)}>
+        <span className={cx("text-[0.9375rem] font-bold", TONE.ink2)}>
           {solved && reveal.solvedOn !== null ? (
             <>
               {copy.solvedOn(reveal.solvedOn)} ·{" "}
@@ -179,9 +182,9 @@ export function MysteryRevealCard({
       <h1
         ref={headingRef}
         tabIndex={-1}
-        data-focus-target="reveal_heading"
+        {...focusTargetProps("reveal_heading")}
         className={cx(
-          "text-[clamp(26px,7.7vw,30px)] leading-[1.02] font-bold tracking-[-0.02em] text-balance outline-none",
+          "text-[clamp(1.625rem,7.7vw,1.875rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance outline-none",
           solved ? "mt-2.5" : "mt-0.5",
           DISPLAY_FONT,
         )}
@@ -197,16 +200,19 @@ export function MysteryRevealCard({
               key={i}
               data-clue-state={row.state}
               className={cx(
-                "grid grid-cols-[24px_minmax(0,1fr)] items-start gap-2 rounded-xl py-[7px] pr-2.5 pl-2 text-sm leading-[1.35]",
+                "grid grid-cols-[1.5rem_minmax(0,1fr)] items-start gap-2 rounded-xl py-[7px] pr-2.5 pl-2 text-sm leading-[1.35]",
                 row.state === "solved" &&
                   cx(
                     TONE.correctTint,
                     "shadow-[inset_0_0_0_1.5px_var(--kn-correct-line,var(--foreground))]",
+                    // Forced colours drop the tint and the inset line: a
+                    // double border marks the solving clue (DESIGN §11).
+                    "forced-colors:border-[3px] forced-colors:border-double forced-colors:border-[color:CanvasText]",
                   ),
                 row.state === "used" &&
                   cx(
                     TONE.surface,
-                    "shadow-[inset_0_0_0_1px_var(--kn-rule,var(--border))]",
+                    "shadow-[inset_0_0_0_1px_var(--kn-rule,var(--border))] forced-colors:border forced-colors:border-[color:CanvasText]",
                   ),
                 row.state === "spare" &&
                   cx(
@@ -219,7 +225,7 @@ export function MysteryRevealCard({
               <span
                 aria-hidden="true"
                 className={cx(
-                  "grid size-6 place-items-center rounded-full border-[1.5px] text-[13px] font-bold",
+                  "grid size-6 place-items-center rounded-full border-[1.5px] text-[0.8125rem] font-bold",
                   DISPLAY_FONT,
                   row.state === "solved"
                     ? cx(TONE.correctFill, TONE.correctBorder)

@@ -4,40 +4,59 @@
  * Extension point (ARCHITECTURE §2.3, §4.4.3): the Encore round (PRD §3.1.5,
  * §4.2; DESIGN §6.5, §12.2), registered in ../registry.tsx.
  *
- * The question, then one number field with its unit beside it, the parsed
- * preview beneath ("You're answering 1,250 km", grouped in the preview and
- * never in the field, so the caret never jumps), inline errors, the two
- * band hints, and Lock in. The field asks for the numeric keypad
- * (`inputmode` numeric, or decimal when decimals are allowed), and Enter
- * locks in too. Locking in sends the parsed value once; the guess can't
- * change afterwards.
+ * The question, then one number field with its unit beside it, one polite
+ * line beneath that shows the parsed preview ("You're answering 1,250 km",
+ * grouped in the preview and never in the field, so the caret never jumps)
+ * or, in its place, the inline error, so a screen reader hears whichever
+ * is current; the two band hints, and Lock in. The field asks for the
+ * numeric keypad (`inputmode` numeric, or decimal when decimals are
+ * allowed), and Enter locks in too. Locking in sends the parsed value
+ * once; the guess can't change afterwards. Focusing the field reads the
+ * question with it, so a desktop pointer (where the field takes focus on
+ * arrival) still hears what is asked.
+ *
+ * With the keypad open (tracked through `visualViewport`), Lock in sits
+ * right under the preview, above the hints, and the page scrolls so the
+ * field and Lock in clear the keypad (DESIGN §6.5, §10.3): numeric keypads
+ * have no return key. Pressing a button then keeps focus in the field
+ * until the click lands, so the keypad doesn't close under the finger.
+ *
+ * The hints, the number line and its text name the Encore's own bands
+ * (`encoreBandsOf`), or the defaults for its kind.
  *
  * On the result the hints give way to the result card: "Your guess 1,200 km
  * · Answer 1,250 km · 4% off", the band chip, the number line, the
  * explanation, the crowd line once enough have answered, the heart and
  * report actions, Learn more, and "See your results". Focus lands on the
- * result line (AC-DLY-18). A voided Encore shows the withdrawn card.
+ * result line (AC-DLY-18), and Enter there continues (PRD §3.0.3). A voided
+ * Encore shows the withdrawn card.
  */
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
 import { TUNABLES } from "@/config/tunables";
 import { formatEncoreAmount, parseEncoreInput } from "@/engine/encore";
-import type {
-  EncoreClient,
-  EncoreOpen,
-  EncoreReveal,
+import {
+  encoreBandsOf,
+  type EncoreClient,
+  type EncoreOpen,
+  type EncoreReveal,
 } from "@/engine/rounds/encore";
-import { bandsFor } from "@/engine/scoring/encore";
 import { analyticsMode } from "@/features/analytics/track";
 import { RevealActions } from "@/features/reports/reveal-actions";
 import { HAPTICS, vibrate } from "@/platform/haptics";
 import { playEffect } from "@/platform/sound";
+import { announce } from "@/ui/announce";
 import { Button } from "@/ui/button";
 import { cx } from "@/ui/cx";
 import { CrossIcon } from "@/ui/icons";
 
 import type { RoundComponentProps } from "../contracts";
 import { MYSTERY_COPY } from "../mystery/copy";
+import {
+  continueOnEnter,
+  focusTargetProps,
+  keepFocusOnControls,
+} from "../mystery/focus";
 import { TargetIcon } from "../mystery/icons";
 import {
   LearnMoreLink,
@@ -46,6 +65,7 @@ import {
   useFocusOnMount,
 } from "../mystery/reveal-parts";
 import { DISPLAY_FONT, TONE, enter } from "../mystery/tones";
+import { keepInView, useOnScreenKeyboard } from "../mystery/use-keyboard";
 import { ENCORE_COPY, encoreAnnouncementText, parseErrorText } from "./copy";
 import { NumberLine } from "./number-line";
 
@@ -115,18 +135,23 @@ function EncorePlay({
   const questionId = `${ids}-question`;
   const headingRef = useRef<HTMLHeadingElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fieldRef = useRef<HTMLDivElement>(null);
+  const lockInRef = useRef<HTMLButtonElement>(null);
 
   const [raw, setRaw] = useState("");
   const [sent, setSent] = useState<number | null>(null);
+  const [fieldFocused, setFieldFocused] = useState(false);
   const busy = status === "judging" || status === "checking";
   const offline = status === "offline";
   const locked = result !== null || busy;
+  const keyboard = useOnScreenKeyboard(fieldFocused && result === null);
 
   const rules = { decimals: encore.decimals, valueKind: encore.valueKind };
   const parsed = parseEncoreInput(raw, rules);
   const typed = raw.trim() !== "";
   const invalid = typed && !parsed.ok;
-  const bands = bandsFor(encore.valueKind, null);
+  const previewing = parsed.ok && result === null;
+  const bands = encoreBandsOf(encore);
   const unitWord = encore.unitLabel;
 
   // Arrival: the field on a desktop pointer, else the question. Once only:
@@ -140,6 +165,19 @@ function EncorePlay({
     else headingRef.current?.focus();
   }, [result]);
 
+  // With the keypad up, the field and Lock in sit between the top edge and
+  // the keypad (DESIGN §6.5: Lock in just above the keypad).
+  useLayoutEffect(() => {
+    const field = fieldRef.current;
+    const lock = lockInRef.current;
+    if (!keyboard.open || field === null || lock === null) return;
+    keepInView(
+      keyboard,
+      lock.getBoundingClientRect().bottom,
+      field.getBoundingClientRect().top,
+    );
+  }, [keyboard]);
+
   function lockIn() {
     if (!parsed.ok || locked || offline) return;
     setSent(parsed.value);
@@ -149,16 +187,47 @@ function EncorePlay({
   // What the field shows once locked in: the value sent, or after a reload the reveal's guess.
   const shownValue = result !== null && raw === "" ? String(result.guess) : raw;
 
+  const hints = (
+    <div
+      role="group"
+      aria-label={ENCORE_COPY.hints.group}
+      className="mt-3 flex flex-wrap gap-2"
+    >
+      {/* Ink on sunken: the greybox's secondary ink is too light on it (4.34:1). */}
+      <span
+        className={cx(
+          "inline-flex items-center gap-1.5 rounded-full py-[5px] pr-[11px] pl-2 text-[0.8125rem] font-bold forced-colors:border forced-colors:border-[color:CanvasText]",
+          TONE.sunken,
+          TONE.ink,
+        )}
+      >
+        <TargetIcon size={16} />
+        {ENCORE_COPY.hints.bullseye(bands.bullseye, encore.valueKind)}
+      </span>
+      <span
+        className={cx(
+          "inline-flex items-center rounded-full px-[11px] py-[5px] text-[0.8125rem] font-bold forced-colors:border forced-colors:border-[color:CanvasText]",
+          TONE.sunken,
+          TONE.ink,
+        )}
+      >
+        {ENCORE_COPY.hints.close(bands.close, encore.valueKind)}
+      </span>
+    </div>
+  );
+
   return (
     <section
       aria-labelledby={questionId}
       data-round="encore"
+      data-keyboard={keyboard.open ? "open" : undefined}
       data-motion={settings.reducedMotion ? "reduce" : undefined}
+      onMouseDown={keyboard.open ? keepFocusOnControls : undefined}
       className="flex flex-col py-2"
     >
       <p
         className={cx(
-          "flex items-center gap-1.5 text-[13px] font-bold tracking-[0.01em]",
+          "flex items-center gap-1.5 text-[0.8125rem] font-bold tracking-[0.01em]",
           TONE.ink3,
         )}
       >
@@ -169,18 +238,19 @@ function EncorePlay({
         id={questionId}
         ref={headingRef}
         tabIndex={-1}
-        data-focus-target="round_heading"
-        className="mt-2 text-[clamp(22px,6.2vw,25px)] leading-[1.28] font-bold text-balance outline-none"
+        {...focusTargetProps("round_heading")}
+        className="mt-2 text-[clamp(1.375rem,6.2vw,1.5625rem)] leading-[1.28] font-bold text-balance outline-none"
       >
         {encore.question}
       </h1>
-      <p className={cx("mt-2 text-[15px] font-semibold", TONE.ink2)}>
+      <p className={cx("mt-2 text-[0.9375rem] font-semibold", TONE.ink2)}>
         {ENCORE_COPY.tiebreak}
       </p>
 
       <div
+        ref={fieldRef}
         className={cx(
-          "relative mt-4 flex h-[84px] items-center gap-2.5 overflow-hidden rounded-2xl border-2 px-4 pb-3.5 outline-offset-2 has-[input:focus-visible]:outline-[3px] has-[input:focus-visible]:outline-[color:color-mix(in_oklab,var(--kn-play-accent,var(--foreground))_50%,transparent)]",
+          "relative mt-4 flex h-[5.25rem] items-center gap-2.5 overflow-hidden rounded-2xl border-2 px-4 pb-3.5 outline-offset-2 has-[input:focus-visible]:outline-[3px] has-[input:focus-visible]:outline-[color:color-mix(in_oklab,var(--kn-play-accent,var(--foreground))_50%,transparent)]",
           TONE.surface,
           TONE.inkBorder,
         )}
@@ -201,20 +271,26 @@ function EncorePlay({
           autoCorrect="off"
           spellCheck={false}
           value={shownValue}
-          readOnly={locked}
+          readOnly={locked || offline}
           aria-disabled={offline || undefined}
           aria-invalid={invalid || undefined}
-          aria-describedby={
-            [
-              unitWord === "" ? null : unitId,
-              parsed.ok && result === null ? previewId : null,
-              invalid ? errorId : null,
-            ]
-              .filter((part) => part !== null)
-              .join(" ") || undefined
-          }
+          aria-describedby={[
+            // The question first: focusing the field reads what is asked.
+            questionId,
+            unitWord === "" ? null : unitId,
+            previewing ? previewId : null,
+            invalid ? errorId : null,
+          ]
+            .filter((part) => part !== null)
+            .join(" ")}
           onChange={(event) => {
             setRaw(event.target.value);
+          }}
+          onFocus={() => {
+            setFieldFocused(true);
+          }}
+          onBlur={() => {
+            setFieldFocused(false);
           }}
           onKeyDown={(event) => {
             if (event.key === "Enter" && !event.nativeEvent.isComposing) {
@@ -223,7 +299,7 @@ function EncorePlay({
             }
           }}
           className={cx(
-            "mt-4 min-w-0 flex-1 bg-transparent text-[44px] leading-none font-bold tracking-[-0.01em] tabular-nums outline-none",
+            "mt-4 min-w-0 flex-1 bg-transparent text-[2.75rem] leading-none font-bold tracking-[-0.01em] tabular-nums outline-none",
             DISPLAY_FONT,
             TONE.ink,
           )}
@@ -243,16 +319,25 @@ function EncorePlay({
         />
       </div>
 
+      {/* One polite line: the preview, or the error that replaces it. */}
       <p
-        id={previewId}
         aria-live="polite"
-        className={cx(
-          "mt-2.5 min-h-[1.4em] text-[15px] font-semibold",
-          TONE.ink2,
-        )}
+        className="mt-2.5 min-h-[1.4em] text-[0.9375rem] font-semibold"
       >
-        {parsed.ok && result === null ? (
-          <>
+        {invalid && !parsed.ok ? (
+          <span
+            id={errorId}
+            data-encore-error={parsed.error}
+            className={cx(
+              "inline-flex items-center gap-1.5",
+              TONE.incorrectText,
+            )}
+          >
+            <CrossIcon size={16} />
+            {parseErrorText(parsed.error, encore.decimals)}
+          </span>
+        ) : previewing && parsed.ok ? (
+          <span id={previewId} className={TONE.ink2}>
             {ENCORE_COPY.previewLead}{" "}
             <strong className={TONE.ink}>
               {formatEncoreAmount(
@@ -261,50 +346,13 @@ function EncorePlay({
                 encore.valueKind,
               )}
             </strong>
-          </>
+          </span>
         ) : null}
       </p>
-      {invalid && !parsed.ok ? (
-        <p
-          id={errorId}
-          data-encore-error={parsed.error}
-          className={cx(
-            "flex items-center gap-1.5 text-[15px] font-semibold",
-            TONE.incorrectText,
-          )}
-        >
-          <CrossIcon size={16} />
-          {parseErrorText(parsed.error, encore.decimals)}
-        </p>
-      ) : null}
 
       {result === null ? (
         <>
-          <div
-            role="group"
-            aria-label={ENCORE_COPY.hints.group}
-            className="mt-3 flex flex-wrap gap-2"
-          >
-            <span
-              className={cx(
-                "inline-flex items-center gap-1.5 rounded-full py-[5px] pr-[11px] pl-2 text-[13px] font-bold",
-                TONE.sunken,
-                TONE.ink2,
-              )}
-            >
-              <TargetIcon size={16} />
-              {ENCORE_COPY.hints.bullseye(bands.bullseye, encore.valueKind)}
-            </span>
-            <span
-              className={cx(
-                "inline-flex items-center rounded-full px-[11px] py-[5px] text-[13px] font-bold",
-                TONE.sunken,
-                TONE.ink2,
-              )}
-            >
-              {ENCORE_COPY.hints.close(bands.close, encore.valueKind)}
-            </span>
-          </div>
+          {keyboard.open ? null : hints}
           <EncoreStateLine
             status={status}
             error={error}
@@ -321,6 +369,7 @@ function EncorePlay({
             }
           />
           <Button
+            ref={lockInRef}
             variant="primary"
             block
             className="mt-5"
@@ -332,6 +381,8 @@ function EncorePlay({
           >
             {ENCORE_COPY.lockIn}
           </Button>
+          {/* With the keypad up the hints wait under Lock in. */}
+          {keyboard.open ? hints : null}
         </>
       ) : (
         <EncoreResult
@@ -368,12 +419,18 @@ function EncoreStateLine({
     text = copy.lockIn;
     retry = true;
   }
+  // A failed lock-in is spoken as it appears (DESIGN §6.9). The controller
+  // announces a lost connection itself, and "Checking…" stays quiet.
+  const spoken = retry ? text : null;
+  useEffect(() => {
+    if (spoken !== null) announce(spoken);
+  }, [spoken, error]);
   if (text === null) return null;
   return (
     <div
       data-round-error={error?.code ?? status}
       className={cx(
-        "mt-3 flex flex-wrap items-center gap-x-3 text-[15px] font-semibold",
+        "mt-3 flex flex-wrap items-center gap-x-3 text-[0.9375rem] font-semibold",
         status === "checking" ? TONE.ink2 : TONE.incorrectText,
       )}
     >
@@ -427,7 +484,7 @@ function EncoreResult({
   }, [sound, haptics, result.band]);
 
   return (
-    <>
+    <div data-encore-reveal="" onKeyDown={continueOnEnter(onContinue)}>
       <div
         data-encore-result={result.band ?? "none"}
         className={cx(
@@ -441,8 +498,8 @@ function EncoreResult({
         <h2
           ref={headingRef}
           tabIndex={-1}
-          data-focus-target="reveal_heading"
-          className="text-[17px] leading-snug font-bold outline-none"
+          {...focusTargetProps("reveal_heading")}
+          className="text-[1.0625rem] leading-snug font-bold outline-none"
         >
           {ENCORE_COPY.result.line(guess, answer, result.error.display)}
         </h2>
@@ -451,7 +508,7 @@ function EncoreResult({
             <span
               data-band-chip={result.band}
               className={cx(
-                "inline-flex items-center gap-1.5 rounded-full py-[3px] pr-2.5 pl-[7px] text-[13px] font-extrabold",
+                "inline-flex items-center gap-1.5 rounded-full py-[3px] pr-2.5 pl-[7px] text-[0.8125rem] font-extrabold forced-colors:border forced-colors:border-[color:CanvasText]",
                 result.band === "bullseye"
                   ? cx(
                       TONE.correctTint,
@@ -473,7 +530,7 @@ function EncoreResult({
           guess={result.guess}
           answer={result.answer}
           median={crowd?.medianGuess ?? null}
-          bands={bandsFor(kind, null)}
+          bands={encoreBandsOf(encore)}
           unitShort={result.unitShort}
           decimals={encore.decimals}
           reducedMotion={reducedMotion}
@@ -486,7 +543,10 @@ function EncoreResult({
           format={MYSTERY_COPY.reveal.sources}
         />
         {crowd === null ? null : (
-          <p className={cx("mt-2 text-[15px]", TONE.ink2)} data-crowd="encore">
+          <p
+            className={cx("mt-2 text-[0.9375rem]", TONE.ink2)}
+            data-crowd="encore"
+          >
             {ENCORE_COPY.result.crowd(
               formatEncoreAmount(crowd.medianGuess, result.unitShort, kind),
               crowd.bullseyeShare,
@@ -512,6 +572,6 @@ function EncoreResult({
       >
         {continueLabel}
       </Button>
-    </>
+    </div>
   );
 }

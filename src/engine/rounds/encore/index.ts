@@ -19,6 +19,14 @@
  *
  * A void that lands mid-round answers with a withdrawn reveal, which the
  * client half applies like any resolution (§8.8).
+ *
+ * **Bands.** The open carries the Encore's effective bands (its own, else
+ * the defaults), which aren't secret: the hints, the number line and its
+ * text equivalent name them (AC-DLY-35). ARCHITECTURE §3.3's encore
+ * `RoundOpen` has no field for them yet, so until the contract gains
+ * `bands` the open is typed `EncoreOpenWithBands` here, and the client
+ * reads them through `encoreBandsOf`, which falls back to the defaults for
+ * an open from a backend that doesn't send them.
  */
 import type { EncoreContent } from "../../types/content.ts";
 import type { EpochMs } from "../../types/ids.ts";
@@ -30,7 +38,11 @@ import type {
 } from "../../types/rounds.ts";
 import { formatEncoreAmount } from "../../encore/format.ts";
 import { checkEncoreValue } from "../../encore/value.ts";
-import { judgeEncoreGuess } from "../../scoring/encore.ts";
+import {
+  bandsFor,
+  judgeEncoreGuess,
+  type EncoreBands,
+} from "../../scoring/encore.ts";
 import type {
   Announcement,
   IntentCheck,
@@ -57,11 +69,37 @@ export interface EncoreJudge {
   result: { guess: number; at: EpochMs } | null;
 }
 
+/** An open with the Encore's effective bands (pending `bands` in ARCHITECTURE §3.3). */
+export type EncoreOpenWithBands = EncoreOpen & { bands: EncoreBands };
+
+function isBands(value: unknown): value is EncoreBands {
+  if (typeof value !== "object" || value === null) return false;
+  const { bullseye, close } = value as Partial<EncoreBands>;
+  return (
+    typeof bullseye === "number" &&
+    typeof close === "number" &&
+    Number.isFinite(bullseye) &&
+    Number.isFinite(close) &&
+    bullseye >= 0 &&
+    bullseye <= close
+  );
+}
+
+/**
+ * The bands an open Encore is judged by: the ones it carries, else the
+ * defaults for its kind (an open from a backend that doesn't send them).
+ */
+export function encoreBandsOf(open: EncoreOpen): EncoreBands {
+  const carried = (open as Partial<EncoreOpenWithBands>).bands;
+  return isBands(carried) ? carried : bandsFor(open.valueKind, null);
+}
+
 /** What the player sees while the Encore is open. */
 export function encoreOpenOf(
   content: EncoreContent,
   judge: EncoreJudge,
-): EncoreOpen {
+): EncoreOpenWithBands {
+  const bands = bandsFor(content.valueKind, content.bands);
   return {
     family: "encore",
     index: judge.index,
@@ -72,6 +110,7 @@ export function encoreOpenOf(
     valueKind: content.valueKind,
     decimals: content.decimals,
     issuedAt: judge.issuedAt,
+    bands: { bullseye: bands.bullseye, close: bands.close },
   };
 }
 

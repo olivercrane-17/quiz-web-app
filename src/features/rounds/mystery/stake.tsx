@@ -11,6 +11,10 @@
  *
  * When the worth drops, the 4 is struck and the disc slides one step with
  * a small overshoot (DESIGN §7.4); under reduced motion the disc jumps.
+ *
+ * Steps are 2rem, and 25 px under 360 px wide (DESIGN §10.2): the cells,
+ * the disc and its slide share one `--stake-step`. Under forced colours the
+ * disc's fill drops out, so a CanvasText ring marks the current value.
  */
 import { useId } from "react";
 
@@ -42,15 +46,15 @@ export function StakeIndicator({
         aria-label={MYSTERY_COPY.stake.name(worth)}
         aria-describedby={descriptionId}
         data-stake={worth}
-        className="relative flex items-center"
+        className="relative flex items-center [--stake-step:2rem] max-[359px]:[--stake-step:1.5625rem]"
       >
         {/* The disc behind the current value, sliding one step per clue. */}
         <span
           aria-hidden="true"
           data-stake-marker=""
-          style={{ translate: `calc(${String(step)} * 2rem) 0` }}
+          style={{ translate: `calc(${String(step)} * var(--stake-step)) 0` }}
           className={cx(
-            "absolute top-0 left-0 size-8 rounded-full shadow-[0_2px_0_0_var(--kn-accent-ledge,color-mix(in_oklab,var(--foreground)_35%,transparent))]",
+            "absolute top-0 left-0 size-[var(--stake-step)] rounded-full shadow-[0_2px_0_0_var(--kn-accent-ledge,color-mix(in_oklab,var(--foreground)_35%,transparent))] forced-colors:border-2 forced-colors:border-[color:CanvasText]",
             TONE.accentFill,
             !reducedMotion && SLIDE,
           )}
@@ -65,10 +69,12 @@ export function StakeIndicator({
               data-value={value}
               data-state={state}
               className={cx(
-                "relative z-[1] grid size-8 place-items-center text-[17px] leading-none font-bold tabular-nums transition-colors duration-150",
+                "relative z-[1] grid size-[var(--stake-step)] place-items-center leading-none font-bold tabular-nums transition-colors duration-150",
                 DISPLAY_FONT,
-                state === "now" &&
-                  "text-[20px] text-[color:var(--kn-on-play-accent,var(--background))]",
+                // One font size per width each, so no two utilities compete.
+                state === "now"
+                  ? "text-[1.25rem] text-[color:var(--kn-on-play-accent,var(--background))] max-[359px]:text-[1.0625rem]"
+                  : "text-[1.0625rem] max-[359px]:text-[0.9375rem]",
                 state === "spent" &&
                   cx(
                     "line-through decoration-[color:var(--kn-ink-2,var(--muted-foreground))] decoration-2",

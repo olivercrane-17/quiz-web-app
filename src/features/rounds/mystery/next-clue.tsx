@@ -12,13 +12,20 @@
  *   worth 2" and clue 3 "Last clue · then worth 1".
  *
  * The accessible name is the whole label, separator included, so it holds
- * the visible text (WCAG 2.5.3). While the keyboard is open the button
- * shrinks to sit beside the field (`compact`).
+ * the visible text (WCAG 2.5.3). At large text sizes the worth wraps under
+ * the action rather than running off the screen (PRD §3.12.4).
+ *
+ * While the keyboard is open the button sits beside the field (`compact`):
+ * one line, "Next clue" or "Last clue", with the rest of the label kept for
+ * screen readers, so the field keeps room for the name. Pressing it then
+ * keeps focus in the field until the click lands: a blur would close the
+ * keyboard and move the button back to the ladder before the click.
  */
 import { Button } from "@/ui/button";
 import { cx } from "@/ui/cx";
 
 import { MYSTERY_COPY } from "./copy";
+import { keepFieldFocus } from "./focus";
 import { NextClueIcon } from "./icons";
 import { TONE } from "./tones";
 
@@ -65,7 +72,34 @@ export function NextClueButton({
   compact = false,
   onPress,
 }: NextClueButtonProps) {
-  const thenWorth = MYSTERY_COPY.nextClue.thenWorth(label.worth);
+  const copy = MYSTERY_COPY.nextClue;
+  const thenWorth = copy.thenWorth(label.worth);
+  if (compact) {
+    // "Next clue" or "Last clue" shows; the rest is read, so the name stays whole.
+    const short = label.action.startsWith(copy.last) ? copy.last : copy.next;
+    return (
+      <Button
+        variant="secondary"
+        data-next-clue=""
+        disabled={disabled}
+        focusableWhenDisabled
+        busy={busy}
+        onMouseDown={keepFieldFocus}
+        onClick={onPress}
+        // The marked utilities override the variant's own (cx doesn't merge them).
+        className={cx(
+          "min-h-11! shrink-0 rounded-[14px]! px-3! text-sm",
+          TONE.surface,
+          TONE.ledge,
+        )}
+      >
+        <span>{short}</span>{" "}
+        <span className="sr-only">
+          {`${label.action.slice(short.length)} · ${thenWorth}`.trim()}
+        </span>
+      </Button>
+    );
+  }
   return (
     <Button
       variant="secondary"
@@ -75,25 +109,19 @@ export function NextClueButton({
       busy={busy}
       onClick={onPress}
       className={cx(
-        "rounded-[14px] text-base",
+        "min-h-12 w-full flex-wrap justify-between gap-x-3 gap-y-0.5 rounded-[14px]! px-3! py-1.5 text-left text-base whitespace-normal!",
         TONE.surface,
         TONE.ledge,
-        compact
-          ? "min-h-11 shrink-0 flex-col gap-0 px-3 py-1 text-sm leading-tight"
-          : "min-h-12 w-full justify-between px-3",
       )}
     >
       <span className="inline-flex items-center gap-2">
-        {compact ? null : <NextClueIcon size={20} />}
+        <NextClueIcon size={20} />
         {label.action}
       </span>{" "}
       <span className="sr-only">·</span>{" "}
+      {/* One piece that drops under the action when the two can't share a line. */}
       <span
-        className={cx(
-          "font-semibold whitespace-nowrap",
-          compact ? "text-xs" : "text-sm",
-          TONE.ink2,
-        )}
+        className={cx("text-sm font-semibold whitespace-nowrap", TONE.ink2)}
       >
         {thenWorth}
       </span>

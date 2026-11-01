@@ -7,7 +7,12 @@ import { parseItemId, type ItemId } from "../../types/ids.ts";
 import type { RoundMeta } from "../../types/rounds.ts";
 import { PLUGINS } from "../index.ts";
 import type { JudgeContext } from "../types.ts";
-import { encorePlugin, encoreVerdictOf } from "./index.ts";
+import {
+  encoreBandsOf,
+  encorePlugin,
+  encoreVerdictOf,
+  type EncoreOpen,
+} from "./index.ts";
 
 function item(text: string): ItemId {
   const id = parseItemId(text);
@@ -82,9 +87,38 @@ describe("the encore plugin", () => {
       valueKind: "quantity",
       decimals: 0,
       issuedAt: 9000,
+      bands: { bullseye: 0.05, close: 0.15 },
     });
     expect(JSON.stringify(open)).not.toContain("1250");
     expect(judge).toEqual({ index: 3, issuedAt: 9000, result: null });
+  });
+
+  it("carries the Encore's own bands on the open, which the hints and the number line name", () => {
+    const own = encore({ bands: { bullseye: 0.02, close: 0.1 } });
+    const { open } = encorePlugin.open(own, meta, ctx);
+    expect(encoreBandsOf(open)).toEqual({ bullseye: 0.02, close: 0.1 });
+    const year = encorePlugin.open(
+      encore({ valueKind: "year", answer: 1969 }),
+      meta,
+      ctx,
+    ).open;
+    expect(encoreBandsOf(year)).toEqual({ bullseye: 2, close: 5 });
+    // An open from a backend that doesn't send bands reads the defaults.
+    const bare: EncoreOpen = {
+      family: "encore",
+      index: 3,
+      question: "How long?",
+      unit: "kilometres",
+      unitShort: "km",
+      unitLabel: "km",
+      valueKind: "quantity",
+      decimals: 0,
+      issuedAt: 0,
+    };
+    expect(encoreBandsOf(bare)).toEqual({ bullseye: 0.05, close: 0.15 });
+    expect(
+      encoreBandsOf({ ...bare, bands: { bullseye: "x" } } as EncoreOpen),
+    ).toEqual({ bullseye: 0.05, close: 0.15 });
   });
 
   it("resolves one lock-in with the error, band and display (PRD §4.2.4)", () => {

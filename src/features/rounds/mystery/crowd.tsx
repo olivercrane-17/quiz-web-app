@@ -31,7 +31,7 @@ export function CrowdChart({ crowd, solvedOn, minN }: CrowdChartProps) {
   const copy = MYSTERY_COPY.crowd;
   if (crowd.eligible < minN) {
     return (
-      <p className={cx("mt-3 text-[15px]", TONE.ink2)} data-crowd="cold">
+      <p className={cx("mt-3 text-[0.9375rem]", TONE.ink2)} data-crowd="cold">
         {copy.coldStart(crowd.eligible)}
       </p>
     );
@@ -63,7 +63,7 @@ export function CrowdChart({ crowd, solvedOn, minN }: CrowdChartProps) {
       </figcaption>
       <div
         aria-hidden="true"
-        className="mt-1.5 grid h-[88px] grid-cols-5 items-end gap-2"
+        className="mt-1.5 grid h-[5.5rem] grid-cols-5 items-end gap-2"
       >
         {bars.map((bar) => (
           <div
@@ -81,11 +81,13 @@ export function CrowdChart({ crowd, solvedOn, minN }: CrowdChartProps) {
                   height: `${String(Math.max(4, (bar.share / tallest) * 100))}%`,
                 }}
                 className={cx(
-                  "block w-full rounded-t-[3px] rounded-b-[1px]",
+                  // Forced colours drop fills: each bar keeps a CanvasText
+                  // outline, and the player's own is filled with Highlight.
+                  "block w-full rounded-t-[3px] rounded-b-[1px] forced-colors:border forced-colors:border-[color:CanvasText]",
                   bar.you
                     ? cx(
                         TONE.chartYou,
-                        "shadow-[inset_0_0_0_2px_var(--kn-chart-you-line,var(--foreground))]",
+                        "shadow-[inset_0_0_0_2px_var(--kn-chart-you-line,var(--foreground))] forced-colors:bg-[color:Highlight] forced-colors:forced-color-adjust-none",
                       )
                     : TONE.chartBar,
                 )}
@@ -126,7 +128,7 @@ export function CrowdChart({ crowd, solvedOn, minN }: CrowdChartProps) {
         </table>
       </div>
       {crowd.topWrongGuess === null ? null : (
-        <p className={cx("mt-1.5 text-[13px] font-semibold", TONE.ink2)}>
+        <p className={cx("mt-1.5 text-[0.8125rem] font-semibold", TONE.ink2)}>
           {copy.topWrongGuess(crowd.topWrongGuess.display)}
         </p>
       )}

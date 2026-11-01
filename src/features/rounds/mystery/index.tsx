@@ -15,16 +15,22 @@
  * stays in the field, so the keyboard stays up and the status region reads
  * the new clue; after Next clue or a pick it moves to the new clue's
  * heading, because the button pressed is gone. Every focus target carries
- * `data-focus-target` (`round_heading`, `clue_heading`, `reveal_heading`),
+ * `focusTargetProps` (`round_heading`, `clue_heading`, `reveal_heading`),
  * which is where the run machine's focus commands land: `clue_heading`
- * marks the field after a wrong guess and the clue otherwise.
+ * marks the field after a wrong guess and the clue otherwise. While the
+ * on-screen keyboard is open, pressing any of the round's buttons keeps
+ * focus in the field until the click lands, because a blur closes the
+ * keyboard and reflows the compact layout under the finger.
  *
  * The component renders what the run machine holds and sends intents back;
  * it never calls the backend. Announcements of verdicts come from the
- * controller (`mysteryAnnouncementText` words them); the round only speaks
- * its own suggestion counts.
+ * controller (`mysteryAnnouncementText` words them); the round speaks its
+ * own suggestion counts and the error under the field (DESIGN §6.9). The
+ * offline line is left to the controller, which announces the lost
+ * connection assertively.
  */
 import {
+  useCallback,
   useEffect,
   useId,
   useMemo,
@@ -39,12 +45,14 @@ import { worthOnClue } from "@/engine/scoring/mystery";
 import type { EntityId, RoundIntent } from "@/engine/types";
 import { HAPTICS, vibrate } from "@/platform/haptics";
 import { playEffect } from "@/platform/sound";
+import { announce } from "@/ui/announce";
 import { Button } from "@/ui/button";
 import { cx } from "@/ui/cx";
 
 import type { RoundComponentProps } from "../contracts";
 import { GuessCombobox } from "./combobox";
 import { MYSTERY_COPY } from "./copy";
+import { focusTargetProps, keepFocusOnControls } from "./focus";
 import { categoryName, roundLabel, RoundKicker } from "./kicker";
 import { ClueLadder } from "./ladder";
 import { NextClueButton, nextClueLabel } from "./next-clue";
@@ -175,15 +183,21 @@ function MysteryPlay({
     settings,
   ]);
 
-  // With the keyboard up, keep the field and three whole rows above it.
-  const fieldGroupRef = useRef<HTMLDivElement>(null);
+  // With the keyboard up the combobox keeps the field, three whole rows and
+  // the top of the current clue's card in view.
+  const currentClueCard = useCallback(
+    () =>
+      clueHeadingRef.current?.closest<HTMLElement>("[data-clue-card]") ?? null,
+    [],
+  );
+
+  // The error under the field is spoken as it appears (DESIGN §6.9). The
+  // controller announces a lost connection itself, assertively.
+  const message = errorMessage(status, error);
+  const spoken = status === "offline" ? null : (message?.text ?? null);
   useEffect(() => {
-    const group = fieldGroupRef.current;
-    if (!keyboard.open || group === null) return;
-    const overflow =
-      group.getBoundingClientRect().top + 58 + 3 * 48 + 16 - keyboard.bottom;
-    if (overflow > 0) window.scrollBy({ top: overflow, behavior: "instant" });
-  }, [keyboard.open, keyboard.bottom, open.clue]);
+    if (spoken !== null) announce(spoken);
+  }, [spoken, error]);
 
   // Keys 1 to 4 pick an option while focus is inside the round (PRD §3.0.3).
   function onKeyDown(event: KeyboardEvent<HTMLElement>) {
@@ -211,7 +225,6 @@ function MysteryPlay({
       />
     );
 
-  const message = errorMessage(status, error);
   const category = categoryName(meta);
   const wrongGuessFocus = lastIntent?.kind === "guess";
 
@@ -223,19 +236,22 @@ function MysteryPlay({
       data-keyboard={keyboard.open ? "open" : undefined}
       data-motion={settings.reducedMotion ? "reduce" : undefined}
       onKeyDown={onKeyDown}
+      onMouseDown={keyboard.open ? keepFocusOnControls : undefined}
       className="flex flex-col gap-2 py-2"
     >
-      <div className="flex items-end justify-between gap-2.5">
-        <div className="min-w-0">
+      {/* At large text sizes the worth scale drops under the title instead of
+          squeezing it: 11rem is the title's share before anything wraps. */}
+      <div className="flex flex-wrap items-end justify-between gap-x-2.5 gap-y-2">
+        <div className="min-w-0 flex-[1_1_11rem]">
           <RoundKicker meta={meta} />
           <div className="mt-0.5 flex flex-wrap items-center gap-2">
             <h1
               id={titleId}
               ref={titleRef}
               tabIndex={-1}
-              data-focus-target="round_heading"
+              {...focusTargetProps("round_heading")}
               className={cx(
-                "text-[clamp(24px,6.9vw,27px)] leading-[1.08] font-semibold tracking-[-0.01em] outline-none",
+                "text-[clamp(1.5rem,6.9vw,1.6875rem)] leading-[1.08] font-semibold tracking-[-0.01em] outline-none",
                 DISPLAY_FONT,
               )}
             >
@@ -245,7 +261,7 @@ function MysteryPlay({
             {category === null ? null : (
               <span
                 className={cx(
-                  "inline-flex min-h-7 items-center rounded-full border-[1.5px] px-[11px] text-[13px] font-bold whitespace-nowrap",
+                  "inline-flex min-h-7 items-center rounded-full border-[1.5px] px-[11px] text-[0.8125rem] font-bold whitespace-nowrap",
                   TONE.strongBorder,
                   TONE.surface,
                 )}
@@ -255,7 +271,11 @@ function MysteryPlay({
             )}
           </div>
         </div>
-        <StakeIndicator worth={worth} reducedMotion={settings.reducedMotion} />
+        <StakeIndicator
+          worth={worth}
+          reducedMotion={settings.reducedMotion}
+          className="ml-auto"
+        />
       </div>
 
       <ClueLadder
@@ -285,13 +305,13 @@ function MysteryPlay({
             }}
           />
           {busy && status === "checking" ? (
-            <p className={cx("text-[15px] font-semibold", TONE.ink2)}>
+            <p className={cx("text-[0.9375rem] font-semibold", TONE.ink2)}>
               {MYSTERY_COPY.checking}
             </p>
           ) : null}
         </>
       ) : (
-        <div ref={fieldGroupRef} className="mt-1">
+        <div className="mt-1">
           <GuessCombobox
             answerType={meta.answerType}
             list={list}
@@ -303,12 +323,19 @@ function MysteryPlay({
             keyboard={keyboard}
             focusTarget={wrongGuessFocus}
             beside={keyboard.open ? nextClue : undefined}
+            keepVisible={currentClueCard}
             inputRef={inputRef}
             onGuess={(entityId) => {
               send({ family: "mystery", kind: "guess", entityId });
             }}
             onFocusChange={setFieldFocused}
           />
+          {/* Guess keeps its label while busy, so the field keeps its width. */}
+          {status === "checking" && lastIntent?.kind === "guess" ? (
+            <p className={cx("mt-2 text-[0.9375rem] font-semibold", TONE.ink2)}>
+              {MYSTERY_COPY.checking}
+            </p>
+          ) : null}
         </div>
       )}
 
@@ -316,7 +343,7 @@ function MysteryPlay({
         <div
           data-round-error={error?.code ?? status}
           className={cx(
-            "flex flex-wrap items-center gap-x-3 gap-y-1 text-[15px] font-semibold",
+            "flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.9375rem] font-semibold",
             TONE.incorrectText,
           )}
         >

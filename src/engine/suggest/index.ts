@@ -7,14 +7,25 @@
  *    used for every entity's `keys` (the name first, then the aliases).
  * 2. **Match**: the query is a prefix of a key, or of a key from one of its
  *    word starts. From 5 characters, a key or word also matches when it
- *    starts with a string within one edit of the query.
+ *    starts with a string within one edit of the query. Two more keys sit
+ *    at the canonical-name tier:
+ *    - the normalized display, when it adds a qualifier to the name ("Ada
+ *      Morrow (sculptor)" is "ada morrow sculptor", "Paris, France" is
+ *      "paris france"), so typing the qualifier, or editing a display the
+ *      field was filled with, keeps the row. This reads PRD §4.1.3 step 2's
+ *      "canonical name" as the name plus its qualifier, for the PM to
+ *      confirm;
+ *    - the display with its leading article kept ("the copper owls"),
+ *      matched by the query normalized the same way, so every prefix of
+ *      "The Copper Owls" ("t", "th", "the", "the c") lists it while the
+ *      article is still being typed (`article.ts`).
  * 3. **Rank** by tier (exact key, canonical-name prefix, alias prefix, word
  *    prefix, typo), then `popularity` descending, then alphabetically.
  *    Popularity is global, so the order never hints at today's answer.
  * 4. **Return** up to `limit` rows (`SUGGESTION_COUNT`, 6), each entity once
  *    at its best tier, already-guessed ones flagged rather than dropped.
- * 5. **Exact Enter**: `exactMatch` is the single entity whose name or alias
- *    equals the normalized text, if exactly one does.
+ * 5. **Exact Enter**: `exactMatch` is the single entity whose name, alias or
+ *    display equals the normalized text, if exactly one does.
  *
  * The index is built once per list. A keystroke scans every key with
  * `startsWith` at precomputed word starts, and the typo pass is linear per
@@ -23,10 +34,12 @@
  */
 import type { AnswerEntity, AnswerList } from "../types/content.ts";
 import type { EntityId } from "../types/ids.ts";
+import { normalizeKeepingArticle, startsWithArticle } from "./article.ts";
 import { normalizeName } from "./normalize.ts";
 import { highlightRange } from "./offsets.ts";
 import { TYPO_MIN_LENGTH, prefixWithinOneEdit } from "./typo.ts";
 
+export { normalizeKeepingArticle } from "./article.ts";
 export { normalizeName } from "./normalize.ts";
 export { highlightRange, normalizeWithOffsets } from "./offsets.ts";
 export { TYPO_MIN_LENGTH, prefixWithinOneEdit } from "./typo.ts";
@@ -48,13 +61,20 @@ interface Entry {
   wordStarts: readonly (readonly number[])[];
   /** Tie order: the normalized display. */
   sortName: string;
+  /** The normalized display when it isn't one of `keys`: the name plus its qualifier. */
+  displayKey: string | null;
+  /** The display with its leading article kept, when it starts with one. */
+  articleKey: string | null;
 }
 
 export interface SuggestionIndex {
   readonly size: number;
   /** @internal */
   readonly entries: readonly Entry[];
-  /** @internal Normalized key to the entries holding it; namesakes share a key. */
+  /**
+   * @internal Normalized key (name, alias or display) to the entries holding
+   * it; namesakes share a name key.
+   */
   readonly exact: ReadonlyMap<string, readonly number[]>;
 }
 
@@ -93,13 +113,22 @@ export function createSuggestionIndex(list: AnswerList): SuggestionIndex {
     const keys = entity.keys.filter((key) => key !== "");
     if (keys.length === 0) continue;
     const at = entries.length;
+    const sortName = normalizeName(entity.display);
+    const displayKey =
+      sortName !== "" && !keys.includes(sortName) ? sortName : null;
+    const kept = normalizeKeepingArticle(entity.display);
     entries.push({
       entity,
       keys,
       wordStarts: keys.map(wordStartsOf),
-      sortName: normalizeName(entity.display),
+      sortName,
+      displayKey,
+      articleKey: startsWithArticle(kept) ? kept : null,
     });
-    for (const key of new Set(keys)) {
+    // The article-kept key stays out: an exact query drops its article, so
+    // it already meets the name or the display.
+    const exactKeys = displayKey === null ? keys : [...keys, displayKey];
+    for (const key of new Set(exactKeys)) {
       const holders = exact.get(key);
       if (holders === undefined) exact.set(key, [at]);
       else holders.push(at);
@@ -118,12 +147,18 @@ const TIER_RANK: Readonly<Record<MatchTier, number>> = {
   typo: 4,
 };
 
+/** What the row can highlight: the name or display as normalized, the display with its article, or nothing. */
+type Highlight = "name" | "article" | null;
+
 interface Hit {
   entry: Entry;
   tier: MatchTier;
-  /** The canonical name matched at a word start, so the display can be highlighted. */
-  onName: boolean;
+  highlight: Highlight;
 }
+
+/** True when `found` would beat the best tier so far. */
+const beats = (found: MatchTier, tier: MatchTier | null) =>
+  tier === null || TIER_RANK[found] < TIER_RANK[tier];
 
 // Plain loops rather than `some` with a closure: these run for every key on
 // every keystroke.
@@ -149,11 +184,19 @@ function typoAtAWord(
   return false;
 }
 
-/** The entry's best tier for the query, or null when nothing matches. */
-function bestHit(entry: Entry, query: string, typos: boolean): Hit | null {
-  const { keys, wordStarts } = entry;
+/**
+ * The entry's best tier for the query (`articleQuery` is the same text with
+ * its leading article kept), or null when nothing matches.
+ */
+function bestHit(
+  entry: Entry,
+  query: string,
+  articleQuery: string,
+  typos: boolean,
+): Hit | null {
+  const { keys, wordStarts, displayKey, articleKey } = entry;
   let tier: MatchTier | null = null;
-  let onName = false;
+  let highlight: Highlight = null;
   for (let k = 0; k < keys.length; k += 1) {
     const key = keys[k] as string;
     let found: MatchTier | null = null;
@@ -163,25 +206,44 @@ function bestHit(entry: Entry, query: string, typos: boolean): Hit | null {
     } else if (startsAtAWord(key, wordStarts[k] as readonly number[], query)) {
       found = "word_prefix";
     }
-    if (
-      found !== null &&
-      (tier === null || TIER_RANK[found] < TIER_RANK[tier])
-    ) {
+    if (found !== null && beats(found, tier)) {
       tier = found;
-      onName = k === 0;
+      highlight = k === 0 ? "name" : null;
       if (found === "exact") break;
     }
   }
-  if (tier !== null) return { entry, tier, onName };
+  // The display, which adds the qualifier to the name, ranks as the name.
+  if (displayKey !== null && tier !== "exact") {
+    if (displayKey === query) {
+      tier = "exact";
+      highlight = "name";
+    } else if (beats("name_prefix", tier) && displayKey.startsWith(query)) {
+      tier = "name_prefix";
+      highlight = "name";
+    }
+  }
+  // An article still being typed: "the" reaches "The Copper Owls". Once
+  // the player has typed the article, it is bolded with the rest.
+  if (articleKey !== null && articleKey.startsWith(articleQuery)) {
+    if (beats("name_prefix", tier)) {
+      tier = "name_prefix";
+      highlight = "article";
+    } else if (highlight === "name" && articleQuery !== query) {
+      highlight = "article";
+    }
+  }
+  if (tier !== null) return { entry, tier, highlight };
   if (!typos) return null;
-  // Typos only for an entity nothing better matched, the last tier.
+  // Typos only for an entity nothing better matched, the last tier. The
+  // display key takes no typos: "ada morrow s" would read as a slip for
+  // "ada morrow c" and list the namesake the player is typing past.
   for (let k = 0; k < keys.length; k += 1) {
     const key = keys[k] as string;
     if (
       prefixWithinOneEdit(key, 0, query) ||
       typoAtAWord(key, wordStarts[k] as readonly number[], query)
     ) {
-      return { entry, tier: "typo", onName: false };
+      return { entry, tier: "typo", highlight: null };
     }
   }
   return null;
@@ -220,12 +282,13 @@ export function suggest(
 ): SuggestResult {
   const query = normalizeName(rawQuery);
   if (query === "" || options.limit <= 0) return { rows: [], total: 0 };
+  const articleQuery = normalizeKeepingArticle(rawQuery);
   const typos = query.length >= TYPO_MIN_LENGTH;
   // Keep only the best `limit` hits, in order, while counting every match.
   const top: Hit[] = [];
   let total = 0;
   for (const entry of index.entries) {
-    const hit = bestHit(entry, query, typos);
+    const hit = bestHit(entry, query, articleQuery, typos);
     if (hit === null) continue;
     total += 1;
     if (top.length === options.limit) {
@@ -240,22 +303,26 @@ export function suggest(
   const guessed = options.alreadyGuessed;
   return {
     total,
-    rows: top.map(({ entry, tier, onName }) => ({
+    rows: top.map(({ entry, tier, highlight }) => ({
       entityId: entry.entity.id,
       display: entry.entity.display,
       alreadyGuessed: guessed?.has(entry.entity.id) ?? false,
       tier,
       match:
-        onName && tier !== "typo"
-          ? highlightRange(entry.entity.display, query)
-          : null,
+        highlight === null || tier === "typo"
+          ? null
+          : highlight === "article"
+            ? highlightRange(entry.entity.display, articleQuery, {
+                keepArticle: true,
+              })
+            : highlightRange(entry.entity.display, query),
     })),
   };
 }
 
 /**
- * The single entity whose name or alias equals the normalized text (PRD
- * §4.1.3 step 6), or null for none or for namesakes sharing the name.
+ * The single entity whose name, alias or display equals the normalized text
+ * (PRD §4.1.3 step 6), or null for none or for namesakes sharing the name.
  */
 export function exactMatch(
   index: SuggestionIndex,

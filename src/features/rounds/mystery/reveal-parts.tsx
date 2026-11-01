@@ -13,6 +13,7 @@ import { Button } from "@/ui/button";
 import { cx } from "@/ui/cx";
 
 import { MYSTERY_COPY } from "./copy";
+import { continueOnEnter, focusTargetProps } from "./focus";
 import { BookOpenIcon } from "./icons";
 import { TONE, enter } from "./tones";
 
@@ -47,7 +48,7 @@ export function SourcesLine({
 }) {
   if (labels.length === 0) return null;
   return (
-    <p className={cx("mt-2 text-[13px] font-semibold", TONE.ink3)}>
+    <p className={cx("mt-2 text-[0.8125rem] font-semibold", TONE.ink3)}>
       {format(labels)}
     </p>
   );
@@ -124,19 +125,20 @@ export function WithdrawnCard({
   return (
     <section
       data-reveal="withdrawn"
+      onKeyDown={continueOnEnter(onContinue)}
       className={cx("flex flex-col gap-3 py-4", enter("card", reducedMotion))}
     >
-      <p className={cx("text-[13px] font-bold", TONE.ink3)}>{kicker}</p>
+      <p className={cx("text-[0.8125rem] font-bold", TONE.ink3)}>{kicker}</p>
       <h1
         ref={headingRef}
         tabIndex={-1}
-        data-focus-target="reveal_heading"
+        {...focusTargetProps("reveal_heading")}
         className="text-2xl leading-tight font-bold text-balance outline-none"
       >
         {title}
       </h1>
       {body === null ? null : (
-        <p className="text-[17px] leading-normal">{body}</p>
+        <p className="text-[1.0625rem] leading-normal">{body}</p>
       )}
       <Button variant="primary" block onClick={onContinue} className="mt-4">
         {continueLabel}

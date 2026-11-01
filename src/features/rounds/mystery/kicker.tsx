@@ -60,7 +60,7 @@ export function RoundKicker({
   return (
     <p
       className={cx(
-        "flex flex-wrap items-center gap-x-1.5 text-[13px] leading-[1.3] font-bold tracking-[0.01em]",
+        "flex flex-wrap items-center gap-x-1.5 text-[0.8125rem] leading-[1.3] font-bold tracking-[0.01em]",
         TONE.ink3,
       )}
     >

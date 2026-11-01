@@ -13,10 +13,12 @@
  *   runs in `numeric`, with bands stored to at most 4 decimal places. So 21
  *   against 20 is exactly 5% off and a bullseye, although the float
  *   `21 / 20 - 1` is 0.050000000000000044.
- * - **Display.** "Spot on"; "under 1% off"; the whole percent rounded half
- *   up from the exact ratio ("4% off"; 1,045 against 1,000 is "5% off");
- *   "over 999% off" from 999% (the share token can't carry 999%); "1 year
- *   off", "3 years off".
+ * - **Display.** "Spot on"; "under 1% off" for any error below 1% that
+ *   isn't exact, tested on the exact ratio before rounding, so 0.5% to 0.99%
+ *   read "under 1% off" too (PRD §4.2.2); otherwise the whole percent rounded
+ *   half up from the exact ratio ("4% off"; 1,045 against 1,000 is "5% off");
+ *   "over 999% off" from a rounded 999% (the share token can't carry 999%);
+ *   "1 year off", "3 years off".
  */
 import type { EncoreBand, EncoreError } from "../types/rounds.ts";
 import {
@@ -116,8 +118,10 @@ export function formatEncoreError(ratio: EncoreRatio): string {
     const years = Number(ratio.num) / Number(ratio.den);
     return years === 1 ? "1 year off" : `${String(years)} years off`;
   }
+  // Under 1% but not exact, before any rounding: 1,005 against 1,000 is
+  // 0.5% off and reads "under 1% off", where rounding first would say 1%.
+  if (ratio.num * ONE_HUNDRED < ratio.den) return "under 1% off";
   const percent = encorePercent(ratio);
-  if (percent === 0) return "under 1% off";
   if (percent >= OVER_PERCENT) return "over 999% off";
   return `${String(percent)}% off`;
 }

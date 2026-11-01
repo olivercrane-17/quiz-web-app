@@ -7,6 +7,7 @@ import {
   createSuggestionIndex,
   exactMatch,
   highlightRange,
+  normalizeKeepingArticle,
   normalizeName,
   normalizeWithOffsets,
   prefixWithinOneEdit,
@@ -238,6 +239,134 @@ describe("suggestions (PRD §4.1.3, ARCHITECTURE §4.7)", () => {
     expect(createSuggestionIndex(COUNTRIES).size).toBe(
       COUNTRIES.entities.length,
     );
+  });
+});
+
+describe("a display's qualifier, read as part of the name", () => {
+  const FILMS = list("film", [
+    entry("x.film.the-lantern-keeper-1987", "The Lantern Keeper", {
+      display: "The Lantern Keeper (1987)",
+    }),
+    entry("x.film.the-lantern-keeper-2014", "The Lantern Keeper", {
+      display: "The Lantern Keeper (2014)",
+    }),
+    entry("x.film.lowmoor", "Lowmoor", { display: "Lowmoor (2015)" }),
+  ]);
+  const CITIES = list("city", [
+    entry("x.city.paris", "Paris", { display: "Paris, France" }),
+    entry("x.city.paris-texas", "Paris", { display: "Paris, United States" }),
+  ]);
+
+  it("tells namesakes apart by the qualifier typed after the name", () => {
+    expect(names(run(PEOPLE, "ada morrow s").rows)).toEqual([
+      "Ada Morrow (sculptor)",
+    ]);
+    expect(run(PEOPLE, "ada morrow s").rows[0]?.tier).toBe("name_prefix");
+    expect(names(run(PEOPLE, "ada morrow sculptor").rows)).toEqual([
+      "Ada Morrow (sculptor)",
+    ]);
+    expect(names(run(CITIES, "paris fr").rows)).toEqual(["Paris, France"]);
+    expect(names(run(FILMS, "lantern keeper 1").rows)).toEqual([
+      "The Lantern Keeper (1987)",
+    ]);
+    // Typing the name alone still lists both.
+    expect(names(run(PEOPLE, "ada morrow").rows)).toEqual([
+      "Ada Morrow (cartographer)",
+      "Ada Morrow (sculptor)",
+    ]);
+  });
+
+  it("keeps a filled-in display's row while it is edited, and selects it on exact Enter", () => {
+    const films = createSuggestionIndex(FILMS);
+    // One Backspace in "The Lantern Keeper (1987)".
+    const edited = suggest(films, "The Lantern Keeper (1987", { limit: LIMIT });
+    expect(edited.rows.map((row) => [row.display, row.tier])).toEqual([
+      ["The Lantern Keeper (1987)", "exact"],
+    ]);
+    expect(exactMatch(films, "The Lantern Keeper (1987)")?.display).toBe(
+      "The Lantern Keeper (1987)",
+    );
+    expect(exactMatch(films, "the lantern keeper 2014")?.display).toBe(
+      "The Lantern Keeper (2014)",
+    );
+    // The bare name is still ambiguous between the namesakes.
+    expect(exactMatch(films, "the lantern keeper")).toBeNull();
+    expect(
+      exactMatch(createSuggestionIndex(PEOPLE), "Ada Morrow (sculptor)")
+        ?.display,
+    ).toBe("Ada Morrow (sculptor)");
+  });
+
+  it("bolds the qualifier's typed letters too", () => {
+    const row = run(PEOPLE, "ada morrow s").rows[0];
+    expect(row?.display.slice(row.match?.start, row.match?.end)).toBe(
+      "Ada Morrow (s",
+    );
+  });
+});
+
+describe("a leading article while it is typed", () => {
+  const BANDS = list("music_artist", [
+    entry("x.music_artist.the-beatles", "The Beatles", {
+      aliases: ["Beatles"],
+    }),
+    entry("x.music_artist.the-copper-owls", "The Copper Owls"),
+    entry("x.music_artist.tolle-river-band", "Tolle River Band"),
+    entry("x.music_artist.ossian-tull", "Ossian Tull"),
+    entry("x.music_artist.under-the-hill", "Under the Hill"),
+    entry("x.music_artist.a-flock-of-wrens", "A Flock of Wrens"),
+  ]);
+
+  it("lists The Beatles at every prefix of its name, article and all", () => {
+    const name = "The Beatles";
+    for (let n = 1; n <= name.length; n += 1) {
+      const typed = name.slice(0, n);
+      expect(names(run(BANDS, typed).rows), typed).toContain("The Beatles");
+    }
+    expect(names(run(BANDS, "the ").rows)).toContain("The Beatles");
+  });
+
+  it("ranks names that start with the article above a word inside a name", () => {
+    expect(
+      run(BANDS, "the").rows.map((row) => [row.display, row.tier]),
+    ).toEqual([
+      ["The Beatles", "name_prefix"],
+      ["The Copper Owls", "name_prefix"],
+      ["Under the Hill", "word_prefix"],
+    ]);
+    expect(names(run(BANDS, "a").rows)).toEqual(["A Flock of Wrens"]);
+  });
+
+  it("bolds the article the player typed", () => {
+    const owls = (typed: string) => {
+      const row = run(BANDS, typed).rows.find(
+        (r) => r.display === "The Copper Owls",
+      );
+      return row?.display.slice(row.match?.start, row.match?.end);
+    };
+    expect(owls("th")).toBe("Th");
+    expect(owls("the c")).toBe("The C");
+    expect(owls("copper")).toBe("Copper");
+    expect(owls("the copper owls")).toBe("The Copper Owls");
+  });
+
+  it("normalizes like normalizeName, with the article kept", () => {
+    for (const text of [
+      "Côte d'Ivoire",
+      "R.E.M.",
+      "AC/DC",
+      "  ...Earth, Wind & Fire!  ",
+      "",
+      "...",
+      "ΟΔΟΣ",
+    ]) {
+      expect(normalizeKeepingArticle(text), text).toBe(normalizeName(text));
+    }
+    expect(normalizeKeepingArticle("The Lantern Keeper (1987)")).toBe(
+      "the lantern keeper 1987",
+    );
+    expect(normalizeKeepingArticle("  A Coruña")).toBe("a coruna");
+    expect(normalizeKeepingArticle("The")).toBe("the");
   });
 });
 

@@ -1,7 +1,14 @@
-import { screen, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import {
+  act,
+  fireEvent,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SHARED } from "@/config/shared";
+import { numberLineGeometry } from "@/engine/encore";
 import { DEFAULT_ENCORE_BANDS } from "@/engine/scoring/encore";
 import {
   parseItemId,
@@ -9,7 +16,7 @@ import {
   type RoundIntent,
   type RoundReveal,
 } from "@/engine/types";
-import { LIVE_REGION_IDS } from "@/ui/announce";
+import { clearAnnouncements, LIVE_REGION_IDS } from "@/ui/announce";
 import { renderWithUser } from "@/test/render";
 
 import type { RoundComponentProps } from "../contracts";
@@ -63,6 +70,10 @@ function play(content = encore()) {
   return { ...view, onIntent, onContinue };
 }
 
+beforeEach(() => {
+  clearAnnouncements();
+});
+
 const numberField = () => screen.getByRole("textbox", { name: "Your number" });
 const lockIn = () => screen.getByRole("button", { name: "Lock in" });
 const liveText = () =>
@@ -81,10 +92,38 @@ describe("EncoreRound, entering a number", () => {
       screen.getByText("Encore · one number, the tiebreak"),
     ).toBeInTheDocument();
     expect(numberField()).toHaveAttribute("inputmode", "numeric");
-    expect(numberField()).toHaveAccessibleDescription("km");
+    // Focusing the field reads the question with it, then the unit.
+    expect(numberField()).toHaveAccessibleDescription(
+      "How long is the fixture Coast Road, in kilometres? km",
+    );
     expect(lockIn()).toHaveAttribute("aria-disabled", "true");
     expect(screen.getByText("Within 5% is a bullseye")).toBeInTheDocument();
     expect(screen.getByText("Within 15% is close")).toBeInTheDocument();
+  });
+
+  it("takes the field on a desktop pointer, and the field reads the question", () => {
+    vi.stubGlobal(
+      "matchMedia",
+      (query: string) =>
+        ({
+          matches: query === "(pointer: fine)",
+          media: query,
+          addEventListener: () => undefined,
+          removeEventListener: () => undefined,
+        }) as unknown as MediaQueryList,
+    );
+    play();
+    expect(numberField()).toHaveFocus();
+    expect(numberField()).toHaveAccessibleDescription(
+      "How long is the fixture Coast Road, in kilometres? km",
+    );
+  });
+
+  it("names the Encore's own bands in the hints", () => {
+    play(encore({ bands: { bullseye: 0.02, close: 0.1 } }));
+    expect(screen.getByText("Within 2% is a bullseye")).toBeInTheDocument();
+    expect(screen.getByText("Within 10% is close")).toBeInTheDocument();
+    expect(screen.queryByText("Within 5% is a bullseye")).toBeNull();
   });
 
   it("asks for the decimal keypad when decimals are allowed", () => {
@@ -97,11 +136,31 @@ describe("EncoreRound, entering a number", () => {
     await user.type(numberField(), "1250");
     const preview = screen.getByText("You're answering", { exact: false });
     expect(preview).toHaveTextContent("You're answering 1,250 km");
-    expect(preview).toHaveAttribute("aria-live", "polite");
+    expect(preview.closest("[aria-live]")).toHaveAttribute(
+      "aria-live",
+      "polite",
+    );
     expect(numberField()).toHaveValue("1250");
     expect(lockIn()).not.toHaveAttribute("aria-disabled");
     expect(numberField()).toHaveAccessibleDescription(
-      "km You're answering 1,250 km",
+      "How long is the fixture Coast Road, in kilometres? km You're answering 1,250 km",
+    );
+  });
+
+  it("speaks a parse error in place of the preview, in the same live line", async () => {
+    const { user } = play();
+    await user.type(numberField(), "1,25");
+    const line = screen
+      .getByText("You're answering", { exact: false })
+      .closest("[aria-live]");
+    expect(line).toHaveTextContent("You're answering 125 km");
+    await user.type(numberField(), "x");
+    // The error replaced the preview inside the one polite line.
+    expect(line).toHaveTextContent("Numbers only, please.");
+    expect(line).not.toHaveTextContent("You're answering");
+    expect(numberField()).toHaveAttribute("aria-invalid", "true");
+    expect(numberField()).toHaveAccessibleDescription(
+      "How long is the fixture Coast Road, in kilometres? km Numbers only, please.",
     );
   });
 
@@ -203,6 +262,53 @@ describe("EncoreRound, the result", () => {
     ).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "See your results" }));
     expect(onContinue).toHaveBeenCalledOnce();
+  });
+
+  it("continues on Enter from the result line (PRD §3.0.3), not from its links", async () => {
+    const { user, onContinue } = play();
+    await user.type(numberField(), "1200{Enter}");
+    const heading = screen.getByRole("heading", { level: 2 });
+    expect(heading).toHaveFocus();
+    expect(heading).toHaveAttribute("data-qz-focus", "reveal_heading");
+    fireEvent.keyDown(screen.getByRole("link", { name: /^Learn more/ }), {
+      key: "Enter",
+    });
+    expect(onContinue).not.toHaveBeenCalled();
+    await user.keyboard("{Enter}");
+    expect(onContinue).toHaveBeenCalledOnce();
+  });
+
+  it("AC-DLY-35 judges, draws and words an Encore's own bands", async () => {
+    const bands = { bullseye: 0.02, close: 0.1 };
+    const { user } = play(encore({ answer: 100, bands }));
+    expect(screen.getByText("Within 2% is a bullseye")).toBeInTheDocument();
+    // 3% off: outside the own bullseye, inside the own close band.
+    await user.type(numberField(), "103{Enter}");
+    expect(document.querySelector("[data-band-chip]")).toHaveTextContent(
+      "Close",
+    );
+    const line = screen.getByRole("img", {
+      name: "Your guess 103 km. Answer 100 km. Bullseye means within 2%, close within 10%.",
+    });
+    // The shaded spans are the own bands, not the defaults.
+    const geometry = numberLineGeometry({
+      valueKind: "quantity",
+      guess: 103,
+      answer: 100,
+      median: null,
+      bands,
+    });
+    const width = (from: number, to: number) =>
+      `${((to - from) * 100).toFixed(3)}%`;
+    expect(line.querySelector('[data-band="bullseye"]')).toHaveStyle({
+      width: width(geometry.bullseye.from, geometry.bullseye.to),
+    });
+    expect(line.querySelector('[data-band="close"]')).toHaveStyle({
+      width: width(geometry.close.from, geometry.close.to),
+    });
+    // The guess sits outside the bullseye band and inside the close band.
+    expect(geometry.guess.at).toBeGreaterThan(geometry.bullseye.to);
+    expect(geometry.guess.at).toBeLessThan(geometry.close.to);
   });
 
   function resultProps(
@@ -388,9 +494,14 @@ describe("EncoreRound, connection and errors", () => {
         error={{ code: "internal", retryable: false }}
       />,
     );
+    const round = document.querySelector('[data-round="encore"]');
     expect(
-      screen.getByText("We couldn't lock that in. Try again."),
+      within(round as HTMLElement).getByText(
+        "We couldn't lock that in. Try again.",
+      ),
     ).toBeInTheDocument();
+    // Spoken as it appears (DESIGN §6.9).
+    expect(liveText()).toBe("We couldn't lock that in. Try again.");
     await user.click(screen.getByRole("button", { name: "Try again" }));
     expect(props.onIntent).toHaveBeenLastCalledWith({
       family: "encore",
@@ -402,12 +513,65 @@ describe("EncoreRound, connection and errors", () => {
   it("disables Lock in offline and says what is safe", () => {
     renderWithUser(<EncoreRound {...base({ status: "offline" })} />);
     expect(numberField()).toHaveAttribute("aria-disabled", "true");
+    // Unavailable means unavailable: no typing either.
+    expect(numberField()).toHaveAttribute("readonly");
     expect(lockIn()).toHaveAttribute("aria-disabled", "true");
     expect(
       within(document.body).getByText(
         "You're offline. Your progress is saved, and we'll pick up where you left off.",
       ),
     ).toBeInTheDocument();
+    // The controller announces the lost connection; the round adds nothing.
+    expect(liveText()).toBe("");
+  });
+
+  it("puts Lock in right under the field while the keypad is up, and keeps the keypad up through the press", async () => {
+    class FakeViewport extends EventTarget {
+      height = 768;
+      width = 1024;
+      offsetTop = 0;
+      offsetLeft = 0;
+      pageTop = 0;
+      pageLeft = 0;
+      scale = 1;
+      onresize = null;
+      onscroll = null;
+      onscrollend = null;
+    }
+    const viewport = new FakeViewport();
+    vi.stubGlobal("visualViewport", viewport);
+    vi.stubGlobal("scrollBy", vi.fn());
+    const props = base();
+    const { user } = renderWithUser(<EncoreRound {...props} />);
+    await user.click(numberField());
+    await user.type(numberField(), "212");
+    act(() => {
+      viewport.height = 340;
+      viewport.dispatchEvent(new Event("resize"));
+    });
+    await waitFor(() => {
+      expect(document.querySelector('[data-round="encore"]')).toHaveAttribute(
+        "data-keyboard",
+        "open",
+      );
+    });
+    // The hints wait under Lock in.
+    const hints = screen.getByRole("group", {
+      name: "How the Encore is judged",
+    });
+    expect(
+      lockIn().compareDocumentPosition(hints) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    // The press keeps focus in the field, so the keypad can't close under the finger.
+    expect(fireEvent.mouseDown(lockIn())).toBe(false);
+    expect(numberField()).toHaveFocus();
+    await user.click(lockIn());
+    expect(props.onIntent).toHaveBeenCalledWith({
+      family: "encore",
+      kind: "lock_in",
+      value: 212,
+    });
   });
 });
 

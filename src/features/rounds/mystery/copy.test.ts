@@ -151,6 +151,11 @@ describe("splitting a row's display", () => {
     ["Earth, Wind & Fire", "music_artist", "Earth, Wind & Fire", null],
     ["Odile Marsh", "person", "Odile Marsh", null],
   ] as const)("%s (%s)", (display, type, name, aside) => {
-    expect(splitDisplay(display, type)).toEqual({ name, aside });
+    const split = splitDisplay(display, type);
+    expect(split).toMatchObject({ name, aside });
+    // Where the aside starts, so a highlight running into it lands right.
+    expect(
+      display.slice(split.asideStart, split.asideStart + (aside?.length ?? 0)),
+    ).toBe(aside ?? "");
   });
 });

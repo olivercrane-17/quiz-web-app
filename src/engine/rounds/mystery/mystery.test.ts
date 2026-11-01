@@ -372,7 +372,7 @@ describe("the mystery client half", () => {
     return { client, verdict: result.verdict, judge: result.judge, content };
   }
 
-  it("rebuilds its state from a resumed open, earlier guesses included (AC-DLY-07)", () => {
+  it("rebuilds its state from a resumed open, earlier guesses included", () => {
     const { verdict } = clue2WithGuess();
     if (verdict.kind !== "continue") throw new Error();
     const resumed = mysteryPlugin.init(verdict.open as never);

@@ -50,7 +50,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       <p
         id={leadId}
         className={cx(
-          "mt-3 text-[13px] font-bold tracking-[0.01em]",
+          "mt-3 text-[0.8125rem] font-bold tracking-[0.01em]",
           TONE.ink3,
         )}
       >

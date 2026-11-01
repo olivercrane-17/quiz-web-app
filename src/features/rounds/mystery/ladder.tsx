@@ -20,6 +20,7 @@ import { cx } from "@/ui/cx";
 import { CrossIcon } from "@/ui/icons";
 
 import { MYSTERY_COPY } from "./copy";
+import { focusTargetProps } from "./focus";
 import { DISPLAY_FONT, TONE, enter } from "./tones";
 
 export interface ClueLadderProps {
@@ -52,23 +53,24 @@ function Rung({
   return (
     <li
       data-rung={state}
-      className="relative grid grid-cols-[30px_minmax(0,1fr)] items-start gap-x-2.5 py-1"
+      className="relative grid grid-cols-[1.875rem_minmax(0,1fr)] items-start gap-x-2.5 py-1"
     >
       {state === "slot" ? null : (
         <span
           aria-hidden="true"
           className={cx(
-            "absolute top-[34px] -bottom-1 left-[14px] w-0.5",
+            "absolute top-[2.125rem] -bottom-1 left-[calc(0.9375rem-1px)] w-0.5",
+            // Forced colours drop fills and gradients: the rail becomes a border.
             state === "past"
-              ? "bg-[color:var(--kn-ink,var(--foreground))]"
-              : "bg-[repeating-linear-gradient(var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_40%,transparent))_0_4px,transparent_4px_8px)]",
+              ? "bg-[color:var(--kn-ink,var(--foreground))] forced-colors:bg-[color:CanvasText] forced-colors:forced-color-adjust-none"
+              : "bg-[repeating-linear-gradient(var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_40%,transparent))_0_4px,transparent_4px_8px)] forced-colors:border-l-2 forced-colors:border-dashed forced-colors:border-[color:CanvasText]",
           )}
         />
       )}
       <span
         aria-hidden="true"
         className={cx(
-          "relative z-[1] grid size-[30px] place-items-center rounded-full border-2 text-[15px] leading-none font-bold transition-colors duration-150",
+          "relative z-[1] grid size-[1.875rem] place-items-center rounded-full border-2 text-[0.9375rem] leading-none font-bold transition-colors duration-150",
           DISPLAY_FONT,
           state === "past" &&
             cx(
@@ -76,7 +78,12 @@ function Rung({
               TONE.sunken,
               TONE.ink2,
             ),
-          state === "current" && cx(TONE.inkFill, TONE.inkBorder),
+          state === "current" &&
+            cx(
+              TONE.inkFill,
+              TONE.inkBorder,
+              "forced-colors:bg-[color:CanvasText] forced-colors:text-[color:Canvas] forced-colors:forced-color-adjust-none",
+            ),
           state === "slot" &&
             cx("border-dashed", TONE.strongBorder, TONE.surface, TONE.ink3),
         )}
@@ -115,35 +122,39 @@ export function ClueLadder({
                 data-clue-card=""
                 className={cx(
                   "relative rounded-[14px] border-[1.5px]",
-                  compact ? "px-3 py-2" : "px-3.5 pt-3 pb-3",
+                  // With the keyboard up the card slims, so the field and
+                  // three rows fit under it (AC-DLY-32).
+                  compact ? "px-3 py-1.5" : "px-3.5 pt-3 pb-3",
                   TONE.inkBorder,
                   TONE.surface,
                   TONE.ledge,
                   arrived && enter("clue", reducedMotion),
                 )}
               >
-                <span
-                  aria-hidden="true"
-                  className={cx(
-                    "absolute -top-2.5 right-3 rounded-full px-2 text-xs leading-[1.35] font-extrabold shadow-[0_0_0_3px_var(--kn-page,var(--background))]",
-                    TONE.accentFill,
-                    arrived && enter("tag", reducedMotion),
-                  )}
-                >
-                  {n === 4
-                    ? MYSTERY_COPY.ladder.lastTag
-                    : MYSTERY_COPY.ladder.newTag}
-                </span>
+                {compact ? null : (
+                  <span
+                    aria-hidden="true"
+                    className={cx(
+                      "absolute -top-2.5 right-3 rounded-full px-2 text-xs leading-[1.35] font-extrabold shadow-[0_0_0_3px_var(--kn-page,var(--background))] forced-colors:border forced-colors:border-[color:CanvasText]",
+                      TONE.accentFill,
+                      arrived && enter("tag", reducedMotion),
+                    )}
+                  >
+                    {n === 4
+                      ? MYSTERY_COPY.ladder.lastTag
+                      : MYSTERY_COPY.ladder.newTag}
+                  </span>
+                )}
                 <h2
                   ref={clueHeadingRef}
                   tabIndex={-1}
-                  data-focus-target={
-                    headingIsFocusTarget ? "clue_heading" : undefined
-                  }
+                  {...focusTargetProps(
+                    headingIsFocusTarget ? "clue_heading" : null,
+                  )}
                   className={cx(
                     "font-semibold text-pretty outline-offset-4 focus-visible:outline-[3px] focus-visible:outline-[color:var(--kn-focus,var(--foreground))]",
                     compact
-                      ? "text-base leading-snug"
+                      ? "text-[0.9375rem] leading-snug"
                       : "text-lg leading-[1.38]",
                   )}
                 >
@@ -159,7 +170,7 @@ export function ClueLadder({
                   "pt-1",
                   optionsShowing || compact
                     ? "text-sm leading-[1.35]"
-                    : "text-[15px] leading-[1.4]",
+                    : "text-[0.9375rem] leading-[1.4]",
                   compact && "line-clamp-1",
                   TONE.ink2,
                 )}
@@ -173,7 +184,7 @@ export function ClueLadder({
                 key={guess.entityId}
                 data-stamp={guess.entityId}
                 className={cx(
-                  "mt-1.5 inline-flex max-w-full origin-left -rotate-[2.5deg] items-center gap-1.5 rounded-[7px] border-2 px-2 py-0.5 text-[13px] leading-[1.3] font-extrabold",
+                  "mt-1.5 inline-flex max-w-full origin-left -rotate-[2.5deg] items-center gap-1.5 rounded-[7px] border-2 px-2 py-0.5 text-[0.8125rem] leading-[1.3] font-extrabold",
                   TONE.surface,
                   TONE.incorrectBorder,
                   TONE.incorrectText,

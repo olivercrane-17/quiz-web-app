@@ -6,7 +6,9 @@
  *
  * - Digits, spaces and the separators "." and "," only; anything else is
  *   `not_number` ("Numbers only, please."). Spaces of any kind are ignored
- *   (they group digits), and full-width digits read as digits.
+ *   (they group digits), and full-width digits, commas and full stops read
+ *   as their ASCII forms. Nothing else is folded: superscript, circled or
+ *   mathematical digits ("10²", "①②") are `not_number`.
  * - A minus sign (any dash in front) or a value of 0 is `not_positive`
  *   ("Positive numbers only.").
  * - With no decimals allowed, every "." and "," is a thousands separator
@@ -52,6 +54,20 @@ export type EncoreParseResult =
 /** A leading hyphen-minus, minus sign or dash. */
 const LEADING_MINUS = /^[-‐-―−﹘﹣－]/u;
 const DIGITS_AND_SEPARATORS = /^[0-9.,]*$/;
+/** Full-width digits (U+FF10 to U+FF19), comma (U+FF0C) and full stop (U+FF0E). */
+const FULL_WIDTH = /[，．０-９]/gu;
+/** A full-width form's distance from its ASCII form. */
+const FULL_WIDTH_OFFSET = 0xfee0;
+
+/**
+ * Reads a CJK keyboard's full-width digits and separators as ASCII. Only
+ * these: whole-string NFKC would also turn "10²" into 102 and "①②" into 12.
+ */
+function asciiDigits(text: string): string {
+  return text.replace(FULL_WIDTH, (char) =>
+    String.fromCharCode(char.charCodeAt(0) - FULL_WIDTH_OFFSET),
+  );
+}
 
 function count(text: string, char: string): number {
   let n = 0;
@@ -95,8 +111,8 @@ export function parseEncoreInput(
   raw: string,
   rules: EncoreNumberRules,
 ): EncoreParseResult {
-  // NFKC reads full-width digits and separators as ASCII; spaces group digits.
-  let body = raw.normalize("NFKC").replace(/\s+/gu, "");
+  // Full-width digits and separators read as ASCII; spaces group digits.
+  let body = asciiDigits(raw).replace(/\s+/gu, "");
   if (body === "") return fail("not_number");
 
   const negative = LEADING_MINUS.test(body);

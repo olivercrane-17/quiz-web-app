@@ -9,8 +9,10 @@
  * character came from. Whole-string lower-casing can differ from per-letter
  * lower-casing in rare contexts (a final Greek sigma), so callers compare
  * `text` with `normalizeName(source)` and skip the highlight when they
- * differ.
+ * differ. With `keepArticle`, the leading article stays, as in
+ * `normalizeKeepingArticle`, so typing "the l" can bold "The L".
  */
+import { normalizeKeepingArticle } from "./article.ts";
 import { normalizeName } from "./normalize.ts";
 
 /** Letters NFKD does not decompose; the same table as `normalizeName`. */
@@ -45,7 +47,10 @@ function fold(char: string): string {
     .replace(/[^\p{L}\p{N}]+/gu, " ");
 }
 
-export function normalizeWithOffsets(source: string): MappedText {
+export function normalizeWithOffsets(
+  source: string,
+  options: { keepArticle?: boolean } = {},
+): MappedText {
   const chars: string[] = [];
   const start: number[] = [];
   const end: number[] = [];
@@ -69,7 +74,8 @@ export function normalizeWithOffsets(source: string): MappedText {
     end.pop();
   }
   const text = chars.join("");
-  const article = /^(?:the|an|a) (?=\S)/.exec(text);
+  const article =
+    options.keepArticle === true ? null : /^(?:the|an|a) (?=\S)/.exec(text);
   const drop = article === null ? 0 : article[0].length;
   return {
     text: text.slice(drop),
@@ -87,15 +93,21 @@ function isWordStart(text: string, at: number): boolean {
  * Where `query` (already normalized) first matches `source` at a word
  * start, as a source range for `<mark>`; null when it doesn't, or when the
  * mapping can't be trusted. The range is widened over combining marks that
- * follow it, so a decomposed accent stays with its letter.
+ * follow it, so a decomposed accent stays with its letter. With
+ * `keepArticle`, `query` was normalized with its leading article kept.
  */
 export function highlightRange(
   source: string,
   query: string,
+  options: { keepArticle?: boolean } = {},
 ): { start: number; end: number } | null {
   if (query === "") return null;
-  const mapped = normalizeWithOffsets(source);
-  if (mapped.text !== normalizeName(source)) return null;
+  const mapped = normalizeWithOffsets(source, options);
+  const expected =
+    options.keepArticle === true
+      ? normalizeKeepingArticle(source)
+      : normalizeName(source);
+  if (mapped.text !== expected) return null;
   let at = mapped.text.indexOf(query);
   while (at !== -1 && !isWordStart(mapped.text, at)) {
     at = mapped.text.indexOf(query, at + 1);

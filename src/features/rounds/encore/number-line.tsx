@@ -9,6 +9,12 @@
  * to the answer; under reduced motion it is a static drawing. A guess
  * beyond either end sits at the edge with an arrow. Screen readers get the
  * same facts as text (AC-DLY-35).
+ *
+ * Every mark is a box with a fill, which forced colours would paint as
+ * Canvas. There the line keeps its own system colours instead
+ * (`forced-color-adjust: none`): the track, the answer and the needle in
+ * CanvasText, the guess in Highlight, the close band as a dashed outline
+ * and the bullseye band as a solid one (DESIGN §11).
  */
 import type { CSSProperties } from "react";
 
@@ -85,7 +91,7 @@ export function NumberLine(props: NumberLineProps) {
       <div className="relative mx-3 h-11">
         <span
           aria-hidden="true"
-          className="absolute inset-x-0 top-[21px] h-0.5 bg-[color:var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_45%,transparent))]"
+          className="absolute inset-x-0 top-[21px] h-0.5 bg-[color:var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_45%,transparent))] forced-colors:bg-[color:CanvasText] forced-colors:forced-color-adjust-none"
         />
         <span
           data-band="close"
@@ -93,7 +99,7 @@ export function NumberLine(props: NumberLineProps) {
             left: pct(line.close.from),
             width: pct(line.close.to - line.close.from),
           }}
-          className="absolute top-3.5 h-4 rounded-[3px] bg-[color:color-mix(in_oklab,var(--kn-correct-tint,var(--muted))_55%,transparent)]"
+          className="absolute top-3.5 h-4 rounded-[3px] bg-[color:color-mix(in_oklab,var(--kn-correct-tint,var(--muted))_55%,transparent)] forced-colors:border-[1.5px] forced-colors:border-dashed forced-colors:border-[color:CanvasText] forced-colors:bg-[color:Canvas] forced-colors:forced-color-adjust-none"
         />
         <span
           data-band="bullseye"
@@ -102,7 +108,7 @@ export function NumberLine(props: NumberLineProps) {
             width: pct(line.bullseye.to - line.bullseye.from),
           }}
           className={cx(
-            "absolute top-3.5 h-4 rounded-[3px] shadow-[inset_0_0_0_1.5px_var(--kn-correct-line,var(--foreground))]",
+            "absolute top-3.5 h-4 rounded-[3px] shadow-[inset_0_0_0_1.5px_var(--kn-correct-line,var(--foreground))] forced-colors:border-2 forced-colors:border-[color:CanvasText] forced-colors:bg-[color:Canvas] forced-colors:shadow-none forced-colors:forced-color-adjust-none",
             TONE.correctTint,
           )}
         />
@@ -112,7 +118,7 @@ export function NumberLine(props: NumberLineProps) {
             data-edge={line.median.edge ?? undefined}
             style={{ left: pct(line.median.at) }}
             className={cx(
-              "absolute top-2 h-7 w-0 -translate-x-1/2 border-l-2 border-dashed",
+              "absolute top-2 h-7 w-0 -translate-x-1/2 border-l-2 border-dashed forced-colors:border-[color:CanvasText]",
               TONE.strongBorder,
             )}
           />
@@ -120,7 +126,7 @@ export function NumberLine(props: NumberLineProps) {
         <span
           data-mark="answer"
           style={{ left: pct(line.answer) }}
-          className="absolute top-1.5 h-8 w-[3px] -translate-x-1/2 rounded-sm bg-[color:var(--kn-ink,var(--foreground))]"
+          className="absolute top-1.5 h-8 w-[3px] -translate-x-1/2 rounded-sm bg-[color:var(--kn-ink,var(--foreground))] forced-colors:bg-[color:CanvasText] forced-colors:forced-color-adjust-none"
         />
         {/* The needle travels from the guess to the answer as the result lands. */}
         <span
@@ -128,7 +134,7 @@ export function NumberLine(props: NumberLineProps) {
           aria-hidden="true"
           style={needle}
           className={cx(
-            "absolute top-0 left-[var(--to)] h-11 w-0.5 -translate-x-1/2 bg-[color:var(--kn-ink,var(--foreground))] opacity-60",
+            "absolute top-0 left-[var(--to)] h-11 w-0.5 -translate-x-1/2 bg-[color:var(--kn-ink,var(--foreground))] opacity-60 forced-colors:bg-[color:CanvasText] forced-colors:forced-color-adjust-none",
             !reducedMotion &&
               "transition-[left] delay-300 duration-700 ease-[cubic-bezier(0.65,0,0.35,1)] starting:left-[var(--from)]",
           )}
@@ -138,7 +144,7 @@ export function NumberLine(props: NumberLineProps) {
           data-edge={line.guess.edge ?? undefined}
           style={{ left: pct(line.guess.at) }}
           className={cx(
-            "absolute top-[15px] size-3 -translate-x-1/2 rounded-full shadow-[0_0_0_2px_var(--kn-surface,var(--background)),inset_0_0_0_2px_var(--kn-chart-you-line,var(--foreground))]",
+            "absolute top-[15px] size-3 -translate-x-1/2 rounded-full shadow-[0_0_0_2px_var(--kn-surface,var(--background)),inset_0_0_0_2px_var(--kn-chart-you-line,var(--foreground))] forced-colors:border-2 forced-colors:border-[color:CanvasText] forced-colors:bg-[color:Highlight] forced-colors:text-[color:CanvasText] forced-colors:shadow-none forced-colors:forced-color-adjust-none",
             TONE.accentFill,
           )}
         >

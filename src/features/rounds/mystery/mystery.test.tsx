@@ -1,4 +1,10 @@
-import { act, screen, waitFor, within } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import type { UserEvent } from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -93,6 +99,8 @@ describe("MysteryRound, guessing", () => {
     });
     expect(heading).toHaveFocus();
     expect(heading).toHaveAttribute("data-focus-target", "round_heading");
+    // DLY-1's round area finds its focus targets by this attribute.
+    expect(heading).toHaveAttribute("data-qz-focus", "round_heading");
     expect(screen.getByText("History")).toBeInTheDocument();
     expect(screen.getByText("Mystery 2 of 3")).toBeInTheDocument();
     expect(screen.getByText("Medium")).toBeInTheDocument();
@@ -280,6 +288,41 @@ describe("MysteryRound, guessing", () => {
     expect(within(reveal()).getByText("Knew it.")).toBeInTheDocument();
   });
 
+  it("AC-SUG-05 Enter on listed text that names no entity exactly selects nothing and keeps the list open", async () => {
+    const { user } = play();
+    // "odile" is a prefix with rows listed, and no entity's name or alias.
+    await user.type(field(), "odile");
+    expect(screen.getAllByRole("option").length).toBeGreaterThan(0);
+    await user.keyboard("{Enter}");
+    expect(guessButton()).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("listbox")).toBeVisible();
+    expect(field()).toHaveValue("odile");
+  });
+
+  it("tells namesakes apart by the qualifier, and keeps a filled-in row while it is edited", async () => {
+    const { user } = play();
+    await user.type(field(), "ada morrow s");
+    expect(screen.getAllByRole("option").map((row) => row.textContent)).toEqual(
+      ["Ada Morrow, sculptor"],
+    );
+    await user.keyboard("{ArrowDown}{Enter}");
+    expect(field()).toHaveValue("Ada Morrow (sculptor)");
+
+    // One Backspace: the selection clears, the row stays, and Enter takes it back.
+    await user.keyboard("{Backspace}");
+    expect(field()).toHaveValue("Ada Morrow (sculptor");
+    expect(guessButton()).toHaveAttribute("aria-disabled", "true");
+    expect(
+      screen.getByRole("option", { name: "Ada Morrow, sculptor" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText("No matches. Try another spelling, or tap Next clue."),
+    ).toBeNull();
+    await user.keyboard("{Enter}");
+    expect(field()).toHaveValue("Ada Morrow (sculptor)");
+    expect(guessButton()).not.toHaveAttribute("aria-disabled");
+  });
+
   it("lists already-guessed entities disabled, and never selects them", async () => {
     const { user } = play();
     await guess(user, "Corin", "Corin Ashby");
@@ -328,10 +371,14 @@ describe("MysteryRound, guessing", () => {
         settings: TEST_SETTINGS,
       },
     };
-    renderWithUser(<MysteryRound {...props} />);
+    const { container } = renderWithUser(<MysteryRound {...props} />);
     expect(
-      screen.getByText("You've tried that one already. Pick another."),
+      within(container).getByText(
+        "You've tried that one already. Pick another.",
+      ),
     ).toBeInTheDocument();
+    // Spoken as it appears (DESIGN §6.9).
+    expect(liveText()).toBe("You've tried that one already. Pick another.");
   });
 });
 
@@ -485,6 +532,26 @@ describe("MysteryRound, the reveal", () => {
     expect(onContinue).toHaveBeenCalledOnce();
   });
 
+  it("continues on Enter from the reveal heading, but not from its links and buttons", async () => {
+    const { user, onContinue } = play();
+    await guess(user, "Odile", "Odile Marsh");
+    const heading = screen.getByRole("heading", {
+      level: 1,
+      name: "Odile Marsh",
+    });
+    expect(heading).toHaveFocus();
+    // Enter on Learn more opens the link; it never continues.
+    fireEvent.keyDown(screen.getByRole("link", { name: /^Learn more/ }), {
+      key: "Enter",
+    });
+    expect(onContinue).not.toHaveBeenCalled();
+    // A held Enter (a repeat) never skips the reveal either.
+    fireEvent.keyDown(heading, { key: "Enter", repeat: true });
+    expect(onContinue).not.toHaveBeenCalled();
+    await user.keyboard("{Enter}");
+    expect(onContinue).toHaveBeenCalledOnce();
+  });
+
   it("says a miss plainly: This one got away., the answer, 0 points, no stamp", async () => {
     const { user, clients } = play();
     for (let i = 0; i < 3; i += 1) await user.click(nextClue());
@@ -622,6 +689,10 @@ describe("MysteryRound, the reveal", () => {
     expect(screen.getByText("Everyone gets 4 points.")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "On to the Encore" }));
     expect(props.onContinue).toHaveBeenCalledOnce();
+    // Enter on the heading continues too (PRD §3.0.3).
+    heading.focus();
+    await user.keyboard("{Enter}");
+    expect(props.onContinue).toHaveBeenCalledTimes(2);
   });
 });
 
@@ -687,14 +758,52 @@ describe("MysteryRound, connection and errors", () => {
         error={{ code: "internal", retryable: false }}
       />,
     );
+    const round = document.querySelector('[data-round="mystery"]');
     expect(
-      screen.getByText("We couldn't check that guess. Try again."),
+      within(round as HTMLElement).getByText(
+        "We couldn't check that guess. Try again.",
+      ),
     ).toBeInTheDocument();
+    // Spoken as it appears (DESIGN §6.9).
+    expect(liveText()).toBe("We couldn't check that guess. Try again.");
     await user.click(screen.getByRole("button", { name: "Try again" }));
     expect(props.onIntent).toHaveBeenLastCalledWith({
       family: "mystery",
       kind: "next_clue",
     });
+  });
+
+  it("leaves the offline line to the controller's alert, and says nothing more", () => {
+    renderWithUser(<MysteryRound {...base({ status: "offline" })} />);
+    expect(liveText()).toBe("");
+  });
+
+  it("shows Checking… under the field while a guess is slow, and Guess keeps its label", async () => {
+    const props = base();
+    const { user, rerender } = renderWithUser(<MysteryRound {...props} />);
+    await user.type(field(), "Mira");
+    await user.keyboard("{ArrowDown}{Enter}");
+    await user.click(guessButton());
+    rerender(<MysteryRound {...props} status="checking" />);
+    expect(screen.getByText("Checking…")).toBeInTheDocument();
+    expect(guessButton()).toHaveAttribute("aria-busy", "true");
+  });
+
+  it("describes the field while the list loads, and says once when it failed", async () => {
+    const loading: MysteryAnswerList = {
+      status: "loading",
+      type: "person",
+      suggest: () => [],
+      search: () => ({ rows: [], total: 0 }),
+      exactMatch: () => null,
+      retry: vi.fn(),
+    };
+    const props = base({ context: { ...base().context, list: loading } });
+    const { user } = renderWithUser(<MysteryRound {...props} />);
+    await user.type(field(), "co");
+    expect(field()).toHaveAccessibleDescription(
+      "Pick a name from the list, then Guess. Loading the suggestions…",
+    );
   });
 
   it("stays finishable when the list fails to load", async () => {
@@ -706,13 +815,15 @@ describe("MysteryRound, connection and errors", () => {
       exactMatch: () => null,
       retry: vi.fn(),
     };
+    const listFailed =
+      "We couldn't load the suggestions. You can still use Next clue and pick from four options at the end.";
     const props = base({ context: { ...base().context, list: failed } });
-    const { user } = renderWithUser(<MysteryRound {...props} />);
-    expect(
-      screen.getByText(
-        "We couldn't load the suggestions. You can still use Next clue and pick from four options at the end.",
-      ),
-    ).toBeInTheDocument();
+    const { user, container } = renderWithUser(<MysteryRound {...props} />);
+    expect(within(container).getByText(listFailed)).toBeInTheDocument();
+    expect(liveText()).toBe(listFailed);
+    expect(field()).toHaveAccessibleDescription(
+      `Pick a name from the list, then Guess. ${listFailed}`,
+    );
     await user.click(screen.getByRole("button", { name: "Try again" }));
     expect(failed.retry).toHaveBeenCalledOnce();
     await user.click(nextClue());
@@ -752,12 +863,13 @@ describe("MysteryRound with the keyboard open", () => {
     ).toBe(false);
   });
 
-  it("collapses older clues and moves Next clue beside the field", async () => {
+  /** A wrong guess, then the keyboard opens over a 340 px viewport. */
+  async function withKeyboardOpen() {
     const viewport = new FakeViewport();
     vi.stubGlobal("visualViewport", viewport);
     vi.stubGlobal("scrollBy", vi.fn());
-    const { user } = play();
-    await guess(user, "Corin", "Corin Ashby");
+    const view = play();
+    await guess(view.user, "Corin", "Corin Ashby");
     expect(field()).toHaveFocus();
     act(() => {
       viewport.height = 340;
@@ -770,11 +882,81 @@ describe("MysteryRound with the keyboard open", () => {
       );
     });
     const combobox = document.querySelector("[data-combobox]") as HTMLElement;
+    return { ...view, combobox };
+  }
+
+  it("collapses older clues and moves Next clue beside the field", async () => {
+    const { combobox } = await withKeyboardOpen();
     expect(
       within(combobox).getByRole("button", { name: /^Next clue/ }),
     ).toBeInTheDocument();
     expect(document.querySelector('[data-rung="past"] p')?.className).toMatch(
       /line-clamp-1/,
+    );
+    // The current clue's card slims: no "New" tag.
+    expect(
+      within(
+        document.querySelector("[data-clue-card]") as HTMLElement,
+      ).queryByText("New"),
+    ).toBeNull();
+  });
+
+  it("gives the field the row: one-line Next clue that keeps its full name, no search icon or Clear", async () => {
+    const { user, combobox } = await withKeyboardOpen();
+    await user.type(field(), "ada");
+    const beside = within(combobox).getByRole("button", {
+      name: /^Next clue/,
+    });
+    expect(beside).toHaveAccessibleName("Next clue · then worth 2");
+    // Visible: "Next clue" only; the worth is read, not shown.
+    const shown = [...beside.childNodes]
+      .filter(
+        (node) =>
+          !(node instanceof HTMLElement && node.classList.contains("sr-only")),
+      )
+      .map((node) => node.textContent)
+      .join("")
+      .trim();
+    expect(shown).toBe("Next clue");
+    expect(
+      within(combobox).queryByRole("button", { name: "Clear your guess" }),
+    ).toBeNull();
+    // Escape still clears.
+    await user.keyboard("{Escape}{Escape}");
+    expect(field()).toHaveValue("");
+  });
+
+  it("fires Next clue from beside the field, keeping the keyboard up until the press lands", async () => {
+    const { user, combobox, onIntent } = await withKeyboardOpen();
+    onIntent.mockClear();
+    const beside = within(combobox).getByRole("button", {
+      name: /^Next clue/,
+    });
+    await user.click(beside);
+    expect(onIntent).toHaveBeenCalledWith({
+      family: "mystery",
+      kind: "next_clue",
+    });
+    expect(document.querySelector('[data-round="mystery"]')).toHaveAttribute(
+      "data-clue",
+      "3",
+    );
+    const clue3 = screen.getByRole("heading", { level: 2 });
+    expect(clue3).toHaveAccessibleName(`Clue 3: ${mystery.clues[2]}`);
+    expect(clue3).toHaveFocus();
+  });
+
+  it("keeps focus in the field when any of the round's buttons is pressed", async () => {
+    const { combobox } = await withKeyboardOpen();
+    const beside = within(combobox).getByRole("button", {
+      name: /^Next clue/,
+    });
+    // A prevented mousedown is what keeps the blur from closing the keyboard.
+    expect(fireEvent.mouseDown(beside)).toBe(false);
+    expect(field()).toHaveFocus();
+    // A press on the clue itself still blurs, so tapping away closes the keyboard.
+    expect(fireEvent.mouseDown(screen.getByRole("heading", { level: 2 }))).toBe(
+      true,
     );
   });
 });

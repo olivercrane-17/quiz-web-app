@@ -1,13 +1,14 @@
 // @vitest-environment node
 /**
- * The suggestion budget (ARCHITECTURE §4.7): a keystroke on the largest
- * list, people at its 3,000-entity target with aliases, takes well under
- * 4 ms. The list is synthetic (seeded syllable names, which spread worse
- * than real ones), the queries replay typing 60 names letter by letter,
- * typos included, and each query keeps its fastest of three runs, so a busy
- * shared machine can't fail the guard on noise alone. The test's own time
- * limit is generous for the same reason: about 2,400 timed scans take a
- * second or two on an idle machine, several times that on a loaded one.
+ * The suggestion budget (ARCHITECTURE §4.7): every keystroke on the largest
+ * list, people at its 3,000-entity target with aliases and some namesakes'
+ * qualifiers, takes under 4 ms, and the typical one well under. The list is
+ * synthetic (seeded syllable names, which spread worse than real ones), the
+ * queries replay typing 60 names letter by letter, typos included, and each
+ * query keeps its fastest of three runs, so a busy shared machine can't fail
+ * the guard on noise alone. The test's own time limit is generous for the
+ * same reason: about 2,400 timed scans take a second or two on an idle
+ * machine, several times that on a loaded one.
  *
  * The timer comes from node:perf_hooks: the test measures the engine, it is
  * not part of it.
@@ -65,6 +66,8 @@ const SYLLABLES = [
   "ke",
 ];
 
+const QUALIFIERS = ["painter", "sculptor", "poet", "chemist", "composer"];
+
 function syntheticPeople(): AnswerList {
   const rng = createRng("suggest-benchmark");
   const word = (parts: number) => {
@@ -81,9 +84,12 @@ function syntheticPeople(): AnswerList {
       aliases.push(`${word(2)} ${name.split(" ")[1] ?? ""}`);
     }
     const id = parseEntityId(`x.person.p${i}`) as EntityId;
+    // One in eight carries a namesake's qualifier, so the display key is
+    // scanned too (CONTENT_GUIDE §2.10).
+    const qualifier = QUALIFIERS[i % QUALIFIERS.length] ?? "poet";
     entities.push({
       id,
-      display: name,
+      display: i % 8 === 0 ? `${name} (${qualifier})` : name,
       keys: [...new Set([name, ...aliases].map(normalizeName))],
       popularity: rng.int(200),
     });
@@ -134,6 +140,8 @@ describe("the suggestion benchmark", () => {
       const sorted = [...times].sort((a, b) => a - b);
       const p95 = sorted[Math.floor(sorted.length * 0.95)] ?? 0;
       expect(queries.length).toBeGreaterThan(500);
+      // The budget holds for every keystroke, not just most of them.
+      expect(sorted.at(-1) ?? 0).toBeLessThan(BUDGET_MS);
       expect(p95).toBeLessThan(BUDGET_MS);
       expect(median(times)).toBeLessThan(BUDGET_MS / 2);
     },
