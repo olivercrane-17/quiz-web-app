@@ -6,18 +6,14 @@
  * numeric fields and as whole formatted tokens in text; names and aliases
  * as whole tokens after normalizeName).
  *
- * It needs the real plugins, so it skips itself while the Wave 0 stubs are
- * in place and runs, unchanged, from the Wave 1 merge on. The echo-plugin
- * scans in sealed.test.ts cover the protocol itself on every branch.
+ * It runs on the real plugins, unconditionally since the Wave 1 merge, so a
+ * plugin that regressed to a stub fails here instead of skipping. The
+ * echo-plugin scans in sealed.test.ts cover the protocol itself.
  */
 import { describe, expect, it } from "vitest";
 
 import { createFakeClock } from "@/engine/clock";
-import {
-  PLUGINS,
-  PluginNotBuiltError,
-  type AnyRoundPlugin,
-} from "@/engine/rounds";
+import { PLUGINS } from "@/engine/rounds";
 import { normalizeName } from "@/engine/suggest/normalize";
 import {
   parseIdempotencyKey,
@@ -29,7 +25,6 @@ import {
   type ItemId,
   type MysteryContent,
   type RoundIntent,
-  type RoundOpen,
   type SealedChoiceContent,
   type TimeZone,
 } from "@/engine/types";
@@ -44,49 +39,6 @@ import musicArtistList from "../../../../content/fixtures/answer-lists/music_art
 import personList from "../../../../content/fixtures/answer-lists/person.json";
 import { createMockBackend } from "../index";
 import { createMemoryStore } from "../store";
-
-/** True once the plugin's client half runs instead of throwing PluginNotBuiltError. */
-function built(plugin: AnyRoundPlugin, open: RoundOpen): boolean {
-  try {
-    plugin.init(open as never);
-    return true;
-  } catch (error) {
-    return !(error instanceof PluginNotBuiltError);
-  }
-}
-
-const REAL_PLUGINS =
-  built(PLUGINS.mystery, {
-    family: "mystery",
-    index: 0,
-    clue: 1,
-    clues: ["A clue"],
-    wrongGuesses: [],
-    options: null,
-    issuedAt: 0,
-  }) &&
-  built(PLUGINS.encore, {
-    family: "encore",
-    index: 0,
-    question: "How many?",
-    unit: "steps",
-    unitShort: "steps",
-    unitLabel: "steps",
-    valueKind: "quantity",
-    decimals: 0,
-    issuedAt: 0,
-  }) &&
-  built(PLUGINS.mc, {
-    family: "choice",
-    index: 0,
-    format: "mc",
-    stem: "Which?",
-    options: [
-      { index: 0, label: "A", alreadyGuessed: false },
-      { index: 1, label: "B", alreadyGuessed: false },
-    ],
-    issuedAt: 0,
-  });
 
 interface ListEntity {
   id: string;
@@ -276,7 +228,7 @@ function wrongGuessFor(content: MysteryContent): EntityId {
   return other.id as EntityId;
 }
 
-describe.skipIf(!REAL_PLUGINS)("sealed secrecy with the real plugins", () => {
+describe("sealed secrecy with the real plugins", () => {
   it("AC-DLY-03 AC-DLY-04 Daily #42 (three Mysteries and an Encore): no key before each round resolves", async () => {
     const mock = setup(Date.UTC(2026, 10, 1, 9));
     const started = await mock.sealed.start({ kind: "today" }, START);

@@ -1,16 +1,12 @@
 /**
  * The Daily greybox on the mock backend (ARCHITECTURE §12.3 DLY-1): Today's
- * card, the Daily screen's start states and the stop screen's routing.
- *
- * Playing a round needs the real round plugins and components: PRA-1's
- * choice plugin and MYS-1's mystery and encore plugins, built on their own
- * Wave 1 branches. Until they merge, opening round 0 throws inside the mock
- * (the stubs raise PluginNotBuiltError), so every spec that plays is a
- * `test.fixme` below, written in full; the Wave 1 exit removes `.fixme`
- * (and wires MYS-1's `useAnswerList` into
- * src/features/daily/screen/answer-lists.ts, which the typed-guess spec
- * needs). The engine-level halves of AC-DLY-01, 07 and 09 already run in
- * Vitest with the echo plugins (src/features/daily/model/controller.test.ts,
+ * card, the Daily screen's start states, the stop screen's routing, and the
+ * fixture Dailies played through the real round plugins and components
+ * (PRA-1's choice round, MYS-1's Mystery and Encore). The typed-guess spec
+ * gets its suggestions from MYS-1's answer lists, which the Daily reads
+ * through src/features/daily/screen/answer-lists.ts. The engine-level halves
+ * of AC-DLY-01, 07 and 09 also run in Vitest with the echo plugins
+ * (src/features/daily/model/controller.test.ts,
  * src/backend/mock/server/sealed.test.ts, src/engine/share/text.test.ts).
  */
 import type { Page } from "@playwright/test";
@@ -193,10 +189,7 @@ test.describe("the stop screen's routing", () => {
   });
 });
 
-/**
- * Wave 1 exit: these need PRA-1's and MYS-1's plugins and round components.
- * Remove `.fixme` once both have merged.
- */
+/** Wave 1 exit: the fixture Dailies on PRA-1's and MYS-1's plugins and round components. */
 test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
   /** Plays a Mystery on Next clue to its options, then picks the one matching `pattern`. */
   async function playMysteryToOptions(page: Page, pattern: RegExp) {
@@ -208,10 +201,10 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
     await page.getByRole("button", { name: pattern }).click();
   }
 
-  test.fixme("a typed guess finds its suggestions, and a wrong one keeps the field and survives a reload", async ({
+  test("a typed guess finds its suggestions, and a wrong one keeps the field and survives a reload", async ({
     page,
   }) => {
-    // Needs MYS-1's list hook wired in src/features/daily/screen/answer-lists.ts.
+    // The suggestions come from MYS-1's person list (screen/answer-lists.ts).
     await page.goto("/daily");
     const round = page.locator("[data-round-area]");
     const field = round.getByRole("combobox");
@@ -241,7 +234,7 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
     expect(await actions()).toEqual([1]);
   });
 
-  test.fixme("AC-DLY-09 [mc ×9, encore] renders, scores out of 9 and shares one row of nine choice glyphs", async ({
+  test("AC-DLY-09 [mc ×9, encore] renders, scores out of 9 and shares one row of nine choice glyphs", async ({
     page,
   }) => {
     // 15 November 2026: the [mc ×9, encore] fixture Daily (content/fixtures/schedule/2026-11.json).
@@ -288,7 +281,7 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
     expect(lines.at(-1)).toMatch(/\/daily$/);
   });
 
-  test.fixme("AC-DLY-09 [mc ×5, mystery, encore] scores out of 9 and shares five choice glyphs, then a Mystery row", async ({
+  test("AC-DLY-09 [mc ×5, mystery, encore] scores out of 9 and shares five choice glyphs, then a Mystery row", async ({
     page,
   }) => {
     // 16 November 2026: the [mc ×5, mystery, encore] fixture Daily.
@@ -323,7 +316,7 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
     ]);
   });
 
-  test.fixme("the home card follows the Daily: in progress, then finished with its grid", async ({
+  test("the home card follows the Daily: in progress, then finished with its grid", async ({
     page,
   }) => {
     await mockInit(page, { scenario: "in_progress_mystery_2" });

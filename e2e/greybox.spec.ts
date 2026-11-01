@@ -2,13 +2,12 @@
  * The playable greybox (ARCHITECTURE §12.2).
  *
  * Wave 0 checks the shell: Home renders with its four destinations, its
- * greeting and its skip link. The Wave 1 exit flows below are written in
- * full by DLY-1 and stay `test.fixme` until PRA-1 (the choice plugin,
- * ChoiceRound and Quick play) and MYS-1 (the mystery and encore plugins and
- * rounds) merge, because every step past the Play button runs on them:
- * remove `.fixme` at the Wave 1 exit. They play by Next clue and the clue-4
- * options, so they don't depend on the typed-guess list being wired. The
- * AC-DLY-09 compositions live in e2e/daily/greybox.spec.ts.
+ * greeting and its skip link. The Wave 1 exit flows below run on the three
+ * Wave 1 lanes together: PRA-1 (the choice plugin, ChoiceRound and Quick
+ * play), MYS-1 (the mystery and encore plugins and rounds) and DLY-1 (the
+ * sealed Daily on the mock backend). They play by Next clue and the clue-4
+ * options; the typed guess, the AC-DLY-09 compositions and the home card's
+ * states live in e2e/daily/greybox.spec.ts.
  */
 import type { Page } from "@playwright/test";
 
@@ -127,7 +126,7 @@ test.describe("Wave 1 exit", () => {
     await page.getByRole("button", { name: option }).click();
   }
 
-  test.fixme("Quick play from Home runs ten questions to the results screen", async ({
+  test("Quick play from Home runs ten questions to the results screen", async ({
     page,
   }) => {
     await page.goto("/");
@@ -149,7 +148,7 @@ test.describe("Wave 1 exit", () => {
     ).toBeVisible();
   });
 
-  test.fixme("AC-DLY-01 one tap on Play opens Mystery 1's first clue with nothing in between", async ({
+  test("AC-DLY-01 one tap on Play opens Mystery 1's first clue with nothing in between", async ({
     page,
   }) => {
     await page.goto("/");
@@ -171,7 +170,7 @@ test.describe("Wave 1 exit", () => {
     await expect(page.getByRole("form")).toHaveCount(0);
   });
 
-  test.fixme("a fixture Daily of three Mysteries and an Encore reaches the stop screen with its share lines in order", async ({
+  test("a fixture Daily of three Mysteries and an Encore reaches the stop screen with its share lines in order", async ({
     page,
   }) => {
     await page.goto("/daily");
@@ -203,7 +202,7 @@ test.describe("Wave 1 exit", () => {
     await expect(page.getByText("Next Daily in 15h 0m")).toBeVisible();
   });
 
-  test.fixme("AC-DLY-07 reloading mid-Mystery resumes at the same clue with the same guess chips", async ({
+  test("AC-DLY-07 reloading mid-Mystery resumes at the same clue with the same guess chips", async ({
     page,
   }) => {
     // Mystery 1 solved on clue 2; Mystery 2 open on clue 2 after one wrong guess.

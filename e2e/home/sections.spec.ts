@@ -2,9 +2,10 @@
  * Today's layout rules that live in CSS (src/features/home/sections.tsx):
  * one notice above Practice at a time, first with content wins, and a
  * promoted Practice card that comes first in the DOM as well as on screen,
- * so keyboard and reading order follow what the player sees. The slots are
- * stubs until their owners build them, so the test fills their wrappers
- * the way the cards will.
+ * so keyboard and reading order follow what the player sees. Both Practice
+ * slots hold the real Quick play card (PRA-1); the notice slots are stubs
+ * until their owners build them, so the test fills those wrappers, and the
+ * Daily's, the way the cards will.
  */
 import type { Page } from "@playwright/test";
 
@@ -50,9 +51,6 @@ test("only the first notice with content shows above Practice", async ({
 test("a promoted Practice card comes before the Daily in reading order, not only on screen", async ({
   page,
 }) => {
-  const card = '<a href="/practice/run">Quick play</a>';
-  await fillSlot(page, "practice", card);
-  await fillSlot(page, "practice-promoted", card);
   await fillSlot(page, "daily", '<a href="/daily">Play</a>');
 
   const quickPlay = page.getByRole("link", { name: "Quick play" });

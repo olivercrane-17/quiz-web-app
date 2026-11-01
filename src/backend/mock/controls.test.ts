@@ -1,7 +1,7 @@
 /**
  * Mock controls: scenarios played through the sealed area (with the echo
- * test plugins here; the real plugins once PRA-1 and MYS-1 merge), seeded
- * once per database, and the transport switches.
+ * test plugins here; the app plays them on the real ones), seeded once per
+ * database, and the transport switches.
  */
 import { describe, expect, it } from "vitest";
 
@@ -249,7 +249,7 @@ describe("transport controls", () => {
       kv: createKv({ storage: createMemoryStorage() }),
       now: () => NOV_1,
     });
-    // The real plugins are stubs until PRA-1 and MYS-1: opening round 0 throws.
+    // A plugin whose open throws stands in for a bug in round 0.
     const mock = createMockBackend(
       {
         identity: () => identity,
