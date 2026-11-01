@@ -10,13 +10,17 @@ import type { Page } from "@playwright/test";
 
 import { expect, test } from "../fixtures";
 
-/** Appends `html` to the wrapper of one home slot. */
+/**
+ * Puts `html` first in the wrapper of one home slot, ahead of a card its
+ * owner already renders there (the Daily card, since DLY-1), so the
+ * injected markup is what reading and focus order meet in that slot.
+ */
 async function fillSlot(page: Page, slot: string, html: string) {
   await page.evaluate(
     ([name, markup]) => {
       const wrapper = document.querySelector(`[data-home-slot="${name}"]`);
       if (wrapper === null) throw new Error(`no home slot ${name}`);
-      wrapper.insertAdjacentHTML("beforeend", markup);
+      wrapper.insertAdjacentHTML("afterbegin", markup);
     },
     [slot, html] as const,
   );

@@ -17,6 +17,8 @@
  * stays as it is. It lives in a feature, not in `src/platform`, because the
  * platform layer may not import `@/backend` (§2.2).
  */
+import { configureBackend } from "@/backend";
+import { loadLocalIdentity } from "@/platform/identity/local";
 import { runStorageMigrations } from "@/platform/storage";
 
 let booted: Promise<void> | null = null;
@@ -28,7 +30,14 @@ async function boot(): Promise<void> {
     // The kv layer never throws, and a failed lock request leaves storage
     // as it was; the app keeps working on what is there.
   }
-  // Step 2 (DLY-1): load or mint the identity, then configureBackend().
+  // Step 2: load or mint the identity, then hand it to the backend. It runs
+  // after the migrations, which never touch `qz:identity` (§6.1).
+  try {
+    configureBackend({ identity: await loadLocalIdentity() });
+  } catch {
+    // Without crypto.getRandomValues no identity can be minted (§9.1 step
+    // 5); calls that need one then answer an error the screen shows.
+  }
 }
 
 /** Runs the boot once per tab; resolves at once on the server. */
