@@ -68,10 +68,12 @@ describe("round component registry", () => {
     }
   });
 
-  it("renders a stub as a visible note until its ticket builds it", () => {
+  it("renders the choice round from the registry", () => {
     const Choice = ROUND_COMPONENTS.choice;
     renderWithUser(<Choice {...props()} />);
-    expect(screen.getByText(/isn't ready yet/)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      "Which is the capital of Australia?",
+    );
   });
 });
 
