@@ -6,6 +6,7 @@
 import { describe, expect, it } from "vitest";
 
 import { createFakeClock } from "@/engine/clock";
+import type { AnyRoundPlugin, PluginRegistry } from "@/engine/rounds";
 import { createEchoRegistry } from "@/engine/rounds/testing/echo";
 import {
   parseEntityId,
@@ -78,7 +79,7 @@ function device(seed: number): IdentityProvider {
   });
 }
 
-function setup(at = NOV_1) {
+function setup(at = NOV_1, plugins: PluginRegistry = createEchoRegistry()) {
   const clock = createFakeClock(at);
   const store = createMemoryStore();
   let identity = device(1);
@@ -92,7 +93,7 @@ function setup(at = NOV_1) {
       clock,
       init: { latencyMs: 0 },
       attachControls: false,
-      plugins: createEchoRegistry(),
+      plugins,
     },
   );
   return {
@@ -312,6 +313,71 @@ describe("act", () => {
       ok: false,
       error: { code: "conflict" },
     });
+  });
+
+  it("rebuilds a replayed key from the attempt as it stands, a void that landed in between included (§8.8)", async () => {
+    const t = setup();
+    const { attemptId } = await started(t);
+    const k = key();
+    const first = await act(t, attemptId, 0, 1, guess(WRONG[0]!), k);
+    expect(first).toMatchObject({
+      ok: true,
+      value: { verdict: { kind: "continue", open: { clue: 2 } } },
+    });
+    await voidRound(t.mock.context, { dailyNumber: 42, round: 0 });
+
+    // The answer to the guess was lost, so the client sends it again.
+    const replay = await act(t, attemptId, 0, 1, guess(WRONG[0]!), k);
+    expect(replay).toMatchObject({
+      ok: true,
+      value: {
+        verdict: {
+          kind: "resolved",
+          reveal: { family: "withdrawn", round: "mystery", points: 4 },
+          next: { index: 1, type: "mystery" },
+        },
+        finished: null,
+        converted: false,
+      },
+    });
+    expect(await t.mock.sealed.get(attemptId)).toMatchObject({
+      ok: true,
+      value: { points: 4, current: { index: 1, open: null } },
+    });
+    // The replay counted nothing.
+    expect(t.attempt(attemptId).actions).toBe(1);
+  });
+
+  it("reports a conversion that landed after the key on its replay", async () => {
+    const t = setup();
+    const { attemptId } = await started(t);
+    const k = key();
+    expect(await act(t, attemptId, 0, 1, nextClue, k)).toMatchObject({
+      ok: true,
+      value: { converted: false },
+    });
+    // 1 November's window closes at 2 November 12:00 UTC.
+    t.clock.set(Date.UTC(2026, 10, 2, 12));
+    expect(await act(t, attemptId, 0, 1, nextClue, k)).toMatchObject({
+      ok: true,
+      value: { verdict: { kind: "continue" }, converted: true },
+    });
+    expect(t.attempt(attemptId)).toMatchObject({
+      kind: "archive",
+      ranked: false,
+    });
+  });
+
+  it("refuses an idempotency key that isn't a v4 UUID, storing nothing", async () => {
+    const t = setup();
+    const { attemptId } = await started(t);
+    for (const raw of ["not-a-uuid", "__proto__", "constructor", ""]) {
+      expect(
+        await act(t, attemptId, 0, 1, nextClue, raw as IdempotencyKey),
+      ).toMatchObject({ ok: false, error: { code: "invalid_input" } });
+    }
+    expect(t.attempt(attemptId).actions).toBe(0);
+    expect(t.mock.controls.inspect("roundActions")).toEqual({});
   });
 
   it("refuses a stale step with the current snapshot, consuming nothing", async () => {
@@ -555,6 +621,31 @@ describe("beginRound", () => {
   });
 });
 
+/** What the judge state of every round carries in the sentinel registry. */
+const SENTINEL = "SENTINEL-KEY";
+
+/**
+ * The echo plugins, with a marker planted in every round's judge state. The
+ * echo judges keep no key of their own, so this is what tells a leak of the
+ * stored judge state apart: with the real plugins it holds the answer.
+ */
+function sentinelRegistry(): PluginRegistry {
+  const echo = createEchoRegistry();
+  const plant = (plugin: AnyRoundPlugin): AnyRoundPlugin => ({
+    ...plugin,
+    open(content, meta, ctx) {
+      const opened = plugin.open(content, meta, ctx);
+      return {
+        ...opened,
+        judge: { ...(opened.judge as object), secret: SENTINEL },
+      };
+    },
+  });
+  return Object.fromEntries(
+    Object.entries(echo).map(([type, plugin]) => [type, plant(plugin)]),
+  ) as unknown as PluginRegistry;
+}
+
 describe("sealed payloads", () => {
   it("carry no answer, content id or later clue before a round resolves (AC-DLY-03, mock half)", async () => {
     const t = setup();
@@ -567,6 +658,57 @@ describe("sealed payloads", () => {
     for (const secret of [...ANSWERS, "fx.m.", "fx.e.", "Echo clue 3"]) {
       expect(sent).not.toContain(secret);
     }
+  });
+
+  it("never carry a round's stored judge state, in verdicts, refusals, snapshots or replays", async () => {
+    const t = setup(NOV_1, sentinelRegistry());
+    const { attemptId } = await started(t);
+    const k = key();
+    // A wrong guess, its replay, a stale step and a refused guess.
+    await act(t, attemptId, 0, 1, guess(WRONG[0]!), k);
+    await act(t, attemptId, 0, 1, guess(WRONG[0]!), k);
+    await act(t, attemptId, 0, 1, nextClue);
+    await act(t, attemptId, 0, 2, guess(entity("fx.x.person.nobody-at-all")));
+    await t.mock.sealed.get(attemptId);
+    await act(t, attemptId, 0, 2, nextClue);
+    await act(t, attemptId, 0, 3, nextClue);
+    // Clue 4's options, a wrong round index, then the pick.
+    await act(t, attemptId, 1, 1, nextClue);
+    await act(t, attemptId, 0, 4, {
+      family: "mystery",
+      kind: "pick",
+      option: 0,
+    });
+    await t.mock.sealed.beginRound(attemptId, 1);
+    await t.mock.sealed.beginRound(attemptId, 1);
+    await playOut(t, attemptId);
+    await t.mock.sealed.finish(attemptId);
+    await t.mock.daily.today(UTC);
+    await t.mock.daily.results(attemptId);
+
+    // The marker is there to find: every round's judge state holds it.
+    expect(JSON.stringify(t.mock.controls.inspect("attempts"))).toContain(
+      SENTINEL,
+    );
+    const responses = t.mock.controls.responses();
+    expect(responses.map((r) => r.method)).toEqual(
+      expect.arrayContaining([
+        "sealed.start",
+        "sealed.act",
+        "sealed.get",
+        "sealed.beginRound",
+        "sealed.finish",
+        "daily.today",
+        "daily.results",
+      ]),
+    );
+    expect(
+      responses.some(
+        (r) =>
+          (r.payload as { error?: { code?: string } }).error?.code === "stale",
+      ),
+    ).toBe(true);
+    expect(JSON.stringify(responses)).not.toContain(SENTINEL);
   });
 });
 

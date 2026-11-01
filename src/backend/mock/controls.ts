@@ -2,7 +2,8 @@
  * Mock controls (ARCHITECTURE §7.4, §11.4): `window.__qzMock`, attached only
  * in mock builds and typed for specs in e2e/support/mock.ts (PLT-1). Pages
  * read `window.__QZ_MOCK_INIT__` before the app loads, so a scenario applies
- * on the very first render.
+ * on the very first render; it seeds an empty database only, so `seed()`
+ * after it, or play, survives a reload that sets it again.
  *
  * The transport controls (latency, reachability, realtime, shed, injected
  * failures), `inspect()` and the response log steer every call. `seed()`
@@ -108,7 +109,10 @@ export interface MockControls {
   addIncident(start: EpochMs, end: EpochMs): Promise<void>;
   /** Read-only, e.g. 'attempts' or 'rooms.<id>'. */
   inspect<T = unknown>(path: string): T;
-  /** For sealed-payload assertions. */
+  /**
+   * For sealed-payload assertions: every call's result, oldest first, up to
+   * the latest RESPONSE_LOG_MAX (older ones drop off the front).
+   */
   responses(): { method: MockMethod; at: EpochMs; payload: unknown }[];
 }
 
@@ -128,6 +132,8 @@ export interface MockInit {
 }
 
 export const DEFAULT_LATENCY_MS = 30;
+/** How many responses the log keeps, so a polling tab's log stays bounded. */
+export const RESPONSE_LOG_MAX = 1000;
 
 /** The transport state every wrapped call consults. */
 export interface MockTransportState {
@@ -170,7 +176,7 @@ function pick(document: unknown, path: string): unknown {
   return at;
 }
 
-/** Where a seeded scenario is recorded, so a reload never seeds it twice. */
+/** Where seed() records the scenario it built: `inspect('scenario')`. */
 export const SCENARIO_MARKER = "scenario";
 
 /** The scenarios seed() builds, beyond `fresh`. */
@@ -401,12 +407,6 @@ async function buildScenario(
     ["players", "credentials", "attempts", "roundActions", SCENARIO_MARKER],
   );
   confirmRegistered(ctx);
-}
-
-/** The scenario a database was seeded with, if any. */
-export function seededScenario(db: Readonly<MockDb>): string | null {
-  const marker = db[SCENARIO_MARKER] as { name?: unknown } | undefined;
-  return typeof marker?.name === "string" ? marker.name : null;
 }
 
 export function createMockControls(ctx: MockContext): MockControls {

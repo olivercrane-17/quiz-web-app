@@ -26,9 +26,27 @@ import {
   dailyLine,
   progressLine,
 } from "./home-card";
-import { loadTodayCard } from "./home-data";
+import { loadSharePayload, loadTodayCard } from "./home-data";
 
-vi.mock("./home-data", () => ({ loadTodayCard: vi.fn(), warmDaily: vi.fn() }));
+vi.mock("./home-data", () => ({
+  loadTodayCard: vi.fn(),
+  loadSharePayload: vi.fn(),
+  warmDaily: vi.fn(),
+}));
+// SHR-1 builds the button; here it shows what it was handed.
+vi.mock("@/features/share/share-button", () => ({
+  ShareButton: ({
+    payload,
+    surface,
+  }: {
+    payload: { text: string };
+    surface: string;
+  }) => (
+    <button type="button" data-share-surface={surface}>
+      {payload.text}
+    </button>
+  ),
+}));
 
 const EPOCH = "2026-09-21";
 /** 12:00 UTC on Sunday 1 November 2026, Daily #42 in every zone from UTC-11 to UTC+11. */
@@ -68,12 +86,28 @@ function card(overrides: Partial<DailyTodayCard> = {}): DailyTodayCard {
   };
 }
 
-function answers(value: DailyTodayCard): void {
+function answers(value: DailyTodayCard, highContrast = false): void {
   vi.mocked(loadTodayCard).mockResolvedValue({
-    ok: true,
-    value,
-  } satisfies Result<DailyTodayCard>);
+    card: { ok: true, value } satisfies Result<DailyTodayCard>,
+    highContrast,
+  });
 }
+
+const FINISHED = {
+  status: "finished",
+  attemptId: parseAttemptId("0f8fad5b-d9cb-469f-a165-70867728950e"),
+  finished: {
+    points: 9,
+    maxPoints: 12,
+    rows: [
+      ["solved", "unused", "unused", "unused"],
+      ["passed", "solved", "unused", "unused"],
+      ["passed", "passed", "solved", "unused"],
+    ],
+    encore: null,
+  },
+  nextUnlockAt: NOON + 15 * 3_600_000,
+} satisfies Partial<DailyTodayCard>;
 
 function renderCard() {
   const view = render(<DailyHomeCard epoch={EPOCH} minutes={6} />);
@@ -157,6 +191,9 @@ describe("Today's Daily card", () => {
     ).toBeVisible();
     expect(within(region()).getByText(/About 6 minutes/)).toBeVisible();
     expect(
+      within(region()).getByText("Fewer clues, more points. Then one number."),
+    ).toBeVisible();
+    expect(
       within(region()).getByRole("link", { name: "Play today's Daily" }),
     ).toHaveAttribute("href", "/daily");
     expect(
@@ -178,6 +215,26 @@ describe("Today's Daily card", () => {
     expect(region()).toHaveAttribute("data-daily-card", "not_started");
   });
 
+  it("not started: a Daily of questions alone gets its own rule line", async () => {
+    answers(
+      card({
+        rounds: [
+          ...Array.from({ length: 9 }, () => ({
+            type: "mc" as const,
+            difficulty: "easy" as const,
+            answerType: null,
+          })),
+          { type: "encore", difficulty: null, answerType: null },
+        ],
+      }),
+    );
+    const { region } = renderCard();
+    expect(
+      await within(region()).findByText("A point a question. Then one number."),
+    ).toBeVisible();
+    expect(region()).not.toHaveTextContent("Fewer clues");
+  });
+
   it("in progress: Continue, named for where the run stands", async () => {
     answers(
       card({
@@ -197,26 +254,14 @@ describe("Today's Daily card", () => {
       within(region()).getByRole("link", { name: "Continue" }),
     ).toHaveAttribute("href", "/daily");
     expect(within(region()).queryByRole("list")).toBeNull();
+    // The heading names the Daily; the line under it keeps the date alone.
+    expect(within(region()).getByText("Sunday 1 November")).toBeVisible();
+    expect(region()).not.toHaveTextContent(/minutes/);
   });
 
   it("finished: the score, the rows as the share draws them, See results and the countdown", async () => {
-    answers(
-      card({
-        status: "finished",
-        attemptId: parseAttemptId("0f8fad5b-d9cb-469f-a165-70867728950e"),
-        finished: {
-          points: 9,
-          maxPoints: 12,
-          rows: [
-            ["solved", "unused", "unused", "unused"],
-            ["passed", "solved", "unused", "unused"],
-            ["passed", "passed", "solved", "unused"],
-          ],
-          encore: null,
-        },
-        nextUnlockAt: NOON + 15 * 3_600_000,
-      }),
-    );
+    answers(card(FINISHED));
+    vi.mocked(loadSharePayload).mockResolvedValue(null);
     const { region } = renderCard();
     expect(
       await within(region()).findByRole("heading", {
@@ -232,17 +277,43 @@ describe("Today's Daily card", () => {
     expect(
       within(region()).queryByRole("link", { name: "Play today's Daily" }),
     ).toBeNull();
+    expect(
+      within(region()).getByText("Daily #42 · Sunday 1 November"),
+    ).toBeVisible();
+    expect(region()).not.toHaveTextContent(/minutes/);
+  });
+
+  it("finished: Share carries the stop screen's text, and the grid follows high contrast", async () => {
+    answers(card(FINISHED), true);
+    vi.mocked(loadSharePayload).mockResolvedValue({
+      text: "Knewt Daily #42 · 9/12",
+      mode: "daily",
+      grid: FINISHED.finished.rows,
+    });
+    const { region } = renderCard();
+    const share = await within(region()).findByRole("button", {
+      name: "Knewt Daily #42 · 9/12",
+    });
+    expect(share).toHaveAttribute("data-share-surface", "home");
+    expect(loadSharePayload).toHaveBeenCalledWith(
+      "0f8fad5b-d9cb-469f-a165-70867728950e",
+      true,
+    );
+    expect(region()).toHaveTextContent("🟦⬜⬜⬜🟧🟦⬜⬜🟧🟧🟦⬜");
   });
 
   it("keeps Play working when get_today fails", async () => {
     vi.mocked(loadTodayCard).mockResolvedValue({
-      ok: false,
-      error: {
-        code: "offline",
-        retryable: true,
-        retryAfterMs: null,
-        refId: null,
+      card: {
+        ok: false,
+        error: {
+          code: "offline",
+          retryable: true,
+          retryAfterMs: null,
+          refId: null,
+        },
       },
+      highContrast: false,
     });
     const { region } = renderCard();
     await vi.waitFor(() => {

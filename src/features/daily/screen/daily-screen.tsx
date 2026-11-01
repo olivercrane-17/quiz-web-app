@@ -10,6 +10,11 @@
  * starts in an effect, after the client boot, so server and client render
  * the same first snapshot. A hidden route (kept in `<Activity>`) stops the
  * controller and picks up from the server when it shows again.
+ *
+ * A start that can't go through says why in words that say what still
+ * works (PRD §3.0.2). A rate-limited one follows AC-IDN-04: the skeleton
+ * and "Checking…" while it retries silently for 5 s, then the network's
+ * copy with Try again, and Practice only once 30 s of refusals have passed.
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -29,11 +34,13 @@ import { ProgressSegments } from "@/ui/progress-segments";
 import { Loading, Skeleton, SkeletonText } from "@/ui/skeleton";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
+import { PRACTICE_HREF } from "../links";
 import { browserDeps } from "../model/browser";
 import {
   createDailyController,
   type DailyController,
   type DailySnapshot,
+  type StartProblem,
 } from "../model/controller";
 import { rememberFinished } from "../model/handoff";
 import { progressSegments, progressVariant } from "../model/labels";
@@ -78,16 +85,29 @@ function StartSkeleton({ slow }: { slow: boolean }) {
   );
 }
 
-/** Why the Daily hasn't opened, in words that say what still works (PRD §3.0.2). */
-function StartProblemCard({
-  snapshot,
-  controller,
-}: {
-  snapshot: DailySnapshot;
-  controller: DailyController;
-}) {
-  const problem = snapshot.problem;
-  if (problem === null) return null;
+/** A rate-limited start still inside its 5 s of silent retries (PRD §3.0.2). */
+function retryingSilently(problem: StartProblem | null): boolean {
+  return problem !== null && problem.retrying && problem.notice === "silent";
+}
+
+/** The words for a start problem, and whether Practice is offered yet. */
+function problemWords(problem: StartProblem): {
+  title: string;
+  body: string | null;
+  practice: boolean;
+} {
+  if (problem.code === "rate_limited" && problem.retrying) {
+    // AC-IDN-04: the network's copy first, Practice only from 30 s.
+    if (problem.notice === "plain") {
+      return {
+        title:
+          problem.scope === "ip" ? COPY.startBusy.ip : COPY.startBusy.other,
+        body: null,
+        practice: false,
+      };
+    }
+    return { ...COPY.startBusyFallback, practice: true };
+  }
   const words =
     problem.code === "offline"
       ? COPY.offline
@@ -98,6 +118,20 @@ function StartProblemCard({
           : problem.code === "unreachable" || problem.code === "timeout"
             ? COPY.unreachable
             : COPY.failed;
+  return { ...words, practice: true };
+}
+
+/** Why the Daily hasn't opened, in words that say what still works (PRD §3.0.2). */
+export function StartProblemCard({
+  snapshot,
+  controller,
+}: {
+  snapshot: DailySnapshot;
+  controller: DailyController;
+}) {
+  const problem = snapshot.problem;
+  if (problem === null) return null;
+  const words = problemWords(problem);
   const canRetry =
     problem.code !== "unavailable" && problem.code !== "feature_disabled";
   return (
@@ -108,19 +142,21 @@ function StartProblemCard({
       data-daily-problem={problem.code}
     >
       <h2 className="text-lg font-semibold">{words.title}</h2>
-      <p className="text-base">{words.body}</p>
+      {words.body === null ? null : <p className="text-base">{words.body}</p>}
       <div className="flex flex-wrap gap-3">
         {canRetry ? (
           <Button onClick={() => controller.retry()}>{COPY.tryAgain}</Button>
         ) : null}
-        <Link
-          href={"/practice" as Route}
-          // Built by a later ticket: no prefetch, which would 404 until then.
-          prefetch={false}
-          className={buttonClasses({ variant: "text" })}
-        >
-          {COPY.practice}
-        </Link>
+        {words.practice ? (
+          <Link
+            href={PRACTICE_HREF as Route}
+            // Rarely followed, and PRA-1's route until the Wave 1 merge: no prefetch.
+            prefetch={false}
+            className={buttonClasses({ variant: "text" })}
+          >
+            {COPY.practice}
+          </Link>
+        ) : null}
       </div>
       {problem.refId === null ? null : (
         <p className="text-xs text-muted-foreground">
@@ -194,6 +230,8 @@ export function DailyScreen() {
         </h1>
         {status === "playing" ? (
           <PlayingArea snapshot={snapshot} controller={controller} />
+        ) : retryingSilently(snapshot.problem) ? (
+          <StartSkeleton slow />
         ) : status === "failed" || snapshot.problem !== null ? (
           <StartProblemCard snapshot={snapshot} controller={controller} />
         ) : (

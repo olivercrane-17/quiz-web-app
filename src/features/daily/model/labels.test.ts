@@ -237,6 +237,10 @@ describe("announcements", () => {
     expect(
       announcementText({ kind: "mystery_missed", answer: "Heat (1995)" }),
     ).toBe("This one got away. The answer was Heat (1995). 0 points.");
+    // A withdrawal has no answer to name, and is never called a miss.
+    expect(announcementText({ kind: "mystery_missed", answer: "" })).toBe(
+      "This Mystery was withdrawn because we got it wrong. Everyone gets 4 points.",
+    );
     expect(announcementText({ kind: "correct", answer: "Paris" })).toBe(
       "Correct. Paris.",
     );

@@ -85,4 +85,19 @@ describe("mock room hints", () => {
     expect(statuses).toEqual(["live", "down", "live"]);
     expect(realtime.state()).toBe("live");
   });
+
+  it("never reports a stale status last when the state changes as it subscribes", async () => {
+    const realtime = createMockRealtime({ channel: null });
+    const statuses: string[] = [];
+    realtime.subscribe("room:1", {
+      hint: () => {},
+      status: (s) => statuses.push(s),
+    });
+    // The switch flips in the same tick, before the first report goes out.
+    realtime.setState("down");
+    await flush();
+    expect(realtime.state()).toBe("down");
+    expect(statuses.at(-1)).toBe("down");
+    expect(statuses).not.toContain("live");
+  });
 });

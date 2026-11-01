@@ -95,6 +95,8 @@ export function browserDeps(): DailyControllerDeps {
     onAttempt(snapshot) {
       // The client preloads the answer lists the Daily needs while clue 1
       // shows (PRD §3.1.3), so suggestions are ready at the first keystroke.
+      // The Wave 1 merge warms MYS-1's handle store itself instead, with
+      // `preloadAnswerLists(types)` (see screen/answer-lists.ts).
       const types = new Set(
         snapshot.rounds.flatMap((meta) =>
           meta.answerType === null ? [] : [meta.answerType],

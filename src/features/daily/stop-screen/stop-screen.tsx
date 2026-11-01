@@ -42,6 +42,7 @@ import { Loading, Skeleton, SkeletonText } from "@/ui/skeleton";
 
 import { STOP_SCREEN_COPY } from "../client-copy";
 import { DEFAULT_GLYPHS, HIGH_CONTRAST_GLYPHS } from "../glyphs";
+import { PRACTICE_HREF } from "../links";
 import { deviceZone } from "../model/browser";
 import {
   CHOICE_ROW_LABEL,
@@ -250,8 +251,8 @@ function Results({
         </Link>
         {nextUnlockAt === null ? null : <NextDaily at={nextUnlockAt} />}
         <Link
-          href={"/practice" as Route}
-          // Built by a later ticket: no prefetch, which would 404 until then.
+          href={PRACTICE_HREF as Route}
+          // Rarely followed, and PRA-1's route until the Wave 1 merge: no prefetch.
           prefetch={false}
           className={buttonClasses({ variant: "text" })}
         >
@@ -302,7 +303,8 @@ export function StopScreen() {
     let live = true;
     void (async () => {
       if (dailyNumber === null) {
-        if (live) setState({ kind: "elsewhere" });
+        // No Daily number in the address at all: nothing moved anywhere.
+        if (live) setState({ kind: "not_found" });
         return;
       }
       try {
@@ -353,6 +355,14 @@ export function StopScreen() {
         <Message
           text={COPY.elsewhere}
           action={{ label: COPY.pastWeek, href: "/archive" }}
+        />
+      );
+      break;
+    case "not_found":
+      body = (
+        <Message
+          text={COPY.notFound}
+          action={{ label: COPY.goToday, href: "/" }}
         />
       );
       break;

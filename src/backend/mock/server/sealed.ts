@@ -14,10 +14,12 @@
  *   time or counting a request. A voided round never opens: it resolves at
  *   once as withdrawn, with the round's full points (4 for a Mystery, none
  *   for an Encore), and the next round's meta, or the finish.
- * - `act` follows round_action's order: the idempotency key first (a key
- *   held by another attempt, round or intent is `conflict`; a known key
- *   returns the response rebuilt from the attempt's current state), the
- *   window's close (the attempt converts to unranked archive), a voided
+ * - `act` follows round_action's order: the idempotency key first (it must
+ *   be a v4 UUID, as `p_idem uuid` is; a key held by another attempt, round
+ *   or intent is `conflict`; a known key returns the response rebuilt from
+ *   the attempt's current state, a close or a mid-round void that landed
+ *   since included), the window's close (the attempt converts to unranked
+ *   archive), a voided
  *   current round (withdrawn instead of judged), the round and step (else
  *   `stale` with the current snapshot), the per-attempt cap, then the
  *   plugin's judge. Refusals consume nothing and store no key. The final
@@ -46,6 +48,7 @@ import { outcomeFromReveal, outcomePoints } from "@/engine/run";
 import { globalWindow, zoneOffsetMinutes } from "@/engine/time";
 import {
   ROUND_FAMILY,
+  parseIdempotencyKey,
   type AttemptId,
   type AttemptKind,
   type AttemptSnapshot,
@@ -800,9 +803,15 @@ export async function actIn(
   input: ActInput,
 ): Promise<Result<ActResponse>> {
   const now = ctx.clock.now();
+  // SQL's p_idem is a uuid: anything else is refused before it is looked up
+  // or stored, and case never makes two keys of one.
+  const key = parseIdempotencyKey(input.key);
+  if (key === null) return fail("invalid_input");
   const tables = sealedTables(db);
   const intent = encodeIntent(input.intent);
-  const known = tables.roundActions[input.key];
+  const known = Object.hasOwn(tables.roundActions, key)
+    ? tables.roundActions[key]
+    : undefined;
   if (known !== undefined) {
     if (
       known.attemptId !== attempt.id ||
@@ -811,12 +820,17 @@ export async function actIn(
     ) {
       return fail("conflict");
     }
+    // Rebuilt from the attempt as it stands now (§8.8), so the replay also
+    // carries a close or a mid-round void that landed after the key. A
+    // later round that hasn't opened yet is left for begin_round.
+    convertIfClosed(attempt, now);
+    withdrawIfVoided(ctx, db, attempt, now, { onlyIfOpen: true });
     return rebuild(db, attempt, known.round, now);
   }
   const converted = convertIfClosed(attempt, now);
   if (attempt.status !== "active") return stale(db, attempt, now);
   const remember = (round: number, step: number) => {
-    tables.roundActions[input.key] = {
+    tables.roundActions[key] = {
       attemptId: attempt.id,
       round,
       step,

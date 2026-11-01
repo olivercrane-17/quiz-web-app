@@ -21,6 +21,8 @@ export type ResultsState =
   | { kind: "not_finished" }
   /** Another date's results, which the archive serves (ARC-1). */
   | { kind: "elsewhere" }
+  /** An address with no Daily number in it. */
+  | { kind: "not_found" }
   | { kind: "error"; code: BackendErrorCode; refId: string | null };
 
 export async function loadResults(

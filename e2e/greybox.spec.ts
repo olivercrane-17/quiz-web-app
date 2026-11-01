@@ -153,6 +153,12 @@ test.describe("Wave 1 exit", () => {
     page,
   }) => {
     await page.goto("/");
+    // Hydration replaces the history entry for "/" once, after goto
+    // resolves. The card's chips come from get_today, which only runs once
+    // the page has hydrated, so from then on only the tap navigates.
+    await expect(page.locator("[data-daily-card] li").first()).toHaveText(
+      "A person · Easy",
+    );
     const urls: string[] = [];
     page.on("framenavigated", (frame) => {
       if (frame === page.mainFrame()) urls.push(new URL(frame.url()).pathname);
@@ -160,7 +166,7 @@ test.describe("Wave 1 exit", () => {
     await page.getByRole("link", { name: "Play today's Daily" }).click();
     await expect(page.getByRole("heading", { name: /clue 1/i })).toBeVisible();
     await expect(page).toHaveURL("/daily");
-    expect(urls.filter((path) => path !== "/daily")).toEqual([]);
+    expect(urls).toEqual(["/daily"]);
     await expect(page.getByRole("dialog")).toHaveCount(0);
     await expect(page.getByRole("form")).toHaveCount(0);
   });
@@ -208,9 +214,8 @@ test.describe("Wave 1 exit", () => {
     });
     await page.goto("/daily");
     const round = page.locator("[data-round-area]");
-    await expect(
-      round.getByRole("heading", { name: /^Mystery 2 of 3/ }),
-    ).toBeVisible();
+    // MysteryRound's own position line: "Mystery 2 of 3", then its difficulty.
+    await expect(round.getByText(/^Mystery 2 of 3/)).toBeVisible();
     await expect(round.getByRole("heading", { name: /clue 2/i })).toBeVisible();
     await expect(round.getByText(/Not Ostravia/)).toHaveCount(1);
     const actions = () =>
@@ -229,9 +234,7 @@ test.describe("Wave 1 exit", () => {
     const before = await actions();
 
     await page.reload();
-    await expect(
-      round.getByRole("heading", { name: /^Mystery 2 of 3/ }),
-    ).toBeVisible();
+    await expect(round.getByText(/^Mystery 2 of 3/)).toBeVisible();
     await expect(round.getByRole("heading", { name: /clue 2/i })).toBeVisible();
     await expect(round.getByRole("heading", { name: /clue 3/i })).toHaveCount(
       0,

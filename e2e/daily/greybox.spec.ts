@@ -7,9 +7,9 @@
  * Wave 1 branches. Until they merge, opening round 0 throws inside the mock
  * (the stubs raise PluginNotBuiltError), so every spec that plays is a
  * `test.fixme` below, written in full; the Wave 1 exit removes `.fixme`
- * (and wires MYS-1's AnswerListHandle into
- * src/features/daily/screen/answer-lists.ts, which the typed-guess steps
- * need). The engine-level halves of AC-DLY-01, 07 and 09 already run in
+ * (and wires MYS-1's `useAnswerList` into
+ * src/features/daily/screen/answer-lists.ts, which the typed-guess spec
+ * needs). The engine-level halves of AC-DLY-01, 07 and 09 already run in
  * Vitest with the echo plugins (src/features/daily/model/controller.test.ts,
  * src/backend/mock/server/sealed.test.ts, src/engine/share/text.test.ts).
  */
@@ -28,6 +28,14 @@ async function mockInit(page: Page, init: MockInit): Promise<void> {
     (window as unknown as { __QZ_MOCK_INIT__: unknown }).__QZ_MOCK_INIT__ =
       value;
   }, init);
+}
+
+/** A choice or clue-4 option by its label: AnswerButton names it "A. Label". */
+function option(page: Page, label: string) {
+  const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return page.getByRole("button", {
+    name: new RegExp(`^[A-H]\\. ${escaped}$`),
+  });
 }
 
 /** Reads the mock's database (`window.__qzMock.inspect`), once the backend has loaded. */
@@ -119,7 +127,7 @@ test.describe("the Daily screen's start states", () => {
     ).toBeVisible();
     await expect(
       problem.getByRole("link", { name: "Play practice instead" }),
-    ).toHaveAttribute("href", "/practice");
+    ).toHaveAttribute("href", "/practice/run");
     // No Daily content renders behind it.
     await expect(page.locator("[data-round-area]")).toHaveCount(0);
     await expect(
@@ -169,6 +177,20 @@ test.describe("the stop screen's routing", () => {
       page.getByRole("link", { name: "Past 7 days" }),
     ).toHaveAttribute("href", "/archive");
   });
+
+  test("for an address with no Daily number, says the page can't be found", async ({
+    page,
+  }) => {
+    await page.goto("/daily/abc/results");
+    await expect(page.getByText("We couldn't find that page.")).toBeVisible();
+    // Exact: the close button is "Close the results and go to Today".
+    await expect(
+      page.getByRole("link", { name: "Go to Today", exact: true }),
+    ).toHaveAttribute("href", "/");
+    await expect(
+      page.getByText("These results have moved to the archive."),
+    ).toHaveCount(0);
+  });
 });
 
 /**
@@ -176,15 +198,48 @@ test.describe("the stop screen's routing", () => {
  * Remove `.fixme` once both have merged.
  */
 test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
-  /** Plays a Mystery on Next clue to its options, then picks `option` (a label or a pattern). */
-  async function playMysteryToOptions(page: Page, option: RegExp) {
+  /** Plays a Mystery on Next clue to its options, then picks the one matching `pattern`. */
+  async function playMysteryToOptions(page: Page, pattern: RegExp) {
     for (let clue = 1; clue < 4; clue += 1) {
       await page
         .getByRole("button", { name: /^(Next clue|Last clue)/ })
         .click();
     }
-    await page.getByRole("button", { name: option }).click();
+    await page.getByRole("button", { name: pattern }).click();
   }
+
+  test.fixme("a typed guess finds its suggestions, and a wrong one keeps the field and survives a reload", async ({
+    page,
+  }) => {
+    // Needs MYS-1's list hook wired in src/features/daily/screen/answer-lists.ts.
+    await page.goto("/daily");
+    const round = page.locator("[data-round-area]");
+    const field = round.getByRole("combobox");
+    await field.fill("Cor");
+    const suggestion = page.getByRole("option", { name: /Corin Ashby/ });
+    await expect(suggestion).toBeVisible();
+    await suggestion.click();
+    await round.getByRole("button", { name: "Guess", exact: true }).click();
+    await expect(round.getByText(/Not Corin Ashby/)).toBeVisible();
+    await expect(round.getByRole("heading", { name: /clue 2/i })).toBeVisible();
+    await expect(field).toBeFocused();
+    const actions = () =>
+      page.evaluate(() =>
+        Object.values(
+          (
+            window as unknown as {
+              __qzMock: {
+                inspect(path: string): Record<string, { actions: number }>;
+              };
+            }
+          ).__qzMock.inspect("attempts"),
+        ).map((attempt) => attempt.actions),
+      );
+    expect(await actions()).toEqual([1]);
+    await page.reload();
+    await expect(round.getByText(/Not Corin Ashby/)).toHaveCount(1);
+    expect(await actions()).toEqual([1]);
+  });
 
   test.fixme("AC-DLY-09 [mc ×9, encore] renders, scores out of 9 and shares one row of nine choice glyphs", async ({
     page,
@@ -207,12 +262,13 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
       page.getByRole("list", { name: "Daily progress" }).getByRole("listitem"),
     ).toHaveCount(10);
     for (const [index, answer] of answers.entries()) {
+      // ChoiceRound's position line ("Question 1 of 9 · Easy").
       await expect(
-        page.getByRole("heading", {
-          name: new RegExp(`^Question ${index + 1} of 9`),
-        }),
+        page
+          .locator("[data-round-area]")
+          .getByText(new RegExp(`^Question ${index + 1} of 9`)),
       ).toBeVisible();
-      await page.getByRole("button", { name: answer }).click();
+      await option(page, answer).click();
       await page
         .getByRole("button", {
           name: index < 8 ? "Next question" : "On to the Encore",
@@ -245,7 +301,7 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
       "Heather ale",
       "1641",
     ].entries()) {
-      await page.getByRole("button", { name: answer, exact: true }).click();
+      await option(page, answer).click();
       await page
         .getByRole("button", {
           name: index < 4 ? "Next question" : "Next mystery",

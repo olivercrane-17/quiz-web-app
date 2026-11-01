@@ -5,7 +5,7 @@
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { GameBackend } from "@/backend";
+import { backendError, type GameBackend } from "@/backend";
 import {
   createMockBackend,
   createMemoryStore,
@@ -312,6 +312,63 @@ describe("starting the Daily", () => {
     await settle();
     expect(h.state()).toMatchObject({ status: "playing", slowStart: false });
   });
+
+  it("AC-IDN-04 keeps a rate-limited start silent for 5 s, then says so, and offers Practice only from 30 s", async () => {
+    const h = harness();
+    const start = h.backend.sealed.start;
+    let refusals = 0;
+    h.backend.sealed.start = async (...args) => {
+      refusals += 1;
+      return refusals <= 40
+        ? {
+            ok: false,
+            error: backendError("rate_limited", {
+              retryAfterMs: 1000,
+              limitScope: "ip",
+            }),
+          }
+        : start(...args);
+    };
+    await started(h);
+    const notice = () => h.state().problem?.notice;
+    expect(h.state()).toMatchObject({
+      status: "starting",
+      problem: { code: "rate_limited", scope: "ip", retrying: true },
+    });
+    expect(notice()).toBe("silent");
+    await h.timers.advance(4900);
+    expect(notice()).toBe("silent");
+    await h.timers.advance(100);
+    expect(notice()).toBe("plain");
+    await h.timers.advance(24_900);
+    expect(notice()).toBe("plain");
+    await h.timers.advance(100);
+    expect(notice()).toBe("fallback");
+    // The first accepted retry reaches clue 1 with no tap.
+    await h.timers.advance(15_000);
+    expect(h.state()).toMatchObject({
+      status: "playing",
+      problem: null,
+      view: { phase: "active", round: { open: { clue: 1 } } },
+    });
+  });
+
+  it("starts a plain-copy refusal's clock again when the error changes", async () => {
+    const h = harness();
+    h.mock.controls.failNext("sealed.start", "unreachable");
+    h.mock.controls.failNext("sealed.start", "rate_limited", { times: 10 });
+    await started(h);
+    expect(h.state().problem).toMatchObject({
+      code: "unreachable",
+      notice: "plain",
+    });
+    await h.timers.advance(2000);
+    expect(h.state().problem).toMatchObject({
+      code: "rate_limited",
+      notice: "silent",
+      since: NOV_1 + 2000,
+    });
+  });
 });
 
 describe("stopping and starting again", () => {
@@ -444,6 +501,46 @@ describe("playing", () => {
     expect(h.mock.controls.inspect(`attempts.${attemptId}.actions`)).toBe(1);
   });
 
+  it("counts a guess once when the server took it and only its answer was lost (invariant 2)", async () => {
+    const h = harness();
+    const { attemptId } = await started(h);
+    // The first act reaches the server and is applied; its answer never arrives.
+    const act0 = h.backend.sealed.act;
+    let lost = false;
+    h.backend.sealed.act = async (input) => {
+      const result = await act0(input);
+      if (lost) return result;
+      lost = true;
+      return { ok: false, error: backendError("timeout") };
+    };
+    await act(h, guess(LIESL));
+    expect(h.state().view).toMatchObject({
+      phase: "judging",
+      retry: { op: "judge", code: "timeout", count: 1 },
+    });
+    await h.timers.advance(2000);
+    expect(h.state().view).toMatchObject({
+      phase: "active",
+      retry: null,
+      round: {
+        open: { clue: 2, wrongGuesses: [{ entityId: LIESL }] },
+      },
+    });
+    expect(h.keysSent).toHaveLength(2);
+    expect(new Set(h.keysSent).size).toBe(1);
+    expect(h.mock.controls.inspect(`attempts.${attemptId}.actions`)).toBe(1);
+    expect(
+      Object.keys(h.mock.controls.inspect("roundActions") as object),
+    ).toEqual([h.keysSent[0]]);
+
+    // A solve whose answer is lost scores once, on the clue it was made on.
+    lost = false;
+    await act(h, guess(ODILE));
+    await h.timers.advance(2000);
+    expect(h.state().view).toMatchObject({ phase: "revealed", score: 3 });
+    expect(h.mock.controls.inspect(`attempts.${attemptId}.points`)).toBe(3);
+  });
+
   it("announces a lost connection once, assertively, and recovers without a reload", async () => {
     const h = harness();
     await started(h);
@@ -554,5 +651,180 @@ describe("playing", () => {
     expect(h.state().view?.status).toBe("idle");
     // No wait, no ticking.
     expect(h.timers.pending()).toEqual([]);
+  });
+
+  it("shows Checking… once begin_round has waited 1.5 s (PRD §3.1.4, Loading clue)", async () => {
+    const h = harness();
+    await started(h);
+    await act(h, guess(ODILE));
+    const begin0 = h.backend.sealed.beginRound;
+    let release: () => void = () => {};
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    h.backend.sealed.beginRound = async (...args) => {
+      await gate;
+      return begin0(...args);
+    };
+    await next(h);
+    expect(h.state()).toMatchObject({
+      slowOpen: false,
+      view: { phase: "opening", index: 1 },
+    });
+    await h.timers.advance(1400);
+    expect(h.state().slowOpen).toBe(false);
+    await h.timers.advance(100);
+    expect(h.state().slowOpen).toBe(true);
+    release();
+    await settle();
+    expect(h.state()).toMatchObject({
+      slowOpen: false,
+      view: { phase: "active", index: 1 },
+    });
+    expect(h.timers.pending()).toEqual([]);
+  });
+
+  it("waits on the player when begin_round fails for good, and Retry starts over from the server", async () => {
+    const h = harness();
+    await started(h);
+    await act(h, guess(ODILE));
+    h.mock.controls.failNext("sealed.beginRound", "not_found");
+    await next(h);
+    expect(h.state()).toMatchObject({
+      status: "playing",
+      view: {
+        phase: "opening",
+        index: 1,
+        status: "error",
+        retry: null,
+        error: { code: "not_found" },
+      },
+    });
+    // Nothing ticks or retries by itself: only the player's Retry moves it.
+    expect(h.timers.pending()).toEqual([]);
+    await h.timers.advance(120_000);
+    expect(h.state().view).toMatchObject({ phase: "opening", status: "error" });
+
+    h.controller.retry();
+    await settle();
+    // The server never saw the Continue, so the reload lands on the reveal.
+    expect(h.state()).toMatchObject({
+      status: "playing",
+      problem: null,
+      view: { phase: "revealed", index: 0, error: null },
+    });
+    await next(h);
+    expect(h.state().view).toMatchObject({ phase: "active", index: 1 });
+  });
+
+  it("waits on the player when finish fails for good, and Retry lands on the results", async () => {
+    const h = harness();
+    await started(h);
+    for (const answer of [ODILE, VALDORIA, BISMUTH]) {
+      await act(h, guess(answer));
+      await next(h);
+    }
+    // The lock-in's answer comes back without its summary, so the Continue
+    // asks finish() for it, which then fails for good.
+    const act0 = h.backend.sealed.act;
+    h.backend.sealed.act = async (input) => {
+      const result = await act0(input);
+      return result.ok
+        ? { ok: true, value: { ...result.value, finished: null } }
+        : result;
+    };
+    await act(h, { family: "encore", kind: "lock_in", value: 90 });
+    h.mock.controls.failNext("sealed.finish", "not_found");
+    await next(h);
+    expect(h.state()).toMatchObject({
+      status: "playing",
+      view: { phase: "finishing", status: "error", retry: null },
+    });
+    expect(h.timers.pending()).toEqual([]);
+
+    h.controller.retry();
+    await settle();
+    // The attempt finished on the server: the reload goes to its results.
+    expect(h.state()).toMatchObject({ status: "finished", run: null });
+  });
+
+  it("announces a round voided mid-round as withdrawn, never as a miss", async () => {
+    const h = harness();
+    await started(h);
+    await act(h, guess(LIESL));
+    await voidRound(h.mock.context, { dailyNumber: 42, round: 0 });
+    await act(h, { family: "mystery", kind: "next_clue" });
+    expect(h.state().view).toMatchObject({
+      phase: "revealed",
+      score: 4,
+      round: { reveal: { family: "withdrawn", round: "mystery", points: 4 } },
+    });
+    expect(h.announced.at(-1)).toEqual({
+      message:
+        "This Mystery was withdrawn because we got it wrong. Everyone gets 4 points.",
+      politeness: "polite",
+    });
+    expect(h.announced.map((a) => a.message).join(" ")).not.toMatch(/got away/);
+  });
+
+  it("waits out a rate-limited resync's Retry-After", async () => {
+    const h = harness();
+    const { attemptId } = await started(h);
+    await h.mock.sealed.act({
+      attemptId: attemptId as never,
+      index: 0,
+      step: 1,
+      intent: { family: "mystery", kind: "next_clue" },
+      clientActiveMs: 0,
+      hiddenMs: 0,
+      key: "00000000-0000-4000-8000-0000000000fd" as IdempotencyKey,
+    });
+    // The mock's refusals carry Retry-After: 1 s.
+    h.mock.controls.failNext("sealed.get", "rate_limited");
+    await act(h, { family: "mystery", kind: "next_clue" });
+    expect(h.timers.pending()).toEqual([1000]);
+    await h.timers.advance(1000);
+    expect(h.state()).toMatchObject({
+      movedOn: true,
+      view: { phase: "active", round: { open: { clue: 2 } } },
+    });
+  });
+
+  it("starts over from the server when a resync can't be served", async () => {
+    const h = harness();
+    const { attemptId } = await started(h);
+    await h.mock.sealed.act({
+      attemptId: attemptId as never,
+      index: 0,
+      step: 1,
+      intent: { family: "mystery", kind: "next_clue" },
+      clientActiveMs: 0,
+      hiddenMs: 0,
+      key: "00000000-0000-4000-8000-0000000000fc" as IdempotencyKey,
+    });
+    h.mock.controls.failNext("sealed.get", "auth_failed");
+    await act(h, { family: "mystery", kind: "next_clue" });
+    expect(h.state()).toMatchObject({
+      status: "failed",
+      problem: { code: "auth_failed", retrying: false },
+    });
+    h.controller.retry();
+    await settle();
+    expect(h.state()).toMatchObject({
+      status: "playing",
+      problem: null,
+      view: { phase: "active", round: { open: { clue: 2 } } },
+    });
+  });
+});
+
+describe("choice rounds", () => {
+  it("leave their verdict to ChoiceRound, which speaks it as the reveal shows", async () => {
+    // 15 November 2026: the [mc ×9, encore] fixture Daily.
+    const h = harness({ at: Date.UTC(2026, 10, 15, 9) });
+    await started(h);
+    await act(h, { family: "choice", kind: "answer", option: 0 });
+    expect(h.state().view).toMatchObject({ phase: "revealed", index: 0 });
+    expect(h.announced).toEqual([]);
   });
 });

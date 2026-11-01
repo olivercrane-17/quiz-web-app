@@ -19,10 +19,20 @@
  *   then 30 s for transport failures; Retry-After, else 1, 2, 4, 8 s, for
  *   `rate_limited`, to which the controller adds up to 30% jitter. Every
  *   retry re-sends the same idempotency key, so a guess never counts twice.
- *   A failed start retries on the same schedule. The player's Retry runs
- *   the next attempt at once.
+ *   A failed start and a failed resync retry on the same schedules. The
+ *   player's Retry runs the next attempt at once. A refused start carries
+ *   its notice (PRD §3.0.2, AC-IDN-04): silent for 5 s of rate limiting,
+ *   then plain copy, then the Practice fallback from 30 s.
+ * - **Failing for good.** A begin_round or finish that fails with an error
+ *   no retry can mend (`not_found` after a reset, `auth_failed` after the
+ *   identity changed) waits on the player's Retry, which starts over from
+ *   the server as a reload does; so does a resync that can't be served.
  * - **Waits.** While a call is in flight the controller ticks the run every
- *   500 ms, so "Checking…" appears after 1.5 s (PRD §3.0.2).
+ *   500 ms, so "Checking…" appears after 1.5 s (PRD §3.0.2); a slow
+ *   begin_round or finish raises `slowOpen` at 1.5 s for the same copy.
+ * - **Announcements.** The plugin's announcement, worded by `labels.ts`;
+ *   a withdrawn round's own words instead of a verdict; and none for choice
+ *   verdicts, which ChoiceRound speaks itself in step with its reveal.
  */
 import {
   backendError,
@@ -33,10 +43,14 @@ import type { Clock } from "@/engine/clock";
 import type { PluginRegistry } from "@/engine/rounds";
 import {
   CHECKING_AFTER_MS,
+  FALLBACK_AFTER_MS,
+  PLAIN_COPY_AFTER_MS,
   createRun,
   reduceRun,
   retryDelayMs,
+  retryNotice,
   selectRunView,
+  type RetryNotice,
   type RunCommand,
   type RunEvent,
   type RunState,
@@ -73,6 +87,18 @@ export interface StartProblem {
   count: number;
   retrying: boolean;
   refId: string | null;
+  /** The first refusal of this run of `code` refusals. */
+  since: EpochMs;
+  /** `rate_limited` only: whose limit refused it, which picks AC-IDN-04's copy. */
+  scope: "ip" | "player" | "project" | null;
+  /** The latest refusal's Retry-After. */
+  retryAfterMs: number | null;
+  /**
+   * What the screen may say yet (PRD §3.0.2): a rate-limited start stays
+   * `silent` for 5 s, then `plain`, then `fallback` (Practice) from 30 s, or
+   * `action` at once for a wait past 60 s; any other refusal is `plain`.
+   */
+  notice: RetryNotice;
 }
 
 export interface DailySnapshot {
@@ -80,6 +106,8 @@ export interface DailySnapshot {
   problem: StartProblem | null;
   /** The start has waited longer than 1.5 s: "Checking…". */
   slowStart: boolean;
+  /** A begin_round or finish has waited longer than 1.5 s: "Checking…". */
+  slowOpen: boolean;
   attemptId: AttemptId | null;
   daily: DailyIdentity | null;
   composition: CompositionId | null;
@@ -130,7 +158,10 @@ export interface DailyController {
   stop(): void;
   intent(intent: RoundIntent): void;
   continue(): void;
-  /** The player's Retry: the waiting call goes out now, with the same key. */
+  /**
+   * The player's Retry: the waiting call goes out now, with the same key; a
+   * call that failed for good starts over from the server instead.
+   */
   retry(): void;
   visibility(hidden: boolean): void;
 }
@@ -161,6 +192,22 @@ function configFor(snapshot: AttemptSnapshot): RunConfig {
 const retryable = (error: BackendError) =>
   error.code === "rate_limited" || error.retryable;
 
+/** Choice verdicts, which ChoiceRound announces itself as its reveal shows. */
+const SPOKEN_BY_ROUND: ReadonlySet<string> = new Set([
+  "correct",
+  "wrong_choice",
+]);
+
+/** Begin_round or finish failed with an error no retry mends (stale resyncs by itself). */
+function failedForGood(run: RunState): boolean {
+  return (
+    (run.phase === "opening" || run.phase === "finishing") &&
+    run.failing === null &&
+    run.error !== null &&
+    run.error.code !== "stale"
+  );
+}
+
 export function createDailyController(
   deps: DailyControllerDeps,
 ): DailyController {
@@ -173,6 +220,7 @@ export function createDailyController(
   let status: DailyStatus = "starting";
   let problem: StartProblem | null = null;
   let slowStart = false;
+  let slowOpen = false;
   let attemptId: AttemptId | null = null;
   let daily: DailyIdentity | null = null;
   let composition: CompositionId | null = null;
@@ -186,6 +234,8 @@ export function createDailyController(
 
   let cancelStartRetry: (() => void) | null = null;
   let cancelSlowStart: (() => void) | null = null;
+  let cancelNotice: (() => void) | null = null;
+  let cancelSlowOpen: (() => void) | null = null;
   let cancelRetry: (() => void) | null = null;
   let cancelTick: (() => void) | null = null;
   let cancelResync: (() => void) | null = null;
@@ -197,6 +247,7 @@ export function createDailyController(
       status,
       problem,
       slowStart,
+      slowOpen,
       attemptId,
       daily,
       composition,
@@ -234,6 +285,51 @@ export function createDailyController(
     cancelStartRetry = null;
     cancelSlowStart?.();
     cancelSlowStart = null;
+    cancelNotice?.();
+    cancelNotice = null;
+  }
+
+  function clearRunTimers(): void {
+    cancelRetry?.();
+    cancelTick?.();
+    cancelResync?.();
+    cancelSlowOpen?.();
+    cancelRetry = cancelTick = cancelResync = cancelSlowOpen = null;
+    slowOpen = false;
+  }
+
+  function noticeOf(current: StartProblem): RetryNotice {
+    return current.retrying
+      ? retryNotice(
+          current.code === "rate_limited",
+          now() - current.since,
+          current.retryAfterMs,
+        )
+      : "plain";
+  }
+
+  /**
+   * A rate-limited start earns its plain copy at 5 s and Practice at 30 s
+   * (PRD §3.0.2), even when the next retry is further off than that.
+   */
+  function scheduleNotice(): void {
+    cancelNotice?.();
+    cancelNotice = null;
+    const current = problem;
+    if (current === null || current.code !== "rate_limited") return;
+    if (!current.retrying) return;
+    const waited = now() - current.since;
+    const next = [PLAIN_COPY_AFTER_MS, FALLBACK_AFTER_MS].find(
+      (at) => at > waited,
+    );
+    if (next === undefined) return;
+    cancelNotice = deps.schedule(() => {
+      cancelNotice = null;
+      if (problem === null) return;
+      problem = { ...problem, notice: noticeOf(problem) };
+      publish();
+      scheduleNotice();
+    }, next - waited);
   }
 
   async function attemptStart(): Promise<void> {
@@ -258,12 +354,18 @@ export function createDailyController(
     }
     const error = result.error;
     const again = retryable(error);
-    problem = {
+    const next: StartProblem = {
       code: error.code,
       count: (problem?.count ?? 0) + 1,
       retrying: again,
       refId: error.refId,
+      since:
+        problem !== null && problem.code === error.code ? problem.since : now(),
+      scope: error.limitScope ?? null,
+      retryAfterMs: error.retryAfterMs,
+      notice: "plain",
     };
+    problem = { ...next, notice: noticeOf(next) };
     if (!again) {
       status = "failed";
       publish();
@@ -282,6 +384,7 @@ export function createDailyController(
       cancelStartRetry = null;
       void attemptStart();
     }, wait);
+    scheduleNotice();
     publish();
   }
 
@@ -300,7 +403,7 @@ export function createDailyController(
     if (attempt.status === "abandoned") {
       // An abandoned attempt reopens from its archive tile (ARC-1).
       status = "failed";
-      problem = { code: "stale", count: 1, retrying: false, refId: null };
+      problem = givenUp("stale", null);
       publish();
       return;
     }
@@ -308,6 +411,39 @@ export function createDailyController(
     run = createRun(configFor(attempt), now()).state;
     status = "playing";
     dispatch({ type: "resume", at: now(), snapshot: attempt });
+  }
+
+  /** A start problem no retry will mend: the screen shows it with Try again. */
+  function givenUp(code: BackendErrorCode, refId: string | null): StartProblem {
+    return {
+      code,
+      count: 1,
+      retrying: false,
+      refId,
+      since: now(),
+      scope: null,
+      retryAfterMs: null,
+      notice: "plain",
+    };
+  }
+
+  /**
+   * Starts over from the server, as a reload does: `start` returns the
+   * attempt as it stands (or a new one after a reset), and the run resumes
+   * from it. What a call made before this answers is dropped.
+   */
+  function restart(): void {
+    generation += 1;
+    clearStartTimers();
+    clearRunTimers();
+    status = "starting";
+    problem = null;
+    run = null;
+    movedOn = false;
+    earlySummary = null;
+    resyncFailures = 0;
+    publish();
+    void attemptStart();
   }
 
   // ----- the run -----------------------------------------------------------
@@ -324,7 +460,7 @@ export function createDailyController(
         `[daily] the run machine refused ${event.type}: ${(error as Error)?.message ?? String(error)}`,
       );
       status = "failed";
-      problem = { code: "internal", count: 1, retrying: false, refId: null };
+      problem = givenUp("internal", null);
       publish();
       return;
     }
@@ -367,12 +503,24 @@ export function createDailyController(
       case "persist":
         // Sealed runs never persist locally (§4.5 invariant 8).
         return;
-      case "announce":
+      case "announce": {
+        // A round withdrawn mid-round resolves with the withdrawn reveal,
+        // which the plugin can't word; the round's own line says why.
+        const reveal = run?.slots[run.index]?.reveal ?? null;
+        if (reveal?.family === "withdrawn") {
+          deps.announce(
+            DAILY_SCREEN_COPY.withdrawn[reveal.round],
+            command.politeness,
+          );
+          return;
+        }
+        if (SPOKEN_BY_ROUND.has(command.announcement.kind)) return;
         deps.announce(
           announcementText(command.announcement),
           command.politeness,
         );
         return;
+      }
       case "focus":
         focus = { target: command.target, seq: (focus?.seq ?? 0) + 1 };
         return;
@@ -387,14 +535,33 @@ export function createDailyController(
     if (value.converted) converted = true;
   }
 
+  /** "Checking…" once a begin_round or finish has waited 1.5 s (PRD §3.1.4, Loading clue). */
+  function armSlowOpen(): void {
+    cancelSlowOpen?.();
+    slowOpen = false;
+    cancelSlowOpen = deps.schedule(() => {
+      cancelSlowOpen = null;
+      slowOpen = true;
+      publish();
+    }, CHECKING_AFTER_MS);
+  }
+
+  function settleSlowOpen(): void {
+    cancelSlowOpen?.();
+    cancelSlowOpen = null;
+    slowOpen = false;
+  }
+
   async function openRound(index: number): Promise<void> {
     const gen = generation;
     const id = attemptId;
     if (id === null) return;
+    armSlowOpen();
     const result = await call((backend) =>
       backend.sealed.beginRound(id, index),
     );
     if (gen !== generation) return;
+    settleSlowOpen();
     if (!result.ok) {
       dispatch({ type: "failed", at: now(), key: null, error: result.error });
       return;
@@ -473,24 +640,25 @@ export function createDailyController(
     const result = await call((backend) => backend.sealed.get(id));
     if (gen !== generation) return;
     if (!result.ok) {
-      if (!retryable(result.error)) {
+      const error = result.error;
+      if (!retryable(error)) {
         status = "failed";
-        problem = {
-          code: result.error.code,
-          count: 1,
-          retrying: false,
-          refId: result.error.refId,
-        };
+        problem = givenUp(error.code, error.refId);
         publish();
         return;
       }
       resyncFailures += 1;
+      const limited = error.code === "rate_limited";
       cancelResync = deps.schedule(
         () => {
           cancelResync = null;
           void resync();
         },
-        retryDelayMs("transport", resyncFailures),
+        retryDelayMs(
+          limited ? "rate_limited" : "transport",
+          resyncFailures,
+          limited ? error.retryAfterMs : null,
+        ),
       );
       return;
     }
@@ -511,8 +679,10 @@ export function createDailyController(
       dispatch({ type: "finished", at: now(), summary: ready });
       return;
     }
+    armSlowOpen();
     const result = await call((backend) => backend.sealed.finish(id));
     if (gen !== generation) return;
+    settleSlowOpen();
     if (!result.ok) {
       dispatch({ type: "failed", at: now(), key: null, error: result.error });
       return;
@@ -523,13 +693,11 @@ export function createDailyController(
   // ----- waits -------------------------------------------------------------
 
   function waiting(): boolean {
-    if (run === null) return false;
-    return (
-      status === "playing" &&
-      (run.phase === "judging" ||
-        run.phase === "opening" ||
-        run.phase === "finishing")
-    );
+    if (run === null || status !== "playing") return false;
+    if (run.phase === "judging") return true;
+    if (run.phase !== "opening" && run.phase !== "finishing") return false;
+    // A call that failed for good waits on the player's Retry, not on time.
+    return !failedForGood(run) && run.error?.code !== "stale";
   }
 
   function syncTicker(): void {
@@ -568,10 +736,7 @@ export function createDailyController(
       active = false;
       generation += 1;
       clearStartTimers();
-      cancelRetry?.();
-      cancelTick?.();
-      cancelResync?.();
-      cancelRetry = cancelTick = cancelResync = null;
+      clearRunTimers();
       slowStart = false;
       earlySummary = null;
     },
@@ -583,15 +748,14 @@ export function createDailyController(
       dispatch({ type: "continue", at: now() });
     },
     retry() {
+      if (!active) return;
       if (status === "starting" && problem !== null) {
         void attemptStart();
         return;
       }
-      if (status === "failed" && run === null) {
-        status = "starting";
-        problem = null;
-        void attemptStart();
-        publish();
+      // Nothing the same call could mend: start over from the server.
+      if (status === "failed" || (run !== null && failedForGood(run))) {
+        restart();
         return;
       }
       if (run?.failing != null) {

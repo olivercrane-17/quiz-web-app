@@ -3,8 +3,10 @@
  * with engine code.
  *
  * - `today(tz)` is get_today: it never registers. With a valid credential
- *   it uses the effective today (§8.7) and the player's attempt status;
- *   without one, the request zone's date. It carries one chip per round
+ *   it uses the effective today (§8.7), raising the player's latest served
+ *   date as `private.player_today` does, so the next start serves the date
+ *   the card showed, and the player's attempt status; without one, the
+ *   request zone's date, and nothing is written. It carries one chip per round
  *   (types, difficulty and answer types only: they are public from clue 1
  *   anyway), the played count from 50 finished ranked runs (AC-DLY-33),
  *   the finished score and grid, and when the next Daily unlocks.
@@ -99,9 +101,29 @@ export function createDailyArea(ctx: MockContext): DailyApi {
 
     async today(tz) {
       const now = ctx.clock.now();
-      const player = ctx.store.read((db) => verifyCredential(ctx, db));
-      const zone = resolveZone(tz, player);
-      const date = playerToday(player, zone, now);
+      const known = ctx.store.read((db) => verifyCredential(ctx, db));
+      // With a credential, the effective today raises the latest date
+      // served (§8.7), so a start from any zone serves the date shown here.
+      // Without one, nothing is written: get_today never registers.
+      const { player, zone, date } =
+        known === null
+          ? {
+              player: null,
+              zone: resolveZone(tz, null),
+              date: playerToday(null, resolveZone(tz, null), now),
+            }
+          : await ctx.store.write(
+              (db) => {
+                const row = verifyCredential(ctx, db);
+                const where = resolveZone(tz, row);
+                return {
+                  player: row,
+                  zone: where,
+                  date: playerToday(row, where, now, { record: true }),
+                };
+              },
+              ["players"],
+            );
       const daily = await ctx.content.daily(date);
       if (daily === null) return fail("no_daily");
       const rounds = await chipsOf(ctx, daily);

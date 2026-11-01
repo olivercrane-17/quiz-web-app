@@ -154,6 +154,53 @@ describe("seed", () => {
     ).toBe(3);
   });
 
+  it("keeps a later seed() across a reload that still carries the init scenario", async () => {
+    const store = createMemoryStore();
+    const identity = createLocalIdentityProvider({
+      kv: createKv({ storage: createMemoryStorage() }),
+      now: () => NOV_1,
+    });
+    const init: MockInit = { scenario: "in_progress_mystery_2" };
+    const first = setup({ store, identity, init });
+    await first.mock.ready;
+    await first.mock.controls.seed("finished_today");
+
+    // The spec reloads; its init script sets the same scenario again.
+    const second = setup({ store, identity, init });
+    expect(await second.mock.daily.today(UTC)).toMatchObject({
+      ok: true,
+      value: { status: "finished", finished: { points: 9, maxPoints: 12 } },
+    });
+  });
+
+  it("leaves a database that has been played alone, scenario or not", async () => {
+    const store = createMemoryStore();
+    const identity = createLocalIdentityProvider({
+      kv: createKv({ storage: createMemoryStorage() }),
+      now: () => NOV_1,
+    });
+    const first = setup({ store, identity });
+    expect(
+      await first.mock.sealed.start(
+        { kind: "today" },
+        {
+          tz: UTC,
+          browser: { context: "browser", app: "none", platform: "desktop" },
+          appVersion: "test",
+        },
+      ),
+    ).toMatchObject({ ok: true, value: { points: 0 } });
+    const second = setup({
+      store,
+      identity,
+      init: { scenario: "finished_today" },
+    });
+    expect(await second.mock.daily.today(UTC)).toMatchObject({
+      ok: true,
+      value: { status: "in_progress" },
+    });
+  });
+
   it("makes every call wait for the init scenario", async () => {
     const { mock } = setup({ init: { scenario: "finished_today" } });
     // No await on ready: the first call still sees the seeded attempt.

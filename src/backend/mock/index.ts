@@ -10,11 +10,15 @@
  * In the browser the database is the persistent store (localStorage, Web
  * Locks, BroadcastChannel), shared by every tab and every device namespace
  * of one browser context, so a reload, a second tab or a second "phone"
- * meets the same server. A scenario from `__QZ_MOCK_INIT__` is seeded once
- * per database (a reload doesn't seed it again), and every call waits for
- * it, so it applies on the very first render. Each response's server time
- * feeds the server clock, as the Supabase adapter does (§7.1). A thrown
- * error is a bug: it is logged and answered as `internal`.
+ * meets the same server. A scenario from `__QZ_MOCK_INIT__` seeds an empty
+ * database only, and every call waits for it, so it applies on the very
+ * first render. A database that already holds anything (that scenario,
+ * another one from `seed()`, or play) is left as it is, so a reload whose
+ * init script sets the scenario again never undoes a later `seed()` or a
+ * move. Each response's server time feeds the server clock, as the
+ * Supabase adapter does (§7.1). A thrown error is a bug: it is logged and
+ * answered as `internal`. The response log keeps the latest
+ * RESPONSE_LOG_MAX responses.
  *
  * This chunk loads only in mock builds (getBackend), and bundles fixture
  * content only.
@@ -30,8 +34,8 @@ import { backendError } from "../errors";
 import type { BackendArea, GameBackend } from "../types";
 import { createMockContext, type MockContext, type MockRules } from "./context";
 import {
+  RESPONSE_LOG_MAX,
   createTransportState,
-  seededScenario,
   type MockControls,
   type MockInit,
   type MockTransportState,
@@ -197,7 +201,12 @@ function withTransport<A extends BackendArea>(
           // The clock keeps its earlier samples.
         }
       }
-      transport.responses.push({ method, at, payload: result });
+      const log = transport.responses;
+      log.push({ method, at, payload: result });
+      // Pollers (room heartbeats every 2 s) would grow it for the tab's life.
+      if (log.length > RESPONSE_LOG_MAX) {
+        log.splice(0, log.length - RESPONSE_LOG_MAX);
+      }
       return result;
     };
   }
@@ -256,11 +265,13 @@ export function createMockBackend(
     });
   }
 
+  // The init scenario goes into an empty database only: anything there
+  // already (it, a later seed(), or play) is what the spec meant to keep.
   const scenario = init.scenario;
   const ready =
     scenario === undefined ||
     scenario === "fresh" ||
-    store.read((db) => seededScenario(db)) === scenario
+    store.read((db) => Object.keys(db).length > 0)
       ? Promise.resolve()
       : controls.seed(scenario).catch((error: unknown) => {
           console.warn(`[mock] ${(error as Error).message}`);

@@ -10,7 +10,10 @@ export const HOME_CARD_COPY = {
   dailyLine: (dailyNumber: number, date: string) =>
     `Daily #${dailyNumber} · ${date}`,
   minutes: (minutes: number) => `About ${minutes} minutes`,
+  /** The one-line rule (PRD §3.1.7), for a Daily with Mysteries. */
   rule: "Fewer clues, more points. Then one number.",
+  /** The same line for a Daily of questions alone (§3.1.2: composition is data). */
+  ruleChoice: "A point a question. Then one number.",
   roundsLabel: "Today's rounds",
   encoreChip: "Encore · a number",
   questionChip: "A question",

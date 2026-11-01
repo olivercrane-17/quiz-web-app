@@ -202,7 +202,11 @@ export function announcementText(announcement: Announcement): string {
         announcement.points,
       );
     case "mystery_missed":
-      return words.missed(announcement.answer);
+      // A withdrawn Mystery resolves unjudged, and the plugin has no answer
+      // to name (the controller words withdrawals before they reach here).
+      return announcement.answer === ""
+        ? DAILY_SCREEN_COPY.withdrawn.mystery
+        : words.missed(announcement.answer);
     case "encore_result": {
       const error = capitalize(announcement.error);
       const exact = error === "Spot on";

@@ -186,6 +186,41 @@ describe("today", () => {
       error: { code: "no_daily" },
     });
   });
+
+  it("raises a registered player's effective today, so the card and the next start agree (§8.7)", async () => {
+    // 11:00 UTC on 1 November is already 2 November at UTC+14.
+    const t = setup(Date.UTC(2026, 10, 1, 11));
+    await t.mock.identity.register(START.browser);
+    const east = await t.mock.daily.today(
+      parseTimeZone("Pacific/Kiritimati") as TimeZone,
+    );
+    expect(east).toMatchObject({
+      ok: true,
+      value: { daily: { dailyNumber: 43 } },
+    });
+    const players =
+      t.mock.controls.inspect<Record<string, { maxLocalDate: string | null }>>(
+        "players",
+      );
+    expect(Object.values(players).map((p) => p.maxLocalDate)).toEqual([
+      "2026-11-02",
+    ]);
+    // A start from UTC-12 now serves the date the card showed.
+    const west = await t.mock.sealed.start(
+      { kind: "today" },
+      { ...START, tz: parseTimeZone("Etc/GMT+12") as TimeZone },
+    );
+    expect(west).toMatchObject({
+      ok: true,
+      value: { daily: { dailyNumber: 43 } },
+    });
+  });
+
+  it("registers no one, and raises nothing, for a device with no registered identity", async () => {
+    const t = setup(Date.UTC(2026, 10, 1, 11));
+    await t.mock.daily.today(parseTimeZone("Pacific/Kiritimati") as TimeZone);
+    expect(t.mock.controls.inspect("players")).toBeUndefined();
+  });
 });
 
 describe("results", () => {

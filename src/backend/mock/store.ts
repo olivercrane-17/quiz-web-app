@@ -18,6 +18,11 @@
  * load fixture content inside a transaction. Without Web Locks (old
  * browsers, unit tests) writes are serialized inside the tab only. Without
  * usable localStorage the document lives in memory for the tab.
+ *
+ * Reads hand out the stored document itself, deep-frozen, so nothing a
+ * caller keeps from a read (a summary, a reveal, a player row) can change
+ * what the next write saves: a stray mutation throws instead, in tests and
+ * in the page alike.
  */
 
 /** Table name to rows; every value is plain JSON. */
@@ -83,6 +88,15 @@ function copy(db: Readonly<MockDb>): MockDb {
   return JSON.parse(JSON.stringify(db)) as MockDb;
 }
 
+/** Freezes a JSON document all the way down: what reads hand out. */
+function deepFreeze<T>(value: T): T {
+  if (typeof value === "object" && value !== null && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const child of Object.values(value)) deepFreeze(child);
+  }
+  return value;
+}
+
 function isDb(value: unknown): value is MockDb {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -119,7 +133,7 @@ function createListeners() {
 }
 
 export function createMemoryStore(initial: MockDb = {}): MockStore {
-  let db = copy(initial);
+  let db = deepFreeze(copy(initial));
   const listeners = createListeners();
   const serialize = createMutex();
   return {
@@ -128,14 +142,14 @@ export function createMemoryStore(initial: MockDb = {}): MockStore {
       return serialize(async () => {
         const next = copy(db);
         const result = await fn(next);
-        db = next;
+        db = deepFreeze(next);
         listeners.notify(tables);
         return result;
       });
     },
     replace(next) {
       return serialize(async () => {
-        db = copy(next);
+        db = deepFreeze(copy(next));
         listeners.notify(Object.keys(next));
       });
     },
@@ -210,9 +224,12 @@ export function createPersistentStore(
   const listeners = createListeners();
   const serialize = createMutex();
 
-  /** The text last parsed, and its document: reads parse only when storage changed. */
+  /**
+   * The text last parsed, and its document, frozen: reads parse only when
+   * storage changed, and hand out `cached` itself.
+   */
   let cachedText: string | null = null;
-  let cached: MockDb = {};
+  let cached: MockDb = deepFreeze({});
   /** Set once storage refused a write: the tab keeps going in memory. */
   let memoryOnly = storage === null;
 
@@ -225,17 +242,20 @@ export function createPersistentStore(
       return cached;
     }
     if (text === null) {
-      cachedText = null;
-      cached = {};
+      if (cachedText !== null) {
+        cachedText = null;
+        cached = deepFreeze({});
+      }
       return cached;
     }
     if (text !== cachedText) {
+      let parsed: unknown = null;
       try {
-        const parsed: unknown = JSON.parse(text);
-        cached = isDb(parsed) ? parsed : {};
+        parsed = JSON.parse(text);
       } catch {
-        cached = {};
+        // An unreadable document reads as empty.
       }
+      cached = deepFreeze(isDb(parsed) ? parsed : {});
       cachedText = text;
     }
     return cached;
@@ -243,7 +263,7 @@ export function createPersistentStore(
 
   function save(db: MockDb): void {
     const text = JSON.stringify(db);
-    cached = JSON.parse(text) as MockDb;
+    cached = deepFreeze(JSON.parse(text) as MockDb);
     cachedText = text;
     if (memoryOnly || storage === null) return;
     try {

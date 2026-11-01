@@ -120,9 +120,11 @@ export function createMockRealtime(
         subscribers.set(topic, set);
       }
       set.add(handlers);
-      const status = current;
+      // The status as it is when the report goes out, not as it was here: a
+      // setState() in between has already told this subscriber, and a stale
+      // "live" heard last would switch off its polling fallback (AC-ROM-03).
       queueMicrotask(() => {
-        if (subscribers.get(topic)?.has(handlers)) handlers.status(status);
+        if (subscribers.get(topic)?.has(handlers)) handlers.status(current);
       });
       return () => {
         const remaining = subscribers.get(topic);

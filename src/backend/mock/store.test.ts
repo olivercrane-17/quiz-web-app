@@ -108,6 +108,44 @@ describe.each([
     (store.snapshot().players as Record<string, number>).x = 1;
     expect(store.snapshot()).toEqual({ players: {} });
   });
+
+  it("hands out read-only data, so a caller's change can never be saved", async () => {
+    const store = make();
+    await store.write(
+      (db) => {
+        db.attempts = { a1: { points: 3, rounds: [{ points: 3 }] } };
+      },
+      ["attempts"],
+    );
+    const attempt = store.read(
+      (db) =>
+        (db.attempts as Record<string, { points: number; rounds: object[] }>)
+          .a1,
+    );
+    expect(() => {
+      (attempt as { points: number }).points = 99;
+    }).toThrow(TypeError);
+    expect(() => {
+      (attempt as { rounds: object[] }).rounds.push({});
+    }).toThrow(TypeError);
+    // A write of another table saves the attempt as it was.
+    await store.write(
+      (db) => {
+        db.players = {};
+      },
+      ["players"],
+    );
+    expect(store.snapshot().attempts).toEqual({
+      a1: { points: 3, rounds: [{ points: 3 }] },
+    });
+    // Writes still work on their own copy.
+    await store.write((db) => {
+      (db.attempts as Record<string, { points: number }>).a1!.points = 4;
+    });
+    expect(store.read((db) => db.attempts)).toMatchObject({
+      a1: { points: 4 },
+    });
+  });
 });
 
 describe("the persistent store", () => {
