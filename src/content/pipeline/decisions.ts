@@ -232,12 +232,7 @@ function dedupeRefusal(record: BankItem, match: DedupeMatch): string {
 
 /** The part of the accept screen that refused an item. */
 export type ScreenGate =
-  | "changed"
-  | "lint"
-  | "dedupe"
-  | "myths"
-  | "acceptance"
-  | "schema";
+  "changed" | "lint" | "dedupe" | "myths" | "acceptance" | "schema";
 
 export interface ScreenFailure {
   gate: ScreenGate;

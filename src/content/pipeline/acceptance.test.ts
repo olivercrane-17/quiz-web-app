@@ -61,7 +61,12 @@ async function loadWithGuide(files: FxFiles, markdown: string): Promise<Bank> {
 /** A bank where one item carries A and B records (and optionally T), and its estimate. */
 async function checkedBank(
   id: string,
-  opts: { patch?: Patch; tiebreak?: boolean; files?: FxFiles; guide?: string } = {},
+  opts: {
+    patch?: Patch;
+    tiebreak?: boolean;
+    files?: FxFiles;
+    guide?: string;
+  } = {},
 ): Promise<Bank> {
   const files = opts.files ?? fxFiles();
   const bank =

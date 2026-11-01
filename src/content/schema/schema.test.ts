@@ -823,9 +823,13 @@ describe("the committed content files", () => {
     expect(listTarget("person")).toBe(1000);
     expect(listTarget("element")).toBe(118);
     expect(pool("list")).toHaveLength(38);
+    // Production has started: a batch is either still planned with no writer,
+    // or past planning with its writer named.
     expect(
-      batches.every(
-        (batch) => batch.status === "planned" && batch.writer === null,
+      batches.every((batch) =>
+        batch.status === "planned"
+          ? batch.writer === null
+          : typeof batch.writer === "string" && batch.writer.length > 0,
       ),
     ).toBe(true);
   });
