@@ -1,0 +1,200 @@
+{
+  "id": "p.hist.0267",
+  "status": "active",
+  "category": "hist",
+  "tags": ["japan", "samurai", "timelines"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Steam trains began running under London in January 1863. In 1877 samurai led by Saigō Takamori rose against Japan's new government and lost to a conscript army.",
+  "learnMore": "Satsuma Rebellion",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "London's Metropolitan Railway, the first Underground line, opened in January 1863."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Satsuma Rebellion, a samurai uprising led by Saigō Takamori, took place in 1877."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Satsuma rebels were defeated by the imperial government's conscript army."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: the 19th century across the world. Lint: content:check reports no errors on this item and no warnings. Claims: every checkable statement in the labels, values and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, named after, comes from, means), and the key claim is high because the item is counterintuitive. Datasets: no pinned dataset covers these historical facts, so checker A needs web evidence for every high-risk claim. Rival test: Samurai feel medieval and the Underground modern, so most players pick b; the 14-year gap passes the separation guard and both dates are firm. Volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. Regional: the people and events are covered in world history teaching and international reference works, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. Style: Oxford spelling, straight quotes, plain hyphens only, explanation of 27 words. Myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-phist02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0d593327cc50caab54b66bce4b69d291927f704e17ec8d5d46aa977e7364e049",
+        "startedAt": "2026-11-01T03:08:23Z",
+        "finishedAt": "2026-11-01T03:28:50Z",
+        "coldSolve": {
+          "answerGiven": "London's first Underground line opens",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Metropolitan Railway, London's first Underground line, opened on 10 January 1863.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and WebSearch was unavailable this run (the shared search budget was used up), so it still needs dataset or web evidence from check B or a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Saigō Takamori's Satsuma Rebellion took place in 1877.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was unavailable this run (the shared search budget was used up), so it still needs dataset or web evidence from check B or a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The imperial government's conscript army crushed the rebellion.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-phist02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cbf5974ce218613e9c64e7ccacf62290bb277f75022005af1ca29e324194cb5c",
+        "startedAt": "2026-11-01T03:07:26Z",
+        "finishedAt": "2026-11-01T03:30:41Z",
+        "coldSolve": {
+          "answerGiven": "London's first Underground line opens",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Metropolitan Railway, London's first Underground line, opened on 10 January 1863.",
+              "confidence": "certain"
+            },
+            "note": "The first underground passenger railway in the world, so the 'first' holds."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Satsuma Rebellion, led by Saigō Takamori, ran from January to September 1877.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Satsuma rebels lost to the imperial government's conscript army.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-phist02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (label, first) and c2 (label, date) rest on knowledge alone in both checks: neither check recorded a search (checker A reports the shared search budget used up), and §9.7 gives a pass/pass item no tiebreak. Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-phist02e",
+        "at": "2026-11-01T03:04:29Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "London's first Underground line opens",
+  "b": "Samurai fight the Satsuma Rebellion",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year it happened",
+  "unit": "year",
+  "values": {
+    "a": 1863,
+    "b": 1877
+  },
+  "valueDisplay": {
+    "a": "January 1863",
+    "b": "1877"
+  },
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.283,
+    "estimator": "v0"
+  }
+}

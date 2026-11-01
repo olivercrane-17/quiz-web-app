@@ -1,0 +1,205 @@
+{
+  "id": "p.art.0218",
+  "status": "cut",
+  "category": "art",
+  "tags": ["architecture", "arctic", "snow"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": true,
+  "explanation": "Snow, full of trapped air, insulates far better than ice. Builders cut blocks from wind-packed snow and lay them in a rising spiral, so the dome holds itself up.",
+  "learnMore": "Igloo",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Traditional domed Inuit igloos are built from blocks of packed snow, not ice."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Domed igloos are not built from blocks of solid ice, sun-dried mud or cut stone."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Snow, which holds a great deal of trapped air, insulates better than solid ice."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Igloo builders cut blocks from wind-packed snow and lay them in a rising spiral so the dome supports itself."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge; the item is counterintuitive, so the key claim is high-risk. Datasets: no dataset covers building methods; the key is counterintuitive, so c1 is high (the schema has no counterintuitive riskReason, so it carries checker_doubt). Rival test: solid ice is the planted wrong belief; mud and stone are building materials of other dome traditions; against the key, the Inuktitut word iglu means any house, including stone ones, which is why the stem says domed igloos built from blocks. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: igloos are a picture-book staple everywhere. Style: Oxford spelling, straight quotes, no en or em dashes, explanation of 29 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: some igloos have an ice window, but the walls are snow.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e10f36940a3de371e75e58df3d4b874b0757a1249da29e4eb392d75be6b6ea2f",
+        "startedAt": "2026-11-01T02:15:00Z",
+        "finishedAt": "2026-11-01T02:51:14Z",
+        "coldSolve": {
+          "answerGiven": "Packed snow",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Snow-house igloos are built from blocks cut from firm, wind-packed snow, not from ice.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Domed igloos are not made of ice blocks, mud bricks or stone.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Air trapped in snow makes it a far better insulator than solid ice.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The blocks are laid in an inward-leaning spiral so the dome supports itself.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e7e6565e2340aa94789b112f8418bebcfd61527677e55d306ac95090cd8200c2",
+        "startedAt": "2026-11-01T02:25:00Z",
+        "finishedAt": "2026-11-01T02:51:43Z",
+        "coldSolve": {
+          "answerGiven": "Packed snow",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Traditional domed snow houses are built from cut blocks of compacted snow, not ice.",
+              "confidence": "certain"
+            },
+            "note": "The writer flagged doubt. I am certain of the snow mechanism; the only wrinkle is that popular speech says 'ice houses', which the distractor 'Solid ice' plays on. Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Domed snow igloos are not built from ice blocks, mud or stone.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Inuit also built stone, sod and whalebone houses, but the stem says 'domed', which excludes them."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Snow is full of trapped air and conducts heat far less than solid ice.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Builders cut blocks from firm wind-packed snow and set them in a rising spiral that forms a self-supporting dome.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "Two distractors (Cut stone, Sun-dried mud) are implausible for an Arctic snow house, so the real choice is ice against snow. Acceptable for an easy item; more tempting alternatives would help."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-part02e",
+        "at": "2026-11-01T02:27:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, checker_doubt) rests on knowledge alone in both checks: neither checker could run a web search (the shared search limit was spent before this batch's checks) and neither check records dataset evidence for it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Redraft under a new id with these facts evidenced (a dataset record or a Tier A or B search) or bounded.",
+      "decidedAt": "2026-11-01T04:30:36Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Traditional domed Inuit igloos are built from blocks of what?",
+  "answer": "Packed snow",
+  "wrong": ["Solid ice", "Sun-dried mud", "Cut stone"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.311,
+    "estimator": "v0"
+  }
+}

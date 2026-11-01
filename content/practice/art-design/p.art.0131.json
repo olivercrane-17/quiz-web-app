@@ -1,0 +1,379 @@
+{
+  "id": "p.art.0131",
+  "status": "active",
+  "category": "art",
+  "tags": ["paintings", "art-crime", "renaissance"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Vincenzo Peruggia, who had helped fit the museum's glass cases, hid it for over two years. The poet Guillaume Apollinaire was briefly jailed as a suspect, and Picasso was questioned.",
+  "learnMore": "Vincenzo Peruggia",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Mona Lisa was stolen from the Louvre in August 1911 by Vincenzo Peruggia, who had worked at the museum."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Mona Lisa was not stolen by a famous painter, a Swiss art dealer or a French art critic."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Peruggia had helped install glass cases for paintings at the Louvre."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Mona Lisa was missing for more than two years, until it was recovered in Florence in December 1913."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Guillaume Apollinaire was briefly jailed as a suspect in the theft, and Picasso was questioned by police."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: moma-artists has Apollinaire (ConstituentID 14265) and Picasso (4609), dates only; the theft claims need a source. Rival test: a famous painter and a French art critic are the planted pulls, because Picasso really was questioned and the poet and critic Apollinaire was jailed as a suspect; a dealer fits the art-world guess; none stole it; against the key, Peruggia's work at the Louvre is well documented. All four options are descriptions, so no named person stands out. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the theft is a famous story worldwide. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit; I avoided the disputed tale of a forger who masterminded the theft. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: a crime, but a century-old art theft told factually (§3.7), with no living person involved.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6e6c741b74fb2466fe5fb10990dadf48dac1295b7903ef1f262a0a97075b928c",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "A former Louvre worker",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Mona Lisa oil on poplar wood panel; stolen from the Louvre August 1911 by Vincenzo Peruggia, recovered in Florence December 1913",
+              "results": [
+                {
+                  "title": "Vincenzo Peruggia",
+                  "url": "https://en.wikipedia.org/wiki/Vincenzo_Peruggia"
+                },
+                {
+                  "title": "Mona Lisa",
+                  "url": "https://en.wikipedia.org/wiki/Mona_Lisa"
+                },
+                {
+                  "title": "Today in History August 21",
+                  "url": "https://www.britannica.com/today-in-history/August-21-The-Mona-Lisa-Theft"
+                },
+                {
+                  "title": "Eduardo de Valfierno",
+                  "url": "https://en.wikipedia.org/wiki/Eduardo_de_Valfierno"
+                },
+                {
+                  "title": "Mona Lisa",
+                  "url": "https://www.britannica.com/topic/Mona-Lisa-painting"
+                },
+                {
+                  "title": "Vincenzo Peruggia",
+                  "url": "https://www.britannica.com/biography/Vincenzo-Peruggia"
+                },
+                {
+                  "title": "Yves Chaudron",
+                  "url": "https://en.wikipedia.org/wiki/Yves_Chaudron"
+                },
+                {
+                  "title": "Art theft",
+                  "url": "https://en.wikipedia.org/wiki/Stolen_masterpiece"
+                },
+                {
+                  "title": "1911 in art",
+                  "url": "https://en.wikipedia.org/wiki/1911_in_art"
+                },
+                {
+                  "title": "Mona Lisa - Page 1 · Louvre Shop",
+                  "url": "https://boutique.louvre.fr/en/products/400621-mona-lisa/"
+                }
+              ],
+              "summaryExcerpt": "Theft: On 21 August 1911, the painting was stolen from the Louvre. The culprit was Louvre employee Vincenzo Peruggia, who had helped construct the painting's glass case.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "21 August 1911, by Vincenzo Peruggia, who worked at the Louvre. This reuses search S7, counted on p.art.0161. The summary's other conflicts (how he left the building, when the painting returned to the Louvre) concern facts the item does not state."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The thief was Peruggia, not a painter, a Swiss dealer or a French critic; Apollinaire was arrested and released.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Mona Lisa oil on poplar wood panel; stolen from the Louvre August 1911 by Vincenzo Peruggia, recovered in Florence December 1913",
+              "results": [
+                {
+                  "title": "Vincenzo Peruggia",
+                  "url": "https://en.wikipedia.org/wiki/Vincenzo_Peruggia"
+                },
+                {
+                  "title": "Mona Lisa",
+                  "url": "https://en.wikipedia.org/wiki/Mona_Lisa"
+                },
+                {
+                  "title": "Today in History August 21",
+                  "url": "https://www.britannica.com/today-in-history/August-21-The-Mona-Lisa-Theft"
+                },
+                {
+                  "title": "Eduardo de Valfierno",
+                  "url": "https://en.wikipedia.org/wiki/Eduardo_de_Valfierno"
+                },
+                {
+                  "title": "Mona Lisa",
+                  "url": "https://www.britannica.com/topic/Mona-Lisa-painting"
+                },
+                {
+                  "title": "Vincenzo Peruggia",
+                  "url": "https://www.britannica.com/biography/Vincenzo-Peruggia"
+                },
+                {
+                  "title": "Yves Chaudron",
+                  "url": "https://en.wikipedia.org/wiki/Yves_Chaudron"
+                },
+                {
+                  "title": "Art theft",
+                  "url": "https://en.wikipedia.org/wiki/Stolen_masterpiece"
+                },
+                {
+                  "title": "1911 in art",
+                  "url": "https://en.wikipedia.org/wiki/1911_in_art"
+                },
+                {
+                  "title": "Mona Lisa - Page 1 · Louvre Shop",
+                  "url": "https://boutique.louvre.fr/en/products/400621-mona-lisa/"
+                }
+              ],
+              "summaryExcerpt": "Theft: On 21 August 1911, the painting was stolen from the Louvre. The culprit was Louvre employee Vincenzo Peruggia, who had helped construct the painting's glass case.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Reuses search S7: he had helped construct the painting's glass case."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Mona Lisa oil on poplar wood panel; stolen from the Louvre August 1911 by Vincenzo Peruggia, recovered in Florence December 1913",
+              "results": [
+                {
+                  "title": "Vincenzo Peruggia",
+                  "url": "https://en.wikipedia.org/wiki/Vincenzo_Peruggia"
+                },
+                {
+                  "title": "Mona Lisa",
+                  "url": "https://en.wikipedia.org/wiki/Mona_Lisa"
+                },
+                {
+                  "title": "Today in History August 21",
+                  "url": "https://www.britannica.com/today-in-history/August-21-The-Mona-Lisa-Theft"
+                },
+                {
+                  "title": "Eduardo de Valfierno",
+                  "url": "https://en.wikipedia.org/wiki/Eduardo_de_Valfierno"
+                },
+                {
+                  "title": "Mona Lisa",
+                  "url": "https://www.britannica.com/topic/Mona-Lisa-painting"
+                },
+                {
+                  "title": "Vincenzo Peruggia",
+                  "url": "https://www.britannica.com/biography/Vincenzo-Peruggia"
+                },
+                {
+                  "title": "Yves Chaudron",
+                  "url": "https://en.wikipedia.org/wiki/Yves_Chaudron"
+                },
+                {
+                  "title": "Art theft",
+                  "url": "https://en.wikipedia.org/wiki/Stolen_masterpiece"
+                },
+                {
+                  "title": "1911 in art",
+                  "url": "https://en.wikipedia.org/wiki/1911_in_art"
+                },
+                {
+                  "title": "Mona Lisa - Page 1 · Louvre Shop",
+                  "url": "https://boutique.louvre.fr/en/products/400621-mona-lisa/"
+                }
+              ],
+              "summaryExcerpt": "Recovery: Peruggia was caught in Florence when he contacted Alfredo Geri, the owner of an art gallery in Florence, using the name Leonardo V. Geri called in Giovanni Poggi, director of the Uffizi, who authenticated the painting. Wikipedia gives his arrest date as 12 December 1913.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Theft on 21 August 1911, recovery in Florence with his arrest on 12 December 1913: more than two years. Reuses search S7. The reported conflict on the date it returned to the Louvre (1913 or 4 January 1914) does not touch the recovery in Florence."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Apollinaire was jailed for about a week in September 1911 as a suspect, and Picasso was questioned.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2e4d25b53a8d0c79efe3d7d852bd9a8789a431351951e60e1634e98d848b6e55",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "A former Louvre worker",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vincenzo Peruggia, an Italian who had worked at the Louvre, stole the Mona Lisa on 21 August 1911.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "It was not stolen by a famous painter, a Swiss dealer or a French critic (Picasso was only questioned).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Peruggia had worked on the glass cases built to protect Louvre paintings, so he knew the museum's routine.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The painting was missing from August 1911 until December 1913, when it was recovered in Florence: more than two years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Apollinaire was arrested and briefly held in September 1911, and Picasso was questioned.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; every high-risk claim (c1, c4) has dataset or web evidence in a confirming check (§9.9 rule 3). No open issue in either record, lint clean, dedupe unique, myths screen clean.",
+      "decidedAt": "2026-11-01T04:15:28Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:28Z",
+      "nearestId": "p.art.0161",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:28Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In 1911 the Mona Lisa vanished from the Louvre. Who turned out to have stolen it?",
+  "answer": "A former Louvre worker",
+  "wrong": ["A famous painter", "A Swiss art dealer", "A French art critic"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.174,
+    "estimator": "v0"
+  }
+}

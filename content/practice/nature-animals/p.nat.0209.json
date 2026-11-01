@@ -1,0 +1,180 @@
+{
+  "id": "p.nat.0209",
+  "status": "checking",
+  "category": "nat",
+  "tags": ["amphibians", "frogs", "camouflage", "americas"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "When they sleep, glass frogs pack nearly all their red blood cells into their liver, which makes their bodies even harder for predators to see.",
+  "learnMore": "Glass frog",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Glass frogs have transparent belly skin through which their internal organs, including the beating heart, can be seen."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Poison dart frogs, horned frogs and leopard frogs do not have see-through bellies."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Sleeping glass frogs store nearly all of their red blood cells in the liver, which makes them more transparent."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: three listed; high: c3 (checker_doubt, raised by me because it rests on a specific study rather than textbook knowledge); standard: c1 and c2. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on glass frogs hiding red blood cells in the liver should cover c3. rivalTest: Argued for 'Tree frogs' and dropped it as an option: glass frogs live in trees, so the name would be a defensible second answer. The three distractors are well-known frogs with opaque skin. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: glass frogs live in Central and South American forests; the name gives every player a foothold. style: Oxford spelling, plain hyphens only, explanation of 25 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: c3 rests on one well-known study (published in Science in 2022), so I raised it to high (checker_doubt) and kept the wording at 'nearly all'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2fbfd57a674f44925f3d9b77812a7491354294cbdb5d2251724b8739ecb714c5",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "Glass frogs",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Glass frogs (family Centrolenidae) have translucent belly skin through which the organs, often including the beating heart, can be seen.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Poison dart frogs, horned frogs and leopard frogs have opaque bellies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "When they sleep, glass frogs take most of their red blood cells (close to 90 percent) out of circulation and pack them into the liver, which makes them two to three times more transparent.",
+              "confidence": "certain"
+            },
+            "note": "Confirmed in substance; see the wording note on 'nearly all'. High-risk (checker_doubt): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says sleeping glass frogs pack 'nearly all' their red blood cells into the liver. The figure I know is close to 90 percent, so 'nearly 90 percent' or 'most' would be more exact. Not wrong at this precision."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e6a449ee770306395c82aec440e297e28ab63fa20e5de74ca408c746d1aded62",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "Glass frogs",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Glass frogs have translucent belly skin, so the internal organs, heart included, can be seen.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Poison dart frogs, horned frogs and leopard frogs have opaque bellies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Resting glass frogs hide most of their red blood cells in the liver, which makes the body more transparent. My recollection of the measured share is roughly nine in ten, which is 'most' or 'almost 90 per cent', not 'nearly all'.",
+              "confidence": "likely"
+            },
+            "note": "Mechanism recalled with confidence, magnitude not. 'Nearly all' looks stronger than the figure I remember. Not retrieved here: no search budget was available."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c3 and the explanation say glass frogs pack 'nearly all' their red blood cells into the liver. The published share I recall is roughly 90 per cent at most, so 'nearly all' overstates it. Reword to 'most' (or 'about nine in ten') and have the figure confirmed externally."
+          },
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The key 'Glass frogs' echoes 'see-through skin' in the stem, and no other option names a transparency. A cue rather than an error."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "Which rainforest frogs have see-through skin on their bellies, so you can watch their hearts beating?",
+  "answer": "Glass frogs",
+  "wrong": ["Poison dart frogs", "Horned frogs", "Leopard frogs"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.84,
+    "spread": 0.4,
+    "estimator": "v0"
+  }
+}

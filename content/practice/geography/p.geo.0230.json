@@ -1,0 +1,211 @@
+{
+  "id": "p.geo.0230",
+  "status": "active",
+  "category": "geo",
+  "tags": ["continents", "countries", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "More than a quarter of all the member states of the United Nations are African countries.",
+  "learnMore": "Africa",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Africa has more countries than any other continent."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Asia, Europe and South America each have fewer countries than Africa."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "More than a quarter of the member states of the United Nations are in Africa."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors and one C22 warning: the same answer as p.food.0250, which asks where watermelons were domesticated, a different fact; related, not a duplicate, for the editor to confirm with related_ok. Claims: every checkable statement is listed, distractors included; c1 (superlative) and c3 (number) are high under the C26 floor, and c2 is standard. Datasets: mledoze-countries, independent entries by region: Africa 54, Asia 46, Europe 45, Americas 35 (South America 12 of them), Oceania 14 (c1, c2). unMember entries in Africa: 54. The file counts 194 UN members because it wrongly marks Vatican City as one; against the real total of 193, 54 is 28%, and against 194 it is still over a quarter (c3). Rival test: Asia is the big continent and Europe has many small states, so both tempt. Against the key: totals for Asia and Europe move with how countries that span both are counted, but no convention lifts either near Africa's. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Nobody's local knowledge; players reason from what they know of each continent's map. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 16 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset. Seed: 3 (medium): many players guess Asia or Europe. Counterintuitive: false. Doubts: c3 avoids the exact count, which would change if a new African state joined the UN.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "bdfce37ff416c2926f1dcb413dabf9f23352a647ccfd39cc926ed2b83db02c2c",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Africa",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "country-codes",
+              "version": "2d84034a0cae19ea5444b78c2131304a5c7f4bb9",
+              "file": "country-codes.csv",
+              "locator": "is_independent=Yes, counted by Continent",
+              "excerpt": "AF 54, AS 46, EU 45, NA 23, OC 15, SA 12",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Africa leads under this continent column, and also in mledoze-countries' regions (Africa 54, Asia 46, Europe 45). Any continent model puts it ahead."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "country-codes",
+              "version": "2d84034a0cae19ea5444b78c2131304a5c7f4bb9",
+              "file": "country-codes.csv",
+              "locator": "is_independent=Yes, counted by Continent",
+              "excerpt": "AF 54; AS 46; EU 45; SA 12",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "unMember=true, region=Africa",
+              "excerpt": "54 entries",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "54 of the 193 UN members is 28%, more than a quarter. The file counts 194 members because it marks Vatican City as one (manifest known issue); that does not change the African count."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "40c8d83ac44e8734b270c13f0440c42074b90902ac5b25e29ab354318521c56a",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Africa",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "unMember=true grouped by region/subregion",
+              "excerpt": "UN members by region in the pinned file: Africa 54, Asia 46, Europe 45, Americas 35 (South America 12), Oceania 14.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "High-risk superlative checked against the dataset. Africa leads by 8 even if Russia, Egypt and Turkiye are counted in both of their continents (Asia 46 plus 2 is still below 54), and with the 5-continent model (Americas 35). Counting-convention issue recorded below."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "subregion=South America; region=Asia, Europe",
+              "excerpt": "South America 12 UN members, Europe 45, Asia 46, against Africa 54.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Each option has fewer than Africa under every common convention that keeps Europe and Asia apart."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "region=Africa, unMember=true",
+              "excerpt": "54 African UN members of 194 flagged (193 once Vatican City is removed, as its knownIssues say): 27.8% to 28.0%, above a quarter.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The pinned file counts Vatican City as a UN member; either denominator gives more than 25%."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Counting convention (guide 3.2): the key holds with Europe and Asia counted separately, as the options do, and with the five-continent model. It would fail only if Europe and Asia were merged into Eurasia, which no option offers, so one answer holds. No change needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 (country-codes and mledoze-countries) and c3 (mledoze-countries) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits. B's counting-convention note holds the key under every model the options use. Dedupe: p.food.0250 asks where watermelons were domesticated, a different fact, so related_ok.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which continent is home to more independent countries than any other?",
+  "answer": "Africa",
+  "wrong": ["Asia", "Europe", "South America"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.284,
+    "estimator": "v0"
+  }
+}

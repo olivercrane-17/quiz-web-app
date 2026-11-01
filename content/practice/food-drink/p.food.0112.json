@@ -1,0 +1,205 @@
+{
+  "id": "p.food.0112",
+  "status": "active",
+  "category": "food",
+  "tags": ["cooking", "food-science", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Tests show seared meat loses as much moisture as unseared meat, or more. What searing does do is brown the surface, creating rich flavours through the Maillard reaction.",
+  "learnMore": "Searing",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Searing does not seal in meat's juices; seared meat loses as much moisture as unseared meat, or more."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Searing browns the surface of meat through the Maillard reaction, which creates flavour compounds."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: a cook could argue that a crust holds juices on the plate, but measured moisture loss does not support sealing; the statement is the classic kitchen myth in its usual words. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the belief is common wherever meat is seared. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; c1 matches searing-seals-juices by design, because it debunks that myth; the checkers decide, and the screen needs web evidence in one check. Mystery and encore checks: not applicable to a practice item. Seed: 5: the myth is widely repeated by cooks, so I expect most players to answer true. Doubts: none on the key; c1 needs a web source, such as a food-science test of seared and unseared meat.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "73252f8ddb2a21751708981dce37b490665ffc30d9d7080a911990d25a39160e",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "searing meat does not seal in juices moisture loss myth",
+              "results": [
+                {
+                  "title": "Searing",
+                  "url": "https://en.wikipedia.org/wiki/Searing"
+                },
+                {
+                  "title": "Doneness",
+                  "url": "https://en.wikipedia.org/wiki/Doneness"
+                },
+                {
+                  "title": "List of common misconceptions about arts and culture",
+                  "url": "https://en.wikipedia.org/wiki/List_of_common_misconceptions_about_arts_and_culture"
+                },
+                {
+                  "title": "Talk:Doneness",
+                  "url": "https://en.wikipedia.org/wiki/Talk:Temperature_(meat)"
+                },
+                {
+                  "title": "Justus von Liebig",
+                  "url": "https://en.wikipedia.org/wiki/Justus_von_Liebig"
+                },
+                {
+                  "title": "Talk:Marination",
+                  "url": "https://en.wikipedia.org/wiki/Talk:Marination"
+                },
+                {
+                  "title": "Heston Blumenthal",
+                  "url": "https://en.wikipedia.org/wiki/Heston_Blumenthal"
+                },
+                {
+                  "title": "Sous vide",
+                  "url": "https://www.britannica.com/topic/sous-vide-cooking"
+                },
+                {
+                  "title": "Pittsburgh rare",
+                  "url": "https://en.wikipedia.org/wiki/Pittsburgh_rare"
+                },
+                {
+                  "title": "Braising",
+                  "url": "https://en.wikipedia.org/wiki/Braising"
+                }
+              ],
+              "summaryExcerpt": "Wikipedia's Searing article says that, despite the common claim, searing causes more moisture loss than cooking to the same internal temperature without it. Experiments dating to the 1930s found that seared roasts lost the same amount of moisture or more.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Myth hit searing-seals-juices: this claim is the debunking, and the call attributes it to Wikipedia's Searing article (Tier B). The only dissent the summary mentions is one Wikipedia talk-page comment (a forum, Tier C, not a source), which it calls anecdotal; no reference source disagrees."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Searing browns the surface through the Maillard reaction, which creates flavour compounds.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b55f2cb8a795cfde5687c9280c80fbb0edc538507d8f353f1a665412bafaa313",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Controlled tests (Harold McGee, Cook's Illustrated, Modernist Cuisine) found that seared meat loses as much moisture as unseared meat or more; a sear is not a seal.",
+              "confidence": "certain"
+            },
+            "note": "Myth hit. Tried a defence of the myth: the crust slows surface evaporation but does not trap juices. Knowledge only, so the item needs the other check's external evidence to clear the myths screen. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Searing browns the surface and the Maillard reaction creates flavour compounds.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. Myth hit searing-seals-juices is cleared: both checks confirm the debunking c1 and pass A carries Tier B web evidence for it (§9.9 rule 5).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": [
+        {
+          "claimId": "c1",
+          "mythId": "searing-seals-juices",
+          "cleared": true
+        }
+      ]
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Searing meat over high heat seals in its juices.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.276,
+    "estimator": "v0"
+  }
+}

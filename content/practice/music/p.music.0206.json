@@ -1,0 +1,190 @@
+{
+  "id": "p.music.0206",
+  "status": "active",
+  "category": "music",
+  "tags": ["pop-rock", "sweden", "band-names"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Agnetha, Björn, Benny and Anni-Frid. A Swedish seafood company was already called Abba, and it agreed to let the band share the name.",
+  "learnMore": "ABBA",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The name ABBA is made from the initials of its members' given names: Agnetha, Björn, Benny and Anni-Frid."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "ABBA's name does not come from a Swedish word for joy, a song title or a street name."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A Swedish seafood company, Abba Seafood, already used the name and agreed to the band using it."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers band names, so the checkers need web evidence for the seafood company in c3. I used no WebSearch. Rival test: argued for each distractor: none has any support; the band's early billing used all four names before the manager shortened it to their initials. Argued against the key: the word abba also means father in Aramaic, but that is not where the band's name comes from. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: ABBA is known worldwide. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None. b01 also has an ABBA item (Waterloo), on a different fact.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0f75b1b96ee4b0284bb145227cd022dcb9cc7cb43ca2e162a516763794b09dc4",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "Its members' initials",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "ABBA is an acronym of the first letters of Agnetha, Björn, Benny and Anni-Frid.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Because the name is an acronym of the members' first names, it is not a Swedish word for joy, a song title or a street name.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A Gothenburg seafood canning company already traded as Abba, and it gave the group permission to use the name.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f39f02cc482156201cfc624a8a1f5e65834a31ef4e61799b7059e7e68ff5e7f8",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "Its members' initials",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "ABBA is formed from the first letters of Agnetha, Bjorn, Benny and Anni-Frid.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: not a Swedish word, street or song; the band itself explained it as an acronym. It is an etymology claim labelled standard; check A may still want to carry external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The name is an acronym of the members' given names, not a Swedish word for joy, a street name or a song title.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A Swedish fish-canning company, Abba Seafood, already used the name, and the band obtained its permission.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c2 (etymology) rests on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail. For the redraft, B's note stands: the key c1 is an etymology in substance and should carry high risk with evidence.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Where does the name of the Swedish band ABBA come from?",
+  "answer": "Its members' initials",
+  "wrong": [
+    "A Swedish word for joy",
+    "Its first hit song",
+    "A street in Stockholm"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.263,
+    "estimator": "v0"
+  }
+}

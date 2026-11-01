@@ -1,0 +1,249 @@
+{
+  "id": "p.soc.0142",
+  "status": "active",
+  "category": "soc",
+  "tags": ["money", "pacific", "traditions"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Some are taller than a person and were quarried on Palau, hundreds of kilometres away. Big stones were rarely moved: everyone simply knew who owned each one.",
+  "learnMore": "Rai stones",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Rai, the traditional money of Yap, are large stone discs, usually with a hole in the centre."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Yapese rai were not whale teeth, feather coils or brass rings."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Some rai stones are taller than a person."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Rai stones were quarried on Palau, hundreds of kilometres from Yap."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Large rai stones were rarely moved; their ownership changed by common agreement."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers traditional money; c4 needs web evidence. rivalTest: every distractor is a real traditional currency from elsewhere: Fijian whale teeth (tabua), the feather money of the Santa Cruz Islands and West African brass manillas. Argued against the key: rai are stone by definition. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: fair everywhere; Yap is obscure to most players alike. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 27 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 4: the famous stone money is known to many from economics books and documentaries. doubts: Yap also used shell valuables, so I kept shell options out to avoid any second answer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a8f60b928c763c072b68d18a8232ee8c4829795f4318ff266c974180b84d2221",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Stone discs",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yap's rai are large stone discs, usually with a hole in the middle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rai are not whale teeth (Fijian tabua), feather coils (Santa Cruz red-feather money) or brass rings (manillas).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The largest rai are more than 3 m across, taller than a person.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Colonia, country=FM, admin1=04; name=Koror, country=PW, admin1=06",
+              "excerpt": "{\"name\":\"Colonia\",\"lat\":\"9.51638\",\"lng\":\"138.12167\",\"country\":\"FM\",\"admin1\":\"04\",\"admin2\":\"WE\"} | {\"name\":\"Koror\",\"lat\":\"7.33978\",\"lng\":\"134.47326\",\"country\":\"PW\",\"admin1\":\"06\",\"admin2\":\"\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "admin1.json names FM.04 Yap State. The great-circle distance from Colonia (Yap) to Koror (Palau), computed from these coordinates with the haversine formula, is about 469 km, which supports 'hundreds of kilometres'. That the stones were quarried on Palau rests on knowledge (certain)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Big stones stayed where they were, and their ownership passed by common knowledge and agreement.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5bfaf2c4df7ca919624bbca7b3effa0182100e1e95dca140c2efe811e7e17bdd",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Stone discs",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rai are large stone discs, usually with a hole in the middle, used as money on Yap.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yapese rai were not whale teeth, feather coils or brass rings.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Some rai are taller than a person.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The famous rai stones were quarried on Palau, some 400 km from Yap.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Large rai were rarely moved; ownership passed by common agreement.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Both checks pass. High-risk c4 has geonames-cities evidence in A for the distance (about 469 km from Colonia on Yap to Koror on Palau, which supports 'hundreds of kilometres'), and both confirm the Palau quarrying at certain; the other claims are standard and certain. Lint clean, no myth or dedupe hit.",
+      "decidedAt": "2026-11-01T04:34:42Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:34:42Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:34:42Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "On the Pacific island of Yap, what form did the traditional money called rai take?",
+  "answer": "Stone discs",
+  "wrong": ["Whale teeth", "Feather coils", "Brass rings"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.244,
+    "estimator": "v0"
+  }
+}

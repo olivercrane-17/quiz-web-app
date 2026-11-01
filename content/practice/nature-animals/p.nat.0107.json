@@ -1,0 +1,484 @@
+{
+  "id": "p.nat.0107",
+  "status": "active",
+  "category": "nat",
+  "tags": ["birds", "owls", "giraffes", "anatomy"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "An owl's 14 neck vertebrae help it swivel its head about 270 degrees. A giraffe has 7, the same number as a human; each one is just far longer.",
+  "learnMore": "Owl",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Owls have 14 neck (cervical) vertebrae."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Giraffes have 7 neck (cervical) vertebrae."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Owls can turn their heads up to about 270 degrees."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Humans also have 7 neck vertebrae."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Each giraffe neck vertebra is much longer than a human neck vertebra."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed; c1 to c4 hold numbers, so they are high by the C26 floor. One search on owl and giraffe neck vertebrae should cover c1 to c4 together. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: the giraffe is the obvious pick, which is why counterintuitive is set. Exact counts, so the separation guard is met many times over (14 against 7). Many birds have more than 7 neck vertebrae and swans more than owls, which is why the stem compares only these two. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: owls and giraffes are known everywhere. style: Oxford spelling, plain hyphens only, explanation of 29 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a comparison item. doubts: none; 14 for owls and 7 for giraffes are standard anatomy figures.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4fdf27ab7db86dddfe9c86b6655d4ca3ad5e2410813abdb49d8610387147fad1",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "An owl",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many neck (cervical) vertebrae does an owl have compared with a giraffe and a human, and how far can an owl rotate its head",
+              "results": [
+                {
+                  "title": "Solving the Mystery of Owls’ Head-Turning Abilities",
+                  "url": "https://www.smithsonianmag.com/science-nature/solving-the-mystery-of-owls-head-turning-abilities-9561557/"
+                },
+                {
+                  "title": "Owl",
+                  "url": "https://en.wikipedia.org/wiki/Owl"
+                },
+                {
+                  "title": "Giraffe",
+                  "url": "https://en.wikipedia.org/wiki/Giraffe"
+                },
+                {
+                  "title": "The Cervical Spine of the American Barn Owl (Tyto furcata pratincola): I. Anatomy of the Vertebrae and Regionalization in Their S-Shaped Arrangement - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3961260/"
+                },
+                {
+                  "title": "The cervical spine of the American barn owl (Tyto furcata pratincola): I. Anatomy of the vertebrae and regionalization in their S-shaped arrangement - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/24651767/"
+                },
+                {
+                  "title": "Muscular Arrangement and Muscle Attachment Sites in the Cervical Region of the American Barn Owl (Tyto furcata pratincola)",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4519302/"
+                },
+                {
+                  "title": "Functional cervicothoracic boundary modified by anatomical shifts in the neck of giraffes - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4785981/"
+                },
+                {
+                  "title": "Preliminary ontogeny of the giraffe neck - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/36929340/"
+                },
+                {
+                  "title": "The Cervical Spine of the American Barn Owl (Tyto furcata pratincola): I. Anatomy of the Vertebrae and Regionalization in Their S-Shaped Arrangement",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3961260/"
+                },
+                {
+                  "title": "Functional cervicothoracic boundary modified by anatomical shifts in the neck of giraffes",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4785981/"
+                }
+              ],
+              "summaryExcerpt": "Owls have 14 neck vertebrae—humans have only seven—and their vertebral circulatory systems are adapted to allow them to rotate their heads without cutting off blood to the brain.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Sentence from the Smithsonian magazine article in the list (Tier B); it covers c1 and c4."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "giraffe number of cervical vertebrae; ostrich number of toes on each foot compared with emu; honeybee number of wings compared with housefly (true flies, halteres)",
+              "results": [
+                {
+                  "title": "Cervical vertebrae",
+                  "url": "https://en.wikipedia.org/wiki/Cervical_vertebrae"
+                },
+                {
+                  "title": "Spinal column",
+                  "url": "https://en.wikipedia.org/wiki/Spinal_column"
+                },
+                {
+                  "title": "Fossil evidence and stages of elongation of the Giraffa camelopardalis neck",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4632521/"
+                },
+                {
+                  "title": "Why sauropods had long necks; and why giraffes have short necks - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3628838/"
+                },
+                {
+                  "title": "1 Media Inquiries: Kendra Snyder, Department of Communications",
+                  "url": "https://www.amnh.org/content/download/400588/5853225/file/giraffe-neck-evolution-study-press-release.pdf"
+                },
+                {
+                  "title": "The cervical anatomy of Samotherium, an intermediate-necked giraffid",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4680625/"
+                },
+                {
+                  "title": "Giraffe Neck Evolution: Combat and Feeding",
+                  "url": "https://www.amnh.org/explore/news-blogs/giraffe-neck-evolution"
+                },
+                {
+                  "title": "Ontogenetic similarities between giraffe and sauropod neck osteological mobility - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6957182/"
+                },
+                {
+                  "title": "The Cervical Osteology of Okapia johnstoni and Giraffa camelopardalis",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4547811/"
+                }
+              ],
+              "summaryExcerpt": "Giraffes have seven cervical vertebrae, the same count as most mammals. Evidence on the phylogenetic constraint to the number of cervical vertebrae in mammals suggests that the giraffe has 7 cervical vertebrae. The neck's length comes from much longer vertebrae, not extra ones ... One study had proposed eight, but the mainstream count is seven.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Stated plainly. The study that 'proposed eight' argued that the giraffe's first thoracic vertebra works like a neck vertebra; it does not change the count of cervical vertebrae the claim names, and the owl wins either way (14 against 8). Noted as an issue. W12, counted here, said only that giraffes are 'generally thought' to have seven, so it is not used for this claim."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many neck (cervical) vertebrae does an owl have compared with a giraffe and a human, and how far can an owl rotate its head",
+              "results": [
+                {
+                  "title": "Solving the Mystery of Owls’ Head-Turning Abilities",
+                  "url": "https://www.smithsonianmag.com/science-nature/solving-the-mystery-of-owls-head-turning-abilities-9561557/"
+                },
+                {
+                  "title": "Owl",
+                  "url": "https://en.wikipedia.org/wiki/Owl"
+                },
+                {
+                  "title": "Giraffe",
+                  "url": "https://en.wikipedia.org/wiki/Giraffe"
+                },
+                {
+                  "title": "The Cervical Spine of the American Barn Owl (Tyto furcata pratincola): I. Anatomy of the Vertebrae and Regionalization in Their S-Shaped Arrangement - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3961260/"
+                },
+                {
+                  "title": "The cervical spine of the American barn owl (Tyto furcata pratincola): I. Anatomy of the vertebrae and regionalization in their S-shaped arrangement - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/24651767/"
+                },
+                {
+                  "title": "Muscular Arrangement and Muscle Attachment Sites in the Cervical Region of the American Barn Owl (Tyto furcata pratincola)",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4519302/"
+                },
+                {
+                  "title": "Functional cervicothoracic boundary modified by anatomical shifts in the neck of giraffes - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4785981/"
+                },
+                {
+                  "title": "Preliminary ontogeny of the giraffe neck - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/36929340/"
+                },
+                {
+                  "title": "The Cervical Spine of the American Barn Owl (Tyto furcata pratincola): I. Anatomy of the Vertebrae and Regionalization in Their S-Shaped Arrangement",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3961260/"
+                },
+                {
+                  "title": "Functional cervicothoracic boundary modified by anatomical shifts in the neck of giraffes",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4785981/"
+                }
+              ],
+              "summaryExcerpt": "On rotation, owls can turn their heads roughly 270 degrees. They can rotate their necks up to 270 degrees in either direction without damaging the vessels running below their heads.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many neck (cervical) vertebrae does an owl have compared with a giraffe and a human, and how far can an owl rotate its head",
+              "results": [
+                {
+                  "title": "Solving the Mystery of Owls’ Head-Turning Abilities",
+                  "url": "https://www.smithsonianmag.com/science-nature/solving-the-mystery-of-owls-head-turning-abilities-9561557/"
+                },
+                {
+                  "title": "Owl",
+                  "url": "https://en.wikipedia.org/wiki/Owl"
+                },
+                {
+                  "title": "Giraffe",
+                  "url": "https://en.wikipedia.org/wiki/Giraffe"
+                },
+                {
+                  "title": "The Cervical Spine of the American Barn Owl (Tyto furcata pratincola): I. Anatomy of the Vertebrae and Regionalization in Their S-Shaped Arrangement - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3961260/"
+                },
+                {
+                  "title": "The cervical spine of the American barn owl (Tyto furcata pratincola): I. Anatomy of the vertebrae and regionalization in their S-shaped arrangement - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/24651767/"
+                },
+                {
+                  "title": "Muscular Arrangement and Muscle Attachment Sites in the Cervical Region of the American Barn Owl (Tyto furcata pratincola)",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4519302/"
+                },
+                {
+                  "title": "Functional cervicothoracic boundary modified by anatomical shifts in the neck of giraffes - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4785981/"
+                },
+                {
+                  "title": "Preliminary ontogeny of the giraffe neck - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/36929340/"
+                },
+                {
+                  "title": "The Cervical Spine of the American Barn Owl (Tyto furcata pratincola): I. Anatomy of the Vertebrae and Regionalization in Their S-Shaped Arrangement",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3961260/"
+                },
+                {
+                  "title": "Functional cervicothoracic boundary modified by anatomical shifts in the neck of giraffes",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4785981/"
+                }
+              ],
+              "summaryExcerpt": "Owls have 14 neck vertebrae—humans have only seven—and their vertebral circulatory systems are adapted to allow them to rotate their heads without cutting off blood to the brain.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many neck (cervical) vertebrae does an owl have compared with a giraffe and a human, and how far can an owl rotate its head",
+              "results": [
+                {
+                  "title": "Solving the Mystery of Owls’ Head-Turning Abilities",
+                  "url": "https://www.smithsonianmag.com/science-nature/solving-the-mystery-of-owls-head-turning-abilities-9561557/"
+                },
+                {
+                  "title": "Owl",
+                  "url": "https://en.wikipedia.org/wiki/Owl"
+                },
+                {
+                  "title": "Giraffe",
+                  "url": "https://en.wikipedia.org/wiki/Giraffe"
+                },
+                {
+                  "title": "The Cervical Spine of the American Barn Owl (Tyto furcata pratincola): I. Anatomy of the Vertebrae and Regionalization in Their S-Shaped Arrangement - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3961260/"
+                },
+                {
+                  "title": "The cervical spine of the American barn owl (Tyto furcata pratincola): I. Anatomy of the vertebrae and regionalization in their S-shaped arrangement - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/24651767/"
+                },
+                {
+                  "title": "Muscular Arrangement and Muscle Attachment Sites in the Cervical Region of the American Barn Owl (Tyto furcata pratincola)",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4519302/"
+                },
+                {
+                  "title": "Functional cervicothoracic boundary modified by anatomical shifts in the neck of giraffes - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4785981/"
+                },
+                {
+                  "title": "Preliminary ontogeny of the giraffe neck - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/36929340/"
+                },
+                {
+                  "title": "The Cervical Spine of the American Barn Owl (Tyto furcata pratincola): I. Anatomy of the Vertebrae and Regionalization in Their S-Shaped Arrangement",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3961260/"
+                },
+                {
+                  "title": "Functional cervicothoracic boundary modified by anatomical shifts in the neck of giraffes",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4785981/"
+                }
+              ],
+              "summaryExcerpt": "They say the long neck results from a disproportionate lengthening of the cervical vertebrae, not from the addition of more vertebrae.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Giraffe neck count: the standard anatomical count is 7 cervical vertebrae, but one study argued the first thoracic vertebra acts as an eighth neck vertebra. The key is safe either way (owl 14)."
+          }
+        ],
+        "searchesUsed": 2,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "87b673b74076dabf3c6695e33d0fb351656f8335d6f233e47b576eca3ed94e93",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "An owl",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Owls have 14 neck vertebrae, twice the usual mammal count of 7.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Giraffes have 7 neck vertebrae, like almost all mammals.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Owls can turn the head through roughly 270 degrees.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Humans have 7 neck vertebrae.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Each giraffe neck vertebra is greatly elongated, far longer than a human one.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 5 claims confirmed in both checks; high-risk c1 (web in A), c2 (web in A), c3 (web in A), c4 (web in A). Style, distractors and balance reviewed. A's note (one study counts the giraffe's first thoracic vertebra as an eighth neck vertebra) leaves the key safe at 14 against 7 or 8.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which has more vertebrae in its neck?",
+  "a": "An owl",
+  "b": "A giraffe",
+  "answer": "a",
+  "relation": "more",
+  "measure": "vertebrae in the neck",
+  "unit": "vertebrae",
+  "values": {
+    "a": 14,
+    "b": 7
+  },
+  "valueDisplay": {
+    "a": "14 vertebrae",
+    "b": "7 vertebrae"
+  },
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.216,
+    "estimator": "v0"
+  }
+}

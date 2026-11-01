@@ -1,0 +1,233 @@
+{
+  "id": "p.geo.0249",
+  "status": "active",
+  "category": "geo",
+  "tags": ["languages", "countries", "central-africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "It was once Spanish Guinea, a colony that included the island of Bioko and a slice of mainland between Cameroon and Gabon.",
+  "learnMore": "Equatorial Guinea",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Spanish is an official language of Equatorial Guinea."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Spanish is not an official language of Morocco, Gabon or Angola."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Equatorial Guinea was formerly the Spanish colony of Spanish Guinea."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Equatorial Guinea includes the island of Bioko and a mainland region between Cameroon and Gabon."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: mledoze-countries: GNQ languages fra, por, spa, borders CMR and GAB (c1, c4); MAR ara and ber; GAB fra; AGO por (c2). Filtering Africa for Spanish gives Equatorial Guinea and Western Sahara, a territory whose status is disputed, which is why the stem says 'Which of these'. Rival test: Morocco is the planted trap: Spanish is widely heard in its north and Spain lies across the strait, but it is not official. Gabon is the neighbour, and Angola has a Portuguese colonial past. Against the key: Equatorial Guinea also lists French and Portuguese, but the stem asks only about Spanish. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Equally obscure to most; the name 'Guinea' and the Spanish colonial clue give a foothold. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c3 is standard history. Seed: 5 (hard): most players pick Morocco; good reasoners remember Spanish Guinea. Counterintuitive: false. Doubts: none; the item makes no claim about the country's capital, which is on the excluded list (§3.4).",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1f74ed2cae0e3801d84e7692492aa48c4d47b0594ab4308390ef9b1b4845a23e",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Equatorial Guinea",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=GNQ",
+              "excerpt": "\"languages\": {\"fra\":\"French\",\"por\":\"Portuguese\",\"spa\":\"Spanish\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MAR, GAB, AGO",
+              "excerpt": "MAR \"languages\": {\"ara\":\"Arabic\",\"ber\":\"Berber\"}; GAB {\"fra\":\"French\"}; AGO {\"por\":\"Portuguese\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Equatorial Guinea was the Spanish colony of Spanish Guinea until 1968.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Equatorial Guinea comprises Bioko and other islands plus mainland Río Muni between Cameroon and Gabon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "54c5a83ef122663194fbb460aba61de34f66f3e852b56f74c8eab42e7e30aa8d",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Equatorial Guinea",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=GNQ",
+              "excerpt": "\"languages\": {\"fra\": \"French\", \"por\": \"Portuguese\", \"spa\": \"Spanish\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MAR, GAB, AGO",
+              "excerpt": "MAR {\"ara\": \"Arabic\", \"ber\": \"Berber\"}; GAB {\"fra\": \"French\"}; AGO {\"por\": \"Portuguese\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Equatorial Guinea was the Spanish colony of Spanish Guinea until 1968.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Equatorial Guinea includes the island of Bioko and the mainland region of Rio Muni between Cameroon and Gabon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation calls the colony 'made up of' Bioko and a mainland slice; Spanish Guinea also held Annobon, Corisco and the Elobey islands. Not false as a summary, but 'included' is safer than 'made up of'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits. Accepted after the wording-only fix in decisions1.json. (earlier, rewrite by ed-pgeo02d: Both checks pass. Wording-only fix from B's note: the colony also held Annobón, Corisco and the Elobey islands, so 'included' replaces 'made up of', matching c4's 'includes'. No claim changes. [wording-only rewrite by ed-pgeo02d at 2026-11-01T04:36:56Z of explanation; checks kept, packetSha256 re-stamped: pass A 37f72865b870d13f50c8bf7fb0c7fb7e47c0675f9093a0e24c59a31815ddb698 -> 1f74ed2cae0e3801d84e7692492aa48c4d47b0594ab4308390ef9b1b4845a23e; pass B d6bee297f446c61336430e1c1490d16847a4f34b08c4bcf4a65ef1fd16655afb -> 54c5a83ef122663194fbb460aba61de34f66f3e852b56f74c8eab42e7e30aa8d])",
+      "decidedAt": "2026-11-01T04:37:04Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:37:04Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:37:04Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which of these African countries has Spanish as an official language?",
+  "answer": "Equatorial Guinea",
+  "wrong": ["Morocco", "Gabon", "Angola"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.289,
+    "estimator": "v0"
+  }
+}

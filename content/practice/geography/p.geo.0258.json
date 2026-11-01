@@ -1,0 +1,224 @@
+{
+  "id": "p.geo.0258",
+  "status": "active",
+  "category": "geo",
+  "tags": ["maps", "prime-meridian", "west-africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "The Prime Meridian comes ashore near the port of Tema. Mapmakers jokingly call the spot at sea where the two lines cross Null Island.",
+  "learnMore": "Null Island",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Ghana's coast lies due north of the point where the Equator meets the Prime Meridian."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The coasts of Togo, Nigeria and Gabon lie east of the Prime Meridian."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Prime Meridian reaches the coast of Ghana near the port of Tema."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The point at sea where the Equator and the Prime Meridian cross is jokingly called Null Island."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors and one C22 warning: the same answer as p.art.0229, which asks where kente cloth comes from, a different fact; related, not a duplicate, for the editor to confirm with related_ok. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: geonames-cities: Tema, GH, 5.6698, -0.01657, on the meridian (c1, c3); Lomé, TG, 6.12874, 1.22154, shows Togo's coast east of it (c2). mledoze-countries: NGA latlng 10, 8 and GAB latlng -1, 11.75, both well east (c2). Rival test: Togo is the planted near-miss, because the meridian crosses its northern edge inland, but its coast lies east; Gabon sits on the Equator and Nigeria is the big Gulf of Guinea country. Against the key: nothing; the first land due north of the crossing is Ghana's coast. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Equally new to most players; West Africans have an edge, and anyone can reason from the meridian's path south from Europe through Algeria. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 24 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c4 is standard. Seed: 5 (hard): most players guess between the Gulf of Guinea countries. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "928bedfe65a411d1f4d489a2b17c3e6ac381248313ee6b2f391d80d1a414f162",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Ghana",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "point-in-polygon on longitude 0",
+              "excerpt": "(0, 5.0) in no country (sea); (0, 5.5) in no country (sea); (0, 6.0) inside ADM0_A3=GHA; (0, 6.5) inside ADM0_A3=GHA",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Going due north from 0° N, 0° E, the first land on the meridian is Ghana's coast."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Togo's short coast, at Lomé, lies east of the meridian, and Nigeria's and Gabon's coasts lie further east still.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Greenwich Meridian comes ashore in Ghana at Tema, east of Accra.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mapmakers jokingly call the spot at 0° N, 0° E, in the Gulf of Guinea, Null Island.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d38e9792478e8c13c00a7627e804d3a6195a5ecea265c2930c6e09dd4a0f7339",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Ghana",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "meridian lon=0 intersected with all country polygons, north of the Equator",
+              "excerpt": "First land crossing going north from 0 N, 0 E is Ghana at 5.53 N (next are Togo and Ghana again at 10.65 N).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "110m generalisation moves the coast by a few km at most; Ghana's coast at the meridian is not close to any other country."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The coasts of Togo (about 1 E), Nigeria and Gabon all lie east of the Prime Meridian.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Tema, country=GH",
+              "excerpt": "Tema GH lat 5.6698, lng -0.01657 (about 2 km west of the Prime Meridian)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The meridian passes through the Tema area, which holds the port."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Null Island is the jokey name for the point at 0 N, 0 E in the Gulf of Guinea.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits. Dedupe: p.art.0229 asks where kente cloth comes from, a different fact, so related_ok.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.art.0229",
+      "score": 0.58,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which country's coast lies due north of the point where the Equator meets the Prime Meridian?",
+  "answer": "Ghana",
+  "wrong": ["Togo", "Nigeria", "Gabon"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.234,
+    "estimator": "v0"
+  }
+}

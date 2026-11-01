@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0128",
+  "status": "active",
+  "category": "food",
+  "tags": ["fruit", "southeast-asia"],
+  "region": "global",
+  "volatility": "slow",
+  "reviewBy": "2028-10-01",
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Its smell is often likened to rotting onions or old socks, yet its sweet, custard-like flesh makes durian a prized treat across Southeast Asia.",
+  "learnMore": "Durian",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Durian is banned on Singapore's MRT trains because of its strong smell."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Jackfruit, rambutan and mangosteen are not the fruit banned on Singapore's trains for its smell."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Durian's smell is often compared to rotting onions or old socks."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Durian's sweet, custard-like flesh is highly valued across Southeast Asia."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: jackfruit is also large, spiky and fragrant, which makes it tempting, but the train-ban signs show the durian. Volatility: slow, because a transport rule could change. The schema requires a reviewBy date for slow items, so I entered 1 October 2028 as a suggestion; the editor sets the final date at acceptance. Regional: the durian's smell is world-famous; Singapore is named only as the setting of the ban. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 24 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: durian is the famously smelly fruit. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "cde5deddefb0181c3fa028d0805c014f0a2a42927eea985392d2e343a36b53fe",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Durian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Singapore's MRT trains ban durians, with no-durian signs, because of the smell.",
+              "confidence": "certain"
+            },
+            "note": "A transit rule, so volatility slow is right and reviewBy matters."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jackfruit, rambutan and mangosteen are not the fruit on the MRT's prohibition signs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Durian's smell is commonly likened to rotten onions, turpentine or old socks.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Its sweet, custard-like flesh is prized across Southeast Asia, where it is called the king of fruits.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e27fde0a08f0fece4c9771c0b7d987b776eb6f1cdbc7b8378a67b204ff8e5795",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Durian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Singapore's MRT trains and stations carry signs banning durians because of their smell.",
+              "confidence": "certain"
+            },
+            "note": "Rule-based, present-tense fact: it could change, so volatility slow with a reviewBy is the right class. Jackfruit is not named in the MRT ban."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Jackfruit, rambutan and mangosteen are not the fruit named in the MRT ban.",
+              "confidence": "certain"
+            },
+            "note": "Some hotels ban both durian and jackfruit, but the question is about the trains."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Durian's odour is often compared to rotting onions, gym socks or sewage.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Durian flesh is sweet and custard-like and the fruit is prized across Southeast Asia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. A transit rule can change, so volatility is slow; reviewBy 2028-10-01 is inside 24 months of this decision (§2.3, §9.9 rule 6).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.food.0146",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which spiky fruit is banned on Singapore's trains because of its powerful smell?",
+  "answer": "Durian",
+  "wrong": ["Jackfruit", "Rambutan", "Mangosteen"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.383,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "id": "p.geo.0117",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "cities", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "London sits at about 51.5° N and Kyiv at about 50.5° N. The nearby Atlantic keeps London's winters far milder, so it feels further south than it is.",
+  "learnMore": "London",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central London lies at about 51.5° N."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Kyiv lies at about 50.5° N."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "London's winters are milder than Kyiv's, largely because of the influence of the nearby Atlantic Ocean."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 and c2 are latitudes, so high; c3 is standard climatology. Datasets: geonames-cities: London GB admin1 ENG lat 51.50853; Kyiv UA admin1 12 lat 50.45466. Gap 1.05°, above the 0.5° guard. Rival test: Kyiv's cold winters make it feel further north, which is the trap; the coordinates settle it. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both are major world cities. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 28 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: c3 says 'largely because of the Atlantic', the textbook maritime-climate point, and avoids the disputed claim about how much the Gulf Stream itself contributes.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b477bf3a716ce91bb968a330389433e26b4a49a8ea8cb41f03a65cadef599835",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "London",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=London, country=GB, admin1=ENG",
+              "excerpt": "{\"name\":\"London\",\"lat\":\"51.50853\",\"lng\":\"-0.12574\",\"country\":\"GB\",\"admin1\":\"ENG\",\"admin2\":\"GLA\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "51.50853 rounds to 51.5."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Kyiv, country=UA, admin1=12",
+              "excerpt": "{\"name\":\"Kyiv\",\"lat\":\"50.45466\",\"lng\":\"30.5238\",\"country\":\"UA\",\"admin1\":\"12\",\"admin2\":\"\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "50.45466 rounds to 50.5."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "London's maritime climate, warmed by the Atlantic and the North Atlantic Drift, gives far milder winters than continental Kyiv.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2c8f8e159395578fea4bb057b411b525557c1ef607b1aa5087d5fc054675a539",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "London",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=London,country=GB,admin1=ENG",
+              "excerpt": "London GB/ENG: lat 51.50853, lng -0.12574",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Kyiv,country=UA,admin1=12",
+              "excerpt": "Kyiv UA/12: lat 50.45466, lng 30.5238",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "London has a maritime climate warmed by the North Atlantic Drift; Kyiv has a continental climate with colder winters.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c2 carry geonames-cities evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which city is further north?",
+  "a": "London",
+  "b": "Kyiv",
+  "answer": "a",
+  "relation": "further_north",
+  "measure": "latitude of the city centre",
+  "unit": "° N",
+  "values": {
+    "a": 51.51,
+    "b": 50.45
+  },
+  "valueDisplay": {
+    "a": "51.5° N",
+    "b": "50.5° N"
+  },
+  "predicted": {
+    "p": 0.45,
+    "spread": 0.146,
+    "estimator": "v0"
+  }
+}

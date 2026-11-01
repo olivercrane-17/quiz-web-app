@@ -1,0 +1,228 @@
+{
+  "id": "p.lang.0132",
+  "status": "active",
+  "category": "lang",
+  "tags": ["borrowed-words", "swedish", "elements"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Swedish tung sten means heavy stone, a fitting name for one of the densest metals. Its symbol, W, comes from its other name, wolfram.",
+  "learnMore": "Tungsten",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name tungsten comes from Swedish tung sten, 'heavy stone'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Tungsten's name does not mean hard iron, bright rock or wolf foam."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Tungsten is one of the densest metals."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Tungsten's chemical symbol W comes from its other name, wolfram."
+    }
+  ],
+  "writerNotes": "Hard with a foothold: tung looks like tongue but sten is plainly stone, and the metal's weight is famous. Wolf foam tempts players who know the gloss of wolfram, the element's other name. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: ptable symbol=W summary 'The word tungsten comes from the Swedish language tung sten, which directly translates to heavy stone'; density_g_cm3 19.25 supports c3; rival test: wolf foam belongs to wolfram, not tungsten; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: element names are the same in English everywhere; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: ptable is built from Wikipedia, so it is one source, not two; fine for a practice item",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0e7f0929ec73da8853df9e9a452387522c87788e0ae26d356ad2e18c0edcf1d2",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Heavy stone",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Tungsten, summary",
+              "excerpt": "\"summary\": \"...The word tungsten comes from the Swedish language tung sten, which directly translates to heavy stone...\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tung sten means heavy stone. 'Wolf foam' belongs to the German root of the other name, wolfram, not to tungsten.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "density of every solid element with atomic number up to 100, sorted",
+              "excerpt": "\"density\" (g/cm3): Osmium 22.59, Iridium 22.56, Platinum 21.45, Rhenium 21.02, Neptunium 20.45, Plutonium 19.816, Gold 19.3, Tungsten 19.25",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Tungsten ranks 8th by density among the solid elements up to atomic number 100 in the file, so 'one of the densest metals' holds."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Tungsten, summary and symbol",
+              "excerpt": "\"summary\": \"...Tungsten, also known as wolfram, is a chemical element with symbol W...\" \"symbol\": \"W\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The record pairs the other name, wolfram, with the symbol W. That the letter is taken from wolfram is the standard reading and my knowledge."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "28d5012dffd9d61a3791038eed095e9c3169488dae2487fe34f77f347575f0fd",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Heavy stone",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tungsten is from Swedish tung sten, heavy stone, a mineral name from the 18th century.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hard iron and bright rock are not glosses; 'wolf foam' is the usual gloss of wolfram, the German name that gave the symbol W.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: 'wolf foam' is a deliberate trap from the other name of the element."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tungsten is among the densest metals, at about 19.3 g/cm3.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tungsten's symbol W comes from wolfram.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, and check A carries ptable dataset evidence for c1, c3 and c4, but high-risk c2 (distractor, etymology) rests on knowledge alone in both checks. The ptable record that confirms c1 would carry c2 too, yet neither check attached it, and no search was possible (the batch used 0 of its 26 searches because the shared search budget was exhausted), so §9.9 rule 3 cannot pass. No wording fix adds evidence, so it is cut. Both checkers found the content sound: this is the cheapest redraft in the batch.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sci.0118",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The element name 'tungsten' comes from Swedish words meaning what?",
+  "answer": "Heavy stone",
+  "wrong": ["Hard iron", "Bright rock", "Wolf foam"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.32,
+    "spread": 0.147,
+    "estimator": "v0"
+  }
+}

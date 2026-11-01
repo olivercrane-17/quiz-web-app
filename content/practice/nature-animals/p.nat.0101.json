@@ -1,0 +1,335 @@
+{
+  "id": "p.nat.0101",
+  "status": "cut",
+  "category": "nat",
+  "tags": ["mammals", "evolution", "africa", "whales"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Despite looking pig-like, hippos sit closest to whales on the family tree of hoofed mammals. Their common ancestor lived on land; the whale line later returned to the sea.",
+  "learnMore": "Hippopotamus",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Whales and dolphins (cetaceans) are the closest living relatives of the hippopotamus."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Pigs and peccaries, rhinos and tapirs, and elephants and manatees are all more distantly related to hippos than whales and dolphins are."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hippos and whales share a common ancestor that lived on land, within the even-toed hoofed mammals."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The whale lineage later moved from land back into the sea."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed. c1 is high twice over: 'closest' is a superlative, and it is the key of a counterintuitive item (C26); superlative is the reason recorded, since it is in the tooling's enum. c2 to c4 are textbook phylogeny with no number, date or trigger word. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: pigs are the planted trap, because hippos were long grouped with them, but molecular and fossil work puts hippos with cetaceans (Whippomorpha), the sister group of the ruminants. Rhinos and tapirs are odd-toed ungulates and elephants and manatees are afrotheres, so neither pair can be closer. Argued against the key: no living group sits between hippos and cetaceans. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: hippos and whales are known worldwide; the pairs in the options are all familiar animals. style: Oxford spelling, plain hyphens only, explanation of 29 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none on the key. Each option is a real pair of relatives on purpose, so the key does not stand out by form.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "10748e9578d593e71fc48af4f80ad8c901202b83af8e50381ebcb6693fa3d704",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Whales and dolphins",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "molecular phylogeny: hippos are the sister group of cetaceans, more closely related to whales than to pigs; red panda is not a bear, sole living member of Ailuridae, false thumb evolved convergently with giant panda",
+              "results": [
+                {
+                  "title": "Red panda",
+                  "url": "https://en.wikipedia.org/wiki/Red_panda"
+                },
+                {
+                  "title": "Evidence of a false thumb in a fossil carnivore clarifies the evolution of pandas",
+                  "url": "https://pnas.org/content/103/2/379"
+                },
+                {
+                  "title": "Ailuridae",
+                  "url": "https://en.wikipedia.org/wiki/Ailuridae"
+                },
+                {
+                  "title": "The position of Hippopotamidae within Cetartiodactyla",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.0409518102"
+                },
+                {
+                  "title": "Comparative genomics reveals convergent evolution between the bamboo-eating giant and red pandas",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1613870114"
+                },
+                {
+                  "title": "Early Miocene hippopotamids (Cetartiodactyla) constrain the phylogenetic and spatiotemporal settings of hippopotamid origin",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1001373107"
+                },
+                {
+                  "title": "Earliest giant panda false thumb suggests conflicting demands for locomotion and feeding",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9246853/"
+                },
+                {
+                  "title": "Evolution of cetaceans",
+                  "url": "https://en.wikipedia.org/wiki/Evolution_of_cetaceans"
+                },
+                {
+                  "title": "Progressive evolution of secondary aquatic adaptation in hippos and cetaceans",
+                  "url": "https://www.nature.com/articles/s41421-022-00483-2"
+                }
+              ],
+              "summaryExcerpt": "Genetic comparisons place cetaceans as the closest living relatives of hippos, with the two diverging roughly 53 million years ago (The phylogenetic trees based on 11,274 orthologous genes and whole-genome alignments of 9 mammalian species confirm sister relationships of hippos and cetaceans). The 2022 study describing this divergence supports the sister-group relationship, and the broader grouping is named Whippomorpha. Pigs fall outside this pair.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Peer-reviewed sources in the list (Nature 2022 genome study, PNAS) carry the sentence. A first call (W4, query on hippo relatives and the orca, counted here) drew a summary that called a National Geographic facts page an outlier listing pigs with whales and dolphins, so that call is not used for this claim. This second call reports earlier morphological debate only as history. My own view: hippos and cetaceans form Whippomorpha, with pigs and peccaries outside it."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pigs and peccaries (Suina), rhinos and tapirs (perissodactyls) and elephants and manatees (afrotherians) all branch off further from hippos than cetaceans do.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hippos and whales descend from a shared land-living ancestor inside the even-toed hoofed mammals (Artiodactyla).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Early whales such as Pakicetus lived on land; the lineage later became fully aquatic.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "second_answer",
+            "severity": "note",
+            "note": "One National Geographic facts page loosely names pigs with whales and dolphins as the hippo's closest relatives. Molecular studies (PNAS, Nature) place cetaceans alone as the sister group, with pigs outside, so Pigs and peccaries is not a second answer. Worth knowing if a player cites that page."
+          }
+        ],
+        "searchesUsed": 2,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ed0e7e49d9220a21090158af64f92c51cd1f85e39df29f43a14b06627018f964",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Whales and dolphins",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "hippopotamus and whales common ancestor semi-aquatic or land-dwelling artiodactyl, Whippomorpha divergence",
+              "results": [
+                {
+                  "title": "Whippomorpha",
+                  "url": "https://en.wikipedia.org/wiki/Whippomorpha"
+                },
+                {
+                  "title": "Hippopotamus",
+                  "url": "https://en.wikipedia.org/wiki/Black_Hippopotamus"
+                },
+                {
+                  "title": "Evolution of cetaceans",
+                  "url": "https://en.wikipedia.org/wiki/Evolution_of_cetaceans"
+                },
+                {
+                  "title": "Progressive evolution of secondary aquatic adaptation in hippos and cetaceans",
+                  "url": "https://www.nature.com/articles/s41421-022-00483-2"
+                },
+                {
+                  "title": "Wikipedia:WikiProject WikiFundi Content/Hippopotamus",
+                  "url": "https://en.wikipedia.org/wiki/Wikipedia:WikiProject_WikiFundi_Content/Hippopotamus"
+                },
+                {
+                  "title": "Progressive evolution of secondary aquatic adaptation in hippos and cetaceans",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9768135/"
+                },
+                {
+                  "title": "Whale",
+                  "url": "https://en.wikipedia.org/wiki/Whales"
+                },
+                {
+                  "title": "Ancodonta",
+                  "url": "https://en.wikipedia.org/wiki/Ancodonta"
+                },
+                {
+                  "title": "Phylogenetic relationships among cetartiodactyls based on insertions of short and long interpersed elements: Hippopotamuses are the closest extant relatives of whales",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.96.18.10261"
+                }
+              ],
+              "summaryExcerpt": "Whippomorpha diverged from other artiodactyls ~59 Mya; whales diverged from hippos ~55 Mya.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Hippos and whales form the clade Whippomorpha. The result list includes a PNAS paper titled \"Hippopotamuses are the closest extant relatives of whales\" (title only); the summary dates the hippo and whale split after both split from all other hoofed mammals. Agrees with my own knowledge that cetaceans are the sister group of hippos."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pigs and peccaries, rhinos and tapirs, and elephants and manatees each branch off before the hippo and whale pair joins; pigs are the traditional wrong guess because hippos look pig-like.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "hippopotamus and whales common ancestor semi-aquatic or land-dwelling artiodactyl, Whippomorpha divergence",
+              "results": [
+                {
+                  "title": "Whippomorpha",
+                  "url": "https://en.wikipedia.org/wiki/Whippomorpha"
+                },
+                {
+                  "title": "Hippopotamus",
+                  "url": "https://en.wikipedia.org/wiki/Black_Hippopotamus"
+                },
+                {
+                  "title": "Evolution of cetaceans",
+                  "url": "https://en.wikipedia.org/wiki/Evolution_of_cetaceans"
+                },
+                {
+                  "title": "Progressive evolution of secondary aquatic adaptation in hippos and cetaceans",
+                  "url": "https://www.nature.com/articles/s41421-022-00483-2"
+                },
+                {
+                  "title": "Wikipedia:WikiProject WikiFundi Content/Hippopotamus",
+                  "url": "https://en.wikipedia.org/wiki/Wikipedia:WikiProject_WikiFundi_Content/Hippopotamus"
+                },
+                {
+                  "title": "Progressive evolution of secondary aquatic adaptation in hippos and cetaceans",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9768135/"
+                },
+                {
+                  "title": "Whale",
+                  "url": "https://en.wikipedia.org/wiki/Whales"
+                },
+                {
+                  "title": "Ancodonta",
+                  "url": "https://en.wikipedia.org/wiki/Ancodonta"
+                },
+                {
+                  "title": "Phylogenetic relationships among cetartiodactyls based on insertions of short and long interpersed elements: Hippopotamuses are the closest extant relatives of whales",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.96.18.10261"
+                }
+              ],
+              "summaryExcerpt": "Wikipedia notes that it is unknown whether the last common ancestor of whales and hippos led an aquatic, semiaquatic/amphibious, or terrestrial lifestyle. A 2022 Nature-family paper calls the semi-aquatic ancestor the most parsimonious hypothesis, supported by shared traits such as hairless skin, while the alternative is that cetaceans and hippos recolonized aquatic environments independently by evolving from a terrestrial common ancestor.",
+              "tiers": ["A", "B"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Not established as written. Sources report that the lifestyle of the last common ancestor (aquatic, semi-aquatic or terrestrial) is unknown, and one 2022 paper favours a semi-aquatic ancestor. The even-toed hoofed mammal part is sound; \"lived on land\" is the unsupported part."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Whales descend from four-legged hoofed mammals that lived on or near land, and the whale line became fully aquatic over millions of years.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "checker_doubt c3: the explanation and claim c3 say the hippo and whale common ancestor \"lived on land\". A search (Wikipedia, a 2022 Nature-family paper) reports its lifestyle as unknown, with a semi-aquatic ancestor favoured by one study. Reword to what sources agree on, for example that the shared ancestor was a four-legged hoofed mammal and the whale line later became fully aquatic, and re-check c3."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "cut",
+      "reason": "Cut (§9.7, §9.5.2). B revise: c3 says the hippo and whale common ancestor lived on land, and B's Tier A and B results report that ancestor's lifestyle as unknown, with one 2022 study favouring a semi-aquatic ancestor. The conflict fails c3 as written, so a tiebreak cannot confirm it, and the fix changes a claim, which needs two fresh checks. Redraft under a new id with an explanation limited to what sources agree on (hippos and cetaceans are sister groups; the whale line became fully aquatic).",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which animals are the hippopotamus's closest living relatives?",
+  "answer": "Whales and dolphins",
+  "wrong": [
+    "Pigs and peccaries",
+    "Rhinos and tapirs",
+    "Elephants and manatees"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.24,
+    "spread": 0.271,
+    "estimator": "v0"
+  }
+}

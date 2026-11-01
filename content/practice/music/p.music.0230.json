@@ -1,0 +1,190 @@
+{
+  "id": "p.music.0230",
+  "status": "cut",
+  "category": "music",
+  "tags": ["classical", "vivaldi", "holst"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The Four Seasons is a set of four violin concertos, each in three movements. Holst's suite has seven, one for each planet known in his day except Earth.",
+  "learnMore": "The Four Seasons (Vivaldi)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Vivaldi's The Four Seasons consists of four violin concertos, each in three movements, 12 movements in all."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Holst's The Planets has seven movements."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Holst's seven movements are named after the planets known in his day other than Earth."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the labels, values and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers musical works, so both counts need web evidence from the checkers. I used no WebSearch. Rival test: argued for 'b': the title suggests four parts, which is the trap. Argued against the key: each of the four concertos has three movements (fast, slow, fast), so the set has 12 against the suite's seven; counting concertos instead of movements would not match the stem's measure. Counterintuitive is true, so both label claims are high under C26. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both works are played worldwide. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None. b01's Holst item (Mars) and the guide's Four Seasons example ask different facts.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5c52f036a533430e72c81a323ed229967524a68b1ae84a0c4200f45174302c2f",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "Vivaldi's The Four Seasons",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Four Seasons is four violin concertos of three movements each, 12 movements in all.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Planets has seven movements, Mars to Neptune.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "When Holst wrote the suite (1914 to 1916) seven planets other than Earth were known, and each movement is named after one of them.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). See the wording note on 'in his day'."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Explanation and c3 say 'known in his day'. Pluto was found in 1930, four years before Holst died, so a pedant could read 'in his day' as including it. 'one for each planet known when he wrote it, except Earth' would be exact. True under the natural reading, so a note only."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e081f4d37af9ab58253f1a806f9752efd8c73c2d5ba7e40037693739c9d03a7b",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "Vivaldi's The Four Seasons",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vivaldi's The Four Seasons is four violin concertos of three movements each, so 12 movements.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: someone may expect four movements, one per season; the work is a set of concertos."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Holst's The Planets has seven movements.",
+              "confidence": "certain"
+            },
+            "note": "Colin Matthews's 2000 'Pluto' addition is not Holst's and would still leave 8 against 12."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Holst's seven movements are Mars, Venus, Mercury, Jupiter, Saturn, Uranus and Neptune, the planets known in his day other than Earth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (number), c2 (number) and c3 (number) rest on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail. For the redraft, A's note stands: 'known in his day' should read 'known when he wrote it', since Pluto was found in 1930, before Holst died.",
+      "decidedAt": "2026-11-01T04:32:21Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which work has more movements?",
+  "a": "Vivaldi's The Four Seasons",
+  "b": "Holst's The Planets",
+  "answer": "a",
+  "relation": "more",
+  "measure": "movements in the complete work",
+  "unit": "movements",
+  "values": {
+    "a": 12,
+    "b": 7
+  },
+  "valueDisplay": {
+    "a": "12 movements",
+    "b": "7 movements"
+  },
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.207,
+    "estimator": "v0"
+  }
+}

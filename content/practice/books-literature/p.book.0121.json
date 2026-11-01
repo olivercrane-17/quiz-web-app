@@ -1,0 +1,230 @@
+{
+  "id": "p.book.0121",
+  "status": "active",
+  "category": "book",
+  "tags": ["drama", "shakespeare", "misquotations"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Hamlet says 'I knew him, Horatio', not the often-quoted 'I knew him well'. Feste, Touchstone and Trinculo are fools in other Shakespeare plays.",
+  "learnMore": "Yorick",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In Hamlet, the skull Hamlet holds in the graveyard belongs to Yorick, the late king's jester."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Feste, Touchstone and Trinculo are fools in Twelfth Night, As You Like It and The Tempest."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "Hamlet's line is 'Alas, poor Yorick! I knew him, Horatio', not 'I knew him well'."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: drama and Shakespeare. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means). Datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. Rival test: All three distractors are Shakespeare's fools, so knowing 'a jester' is not enough; none appears in Hamlet. Yorick is certain. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 23 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "103cf8e2be279ae13ca49a6eb656307bfd15ac8bb49cd61f9506e38f7229eb8e",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "Yorick",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In the graveyard scene Hamlet holds the skull of Yorick, the king's jester.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Feste is the fool of Twelfth Night, Touchstone of As You Like It and Trinculo the jester of The Tempest.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Shakespeare misquotations: Juliet's \"wherefore art thou Romeo\" means why, not where; Hamlet's line is \"Alas, poor Yorick! I knew him, Horatio\", often misquoted as \"I knew him well\"",
+              "results": [
+                {
+                  "title": "A rose by any other name would smell as sweet",
+                  "url": "https://en.wikipedia.org/wiki/A_rose_by_any_other_name_would_smell_as_sweet"
+                },
+                {
+                  "title": "Romeo and Juliet Facts",
+                  "url": "https://www.britannica.com/facts/Romeo-and-Juliet"
+                },
+                {
+                  "title": "Famous Quotes",
+                  "url": "https://www.rsc.org.uk/hamlet/about-the-play/famous-quotes"
+                },
+                {
+                  "title": "Phrases from Hamlet in common English",
+                  "url": "https://en.wikipedia.org/wiki/Phrases_from_Hamlet_in_common_English"
+                },
+                {
+                  "title": "Famous quotes from Romeo and Juliet",
+                  "url": "https://www.folger.edu/blogs/shakespeare-and-beyond/famous-quotes-from-romeo-and-juliet/"
+                },
+                {
+                  "title": "List of idioms attributed to Shakespeare",
+                  "url": "https://en.wikipedia.org/wiki/List_of_idioms_attributed_to_Shakespeare"
+                },
+                {
+                  "title": "Yorick - Students",
+                  "url": "https://kids.britannica.com/students/article/Yorick/342008"
+                },
+                {
+                  "title": "Famous Quotes",
+                  "url": "https://www.rsc.org.uk/romeo-and-juliet/about-the-play/famous-quotes"
+                },
+                {
+                  "title": "Order It: Juliet's \"What's in a name?\" speech",
+                  "url": "https://www.folger.edu/blogs/shakespeare-and-beyond/quiz-order-it-juliet-whats-in-a-name-speech/"
+                },
+                {
+                  "title": "Romeo and Juliet",
+                  "url": "https://en.wikipedia.org/wiki/Romeo_and_Juliet"
+                }
+              ],
+              "summaryExcerpt": "The RSC notes that this line is often misquoted as: 'Alas, poor Yorick, I knew him well'. Wikipedia's article on phrases from Hamlet describes the substitution as the Horatio is often replaced with the word well, a common misquote. The line appears in Act 5, Scene 1, where Hamlet speaks over the skull of his childhood playmate, the jester Yorick.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 8 (counted on p.book.0137): the RSC says the line is often misquoted as 'I knew him well'. Counts at Tier B."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "a5a9f6ec48640d0f8e97985775aacaa8375ae3c52ce0caba67a3caf06c5d177f",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "Yorick",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In the gravediggers' scene (Act 5 scene 1) Hamlet holds the skull of Yorick, his father's jester.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Feste (Twelfth Night), Touchstone (As You Like It) and Trinculo (The Tempest) are fools in other Shakespeare plays.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hamlet says 'Alas, poor Yorick! I knew him, Horatio', and 'I knew him well' is a later misquotation.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Both checks pass; the misquotation claim c3 has web evidence (Tier B) in check A.",
+      "decidedAt": "2026-11-01T04:03:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In Hamlet, what is the name of the dead jester whose skull Hamlet holds?",
+  "answer": "Yorick",
+  "wrong": ["Feste", "Touchstone", "Trinculo"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.37,
+    "estimator": "v0"
+  }
+}

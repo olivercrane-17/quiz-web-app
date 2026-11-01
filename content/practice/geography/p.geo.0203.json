@@ -1,0 +1,224 @@
+{
+  "id": "p.geo.0203",
+  "status": "active",
+  "category": "geo",
+  "tags": ["mountains", "borders", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The tiny country of Andorra sits high in the range between the two, and its official language is Catalan.",
+  "learnMore": "Pyrenees",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Pyrenees form much of the border between Spain and France."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Alps lie on France's borders with Italy and Switzerland, and the Cantabrian Mountains and the Sierra Nevada lie inside Spain."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Andorra lies in the Pyrenees between Spain and France."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Catalan is the official language of Andorra."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: mledoze-countries cca3=AND: borders FRA and ESP, languages cat (Catalan), area 468 (c3, c4). Rival test: The Alps are the reflex answer for any European range, but they border Italy and Switzerland, never Spain. The Cantabrian Mountains continue the Pyrenees westwards inside Spain, and the Sierra Nevada is in Andalusia. Against the key: the border leaves the mountains at each coast and follows the Bidasoa river in the west, which is why the stem says 'much of'. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Spain and France are known everywhere, and the Pyrenees are the famous range between them. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 19 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; every claim is standard, and c3 and c4 are in the dataset. Seed: 2 (easy): most players can name the Pyrenees once the Alps are ruled out. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5a34b273bd73947c312ba88cccdc8946fd27d3663392aaf66ede7d631745b54e",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Pyrenees",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Pyrenees run along most of the Spain-France border, from the Bay of Biscay to the Mediterranean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Alps stand on France's borders with Italy and Switzerland, while the Cantabrian Mountains and Andalusia's Sierra Nevada are wholly within Spain.",
+              "confidence": "certain"
+            },
+            "note": "Whether the player reads Sierra Nevada as Spain's or California's range, neither forms the Spain-France border."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Andorra is a small landlocked state high in the eastern Pyrenees, between Spain and France.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=AND",
+              "excerpt": "\"languages\": {\"cat\":\"Catalan\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0bc12593e5ea4f3d49be6e2bf72b130604efccfa21778f3db9850c77bdef5796",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Pyrenees",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Pyrenees run along most of the border between Spain and France.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Alps border France with Italy and Switzerland; the Cantabrian Mountains and the Sierra Nevada lie wholly inside Spain.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=AND",
+              "excerpt": "\"borders\": [\"FRA\",\"ESP\"], \"area\": 468",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset gives Andorra's two neighbours; that it sits in the Pyrenees is textbook knowledge."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=AND",
+              "excerpt": "\"languages\": {\"cat\": \"Catalan\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.geo.0125",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which mountain range forms much of the border between Spain and France?",
+  "answer": "Pyrenees",
+  "wrong": ["Alps", "Cantabrian Mountains", "Sierra Nevada"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.78,
+    "spread": 0.268,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "id": "p.sci.0114",
+  "status": "active",
+  "category": "sci",
+  "tags": ["chemistry", "nobel-prizes", "radioactivity"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "She shared the 1903 physics prize with Pierre Curie and Henri Becquerel, then won chemistry alone for discovering polonium and radium. She named polonium after Poland, her homeland.",
+  "learnMore": "Marie Curie",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Marie Curie won the Nobel Prize in Physics in 1903 and the Nobel Prize in Chemistry in 1911."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Pierre Curie won only the 1903 physics prize, Ernest Rutherford won only the 1908 chemistry prize, and Lise Meitner never won a Nobel Prize."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Marie Curie shared the 1903 Nobel Prize in Physics with Pierre Curie and Henri Becquerel."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Marie Curie won the 1911 Nobel Prize in Chemistry alone, for discovering polonium and radium."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Marie Curie named polonium after Poland, her homeland."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: c1, c3 and c4 match nobel-prizes (year 1903, physics: Henri Becquerel, Pierre Curie, Marie Curie; year 1911, chemistry: Marie Curie alone, for radium and polonium); c2 matches nobel-prizes (Rutherford, 1908 chemistry; Pierre Curie, 1903 physics only; no record for Meitner); nobel-laureates-2016 id 6 gives Marie Curie's birthplace as Warsaw, Russian Empire (now Poland), which supports 'her homeland' in c5. rivalTest: Pierre Curie is the planted trap with the 1903 physics prize, but he died in 1906; Ernest Rutherford won chemistry in 1908 but never physics; Lise Meitner never won a Nobel Prize. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 28 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: c5, that she named polonium after Poland, needs web evidence; the naming is in the Curies' 1898 paper. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d8ce38a672c0e6b73989de8df1a39d4596284cf6bcf7737940cbcf57ca461b1f",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "Marie Curie",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=1903,category=physics].laureates[id=6]; prizes[year=1911,category=chemistry].laureates[id=6]",
+              "excerpt": "1903 physics: {\"id\":\"6\",\"firstname\":\"Marie\",\"surname\":\"Curie\",\"share\":\"4\"}; 1911 chemistry: {\"id\":\"6\",\"firstname\":\"Marie\",\"surname\":\"Curie\",\"share\":\"1\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "every prize to 2022: laureate id 5 (Pierre Curie), laureate id 167 (Ernest Rutherford), and a search of the whole file for 'Meitner'",
+              "excerpt": "Pierre Curie (id 5) appears only in 1903 physics (\"share\":\"4\"); Ernest Rutherford (id 167) appears only in 1908 chemistry (\"share\":\"1\"); no laureate named Meitner appears in any prize",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The file covers every prize to 2022, and Meitner died in 1968, so she never won one."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=1903,category=physics].laureates",
+              "excerpt": "{\"firstname\":\"Henri\",\"surname\":\"Becquerel\",\"share\":\"2\"}, {\"firstname\":\"Pierre\",\"surname\":\"Curie\",\"share\":\"4\"}, {\"firstname\":\"Marie\",\"surname\":\"Curie\",\"share\":\"4\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=1911,category=chemistry].laureates[id=6]",
+              "excerpt": "\"share\":\"1\",\"motivation\":\"\\\"in recognition of her services to the advancement of chemistry by the discovery of the elements radium and polonium, by the isolation of radium and the study of the nature and compounds of this remarkable element\\\"\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Share 1 means she won it alone; the motivation names the discovery of radium and polonium."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Curies named polonium, announced in July 1898, after Poland, Marie Skłodowska-Curie's native country, then under foreign rule.",
+              "confidence": "certain"
+            },
+            "note": "nobel-laureates-2016 (id 6) gives her birthplace as Warsaw, 'Russian Empire (now Poland)', which supports 'her homeland' but not the naming. The naming was joint with Pierre; 'Marie Curie named' is the usual shorthand. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0b76b879a6d475965946bb7b605d276cd5f8d994f669ce84ccb8055694842ecb",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "Marie Curie",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1903 category=physics; year=1911 category=chemistry",
+              "excerpt": "1903 physics: laureates Henri Becquerel (id 4), Pierre Curie (id 5), Marie Curie (id 6). 1911 chemistry: Marie Curie (id 6).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "A scan of every laureate in prize.json finds Marie Curie (id 6) as the only person with both a physics and a chemistry prize."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "laureate id 5 (Pierre Curie); year=1908 category=chemistry (Rutherford); surname Meitner",
+              "excerpt": "Pierre Curie (id 5) appears only in 1903 physics. 1908 chemistry: Ernest Rutherford (id 167), alone. No laureate with the surname Meitner appears in prize.json (1901 to 2022).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Established by scanning every laureate id in the file; the Meitner absence is a scan result, not a single record."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1903 category=physics",
+              "excerpt": "1903 physics laureates: Henri Becquerel (id 4, share 2); Pierre Curie (id 5, share 4); Marie Curie (id 6, share 4).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1911 category=chemistry",
+              "excerpt": "1911 chemistry: Marie Curie, share 1, motivation in recognition of her services to the advancement of chemistry by the discovery of the elements radium and polonium, by the isolation of radium and the study of the nature and compounds of this remarkable element.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Sole laureate with a full share; the motivation names radium and polonium, so for discovering polonium and radium is a fair paraphrase."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Marie Curie named polonium after Poland, her native country, in 1898.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c5 (explanation, etymology) rests on knowledge alone in both checks, with no dataset or web evidence for it in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced. Only c5 lacks evidence: every other claim carries nobel-prizes dataset evidence in both checks, and ptable's polonium entry says nothing about the name, so one Tier A or B web result would clear it in a redraft.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Who won Nobel Prizes in both physics, in 1903, and chemistry, in 1911?",
+  "answer": "Marie Curie",
+  "wrong": ["Pierre Curie", "Ernest Rutherford", "Lise Meitner"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.82,
+    "spread": 0.447,
+    "estimator": "v0"
+  }
+}

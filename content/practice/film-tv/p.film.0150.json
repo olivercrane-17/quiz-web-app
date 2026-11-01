@@ -1,0 +1,199 @@
+{
+  "id": "p.film.0150",
+  "status": "cut",
+  "category": "film",
+  "tags": ["tv-series", "telenovelas", "adaptations"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Yo soy Betty, la fea first aired in 1999 and was remade around the world, including in India as Jassi Jaissi Koi Nahin and Germany as Verliebt in Berlin.",
+  "learnMore": "Yo soy Betty, la fea",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Ugly Betty (2006) was adapted from Yo soy Betty, la fea, a Colombian telenovela first broadcast in 1999."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Yo soy Betty, la fea was not made in Mexico, Brazil or Venezuela."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Yo soy Betty, la fea was remade in India as Jassi Jaissi Koi Nahin."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Yo soy Betty, la fea was remade in Germany as Verliebt in Berlin."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Mexico is the planted trap, as the best-known telenovela exporter, and it made its own remake; Brazil and Venezuela are other telenovela powers. None made the original. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a Colombian original remade on several continents; the reveal names versions from India and Germany. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 29 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "47879eb1843195bb5b860aaf90ebd1fd3575608333718ea5e77650f2b103ec5d",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Colombia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ugly Betty (2006) adapts the Colombian telenovela Yo soy Betty, la fea, first shown in 1999.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yo soy Betty, la fea is Colombian, not Mexican, Brazilian or Venezuelan.",
+              "confidence": "certain"
+            },
+            "note": "Mexico made its own remake, which makes Mexico a fair distractor but not the source."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Indian remake was Jassi Jaissi Koi Nahin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The German remake was Verliebt in Berlin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1a92fa584fd5be467bdf5c16b76c6ae09bd9db0216fb5738936e51b2ce8590d4",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Colombia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ugly Betty (2006) was adapted from the Colombian telenovela Yo soy Betty, la fea, first shown in 1999.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The original was not made in Mexico, Brazil or Venezuela.",
+              "confidence": "certain"
+            },
+            "note": "Mexico and Brazil made later remakes, which makes them tempting; the original is Colombian."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The telenovela was remade in India as Jassi Jaissi Koi Nahin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was remade in Germany as Verliebt in Berlin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 rests on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The US series Ugly Betty (2006) was adapted from a telenovela made in which country?",
+  "answer": "Colombia",
+  "wrong": ["Mexico", "Brazil", "Venezuela"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.22,
+    "spread": 0.292,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "id": "p.sport.0255",
+  "status": "active",
+  "category": "sport",
+  "tags": ["world-cup", "football", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Cameroon beat the holders, Argentina, in the opening match, and Roger Milla, aged 38, scored four goals. Morocco became the first African semi-finalists in 2022.",
+  "learnMore": "Cameroon national football team",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Cameroon was the first African team to reach a men's World Cup quarter-final, in 1990."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Nigeria, Senegal and Ghana had not reached a men's World Cup quarter-final by 1990; Senegal first did so in 2002 and Ghana in 2010."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "At the 1990 World Cup Cameroon beat the holders, Argentina, 1-0 in the opening match."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Roger Milla was 38 at the 1990 World Cup and scored four goals there."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Morocco became the first African team to reach a men's World Cup semi-final, in 2022."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed, 5 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup: in every tournament from 1934 to 1986 no African team appears in a quarter-final or later round; 1990/worldcup.json has Argentina v Cameroon on 8 June 1990, 0-1, and the quarter-final England v Cameroon on 1 July 1990, 3-2 after extra time; 2002 and 2010 show Senegal's and Ghana's first quarter-finals; 2022 shows France v Morocco in the semi-finals on 14 December 2022. These confirm c1, c2, c3 and c5. Milla's age and goals in c4 need web evidence. rivalTest: Senegal and Ghana did reach quarter-finals, but later, which makes them the traps; Nigeria is the famous African side of the 1990s that never got that far. Cameroon in 1990 is the only answer the dataset allows. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 25 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: c2 is dated to 1990 so it cannot go stale.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "72eb54a51ccc0a7cd09d745e4253125b17616a5a33d1260f816e4c9aa19f0a52",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Cameroon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1990/worldcup.json",
+              "locator": "matches[round=Quarter-finals, date=1990-07-01]; the knockout rounds (and the 1974 to 1982 second-round groups) of every file from 1930 to 1986 scanned for African teams",
+              "excerpt": "\"date\": \"1990-07-01\" ... \"team1\": \"England\" ... \"team2\": \"Cameroon\" ... \"score\": {\"et\": [3, 2], \"ft\": [2, 2]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Before 1990 no African team appears in any knockout round beyond the last 16 or in a second-round group (Egypt lost in the first knockout round of 1934; Morocco lost in the 1986 round of 16; Zaire 1974, Tunisia 1978 and Cameroon and Algeria 1982 went out in first-round groups). Cameroon played the 1990 quarter-final, losing 2-3 after extra time to England."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2002/worldcup.json",
+              "locator": "2002 matches[round=Quarter-finals, date=2002-06-22] and 2010 matches[round=Quarterfinals, date=2010-07-02]; Nigeria's furthest round in every file",
+              "excerpt": "2002: \"date\": \"2002-06-22\" ... \"team1\": \"Senegal\" ... \"team2\": \"Turkey\" | 2010: \"date\": \"2010-07-02\" ... \"team1\": \"Uruguay\" ... \"team2\": \"Ghana\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Senegal's first quarter-final is 2002 (v Turkey) and Ghana's is 2010 (v Uruguay); Nigeria's furthest round in any file is the round of 16 (1994, 1998, 2014), so none of the three had reached a quarter-final by 1990."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1990/worldcup.json",
+              "locator": "matches[date=1990-06-08], the only match on the earliest date in the file",
+              "excerpt": "\"date\": \"1990-06-08\" ... \"team1\": \"Argentina\" ... \"team2\": \"Cameroon\" ... \"score\": [0, 1] ... \"group\": \"Group B\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Argentina 0-1 Cameroon on 8 June 1990 is the only match on the tournament's first date, so it was the opening match; Argentina were the holders, having won the 1986 final 3-2 against West Germany (1986 file)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Milla, born in May 1952, was 38 at Italia 90 and scored four goals there, two against Romania and two against Colombia.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). worldcup 1990 carries no Cameroon scorers."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2022/worldcup.json",
+              "locator": "matches[round=Semi-finals, date=2022-12-14]; the semi-finals of every earlier file scanned for African teams",
+              "excerpt": "{\"round\": \"Semi-finals\", ... \"date\": \"2022-12-14\" ... \"team1\": \"France\" ... \"team2\": \"Morocco\" ... \"score\": {\"ft\": [2, 0], \"ht\": [1, 0]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "France 2-0 Morocco in the 2022 semi-finals; no African team appears in any semi-final of an earlier file, so Morocco were the first."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "78784dfa5f06f1ef04b6780b94ba0602d19de3cc466dd989df93fdf95db8dd6d",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Cameroon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1990/worldcup.json",
+              "locator": "round=Quarter-finals, Cameroon",
+              "excerpt": "Quarter-finals, 1990-07-01: England {\"et\":[3,2],\"ft\":[2,2]} Cameroon, Stadio San Paolo, Naples",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "I scanned every tournament from 1930 to 1986 in the file and no African team appears in a quarter-final round, so Cameroon in 1990 is the first."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2002 and 2010 worldcup.json",
+              "locator": "round=Quarter-finals, Senegal and Ghana",
+              "excerpt": "Quarter-finals, 2002-06-22: Senegal {\"et\":[0,1],\"ft\":[0,0]} Turkey, Nagai Stadium, Osaka | Quarterfinals, 2010-07-02: Uruguay {\"p\":[4,2],\"et\":[1,1],\"ft\":[1,1]} Ghana, Soccer City, Johannesburg",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Senegal first reached a quarter-final in 2002 and Ghana in 2010. Nigeria never appears in a quarter-final in the file."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1990/worldcup.json and 1986/worldcup.json",
+              "locator": "opening match, and the 1986 final",
+              "excerpt": "Matchday 1, 1990-06-08: Argentina [0,1] Cameroon, San Siro, Milan | Final, 1986-06-29: Argentina [3,2] West Germany, Estadio Azteca, Mexico City",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Argentina won the 1986 final, so they were the holders; 8 June 1990 was the first day of the tournament."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Roger Milla was born on 20 May 1952, so he was 38 in June 1990, and he scored twice against Romania and twice against Colombia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2022/worldcup.json",
+              "locator": "round=Semi-finals, Morocco",
+              "excerpt": "Semi-finals, 2022-12-14: France {\"ft\":[2,0],\"ht\":[1,0]} Morocco, Al Bayt Stadium, Al Khor",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "No African team appears in a semi-final round in any earlier tournament in the file."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c4 (explanation, number) rests on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Only c4 (Milla's age and four goals) is missing: c1 to c3 and c5 carry worldcup evidence in both checks. Redraft under a new id with this fact evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which country became the first African team to reach a men's World Cup quarter-final, in 1990?",
+  "answer": "Cameroon",
+  "wrong": ["Nigeria", "Senegal", "Ghana"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.35,
+    "spread": 0.369,
+    "estimator": "v0"
+  }
+}

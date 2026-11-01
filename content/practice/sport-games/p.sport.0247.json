@@ -1,0 +1,236 @@
+{
+  "id": "p.sport.0247",
+  "status": "active",
+  "category": "sport",
+  "tags": ["world-cup", "football", "uruguay"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "France, Belgium, Romania and Yugoslavia crossed the Atlantic by ship. All 13 teams took part by invitation, so there was no qualifying tournament.",
+  "learnMore": "1930 FIFA World Cup",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Four European teams played at the 1930 World Cup in Uruguay: France, Belgium, Romania and Yugoslavia."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The number of European teams at the 1930 World Cup was not 2, 7 or 10."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "13 teams played at the 1930 World Cup, all of them by invitation, with no qualifying competition."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The European teams travelled to Uruguay by ship."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 3 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup, 1930/worldcup.json: the matches involve exactly 13 teams (Argentina, Belgium, Bolivia, Brazil, Chile, France, Mexico, Paraguay, Peru, Romania, USA, Uruguay and Yugoslavia), of which Belgium, France, Romania and Yugoslavia are European. This confirms c1, c2 and the count in c3; the invitation-only entry in c3 needs web evidence. rivalTest: 2 is the trap for a player who knows that few came; 7 and 10 suit a player who assumes Europe dominated. The dataset shows four, so the key is certain. A player can reason from the length of a sea voyage in 1930. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 23 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f80e24a0b8c36c1651fba2072fa53de6e6255c20d81c81b51330f9a8755af236",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "4",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "team1 and team2 of all 18 matches: 13 distinct team names",
+              "excerpt": "\"team2\": \"Belgium\" | \"team1\": \"France\" | \"team1\": \"Romania\" | \"team1\": \"Yugoslavia\" (the European names among Argentina, Belgium, Bolivia, Brazil, Chile, France, Mexico, Paraguay, Peru, Romania, USA, Uruguay, Yugoslavia)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The 1930 file's 13 teams include four European ones: Belgium, France, Romania and Yugoslavia."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "team1 and team2 of all 18 matches: 13 distinct team names",
+              "excerpt": "\"team2\": \"Belgium\" | \"team1\": \"France\" | \"team1\": \"Romania\" | \"team1\": \"Yugoslavia\" (the European names among Argentina, Belgium, Bolivia, Brazil, Chile, France, Mexico, Paraguay, Peru, Romania, USA, Uruguay, Yugoslavia)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Four European teams, so not 2, 7 or 10."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "team1 and team2 of all 18 matches: 13 distinct team names",
+              "excerpt": "\"team2\": \"Belgium\" | \"team1\": \"France\" | \"team1\": \"Romania\" | \"team1\": \"Yugoslavia\" (the European names among Argentina, Belgium, Bolivia, Brazil, Chile, France, Mexico, Paraguay, Peru, Romania, USA, Uruguay, Yugoslavia)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The 1930 file has 13 distinct teams in 18 matches. That all 13 came by invitation, with no qualifying competition, rests on my knowledge (certain)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The European teams sailed to Montevideo; France, Belgium and Romania travelled together on the liner Conte Verde.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "14ead9e890a6e1d5628f4091e542de1ee6cb58b1f233e86377310bd470be0584",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "4",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "all 18 matches, set of team names",
+              "excerpt": "13 teams: Argentina, Belgium, Bolivia, Brazil, Chile, France, Mexico, Paraguay, Peru, Romania, USA, Uruguay, Yugoslavia; the European ones are Belgium, France, Romania and Yugoslavia",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "all 18 matches, set of team names",
+              "excerpt": "13 teams: Argentina, Belgium, Bolivia, Brazil, Chile, France, Mexico, Paraguay, Peru, Romania, USA, Uruguay, Yugoslavia; four European teams, not 2, 7 or 10",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "all 18 matches, set of team names",
+              "excerpt": "13 teams: Argentina, Belgium, Bolivia, Brazil, Chile, France, Mexico, Paraguay, Peru, Romania, USA, Uruguay, Yugoslavia",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The file confirms 13 teams. That they were all invited with no qualifying round is knowledge: the 1930 field was built from invitations."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The European teams crossed the Atlantic to Uruguay by ship; there were no transatlantic passenger flights then.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Both checks pass; high-risk c1 to c3 have worldcup dataset evidence in both checks (13 teams, four of them European), and standard c4 is confirmed at certain. Nearest item is active p.sport.0102 (Uruguay won in 1930) at 0.457, a different fact, so unique. Style reviewed.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:37:40Z",
+      "nearestId": "p.sport.0102",
+      "score": 0.457,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:37:40Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "How many European teams made the long sea voyage to play at the first men's World Cup, in Uruguay in 1930?",
+  "answer": "4",
+  "wrong": ["2", "7", "10"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.32,
+    "spread": 0.299,
+    "estimator": "v0"
+  }
+}

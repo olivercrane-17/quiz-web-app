@@ -1,0 +1,213 @@
+{
+  "id": "p.soc.0234",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["institutions", "nobel-prize", "india", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "He was nominated five times, the last in 1948, but never won. That year the committee gave no peace prize, saying there was no suitable living candidate.",
+  "learnMore": "Mahatma Gandhi",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Mahatma Gandhi never received the Nobel Peace Prize."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Gandhi was nominated for the Nobel Peace Prize five times: in 1937, 1938, 1939, 1947 and 1948."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "No Nobel Peace Prize was awarded in 1948."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In 1948 the Norwegian Nobel Committee declined to award the peace prize on the ground that there was no suitable living candidate."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: how institutions work (the UN, courts, heads of state, laws). lint: content:check shows no errors for this item. claims: every checkable statement in the statement and explanation is listed, with risk at or above the C26 floor and raised where honest. Counterintuitive is true, so the key claim is high under C26; the claim schema has no 'counterintuitive' riskReason, so checker_doubt stands in. datasets: nobel-prizes (prize.json): no laureate named Gandhi in any year or category, and the peace entry for 1948 has no laureates, with the note that no prize was awarded that year (c1, c3). c2 and c4 need web evidence (the Nobel Prize site's own article on Gandhi is the Tier A source). rivalTest: argued for true: Gandhi is the world's best-known apostle of non-violence, and many assume he won. Argued against: the official list has no Gandhi, so false stands. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: Gandhi is known everywhere; the belief is common worldwide. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 27 words. myths: every claim screened against content/reference/myths.json; the claim is not in myths.json, so no C25 hit is expected. mystery and encore: nothing of either kind to check in a practice item. seed: 4 (medium): a coin flip; the myth pulls many to true. doubts: none. dedupe: C22 flags a near-duplicate of p.food.0111 (Norman Borlaug's 1970 peace prize), which shares only the prize's name; the pair shares only the answer word, not the fact, so related_ok is suggested to the editor.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d955ef37d144f9b34c8ac2d299a0cdac768b7e52c23dc507f767558de31fedae",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "all 664 prize entries, 1901 to 2022 (989 laureate records; 122 peace entries)",
+              "excerpt": "No laureate firstname or surname in prize.json matches 'Gandhi'. Peace 1948: {\"year\":\"1948\",\"category\":\"peace\",\"overallMotivation\":\"No Nobel Prize was awarded this year. ...\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Dataset evidence by absence: the pinned Nobel API copy covers every prize to 2022, well past Gandhi's death in January 1948."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gandhi was nominated for the peace prize in 1937, 1938, 1939, 1947 and, days before his death, in 1948.",
+              "confidence": "certain"
+            },
+            "note": "The pinned Nobel dataset holds prizes, not nominations. High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1948, category=peace",
+              "excerpt": "{\"year\":\"1948\",\"category\":\"peace\",\"overallMotivation\":\"\\\"No Nobel Prize was awarded this year. The prize money was with 1/3 allocated to the Main Fund and with 2/3 to the Special Fund of this prize section.\\\"\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The 1948 peace entry has no laureates."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Norwegian Nobel Committee made no 1948 award, saying there was no suitable living candidate.",
+              "confidence": "certain"
+            },
+            "note": "The dataset's 1948 entry records no award but not the committee's reason. High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8f962089446df988bb9be6dd0225f3383f3b142ec93db84185170745ba17a9d2",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "category=peace, every year 1901 to 2022, laureates whose firstname or surname matches Gandhi, Mohandas or Mahatma",
+              "excerpt": "No match among the 140 Peace laureate records over 122 Peace prize years.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Negative dataset check. The file stops at 2022, but Gandhi died in 1948, so no later award is possible."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Nobel archive lists five nominations for Gandhi: 1937, 1938, 1939, 1947 and 1948.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1948 category=peace",
+              "excerpt": "No Nobel Prize was awarded this year. The prize money was with 1/3 allocated to the Main Fund and with 2/3 to the Special Fund of this prize section.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The committee gave as its reason that there was no suitable living candidate.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c2 (explanation, number) and c4 (explanation, date) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. Only explanation claims lack evidence, so the redraft can keep the question and write the explanation from standard-risk or dataset-backed facts. c1 and c3 have dataset evidence (nobel-prizes); c2 (five nominations) and c4 (the committee's 1948 reason) do not. Also flagged as a near-duplicate of p.food.0111. The key claim's riskReason should be counterintuitive. Redraft under a new id.",
+      "decidedAt": "2026-11-01T04:47:17Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Mahatma Gandhi won the Nobel Peace Prize.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.313,
+    "estimator": "v0"
+  }
+}

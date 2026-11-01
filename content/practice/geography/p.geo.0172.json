@@ -1,0 +1,219 @@
+{
+  "id": "p.geo.0172",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "cities", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Buenos Aires sits at about 34.6° S and Sydney at about 33.9° S. Cape Town, at about 33.9° S, is almost exactly level with Sydney.",
+  "learnMore": "Buenos Aires",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Buenos Aires lies at about 34.6° S."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Sydney lies at about 33.9° S."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Cape Town lies at about 33.9° S, almost level with Sydney."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; every claim is a latitude, so all are high. Datasets: geonames-cities: Buenos Aires AR admin1 07 lat -34.61315; Sydney AU admin1 02 lat -33.86785 (gap 0.75°, above the 0.5° guard); Cape Town ZA admin1 11 lat -33.92584 (c3). Rival test: Australia's place 'down under' makes Sydney feel further south, so most players pick it, which makes the item counterintuitive and Hard; the coordinates settle it. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: three famous southern cities on three continents. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none. This replaces a Sudan and Egypt pyramid comparison that duplicated p.hist.0162.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "42ef4b1b2ac989f4680d2871e829648fb74e1bf39d2cd6c466fbf988c56be657",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Buenos Aires",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Buenos Aires, country=AR, admin1=07",
+              "excerpt": "{\"name\":\"Buenos Aires\",\"lat\":\"-34.61315\",\"lng\":\"-58.37723\",\"country\":\"AR\",\"admin1\":\"07\",\"admin2\":\"\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "-34.61315 rounds to 34.6° S."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Sydney, country=AU, admin1=02",
+              "excerpt": "{\"name\":\"Sydney\",\"lat\":\"-33.86785\",\"lng\":\"151.20732\",\"country\":\"AU\",\"admin1\":\"02\",\"admin2\":\"\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "-33.86785 rounds to 33.9° S."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Cape Town, country=ZA, admin1=11",
+              "excerpt": "{\"name\":\"Cape Town\",\"lat\":\"-33.92584\",\"lng\":\"18.42322\",\"country\":\"ZA\",\"admin1\":\"11\",\"admin2\":\"CPT\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "-33.92584 rounds to 33.9° S, about 0.06° from Sydney."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7cccad5fac3d4c4ecbd3ea8a26d47633bf5782cff12c6eda37028dc3f598c549",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Buenos Aires",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Buenos Aires,country=AR,admin1=07",
+              "excerpt": "Buenos Aires AR/07: lat -34.61315, lng -58.37723",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Sydney,country=AU,admin1=02",
+              "excerpt": "Sydney AU/02: lat -33.86785, lng 151.20732",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Cape Town,country=ZA,admin1=11",
+              "excerpt": "Cape Town ZA/11: lat -33.92584, lng 18.42322",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 to c3 carry geonames-cities evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which city is further south?",
+  "a": "Buenos Aires",
+  "b": "Sydney",
+  "answer": "a",
+  "relation": "further_south",
+  "measure": "latitude of the city centre",
+  "unit": "° latitude",
+  "values": {
+    "a": -34.61,
+    "b": -33.87
+  },
+  "valueDisplay": {
+    "a": "34.6° S",
+    "b": "33.9° S"
+  },
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.119,
+    "estimator": "v0"
+  }
+}

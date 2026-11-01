@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0108",
+  "status": "active",
+  "category": "food",
+  "tags": ["chillies", "food-science"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Birds feel no burn from capsaicin, so they eat chillies and scatter the seeds unharmed, while mammals, whose teeth would crush the seeds, are put off.",
+  "learnMore": "Capsaicin",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Capsaicin is the compound responsible for the heat of chilli peppers."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Piperine gives black pepper its bite, allicin forms in crushed garlic and menthol gives mint its cooling feel; none makes chillies hot."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Birds do not feel the burning sensation of capsaicin, because their version of the receptor it acts on is insensitive to it."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Birds eat chillies and pass the seeds intact, while mammals, which tend to crush seeds when chewing, are deterred by capsaicin."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: piperine is the strongest distractor, since black pepper is also called hot, but it is pepper's compound, not the chilli's. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: chillies are eaten on every continent. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 26 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: the name capsaicin echoes capsicum, which most players can use. Doubts: none. c4 states the seed-dispersal finding plainly, without claiming it is the plant's purpose.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "75a009e1f6dbb6aa0be36cf11b612b872681bb4866126d7212c4209a6c3406c6",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Capsaicin",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Capsaicin is the compound that makes chilli peppers hot.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Piperine gives black pepper its bite, allicin forms when garlic is crushed and menthol gives mint its cooling feel.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Birds feel no burn from capsaicin because their version of the TRPV1 receptor is insensitive to it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Birds swallow chilli seeds whole and pass them intact, spreading them, while seed-crushing mammals are deterred by the burn.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2d60bbe4b31db1e4f8ccc71ee37e8854bf55502b6a01406d76f3626ce195bbc7",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Capsaicin",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Capsaicin is the pungent compound of chillies and acts on the TRPV1 heat receptor.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Piperine is black pepper's bite, allicin forms when garlic is crushed, menthol triggers cold receptors; none is chilli heat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bird TRPV1 is insensitive to capsaicin (shown for chickens by Jordt and Julius, 2002), so birds do not feel the burn.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Directed deterrence: mammals chew and destroy seeds and avoid capsaicin, while birds swallow seeds whole and spread them (Tewksbury and Nabhan, 2001).",
+              "confidence": "certain"
+            },
+            "note": "A well-supported hypothesis stated as fact in the explanation; acceptable."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.food.0144",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which compound makes chilli peppers taste hot?",
+  "answer": "Capsaicin",
+  "wrong": ["Piperine", "Allicin", "Menthol"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.76,
+    "spread": 0.358,
+    "estimator": "v0"
+  }
+}

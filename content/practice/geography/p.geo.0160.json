@@ -1,0 +1,256 @@
+{
+  "id": "p.geo.0160",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "cities", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Cairo, at about 30.1° N, lies almost level with New Orleans. Miami, at about 25.8° N, is much nearer the Tropic of Cancer.",
+  "learnMore": "Cairo",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Cairo lies at about 30.1° N."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Miami lies at about 25.8° N."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central New Orleans lies at about 30.0° N, almost level with Cairo."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Miami is much nearer the Tropic of Cancer, at about 23.4° N, than Cairo is."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; every claim carries a latitude, so all are high. Datasets: geonames-cities: Cairo EG admin1 11 lat 30.06263; Miami US FL lat 25.77427 (gap 4.29°); New Orleans US LA lat 29.95465 (c3). c4 by calculation: Miami is about 2.3° from the Tropic of Cancer (about 23.44° N) and Cairo about 6.6°. Rival test: Africa feels 'south' of the United States to many players, so Miami gets picked; the coordinates settle it. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: two world-famous cities on different continents. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: not marked counterintuitive: the pull is real but not a firm belief for most players.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7460b3483d354fdcaab99f6b683d71665e2073a3bc9449b9bf935ea2e98292d2",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Cairo",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Cairo, country=EG, admin1=11",
+              "excerpt": "{\"name\":\"Cairo\",\"lat\":\"30.06263\",\"lng\":\"31.24967\",\"country\":\"EG\",\"admin1\":\"11\",\"admin2\":\"\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "30.06263 rounds to 30.1° N."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Miami, country=US, admin1=FL",
+              "excerpt": "{\"name\":\"Miami\",\"lat\":\"25.77427\",\"lng\":\"-80.19366\",\"country\":\"US\",\"admin1\":\"FL\",\"admin2\":\"086\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "25.77427 rounds to 25.8° N."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=New Orleans, country=US, admin1=LA",
+              "excerpt": "{\"name\":\"New Orleans\",\"lat\":\"29.95465\",\"lng\":\"-90.07507\",\"country\":\"US\",\"admin1\":\"LA\",\"admin2\":\"071\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "29.95465 rounds to 30.0° N, almost level with Cairo."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Miami, country=US, admin1=FL; name=Cairo, country=EG, admin1=11",
+              "excerpt": "{\"name\":\"Miami\",\"lat\":\"25.77427\",\"lng\":\"-80.19366\",\"country\":\"US\",\"admin1\":\"FL\",\"admin2\":\"086\"} | {\"name\":\"Cairo\",\"lat\":\"30.06263\",\"lng\":\"31.24967\",\"country\":\"EG\",\"admin1\":\"11\",\"admin2\":\"\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Miami is about 2.3° from the Tropic of Cancer and Cairo about 6.6°. The Tropic's latitude, about 23.4° N (23° 26'), is a textbook constant."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "265bc8329cdac9cf6e0c16c69d0f8830baabaa6798f80048ed322b7ee5b3b0c6",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Cairo",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Cairo,country=EG,admin1=11",
+              "excerpt": "Cairo EG/11: lat 30.06263, lng 31.24967",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Miami,country=US,admin1=FL",
+              "excerpt": "Miami US/FL: lat 25.77427, lng -80.19366",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=New Orleans,country=US,admin1=LA",
+              "excerpt": "New Orleans US/LA: lat 29.95465, lng -90.07507",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Miami,country=US,admin1=FL; name=Cairo,country=EG,admin1=11",
+              "excerpt": "Miami US/FL: lat 25.77427, lng -80.19366 | Cairo EG/11: lat 30.06263, lng 31.24967",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Miami is 2.3 degrees and Cairo 6.6 degrees from 23.4 N. The Tropic of Cancer at about 23.4 N (23 deg 26 min) is a textbook constant, knowledge, certain."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 to c4 carry geonames-cities evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which city is further north?",
+  "a": "Cairo",
+  "b": "Miami",
+  "answer": "a",
+  "relation": "further_north",
+  "measure": "latitude of the city centre",
+  "unit": "° N",
+  "values": {
+    "a": 30.06,
+    "b": 25.77
+  },
+  "valueDisplay": {
+    "a": "30.1° N",
+    "b": "25.8° N"
+  },
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.15,
+    "estimator": "v0"
+  }
+}

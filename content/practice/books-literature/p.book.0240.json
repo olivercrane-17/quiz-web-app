@@ -1,0 +1,230 @@
+{
+  "id": "p.book.0240",
+  "status": "checking",
+  "category": "book",
+  "tags": ["childrens-books", "nursery-rhymes"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Folklorists find no link: the rhyme first appeared in print in 1881, and the plague reading arose in the 20th century. Early versions have no sneezing line.",
+  "learnMore": "Ring a Ring o' Roses",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "There is no evidence that the nursery rhyme 'Ring a Ring o' Roses' is about the plague."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The rhyme first appeared in print in 1881, in Kate Greenaway's Mother Goose."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The idea that the rhyme describes the plague arose in the 20th century."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Early printed versions of the rhyme have no sneezing line."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Folklorists, among them Iona and Peter Opie, reject the plague interpretation."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: children's and young-adult books. lint: content:check reports no errors on this item; C25 warns on c1 (ring-a-roses-plague) by design, as the myths note explains. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. rivalTest: Argued for true: the falling-down ending and the later 'atishoo' look like plague symptoms, and the story is widely repeated; but no version before the 1880s is known, the earliest have no sneezing, and the plague reading appears only in the 20th century, so false holds. Counterintuitive: the plague story is repeated so often that most players answer true. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: The rhyme is sung across the English-speaking world (as 'Ring Around the Rosie' in North America), and the plague story travels with it, so the trap works everywhere. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 27 words. myths: C25 matches c1 to ring-a-roses-plague in content/reference/myths.json by design: the item debunks that myth, so both checks must confirm c1 and one of them must carry web evidence for it. mystery and encore: nothing of either kind to check in a practice item. doubts: none. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "39a96b56415356ce46702a767694676e11a5c7e3663f9c750fee7c3d766d3664",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Folklorists, Iona and Peter Opie among them, find no evidence that the rhyme has anything to do with the plague.",
+              "confidence": "certain"
+            },
+            "note": "This claim refutes myth 'ring-a-roses-plague' (the packet's myth hit). The screen clears only with dataset or web evidence in a confirming check. High-risk (etymology), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The earliest printed text is in Kate Greenaway's Mother Goose, or the Old Nursery Rhymes (1881).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The plague reading shows up only in the mid-20th century.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Early printed versions have no sneezing line; Greenaway's ends 'Hush! Hush! Hush! Hush! We're all tumbled down'.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Opies rejected the plague explanation in their work on nursery rhymes and children's games.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7039b8cc58649f8408b50a1d7a13ccfc161788ea7a6e09e30fb44b3e25d43c03",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "There is no evidence that Ring a Ring o' Roses is about the plague, and folklorists reject the link.",
+              "confidence": "certain"
+            },
+            "note": "Matches the myths list by design (a debunking claim). The claim is the \"no evidence\" form; the key False is the standard folklorist verdict. High-risk (etymology): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kate Greenaway's Mother Goose (1881) is the best-known early printing, but I cannot rule out earlier printed or recorded variants, so 'first appeared in print in 1881' is unverified.",
+              "confidence": "likely"
+            },
+            "note": "checker_doubt c2: no search was possible (budget exhausted). High-risk \"first\" claim."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The reading of the rhyme as a plague rhyme is not found in print before the 20th century.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "I recall early printed versions ending in lines such as 'Hush! Hush!' rather than a sneeze, but I cannot confirm what the earliest texts say.",
+              "confidence": "likely"
+            },
+            "note": "checker_doubt c4: no search was possible (budget exhausted)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Iona and Peter Opie, among other folklorists, reject the plague interpretation of the rhyme.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "checker_doubt c2 and c4: the explanation says the rhyme \"first appeared in print in 1881\" and that early versions \"have no sneezing line\". I recall 1881 (Kate Greenaway) as the earliest widely cited British print, but I cannot rule out earlier printed or recorded variants, and I cannot confirm the wording of the earliest texts. No search was possible. Restate as \"the earliest known printed version dates from 1881\" with a Tier A or B source, or drop the print date and the sneezing detail and keep the safer points (the plague reading appeared in the 20th century; folklorists reject it)."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ]
+  },
+  "format": "tf",
+  "stem": "The nursery rhyme 'Ring a Ring o' Roses' is about the plague.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.26,
+    "spread": 0.244,
+    "estimator": "v0"
+  }
+}

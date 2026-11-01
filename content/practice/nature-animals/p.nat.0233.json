@@ -1,0 +1,212 @@
+{
+  "id": "p.nat.0233",
+  "status": "cut",
+  "category": "nat",
+  "tags": ["plants", "cacti", "deserts", "americas"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Apart from one rainforest species also found in Africa and southern Asia, cacti come from the Americas. Africa's cactus lookalikes are mostly euphorbias, which evolved a similar shape separately.",
+  "learnMore": "Cactus",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Cacti are native to the Americas."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Apart from Rhipsalis baccifera, no cactus is native to Africa, the Middle East or Australia; cacti growing wild there were introduced by people."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "One cactus species, Rhipsalis baccifera, is native to Africa and southern Asia as well as the Americas."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Many cactus-like succulents of Africa are euphorbias, which evolved a similar form independently."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed; high: c1 (checker_doubt, standing in for counterintuitive, which the tooling's riskReason enum lacks; C26 makes the key of a counterintuitive item high) and c3 (number); standard: c2 and c4. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on cacti native only to the Americas and Rhipsalis baccifera should cover c1 to c3. rivalTest: Argued for Africa: deserts suggest the Sahara, and one cactus does grow wild in Africa, which is why the explanation names that exception so the key stays defensible. Prickly pears now run wild in Australia and around the Mediterranean, but people brought them there, so none of the distractors is a native range. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: cacti are known everywhere, and players in Mexico or Arizona are not the only ones who could reason toward the key. style: Oxford spelling, plain hyphens only, explanation of 29 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: c3's range for Rhipsalis baccifera (tropical Africa, Madagascar and Sri Lanka) is worded as 'Africa and southern Asia' to stay at a precision every source shares.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "efbb1124cf3cc82b22bbbbe6d95baa2b5bb43c1fd93b0307effcb30bb566dfe3",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "The Americas",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The cactus family (Cactaceae) is native to the Americas.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Apart from Rhipsalis baccifera, no cactus is native to Africa, the Middle East or Australia; cacti growing wild there, such as prickly pears, were introduced by people.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rhipsalis baccifera, a rainforest epiphyte, is the one cactus that also grows wild in tropical Africa, Madagascar and Sri Lanka as well as the Americas.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Many cactus-like African succulents are euphorbias, which evolved a similar form independently (convergent evolution).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "The distractor 'Africa' is not entirely empty, because Rhipsalis baccifera grows wild in tropical Africa. The stem asks where cacti as a group are native, c2 states the exception and the explanation defuses it, so the key stands."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7109798d5ca25164bf5e3078cd1eaa86f1d5889ee541407c1e3668985f82e94b",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "The Americas",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cacti are native to the Americas.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The only cactus with a natural range outside the Americas is Rhipsalis baccifera; other wild cacti in Africa, the Middle East and Australia were introduced by people.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rhipsalis baccifera grows naturally in tropical Africa, Madagascar and Sri Lanka as well as in the Americas.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cactus-like succulents in Africa are largely euphorbias, which evolved a similar shape independently.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "One species, Rhipsalis baccifera, is native to Africa, so 'Africa' is not wrong for every cactus. The explanation discloses it, and 'they' in the stem means cacti as a family, so it is not a second answer. 'Almost all' in the stem would make it airtight."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, checker_doubt) and c3 (explanation, number) rest on knowledge alone in both checks: no pinned dataset covers animal biology and checker A's one search was refused at the session limit, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered. For the redraft: both checks note the one African cactus (Rhipsalis baccifera); 'almost all cacti' in the stem would make it airtight.",
+      "decidedAt": "2026-11-01T04:21:42Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Cacti grow wild in many dry lands, but which part of the world are they native to?",
+  "answer": "The Americas",
+  "wrong": ["Africa", "The Middle East", "Australia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.82,
+    "spread": 0.344,
+    "estimator": "v0"
+  }
+}

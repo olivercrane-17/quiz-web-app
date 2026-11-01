@@ -1,0 +1,216 @@
+{
+  "id": "p.geo.0164",
+  "status": "active",
+  "category": "geo",
+  "tags": ["landmarks", "mountains", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Sugarloaf Mountain, the rocky dome by the bay, is reached by cable car. The statue looks out from Corcovado, a steep peak inside Tijuca National Park.",
+  "learnMore": "Corcovado",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The Christ the Redeemer statue stands on the summit of Corcovado in Rio de Janeiro."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Christ the Redeemer statue does not stand on Sugarloaf Mountain, Pedra da Gávea or Pico da Tijuca."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sugarloaf Mountain is a rocky dome beside Guanabara Bay, reached by cable car."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Corcovado is a steep peak within Tijuca National Park."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is high under the C26 floor (counterintuitive; schema has no 'counterintuitive' riskReason, so checker_doubt) and needs a web result; the rest are standard. Datasets: none. Rival test: Sugarloaf Mountain is the confident wrong answer, the other icon of Rio's skyline, which makes the item counterintuitive; Pedra da Gávea and Pico da Tijuca are real Rio peaks. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both landmarks are world-famous; the foothold is a picture most players have seen. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 26 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "00fb5525c9c6fa67a01bf7f29e252c1d882b85fcfe0fe820b4821a57cef83da3",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Corcovado",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Christ the Redeemer stands on the summit of Corcovado above Rio de Janeiro.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only. No pinned dataset covers this, and WebSearch was unavailable this session (the turn's shared search quota was exhausted before any search ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The statue is not on Sugarloaf, Pedra da Gávea or Pico da Tijuca.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sugarloaf is a granite dome on Guanabara Bay with a cable car.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Corcovado lies inside Tijuca National Park.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c1146b5bea7b0d75d59ee2fb002adcfd29709740b04098f2a829fbac5f0413f8",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Corcovado",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Christ the Redeemer stands on the summit of Corcovado, in Rio de Janeiro.",
+              "confidence": "certain"
+            },
+            "note": "Writer labelled this checker_doubt, but it is textbook-certain. Knowledge only: no dataset covers this. Needs dataset or web evidence in the other check (I could not search: the shared WebSearch budget was spent)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The statue is not on Sugarloaf Mountain, Pedra da Gavea or Pico da Tijuca.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Sugarloaf Mountain is a rocky dome beside Guanabara Bay with a cable car to its top.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Corcovado is a steep peak inside Tijuca National Park.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key of a counterintuitive item, so high by the C26 floor) rest on knowledge alone in both checks: no pinned dataset covers them and neither checker could search. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with web evidence, or with the claim stepped down or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In Rio de Janeiro, the Christ the Redeemer statue stands on top of which peak?",
+  "answer": "Corcovado",
+  "wrong": ["Sugarloaf Mountain", "Pedra da Gávea", "Pico da Tijuca"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.245,
+    "estimator": "v0"
+  }
+}

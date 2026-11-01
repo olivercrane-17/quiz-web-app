@@ -1,0 +1,212 @@
+{
+  "id": "p.geo.0273",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "cities", "southern-hemisphere"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Brisbane sits at about 27.5° S and Johannesburg at about 26.2° S. Johannesburg's chilly winters come from its height on a high plateau, not from being far south.",
+  "learnMore": "Brisbane",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Brisbane lies at about 27.5° S."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Johannesburg lies at about 26.2° S."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Johannesburg's cool winters are due mainly to its altitude on the Highveld plateau."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (number) and c2 (number) are high under the C26 floor, and c3 is standard. Datasets: geonames-cities: Brisbane, AU, -27.46794, 153.02809; Johannesburg, ZA, -26.20227, 28.04363 (c1, c2). The gap is about 1.3 degrees, above the 0.5 degree guard. Rival test: South Africa's name and Johannesburg's frosty winters suggest the far south, while Brisbane is the sunny city of Queensland, which is the trap. The centres settle it. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Both cities are well known; the reasoning is map knowledge. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 28 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c3 is standard. Seed: 5 (hard): most players pick Johannesburg. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f60a0baf1e35441964c95b1e6917f251986e64d8baf9478a170f92e8c70e9c4b",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Brisbane",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Brisbane, country=AU",
+              "excerpt": "{\"name\":\"Brisbane\",\"lat\":\"-27.46794\",\"lng\":\"153.02809\",\"country\":\"AU\",\"admin1\":\"04\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "-27.468 rounds to 27.5° S."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Johannesburg, country=ZA",
+              "excerpt": "{\"name\":\"Johannesburg\",\"lat\":\"-26.20227\",\"lng\":\"28.04363\",\"country\":\"ZA\",\"admin1\":\"06\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "-26.202 rounds to 26.2° S."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Johannesburg stands about 1,750 m up on the Highveld, which makes its winters cool.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5e2c3c0474364d135721848942ce40bf23a3a26781099279db60273d3f5623c6",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Brisbane",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Brisbane, country=AU",
+              "excerpt": "Brisbane AU (Queensland) lat -27.46794",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 27.5 S."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Johannesburg, country=ZA",
+              "excerpt": "Johannesburg ZA (Gauteng) lat -26.20227",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 26.2 S; Brisbane is 1.27 degrees further south, over the 0.5 degree guard."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Johannesburg's cool winters are due mainly to its altitude on the Highveld plateau.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c2 (geonames-cities) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which city is further south?",
+  "a": "Brisbane",
+  "b": "Johannesburg",
+  "answer": "a",
+  "relation": "further_south",
+  "measure": "latitude of the city centre",
+  "unit": "° latitude",
+  "values": {
+    "a": -27.47,
+    "b": -26.2
+  },
+  "valueDisplay": {
+    "a": "27.5° S",
+    "b": "26.2° S"
+  },
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.183,
+    "estimator": "v0"
+  }
+}

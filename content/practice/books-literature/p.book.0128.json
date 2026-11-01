@@ -1,0 +1,332 @@
+{
+  "id": "p.book.0128",
+  "status": "active",
+  "category": "book",
+  "tags": ["poetry", "nobel-prize", "indian-literature"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The prize honoured poems he had rendered into English himself, such as Gitanjali. Tagore also wrote the songs that became the national anthems of India and Bangladesh.",
+  "learnMore": "Rabindranath Tagore",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "In 1913 Rabindranath Tagore became the first non-European to win the Nobel Prize in Literature."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Rudyard Kipling won the Nobel Prize in Literature in 1907, and Lu Xun and Muhammad Iqbal never won it."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Nobel citation praised verse that Tagore had expressed in his own English words, as in the English Gitanjali."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Tagore wrote the songs that became the national anthems of India and Bangladesh."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: poetry and poets. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means). Datasets: c1 and c2 checked in nobel-prizes (iaseth/nobel-prize-data, prize.json) and nobel-laureates-2016 (laureate.json): Tagore is the sole 1913 literature laureate (id 583, born Calcutta, India); every laureate from 1901 to 1912 was European by nationality, the only one born outside Europe being Kipling (1907, id 577, born Bombay, British India), a British subject. c3 matches the 1913 motivation in prize.json ('expressed in his own English words'). No Lu Xun or Iqbal in either file. Rival test: Kipling is the deliberate trap (born in India, won earlier, but British); Lu Xun and Iqbal are great Asian writers of the same era who never won. The year 1913 pins the key even without the 'first' wording. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 27 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1cc77a6670fe9e4d8bb2273e685bc9da94d6640e67c2d4debbe811aeec7a8b6a",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "Rabindranath Tagore",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Rabindranath Tagore 1913 first non-European to win the Nobel Prize in Literature; wrote the national anthems of India and Bangladesh",
+              "results": [
+                {
+                  "title": "Rabindranath Tagore",
+                  "url": "https://www.britannica.com/biography/Rabindranath-Tagore"
+                },
+                {
+                  "title": "Rabindranath Tagore - Students",
+                  "url": "https://kids.britannica.com/students/article/Rabindranath-Tagore/277244"
+                },
+                {
+                  "title": "List of Indian Nobel laureates",
+                  "url": "https://en.wikipedia.org/wiki/List_of_Indian_Nobel_laureates"
+                },
+                {
+                  "title": "Portal:Bangladesh/Selected biography/3",
+                  "url": "https://en.wikipedia.org/wiki/Portal:Bangladesh/Selected_biography/3"
+                },
+                {
+                  "title": "Rabindranath Tagore (film)",
+                  "url": "https://en.wikipedia.org/wiki/Rabindranath_Tagore_(film)"
+                },
+                {
+                  "title": "Bengali literature",
+                  "url": "https://www.britannica.com/art/Bengali-literature"
+                },
+                {
+                  "title": "What awards did Rabindranath Tagore win?",
+                  "url": "https://www.britannica.com/question/What-awards-did-Rabindranath-Tagore-win"
+                },
+                {
+                  "title": "Rabindranath Tagore summary",
+                  "url": "https://www.britannica.com/summary/Rabindranath-Tagore"
+                },
+                {
+                  "title": "Bangladesh - Students",
+                  "url": "https://kids.britannica.com/students/article/Bangladesh/273092"
+                },
+                {
+                  "title": "Indian literature",
+                  "url": "https://en.wikipedia.org/wiki/Indian_literature"
+                }
+              ],
+              "summaryExcerpt": "Britannica says Tagore became the first non-European to receive the Literature prize in 1913 In 1913 Rabindranath Tagore became the first non-European to receive the Nobel Prize for Literature.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 18: the summary attributes 'In 1913 Rabindranath Tagore became the first non-European to receive the Nobel Prize for Literature' to Britannica. Counts at Tier B. The 1913 award is also in the pinned nobel-prizes file."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[category=literature, year=1907]",
+              "excerpt": "{\"year\":\"1907\",\"category\":\"literature\",\"laureates\":[{\"id\":\"577\",\"firstname\":\"Rudyard\",\"surname\":\"Kipling\",\"motivation\":\"\\\"in consideration of the power of observation, originality of imagination, virility of ideas and remarkable talent for narration which characterize the creations of this world-famous author\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Kipling is the 1907 laureate. No laureate named Lu Xun or Iqbal appears in any category of the file (1901 to 2022), and both died in the 1930s."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[category=literature, year=1913]",
+              "excerpt": "{\"year\":\"1913\",\"category\":\"literature\",\"laureates\":[{\"id\":\"583\",\"firstname\":\"Rabindranath\",\"surname\":\"Tagore\",\"motivation\":\"\\\"because of his profoundly sensitive, fresh and beautiful verse, by which, with consummate skill, he has made his poetic thought, expressed in his own English words, a part of the literature of the West\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The motivation reads 'expressed in his own English words'."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Rabindranath Tagore 1913 first non-European to win the Nobel Prize in Literature; wrote the national anthems of India and Bangladesh",
+              "results": [
+                {
+                  "title": "Rabindranath Tagore",
+                  "url": "https://www.britannica.com/biography/Rabindranath-Tagore"
+                },
+                {
+                  "title": "Rabindranath Tagore - Students",
+                  "url": "https://kids.britannica.com/students/article/Rabindranath-Tagore/277244"
+                },
+                {
+                  "title": "List of Indian Nobel laureates",
+                  "url": "https://en.wikipedia.org/wiki/List_of_Indian_Nobel_laureates"
+                },
+                {
+                  "title": "Portal:Bangladesh/Selected biography/3",
+                  "url": "https://en.wikipedia.org/wiki/Portal:Bangladesh/Selected_biography/3"
+                },
+                {
+                  "title": "Rabindranath Tagore (film)",
+                  "url": "https://en.wikipedia.org/wiki/Rabindranath_Tagore_(film)"
+                },
+                {
+                  "title": "Bengali literature",
+                  "url": "https://www.britannica.com/art/Bengali-literature"
+                },
+                {
+                  "title": "What awards did Rabindranath Tagore win?",
+                  "url": "https://www.britannica.com/question/What-awards-did-Rabindranath-Tagore-win"
+                },
+                {
+                  "title": "Rabindranath Tagore summary",
+                  "url": "https://www.britannica.com/summary/Rabindranath-Tagore"
+                },
+                {
+                  "title": "Bangladesh - Students",
+                  "url": "https://kids.britannica.com/students/article/Bangladesh/273092"
+                },
+                {
+                  "title": "Indian literature",
+                  "url": "https://en.wikipedia.org/wiki/Indian_literature"
+                }
+              ],
+              "summaryExcerpt": "\"Jana Gana Mana\" comes from his 1911 Bengali poem \"Bharoto Bhagyo Bidhata.\" ... \"Amar Sonar Bangla\" was adopted by Bangladesh. ... Britannica's note says Rabindranath Tagore is the only poet credited with authoring the national anthems of two countries.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 18: Jana Gana Mana and Amar Sonar Bangla."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "nobel-laureates-2016 (id 577) gives Kipling's birthplace as Bombay, British India, so 'first non-European' holds by nationality, not birthplace. The stem's 'In 1913' already rules Kipling (1907) out, so the key is unaffected."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "89ed8269afc51ca6c075d7a1ca0c56120d3674f839e4f200f1261c1755398cad",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "Rabindranath Tagore",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "category=literature, year=1913",
+              "excerpt": "{\"year\":\"1913\",\"category\":\"literature\",\"laureates\":[{\"id\":\"583\",\"firstname\":\"Rabindranath\",\"surname\":\"Tagore\", ... \"share\":\"1\"}]}; the 1901 to 1912 literature laureates are Sully Prudhomme, Mommsen, Bjørnson, Mistral, Echegaray, Sienkiewicz, Carducci, Kipling, Eucken, Lagerlöf, Heyse, Maeterlinck and Hauptmann.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset fixes the year and the earlier winners' names. 'Non-European' is nationality, not birthplace: nobel-laureates-2016 lists Kipling's birthplace as Bombay, British India, but he was a British writer of British parents, and the Nobel Foundation counts Tagore as the first non-European laureate. The stem's '1913' pins Tagore either way."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "category=literature, year=1907",
+              "excerpt": "{\"year\":\"1907\",\"category\":\"literature\",\"laureates\":[{\"id\":\"577\",\"firstname\":\"Rudyard\",\"surname\":\"Kipling\", ... \"share\":\"1\"}]}; no laureate with the surname Iqbal or Xun in prize.json or laureate.json.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "category=literature, year=1913",
+              "excerpt": "Motivation: \"because of his profoundly sensitive, fresh and beautiful verse, by which, with consummate skill, he has made his poetic thought, expressed in his own English words, a part of the literature of the West\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tagore wrote the words of 'Jana Gana Mana' (India) and 'Amar Shonar Bangla' (Bangladesh), both now national anthems.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Kipling was born in Bombay (laureate.json: British India), so 'first non-European' holds by nationality, not by birthplace. The stem's year makes the answer unique, and the Nobel Foundation's own usage matches the claim, so no change is needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Both checks pass with dataset and web evidence. Kipling's Bombay birth, raised by both checkers, does not touch the key: the stem's year pins Tagore and the claim is by nationality. Dedupe: Shares the answer with p.music.0146, which asks about the anthems; this item asks about the 1913 Nobel. Different facts, though this explanation mentions the anthems.",
+      "decidedAt": "2026-11-01T04:03:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "nearestId": "p.music.0146",
+      "score": 0.6,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In 1913, who became the first non-European to win the Nobel Prize in Literature?",
+  "answer": "Rabindranath Tagore",
+  "wrong": ["Rudyard Kipling", "Lu Xun", "Muhammad Iqbal"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.56,
+    "spread": 0.453,
+    "estimator": "v0"
+  }
+}

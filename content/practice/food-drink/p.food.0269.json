@@ -1,0 +1,201 @@
+{
+  "id": "p.food.0269",
+  "status": "cut",
+  "category": "food",
+  "tags": ["fruit", "nutrition", "minerals"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Bananas are famous for their potassium, but weight for weight avocados, raw spinach and potatoes all hold more of it.",
+  "learnMore": "Avocado",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Raw avocado contains about 485 mg of potassium per 100 g."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Raw banana contains about 358 mg of potassium per 100 g."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Raw spinach and raw potatoes also contain more potassium per 100 g than bananas."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed; risk is at or above the C26 floor (high: c1, c2, c3). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Values come from standard food-composition tables, which vary a little by variety; the avocado leads by about a third, more than any variation I know of. The banana's reputation is the trap, so counterintuitive is true. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both fruits are sold worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 20 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: most players pick the banana. Doubts: the exact figures are high-risk numbers for checker A to evidence; the comparison survives any published table I know.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "38fd7b3a50d04eafc4415ed29e30df611a49474be7105000f85af6f43378efda",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "An avocado",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "USDA food composition data give raw avocado about 485 mg potassium per 100 g.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "USDA food composition data give raw banana about 358 mg potassium per 100 g.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Raw spinach (about 558 mg) and raw potato with skin (about 425 mg) beat banana per 100 g.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation's 'raw spinach and potatoes' could be read as any potatoes, and peeled boiled potato has less potassium per 100 g than banana; 'raw spinach and raw potatoes', as c3 says, is exact."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4f15a0d94170c0bb9966dcc937483a858c0ea3e462a28d87b2fa69989609040e",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "An avocado",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Raw avocado has about 485 mg of potassium per 100 g (the USDA figure for all commercial varieties).",
+              "confidence": "certain"
+            },
+            "note": "From my memory of the USDA table, recorded as knowledge. I recall that the Florida-type avocado is listed lower, near the banana figure, so the key is for the usual (Hass-type) avocado. High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Raw banana has about 358 mg of potassium per 100 g (USDA).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Raw spinach (about 558 mg) and raw potato (over 400 mg) hold more potassium than banana per 100 g.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "'An avocado' is generic. I recall the USDA listing larger, watery Florida-type avocados at roughly the banana's figure, so the margin of 485 against 358 holds for Hass-type and all-variety averages but not for every avocado."
+          },
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says 'potatoes' without 'raw' (only spinach carries it in the sentence). Raw or baked potato beats the banana, but by my recollection of the USDA table a boiled, peeled potato falls just below it, so 'raw potatoes' would be safer."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (label, number), c2 (label, number) and c3 (explanation, number) rest on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7). For a redraft: 'potatoes' needs 'raw', and 'an avocado' is generic (A, B).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Weight for weight, which has more potassium?",
+  "a": "An avocado",
+  "b": "A banana",
+  "answer": "a",
+  "relation": "more",
+  "measure": "potassium per 100 g of raw flesh",
+  "unit": "mg per 100 g",
+  "values": {
+    "a": 485,
+    "b": 358
+  },
+  "valueDisplay": {
+    "a": "about 485 mg per 100 g",
+    "b": "about 358 mg per 100 g"
+  },
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.327,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,255 @@
+{
+  "id": "p.sport.0248",
+  "status": "checking",
+  "category": "sport",
+  "tags": ["padel", "racket-sports", "mexico"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Enrique Corcuera built the first court at his house in Mexico. A Spanish friend, Alfonso de Hohenlohe, took the game to Marbella, and from there it spread across Spain.",
+  "learnMore": "Padel",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Padel was invented in 1969 by Enrique Corcuera at his home in Acapulco, Mexico."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Padel was not invented in Marbella, Buenos Aires or Barcelona."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Alfonso de Hohenlohe built the first padel courts in Spain, at Marbella, after playing the game in Acapulco."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed, 3 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item. datasets: No pinned dataset covers padel; c1 and c3 need web evidence (the International Padel Federation or quality press). rivalTest: Marbella is the planted trap, because padel's boom began there; Buenos Aires and Barcelona are the cities of its two biggest playing nations. All three came after Acapulco. Counterintuitive is true because the obvious guess is Spain. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 29 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None on the key, which the sport's own histories agree on.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0d01e12a8604d6fd46787ca543c53d3815befdc583addbe4a54448cbc089258e",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Acapulco",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Enrique Corcuera built the first padel court at his house in Acapulco, Mexico, in 1969.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). The stem's 'holiday home' fits the usual account of Corcuera's Acapulco house."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Padel began in Acapulco; Marbella, Buenos Aires and Barcelona took it up later.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Alfonso de Hohenlohe, who had played at Corcuera's, built Spain's first padel courts at Marbella in 1974.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). The explanation's 'Spanish friend' fits: Hohenlohe was a Madrid-born aristocrat and businessman based in Marbella and a friend of Corcuera."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4bf45aa03bfe9f047f8b08f38c97aea1937353fbf4471bf9013a5a3dfbf2dbf8",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Acapulco",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The usual account, including the International Padel Federation's, is that Enrique Corcuera invented padel at his home in Acapulco, Mexico, in 1969.",
+              "confidence": "likely"
+            },
+            "note": "The year 1969 is the standard date but I could not rule out a different year in some histories, and I could not search. Stepping the year down to the 1960s would be safe."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Padel was not invented in Marbella, Buenos Aires or Barcelona; it reached Spain at Marbella and Argentina later.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Prince Alfonso of Hohenlohe, after playing in Acapulco, built the first padel courts in Spain at the Marbella Club in the mid 1970s.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "I cannot confirm that the Acapulco house where padel began was a holiday home; some tellings say home, house or residence.",
+              "confidence": "unsure"
+            },
+            "note": "Added claim: the stem says holiday home, and no claim covers that descriptor. Could not check because the shared search budget was used up."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "The stem fixes two details I could not confirm: the exact year 1969 and the words holiday home. Step down the precision, for example: The racket sport padel was invented in Mexico in the 1960s at a private home in which city? The key Acapulco is not in doubt."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-psport02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "1ed9f7ffc19b4a9741f677e284cc25a04651e7444a0db0977d4c18920fbae8f6",
+      "startedAt": "2026-11-01T04:59:04Z",
+      "finishedAt": "2026-11-01T05:07:00Z",
+      "coldSolve": {
+        "answerGiven": "Acapulco",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Enrique Corcuera created padel in 1969 by building a walled court at his house in Acapulco, Mexico.",
+            "confidence": "certain"
+          },
+          "note": "A disputed claim: B doubted the year 1969. 1969 is the date in every account I know, but knowledge does not count in a tiebreak or for a high-risk claim (§9.5.3, §9.7), so this does not settle B's doubt. No external evidence could be gathered: the WebSearch call was refused (shared per-turn budget spent, 0 searches ran) and no pinned dataset covers padel."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Padel began in Acapulco; Spain took it up through Marbella in the 1970s and Argentina soon after, and Barcelona had no part in its invention.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed. High-risk and knowledge only, so it still needs dataset or web evidence; none could be gathered."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Alfonso de Hohenlohe played padel at Corcuera's house in Acapulco and then built Spain's first courts at the Marbella Club in the mid 1970s.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed. High-risk and knowledge only, so it still needs dataset or web evidence; none could be gathered."
+        },
+        {
+          "claimId": "x1",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The accounts I know place the first court at Corcuera's house in Acapulco, a resort city, which fits a holiday home, but I cannot confirm that it was a holiday or second home rather than his residence.",
+            "confidence": "likely"
+          },
+          "note": "B's addition x1: the stem's descriptor 'holiday home', which no writer claim covers. Disputed and still unconfirmed: no search could run and no dataset covers it. See the fix issue."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "Checker doubt on x1 (the record schema has no checker_doubt type, so it is filed as wording). I side with B on 'holiday home': it is unconfirmed, and no search could run. Either a re-run of this tiebreak finds a Tier A or B source for it (and for the year 1969 in c1), or the stem drops the descriptor, for example 'The racket sport padel was invented in 1969 at a private home in which city?'. Adding 'in Mexico' to the stem, as B suggested, would give the key away, since Acapulco is the only Mexican option. The key (Acapulco) is not in doubt."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    }
+  },
+  "format": "mc",
+  "stem": "The racket sport padel was invented in 1969 at a holiday home in which city?",
+  "answer": "Acapulco",
+  "wrong": ["Marbella", "Buenos Aires", "Barcelona"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.2,
+    "spread": 0.434,
+    "estimator": "v0"
+  }
+}

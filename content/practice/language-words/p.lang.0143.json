@@ -1,0 +1,230 @@
+{
+  "id": "p.lang.0143",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["scripts", "vietnamese", "southeast-asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Missionaries in the 1600s developed Vietnamese's Latin-based script, which uses accent marks for its tones. Thai, Khmer and Lao scripts descend instead from the ancient Brahmi script of India.",
+  "learnMore": "Vietnamese alphabet",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Of Vietnamese, Thai, Khmer and Lao, only Vietnamese is normally written in the Latin alphabet."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Thai, Khmer and Lao are written in their own scripts, not the Latin alphabet."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Vietnamese's Latin-based script was developed by Catholic missionaries in the 17th century."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Vietnamese script uses diacritics to mark tones."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Thai, Khmer and Lao scripts descend from the Brahmi script of ancient India."
+    }
+  ],
+  "writerNotes": "Most players expect a Southeast Asian script for all four, so counterintuitive is true. The key is an only claim over the four options, a superlative in disguise, hence high. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers scripts; rival test: Thai, Khmer and Lao each have their own Brahmi-derived script; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: Vietnamese text on menus and signs is familiar worldwide; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "bf313c5a675f2cab9b5c2f66e94dcbcc57a89f7b6eba6521c4a3b030cd51863e",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Vietnamese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vietnamese is written in the Latin-based chu Quoc ngu, while Thai, Khmer and Lao use their own Brahmic scripts.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Thai, Khmer and Lao each have their own script, none of them Latin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Chu Quoc ngu was developed by Catholic missionaries, Portuguese and French, in the 17th century; Alexandre de Rhodes's dictionary of 1651 fixed much of it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vietnamese spelling marks its tones with diacritics.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Thai, Lao and Khmer scripts descend from Brahmi through the southern Indian Pallava script and Old Khmer.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9133dee1362e752773907ab5e34284aaed21eca0379158e0a6df2fc731527809",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Vietnamese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vietnamese uses the Latin-based quoc ngu; Thai, Khmer and Lao each use their own Brahmic scripts.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: no other option is normally written in Latin letters."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Thai, Khmer and Lao are written in their own scripts, not the Latin alphabet.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Catholic missionaries, Portuguese and Italian and French Jesuits among them, developed the Latin-based script in the 17th century.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vietnamese marks tones with diacritics.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Thai, Khmer and Lao scripts descend from Brahmic scripts of India.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, superlative) and c3 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which of these languages is normally written in the Latin alphabet?",
+  "answer": "Vietnamese",
+  "wrong": ["Thai", "Khmer", "Lao"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.269,
+    "estimator": "v0"
+  }
+}

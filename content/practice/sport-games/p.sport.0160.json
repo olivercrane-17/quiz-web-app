@@ -1,0 +1,207 @@
+{
+  "id": "p.sport.0160",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["motor-sport", "endurance", "france"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The race rewards endurance as much as speed. Teams of drivers take turns at the wheel, and the winning car is the one that covers the greatest distance in the 24 hours.",
+  "learnMore": "24 Hours of Le Mans",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 24 Hours of Le Mans motor race, first run in 1923, is named after the French city of Le Mans, where it is held."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Reims, Dijon and Pau do not give their names to a 24-hour motor race."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "At Le Mans, several drivers share each car, taking turns at the wheel."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The winning car at Le Mans is the one that covers the greatest distance in 24 hours."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; c1, c2, c4 are high and c3 is standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor); the standard claim carries none of those triggers and states a rule or a well-known fact. datasets: no pinned dataset covers motor sport, so c1, c2 and c4 need web evidence from checker A. rivalTest: Reims and Dijon hosted the French Grand Prix and Pau has its own Grand Prix, so all three are real motor-racing cities; none has a 24-hour race named after it. The famous Belgian 24-hour race is at Spa, which is not French and not an option. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 32 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b8fa82ec07352a270ae0cd11b98bc97ffdbf7f018d32d5a212fbfbb01ff76151",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Le Mans",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 24 Hours of Le Mans, first run in May 1923, is named after Le Mans, where it is held.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "No famous 24-hour motor race is named after Reims, Dijon or Pau: Reims had a 12-hour race, Pau has its Grand Prix and Dijon hosted the French Grand Prix.",
+              "confidence": "certain"
+            },
+            "note": "The stem's 'famous' and 'first run in 1923' pin Le Mans in any case. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Several drivers share each car at Le Mans, taking turns at the wheel.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The winner is the car that covers the greatest distance in the 24 hours.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "06c2ede9d6ed728fc75d2bf83b354e64783f374acb367c881c4b52e7fdd8d3d9",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Le Mans",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 24 Hours of Le Mans, first run in 1923, is named after the French city where it is held.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "None of Reims, Dijon or Pau gives its name to the famous 24-hour race first run in 1923.",
+              "confidence": "certain"
+            },
+            "note": "Read with the stem's 'famous' and 'first run in 1923'. As written the claim is an unbounded negative about any 24-hour race, which I cannot rule out for minor events."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Several drivers share each car at Le Mans, taking turns at the wheel.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The winner is the car that covers the greatest distance in the 24 hours.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Claim c2 would be safer scoped to 'the 24-hour race first run in 1923' rather than 'a 24-hour motor race'. The item text is fine."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, date), c2 (distractor, number) and c4 (explanation, superlative) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. B: scope c2 to the race first run in 1923, not every 24-hour race. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which French city gives its name to a famous 24-hour motor race, first run in 1923?",
+  "answer": "Le Mans",
+  "wrong": ["Reims", "Dijon", "Pau"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.459,
+    "estimator": "v0"
+  }
+}

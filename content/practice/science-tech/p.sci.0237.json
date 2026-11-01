@@ -1,0 +1,216 @@
+{
+  "id": "p.sci.0237",
+  "status": "active",
+  "category": "sci",
+  "tags": ["human-body", "eyes"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "The cornea has no blood vessels, which keeps it clear. Oxygen from the air dissolves into the film of tears covering it; with the eyes shut, the eyelids supply it instead.",
+  "learnMore": "Cornea",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The cornea gets most of its oxygen directly from the air, dissolved through the tear film, rather than from blood vessels."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The eardrum, the tongue and the lips have blood vessels that supply their oxygen."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The cornea has no blood vessels, which helps keep it transparent."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "When the eyes are closed, the cornea gets oxygen from blood vessels in the inner lining of the eyelids."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors and no warnings for this item. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high (the C26 floor). datasets: no pinned dataset covers anatomy; I raised c1 to high (checker_doubt) because it is beyond everyday knowledge, so checker A needs web evidence for it. rivalTest: The eardrum tempts as a thin membrane open to the air, the lips because they look thin and are always exposed, and the tongue because it sits in moving air. Against the key: the cornea is the standard example of an avascular tissue that takes oxygen from the air, which is why tight contact lenses must let oxygen through. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 31 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: The innermost layer of the cornea also takes oxygen from the fluid behind it, which is why the stem says most of its oxygen. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8f0664555bf56f37f3fa20c8b5145ab8d17c22cec25cecb3cb92bf9c0c5cfee0",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "The cornea",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "With the eyes open, the cornea, which has no blood vessels, takes most of its oxygen from the air dissolved in the tear film; its inner layers also draw some from the aqueous humour.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). The writer set riskReason checker_doubt; I have no doubt about the claim."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The eardrum, tongue and lips all have their own blood supply.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The cornea has no blood vessels, which helps keep it transparent.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "With the eyes shut, oxygen reaches the cornea from capillaries in the conjunctiva lining the eyelids.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b4e9e5c5d3f5162bf5bee9bd0066a73715f0eff5835842258256c8bc3efb66d4",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "The cornea",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "With the eye open the blood-free cornea draws most of its oxygen from the air, dissolved in the tear film.",
+              "confidence": "certain"
+            },
+            "note": "Counterintuitive key claim: needs external evidence in A. High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The eardrum, tongue and lips are all supplied by blood vessels.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The cornea has no blood vessels, which helps keep it transparent.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "With the lids closed the cornea is supplied from vessels in the conjunctiva lining the eyelids.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, checker_doubt) rests on knowledge alone in both checks, with no dataset or web evidence for it in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.nat.0162",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which part of the body gets most of its oxygen straight from the air instead of from the blood?",
+  "answer": "The cornea",
+  "wrong": ["The eardrum", "The tongue", "The lips"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.175,
+    "estimator": "v0"
+  }
+}

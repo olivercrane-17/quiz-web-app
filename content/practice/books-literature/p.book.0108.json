@@ -1,0 +1,169 @@
+{
+  "id": "p.book.0108",
+  "status": "cut",
+  "category": "book",
+  "tags": ["comics", "belgian-comics"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Hergé is a pen name: the French pronunciation of R. G., the reversed initials of Georges Remi. Peyo created the Smurfs, while Goscinny and Uderzo made Asterix.",
+  "learnMore": "Hergé",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Tintin was created by the Belgian cartoonist Hergé."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Peyo created the Smurfs, and René Goscinny and Albert Uderzo created Asterix; none of them created Tintin."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Hergé was the pen name of Georges Remi, from the French pronunciation of his reversed initials, R. G."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: comics and graphic novels. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means). Datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. Rival test: Peyo is the strongest pull, a fellow Belgian cartoonist; Goscinny and Uderzo are the French creators of Asterix. None drew Tintin. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: Tintin is published in dozens of languages and was a 2011 Hollywood film; players who never read it can still reason from the famous name Hergé, so the item stays fair beyond Europe. Style: Oxford spelling, plain hyphens only, explanation of 27 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4a5101ca4c170bd199eae91832141e1268ad63ee65285217dca7941232112bc3",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "Hergé",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hergé, a Belgian cartoonist, created Tintin, who first appeared in 1929.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Peyo created the Smurfs; René Goscinny wrote and Albert Uderzo drew Asterix.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Georges Remi's pen name Hergé is the French pronunciation of his reversed initials, R. G.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No dataset covers it and it fell outside the batch search cap, so it counts only with dataset or web evidence from check B or a follow-up (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d0650f5013681cb97dab1b44ebabfdddf4833c00e6a0f7bfcbcb5a725bd208a7",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "Hergé",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Tintin was created by the Belgian cartoonist Hergé.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Peyo drew the Smurfs, while the Asterix team was Goscinny (writer) and Uderzo (artist).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Georges Remi's initials G.R. reversed give R.G., which sounds like 'Hergé' in French.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, etymology) rest on knowledge alone in both checks, and the batch's search cap is spent (29 of 26). Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:03:00Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which Belgian cartoonist created Tintin?",
+  "answer": "Hergé",
+  "wrong": ["Peyo", "René Goscinny", "Albert Uderzo"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.295,
+    "estimator": "v0"
+  }
+}

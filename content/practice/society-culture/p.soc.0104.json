@@ -1,0 +1,243 @@
+{
+  "id": "p.soc.0104",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["calendars", "popes", "gregorian-calendar"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Catholic countries jumped straight from Thursday 4 October to Friday 15 October 1582, skipping 10 days to bring Easter back in line with the March equinox.",
+  "learnMore": "Gregorian calendar",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Gregorian calendar is named after Pope Gregory XIII, who introduced it in 1582."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Gregory I, Julius II and Sixtus V did not introduce the Gregorian calendar; Sixtus V was Gregory XIII's successor."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In Catholic countries, Thursday 4 October 1582 was followed by Friday 15 October 1582."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The 1582 reform skipped 10 days."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The reform aimed to bring the date of Easter back in line with the March equinox."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers calendars or popes; c1, c3 and c4 need web evidence. c3's weekdays follow from the Julian and Gregorian calendars and can also be checked by calculation. rivalTest: Gregory I (Gregory the Great) is the planted trap for anyone who knows only the name; Sixtus V reigned just after Gregory XIII, and Julius II a lifetime earlier. Argued against the key: the calendar is named after Gregory XIII by every reference. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: the Gregorian calendar is the civil calendar almost everywhere, and the name is the foothold. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 26 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 2: the adjective Gregorian points at a Pope Gregory; choosing the right one is the test. doubts: none. The bull Inter gravissimas was issued in February 1582; the stem says only 'introduced in 1582'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "bb579cedf0be5c681cfd26e7566c056d42c6702714733a9e8463603ab3c1a937",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Gregory XIII",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pope Gregory XIII decreed the reform in 1582 (the bull Inter gravissimas), and the calendar bears his name.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gregory I, Julius II and Sixtus V had no part in issuing the 1582 reform; Sixtus V followed Gregory XIII as pope in 1585.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the countries that adopted the reform at once (Spain, Portugal, most Italian states, Poland-Lithuania), Thursday 4 October 1582 was followed by Friday 15 October 1582.",
+              "confidence": "certain"
+            },
+            "note": "Confirmed for the first adopters only: 'Catholic countries' overgeneralizes (France switched from 9 to 20 December 1582, others in 1583 to 1587). See the wording issue. High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The 1582 change removed ten days from the calendar.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The reform's purpose was to bring the March equinox back to about 21 March, so that Easter would fall as the Council of Nicaea intended.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c3 and the explanation say Catholic countries jumped straight from Thursday 4 October to Friday 15 October 1582. Only the first adopters did (Spain, Portugal, most Italian states, Poland-Lithuania). France went from 9 to 20 December 1582, and the Catholic German states, Austria and Hungary switched between 1583 and 1587. Suggest 'Spain, Portugal and most of Italy jumped straight from...' or 'The first countries to switch jumped straight from...', with c3 reworded to match."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "670ea3e8a60bf2e3336827ac0aa027313b5f7977ffe0d82c6320350e7e3d726d",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Gregory XIII",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Gregorian calendar is named for Pope Gregory XIII, who decreed it in 1582.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gregory I (died 604), Julius II (1503 to 1513) and Sixtus V (1585 to 1590) did not introduce it; Sixtus V followed Gregory XIII directly.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Where the reform was applied first, Thursday 4 October 1582 was followed by Friday 15 October 1582.",
+              "confidence": "certain"
+            },
+            "note": "Checked by day-of-week calculation: 14 October 1582 in the proleptic Gregorian count (the same day as 4 October Julian) is a Thursday and 15 October a Friday. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The 1582 reform skipped ten days.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The reform aimed to bring Easter back in line with the March equinox.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "'Gregorian' echoes 'Gregory' and narrows the field to two options, but Gregory I is a fair foil, so the player still has to separate XIII from I. No change needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "cut",
+      "reason": "A revises: c3 and the explanation say Catholic countries went straight from Thursday 4 October to Friday 15 October 1582, but only the first adopters did (France switched in December 1582, other Catholic states between 1583 and 1587). The fix changes claim c3 as well as the explanation, so it is not wording only and needs two fresh checks, and a tiebreak could not confirm c3 as written. High-risk c1, c3 and c4 also rest on knowledge alone (no search was possible), so §9.9 rule 3 cannot pass. Cut; redraft under a new id with the jump tied to the first adopters and web evidence for the dates.",
+      "decidedAt": "2026-11-01T04:34:42Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The Gregorian calendar, introduced in 1582, is named after which pope?",
+  "answer": "Gregory XIII",
+  "wrong": ["Gregory I", "Julius II", "Sixtus V"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.179,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,230 @@
+{
+  "id": "p.food.0107",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-words", "mexico", "spanish"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Burro is Spanish for donkey and -ito makes it small. Nobody knows for sure why; one idea is that the bulging wrap looked like the packs donkeys carried.",
+  "learnMore": "Burrito",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name burrito is the Spanish diminutive of burro, donkey, so it means 'little donkey'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The names taco, tamale and quesadilla are not Spanish words for a little donkey."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Why burritos were given the name is uncertain; one suggestion is that the bulging wrap resembles the packs carried by donkeys."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: quesadilla is built on queso (cheese) and tamale on a Nahuatl word, so a Spanish speaker can eliminate them; I found no reading under which a distractor means little donkey. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: all four dishes are known well beyond Mexico; Spanish speakers have an edge, but burro is one of the best-known Spanish words. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: many players know burro, and the rest can reason from -ito. Doubts: c3 is written as an open question on purpose, because the reason for the name is unknown.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ddb13ee617ce6c6b0e1d91d698c451cb2c6a2d1bfd372b48cb954d3d3aa64b06",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Burrito",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "word origins of food names: burrito Spanish diminutive of burro little donkey; orecchiette Italian for little ears; grenadine from French grenade pomegranate",
+              "results": [
+                {
+                  "title": "Burrito",
+                  "url": "https://en.wikipedia.org/wiki/Burrito"
+                },
+                {
+                  "title": "Orecchiette",
+                  "url": "https://en.wikipedia.org/wiki/Orecchiette"
+                },
+                {
+                  "title": "Burrito",
+                  "url": "https://www.britannica.com/topic/burrito"
+                },
+                {
+                  "title": "What is the history of the burrito?",
+                  "url": "https://beyond.britannica.com/what-is-the-history-of-the-burrito"
+                },
+                {
+                  "title": "Taco",
+                  "url": "https://en.wikipedia.org/wiki/Taco"
+                },
+                {
+                  "title": "Grenadine",
+                  "url": "https://en.wikipedia.org/?title=Grenadine"
+                },
+                {
+                  "title": "Ciceri e tria",
+                  "url": "https://en.wikipedia.org/wiki/Ciceri_e_tria"
+                },
+                {
+                  "title": "List of English words of Spanish origin",
+                  "url": "https://en.wikipedia.org/wiki/List_of_English_words_of_Spanish_origin"
+                },
+                {
+                  "title": "List of foods named after places",
+                  "url": "https://en.wikipedia.org/wiki/List_of_foods_named_after_places"
+                },
+                {
+                  "title": "Grenadine Definition & Meaning",
+                  "url": "https://www.britannica.com/dictionary/grenadine"
+                }
+              ],
+              "summaryExcerpt": "Wikipedia gives the Spanish diminutive of burro (donkey) as the base, so \"little donkey\" is right. The word burrito means \"little donkey\" in Spanish, the diminutive form of burro, or \"donkey\".",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "One call covered three food-name etymologies (this item, p.food.0120 and p.food.0173); it is counted here. Every result is a Wikipedia article or a Britannica page (Tier B)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Taco means a plug or wad in Mexican Spanish, tamale comes from Nahuatl tamalli and quesadilla from queso, cheese; none means little donkey.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Why the dish is called a little donkey is not known for sure; the usual suggestions liken it to the load or bedroll a donkey carries.",
+              "confidence": "certain"
+            },
+            "note": "The same call's summary says the origin of the name is less certain and gives donkey-load theories (a bedroll across a donkey's saddle, baskets carried on burros)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6d5a10062937a58856d00cf5cb342f6ecc7e1b968f0836905d8c2f6589f8b916",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Burrito",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Spanish burro is a donkey and -ito is the diminutive ending, so burrito literally means little donkey.",
+              "confidence": "certain"
+            },
+            "note": "Tried the other options: taco is thought to mean a plug or wad, tamale comes from Nahuatl tamalli, quesadilla means little cheesy thing. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "None of taco, tamale or quesadilla has little donkey as its meaning.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The reason for the name is not known; the pack-donkey resemblance is a popular suggestion.",
+              "confidence": "certain"
+            },
+            "note": "Hedged correctly."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. The key etymology c1 carries Tier B web evidence in pass A, and c3 keeps its hedge on why the name was given (§9.7, §9.9).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.music.0264",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Mexican dish's name means 'little donkey' in Spanish?",
+  "answer": "Burrito",
+  "wrong": ["Taco", "Tamale", "Quesadilla"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.288,
+    "estimator": "v0"
+  }
+}

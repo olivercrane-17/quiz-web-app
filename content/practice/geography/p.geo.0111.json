@@ -1,0 +1,282 @@
+{
+  "id": "p.geo.0111",
+  "status": "cut",
+  "category": "geo",
+  "tags": ["capitals", "oceania", "new-zealand"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Wellington took over from Auckland as capital partly because it was more central. At about 41.3° S, it is the most southerly capital of any sovereign state.",
+  "learnMore": "Wellington",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Wellington is the capital of New Zealand."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Auckland, Christchurch and Dunedin are New Zealand cities, but none of them is the national capital."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Wellington replaced Auckland as New Zealand's capital."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Wellington's more central position helped it win the role of capital."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Wellington lies at about 41.3° S."
+    },
+    {
+      "id": "c6",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Wellington is the most southerly capital of any sovereign state."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is high under the C26 floor (counterintuitive; schema has no 'counterintuitive' riskReason, so checker_doubt), c5 for its number and c6 as a superlative; c3 and c4 are standard history with no date. Datasets: mledoze-countries cca3=NZL capital Wellington; country-codes NZL Capital Wellington; geonames-cities Wellington NZ lat -41.28664 (c5). c6 can be checked by looking up every independent country's capital from mledoze-countries in geonames-cities: the next most southerly are Canberra (about 35.3° S), Montevideo (about 34.9° S) and Buenos Aires (about 34.6° S). As a current-capital key, c1 also needs a Tier A or B web result (§3.4); New Zealand is not on the excluded-capitals list. Rival test: Auckland is the trap and the reason the item is counterintuitive: it was the capital earlier and is far better known abroad. Christchurch and Dunedin are the South Island's main cities. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a capital question about a country known everywhere; the trap works the same in every region. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 27 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: c6 says sovereign state on purpose, because capitals of territories such as the Falkland Islands lie further south.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f6128724a392e9b555eb140d4a0b8fd6a4b457ce48ebe3a8b675c0d35ec537c8",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Wellington",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=NZL",
+              "excerpt": "NZL: \"capital\": [\"Wellington\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Capital key: §3.4 also asks for a Tier A or B web result beside the dataset record. That could not be gathered this session (WebSearch quota exhausted), so the editor should get one before acceptance."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Auckland, Christchurch and Dunedin are New Zealand cities, and Wellington, not any of them, is the capital.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "New Zealand's seat of government moved from Auckland to Wellington in 1865.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Wellington was chosen largely for its central position between the North and South Islands.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Wellington, country=NZ, admin1=G2",
+              "excerpt": "{\"name\":\"Wellington\",\"lat\":\"-41.28664\",\"lng\":\"174.77557\",\"country\":\"NZ\",\"admin1\":\"G2\",\"admin2\":\"047\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "-41.28664 rounds to 41.3° S."
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Wellington, country=NZ, admin1=G2; name=Canberra, country=AU, admin1=01; name=Montevideo, country=UY, admin1=10; name=Buenos Aires, country=AR, admin1=07",
+              "excerpt": "{\"name\":\"Wellington\",\"lat\":\"-41.28664\",\"lng\":\"174.77557\",\"country\":\"NZ\",\"admin1\":\"G2\",\"admin2\":\"047\"} | {\"name\":\"Canberra\",\"lat\":\"-35.28346\",\"lng\":\"149.12807\",\"country\":\"AU\",\"admin1\":\"01\",\"admin2\":\"\"} | {\"name\":\"Montevideo\",\"lat\":\"-34.90328\",\"lng\":\"-56.18816\",\"country\":\"UY\",\"admin1\":\"10\",\"admin2\":\"02\"} | {\"name\":\"Buenos Aires\",\"lat\":\"-34.61315\",\"lng\":\"-58.37723\",\"country\":\"AR\",\"admin1\":\"07\",\"admin2\":\"\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Joining every independent: true entry of mledoze-countries (pinned 6031f5d) to its capital in this file and sorting by latitude puts Wellington first, then Canberra, Montevideo and Buenos Aires. Capitals not found under their mledoze spelling (Nuku'alofa, Port-Vila and ten northern ones) were looked up by alternate spelling and all lie north of 22° S."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f5629503e94ea6a9eb0657da1e59b8a9c77988bbfdbc3a48b142669098da0cdf",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Wellington",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=NZL",
+              "excerpt": "NZL (New Zealand): capital [\"Wellington\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Capital claim: sections 3.4 and 9.9 also want a Tier A or B web result beside the dataset. I could not search, so that half must come from the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=NZL",
+              "excerpt": "NZL (New Zealand): capital [\"Wellington\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset lists Wellington alone as New Zealand's capital."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Parliament moved from Auckland to Wellington in 1865.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Wellington's central position on Cook Strait helped it win the capital role over Auckland.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Wellington,country=NZ,admin1=G2",
+              "excerpt": "Wellington NZ/G2: lat -41.28664, lng 174.77557",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_populated_places_simple.geojson",
+              "locator": "featurecla=Admin-0 capital, sorted by latitude",
+              "excerpt": "Southernmost: Wellington (New Zealand) -41.30; Canberra (Australia) -35.28; Montevideo (Uruguay) -34.86; Buenos Aires (Argentina) -34.60; 202 Admin-0 capital features",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Stanley (Falkland Islands) is not a sovereign state's capital, and the item says sovereign state."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but c1 names a country's current capital, and §3.4 with §9.9 rule 3 requires a Tier A or B web result beside the dataset record before acceptance. Both checkers flagged that neither could search. The editor cannot supply evidence without taking a checker's role (§0.2). Redraft under a new id with the web result recorded in a check.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which city is the capital of New Zealand?",
+  "answer": "Wellington",
+  "wrong": ["Auckland", "Christchurch", "Dunedin"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.241,
+    "estimator": "v0"
+  }
+}

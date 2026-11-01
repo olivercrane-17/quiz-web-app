@@ -1,0 +1,221 @@
+{
+  "id": "p.music.0214",
+  "status": "cut",
+  "category": "music",
+  "tags": ["pop-rock", "festivals", "eurovision"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Switzerland hosted and won the first contest, held in Lugano in 1956 with seven countries. Glastonbury began in 1970, when a £1 ticket included free milk from the farm.",
+  "learnMore": "Eurovision Song Contest 1956",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The first Eurovision Song Contest was held in Lugano, Switzerland, on 24 May 1956."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The first Glastonbury Festival was held at Worthy Farm, Pilton, in September 1970."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Seven countries took part in the first Eurovision Song Contest, which Switzerland won."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Tickets for the first Glastonbury Festival cost £1 and included free milk from the farm."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the labels, values and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: geonames-cities lists Lugano (CH, admin1 TI, 46.01008, 8.96004), which confirms the place; both dates need web evidence. I used no WebSearch. Rival test: argued for 'b': nothing supports it; the two events are 14 years apart, well past the 10-year guard. Argued against the key: Glastonbury's 1970 event is counted as the first festival; even the 1971 Glastonbury Fair would not change the answer. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Eurovision is watched far beyond Europe and Glastonbury is world-famous; a player who knows neither can still reason that a television contest of the 1950s came first. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "694eae4792b6b1a29e9f2cd63a8c5c236ff1d599a9a47685c56339761d3b0382",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "The first Eurovision Song Contest",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first Eurovision Song Contest was held in Lugano, Switzerland, on 24 May 1956.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Michael Eavis's first festival at Worthy Farm, Pilton, took place on 19 September 1970.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). See the ambiguity note: Rutland Boughton's earlier Glastonbury Festivals ran from 1914."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Seven countries took part in the 1956 contest, and Switzerland's entry won.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Entry to the 1970 festival cost £1 and included free milk from Worthy Farm.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Label b, 'The first Glastonbury Festival', has a literal second reading: the composer Rutland Boughton ran a series called the Glastonbury Festival in the town of Glastonbury from 1914 to 1926, which would put Glastonbury before 1956 and flip the key. The modern festival is the overwhelming reading and the reveal shows 'September 1970', so this is a note; a qualifier such as 'The first Glastonbury at Worthy Farm' (36 characters) would close it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "df78af2afa5f7318fa0585e74d4edf2844994d1bdaac1876152913712afd8662",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "The first Eurovision Song Contest",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first Eurovision Song Contest was held in Lugano, Switzerland, on 24 May 1956.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: none; 1956 against 1970 is a 14-year gap, so the order holds even if Glastonbury's 'first' is taken as 1971."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first Glastonbury Festival, the Pilton Festival, was held at Worthy Farm in September 1970.",
+              "confidence": "certain"
+            },
+            "note": "Some histories date the modern festival from the 1971 Glastonbury Fair; either year is far after 1956."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Seven countries took part in 1956 and Switzerland (Lys Assia) won.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tickets for the first Glastonbury cost £1 and included free milk from the farm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (date), c2 (date), c3 (number) and c4 (number) rest on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail. For the redraft, A's ambiguity note stands: Rutland Boughton's Glastonbury Festival ran from 1914, so qualify label b (for example 'at Worthy Farm').",
+      "decidedAt": "2026-11-01T04:32:21Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "The first Eurovision Song Contest",
+  "b": "The first Glastonbury Festival",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year first held",
+  "unit": "year",
+  "values": {
+    "a": 1956,
+    "b": 1970
+  },
+  "valueDisplay": {
+    "a": "May 1956",
+    "b": "September 1970"
+  },
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.224,
+    "estimator": "v0"
+  }
+}

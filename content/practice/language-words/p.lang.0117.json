@@ -1,0 +1,219 @@
+{
+  "id": "p.lang.0117",
+  "status": "active",
+  "category": "lang",
+  "tags": ["borrowed-words", "chinese", "drinks"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Tea comes from te in the Min Chinese of Fujian's ports, spread by Dutch traders. Chai comes from cha, which travelled overland and reached English through Hindi and Persian.",
+  "learnMore": "Etymology of tea",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Both 'tea' and 'chai' ultimately come from Chinese words for tea: te in Min Chinese, and cha in Mandarin and Cantonese."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Neither 'tea' nor 'chai' originates in Hindi, Japanese or Portuguese, though these languages passed on or share the Chinese word."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The te form spread from Min-speaking ports in Fujian, largely through Dutch traders."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "English 'chai' came from the cha form through Hindi, which had it from Persian."
+    }
+  ],
+  "writerNotes": "Hindi is the tempting pick for chai; the stem says 'trace back', and the explanation names Hindi as the route, not the root. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers it; rival test: Portuguese cha came from Cantonese through Macau and Japanese cha is a Chinese loan too, so neither is the origin; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: tea is drunk everywhere and the two names split the world's languages, which makes the reveal work in every country; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: the Dutch role in spreading te is the standard account; c3 says 'largely' to stay at the defensible precision",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "49a1082d0734c6a51cc6522b76e22e1e4bdc4135274291f71430eef2ae9e00d5",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Chinese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tea comes from te, the Min Chinese word, and chai from cha, the Mandarin and Cantonese form. Both are Chinese words for tea.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hindi, Japanese and Portuguese took their words for tea from Chinese. None of them is the origin of tea or chai.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The te form spread from Hokkien (Min) speakers of Fujian's ports, largely through the Dutch East India Company.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English chai is from Hindi and Urdu chai, which came from Persian chay, itself from Chinese cha.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "efcbef7854a8cf9ae1fdc5597dd7a11ea895c2dfe9948c8c213e5be6b7b70982",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Chinese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English tea goes back, via Dutch, to Min Chinese te; chai goes back, via Persian and Hindi, to Chinese cha. Both are Chinese words for tea.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Hindi is where English got 'chai', but Hindi took the word from Persian, which took it from Chinese; 'tea' never came from Hindi."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hindi, Japanese and Portuguese carry the Chinese word (chai, cha) but did not originate it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The te form comes from Min-speaking Fujian ports and reached Europe largely through Dutch traders.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English chai came from Hindi, which had it from Persian, which took it from the Chinese cha form.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, etymology), c2 (distractor, etymology), c3 (explanation, etymology) and c4 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: chai reached English from Persian through Hindi, the order c4 gives, not 'through Hindi and Persian'.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.music.0134",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The English words 'tea' and 'chai' both trace back to which language?",
+  "answer": "Chinese",
+  "wrong": ["Hindi", "Japanese", "Portuguese"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.273,
+    "estimator": "v0"
+  }
+}

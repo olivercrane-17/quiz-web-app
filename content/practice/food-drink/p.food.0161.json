@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0161",
+  "status": "active",
+  "category": "food",
+  "tags": ["drinks", "south-america", "tea"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Mate is often shared from a single gourd among friends in Argentina, Uruguay, Paraguay and southern Brazil. Emigrants returning from South America also made it a popular drink in Syria.",
+  "learnMore": "Mate (drink)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Yerba mate is traditionally drunk from a gourd through a metal straw with a filter, called a bombilla."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Guaraná, chicha and horchata are not traditionally drunk from a gourd through a bombilla."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Yerba mate is commonly shared from a single gourd in Argentina, Uruguay, Paraguay and southern Brazil."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Emigrants returning from South America brought the mate habit to Syria, where it became a popular drink."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: guaraná and chicha are other South American drinks, which makes them tempting, but neither is drunk through a bombilla; horchata is drunk from glasses. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: mate is known worldwide through South American football and travel; players there have the home edge. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 30 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: the gourd and straw are a well-known image. Doubts: none. Lebanon is left out of c4 on purpose, so the item gives nothing away to p.food.0141.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "19f9579ecb00fc36ac1e3c6ec012a365d4f0ab39c48278b31b0e2f1e518d2340",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Yerba mate",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mate is drunk from a gourd through a metal straw with a filter, the bombilla.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Guaraná, chicha and horchata are not drunk from a gourd through a bombilla.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mate is shared from one gourd in Argentina, Uruguay, Paraguay and southern Brazil.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Syrians returning from Argentina brought the mate habit home, and Syria became a major mate-drinking country.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2f0acbda6a4f31307e6cf5ac361ec540ecc4a39cc8e17e11a42911318e5de031",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Yerba mate",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Yerba mate is drunk from a gourd through a metal straw with a filter called a bombilla.",
+              "confidence": "certain"
+            },
+            "note": "Cold tereré uses the same gear, which does not change the answer."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Guarana is a soft drink, chicha a fermented maize or fruit drink and horchata a milky drink; none is sipped through a bombilla.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Mate is shared from one gourd in Argentina, Uruguay, Paraguay and southern Brazil.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Syrian emigrants to Argentina brought the mate habit back to Syria, where it became popular.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.lang.0201",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which South American drink is sipped from a gourd through a metal straw called a bombilla?",
+  "answer": "Yerba mate",
+  "wrong": ["Guaraná", "Chicha", "Horchata"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.281,
+    "estimator": "v0"
+  }
+}

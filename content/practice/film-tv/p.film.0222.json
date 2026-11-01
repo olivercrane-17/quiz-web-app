@@ -1,0 +1,215 @@
+{
+  "id": "p.film.0222",
+  "status": "active",
+  "category": "film",
+  "tags": ["tv-series", "animation", "ocean-life"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "His neighbour Patrick lives under a rock, and Squidward in a stone head. The show's creator, Stephen Hillenburg, taught marine biology before he became an animator.",
+  "learnMore": "SpongeBob SquarePants",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In SpongeBob SquarePants, SpongeBob lives in a pineapple under the sea."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "SpongeBob does not live in a rock, an anchor or a sunken ship; Patrick lives under a rock and Mr. Krabs in an anchor."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Squidward lives in a house shaped like a stone head."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "SpongeBob's creator, Stephen Hillenburg, taught marine biology before becoming an animator."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: The rock and the anchor are the neighbours' homes, so a viewer with a hazy memory can slip; the pineapple is SpongeBob's. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a cartoon shown worldwide; no local knowledge is needed. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 26 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c0501a76b6feca506547259feddca6e3705b4fb38ed66edd53fd42d77b630a5a",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "A pineapple",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "SpongeBob lives in a pineapple under the sea.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Patrick lives under a rock and Mr. Krabs in an anchor; SpongeBob lives in neither, nor in a shipwreck.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Squidward's house is shaped like an Easter Island head.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hillenburg taught marine biology at an ocean institute in California before he studied animation.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f872aaa668bdf0cef4d6fb5823bd20ca006933857f8774689c4abaac113b97e7",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "A pineapple",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "SpongeBob lives in a pineapple.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Patrick lives under a rock and Mr. Krabs in an anchor; SpongeBob lives in neither, nor in a sunken ship.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: rock and anchor are other characters' homes, so they lure but are wrong for SpongeBob."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Squidward lives in a house shaped like a stone head.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Stephen Hillenburg taught marine biology before turning to animation.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed at certain, and all four claims are standard risk, so knowledge evidence suffices (§9.5.3). Lint clean, no myth hits. Dedupe flags a near item across the seal; checked locally with --reveal, it states a different fact, so related_ok.",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:35:04Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:35:04Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In the cartoon SpongeBob SquarePants, what does SpongeBob live in at the bottom of the sea?",
+  "answer": "A pineapple",
+  "wrong": ["A rock", "An anchor", "A sunken ship"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.95,
+    "spread": 0.235,
+    "estimator": "v0"
+  }
+}

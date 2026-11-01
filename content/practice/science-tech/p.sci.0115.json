@@ -1,0 +1,266 @@
+{
+  "id": "p.sci.0115",
+  "status": "active",
+  "category": "sci",
+  "tags": ["elements", "symbols", "word-origins"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "K stands for kalium, from an Arabic word for plant ashes, a source of potassium compounds. The same word gave English 'alkali', and 'potassium' itself comes from potash.",
+  "learnMore": "Potassium",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "K is the chemical symbol of potassium."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Krypton's symbol is Kr, calcium's is Ca and cobalt's is Co."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The symbol K comes from kalium, a name that goes back to an Arabic word for plant ashes."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The English word 'alkali' comes from the same Arabic word for plant ashes."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name potassium comes from potash."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: c1 and c2 match ptable (symbol K, Potassium; Kr, Krypton; Ca, Calcium; Co, Cobalt); the ptable summary for K says the symbol derives from Neo-Latin kalium and the name from potash, which supports c3 and c5, though ptable is built from Wikipedia and counts as one source with it. rivalTest: Krypton is the planted trap, because its name begins with K, but its symbol is Kr; calcium sounds as if it might be K; cobalt is Co. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 28 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: c3 and c4 rest on the standard derivation: kali (potash) from the Arabic qaly, plant ashes, which also gives 'alkali'. Checker A needs web evidence for c4. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c8a603e7bd2712c61db6b39d18f898655ce91c03bfcb9754f043851fbf790ecf",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "Potassium",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[number=19].summary",
+              "excerpt": "Potassium is a chemical element with symbol K (derived from Neo-Latin, kalium) and atomic number 19.",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[number=36], elements[number=20], elements[number=27]: name and symbol",
+              "excerpt": "\"name\": \"Krypton\" ... \"symbol\": \"Kr\"; \"name\": \"Calcium\" ... \"symbol\": \"Ca\"; \"name\": \"Cobalt\" ... \"symbol\": \"Co\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "K stands for kalium, from kali, which goes back to Arabic al-qali, the ashes of certain plants.",
+              "confidence": "certain"
+            },
+            "note": "ptable's potassium summary supports the first half ('symbol K (derived from Neo-Latin, kalium)') but not the Arabic root, so the claim is recorded on knowledge. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "'Alkali' came into English through Medieval Latin from Arabic al-qali, the ashes of saltwort and similar plants.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[number=19].summary",
+              "excerpt": "It was first isolated from potash, the ashes of plants, from which its name is derived.",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8c59eca2ee477fa67c8f83323e2883f6850a793fe6c855d4254dd87863e186d0",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "Potassium",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Potassium",
+              "excerpt": "{\"name\":\"Potassium\",\"symbol\":\"K\",\"number\":19}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Krypton|Calcium|Cobalt",
+              "excerpt": "{\"name\":\"Krypton\",\"symbol\":\"Kr\",\"number\":36} {\"name\":\"Calcium\",\"symbol\":\"Ca\",\"number\":20} {\"name\":\"Cobalt\",\"symbol\":\"Co\",\"number\":27}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The symbol K comes from Neo-Latin kalium, which goes back to an Arabic word for plant ashes (al-qalyah).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English alkali comes from the same Arabic word, al-qalyah, plant ashes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Potassium (summary)",
+              "excerpt": "It was first isolated from potash, the ashes of plants, from which its name is derived.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, etymology) and c4 (explanation, etymology) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced. Claims c1, c2 and c5 carry ptable evidence; the kalium and alkali etymologies do not.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which element has the chemical symbol K?",
+  "answer": "Potassium",
+  "wrong": ["Krypton", "Calcium", "Cobalt"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.274,
+    "estimator": "v0"
+  }
+}

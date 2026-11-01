@@ -1,0 +1,233 @@
+{
+  "id": "p.sport.0108",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["athletics", "marathon", "olympics", "london"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The 1908 route ran from Windsor Castle to the royal box in London's White City stadium: 26 miles 385 yards. That became the official marathon distance in 1921.",
+  "learnMore": "Marathon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The standard marathon distance of 42.195 km is the length of the course of the 1908 London Olympic marathon."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The marathon distance was not set by the Olympic courses in Athens (1896), Paris (1900) or Stockholm (1912)."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 1908 Olympic marathon started at Windsor Castle and finished in front of the royal box in the White City stadium."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "42.195 km is equal to 26 miles 385 yards."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 1908 distance of 42.195 km became the official marathon distance in 1921."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item. datasets: olympic-editions confirms that the 1908 Summer Games were in London (edition_id 5, 13 to 25 July 1908) and that Athens, Paris and Stockholm hosted in 1896, 1900 and 1912; the course facts are not in any pinned dataset, so c1, c3 and c5 need web evidence. c4 is a pure conversion (26 miles x 1.609344 km plus 385 yards x 0.9144 m = 42.194988 km), so a calculation can confirm it. rivalTest: Athens is the planted trap, because the race is named after Marathon in Greece and the first Olympic marathon was run there in 1896, over about 40 km. Paris 1924 was the first Olympics to use 42.195 km after it was fixed, but the stem asks which course set it, and that was London 1908. Stockholm 1912 used a different length. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Paris 1924 used the 42.195 km distance, so a reader could confuse 'set by' with 'first used after standardization'; the stem says 'set by the course', which only London fits.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f678b5e6df79eee2a4ccc4b12c584703edf0d465528af8d4fa8da053100c59f5",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "London",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1908 London Olympic marathon was run over 26 miles 385 yards, 42.195 km, and that course length became the standard.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Athens 1896, Paris 1900 and Stockholm 1912 marathons were each about 40 km, so none of them set 42.195 km.",
+              "confidence": "certain"
+            },
+            "note": "olympic-editions rows 1, 2 and 6 confirm only those Games' hosts and years, not course lengths. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1908 race started at Windsor Castle and finished in front of the royal box in the White City stadium.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "26 miles is 41,842.944 m and 385 yards is 352.044 m; together 42,194.988 m, which rounds to 42.195 km.",
+              "confidence": "certain"
+            },
+            "note": "A pure conversion. The record schema has no calculation entry, so it is recorded as knowledge with the arithmetic. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IAAF fixed 42.195 km as the official marathon distance in 1921.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2dc7ca8bb563434463ec2df712d0a70b5973cd9203bde8500b057ab3dfab5271",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "London",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1908 London Olympic marathon ran 26 miles 385 yards (42.195 km), the length later fixed as the standard.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1896 Athens, 1900 Paris and 1912 Stockholm courses were each roughly 40 km, not 42.195 km.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1908 race started below the windows of Windsor Castle and finished in front of the royal box at the White City stadium.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "26 x 1.609344 km + 385 x 0.0009144 km = 41.841 + 0.352 = 42.195 km (arithmetic re-run).",
+              "confidence": "certain"
+            },
+            "note": "A pure unit conversion."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IAAF adopted 42.195 km as the standard marathon distance in 1921.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, number), c2 (distractor, date), c3 (explanation, date), c4 (explanation, number) and c5 (explanation, date) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. c4 is a unit conversion; the record schema has no calculation method, so keep conversions inside an evidenced claim. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The marathon's distance of 42.195 km was set by the course of the Olympic marathon in which city?",
+  "answer": "London",
+  "wrong": ["Athens", "Paris", "Stockholm"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.24,
+    "spread": 0.184,
+    "estimator": "v0"
+  }
+}

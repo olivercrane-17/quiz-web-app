@@ -1,0 +1,245 @@
+{
+  "id": "p.nat.0217",
+  "status": "active",
+  "category": "nat",
+  "tags": ["behaviour", "monkeys", "africa", "communication"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Each response fits its hunter. Climbing a tree escapes a leopard but exposes a monkey to an eagle, while snake calls make vervets stand tall and search the grass.",
+  "learnMore": "Vervet monkey",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "On hearing an eagle alarm call, vervet monkeys look up and run into dense bushes."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Vervets respond to eagle alarm calls by taking cover in bushes, not by climbing trees, searching the grass or freezing."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Vervet monkeys give different alarm calls for leopards, eagles and snakes."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Vervets climb trees on hearing a leopard alarm call, which protects them from leopards but not from eagles."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "On hearing a snake alarm call, vervets stand up on their hind legs and scan the ground."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed; all standard: no digit, number word, superlative or other C26 trigger, and each is textbook knowledge. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies; every claim is standard-risk knowledge a checker can confirm at certain confidence, so the item needs no search. rivalTest: Two distractors are the real responses to the other calls (trees for leopards, scanning the grass for snakes), so they tempt anyone who half-remembers the study. The foothold is reasoning: an eagle strikes from above, so open treetops are the wrong place to be. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: vervets live across eastern and southern Africa; the reasoning needs no local knowledge. style: Oxford spelling, plain hyphens only, explanation of 29 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none; this is the classic Seyfarth, Cheney and Marler alarm-call study.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d5c231a3173a6ff06895165bea8cf4b20bcd030cb1d05add7e18f6d3bf37c0eb",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "Dive into thick bushes",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "When vervets hear the eagle alarm they look up and run into dense bushes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Climbing trees is the leopard response, scanning the ground is the snake response, and freezing is not the eagle response.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vervet monkeys use distinct alarm calls for leopards, eagles and snakes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "On a leopard alarm vervets climb into trees, out of a leopard's reach but exposed to an eagle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "On a snake alarm vervets stand up on their hind legs and scan the ground around them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "304e161fc01bbee542303508dff56618c7c3e5e19ad2721123631b37803de5d8",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "Dive into thick bushes",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vervet monkeys answer an eagle alarm by looking up and running into dense bushes.",
+              "confidence": "certain"
+            },
+            "note": "Classic field-playback result: leopard call, climb into trees; eagle call, look up and take cover in bushes; snake call, stand and scan the ground."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The eagle response is cover in bushes; trees are the leopard response and scanning the ground the snake response.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vervets give distinct alarm calls for leopards, eagles and snakes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A leopard alarm sends vervets up into trees, which would be a poor refuge from an eagle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A snake alarm makes vervets stand on their hind legs and look at the ground.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "accept",
+      "reason": "A and B pass; all 5 claims confirmed in both checks; no high-risk claims; every knowledge confirmation at certain. Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:21:42Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:21:42Z",
+      "nearestId": "p.nat.0137",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:21:42Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Vervet monkeys give a different alarm call for each kind of predator. How do they react to the 'eagle' call?",
+  "answer": "Dive into thick bushes",
+  "wrong": ["Climb up into trees", "Search the grass", "Freeze in place"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.156,
+    "estimator": "v0"
+  }
+}

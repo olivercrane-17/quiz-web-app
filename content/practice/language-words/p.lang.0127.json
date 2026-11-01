@@ -1,0 +1,212 @@
+{
+  "id": "p.lang.0127",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["place-names", "maori", "countries"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "It is often translated as land of the long white cloud. The English name comes from Zeeland, a Dutch province, via the Latin Nova Zeelandia on Dutch maps.",
+  "learnMore": "Aotearoa",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Aotearoa is the Māori name for New Zealand."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Samoa, Fiji and Tonga are separate Pacific countries; Fiji's own name in Fijian is Viti."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Aotearoa is often translated as 'land of the long white cloud'."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "New Zealand is named after Zeeland, a province of the Netherlands, through the Latin Nova Zeelandia used by Dutch map-makers."
+    }
+  ],
+  "writerNotes": "The translation is hedged with 'often translated' because the original sense of Aotearoa is debated. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: mledoze-countries cca3=NZL name.native.mri.common 'Aotearoa' and altSpellings 'Aotearoa'; cca3=FJI name.native.fij 'Viti'; rival test: Samoa, Fiji and Tonga are Polynesian or Pacific neighbours with Māori-like sounds; none is called Aotearoa; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: widely seen on New Zealand passports, sport and tourism, and fair through elimination elsewhere; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "665b9bca8fcbca0d192b77afc0abe40b990bf5b5ced7be032f6bf018dacd647c",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "New Zealand",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=NZL, name.native.mri",
+              "excerpt": "NZL name.native.mri {\"official\":\"Aotearoa\",\"common\":\"Aotearoa\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=FJI, name.native.fij",
+              "excerpt": "FJI name.native.fij {\"official\":\"Matanitu Tugalala o Viti\",\"common\":\"Viti\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Samoa, Fiji and Tonga are separate entries in the same file; the excerpt shows Fiji's Fijian name, Viti."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Aotearoa is commonly glossed as land of the long white cloud.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "After Tasman's voyage of 1642, Dutch map-makers named the land Nova Zeelandia after the Dutch province of Zeeland, which became New Zealand in English.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "32119c2fb78e09727c9ee441b1e810e7d44b3d933f43504716bd900a4d560342",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "New Zealand",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=NZL name.native.mri.common",
+              "excerpt": "NZL: \"Aotearoa\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Maori native name of New Zealand. Pedantic note: some accounts say Aotearoa first named the North Island only, but it is today's Maori name for the whole country, and the stem asks for today's usage."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=FJI name.native.fij.common",
+              "excerpt": "FJI: \"Viti\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Fiji's own name in Fijian; Samoa and Tonga are also separate countries (cca3 WSM, TON in the same file)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Aotearoa is commonly rendered as land of the long white cloud; the item says 'often translated', which is fair.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dutch navigators named the land after Zeeland, and 17th-century Dutch maps showed Latin Nova Zeelandia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, etymology) and c4 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Aotearoa is the Māori name for which country?",
+  "answer": "New Zealand",
+  "wrong": ["Samoa", "Fiji", "Tonga"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.291,
+    "estimator": "v0"
+  }
+}

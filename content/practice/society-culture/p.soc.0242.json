@@ -1,0 +1,228 @@
+{
+  "id": "p.soc.0242",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["money", "currencies", "switzerland", "latin"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "CH stands for Confoederatio Helvetica, Latin for the Swiss Confederation, which also gives Switzerland its CH car stickers and .ch web addresses. F is for franc.",
+  "learnMore": "Swiss franc",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The ISO 4217 code for the Swiss franc is CHF."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "SWF, SFR and SZF are not the ISO 4217 code for the Swiss franc."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "CH stands for Confoederatio Helvetica, Latin for the Swiss Confederation."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "CH is Switzerland's international vehicle registration code, and .ch is its internet country code."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: money and trade. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. datasets: currency-codes (codes-all.csv): 'SWITZERLAND, Swiss Franc, CHF, 756' (c1, c2); country-codes (country-codes.csv): CH, Switzerland, TLD .ch (c4). c3 needs web evidence. rivalTest: SFR looks like the 'SFr.' abbreviation seen on Swiss price tags, which makes it the trap, but the stem asks for the international code, which is CHF. Nothing survives against the key. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: the CH sticker and .ch addresses give players everywhere a foothold. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 26 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 4 (medium): SFR and SWF look more natural to many. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e3841a066a82cbf80e530567d8eb1998cc73504aa62fa5184d65a092056e46b2",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "CHF",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "currency-codes",
+              "version": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+              "file": "codes-all.csv",
+              "locator": "Entity=SWITZERLAND, Currency=Swiss Franc",
+              "excerpt": "SWITZERLAND,Swiss Franc,CHF,756,2,",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "LIECHTENSTEIN,Swiss Franc,CHF,756,2, gives the same code."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "currency-codes",
+              "version": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+              "file": "codes-all.csv",
+              "locator": "AlphabeticCode = SWF, SFR or SZF, over every current and withdrawn row",
+              "excerpt": "No row of codes-all.csv carries the alphabetic code SWF, SFR or SZF; the Swiss franc's row is SWITZERLAND,Swiss Franc,CHF,756,2,",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Dataset evidence by absence over the full ISO 4217 list, withdrawn codes included."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "CH abbreviates Confoederatio Helvetica, Latin for the Swiss Confederation.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "CH is Switzerland's international vehicle code and .ch its internet country-code domain.",
+              "confidence": "certain"
+            },
+            "note": "mledoze-countries (cca3=CHE) lists tld .ch; the vehicle code rests on knowledge."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In ISO 4217 the first two letters are the country code and the third usually the currency's initial, so the F in CHF stands for franc.",
+              "confidence": "certain"
+            },
+            "note": "Checker addition (role explanation, standard), from 'F is for franc'."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "21058c2a1f667f9ee81bc6202e572460bae51ea755463bac6181992167ff3e0d",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "CHF",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "currency-codes",
+              "version": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+              "file": "codes-all.csv",
+              "locator": "AlphabeticCode=CHF",
+              "excerpt": "SWITZERLAND,Swiss Franc,CHF,756,2,",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Rival test: 'SFr' and 'SFR' are common written abbreviations, but the stem asks for the international (ISO) code."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "currency-codes",
+              "version": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+              "file": "codes-all.csv",
+              "locator": "AlphabeticCode in SWF, SFR, SZF",
+              "excerpt": "No row carries any of the codes SWF, SFR or SZF.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "CH abbreviates Confoederatio Helvetica, Latin for the Swiss Confederation.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "country-codes",
+              "version": "2d84034a0cae19ea5444b78c2131304a5c7f4bb9",
+              "file": "country-codes.csv",
+              "locator": "ISO3166-1-Alpha-2=CH",
+              "excerpt": "DS (distinguishing sign of vehicles in international traffic) = CH; TLD = .ch",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c3 (explanation, etymology) has only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. Only explanation claims lack evidence, so the redraft can keep the question and write the explanation from standard-risk or dataset-backed facts. c1 and c2 have dataset evidence (ISO 4217); only c3 (Confoederatio Helvetica) lacks it, so the redraft needs one web result or a standard-risk explanation. Redraft under a new id.",
+      "decidedAt": "2026-11-01T04:47:17Z"
+    }
+  },
+  "format": "mc",
+  "stem": "What is the international three-letter code for the Swiss franc?",
+  "answer": "CHF",
+  "wrong": ["SWF", "SFR", "SZF"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.297,
+    "estimator": "v0"
+  }
+}

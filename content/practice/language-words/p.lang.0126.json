@@ -1,0 +1,243 @@
+{
+  "id": "p.lang.0126",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["place-names", "countries", "french"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Allemagne comes from the Alemanni tribe, Finnish Saksa from the Saxons, and Polish Niemcy from a Slavic word for people who could not speak the local tongue.",
+  "learnMore": "Names of Germany",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Germany is called Allemagne in French and Niemcy in Polish."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Austria, Belgium and Switzerland are called Autriche, Belgique and Suisse in French."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The French name Allemagne comes from the Alemanni, a Germanic tribal group."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The Finnish name for Germany, Saksa, comes from the Saxons."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Polish Niemcy comes from a Slavic word related to niemy, 'mute', once used for foreigners who could not speak the local language."
+    }
+  ],
+  "writerNotes": "Easy through Allemagne and Alemania; the reveal shows how one country collects very different names. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: mledoze-countries cca3=DEU translations.fra 'Allemagne', translations.pol 'Niemcy', translations.fin 'Saksa'; cca3=AUT translations.fra 'Autriche', BEL 'Belgique', CHE 'Suisse'; rival test: Austria and Switzerland are German-speaking, which is why they tempt; their French names are Autriche and Suisse; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: anyone who has seen Spanish, French or Portuguese names for Germany has a foothold; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none on the key; c5 is the standard account of Niemcy, worth a reference check",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ab780639d9f2548133c5f188a05e87ef7e57b3b49e56c3964d161c7352be80d7",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Germany",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=DEU translations.fra and translations.pol",
+              "excerpt": "DEU translations.fra {\"official\":\"République fédérale d'Allemagne\",\"common\":\"Allemagne\"} | DEU translations.pol {\"official\":\"Republika Federalna Niemiec\",\"common\":\"Niemcy\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=AUT, BEL and CHE, translations.fra",
+              "excerpt": "AUT translations.fra {\"official\":\"République d'Autriche\",\"common\":\"Autriche\"} | BEL translations.fra {\"official\":\"Royaume de Belgique\",\"common\":\"Belgique\"} | CHE translations.fra {\"official\":\"Confédération suisse\",\"common\":\"Suisse\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "French Allemagne comes from the Alemanni (Alamanni), a confederation of Germanic tribes on the upper Rhine.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Finnish Saksa comes from the name of the Saxons.",
+              "confidence": "certain"
+            },
+            "note": "The pinned countries file confirms the Finnish name itself (DEU translations.fin: Saksa); its origin rests on knowledge. High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Polish Niemcy goes back to a Slavic word related to niemy, mute, for foreigners who could not speak the local language.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "114b01192a3ea9c855265bed051fc96fd8461a3c4d8e4a9cb5f0f28d23b4c7ca",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Germany",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=DEU translations.fra.common; cca3=DEU translations.pol.common",
+              "excerpt": "DEU: \"Allemagne\"; DEU: \"Niemcy\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "French and Polish names for Germany. Rival test: Allemagne and Niemcy fit no other country in the options."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=AUT translations.fra.common; cca3=BEL translations.fra.common; cca3=CHE translations.fra.common",
+              "excerpt": "AUT: \"Autriche\"; BEL: \"Belgique\"; CHE: \"Suisse\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "French names of the three distractors; none is Allemagne."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "French Allemagne comes from the Alemanni, a Germanic tribal confederation.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Finnish Saksa for Germany comes from the Saxons.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Polish Niemcy is from Slavic nemu (mute), a name for foreigners who could not speak the local language; this is the standard explanation.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, etymology), c4 (explanation, etymology) and c5 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "French speakers call it Allemagne and Poles call it Niemcy. Which country is it?",
+  "answer": "Germany",
+  "wrong": ["Austria", "Belgium", "Switzerland"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.172,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "id": "p.sport.0120",
+  "status": "active",
+  "category": "sport",
+  "tags": ["sumo", "rules", "japan"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Belt grips, open-hand slaps, shoves and lifts are all legal. Hair pulling and closed-fist punches are fouls; otherwise a wrestler loses by leaving the ring or touching down.",
+  "learnMore": "Sumo",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In sumo, deliberately pulling an opponent's hair is a foul that loses the bout."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Gripping the opponent's belt (mawashi), open-hand slaps, pushing and lifting the opponent are legal techniques in sumo."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Punching with a closed fist is also a foul in sumo."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A sumo wrestler loses by leaving the ring or by touching the ground with any part of the body other than the soles of the feet."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; none is high and c1, c2, c3, c4 are standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor); the standard claims carry none of those triggers and state rules or well-known facts. datasets: no pinned dataset covers sumo rules; every claim is standard, with no number, date or superlative. rivalTest: Open-hand slaps are the main rival, because they look violent, but slapping (tsuppari) is a standard legal technique; belt grips and lifts are how many bouts are won. Hair pulling is a listed foul (kinjite), so the key holds. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. Eye poking and choking are also fouls; the explanation names two fouls to stay short.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0f33d0a74d91a7a70a968e3add4801a2c7484651c7649b99d322296db859d710",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Pulling the hair",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pulling the hair is a kinjite, a forbidden move, and loses the bout.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Belt grips, open-hand thrusts and slaps, pushing and lifting the opponent are all legal sumo techniques.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Striking with a closed fist is also a kinjite.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A wrestler loses by leaving the ring or touching the ground with anything but the soles of the feet.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2664c0e0c6bd3ae79f862303ef8945a8bf2e1ddd76817f2b498e19e8a7a3fca7",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Pulling the hair",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pulling an opponent's hair (the topknot) is one of sumo's prohibited acts (kinjite) and loses the bout by disqualification.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Belt grips, open-hand slaps, pushes and lifts are standard legal sumo techniques.",
+              "confidence": "certain"
+            },
+            "note": "True in general terms. Two narrow variants are prohibited acts: gripping the front flap of the mawashi over the groin, and clapping both ears at once. See the ambiguity note."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Closed-fist punches are prohibited acts in sumo.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A rikishi loses by leaving the ring or by touching the ground with anything other than the soles of the feet.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Two distractors have narrow prohibited variants (the front groin flap of the belt; a double ear clap), so a sumo expert could quibble. 'Gripping the belt' and 'open-hand slaps' are legal as written, and pulling hair is the clear foul, so the key stands. The explanation's 'all legal' could say 'generally legal'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Both checks pass; all four claims are standard risk and confirmed at certain in both checks. B's note (narrow prohibited variants: the front flap of the belt, a double ear clap) leaves the three distractors legal as written and hair pulling the one clear foul, so no change.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In sumo, which of these is a foul that loses the bout?",
+  "answer": "Pulling the hair",
+  "wrong": ["Gripping the belt", "Open-hand slaps", "Lifting the opponent"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.245,
+    "estimator": "v0"
+  }
+}

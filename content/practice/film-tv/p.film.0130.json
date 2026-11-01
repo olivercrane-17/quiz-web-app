@@ -1,0 +1,236 @@
+{
+  "id": "p.film.0130",
+  "status": "cut",
+  "category": "film",
+  "tags": ["world-cinema", "martial-arts", "languages"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Many Hong Kong martial arts films were made in Cantonese, but this one is in Mandarin. As Taiwan's entry, it won Best Foreign Language Film among four Oscars.",
+  "learnMore": "Crouching Tiger, Hidden Dragon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Crouching Tiger, Hidden Dragon (2000) is a Mandarin-language film."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Crouching Tiger, Hidden Dragon is not in Cantonese, Japanese or Korean."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Many Hong Kong martial arts films were made in Cantonese."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Crouching Tiger, Hidden Dragon won four Academy Awards, including Best Foreign Language Film."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The film was Taiwan's entry for the Best Foreign Language Film award."
+    }
+  ],
+  "writerNotes": "C22 pairs this with p.food.0137, where Mandarin is the citrus fruit, a different meaning of the same word. Not the same fact. Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Cantonese is the planted trap, because Hong Kong martial arts cinema mostly used it; Japanese and Korean are other East Asian film languages. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a non-US production; the options can be reasoned from names, eras and languages without local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 28 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "02ede617e09b51ec4d816f4572b53795bfacb422c0ae8c2a9f4d3a156209bdd2",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Mandarin",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Crouching Tiger, Hidden Dragon (2000) is a Mandarin-language film.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Its dialogue is Mandarin, not Cantonese, Japanese or Korean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Much of Hong Kong's martial arts cinema was made in Cantonese.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It won four Oscars: Foreign Language Film, Cinematography, Art Direction and Original Score.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Taiwan submitted it for Best Foreign Language Film.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "22bf85a68c41a49a6c59199f091a94c7f80c14dd672f19115f82f711eadaaed3",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Mandarin",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Crouching Tiger, Hidden Dragon (2000) is in Mandarin.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Cantonese is the tempting genre default, but the dialogue is Mandarin."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It is not in Cantonese, Japanese or Korean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Many Hong Kong martial arts films were made in Cantonese.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It won four Oscars: Foreign Language Film, Cinematography, Art Direction and Original Score.",
+              "confidence": "certain"
+            },
+            "note": "Number claim; needs check A's external evidence."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was Taiwan's submission for the Foreign Language Film award.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "sensitivity",
+            "severity": "note",
+            "note": "'As Taiwan's entry' is a neutral statement of how the Academy listed the film, not a sovereignty claim. If the editor wants no sovereignty-adjacent wording at all (3.7), drop that clause and claim c5."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 and c4 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). Redraft it under a new id once evidence can be gathered. Checker B also flagged 'Taiwan's entry' as sovereignty-adjacent wording, and dedupe flagged p.food.0137 (same answer).",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In which language was Ang Lee's Crouching Tiger, Hidden Dragon (2000) made?",
+  "answer": "Mandarin",
+  "wrong": ["Cantonese", "Japanese", "Korean"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.19,
+    "estimator": "v0"
+  }
+}

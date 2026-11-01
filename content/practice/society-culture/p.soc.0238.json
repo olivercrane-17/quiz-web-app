@@ -1,0 +1,237 @@
+{
+  "id": "p.soc.0238",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["money", "currencies", "south-africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "It is named after the Witwatersrand, the ridge on which Johannesburg grew after gold was found there in 1886. The rand replaced the South African pound.",
+  "learnMore": "South African rand",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "South Africa introduced the rand as its currency in 1961."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Kenya, Nigeria and Ghana did not introduce the rand; their currencies are the shilling, the naira and the cedi."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The rand is named after the Witwatersrand."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Gold was discovered on the Witwatersrand in 1886, and Johannesburg grew up on the ridge."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The rand replaced the South African pound."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: money and trade. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. datasets: currency-codes (codes-all.csv): 'SOUTH AFRICA, Rand, ZAR, 710'; the same file lists the rand for Lesotho and Namibia, so neither they nor Eswatini (in the same monetary area) is used as a distractor. The 1961 date in c1 needs web evidence. rivalTest: the distractors are other large African economies with their own currencies; nothing survives against South Africa. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: the rand is widely known, and the name points many players to South Africa. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 26 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 2 (easy): most know it. doubts: none. dedupe: C22 flags a near-duplicate of p.food.0127 (rooibos comes from South Africa); the pair shares only the answer word, not the fact, so related_ok is suggested to the editor.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c9b4701810b66d767529f7d57842e0576b19bc6e5711941532c111b46b829213",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "South Africa",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "South Africa introduced the rand on 14 February 1961, replacing the pound.",
+              "confidence": "certain"
+            },
+            "note": "currency-codes lists SOUTH AFRICA,Rand,ZAR (which settles the key among the options) but carries no introduction date, so the 1961 date rests on knowledge. High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "currency-codes",
+              "version": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+              "file": "codes-all.csv",
+              "locator": "Entity=KENYA, NIGERIA, GHANA and SOUTH AFRICA (current rows)",
+              "excerpt": "KENYA,Kenyan Shilling,KES,404,2, | NIGERIA,Naira,NGN,566,2, | GHANA,Ghana Cedi,GHS,936,2, | SOUTH AFRICA,Rand,ZAR,710,2,",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The three distractor countries use the shilling, the naira and the cedi; the rand is South Africa's."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The rand takes its name from the Witwatersrand, the ridge where Johannesburg stands.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gold was found on the Witwatersrand in 1886, and Johannesburg grew up on the ridge.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The rand replaced the South African pound at two rand to the pound.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bea294477b828b1ca35231e5825140d40c2afd993ecef7cf324f0f2587fc22b8",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "South Africa",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "South Africa introduced the rand on 14 February 1961.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "currency-codes",
+              "version": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+              "file": "codes-all.csv",
+              "locator": "Entity=KENYA, NIGERIA, GHANA, SOUTH AFRICA",
+              "excerpt": "KENYA,Kenyan Shilling,KES,404,2, | NIGERIA,Naira,NGN,566,2, | GHANA,Ghana Cedi,GHS,936,2, | SOUTH AFRICA,Rand,ZAR,710,2,",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The file shows today's currencies; that the three never introduced the rand in 1961 rests on knowledge."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The rand is named after the Witwatersrand.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gold was found on the Witwatersrand in 1886 and Johannesburg grew there.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The rand replaced the South African pound.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, date), c3 (explanation, etymology) and c4 (explanation, date) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. The gap includes the key, a label or a distractor, so the redraft needs evidence for the question itself. c2 has dataset evidence; c1, c3 and c4 do not. Redraft under a new id.",
+      "decidedAt": "2026-11-01T04:47:17Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which country introduced the rand as its currency in 1961?",
+  "answer": "South Africa",
+  "wrong": ["Kenya", "Nigeria", "Ghana"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.84,
+    "spread": 0.471,
+    "estimator": "v0"
+  }
+}

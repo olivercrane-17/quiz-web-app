@@ -1,0 +1,185 @@
+{
+  "id": "p.geo.0106",
+  "status": "active",
+  "category": "geo",
+  "tags": ["mountains", "africa", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Kilimanjaro stands in northern Tanzania, close to the Kenyan border. Many famous photographs of it are taken from Kenya's Amboseli National Park, which helps explain the mix-up.",
+  "learnMore": "Mount Kilimanjaro",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Mount Kilimanjaro is in Tanzania, not Kenya."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kilimanjaro lies in northern Tanzania, close to the border with Kenya."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kenya's Amboseli National Park, across the border, is a well-known place to photograph Kilimanjaro."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is high under the C26 floor because the item is counterintuitive; the schema's riskReason list has no 'counterintuitive', so I used checker_doubt to flag it for external evidence. c2 and c3 are standard. Datasets: none: natural-earth's region points have no Kilimanjaro, so c1 needs a web result from checker A. Rival test: argued for true: Kenya markets the mountain and Amboseli frames the classic photographs, which is why the myth exists; but the summit and the national park are in Tanzania, and nobody disputes the border there. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Kilimanjaro is known everywhere, and the confusion is common outside East Africa. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 27 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none; it is a myth in the guide's sense, a confident wrong belief, not a trick.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d218765bf5b7d02abc43df7697d98f5416ac826a88358d6dd9b43a826b335e71",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kilimanjaro, Africa's highest mountain, stands in north-eastern Tanzania, south of the Kenyan border.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only. No pinned dataset covers this, and WebSearch was unavailable this session (the turn's shared search quota was exhausted before any search ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). GeoNames admin1 TZ.06 'Kilimanjaro' only shows a Tanzanian region named after the mountain, which is context, not proof."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kilimanjaro is in northern Tanzania, a short distance from the border with Kenya.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Amboseli National Park in southern Kenya is a classic place to photograph Kilimanjaro across the border.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6e0dd7c3b463d971ea7927c4f6844a4db0fc796cfe23c374e961701872212435",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kilimanjaro is a volcanic massif in north-eastern Tanzania, on the Kenyan border region; Kilimanjaro National Park is Tanzanian.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: no dataset covers this. Needs dataset or web evidence in the other check (I could not search: the shared WebSearch budget was spent)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kilimanjaro lies in northern Tanzania, close to the Kenyan border.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Amboseli National Park in southern Kenya is famous for views of Kilimanjaro across the border.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key of a counterintuitive item, so high by the C26 floor) rest on knowledge alone in both checks: no pinned dataset covers them and neither checker could search. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with web evidence, or with the claim stepped down or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Mount Kilimanjaro is in Kenya.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.215,
+    "estimator": "v0"
+  }
+}

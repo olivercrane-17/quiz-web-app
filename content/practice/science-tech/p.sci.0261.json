@@ -1,0 +1,211 @@
+{
+  "id": "p.sci.0261",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["computing", "computer-history", "dates"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Many programs stored years as two digits, so 2000 might be read as 1900. Years of repair work meant few serious failures when 1 January 2000 arrived.",
+  "learnMore": "Year 2000 problem",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The millennium bug, or Y2K, was the risk that software storing years as two digits would read 2000 as 1900."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The millennium bug was not a computer virus, a shortage of memory chips or a solar storm."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Many older programs stored years using only their last two digits."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Years of repair work meant that few serious failures occurred on 1 January 2000."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors and no warnings for this item. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high (the C26 floor). datasets: no pinned dataset covers this; c1 and c4 need web evidence. rivalTest: 'A virus set for 2000' is the common misconception, because the bug was called a bug and feared like an attack; the chip shortage and solar storm are other kinds of computer trouble. Against the key: two-digit year storage is the standard definition of the problem. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 27 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Some embedded hardware clocks had the same date fault, but that is still two-digit years, which the key covers. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "3802b130fe4c67b6208273d975c6f193dab4db0220e089d5d3d9c97a4d3599e3",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "Two-digit years in code",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Y2K was the risk that software storing years as two digits would treat 00 as 1900 instead of 2000.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Y2K was a date-format bug, not a virus, a chip shortage or a solar storm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Many older systems stored only the last two digits of the year to save memory.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "After years of costly remediation, 1 January 2000 passed with few serious failures.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). Some analysts argue that failures would have been few anyway, so the causal 'meant that' is the mainstream view rather than a settled fact; see the issue."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c4 and the explanation say repair work 'meant' few failures. That is the mainstream view, but how much the fixes prevented is debated; a neutral form such as 'After years of repair work, few serious failures occurred' would avoid the causal claim."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "656b0a0a53e3c5c727cf53d100bd0f17a094c6021d4b7e2a79a82c50427d5b1f",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "Two-digit years in code",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Y2K was the risk that two-digit year fields would make 2000 read as 1900.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The millennium bug was not a virus, a chip shortage or a solar storm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Many older programs stored years as two digits.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Heavy remediation work meant few serious failures on 1 January 2000.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, number), c3 (explanation, number) and c4 (explanation, date) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. For a redraft, A suggests a neutral wording for the repair work, because how much it prevented is debated. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T04:50:16Z"
+    }
+  },
+  "format": "mc",
+  "stem": "What was the computer problem known as the millennium bug, or Y2K?",
+  "answer": "Two-digit years in code",
+  "wrong": [
+    "A virus set for 2000",
+    "A memory chip shortage",
+    "A solar storm in 1999"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.355,
+    "estimator": "v0"
+  }
+}

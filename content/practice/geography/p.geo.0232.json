@@ -1,0 +1,225 @@
+{
+  "id": "p.geo.0232",
+  "status": "active",
+  "category": "geo",
+  "tags": ["islands", "pacific", "polynesia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The island lies more than 3,000 km off the Chilean coast, and its Polynesian people call it Rapa Nui.",
+  "learnMore": "Easter Island",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Easter Island belongs to Chile."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Easter Island is not part of Peru, New Zealand or France."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Easter Island lies more than 3,000 km from the coast of mainland Chile."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Easter Island's Polynesian people call the island Rapa Nui."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors and one C22 warning: the same answer as p.geo.0107, which asks where the Atacama Desert lies, a different fact; related, not a duplicate, for the editor to confirm with related_ok. Claims: every checkable statement is listed, distractors included; c3 (number) is high under the C26 floor, and c1, c2 and c4 are standard. Datasets: geonames-cities: Hanga Roa, CL, -27.15253, -109.42438, the island's town (c1). Caldera, CL, -27.06812, -70.81921, on the nearest stretch of the Chilean mainland, is about 3,800 km away by great circle from those coordinates (c3). Rival test: France pulls because of French Polynesia to the west, New Zealand because the island is Polynesian, and Peru because it is the next mainland country north. Against the key: nothing; the island has belonged to Chile since the 19th century. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Easter Island is famous worldwide for its statues, which the item does not mention. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 19 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c4 is standard. Seed: 3 (medium): many players know it, others guess a Pacific power. Counterintuitive: false. Doubts: none. Related: p.hist.0127 asks for the name of the island's statues, a different fact, and p.geo.0107 also has Chile as its answer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1c796d85b15e114a08783640a54549182af9ccf9d8a1e7feb570421019011f97",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Chile",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Hanga Roa, country=CL",
+              "excerpt": "{\"name\":\"Hanga Roa\",\"lat\":\"-27.15253\",\"lng\":\"-109.42438\",\"country\":\"CL\",\"admin1\":\"01\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Hanga Roa, Easter Island's town, is listed under Chile (admin1 CL.01, Valparaíso)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Easter Island has been part of Chile since 1888; Peru, New Zealand and France do not hold it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=I. de Pascua; name=Punta Lavapié",
+              "excerpt": "{\"name\":\"I. de Pascua\",\"featurecla\":\"island\",\"subregion\":\"Polynesia\",\"coordinates\":[-109.367909,-27.102227]}; {\"name\":\"Punta Lavapié\",\"featurecla\":\"cape\",\"subregion\":null,\"coordinates\":[-73.603044,-37.1712]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Great-circle distance from the island to Punta Lavapié on the mainland coast: 3,525 km. Cross-check: the nearest of 304 mainland Chilean places in geonames-cities (Lebu) is 3,530 km from Hanga Roa. Well over 3,000 km."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The islanders, a Polynesian people, call their island Rapa Nui.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "db39b9a17d6234c96ae7de9b609c8f27e61097ac5e0f0c551361e04a5c7e9884",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Chile",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Easter Island (Rapa Nui) belongs to Chile, which annexed it in 1888.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Easter Island is not part of Peru, New Zealand or France.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "Chile polygon (110m) against geonames-cities Hanga Roa, CL (-27.15253, -109.42438)",
+              "excerpt": "Shortest great-circle distance from Hanga Roa to the Chilean mainland coast in the 110m polygon: 3,528 km (nearest vertex 73.59 W, 37.16 S).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Computed from two pinned datasets (Hanga Roa from geonames-cities 1.1.65); more than 3,000 km holds with a wide margin."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rapa Nui is the Polynesian name of Easter Island and of its people.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c3 (natural-earth) carries dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits. Dedupe: p.geo.0107 asks where the Atacama lies, a different fact, so related_ok.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.geo.0107",
+      "score": 0.7,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which country does Easter Island belong to?",
+  "answer": "Chile",
+  "wrong": ["Peru", "New Zealand", "France"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.54,
+    "spread": 0.283,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "id": "p.food.0257",
+  "status": "active",
+  "category": "food",
+  "tags": ["baking", "germany", "food-science"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Lye, a strong alkali, speeds up browning on the dough's surface. It is caustic, but baking turns it into harmless compounds, leaving the dark, chewy skin.",
+  "learnMore": "Pretzel",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Traditional German pretzels (Laugenbrezeln) are dipped in a lye solution before baking."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "German pretzels are not dipped in sugar syrup, black tea or vinegar to make their crust."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The alkaline lye speeds the browning (Maillard) reactions on the pretzel's surface."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Lye is caustic, but during baking it reacts with carbon dioxide and becomes harmless."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Sugar syrup and tea would also darken a crust, which makes them plausible; vinegar is the acid opposite of lye. Against the key: home bakers often substitute baked baking soda, a weaker alkali, which does not change the traditional answer. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: pretzels are sold worldwide; the crust colour is the foothold. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 26 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: almost nobody expects a caustic chemical. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "51a2b003c2e9a9ffd524a0535eb6b6f184ce9c263410e7508744c524e7a677c0",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "A lye solution",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "German Laugenbrezeln are dipped in a lye (sodium hydroxide) solution before baking.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "They are not dipped in sugar syrup, black tea or vinegar for the crust.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The alkaline surface browns fast through Maillard reactions.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the oven the lye reacts with carbon dioxide to form sodium carbonate, which is safe to eat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "style",
+            "severity": "note",
+            "note": "Only the key carries an article ('A lye solution' against 'Sugar syrup', 'Vinegar' and 'Black tea'); 'Lye solution' keeps the forms parallel (§4 rule 1)."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "de747fe6b7c56d80efd2679e0b1524eaf792652ab87243c8bdcdff91eea1a25f",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "A lye solution",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Traditional German pretzels (Laugenbrezeln) are dipped in a lye (sodium hydroxide) solution before baking.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "They are not dipped in sugar syrup, black tea or vinegar.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The alkaline dip speeds browning (Maillard) reactions on the surface.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lye is caustic, but baking neutralises it, as it reacts with carbon dioxide and the dough.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. A's style note is weighed: only the key carries an article ('A lye solution'). Every option still fits the stem's grammar, so the cue is weak, and changing the key would need two fresh checks; accepted as written, note passed to the writer.",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Before baking, German pretzels are dipped briefly in what, which gives them their glossy brown crust?",
+  "answer": "A lye solution",
+  "wrong": ["Sugar syrup", "Black tea", "Vinegar"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.339,
+    "estimator": "v0"
+  }
+}

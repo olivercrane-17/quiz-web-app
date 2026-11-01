@@ -1,0 +1,220 @@
+{
+  "id": "p.sport.0112",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["world-cup", "football", "brazil"],
+  "region": "global",
+  "volatility": "dated",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Germany came closest, missing only 1930, when it did not enter, and 1950, when it was not allowed to take part after the Second World War.",
+  "learnMore": "Brazil national football team",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Brazil played at all 22 men's FIFA World Cups from 1930 to 2022, and no other team did."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Germany, Argentina and Italy each missed at least one men's World Cup between 1930 and 2022."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Germany did not enter the 1930 World Cup and was not permitted to take part in 1950."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "After Brazil, Germany played at the most men's World Cups from 1930 to 2022: 20 of the 22."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors; its one warning is C22 (score 0.57, same answer), because the key, Brazil, is also the key of p.geo.0113, a geography question about an unrelated fact. I ask the editor for dedupe related_ok. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup, every file from 1930 to 2022: Brazil appears in all 22 tournaments and no other team does (c1); Germany or West Germany is absent from 1930 and 1950 only (c3, c4); Argentina is absent from 1938, 1950, 1954 and 1970, Italy from 1930, 1958, 2018 and 2022 (c2); Argentina and Italy have 18 appearances each. Checked by counting teams per file. The reasons in c3 (no entry in 1930; Germany outside FIFA in 1950) need web evidence. rivalTest: Germany is the closest rival with 20 of 22, and the explanation defuses it; Argentina and Italy are famous champions with gaps. The range is closed at 2022 so the item is dated and cannot go stale. volatility: dated: the year in the text pins the fact, so it cannot expire; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 26 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: In 1974 both West and East Germany played; I counted West Germany as Germany, the usual convention, and the claim does not depend on East Germany. The stem says 'team' and 'all 22' rather than 'country' and 'FIFA' because the first wording scored as a near-duplicate of p.sport.0102.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8fdcd729f6947fc57adc6dc8d8a5f4ae2cc17f53190ed9860c12abf955609712",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Brazil",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 2022/worldcup.json (all 22 files)",
+              "locator": "teams appearing in each file's matches, West Germany counted as Germany",
+              "excerpt": "Brazil appears in all 22 files; most appearances: Brazil 22; Germany 20; Argentina 18; Italy 18",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Computed across every tournament file."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 2022/worldcup.json (all 22 files)",
+              "locator": "tournaments without the team",
+              "excerpt": "Germany (incl. West Germany) absent: 1930, 1950; Argentina absent: 1938, 1950, 1954, 1970; Italy absent: 1930, 1958, 2018, 2022",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Germany did not enter the 1930 tournament and was barred from the 1950 tournament after the Second World War.",
+              "confidence": "certain"
+            },
+            "note": "The worldcup files confirm Germany's absence in 1930 and 1950; the reasons rest on knowledge. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 2022/worldcup.json (all 22 files)",
+              "locator": "appearance counts, West Germany counted as Germany",
+              "excerpt": "most appearances: Brazil 22; Germany 20; Argentina 18; Italy 18",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Counts West Germany (1954 to 1990) as Germany, as FIFA does: 20 of 22, missing 1930 and 1950."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f153bd724fbbcad0e02adf65745a38091d4a527dbde66826b6e81237e68a2419",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Brazil",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 2022/worldcup.json (22 files)",
+              "locator": "all 22 files, derived",
+              "excerpt": "Brazil appears in all 22 tournament files. No other team name appears in more than 18 files; Germany appears under two names (Germany 10 files, West Germany 10 files).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Brazil is the only ever-present team."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 2022/worldcup.json (22 files)",
+              "locator": "absences, derived",
+              "excerpt": "Germany/West Germany absent 1930 and 1950; Argentina absent 1938, 1950, 1954, 1970; Italy absent 1930, 1958, 2018, 2022.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Germany did not enter in 1930 (the long voyage) and was excluded from the 1950 tournament after the war.",
+              "confidence": "certain"
+            },
+            "note": "The dataset confirms the absences in 1930 and 1950; the reasons rest on knowledge."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 2022/worldcup.json (22 files)",
+              "locator": "participation counts, derived",
+              "excerpt": "Germany plus West Germany: 20 of 22 files. Italy and Argentina: 18 each. Nobody else is higher.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Counting West Germany as Germany follows FIFA's own lineage."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c3 (explanation, date) rests on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which team played at all 22 men's World Cups held from 1930 to 2022?",
+  "answer": "Brazil",
+  "wrong": ["Germany", "Argentina", "Italy"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.479,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "id": "p.art.0209",
+  "status": "active",
+  "category": "art",
+  "tags": ["architecture", "stadiums", "china"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Swiss architects Herzog & de Meuron wrapped it in a lattice of steel beams that resembles woven twigs. The Water Cube, the Olympic swimming venue, stands nearby.",
+  "learnMore": "Beijing National Stadium",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Beijing's National Stadium, built for the 2008 Olympic Games, is nicknamed the Bird's Nest."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Water Cube is Beijing's National Aquatics Centre, the Giant Egg is Beijing's National Centre for the Performing Arts and the Gherkin is a London office tower; none is the National Stadium."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Beijing's National Stadium was designed by the Swiss firm Herzog & de Meuron, with a lattice of steel beams resembling woven twigs."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Water Cube, the Olympic swimming venue, stands near the National Stadium in Beijing's Olympic Green."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no dataset covers buildings; c1 is high only for its year. Rival test: the Water Cube and the Giant Egg are real Beijing building nicknames from the same years, and the Gherkin a famous London one; none is the stadium; against the key, Bird's Nest is the universal nickname. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the 2008 Games were watched worldwide. Style: Oxford spelling, straight quotes, no en or em dashes, explanation of 27 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: Herzog & de Meuron led the design with Chinese partners and the artist Ai Weiwei as consultant; c3 names only the lead architects, which is accurate.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "82c9d456af2b576e38df460f04ee7bba113cfb2d69e3b678a3025d77fb538f79",
+        "startedAt": "2026-11-01T02:15:00Z",
+        "finishedAt": "2026-11-01T02:51:14Z",
+        "coldSolve": {
+          "answerGiven": "The Bird's Nest",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=53 (games=2008 Summer)",
+              "excerpt": "53,2008 Summer,2008,Summer,Beijing,People's Republic of China,2008-08-08,2008-08-24",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The dataset covers the date half of the claim: the 2008 Summer Games were held in Beijing. That the National Stadium was built for them and is nicknamed the Bird's Nest rests on my knowledge (certain); one evidence entry per claim, so it is stated here."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Water Cube is the National Aquatics Centre, the 'Giant Egg' is the National Centre for the Performing Arts and the Gherkin is 30 St Mary Axe in London.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Herzog & de Meuron designed the stadium, whose criss-crossing steel structure looks like a nest woven from twigs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Water Cube stands beside the National Stadium on the Olympic Green.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "fc1974a2481aab5af84a291c20206a749e3789534f48e7be9d879eab4b4cf887",
+        "startedAt": "2026-11-01T02:25:00Z",
+        "finishedAt": "2026-11-01T02:51:43Z",
+        "coldSolve": {
+          "answerGiven": "The Bird's Nest",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Beijing's National Stadium, built for the 2008 Games, is nicknamed the Bird's Nest.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Water Cube is the National Aquatics Centre, the Giant Egg is the National Centre for the Performing Arts and the Gherkin is a London tower.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the Giant Egg is a real Beijing nickname, but of another building."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Herzog & de Meuron designed the stadium with a lattice of steel members that looks like woven twigs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Water Cube, the swimming venue, stands beside the stadium in the Olympic Green.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-part02e",
+        "at": "2026-11-01T02:27:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part02d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim. The one high-risk claim, c1 (key, date), has dataset evidence in check A (olympic-editions: the 2008 Summer Games were held in Beijing), so §9.9 rule 3 passes; the nickname itself is world-famous and both checks confirm it. No open issue, lint clean, dedupe unique, myths screen clean.",
+      "decidedAt": "2026-11-01T04:30:36Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:30:36Z",
+      "nearestId": "p.sport.0001",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:30:36Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "What is the nickname of Beijing's National Stadium, built for the 2008 Olympic Games?",
+  "answer": "The Bird's Nest",
+  "wrong": ["The Water Cube", "The Giant Egg", "The Gherkin"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.76,
+    "spread": 0.444,
+    "estimator": "v0"
+  }
+}

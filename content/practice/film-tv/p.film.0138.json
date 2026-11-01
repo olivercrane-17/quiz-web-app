@@ -1,0 +1,249 @@
+{
+  "id": "p.film.0138",
+  "status": "active",
+  "category": "film",
+  "tags": ["awards", "silent-film", "oscars"],
+  "region": "global",
+  "volatility": "dated",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Wings is a silent film about First World War fighter pilots. The ceremony lasted about 15 minutes, and the winners had been announced three months earlier.",
+  "learnMore": "Wings (1927 film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Wings won the top award, Outstanding Picture, later counted as Best Picture, at the first Academy Awards in 1929."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The Jazz Singer received an honorary award at the first ceremony, The Broadway Melody won the top award at the second, and The Big Parade won no Academy Award."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Wings is a silent film about fighter pilots in the First World War."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The first Academy Awards ceremony lasted about 15 minutes."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The winners of the first Academy Awards were announced about three months before the ceremony."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: The Jazz Singer is the famous film of that ceremony, but it received an honorary award; The Broadway Melody won the next year; The Big Parade (1925) is another war epic and predates the awards. Sunrise, winner of the separate Unique and Artistic Production award, is left out so no pedant can argue for it. Volatility: dated; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 26 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: The Big Parade was released before the first eligibility period, so it won nothing; checkers should confirm.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "334d6e88a2652262ad8b4ba2b48047c9745ec12367c93256c31bb6e3c9f91036",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Wings",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "At the first Academy Awards, in May 1929, Wings won Outstanding Picture, the award later counted as Best Picture.",
+              "confidence": "certain"
+            },
+            "note": "Sunrise won the separate Unique and Artistic Production award that night; the stem's 'later known as Best Picture' correctly picks out Wings, and Sunrise is not an option. High-risk (first), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Warner Bros. received a special award for The Jazz Singer at the first ceremony; The Broadway Melody won the top award at the second; The Big Parade (1925) predates the awards and won none.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Wings is a silent film about fighter pilots in the First World War.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first ceremony, a dinner at the Hollywood Roosevelt Hotel, lasted about 15 minutes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The winners were announced in February 1929, about three months before the May ceremony.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "45d535408734a021e2dc172edc28ea530a9840366cb0f6c6eda0389550fd274d",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Wings",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Wings won Outstanding Picture at the first ceremony in 1929, which the Academy counts as the forerunner of Best Picture.",
+              "confidence": "certain"
+            },
+            "note": "High-risk first. Sunrise won the separate Unique and Artistic Production award that night, which was dropped afterwards, so 'top prize, later known as Best Picture' is the right reading. Needs check A's external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Jazz Singer got an honorary award at the first ceremony, The Broadway Melody won the top award at the second, and The Big Parade (1925) predates the awards and won nothing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Wings is a silent film about First World War fighter pilots.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first ceremony lasted about 15 minutes.",
+              "confidence": "certain"
+            },
+            "note": "Number; needs check A's external evidence."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The winners were announced about three months before the first ceremony.",
+              "confidence": "certain"
+            },
+            "note": "Number; needs check A's external evidence."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1, c2, c4 and c5 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which film won the top prize, later known as Best Picture, at the first Academy Awards in 1929?",
+  "answer": "Wings",
+  "wrong": ["The Jazz Singer", "The Broadway Melody", "The Big Parade"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.18,
+    "spread": 0.125,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "id": "p.sport.0207",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["equestrian", "olympics", "horses"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Dressage is French for 'training'. Equestrian events are among the few Olympic contests where women and men compete directly against each other.",
+  "learnMore": "Dressage",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Dressage is an equestrian discipline at the Olympic Games."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Gymnastics, artistic swimming and figure skating have no event called dressage."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word dressage is French for 'training'."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "In Olympic equestrian events women and men compete against each other in the same events, which few Olympic sports allow."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 2 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: No pinned dataset covers Olympic disciplines. c3 is an etymology and c4 a comparison across sports, so both are high and need web evidence. rivalTest: Gymnastics, artistic swimming and figure skating are the confusions because, like dressage, they are judged on precision and artistry; none has a dressage event. Dressage is one of the three Olympic equestrian disciplines, so the key is safe. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 22 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: c4 says 'among the few' rather than 'the only', because mixed events now exist in other sports; I raised it to high so that a checker confirms it externally.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "90b7c40732fdb1118225fc8c9ca1cc267d452c4ff95304f3cca59c7b7d808d3d",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Equestrian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Dressage is one of the Olympic equestrian disciplines, with jumping and eventing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Gymnastics, artistic swimming and figure skating have no event called dressage.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The French noun dressage, from dresser, means training, as of a horse.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Olympic equestrian events are open to men and women in the same competitions on equal terms, which very few Olympic sports allow.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). 'Few' holds: several sports now have mixed-team events, but equestrian is the standout sport where every event is open to both sexes."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9285cdf4471349d6c979a59e4c90970786e962df7d2388396989a174a7bc1977",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Equestrian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Dressage is one of the three Olympic equestrian disciplines, alongside eventing and show jumping.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Gymnastics, artistic swimming and figure skating have no event called dressage.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The English word dressage is borrowed from French, from dresser, to train.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Olympic equestrian events have no gender split, so women and men compete in the same events, and the sport is commonly described as one of very few that do this.",
+              "confidence": "certain"
+            },
+            "note": "The word few is soft. Mixed doubles, mixed relays and sailing's mixed classes also put women and men in one event, so the claim is safest read as individual competition. It is defensible as hedged."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says equestrian is among the few contests where women and men compete directly. That holds for individual events, but mixed doubles and mixed relays exist, so a pedant could object. The hedge among the few keeps it acceptable."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, etymology) and c4 (explanation, superlative) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Checker B's note also applies: mixed doubles and mixed relays exist, so 'among the few contests' needs the individual-event scope. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In which Olympic sport would you see dressage?",
+  "answer": "Equestrian",
+  "wrong": ["Gymnastics", "Artistic swimming", "Figure skating"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.285,
+    "estimator": "v0"
+  }
+}

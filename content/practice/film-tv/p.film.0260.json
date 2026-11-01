@@ -1,0 +1,186 @@
+{
+  "id": "p.film.0260",
+  "status": "cut",
+  "category": "film",
+  "tags": ["myths", "animation", "disney"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Disney was cremated after his death in December 1966. The first person to be cryonically preserved, James Bedford, was frozen weeks later, in January 1967. His ashes rest at Forest Lawn in Glendale, California.",
+  "learnMore": "Walt Disney",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Walt Disney was cremated after his death in December 1966, so his body was never cryogenically frozen."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "James Bedford, frozen in January 1967, was the first person to be cryonically preserved."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Walt Disney's ashes are interred at Forest Lawn Memorial Park in Glendale, California."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: no errors; one C25 warning, expected because the item debunks a listed myth. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Arguing for the statement: the rumour is old and widespread, and cryonics began within weeks of his death; but records of his cremation and burial settle it. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a rumour told worldwide about a world-famous figure; no local knowledge is needed. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 34 words. Myths: claims screened against myths.json; c1 matches walt-disney-frozen by design, because the item debunks that myth; C25 will flag it and the checkers decide, so c1 needs external evidence in a confirming check. Mystery and encore: not applicable to a practice item. Doubts: the death and cremation are stated as dated history, in a neutral tone (§3.7).",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "cd3e4e91cab1fb849b4c86213111e194818668e1566349e27c1025ac5103ec57",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Walt Disney died on 15 December 1966 and was cremated; his body was never frozen.",
+              "confidence": "certain"
+            },
+            "note": "Myth hit walt-disney-frozen: this debunking claim matches the myth by design, and a knowledge-only confirmation does not clear the myths screen, so it needs dataset or web evidence. High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "James Bedford, frozen on 12 January 1967, is generally regarded as the first person to be cryonically preserved.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Disney's ashes are interred at Forest Lawn Memorial Park in Glendale, California.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "The last sentence, 'His ashes rest at Forest Lawn in Glendale, California', follows the sentence about James Bedford, so 'His' reads as Bedford's ashes, the opposite of the point. Name Disney there, or move the sentence after the first one."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5b116e364bacdf44733bb116a4c4b1655803a98d6f500738076d41ac2ffcab59",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Walt Disney was cremated after his death in December 1966, so his body was never frozen.",
+              "confidence": "certain"
+            },
+            "note": "Myth check: matches the myths list entry on Disney being frozen. High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "James Bedford, frozen in January 1967, was the first person to be cryonically preserved.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Walt Disney's ashes are interred at Forest Lawn Memorial Park in Glendale, California.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Explanation ends \"His ashes rest at Forest Lawn\", straight after the sentence about James Bedford. \"His\" reads as Bedford, so a player could learn that Bedford was cremated, which is false (his body was frozen). Say \"Disney's ashes\", or reorder the sentences."
+          },
+          {
+            "type": "sensitivity",
+            "severity": "note",
+            "note": "A death-related myth. The tone is factual and respectful, so it stays within the sensitivity rules, but the editor may want to confirm that a death is acceptable as the hook."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "cut",
+      "reason": "Both checks revise for the same fix: 'His ashes' follows the sentence about James Bedford, so it reads as Bedford's ashes. That fix is wording only, but a wording-only rewrite leaves both revise verdicts standing and no tiebreak can settle a revise/revise pair (§9.9 rule 2). High-risk c1 and c2 also rest on knowledge only, and c1, which debunks a listed myth by design, needs dataset or web evidence to clear the myths screen. Cut (§9.7). Worth redrafting under a new id with 'Disney's ashes'.",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Walt Disney's body was cryogenically frozen after his death.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.54,
+    "spread": 0.273,
+    "estimator": "v0"
+  }
+}

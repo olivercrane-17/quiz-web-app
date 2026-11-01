@@ -1,0 +1,233 @@
+{
+  "id": "p.music.0130",
+  "status": "cut",
+  "category": "music",
+  "tags": ["instruments", "piano", "harp"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Most piano notes have two or three strings tuned in unison, so its 88 keys need more than 200 strings. An orchestral harp has 47, one for each note.",
+  "learnMore": "Piano",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A modern piano has more than 200 strings."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A standard orchestral (concert pedal) harp has 47 strings."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Most notes on a modern piano are strung with two or three strings tuned in unison."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A modern piano has 88 keys."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers these music facts (the manifest holds geographic, scientific, Nobel, Olympic and art-collection data), so each high-risk claim needs web evidence from the checkers. I used no WebSearch. Rival test: argued for the harp, an instrument that looks like nothing but strings, which is the trap; a modern grand piano usually has about 220 to 240 strings, so label a states the bounded 'more than 200', which every full-size modern piano exceeds, against the harp's 47. The ratio is far past the 1.1 guard. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both instruments are familiar worldwide. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: c1 is bounded on purpose, because the exact count varies by maker and model. The labels avoid the wording of the guide's harp encore so that no near-duplicate arises.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "3a3fd09817fae3d6b2e78a0116f152f40a6d6c3624d6bbea33b9e8a0b12bcb1e",
+        "startedAt": "2026-11-01T02:00:29Z",
+        "finishedAt": "2026-11-01T02:19:40Z",
+        "coldSolve": {
+          "answerGiven": "A modern piano",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A modern piano has more than 200 strings, usually around 230.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A concert pedal harp has 47 strings.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most piano notes are strung with two or three unison strings; only the lowest bass notes have one.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A modern piano has 88 keys.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Each harp string plays its own note with no unison doubling, unlike the piano; pedals retune each string by a semitone either way.",
+              "confidence": "certain"
+            },
+            "note": "Checker addition x1: role explanation, ref explanation, risk standard. Claim: An orchestral harp has one string for each note, with no strings doubled in unison. The explanation's 'one for each note', which no writer claim states. Confirmed for the no-doubling reading the sentence sets up; see the wording note."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation's 'An orchestral harp has 47, one for each note' is right as a contrast with the piano's doubled strings, but a harpist may object that pedals let each string sound three pitches. 'one string per note of the scale' would be safer. Recorded as x1."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6e0942c051a55cb1573d44ffead5606732e34f43d59386ea1eea4d59f9418283",
+        "startedAt": "2026-11-01T02:05:28Z",
+        "finishedAt": "2026-11-01T02:26:16Z",
+        "coldSolve": {
+          "answerGiven": "A modern piano",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A modern piano has roughly 230 strings, well over 200.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A concert pedal harp has 47 strings.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Most piano notes have two or three strings in unison, and the lowest have one or two.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A modern piano has 88 keys.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic01e",
+        "at": "2026-11-01T02:04:12Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (number), c2 (number), c3 (number) and c4 (number) rest on knowledge only: neither check ran a search (A's records say WebSearch was refused) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with evidence or without the risky detail. A's note: say 'one string per note of the scale' for the harp.",
+      "decidedAt": "2026-11-01T04:20:00Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which has more strings?",
+  "a": "A modern piano",
+  "b": "An orchestral harp",
+  "answer": "a",
+  "relation": "more",
+  "measure": "number of strings",
+  "unit": "strings",
+  "values": {
+    "a": 200,
+    "b": 47
+  },
+  "valueDisplay": {
+    "a": "more than 200 strings",
+    "b": "47 strings"
+  },
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.153,
+    "estimator": "v0"
+  }
+}

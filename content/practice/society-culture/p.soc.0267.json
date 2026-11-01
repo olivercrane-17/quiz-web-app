@@ -1,0 +1,201 @@
+{
+  "id": "p.soc.0267",
+  "status": "active",
+  "category": "soc",
+  "tags": ["inventions", "telephones", "emergency-services"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "London introduced 999 in June 1937, making it the oldest emergency telephone number. The first 911 call was made in Haleyville, Alabama, in February 1968.",
+  "learnMore": "999 (emergency telephone number)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 999 emergency telephone number came into use in London on 30 June 1937."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The first 911 call in the United States was made in Haleyville, Alabama, on 16 February 1968."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "999 is the oldest emergency telephone number in the world."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: inventions of everyday life. lint: content:check shows no errors for this item. claims: every checkable statement in the labels, values and explanation is listed, one label claim per side, with risk at or above the C26 floor and raised where honest. Counterintuitive is true, so both label claims are high under C26, carrying the date reason they also hold. datasets: geonames-cities: Haleyville, US, admin1 AL, lat 34.22649, lng -87.62141 (place check only); c1 to c3 need web evidence. rivalTest: argued for 911: it is the number the world knows from films and television. Argued against: 999 is 31 years older, beyond any quibble about dates. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: both numbers are widely known through British and American media; the surprise is the same for everyone. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 25 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 4 (medium): many pick 911. doubts: c3 is a record claim; if a checker finds an older emergency number, the explanation can drop to 'one of the oldest' without touching the key.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1e6e9892940f8612ed4c8f51d1c2f472a76138ab91abb54cad829395e42f9579",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "Britain's 999",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "London's 999 emergency service began on 30 June 1937.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first US 911 call was made in Haleyville, Alabama, on 16 February 1968.",
+              "confidence": "certain"
+            },
+            "note": "geonames-cities lists Haleyville (US, AL) but not the call or its date. High-risk (first), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "999 is generally described as the world's oldest emergency telephone number.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (superlative), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9bd03d0ad5f193a472a21a8a131306d461daac732086f2027f06d350f2bc1472",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "Britain's 999",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 999 emergency number came into use in London on 30 June 1937.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first 911 call was made in Haleyville, Alabama, on 16 February 1968.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "999 is widely described as the world's first emergency telephone number.",
+              "confidence": "certain"
+            },
+            "note": "A standard statement in UK reference sources. A superlative, so it counts only with external evidence in the other check."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (label, date), c2 (label, first) and c3 (explanation, superlative) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. The gap includes the key, a label or a distractor, so the redraft needs evidence for the question itself. Redraft under a new id.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0226",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which emergency number came first?",
+  "a": "Britain's 999",
+  "b": "North America's 911",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year the number came into use",
+  "unit": "year",
+  "values": {
+    "a": 1937,
+    "b": 1968
+  },
+  "valueDisplay": {
+    "a": "1937",
+    "b": "1968"
+  },
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.18,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "id": "p.music.0254",
+  "status": "active",
+  "category": "music",
+  "tags": ["songs-albums", "national-anthems", "liechtenstein"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The anthem, 'Oben am jungen Rhein', sets German words about the young Rhine to the British tune, so the melody is played twice when England meet Liechtenstein at football (soccer).",
+  "learnMore": "Oben am jungen Rhein",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "Liechtenstein's national anthem, 'Oben am jungen Rhein', uses the same melody as the British national anthem."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Liechtenstein's anthem has German words about the young Rhine."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "When England and Liechtenstein play each other at football (soccer), the same melody is played for both national anthems."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the statement and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: cldr-territories names LI as Liechtenstein, which only confirms the country name; c1 needs web evidence. I used no WebSearch. Rival test: argued for 'false': a German-speaking principality borrowing the British tune sounds unlikely, which is the surprise. Argued against the key: the anthem has used the melody of the British national anthem since the 19th century. The stem says 'the British national anthem' rather than its title, because the title changes between King and Queen with the monarch. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the British anthem's tune is known worldwide, and the statement needs no local knowledge. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0d96d9a09b12110c16ec54e7c116483a5ab2bfb676ec596d35033ebbafd2a858",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Liechtenstein's anthem, 'Oben am jungen Rhein', is sung to the tune of God Save the King.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Its German words speak of the young Rhine.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "When England play Liechtenstein, the same tune is played for both anthems.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3f779586d5fab366be38723a1d753d4aaeebbef910f698d0f164da9110bf307b",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Liechtenstein's anthem, Oben am jungen Rhein, uses the same melody as 'God Save the King', the British national anthem.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: 'British national anthem' has no statutory text, but the tune is the one meant; the match is exact."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The anthem's words are German and about the young Rhine.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "When England and Liechtenstein meet at football the same tune is played for both anthems.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c1 (quotation) rests on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.music.0251",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Liechtenstein's national anthem is sung to the same tune as the British national anthem.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.257,
+    "estimator": "v0"
+  }
+}

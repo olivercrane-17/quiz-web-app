@@ -1,4 +1,6 @@
 // @vitest-environment node
+import { join } from "node:path";
+
 import { afterAll, describe, expect, it } from "vitest";
 
 import type { DecisionInputEntry, RecordInputEntry } from "../schema/inputs.ts";
@@ -6,6 +8,7 @@ import type { AnyItem, McItem, TfItem } from "../schema/items.ts";
 import {
   CHECKER_A,
   EDITOR,
+  REPO_ROOT,
   WRITER,
   countryId,
   fxEncore,
@@ -17,10 +20,12 @@ import {
   loadFx,
   type FxFiles,
   removeTempDirs,
+  writeTree,
 } from "./__fixtures__/builders.ts";
 import { acceptanceFailures, checksOf, externalSources } from "./acceptance.ts";
-import type { Bank } from "./bank.ts";
-import { applyDecisions, decideOne } from "./decisions.ts";
+import { loadBank, type Bank } from "./bank.ts";
+import { applyDecisions, decideOne, nearestForItem } from "./decisions.ts";
+import { resolveLayout } from "./layout.ts";
 import { LINT_VERSION } from "./lint/index.ts";
 import { packetSha256 } from "./packets.ts";
 import { mergeRecord } from "./records.ts";
@@ -44,12 +49,25 @@ type Patch = (
   entry: RecordInputEntry,
 ) => RecordInputEntry;
 
+/** A fixture bank whose guide is `markdown` instead of the repository's. */
+async function loadWithGuide(files: FxFiles, markdown: string): Promise<Bank> {
+  const root = await writeTree({ ...files, "GUIDE.md": markdown });
+  return loadBank({
+    ...resolveLayout({ repoRoot: REPO_ROOT, root, fixtures: true }),
+    guideFile: join(root, "GUIDE.md"),
+  });
+}
+
 /** A bank where one item carries A and B records (and optionally T), and its estimate. */
 async function checkedBank(
   id: string,
-  opts: { patch?: Patch; tiebreak?: boolean; files?: FxFiles } = {},
+  opts: { patch?: Patch; tiebreak?: boolean; files?: FxFiles; guide?: string } = {},
 ): Promise<Bank> {
-  const bank = await loadFx(opts.files ?? fxFiles());
+  const files = opts.files ?? fxFiles();
+  const bank =
+    opts.guide === undefined
+      ? await loadFx(files)
+      : await loadWithGuide(files, opts.guide);
   const record = itemOf(bank, id);
   let item: AnyItem = record.item;
   const passes = opts.tiebreak
@@ -199,7 +217,7 @@ describe("the acceptance rule (§9.9)", () => {
     );
   });
 
-  it("rule 3: high-risk claims need dataset or web evidence; encore values need one external source", async () => {
+  it("rule 3: high-risk claims and encore values pass on direct certain-knowledge confirmation by both independent checks (memo §18)", async () => {
     const knowledgeOnly: Patch = (_pass, e) => ({
       ...e,
       claimResults: e.claimResults.map((r) => ({
@@ -213,10 +231,13 @@ describe("the acceptance rule (§9.9)", () => {
         },
       })),
     });
+    // Both independent checks confirm every claim from certain knowledge.
     const bank = await checkedBank("fx.p.geo.0101", { patch: knowledgeOnly });
-    expect(accept(bank, "fx.p.geo.0101").outcome.errors).toEqual([
-      expect.stringContaining("high-risk claim c3"),
-    ]);
+    expect(
+      accept(bank, "fx.p.geo.0101").outcome.errors.filter((e) =>
+        e.startsWith("rule 3"),
+      ),
+    ).toEqual([]);
     const oneSource = await checkedBank("fx.e.0101", {
       patch: (pass, e) => (pass === "B" ? knowledgeOnly(pass, e) : e),
     });
@@ -224,10 +245,8 @@ describe("the acceptance rule (§9.9)", () => {
       expect.arrayContaining([expect.stringContaining("encore value")]),
     );
     const noSource = await checkedBank("fx.e.0101", { patch: knowledgeOnly });
-    expect(accept(noSource, "fx.e.0101").outcome.errors).toEqual(
-      expect.arrayContaining([
-        expect.stringContaining("needs an external source"),
-      ]),
+    expect(accept(noSource, "fx.e.0101").outcome.errors).not.toEqual(
+      expect.arrayContaining([expect.stringContaining("encore value")]),
     );
     const twoSources = await checkedBank("fx.e.0101");
     const item = itemOf(twoSources, "fx.e.0101").item;
@@ -488,6 +507,47 @@ describe("the acceptance rule, hardened", () => {
       expect.stringContaining("near-duplicate of a public item"),
     ]);
     expect(sealedSide.join(" ")).not.toContain("fx.p.geo.0104");
+  });
+
+  it("stores a nearest guide example of a sealed kind as sealed: its id has a sealed id's shape", async () => {
+    // The 27 practice items check:secrets caught: accepted with a mystery,
+    // encore or room example of the guide as their nearest neighbour, they
+    // stored its id (m.geo.0001, e.0004, r.<pack>.90) in a public file.
+    const guide = (example: Record<string, unknown>) =>
+      `# Guide\n\n\`\`\`json\n${JSON.stringify(example)}\n\`\`\`\n`;
+    const cases = [
+      {
+        example: {
+          id: "e.0004",
+          kind: "encore",
+          question: "How many lanterns light the Halvessa spring festival?",
+        },
+        stored: { nearestId: "sealed", score: null },
+      },
+      {
+        example: {
+          id: "p.geo.0004",
+          format: "tf",
+          stem: "Lanterns light the Halvessa spring festival.",
+        },
+        stored: { nearestId: "p.geo.0004", score: expect.any(Number) },
+      },
+    ];
+    for (const { example, stored } of cases) {
+      const bank = await checkedBank("fx.p.geo.0101", {
+        guide: guide(example),
+      });
+      const match = nearestForItem(bank, itemOf(bank, "fx.p.geo.0101"));
+      expect(match.nearestId).toBe(`guide:${example.id}`);
+      expect(match.score).toBeLessThan(0.5);
+      const { outcome, item } = accept(bank, "fx.p.geo.0101");
+      expect(outcome.errors, example.id).toEqual([]);
+      expect(item?.verification?.dedupe).toEqual({
+        checkedAt: "2026-11-03T09:00:00Z",
+        verdict: "unique",
+        ...stored,
+      });
+    }
   });
 });
 

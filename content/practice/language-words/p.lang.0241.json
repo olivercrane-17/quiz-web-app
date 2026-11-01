@@ -1,0 +1,362 @@
+{
+  "id": "p.lang.0241",
+  "status": "checking",
+  "category": "lang",
+  "tags": ["dictionaries", "samuel-johnson", "quotations"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "He gathered about 114,000 quotations, from writers such as Shakespeare, Milton and Dryden, to illustrate some 42,000 entries. The Oxford English Dictionary later built on the same idea.",
+  "learnMore": "A Dictionary of the English Language",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Samuel Johnson's 1755 Dictionary of the English Language illustrated how words were used with quotations from published writers."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Johnson's Dictionary did not show usage with drawings, Latin translations or rhyming examples."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Johnson's Dictionary contains about 114,000 quotations."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Johnson's Dictionary has some 42,000 entries."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Johnson quoted writers such as Shakespeare, Milton and Dryden."
+    },
+    {
+      "id": "c6",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Oxford English Dictionary later used quotations to illustrate usage on a much larger scale."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 6 listed, 3 high (date, number) and 3 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers dictionaries. rivalTest: Argued for Latin translations, since Johnson gave word origins: etymologies explain where a word came from, not how it is used. The figures in c3 and c4 are rounded down to what reference works agree on (42,773 entries is the usual exact count). volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: Johnson's dictionary is a landmark of English worldwide. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 28 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ff5d0fabaf128b4d4cb31f063af1fd153448006bfec60f395611aefbc153c7fe",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Quotations from books",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Johnson's 1755 Dictionary showed how words were used through quotations from published writers.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Dictionary did not illustrate usage with pictures, Latin translations or rhymes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Dictionary holds about 114,000 illustrative quotations.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Dictionary has about 42,000 entries (42,773 in the usual count).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Shakespeare, Milton and Dryden are among the writers Johnson quoted most often.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Oxford English Dictionary later used illustrative quotations on a far larger scale.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "55133478e45914e7bab7075ce93d914f3d690e2a1612b2f3fe0d4f89b10df3dd",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Quotations from books",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Johnson's Dictionary illustrated usage with quotations from earlier writers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It did not use drawings, Latin translations or rhyming examples to show usage.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "I recall a figure of about 114,000 quotations, but not firmly enough to confirm it offline.",
+              "confidence": "unsure"
+            },
+            "note": "A number in the player-facing explanation. Unconfirmed for lack of search budget."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first edition has about 42,000 entries (I recall 42,773).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Shakespeare, Milton and Dryden are among the authors Johnson quoted most.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The OED later used quotations on a much larger scale.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Only c3 (about 114,000 quotations) is unconfirmed. A rounded wording such as 'more than 100,000' would need a less exact source."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-plang02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "79473d79a6f98c22991d747faa0002c1a7737539195a0d9a0585e3a99447efac",
+      "startedAt": "2026-11-01T05:04:45Z",
+      "finishedAt": "2026-11-01T05:10:48Z",
+      "coldSolve": {
+        "answerGiven": "Quotations from books",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "Johnson's Dictionary of 1755 illustrated the senses of its words with quotations from English writers.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it on knowledge. It is high-risk and no check carries dataset or web evidence for it, so rule 3 still needs external evidence. This run's only WebSearch call was refused (the turn's shared search limit was used up) and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The Dictionary had no pictures and no rhyming examples, and it showed usage through quoted passages rather than Latin translations.",
+            "confidence": "certain"
+          },
+          "note": "Standard risk, confirmed by A and B on knowledge, so nothing more is needed for rule 3."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "I recall about 114,000 as the usual count of Johnson's illustrative quotations, but not with the certainty an exact figure needs.",
+            "confidence": "likely"
+          },
+          "note": "Disputed: B left c3 uncertain. It is a number stated in the explanation, so it needs a Tier A or B source. No external evidence could be gathered in this run (WebSearch refused, no dataset covers it). B's precision-ladder fallback ('more than 100,000') would still need a source."
+        },
+        {
+          "claimId": "c4",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The first edition is usually counted at 42,773 entries, so 'some 42,000' is a fair round figure.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it on knowledge. High-risk (a number) with no external evidence in any check, so rule 3 still needs it. No search was possible in this run (see c1)."
+        },
+        {
+          "claimId": "c5",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "Shakespeare, Milton and Dryden are among the writers Johnson quoted most often.",
+            "confidence": "certain"
+          },
+          "note": "Standard risk, confirmed by A and B on knowledge, so nothing more is needed for rule 3."
+        },
+        {
+          "claimId": "c6",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The Oxford English Dictionary took up the same method of dated illustrative quotations, on a far larger scale.",
+            "confidence": "certain"
+          },
+          "note": "Standard risk, confirmed by A and B on knowledge, so nothing more is needed for rule 3."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "checker_doubt c3: the figure of about 114,000 quotations rests on knowledge in all three checks. Settle it with web evidence in a re-run tiebreak, or step the explanation down to a figure a source supports."
+        },
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "Optional: 'each word' in the stem reads as if every entry carried a quotation, which is broader than c1 ('how words were used'). 'Show the way words were used' would match c1 exactly. Not a reason to revise on its own."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    }
+  },
+  "format": "mc",
+  "stem": "How did Samuel Johnson's 1755 dictionary show the way each word was used?",
+  "answer": "Quotations from books",
+  "wrong": ["Hand-drawn pictures", "Latin translations", "Rhyming examples"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.172,
+    "estimator": "v0"
+  }
+}

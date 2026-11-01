@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0207",
+  "status": "active",
+  "category": "food",
+  "tags": ["soups", "spain", "national-dishes"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Andalusian farm workers made early gazpachos from bread, oil, vinegar, garlic and water. Tomatoes and peppers, from the Americas, joined the recipe centuries later.",
+  "learnMore": "Gazpacho",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Gazpacho is a cold Spanish soup made from raw vegetables such as tomatoes, peppers and cucumber, with bread and olive oil."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Minestrone, bouillabaisse and mulligatawny are hot soups from Italy, France and Anglo-Indian cooking, not cold Spanish soups."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Early gazpachos in Andalusia were made from bread, olive oil, vinegar, garlic and water."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Tomatoes and peppers came to Spain from the Americas and were added to gazpacho long after the soup existed."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Each distractor is a famous soup of another cuisine, served hot. Against the key: salmorejo is also a cold Spanish soup with those ingredients, so it is kept out of the options. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: gazpacho is known worldwide, and the description lets anyone eliminate the others. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 24 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 1: the description and 'Spanish' make it easy. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8a17b55af2ba3a599187e61e4a1a258f3a47d4844a4a40f77719767790ca16a1",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Gazpacho",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gazpacho is a cold Andalusian soup of raw blended tomato, pepper, cucumber, bread and olive oil.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Minestrone (Italy), bouillabaisse (France) and mulligatawny (Anglo-Indian) are normally served hot and are not Spanish.",
+              "confidence": "certain"
+            },
+            "note": "Minestrone is sometimes eaten cool in Italian summers, but it is not Spanish, so it stays definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Before tomatoes, Andalusian gazpacho was a pounded mix of bread, oil, vinegar, garlic and water, a farm labourers' food.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tomatoes and peppers are American plants that reached Spain in the 16th century and entered gazpacho much later.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "eb0ebab6a7707c2e86bcb0b412ed98fb0b26e990d1c97a19794eaf1a1262ba6f",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Gazpacho",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gazpacho is Spain's cold Andalusian soup of raw tomato, pepper, cucumber, bread and olive oil.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Minestrone (Italy), bouillabaisse (France) and mulligatawny (Anglo-Indian) are not Spanish cold soups.",
+              "confidence": "certain"
+            },
+            "note": "'Hot soups' in the claim is loose, because minestrone is sometimes eaten lukewarm or cold, but all three fail on country. Rival test: salmorejo is a Spanish cold soup but is not offered."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Early gazpacho was a soup of bread, olive oil, vinegar, garlic and water made before tomatoes arrived.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tomatoes and peppers came to Spain from the Americas after 1492, and tomato gazpacho appeared long after the soup itself.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. B's note that minestrone is sometimes eaten cool is weighed: all three distractors fail on country, so they stay definitely wrong. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "nearestId": "p.food.0230",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Spanish soup, made from raw tomatoes, peppers, cucumber, bread and olive oil, is served cold?",
+  "answer": "Gazpacho",
+  "wrong": ["Minestrone", "Bouillabaisse", "Mulligatawny"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.85,
+    "spread": 0.338,
+    "estimator": "v0"
+  }
+}

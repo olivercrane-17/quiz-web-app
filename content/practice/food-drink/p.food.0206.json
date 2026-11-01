@@ -1,0 +1,246 @@
+{
+  "id": "p.food.0206",
+  "status": "active",
+  "category": "food",
+  "tags": ["pasta", "italy", "sauces"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Cooks in Bologna say the thick sauce clings better to flat egg ribbons than to thin spaghetti. The same ragù is layered into the city's green lasagne.",
+  "learnMore": "Bolognese sauce",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "In Bologna, ragù alla bolognese is traditionally served with tagliatelle."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Spaghetti, penne and fusilli are not the traditional pasta for ragù alla bolognese in Bologna."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Tagliatelle are flat ribbons of egg pasta."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Bolognese cooks favour tagliatelle because the thick ragù clings to flat ribbons better than to spaghetti."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Ragù alla bolognese is also layered in green (spinach) lasagne alla bolognese."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Spaghetti is the planted trap, from 'spaghetti bolognese' abroad. Lasagne, the one other traditional pairing, is deliberately not an option. Against the key: none survives in Bologna. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: spaghetti bolognese is eaten worldwide, so the trap works everywhere, and the key is a common Italian pasta. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: the famous pairing is the wrong one, so about half reach tagliatelle. Doubts: none on the key. c4 is the reason Bolognese cooks give, written as their preference rather than as physics.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "76244291f34b128f4ebe780525a43571747c0f5e41c474b2dbc65b382672414b",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Tagliatelle",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Bologna the ragu is served with fresh egg tagliatelle (the city's registered recipe pairs them); spaghetti bolognese is a habit from abroad.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt, set by the writer): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Spaghetti, penne and fusilli are not the Bolognese pairing for ragu.",
+              "confidence": "certain"
+            },
+            "note": "Lasagne and other fresh egg pastas also carry the ragu in Bologna, but none of them is an option."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tagliatelle are flat ribbons of fresh egg pasta.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bolognese cooks commonly explain the pairing by the wide, porous egg ribbons holding the thick sauce better than spaghetti.",
+              "confidence": "certain"
+            },
+            "note": "A reported reason; the explanation rightly frames it as what cooks say."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lasagne verdi alla bolognese layers green spinach pasta with the same ragu.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "fe047b098d45586e94de8521ee58b9cd96d0c1f92d89a0e1e2100ab2ba8fa808",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Tagliatelle",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Bologna the classic ragu goes with tagliatelle; spaghetti bolognese is not the local pairing.",
+              "confidence": "certain"
+            },
+            "note": "The writer marked this checker_doubt. Knowledge is certain: tagliatelle al ragu is the local classic. High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Penne, spaghetti and fusilli are not the traditional Bolognese partners for ragu.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: pappardelle and lasagne also take ragu locally, but neither is offered."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tagliatelle are flat ribbons of egg pasta.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bolognese cooks say the thick ragu clings better to flat, rough egg ribbons than to thin spaghetti.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lasagne verdi alla bolognese layers spinach-green pasta with ragu and bechamel.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c1 (key, the writer's doubt) rests on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7).",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In Bologna, the meat sauce ragù alla bolognese is traditionally served with which pasta?",
+  "answer": "Tagliatelle",
+  "wrong": ["Spaghetti", "Penne", "Fusilli"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.27,
+    "estimator": "v0"
+  }
+}

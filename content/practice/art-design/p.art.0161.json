@@ -1,0 +1,273 @@
+{
+  "id": "p.art.0161",
+  "status": "active",
+  "category": "art",
+  "tags": ["paintings", "renaissance", "materials"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "It is painted in oil on a thin panel of poplar wood, as many Italian paintings of its time were. Over the centuries the panel has warped slightly.",
+  "learnMore": "Mona Lisa",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The Mona Lisa is painted in oil on a poplar wood panel, not on canvas."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Poplar panels were commonly used for Italian paintings in Leonardo's time."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Mona Lisa's poplar panel has warped slightly over time."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. c1 carries checker_doubt only as the stand-in for the counterintuitive floor (see Doubts). Datasets: no dataset covers this; c1 needs a source. Rival test: argued for 'true': most famous old paintings people picture are on canvas, and reproductions hide the support; the Mona Lisa is on poplar, so the statement is false. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the most famous painting in the world; the misconception is universal. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit; not in the list. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: the misconception is common rather than a famous named myth, so the editor may judge whether it is widely enough believed for a tf item; c1 is high because the item is counterintuitive (C26 floor); the schema's riskReason list has no counterintuitive value, so it carries checker_doubt.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2811b5337f302bfc80467523c68944489a832705ac2e2cf13e7210044b8c465e",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Mona Lisa oil on poplar wood panel; stolen from the Louvre August 1911 by Vincenzo Peruggia, recovered in Florence December 1913",
+              "results": [
+                {
+                  "title": "Vincenzo Peruggia",
+                  "url": "https://en.wikipedia.org/wiki/Vincenzo_Peruggia"
+                },
+                {
+                  "title": "Mona Lisa",
+                  "url": "https://en.wikipedia.org/wiki/Mona_Lisa"
+                },
+                {
+                  "title": "Today in History August 21",
+                  "url": "https://www.britannica.com/today-in-history/August-21-The-Mona-Lisa-Theft"
+                },
+                {
+                  "title": "Eduardo de Valfierno",
+                  "url": "https://en.wikipedia.org/wiki/Eduardo_de_Valfierno"
+                },
+                {
+                  "title": "Mona Lisa",
+                  "url": "https://www.britannica.com/topic/Mona-Lisa-painting"
+                },
+                {
+                  "title": "Vincenzo Peruggia",
+                  "url": "https://www.britannica.com/biography/Vincenzo-Peruggia"
+                },
+                {
+                  "title": "Yves Chaudron",
+                  "url": "https://en.wikipedia.org/wiki/Yves_Chaudron"
+                },
+                {
+                  "title": "Art theft",
+                  "url": "https://en.wikipedia.org/wiki/Stolen_masterpiece"
+                },
+                {
+                  "title": "1911 in art",
+                  "url": "https://en.wikipedia.org/wiki/1911_in_art"
+                },
+                {
+                  "title": "Mona Lisa - Page 1 · Louvre Shop",
+                  "url": "https://boutique.louvre.fr/en/products/400621-mona-lisa/"
+                }
+              ],
+              "summaryExcerpt": "Panel: The search supports poplar but not \"oil.\" One source says the painting is painted on a thin board of poplar wood, and another notes that the poplar panel shows some evidence of warping.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The key point, a poplar panel rather than canvas, is stated. The summary says the medium 'oil' is unverified in this search; oil on panel is standard knowledge. Tiers: Wikipedia and Britannica (B), and the Louvre Shop page on the museum's own louvre.fr site. The summary's reported conflicts (how the thief left, when the painting returned) do not touch the panel."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Poplar panels were the usual support for Italian paintings around 1500.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Mona Lisa oil on poplar wood panel; stolen from the Louvre August 1911 by Vincenzo Peruggia, recovered in Florence December 1913",
+              "results": [
+                {
+                  "title": "Vincenzo Peruggia",
+                  "url": "https://en.wikipedia.org/wiki/Vincenzo_Peruggia"
+                },
+                {
+                  "title": "Mona Lisa",
+                  "url": "https://en.wikipedia.org/wiki/Mona_Lisa"
+                },
+                {
+                  "title": "Today in History August 21",
+                  "url": "https://www.britannica.com/today-in-history/August-21-The-Mona-Lisa-Theft"
+                },
+                {
+                  "title": "Eduardo de Valfierno",
+                  "url": "https://en.wikipedia.org/wiki/Eduardo_de_Valfierno"
+                },
+                {
+                  "title": "Mona Lisa",
+                  "url": "https://www.britannica.com/topic/Mona-Lisa-painting"
+                },
+                {
+                  "title": "Vincenzo Peruggia",
+                  "url": "https://www.britannica.com/biography/Vincenzo-Peruggia"
+                },
+                {
+                  "title": "Yves Chaudron",
+                  "url": "https://en.wikipedia.org/wiki/Yves_Chaudron"
+                },
+                {
+                  "title": "Art theft",
+                  "url": "https://en.wikipedia.org/wiki/Stolen_masterpiece"
+                },
+                {
+                  "title": "1911 in art",
+                  "url": "https://en.wikipedia.org/wiki/1911_in_art"
+                },
+                {
+                  "title": "Mona Lisa - Page 1 · Louvre Shop",
+                  "url": "https://boutique.louvre.fr/en/products/400621-mona-lisa/"
+                }
+              ],
+              "summaryExcerpt": "Panel: The search supports poplar but not \"oil.\" One source says the painting is painted on a thin board of poplar wood, and another notes that the poplar panel shows some evidence of warping.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Standard claim: 'the poplar panel shows some evidence of warping'."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8de6554accb357f9918d424fda78c6a161a3e8e70de273197cd8fe5e5c1b4d63",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Mona Lisa is oil on a poplar wood panel, not canvas.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Poplar boards were common supports for Italian paintings of Leonardo's time.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The panel has warped slightly over the centuries.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; every high-risk claim (c1) has dataset or web evidence in a confirming check (§9.9 rule 3). No open issue in either record, lint clean, dedupe unique, myths screen clean.",
+      "decidedAt": "2026-11-01T04:15:28Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:28Z",
+      "nearestId": "p.art.0111",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:28Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Leonardo da Vinci painted the Mona Lisa on canvas.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.191,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "id": "p.sport.0141",
+  "status": "active",
+  "category": "sport",
+  "tags": ["olympics", "women-in-sport", "tennis"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Britain's Charlotte Cooper won the tennis singles there, the first woman to win an individual Olympic event. No women had competed at the first modern Games in Athens.",
+  "learnMore": "Charlotte Cooper (tennis)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Women first competed at the modern Olympic Games at Paris 1900."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "No women competed at Athens 1896, and London 1908 and Stockholm 1912 came after women's Olympic debut."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Charlotte Cooper of Great Britain won the women's tennis singles at Paris 1900, becoming the first woman to win an individual Olympic event."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: olympic-editions confirms the order of the editions (Athens 1896, Paris 1900, St. Louis 1904, London 1908, Stockholm 1912) but has no participant breakdown by sex, so c1 to c3 need web evidence from checker A. rivalTest: Athens 1896 is the natural guess for 'first'; London 1908 and Stockholm 1912 tempt players who think women joined later. Stamata Revithi ran the 1896 marathon course unofficially, which is why c1 and the stem say 'compete' at the Games, meaning official events. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: A sailor, Hélène de Pourtalès, won a crew event in 1900 before Cooper's title, which is why c3 says 'individual'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9d83553d15f49d8b92d8abdb1358a049a2250c11ac91202d5a1e30b4bea221b2",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Paris 1900",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Women first competed at the modern Olympics at Paris 1900.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "No women competed at Athens 1896; London 1908 and Stockholm 1912 came after women's debut.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Charlotte Cooper of Great Britain won the 1900 women's tennis singles, the first woman to win an individual Olympic event.",
+              "confidence": "certain"
+            },
+            "note": "A woman won earlier in 1900 as a sailing crew member, which is why 'individual' matters; the claim has it. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f1d97f7e4ef82a53b1f4e13782efdaf838a0d306da0e7394abe2757edfdf5a47",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Paris 1900",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IOC counts Paris 1900 as the first Games with women competitors.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "No woman competed at Athens 1896; London 1908 and Stockholm 1912 came after the 1900 debut.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Charlotte Cooper of Great Britain won the 1900 women's tennis singles, the first woman to win an individual Olympic event.",
+              "confidence": "certain"
+            },
+            "note": "A Swiss sailor, Hélène de Pourtalès, won a team (crew) event earlier in 1900, so 'individual' is the correct word."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, first), c2 (distractor, date) and c3 (explanation, first) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "At which Olympic Games did women compete for the first time?",
+  "answer": "Paris 1900",
+  "wrong": ["Athens 1896", "London 1908", "Stockholm 1912"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.201,
+    "estimator": "v0"
+  }
+}

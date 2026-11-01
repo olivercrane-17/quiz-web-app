@@ -1,0 +1,220 @@
+{
+  "id": "p.sci.0173",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["inventions", "ancient-world"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Hero of Alexandria described a temple machine that released holy water when a coin dropped in. Spectacles appeared in Italy about 1,200 years later, in the late 1200s.",
+  "learnMore": "Vending machine",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Hero of Alexandria described a coin-operated machine that dispensed holy water in the 1st century AD."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Spectacles were first made in Italy in the late 13th century, around the 1280s."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hero's machine released a measure of holy water when a coin was dropped into it."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Spectacles appeared about 1,200 years after Hero's coin-operated machine."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers this, so checker A needs web evidence for c1 and c2; c4 is a calculation from them. rivalTest: Spectacles are the side most players pick, because a coin machine sounds modern; the gap is more than a thousand years. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 28 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: c1 dates Hero to the 1st century AD, so the value 50 is a stand-in for that century; c2 rests on a 1306 sermon by Giordano da Pisa saying the art of making spectacles was less than twenty years old. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a2373dcab25b060ee53ec503f36b0ca42e663b6f57afca447b40b6d2c7b2f456",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "The coin-operated vending machine",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hero of Alexandria, active in the 1st century AD, described in his Pneumatica a temple device that gave out holy water when a coin was put in.",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8). High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Spectacles were invented in northern Italy around 1286, as a 1306 sermon by Giordano da Pisa recalls.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The coin dropped onto a pan, tipping a lever that opened a valve for a measure of water.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "From the 1st century AD to the 1280s is about 1,200 years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b039f0651cf941e75166eff123441ab8b234fc8edefc58ac02160fe010d08782",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "The coin-operated vending machine",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hero of Alexandria, active about AD 60, described a coin-operated device that released holy water in his Pneumatica.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Spectacles are first documented in Italy in the late 1200s, about 1286 to 1300.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hero's device released a measured amount of water when a coin dropped on a pan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "1286 minus about 50 is roughly 1,236 years (computed), so about 1,200.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Which came first? mixes a described machine (Hero, no surviving device) with made spectacles, and the measure field (date first described or made) is not shipped to players. A literal reader can say a coin-operated vending machine was first made in the 1800s. The explanation says described, so it is honest, but the labels could say Hero's coin-operated holy-water dispenser to make the documented event plain."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (label, date), c2 (label, first) and c4 (explanation, number) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced. For a redraft, checker B's note stands: the labels set a described machine against made spectacles, so name Hero's coin-operated holy-water dispenser in the label.",
+      "decidedAt": "2026-11-01T04:27:18Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "The coin-operated vending machine",
+  "b": "Spectacles (eyeglasses)",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "date first described or made",
+  "unit": "year",
+  "values": {
+    "a": 50,
+    "b": 1286
+  },
+  "valueDisplay": {
+    "a": "1st century AD",
+    "b": "Italy, late 1200s"
+  },
+  "predicted": {
+    "p": 0.2,
+    "spread": 0.229,
+    "estimator": "v0"
+  }
+}

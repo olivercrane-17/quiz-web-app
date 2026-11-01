@@ -1,0 +1,245 @@
+{
+  "id": "p.food.0154",
+  "status": "active",
+  "category": "food",
+  "tags": ["spice", "pepper", "surprising-truths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Green peppercorns are picked unripe and kept green, black ones are unripe berries dried until dark, and white ones are ripe seeds with the skin removed. Pink peppercorns come from a different plant.",
+  "learnMore": "Black pepper",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Black, white and green peppercorns are all fruits of the same plant, the vine Piper nigrum."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Green peppercorns are unripe fruits preserved so they stay green."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Black peppercorns are unripe fruits dried until their skins turn dark."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "White peppercorns are ripe fruits with the outer skin removed."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Pink peppercorns are the fruits of a different plant, the Peruvian or Brazilian pepper tree (Schinus)."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: pink peppercorns are the one way to argue false, and the statement leaves them out; the three named colours all come from Piper nigrum. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: pepper is used everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 33 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: many assume three colours mean three plants. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "62bb6937476d3504aa21022e1c83cc2293afc4589b06a781b3c5a5f2daeb13be",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Black, white and green peppercorns are all fruits of the vine Piper nigrum, processed differently.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. No pinned dataset covers it and this check's share of the batch search cap went to claims with numbers and dates, so it still needs dataset or web evidence (a follow-up) before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Green peppercorns are unripe fruits kept green by brining, freeze-drying or dehydrating.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Black peppercorns are unripe fruits dried until the skin turns dark and wrinkled.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "White peppercorns are ripe fruits soaked and stripped of their outer skin, leaving the seed.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pink peppercorns come from Schinus, the Peruvian or Brazilian pepper tree.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "68b7b60c077143cc71a3d3ccb9a17620bb821d7791c1f941125ce8502905bb73",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Black, green and white peppercorns are all fruits of Piper nigrum, differing only in ripeness and processing.",
+              "confidence": "certain"
+            },
+            "note": "Pink peppercorns come from a different plant but are not in the statement. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Green peppercorns are picked unripe and preserved, for example by brining or freeze-drying, so they stay green.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Black peppercorns are picked just before ripeness, blanched and dried until the skins darken.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "White peppercorns are ripe fruits with the outer skin removed, often by soaking.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pink peppercorns are usually the fruit of Schinus trees, the Peruvian or Brazilian pepper tree.",
+              "confidence": "certain"
+            },
+            "note": "Ripe red Piper nigrum berries are also sold as red peppercorns; 'pink peppercorns' in the usual sense are Schinus."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk key c1 (counterintuitive key claim) rests on knowledge alone in both checks; no pinned dataset covers it and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Black, white and green peppercorns all come from the same plant.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.248,
+    "estimator": "v0"
+  }
+}

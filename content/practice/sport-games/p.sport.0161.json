@@ -1,0 +1,293 @@
+{
+  "id": "p.sport.0161",
+  "status": "active",
+  "category": "sport",
+  "tags": ["olympics", "nobel-prize", "athletics"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "The British politician was honoured 'for his longstanding contribution to the cause of disarmament and peace', 39 years after his Olympic medal in Antwerp.",
+  "learnMore": "Philip Noel-Baker",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "ref": "stem",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Philip Noel-Baker won the silver medal in the men's 1,500 metres at the 1920 Antwerp Olympics."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Philip Noel-Baker won the Nobel Peace Prize in 1959."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Noel-Baker did not win the Nobel Prize in Physics, a Pulitzer Prize or the Booker Prize, which was first awarded in 1969."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "The 1959 Nobel Peace Prize was awarded to Noel-Baker 'for his longstanding contribution to the cause of disarmament and peace'."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Philip Noel-Baker was a British politician."
+    },
+    {
+      "id": "c6",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "1959 was 39 years after 1920."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 6 listed; c1, c2, c3, c4, c6 are high and c5 is standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor); the standard claim carries none of those triggers and states a rule or a well-known fact. datasets: nobel-prizes, prize.json: year 1959, category peace, laureate id 518, Philip Noel-Baker, share 1, motivation 'for his longstanding contribution to the cause of disarmament and peace' (c2, c4); the 1959 physics prize went to Emilio Segrè and Owen Chamberlain (c3). olympic-editions confirms the 1920 Summer Games in Antwerp (14 to 30 August 1920) but not results, so c1 needs web evidence. c6 is arithmetic. rivalTest: The Physics prize tempts players who think of scientists who were athletes; the Pulitzer and the Booker are other famous prizes, and the Booker did not exist until 1969. The dataset settles the key. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 24 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: He is often described as the only person to win both an Olympic medal and a Nobel Prize; I left that out because 'only' over a living set is a record that could change (§3.5).",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b0d21d9333d5b07584a586afb880ea5dea121799e120a5fed565c2373771c643",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Nobel Peace Prize",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Philip Noel-Baker took silver in the 1,500 m at Antwerp 1920, behind Albert Hill.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1959, category=peace",
+              "excerpt": "{\"year\":\"1959\",\"category\":\"peace\",\"laureates\":[{\"id\":\"518\",\"firstname\":\"Philip\",\"surname\":\"Noel-Baker\",\"motivation\":\"\\\"for his longstanding contribution to the cause of disarmament and peace\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Noel-Baker's only Nobel was the 1959 Peace Prize; he won no Pulitzer or Booker, and the Booker was first awarded in 1969.",
+              "confidence": "certain"
+            },
+            "note": "nobel-prizes lists him only under 1959 peace (no physics entry in any year); the Booker's first year and the Pulitzer rest on knowledge. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1959, category=peace, laureates[0].motivation",
+              "excerpt": "{\"year\":\"1959\",\"category\":\"peace\",\"laureates\":[{\"id\":\"518\",\"firstname\":\"Philip\",\"surname\":\"Noel-Baker\",\"motivation\":\"\\\"for his longstanding contribution to the cause of disarmament and peace\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Noel-Baker was a British Labour politician.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "1959 minus 1920 is 39.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "538b8a2d32448d1bceceab346fc94374195ef043f6f2605e3ac6d48fe7845a4b",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Nobel Peace Prize",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Philip Baker, later Noel-Baker, won silver in the men's 1500 m at the 1920 Antwerp Games.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1959, category=peace",
+              "excerpt": "{\"year\":\"1959\",\"category\":\"peace\",\"laureates\":[{\"id\":\"518\",\"firstname\":\"Philip\",\"surname\":\"Noel-Baker\",...,\"share\":\"1\"}]}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Noel-Baker won no Pulitzer or Booker Prize, and the Booker was first awarded in 1969. The 1959 Physics prize in the nobel-prizes file went to Segre and Chamberlain.",
+              "confidence": "certain"
+            },
+            "note": "Part of this is in the dataset, part rests on knowledge."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1959, category=peace",
+              "excerpt": "\"motivation\":\"\\\"for his longstanding contribution to the cause of disarmament and peace\\\"\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Noel-Baker was a British Labour politician.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "1959 minus 1920 is 39.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, date), c3 (distractor, date) and c6 (explanation, number) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. c6 is arithmetic (1959 minus 1920); fold such sums into the dated claims or leave them out. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.hist.0163",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Philip Noel-Baker won an Olympic silver medal in the 1,500 metres in 1920. Which prize did he win in 1959?",
+  "answer": "Nobel Peace Prize",
+  "wrong": ["Nobel Prize in Physics", "Pulitzer Prize", "Booker Prize"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.146,
+    "estimator": "v0"
+  }
+}

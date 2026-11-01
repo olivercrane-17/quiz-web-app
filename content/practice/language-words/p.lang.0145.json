@@ -1,0 +1,226 @@
+{
+  "id": "p.lang.0145",
+  "status": "active",
+  "category": "lang",
+  "tags": ["world-languages", "portuguese", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "A 1494 treaty between Spain and Portugal put the eastern bulge of South America on Portugal's side of a line through the Atlantic. Brazil is the only Portuguese-speaking country in the Americas.",
+  "learnMore": "Brazilian Portuguese",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Portuguese is the official and main language of Brazil."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Spanish, Italian and French are not Brazil's main language."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Treaty of Tordesillas, signed by Spain and Portugal in 1494, drew a line through the Atlantic that placed the eastern part of South America on Portugal's side."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Brazil is the only country in the Americas whose official language is Portuguese."
+    }
+  ],
+  "writerNotes": "Spanish is the trap for players who think of South America as Spanish-speaking; most players know Portuguese, so counterintuitive stays false. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: mledoze-countries cca3=BRA languages {por: Portuguese}; no other country in region Americas lists por, which supports c4; rival test: Spanish is spoken by all Brazil's Spanish-American neighbours, but not as Brazil's main language; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: Brazil is known worldwide; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9230a020569a6ae4a95b7dcb91d0374b7929fe71dffa14a158f64fa6f0556f8e",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Portuguese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=BRA, languages",
+              "excerpt": "BRA languages {\"por\":\"Portuguese\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Brazil's main language is Portuguese, not Spanish, Italian or French.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Treaty of Tordesillas of 1494 set a meridian 370 leagues west of the Cape Verde islands. Land east of it, including the eastern part of South America, fell to Portugal.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "every entry with region=Americas, languages",
+              "excerpt": "Of the 56 entries with \"region\": \"Americas\", only one lists Portuguese: BRA languages {\"por\":\"Portuguese\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e0e2fd039b81f6718274256450bbc0a171bbb24fdc4c15e5276789b3b7c69da6",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Portuguese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=BRA languages",
+              "excerpt": "BRA: {\"por\":\"Portuguese\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset lists Portuguese as Brazil's only language, matching the official and main language."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Spanish, Italian and French are not Brazil's main language.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Treaty of Tordesillas of 1494 split the Atlantic world between Spain and Portugal along a line that left the eastern bulge of South America to Portugal.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Brazil is the only country in the Americas with Portuguese as its official language.",
+              "confidence": "certain"
+            },
+            "note": "A stable 'only' over a fixed small set; I know of no other American state with Portuguese as an official language."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, date) rests on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. It missed by one claim, so the redraft is cheap.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "What is the main language of Brazil?",
+  "answer": "Portuguese",
+  "wrong": ["Spanish", "Italian", "French"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.391,
+    "estimator": "v0"
+  }
+}

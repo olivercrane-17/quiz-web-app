@@ -1,0 +1,205 @@
+{
+  "id": "p.film.0220",
+  "status": "cut",
+  "category": "film",
+  "tags": ["tv-series", "britain", "science-fiction"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "It is meant to blend in wherever it lands, but a broken chameleon circuit leaves it stuck as a blue police box, a common London sight when the show began in 1963.",
+  "learnMore": "TARDIS",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In Doctor Who, the TARDIS looks from the outside like a blue police box."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The TARDIS does not look like a red telephone box, a garden shed or a newspaper kiosk."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In the story, the TARDIS's chameleon circuit, meant to disguise it wherever it lands, is broken, so it keeps its police box shape."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Doctor Who began in 1963, when police boxes were a common sight on London streets."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: The red telephone box is the planted confusion: both are British street boxes, but the TARDIS is a blue police box. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a British series shown worldwide; the police box is described in the reveal for players who never saw one. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 32 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "3447e080c5b9657264873b2d555c89269f9e21387d4b891f0d1f7c5da202bf7f",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "A police box",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The TARDIS looks like a blue police box.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "It is a police box, not a red telephone box, a shed or a kiosk.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the series the chameleon circuit that should disguise it is broken, so it stays a police box.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Doctor Who was first broadcast in November 1963, when police boxes still stood on British streets.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4e05e861c888f504926d2dcf70b5829df0e8376840338905ee26ded0427698ac",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "A police box",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The TARDIS appears from outside as a blue police box.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The TARDIS is not a red telephone box, a garden shed or a newspaper kiosk.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the red telephone box is the only serious lure (another British street icon), but the TARDIS is the blue police box."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The TARDIS's chameleon circuit is meant to disguise it, but it is broken, so it stays a police box.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Doctor Who began in 1963, when police boxes were still a common sight on British streets, London included.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [
+          {
+            "type": "regional",
+            "severity": "note",
+            "note": "Police box is a British term, so a non-UK player may not know the word; the item still works for anyone who knows the TARDIS as a blue box with POLICE on it, and the red telephone box is a fair lure."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c4 rests on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered. Checker B also noted that 'police box' is a British term; the item still works for anyone who knows the blue box.",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In Doctor Who, the Doctor's time machine, the TARDIS, looks from the outside like what?",
+  "answer": "A police box",
+  "wrong": ["A red telephone box", "A garden shed", "A newspaper kiosk"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.382,
+    "estimator": "v0"
+  }
+}

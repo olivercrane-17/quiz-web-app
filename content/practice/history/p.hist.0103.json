@@ -1,0 +1,217 @@
+{
+  "id": "p.hist.0103",
+  "status": "active",
+  "category": "hist",
+  "tags": ["ancient-greece", "philosophy"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Philip II of Macedon hired him around 343 BC. Aristotle had studied at Plato's Academy in Athens for about 20 years.",
+  "learnMore": "Aristotle",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Aristotle tutored Alexander the Great, hired by Alexander's father, Philip II of Macedon."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Plato, Socrates and Pythagoras did not tutor Alexander the Great."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Philip II hired Aristotle to tutor Alexander around 343 BC."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Aristotle studied at Plato's Academy in Athens for about 20 years."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed; each claim with a digit, number word, superlative, 'first', 'only', quotation or etymology is high (the C26 floor), and so is the key of a counterintuitive item. datasets: no pinned dataset covers these facts (the manifest has no history source), so checker A needs web evidence for every high-risk claim. rivalTest: Plato is the tempting pick as Aristotle's own teacher, but he died around 348 BC when Alexander was a child; Socrates died in 399 BC and Pythagoras much earlier. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the people and events here are reported in world history teaching and reference works, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 21 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: c3 uses 'around 343 BC' because sources give 343 or 342 BC.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-phist01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2e381e1efc8ccd948049a6a5c1c6b68f8cb528e28bd1bbe7e5067fb2512b6f81",
+        "startedAt": "2026-11-01T00:47:00Z",
+        "finishedAt": "2026-11-01T01:23:12Z",
+        "coldSolve": {
+          "answerGiven": "Aristotle",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Philip II of Macedon engaged Aristotle as tutor to his son Alexander.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Socrates died in 399 BC and Pythagoras around 495 BC, before Alexander was born in 356 BC, and Plato never taught him.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Aristotle went to the Macedonian court around 343 or 342 BC to teach the young Alexander.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). Not searched: the batch's WebSearch cap (26, shared with pass B) could not cover every high-risk claim."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Aristotle entered the Academy at about 17, in 367 BC, and stayed until Plato died in 347 BC, so about 20 years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). Not searched: the batch's WebSearch cap (26, shared with pass B) could not cover every high-risk claim."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-phist01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "fbd5f7b179244bc113cbdd2c20683234590f2b329e95ca3dddfa107226f1f1e1",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:31:21Z",
+        "coldSolve": {
+          "answerGiven": "Aristotle",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Philip II of Macedon brought Aristotle to teach his son Alexander.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Plato taught Aristotle, Socrates taught Plato and Pythagoras lived centuries before Alexander, so none tutored him.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The appointment is dated to about 343 or 342 BC.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check only counts once check A carries external evidence for it."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Aristotle joined the Academy at about seventeen in 367 BC and stayed until Plato's death in 347 BC, roughly twenty years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check only counts once check A carries external evidence for it."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-phist01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, date) and c4 (explanation, number) rest on knowledge alone in both checks, and the batch's search cap is spent (26 of 26). Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-phist01e",
+        "at": "2026-11-01T00:46:48Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which philosopher was hired to tutor the young Alexander the Great?",
+  "answer": "Aristotle",
+  "wrong": ["Plato", "Socrates", "Pythagoras"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.64,
+    "spread": 0.295,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,255 @@
+{
+  "id": "p.geo.0271",
+  "status": "active",
+  "category": "geo",
+  "tags": ["area", "islands", "countries"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Japan covers about 378,000 km² and the UK about 243,000 km², so Japan is roughly one and a half times as big. It is even slightly bigger than Germany.",
+  "learnMore": "Japan",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Japan's total area is about 378,000 km²."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The United Kingdom's total area is about 243,000 km²."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Japan is roughly one and a half times the size of the United Kingdom."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Japan is slightly larger than Germany by area."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (number), c2 (number) and c3 (number) are high under the C26 floor, and c4 is standard. Datasets: mledoze-countries: JPN area 377,930; GBR 242,900; DEU 357,114 (c1 to c4). The ratio is 1.56, well above the 1.1 guard. Rival test: Two island nations of similar fame often get pictured as the same size, so the UK tempts. Against the key: nothing; the gap is wide under any published figure. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Both countries are known everywhere. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 29 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset. Seed: 4 (medium): a coin flip for many players. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8935a058d38918458d30f6b666c4c0271cfbbaa6f978daf399f70ae923f467a6",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Japan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=JPN",
+              "excerpt": "\"area\": 377930",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=GBR",
+              "excerpt": "\"area\": 242900",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=JPN, GBR",
+              "excerpt": "JPN \"area\": 377930; GBR \"area\": 242900",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Ratio 1.56: roughly one and a half times."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=JPN, DEU",
+              "excerpt": "JPN \"area\": 377930; DEU \"area\": 357114",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Japan is 6% larger: slightly bigger."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "393a64590a591652706d73827850d4306b4ee793c8343a532de3c823c446ed79",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Japan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=JPN",
+              "excerpt": "\"area\": 377930",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=GBR",
+              "excerpt": "\"area\": 242900",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=JPN vs GBR",
+              "excerpt": "377930 / 242900 = 1.556, roughly one and a half times.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Number claim."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=JPN vs DEU",
+              "excerpt": "Japan 377930; Germany 357114; Japan is 5.8% larger.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "'Slightly larger' is fair."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1, c2 and c3 (mledoze-countries) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.geo.0269",
+      "score": 0.25,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which country is bigger by area?",
+  "a": "Japan",
+  "b": "United Kingdom",
+  "answer": "a",
+  "relation": "larger",
+  "measure": "area",
+  "unit": "km²",
+  "values": {
+    "a": 377930,
+    "b": 242900
+  },
+  "valueDisplay": {
+    "a": "about 378,000 km²",
+    "b": "about 243,000 km²"
+  },
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.231,
+    "estimator": "v0"
+  }
+}

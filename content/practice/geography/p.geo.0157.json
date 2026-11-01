@@ -1,0 +1,221 @@
+{
+  "id": "p.geo.0157",
+  "status": "active",
+  "category": "geo",
+  "tags": ["waterfalls", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The water falls from the flat-topped mountain Auyán-tepui, and in the dry season much of it turns to mist before reaching the bottom.",
+  "learnMore": "Angel Falls",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Angel Falls is in Venezuela."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Angel Falls is not in Brazil, Guyana or Colombia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Angel Falls drops from the edge of Auyán-tepui, a flat-topped mountain."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Much of Angel Falls' water turns to mist before it reaches the bottom, especially in the dry season."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; all standard; I kept the famous height and the 'highest waterfall' record out so nothing needs a search. Datasets: natural-earth ne_50m_geography_regions_points: 'Salto Angel' lat 5.686836, lng -62.061848; a point-in-polygon test against ne_110m_admin_0_countries places it in Venezuela (c1). Rival test: Brazil and Guyana share the same tepui highlands near the Venezuelan border, and Colombia is the other neighbour, so all are real confusions. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a famous natural wonder. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2401f3feb65b69cc119a99dd343010a300ad28c89cdaacfe6fcc661fd3de0ff2",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Venezuela",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Salto Angel (name_en Angel Falls)",
+              "excerpt": "coordinates [-62.061818,5.686896]; inside \"ADMIN\": \"Venezuela\" in ne_110m_admin_0_countries",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Salto Angel (name_en Angel Falls)",
+              "excerpt": "coordinates [-62.061818,5.686896]; inside \"ADMIN\": \"Venezuela\" in ne_110m_admin_0_countries",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "So not in Brazil, Guyana or Colombia."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Angel Falls drops from the rim of Auyán-tepui, a flat-topped tepui.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the dry season much of the falling water turns to mist before reaching the base.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3889013867ffd35252e5ac35965aef7d2832f84d6b8f2b18e6169ab06ad4f104",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Venezuela",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Angel Falls is in Canaima National Park, Venezuela.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Angel Falls is not in Brazil, Guyana or Colombia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Angel Falls drops from the edge of Auyan-tepui, a flat-topped mountain.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Much of Angel Falls' water turns to mist before reaching the bottom, especially in the dry season.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; c1 and c2 also carry natural-earth evidence in pass A. Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0150",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In which country does Angel Falls plunge from a flat-topped mountain?",
+  "answer": "Venezuela",
+  "wrong": ["Brazil", "Guyana", "Colombia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.54,
+    "spread": 0.21,
+    "estimator": "v0"
+  }
+}

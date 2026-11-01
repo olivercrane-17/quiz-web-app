@@ -1,0 +1,205 @@
+{
+  "id": "p.nat.0207",
+  "status": "cut",
+  "category": "nat",
+  "tags": ["dinosaurs", "fossils", "feathers", "asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Jurassic Park's raptors were far bigger, closer in size to relatives such as Deinonychus. The real animal was feathered: its forearm bones carry quill knobs, where wing feathers were anchored.",
+  "learnMore": "Velociraptor",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Velociraptor was about the size of a turkey."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Velociraptor was much smaller than an adult human, a horse or a lion."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The raptors in Jurassic Park were much bigger than Velociraptor, closer in size to relatives such as Deinonychus."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Velociraptor forearm fossils show quill knobs, where feathers were anchored."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed; high: c1 (checker_doubt, standing in for counterintuitive, which the tooling's riskReason enum lacks; C26 makes the key of a counterintuitive item high); standard: c2, c3 and c4. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on Velociraptor size and quill knobs should cover c1, c3 and c4. rivalTest: Argued for 'An adult human', the size the films made famous: that is the planted trap and the reason counterintuitive is set. Argued against the key: with its long tail Velociraptor was about 2 m long, longer than a turkey, but its body mass (about 15 kg) and hip height put it at turkey size, which is how references describe it. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: dinosaurs and the film are known worldwide; the answer needs no local knowledge. style: Oxford spelling, plain hyphens only, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none on the size. c3 is worded as a comparison of size only, because the film's naming history (Crichton following Gregory Paul) is more tangled than a one-line claim can carry.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d66f55221043d0987e300352958a24f347c79097bbef47ac3248331be64bccd8",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "A turkey",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Velociraptor mongoliensis was roughly turkey-sized: about half a metre tall at the hip and around 15 kg, with a long tail.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "At that size it was far smaller than an adult human, a horse or a lion.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Jurassic Park raptors were modelled on larger dromaeosaurids such as Deinonychus and were far bigger than the real Velociraptor.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A Velociraptor forearm bone (ulna) shows quill knobs, the anchor points of wing feathers, so the animal was feathered.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "dc67e635552a54d59c69b040ca4525cf486cb4d9c931535f99fefdd7a04f5d22",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "A turkey",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Velociraptor is the animal usually described as turkey-sized: about 2 m from nose to tail tip, around 0.5 m high at the hip, and roughly 15 kg.",
+              "confidence": "certain"
+            },
+            "note": "Turkey is the standard museum comparison and the closest option by mass and hip height."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Velociraptor was far lighter and lower than an adult human, a horse or a lion.",
+              "confidence": "certain"
+            },
+            "note": "True by mass and height. By nose-to-tail length (about 2 m) it is comparable to a person's height, which is the ambiguity noted below."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The film raptors were scaled-up versions modelled on the larger Deinonychus, not on real Velociraptor.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A Velociraptor forearm bone (ulna) shows quill knobs, the anchor points for large feathers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "'Size' has no stated measure. Velociraptor matches a turkey in mass and hip height, but its roughly 2 m length matches an adult human's height. Turkey is the conventional comparison and the best fit overall, so the key stands; the editor may prefer 'weighed about as much as' to remove the pedant's route."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 (key, checker_doubt) rests on knowledge alone in both checks: no pinned dataset covers animal biology and checker A's one search was refused at the session limit, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered. For the redraft: B notes that 'size' has no stated measure (a turkey by mass, a human by length), so ask what it weighed about as much as.",
+      "decidedAt": "2026-11-01T04:21:42Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The real Velociraptor was about the size of which animal?",
+  "answer": "A turkey",
+  "wrong": ["An adult human", "A horse", "A lion"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.22,
+    "estimator": "v0"
+  }
+}

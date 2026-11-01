@@ -1,0 +1,242 @@
+{
+  "id": "p.soc.0272",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["inventions", "cars", "united-states"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Her windscreen (windshield) wiper swept a rubber blade across the glass when the driver turned a lever inside. The patent ran out in 1920, before wipers became common.",
+  "learnMore": "Mary Anderson (inventor)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Mary Anderson received a US patent for a windscreen (windshield) wiper in 1903."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Mary Anderson did not patent snow chains, a car heater or a rear-view mirror."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Anderson was inspired during a streetcar ride in New York in snowy weather, when the driver struggled to see."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Her device swept a rubber blade across the glass when a lever inside the vehicle was turned."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Anderson's patent expired in 1920, before windscreen wipers became common on cars."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: inventions of everyday life. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers this; c1 and c5 need web evidence. rivalTest: snow chains are the planted trap from the snowy ride (patented by Harry Weed in 1904); the heater and mirror are other early motoring devices. Nothing survives against the wiper. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: a fair test everywhere; 'windscreen' is glossed as 'windshield' in the explanation. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 28 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 3 (medium): the snow foothold leads many to the wiper, and snow chains pull others. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "dae36576a780f3c3f6fc35a33b9dca658f85a6c3f742d214a04601b54063984d",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "Windscreen wiper",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mary Anderson received a US patent for her windscreen wiper (a window-cleaning device) on 10 November 1903.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Anderson did not patent snow chains, a car heater or a rear-view mirror.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A streetcar ride in snowy New York, around 1902, gave Anderson the idea.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Her lever-worked device swept a rubber blade across the glass.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1903 patent expired in 1920, at the end of its 17-year term. I cannot confirm that wipers were still uncommon by then: I also recall accounts that wipers were standard on many American cars by about 1916.",
+              "confidence": "unsure"
+            },
+            "note": "Uncertain: the expiry year is consistent with the patent term, but 'before windscreen wipers became common on cars' conflicts with accounts I recall. See the wording issue. High-risk (date). No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c5 is left uncertain. The 1920 expiry fits a 1903 patent's 17-year term, but I cannot confirm 'before wipers became common': I also recall accounts that wipers were standard on many American cars by about 1916, and others that Cadillac made them standard only in 1922. Drop the clause from the explanation ('The patent ran out in 1920.') or get external evidence that settles it; no search could run in this pass."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "33a06be6e1f861244043c0dfb14ac0f6e7ccedb195e8225e4f7356f2265d0eff",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "Windscreen wiper",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mary Anderson was granted a US patent for a hand-operated windscreen wiper in November 1903.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Anderson's one famous patent is the wiper; she is not credited with snow chains, a car heater or a rear-view mirror.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The New York streetcar story is the standard biographical anecdote, but I know of no primary record of it, so I treat it as tradition rather than documented fact.",
+              "confidence": "likely"
+            },
+            "note": "Uncertain: the stem states the anecdote as fact. Hedge it ('said to be', as item 0271 does) or source it."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Her device used a lever inside the vehicle to sweep a rubber blade across the glass.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A US patent of 1903 ran 17 years, so hers lapsed in 1920. Whether wipers were not yet common by then is vague, since they were widely fitted by the early 1920s.",
+              "confidence": "likely"
+            },
+            "note": "Uncertain: 'before wipers became common' is loose, because wipers were already widely fitted around 1920. Drop the clause or give a date."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Beyond the two uncertain claims: 'streetcar' is a US word (tram elsewhere), and the stem gives the anecdote as plain fact. 'After a snowy tram ride in New York, she was said to have patented...' would read worldwide and match item 0271's hedge."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "cut",
+      "reason": "A revise, B revise, so no tiebreak can settle it (§9.7, §9.9 rule 2). c5 (the patent ran out before wipers became common) is uncertain in both checks and c3 (the streetcar anecdote, stated as fact in the stem) is uncertain in B; c1 and c5 also lack dataset or web evidence. The fixes drop or hedge claims, so they need fresh checks. Cut; redraft with the anecdote hedged ('is said to', as p.soc.0271 does), 'tram' beside or for 'streetcar', and no claim about when wipers became common.",
+      "decidedAt": "2026-11-01T04:47:17Z"
+    }
+  },
+  "format": "mc",
+  "stem": "After a snowy streetcar ride in New York, Mary Anderson patented which device in 1903?",
+  "answer": "Windscreen wiper",
+  "wrong": ["Snow chains", "Car heater", "Rear-view mirror"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.318,
+    "estimator": "v0"
+  }
+}

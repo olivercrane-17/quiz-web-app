@@ -1,0 +1,309 @@
+{
+  "id": "p.geo.0129",
+  "status": "active",
+  "category": "geo",
+  "tags": ["landlocked", "area", "asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "At about 2.7 million km², Kazakhstan is roughly 1.7 times the size of runner-up Mongolia. Its Caspian shore doesn't make it coastal: the Caspian has no outlet to the ocean.",
+  "learnMore": "Kazakhstan",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Kazakhstan is the largest landlocked country by area."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Mongolia, Chad and Ethiopia are landlocked countries smaller in area than Kazakhstan."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Kazakhstan covers about 2.7 million km²."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Kazakhstan's area is roughly 1.7 times Mongolia's."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Mongolia is the second-largest landlocked country by area."
+    },
+    {
+      "id": "c6",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Caspian Sea has no outlet to the ocean, so a Caspian shore gives a country no access to the ocean."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 and c5 are superlatives and c3 and c4 carry numbers, all high; c2 and c6 are standard. Datasets: mledoze-countries, independent entries with landlocked true sorted by area: KAZ 2,724,900; MNG 1,564,110; TCD 1,284,000; NER 1,267,000; MLI 1,240,192; ETH 1,104,300 km² (c1, c2, c3, c5). c4: 2,724,900 / 1,564,110 = 1.74. Rival test: Mongolia is the famous landlocked giant and the likeliest pick; Chad and Ethiopia are Africa's big landlocked states. Against the key: someone might say the Caspian coast makes Kazakhstan coastal, which the explanation answers; it is landlocked in every standard list and in the pinned file. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a world-map question with no local knowledge needed. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 30 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: not marked counterintuitive: the Mongolia pull is real but more a guess than a firm belief.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4d833bcefdfb6af3d1acb3f3d11cf61fe836aa4c4ed4a629d78b6381687a629e",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Kazakhstan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=KAZ; cca3=MNG; cca3=TCD",
+              "excerpt": "KAZ: \"landlocked\": true, \"area\": 2724900 | MNG: \"landlocked\": true, \"area\": 1564110 | TCD: \"landlocked\": true, \"area\": 1284000",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "KAZ has the largest area of any landlocked: true entry."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MNG; cca3=TCD; cca3=ETH; cca3=KAZ",
+              "excerpt": "MNG: \"landlocked\": true, \"area\": 1564110 | TCD: \"landlocked\": true, \"area\": 1284000 | ETH: \"landlocked\": true, \"area\": 1104300 | KAZ: \"landlocked\": true, \"area\": 2724900",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "All landlocked, all smaller than KAZ."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=KAZ",
+              "excerpt": "KAZ: \"area\": 2724900",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=KAZ; cca3=MNG",
+              "excerpt": "KAZ: \"area\": 2724900 | MNG: \"area\": 1564110",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Ratio 1.742, roughly 1.7."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=KAZ; cca3=MNG; cca3=TCD",
+              "excerpt": "KAZ: \"landlocked\": true, \"area\": 2724900 | MNG: \"landlocked\": true, \"area\": 1564110 | TCD: \"landlocked\": true, \"area\": 1284000",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "MNG ranks second among landlocked: true entries by area."
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Caspian is a closed basin, so a Caspian coast gives no natural sea access.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f71b3268c7b40e580cf9d96a3da92bad8da6d4309877562d6acaecf9d0f7c6c9",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Kazakhstan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=KAZ, cca3=MNG, cca3=TCD, cca3=ETH",
+              "excerpt": "Landlocked records by area: KAZ 2724900, MNG 1564110, TCD 1284000, NER 1267000",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Kazakhstan is landlocked in the dataset, which treats the Caspian as not an ocean coast."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MNG, cca3=TCD, cca3=ETH",
+              "excerpt": "MNG (Mongolia): landlocked true; area 1564110 | TCD (Chad): landlocked true; area 1284000 | ETH (Ethiopia): landlocked true; area 1104300",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=KAZ",
+              "excerpt": "KAZ (Kazakhstan): area 2724900",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=KAZ, cca3=MNG",
+              "excerpt": "KAZ (Kazakhstan): area 2724900 | MNG (Mongolia): area 1564110 | ratio 1.742",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MNG, cca3=KAZ",
+              "excerpt": "Second in the landlocked ranking above: MNG 1564110",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Caspian Sea is an enclosed basin with no outlet to the ocean, so a Caspian shore gives no ocean access.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1, c3, c4 and c5 carry mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0103",
+      "score": 0.48,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which is the world's largest landlocked country by area?",
+  "answer": "Kazakhstan",
+  "wrong": ["Mongolia", "Chad", "Ethiopia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.221,
+    "estimator": "v0"
+  }
+}

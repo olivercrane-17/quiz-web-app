@@ -1,0 +1,212 @@
+{
+  "id": "p.geo.0268",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "cities", "climate"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Lisbon sits at about 38.7° N and Seoul at about 37.6° N. Seoul's freezing winters come from cold air sweeping south from Siberia, not from being far north.",
+  "learnMore": "Lisbon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Seoul lies at about 37.6° N."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Lisbon lies at about 38.7° N."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Seoul's cold winters are driven by cold air flowing south from Siberia."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (number) and c2 (number) are high under the C26 floor, and c3 is standard. Datasets: geonames-cities: Seoul, KR, 37.566, 126.9784; Lisbon, PT, 38.72509, -9.1498 (c1, c2). The gap is about 1.2 degrees, above the 0.5 degree guard. Rival test: Seoul's snowy winters and Lisbon's sunshine are the trap. The centres settle it, and no reasonable point inside either city closes the gap. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Both cities are well known; the reasoning is map knowledge. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 28 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c3 is standard climatology. Seed: 4 (medium): a coin flip that leans towards the wrong side. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "21c9b9470cf0178d62b2a84a66104e2058b085a36e8ecd6a719c21a989e7ecde",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Lisbon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Seoul, country=KR",
+              "excerpt": "{\"name\":\"Seoul\",\"lat\":\"37.566\",\"lng\":\"126.9784\",\"country\":\"KR\",\"admin1\":\"11\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "37.566 rounds to 37.6."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Lisbon, country=PT",
+              "excerpt": "{\"name\":\"Lisbon\",\"lat\":\"38.72509\",\"lng\":\"-9.1498\",\"country\":\"PT\",\"admin1\":\"14\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "38.725 rounds to 38.7."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Seoul's cold, dry winters come from the Siberian High sending frigid air south.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "50c92d5df04dddd91c54831bd276a0f25f59ea5ac4a7fec0c5b9465441281eb4",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Lisbon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Seoul, country=KR",
+              "excerpt": "Seoul KR lat 37.566",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 37.6 N."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Lisbon, country=PT",
+              "excerpt": "Lisbon PT lat 38.72509",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 38.7 N; Lisbon is 1.16 degrees further north, over the 0.5 degree guard."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Seoul's cold winters come from cold air flowing south from Siberia (the Siberian High and the winter monsoon).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c2 (geonames-cities) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which city is further north?",
+  "a": "Seoul",
+  "b": "Lisbon",
+  "answer": "b",
+  "relation": "further_north",
+  "measure": "latitude of the city centre",
+  "unit": "° N",
+  "values": {
+    "a": 37.57,
+    "b": 38.73
+  },
+  "valueDisplay": {
+    "a": "37.6° N",
+    "b": "38.7° N"
+  },
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.138,
+    "estimator": "v0"
+  }
+}

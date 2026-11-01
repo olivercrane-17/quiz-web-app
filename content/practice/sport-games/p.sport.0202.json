@@ -1,0 +1,237 @@
+{
+  "id": "p.sport.0202",
+  "status": "active",
+  "category": "sport",
+  "tags": ["olympics", "tokyo", "olympic-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The COVID-19 pandemic delayed them by a year, but they kept the Tokyo 2020 name. The Games had been cancelled during both world wars, yet never postponed before.",
+  "learnMore": "2020 Summer Olympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Tokyo 2020 Summer Olympics were held from 23 July to 8 August 2021."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Tokyo 2020 Olympics were not held in 2019, 2020 or 2022."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Tokyo Olympics were postponed by one year because of the COVID-19 pandemic and kept the name Tokyo 2020."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The Summer Olympics of 1916, 1940 and 1944 were cancelled because of the two world wars, and Tokyo 2020 was the first modern Olympics to be postponed rather than cancelled."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 4 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: olympic-editions, edition_metadata.csv: edition_id 61 (2020 Summer, Tokyo, opening ceremony 23 July 2021, closing ceremony 8 August 2021) confirms c1 and c2; edition_ids 50, 51 and 52 (1916, 1940 and 1944 Summer) are marked cancelled, which supports the first half of c4. The postponement reason and the 'first postponed' half of c4 need web evidence. rivalTest: 2020 is the planted trap, because the name says 2020. 2019 and 2022 are definitely wrong: the Games opened on 23 July 2021. The Winter Games of 1940 and 1944 were also cancelled, which does not affect the claim about postponement. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: The pandemic is mentioned only as the documented reason for the delay, in a factual tone.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0e13082fd6411193862d4c6b5b3ec127810ebb010296457f2293b19d82085162",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "2021",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=61 (games 2020 Summer)",
+              "excerpt": "61,2020 Summer,2020,Summer,Tokyo,Japan,2021-07-23,2021-08-08,11318,206,339,49",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The 2020 Summer row gives an opening ceremony on 2021-07-23 and a closing ceremony on 2021-08-08, matching 23 July to 8 August 2021."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=61 (games 2020 Summer)",
+              "excerpt": "61,2020 Summer,2020,Summer,Tokyo,Japan,2021-07-23,2021-08-08,11318,206,339,49",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Both ceremonies of the 2020 Summer edition fall in 2021, so the Games were held in none of 2019, 2020 or 2022."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=61 (games 2020 Summer)",
+              "excerpt": "61,2020 Summer,2020,Summer,Tokyo,Japan,2021-07-23,2021-08-08,11318,206,339,49",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The edition kept its 2020 name (games '2020 Summer', year 2020) but ran in 2021, one year late. The COVID-19 cause rests on my knowledge (certain); the row's notes column says the same but is free text and not counted as evidence (manifest knownIssues)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=50, 51 and 52 (1916, 1940 and 1944 Summer) and 61 (2020 Summer); opening_ceremony year compared with the year column on all 63 rows",
+              "excerpt": "50,1916 Summer,1916,Summer,Berlin,Germany,,,,,, | 51,1940 Summer,1940,Summer,Helsinki,Finland,,,,,, | 52,1944 Summer,1944,Summer,London,Great Britain,,,,,, | 61,2020 Summer,2020,Summer,Tokyo,Japan,2021-07-23,2021-08-08",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Structured columns only: the 1916, 1940 and 1944 Summer rows have no ceremonies, participants, NOCs or medal events, so those Games were not held; and of all 63 rows the 2020 Summer edition is the only one whose opening ceremony falls outside its named year, which supports 'the first to be postponed'. That the cancellations were caused by the two world wars rests on my knowledge (certain)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "a0e2cc5a82a0a3d692fc53f958f97a67705330dd0fd54e13635d3aa195c5efe1",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "2021",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=61 (2020 Summer)",
+              "excerpt": "61,2020 Summer,2020,Summer,Tokyo,Japan,2021-07-23,2021-08-08",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The file gives the host and the actual dates (23 July to 8 August 2021) under the 2020 label. Only the host, year and date columns are used; the notes column is free text and not evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "season=Summer, opening ceremony dated 2019 to 2022",
+              "excerpt": "61,2020 Summer,2020,Summer,Tokyo,Japan,2021-07-23,2021-08-08",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Tokyo 2020 is the only Summer edition in the file with an opening ceremony between 2019 and 2022, and it is dated 2021, so the Games were not held in 2019, 2020 or 2022."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IOC and the Japanese organisers agreed in March 2020 to postpone the Games by a year because of COVID-19, and the event kept the name Tokyo 2020 although it ran in 2021.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Summer Games of 1916, 1940 and 1944 were cancelled because of the two world wars, and Tokyo 2020 was the first Olympics ever postponed rather than cancelled.",
+              "confidence": "certain"
+            },
+            "note": "Rival test for the trap option: 2020 is the label, not the year. The dataset lists 1916, 1940 and 1944 as editions without dates, but its notes column is free text, so this rests on knowledge."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Both checks pass; every claim is confirmed in both, and high-risk c1 to c4 have olympic-editions dataset evidence in a confirming check (A on all four, B on c1 and c2). Nearest item scores 0.457, a guide example on a different fact (Wimbledon against the first modern Olympics), so unique. Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:37:40Z",
+      "nearestId": "p.sport.0002",
+      "score": 0.457,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:37:40Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The Olympic Games known as Tokyo 2020 were held in which year?",
+  "answer": "2021",
+  "wrong": ["2019", "2020", "2022"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.528,
+    "estimator": "v0"
+  }
+}

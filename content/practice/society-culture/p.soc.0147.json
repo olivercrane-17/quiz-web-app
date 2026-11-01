@@ -1,0 +1,217 @@
+{
+  "id": "p.soc.0147",
+  "status": "active",
+  "category": "soc",
+  "tags": ["customs", "gifts", "china"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "In Mandarin, 'give a clock', song zhong, sounds just like a phrase for caring for someone at the end of life. Umbrellas are also avoided, because the word suggests separation.",
+  "learnMore": "Chinese gift-giving customs",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "In Chinese tradition, clocks are avoided as gifts because 'give a clock' (song zhong) sounds like the phrase for attending someone at their death (song zhong)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Teapots and silk scarves are acceptable gifts in Chinese tradition; umbrellas are avoided for a different reason."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "In Mandarin, the phrases for giving a clock and for attending someone at the end of life are both pronounced song zhong."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Umbrellas are avoided as gifts because the word for umbrella, san, sounds like the word for separating."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers customs; c1 and c3 need web evidence. rivalTest: the umbrella is the strongest pull, because it really is avoided, but for separation, not death; the explanation defuses it. Teapots and silk scarves are common gifts. Argued against the key: the clock taboo is the best-known example of a homophone gift taboo. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: fair everywhere; the foothold is the idea of time running out. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 5. doubts: the stem's quoted phrase is my plain-English gloss of the idiom, not a quotation from a source.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "da7e8b00a22ec7441ee07530157c02141ab21baffd8b37d923bd57a3c676cce6",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "A clock",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Giving a clock (song zhong) sounds like the phrase for attending a dying relative or the funeral rites (song zhong), so clocks are avoided as gifts.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Teapots and silk scarves carry no such taboo, while umbrellas are avoided because of a pun on separation.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Mandarin both phrases are pronounced song zhong, with the same tones.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The word for umbrella, san, sounds like the word for scattering or separating, san.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9d40e465fc815629f4c59dce956986187770225eaab5902ecf084334248a755c",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "A clock",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Giving a clock (song zhong) sounds like song zhong, attending someone at the end of life, so clocks are avoided as gifts.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tea sets and silk are customary gifts and have no deathbed pun; umbrellas are avoided for a different reason (san sounds like 'to separate').",
+              "confidence": "certain"
+            },
+            "note": "'Acceptable gifts' is looser than the stem needs: all that matters is that neither the teapot nor the scarf has a deathbed pun."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Mandarin, 'to give a clock' and 'to attend a dying person' are both pronounced song zhong.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Umbrella (san) sounds like the word for separating.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, quotation) and c3 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sci.0127",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In Chinese tradition, which gift is avoided because the phrase for giving it sounds like 'attending a deathbed'?",
+  "answer": "A clock",
+  "wrong": ["An umbrella", "A teapot", "A silk scarf"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.183,
+    "estimator": "v0"
+  }
+}

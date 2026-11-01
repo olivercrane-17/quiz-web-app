@@ -1,0 +1,348 @@
+{
+  "id": "p.book.0104",
+  "status": "active",
+  "category": "book",
+  "tags": ["drama", "shakespeare"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Shylock is the moneylender. Antonio, the merchant, borrows from him on behalf of his friend Bassanio and pledges a pound of his own flesh as security.",
+  "learnMore": "The Merchant of Venice",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "In The Merchant of Venice, the merchant of the title is Antonio."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Shylock is a moneylender, Bassanio is Antonio's friend and Lorenzo is a friend of Bassanio who elopes with Jessica, so none of them is the merchant of the title."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Antonio borrows money from Shylock on behalf of his friend Bassanio."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Antonio agrees to forfeit a pound of his own flesh if the loan is not repaid."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: drama and Shakespeare. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item). The tooling's riskReason list has no 'counterintuitive' value, so c1 (the key of a counterintuitive item, high under C26) carries 'checker_doubt' instead. Datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for the key, which is high only because the item is counterintuitive. Rival test: Shylock is the strongest pull, but he lends rather than trades; Bassanio is the borrower's friend and suitor of Portia; Lorenzo is a minor lover. The play calls Antonio the merchant throughout. Counterintuitive: Shylock is the famous character, so most players pick him; the explanation defuses that. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 26 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "52ecca5412f9ef94bf8af351a520899d693765ec49fb8ab8013023b7e5c25128",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "Antonio",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Shakespeare: Antonio is the merchant of the title in The Merchant of Venice, Shylock the moneylender; Mark Antony's funeral speech \"Friends, Romans, countrymen\" in Julius Caesar; Iago's \"green-eyed monster\" in Othello",
+              "results": [
+                {
+                  "title": "Famous Quotes",
+                  "url": "https://www.rsc.org.uk/shakespeare/themes/famous-quotes"
+                },
+                {
+                  "title": "Shakespeare's Phrases",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-phrases/"
+                },
+                {
+                  "title": "List of idioms attributed to Shakespeare",
+                  "url": "https://en.wikipedia.org/wiki/List_of_idioms_attributed_to_Shakespeare"
+                },
+                {
+                  "title": "Summary of Othello",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-plays/othello-moor-venice/"
+                },
+                {
+                  "title": "Shylock",
+                  "url": "https://www.britannica.com/topic/Shylock"
+                },
+                {
+                  "title": "William Shakespeare",
+                  "url": "https://www.britannica.com/summary/William-Shakespeares-Important-Works"
+                },
+                {
+                  "title": "Famous Quotes",
+                  "url": "https://www.rsc.org.uk/othello/about-the-play/famous-quotes"
+                },
+                {
+                  "title": "Othello",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-characters/othello/"
+                },
+                {
+                  "title": "Shylock",
+                  "url": "https://en.wikipedia.org/wiki/Shylock"
+                },
+                {
+                  "title": "Othello - Act 3, scene 3",
+                  "url": "https://www.folger.edu/explore/shakespeares-works/othello/read/3/3/"
+                }
+              ],
+              "summaryExcerpt": "Britannica describes Bassanio's friend, the merchant Antonio, agreeing to guarantee a loan, and Shylock as a Jewish moneylender and a central character in the play. Antonio borrows from Shylock on Bassanio's behalf, and when his ships are lost, Shylock demands the agreed penalty of a pound of Antonio's flesh",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 12: the summary attributes 'the merchant Antonio' and Shylock the moneylender to Britannica. Counts at Tier B. The writer's checker_doubt flag is answered by this external source."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Shylock is the moneylender, Bassanio is Antonio's friend who woos Portia, and Lorenzo is Bassanio's friend who elopes with Shylock's daughter Jessica.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Shakespeare: Antonio is the merchant of the title in The Merchant of Venice, Shylock the moneylender; Mark Antony's funeral speech \"Friends, Romans, countrymen\" in Julius Caesar; Iago's \"green-eyed monster\" in Othello",
+              "results": [
+                {
+                  "title": "Famous Quotes",
+                  "url": "https://www.rsc.org.uk/shakespeare/themes/famous-quotes"
+                },
+                {
+                  "title": "Shakespeare's Phrases",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-phrases/"
+                },
+                {
+                  "title": "List of idioms attributed to Shakespeare",
+                  "url": "https://en.wikipedia.org/wiki/List_of_idioms_attributed_to_Shakespeare"
+                },
+                {
+                  "title": "Summary of Othello",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-plays/othello-moor-venice/"
+                },
+                {
+                  "title": "Shylock",
+                  "url": "https://www.britannica.com/topic/Shylock"
+                },
+                {
+                  "title": "William Shakespeare",
+                  "url": "https://www.britannica.com/summary/William-Shakespeares-Important-Works"
+                },
+                {
+                  "title": "Famous Quotes",
+                  "url": "https://www.rsc.org.uk/othello/about-the-play/famous-quotes"
+                },
+                {
+                  "title": "Othello",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-characters/othello/"
+                },
+                {
+                  "title": "Shylock",
+                  "url": "https://en.wikipedia.org/wiki/Shylock"
+                },
+                {
+                  "title": "Othello - Act 3, scene 3",
+                  "url": "https://www.folger.edu/explore/shakespeares-works/othello/read/3/3/"
+                }
+              ],
+              "summaryExcerpt": "Britannica describes Bassanio's friend, the merchant Antonio, agreeing to guarantee a loan, and Shylock as a Jewish moneylender and a central character in the play. Antonio borrows from Shylock on Bassanio's behalf, and when his ships are lost, Shylock demands the agreed penalty of a pound of Antonio's flesh",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 12 (counted on this item)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Shakespeare: Antonio is the merchant of the title in The Merchant of Venice, Shylock the moneylender; Mark Antony's funeral speech \"Friends, Romans, countrymen\" in Julius Caesar; Iago's \"green-eyed monster\" in Othello",
+              "results": [
+                {
+                  "title": "Famous Quotes",
+                  "url": "https://www.rsc.org.uk/shakespeare/themes/famous-quotes"
+                },
+                {
+                  "title": "Shakespeare's Phrases",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-phrases/"
+                },
+                {
+                  "title": "List of idioms attributed to Shakespeare",
+                  "url": "https://en.wikipedia.org/wiki/List_of_idioms_attributed_to_Shakespeare"
+                },
+                {
+                  "title": "Summary of Othello",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-plays/othello-moor-venice/"
+                },
+                {
+                  "title": "Shylock",
+                  "url": "https://www.britannica.com/topic/Shylock"
+                },
+                {
+                  "title": "William Shakespeare",
+                  "url": "https://www.britannica.com/summary/William-Shakespeares-Important-Works"
+                },
+                {
+                  "title": "Famous Quotes",
+                  "url": "https://www.rsc.org.uk/othello/about-the-play/famous-quotes"
+                },
+                {
+                  "title": "Othello",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-characters/othello/"
+                },
+                {
+                  "title": "Shylock",
+                  "url": "https://en.wikipedia.org/wiki/Shylock"
+                },
+                {
+                  "title": "Othello - Act 3, scene 3",
+                  "url": "https://www.folger.edu/explore/shakespeares-works/othello/read/3/3/"
+                }
+              ],
+              "summaryExcerpt": "Britannica describes Bassanio's friend, the merchant Antonio, agreeing to guarantee a loan, and Shylock as a Jewish moneylender and a central character in the play. Antonio borrows from Shylock on Bassanio's behalf, and when his ships are lost, Shylock demands the agreed penalty of a pound of Antonio's flesh",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 12: the summary states the penalty of a pound of Antonio's flesh."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5a819b18825f3edfa137b7c03812b671be00082403afbb771b63de86c0431df2",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "Antonio",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The title character of The Merchant of Venice is Antonio, the Venetian merchant who stands surety for Bassanio; Shylock is the moneylender.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Shylock lends money, Bassanio is Antonio's gentleman friend who courts Portia, and Lorenzo elopes with Shylock's daughter Jessica; none is the merchant.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Antonio takes out the loan from Shylock so that Bassanio can go to Belmont and woo Portia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The bond lets Shylock cut a pound of Antonio's flesh if the debt is not repaid on time.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Both checks pass; the high-risk key has web evidence (Tier B) in check A, which also answers the writer's checker_doubt flag.",
+      "decidedAt": "2026-11-01T04:03:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "nearestId": "p.book.0223",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In Shakespeare's The Merchant of Venice, who is the merchant of the title?",
+  "answer": "Antonio",
+  "wrong": ["Shylock", "Bassanio", "Lorenzo"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.254,
+    "estimator": "v0"
+  }
+}

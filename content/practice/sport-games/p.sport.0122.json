@@ -1,0 +1,243 @@
+{
+  "id": "p.sport.0122",
+  "status": "active",
+  "category": "sport",
+  "tags": ["world-cup", "football", "finals"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "France trailed 2-0 until Mbappé scored in the 80th and 81st minutes. After a 3-3 draw in extra time, Argentina won the penalty shoot-out 4-2.",
+  "learnMore": "2022 FIFA World Cup final",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Kylian Mbappé scored three goals for France in the 2022 men's World Cup final, which France lost."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In the 2022 final Lionel Messi scored twice and Ángel Di María once for the winners, Argentina, and Olivier Giroud did not score."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "France were 2-0 down in the 2022 final until Mbappé scored in the 80th and 81st minutes."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The 2022 final finished 3-3 after extra time, and Argentina won the penalty shoot-out 4-2."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup, file 2022/worldcup.json, round Final, 18 December 2022, Argentina v France: score ht 2-0, ft 2-2, et 3-3, p 4-2 (c3, c4); goals2 lists Kylian Mbappé at minutes 80 (penalty), 81 and 118 (penalty) (c1); goals1 lists Lionel Messi at 23 (penalty) and 108 and Ángel Di María at 36, and Giroud appears in no goal list (c2). rivalTest: Messi is the trap: he scored twice and is the face of the final, but he was on the winning side. Di María scored for the winners; Giroud played for France but did not score. Only Mbappé fits both halves of the stem. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 25 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "80bd87bb4f87d2c4807182eabdfe8a7ab9b394858d869313234fccc7ef8535fa",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Kylian Mbappé",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2022/worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "{\"round\":\"Final\",\"date\":\"2022-12-18\",\"team1\":\"Argentina\",\"team2\":\"France\",\"score\":{\"p\":[4,2],\"et\":[3,3],\"ft\":[2,2],\"ht\":[2,0]},\"goals1\":[{\"name\":\"Lionel Messi\",\"minute\":\"23\",\"penalty\":true},{\"name\":\"Ángel Di María\",\"minute\":\"36\"},{\"name\":\"Lionel Messi\",\"minute\":\"108\"}],\"goals2\":[{\"name\":\"Kylian Mbappé\",\"minute\":\"80\",\"penalty\":true},{\"name\":\"Kylian Mbappé\",\"minute\":\"81\"},{\"name\":\"Kylian Mbappé\",\"minute\":\"118\",\"penalty\":true}],\"ground\":\"Lusail Iconic Stadium, Lusail\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Mbappé scored at 80 (pen), 81 and 118 (pen); France lost the shoot-out."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2022/worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "{\"round\":\"Final\",\"date\":\"2022-12-18\",\"team1\":\"Argentina\",\"team2\":\"France\",\"score\":{\"p\":[4,2],\"et\":[3,3],\"ft\":[2,2],\"ht\":[2,0]},\"goals1\":[{\"name\":\"Lionel Messi\",\"minute\":\"23\",\"penalty\":true},{\"name\":\"Ángel Di María\",\"minute\":\"36\"},{\"name\":\"Lionel Messi\",\"minute\":\"108\"}],\"goals2\":[{\"name\":\"Kylian Mbappé\",\"minute\":\"80\",\"penalty\":true},{\"name\":\"Kylian Mbappé\",\"minute\":\"81\"},{\"name\":\"Kylian Mbappé\",\"minute\":\"118\",\"penalty\":true}],\"ground\":\"Lusail Iconic Stadium, Lusail\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Messi scored at 23 (pen) and 108, Di María at 36; Giroud is not among the scorers."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2022/worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "{\"round\":\"Final\",\"date\":\"2022-12-18\",\"team1\":\"Argentina\",\"team2\":\"France\",\"score\":{\"p\":[4,2],\"et\":[3,3],\"ft\":[2,2],\"ht\":[2,0]},\"goals1\":[{\"name\":\"Lionel Messi\",\"minute\":\"23\",\"penalty\":true},{\"name\":\"Ángel Di María\",\"minute\":\"36\"},{\"name\":\"Lionel Messi\",\"minute\":\"108\"}],\"goals2\":[{\"name\":\"Kylian Mbappé\",\"minute\":\"80\",\"penalty\":true},{\"name\":\"Kylian Mbappé\",\"minute\":\"81\"},{\"name\":\"Kylian Mbappé\",\"minute\":\"118\",\"penalty\":true}],\"ground\":\"Lusail Iconic Stadium, Lusail\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Half time 2-0 to Argentina; France's first goals at 80 and 81."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2022/worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "{\"round\":\"Final\",\"date\":\"2022-12-18\",\"team1\":\"Argentina\",\"team2\":\"France\",\"score\":{\"p\":[4,2],\"et\":[3,3],\"ft\":[2,2],\"ht\":[2,0]},\"goals1\":[{\"name\":\"Lionel Messi\",\"minute\":\"23\",\"penalty\":true},{\"name\":\"Ángel Di María\",\"minute\":\"36\"},{\"name\":\"Lionel Messi\",\"minute\":\"108\"}],\"goals2\":[{\"name\":\"Kylian Mbappé\",\"minute\":\"80\",\"penalty\":true},{\"name\":\"Kylian Mbappé\",\"minute\":\"81\"},{\"name\":\"Kylian Mbappé\",\"minute\":\"118\",\"penalty\":true}],\"ground\":\"Lusail Iconic Stadium, Lusail\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Extra time 3-3, penalties 4-2."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d3529f2c9174b467c3f5fe098efca434e557f97476376ab280b41c9f1360b014",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Kylian Mbappé",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2022/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "\"goals2\":[{\"name\":\"Kylian Mbappé\",\"minute\":\"80\",\"penalty\":true},{\"name\":\"Kylian Mbappé\",\"minute\":\"81\"},{\"name\":\"Kylian Mbappé\",\"minute\":\"118\",\"penalty\":true}]; \"score\":{\"p\":[4,2],\"et\":[3,3],\"ft\":[2,2],\"ht\":[2,0]} for Argentina v France",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2022/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "\"goals1\":[{\"name\":\"Lionel Messi\",\"minute\":\"23\",\"penalty\":true},{\"name\":\"Ángel Di María\",\"minute\":\"36\"},{\"name\":\"Lionel Messi\",\"minute\":\"108\"}]; no goal by Olivier Giroud is listed for the final",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2022/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "\"ht\":[2,0] for Argentina; France's goals at minutes 80 (penalty) and 81 by Kylian Mbappé",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2022/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "\"score\":{\"p\":[4,2],\"et\":[3,3],\"ft\":[2,2],\"ht\":[2,0]}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Both checks pass; high-risk c1 to c4 have worldcup dataset evidence in both checks. Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "nearestId": "p.sport.0142",
+      "score": 0.356,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Who scored a hat-trick in the 2022 men's World Cup final but still finished on the losing side?",
+  "answer": "Kylian Mbappé",
+  "wrong": ["Lionel Messi", "Olivier Giroud", "Ángel Di María"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.82,
+    "spread": 0.456,
+    "estimator": "v0"
+  }
+}

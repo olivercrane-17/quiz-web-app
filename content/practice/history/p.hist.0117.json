@@ -1,0 +1,214 @@
+{
+  "id": "p.hist.0117",
+  "status": "cut",
+  "category": "hist",
+  "tags": ["south-africa", "apartheid", "nobel-prize"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Mandela was released in 1990 after 27 years in prison. He and F. W. de Klerk shared the 1993 Nobel Peace Prize for ending apartheid peacefully.",
+  "learnMore": "Nelson Mandela",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Nelson Mandela became South Africa's first president elected in a fully democratic, non-racial vote, in 1994."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "De Klerk, Mbeki and Tutu were not the president elected in 1994."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Mandela was released from prison in 1990 after 27 years."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Mandela and F. W. de Klerk shared the 1993 Nobel Peace Prize."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed; each claim with a digit, number word, superlative, 'first', 'only', quotation or etymology is high (the C26 floor), and so is the key of a counterintuitive item. datasets: c4 checked in nobel-prizes, prize.json, year 1993, category peace: Nelson Mandela and F.W. de Klerk, share 2 each, motivation 'for their work for the peaceful termination of the apartheid regime'. c1 to c3 need web evidence. rivalTest: de Klerk was president before 1994 but under the old franchise, and Mbeki followed Mandela in 1999; Tutu never held office. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the people and events here are reported in world history teaching and reference works, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 26 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. Mbeki is living and appears only for his public office.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-phist01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "97999e221954426f35cd60f0de364af23e0195dcb7fd9f8dabd93d02311da6b4",
+        "startedAt": "2026-11-01T00:47:00Z",
+        "finishedAt": "2026-11-01T01:23:12Z",
+        "coldSolve": {
+          "answerGiven": "Nelson Mandela",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "After the April 1994 election, the first held on a universal franchise, the new National Assembly elected Mandela president in May 1994.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). Not searched: the batch's WebSearch cap (26, shared with pass B) could not cover every high-risk claim."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "De Klerk was president under the old system from 1989 to 1994, Mbeki succeeded Mandela in 1999, and Desmond Tutu was never president.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). Not searched: the batch's WebSearch cap (26, shared with pass B) could not cover every high-risk claim."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mandela was freed in February 1990 after 27 years in prison, from 1962.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). Not searched: the batch's WebSearch cap (26, shared with pass B) could not cover every high-risk claim."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=1993, category=peace].laureates[id=555, id=556]",
+              "excerpt": "{\"year\":\"1993\",\"category\":\"peace\",\"laureates\":[{\"id\":\"555\",\"firstname\":\"Nelson\",\"surname\":\"Mandela\",\"motivation\":\"\\\"for their work for the peaceful termination of the apartheid regime, and for laying the foundations for a new democratic South Africa\\\"\",\"share\":\"2\"},{\"id\":\"556\",\"firstname\":\"F.W.\",\"surname\":\"de Klerk\",\"motivation\":\"\\\"for their work for the peaceful termination of the apartheid regime, and for laying the foundations for a new democratic South Africa\\\"\",\"share\":\"2\"}]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Mandela and de Klerk each hold share 2 (half) of the 1993 Peace Prize."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-phist01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "90d82d1cf95b8c7ce79c5f0a88a8649836f5390e13a6e55858d8de0006ead5ac",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:31:21Z",
+        "coldSolve": {
+          "answerGiven": "Nelson Mandela",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "South Africa's first all-race election was held in April 1994, and the new National Assembly elected Mandela president in May 1994.",
+              "confidence": "certain"
+            },
+            "note": "Voters chose the Assembly, which then elected the president, so 'elected in a fully democratic vote' is shorthand. High-risk claim: my knowledge check only counts once check A carries external evidence for it."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "De Klerk was the last apartheid-era state president, Mbeki succeeded Mandela in 1999 and Tutu was an archbishop.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check only counts once check A carries external evidence for it."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mandela was released on 11 February 1990 after 27 years in custody.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check only counts once check A carries external evidence for it."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=1993,category=peace]",
+              "excerpt": "{\"year\":\"1993\",\"category\":\"peace\",\"laureates\":[{\"id\":\"555\",\"firstname\":\"Nelson\",\"surname\":\"Mandela\",\"motivation\":\"\\\"for their work for the peaceful termination of the apartheid regime, and for laying the foundations for a new democratic South Africa\\\"\",\"share\":\"2\"},{\"id\":\"556\",\"firstname\":\"F.W.\",\"surname\":\"de Klerk\",\"motivation\":\"\\\"for their work for the peaceful termination of the apartheid regime, and for laying the foundations for a new democratic South Africa\\\"\",\"share\":\"2\"}]}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The 1994 vote elected the National Assembly, which then chose Mandela as president. 'Elected in a fully democratic vote' is the usual shorthand and no other option fits, but 'became president after the first fully democratic election' would be exact."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-phist01e",
+        "at": "2026-11-01T00:46:48Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-phist01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, first), c2 (distractor, date) and c3 (explanation, number) rest on knowledge alone in both checks, and the batch's search cap is spent (26 of 26). Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:13:09Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Who became South Africa's first president elected in a fully democratic vote, in 1994?",
+  "answer": "Nelson Mandela",
+  "wrong": ["F. W. de Klerk", "Thabo Mbeki", "Desmond Tutu"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.97,
+    "spread": 0.409,
+    "estimator": "v0"
+  }
+}

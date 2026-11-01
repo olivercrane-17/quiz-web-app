@@ -1,0 +1,252 @@
+{
+  "id": "p.geo.0239",
+  "status": "active",
+  "category": "geo",
+  "tags": ["cities", "sahara", "west-africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Many people think Timbuktu is a made-up name for the middle of nowhere, but its mud-brick mosques and its libraries of old manuscripts are very real.",
+  "learnMore": "Timbuktu",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Timbuktu is in Mali."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Timbuktu is not in Niger, Mauritania or Chad."
+    },
+    {
+      "id": "c3",
+      "role": "key",
+      "ref": "stem",
+      "risk": "standard",
+      "text": "Timbuktu was once a great centre of Islamic learning."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Timbuktu is often used as a byword for a remote, almost mythical place."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Timbuktu has historic mud-brick mosques and collections of old manuscripts."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: geonames-cities: Timbuktu, ML, 16.77348, -3.00742 (c1). Rival test: Niger and Mauritania are the Sahel neighbours, and Chad another Saharan country; each fits the desert setting. Against the key: nothing. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Timbuktu is famous as a byword in many languages; players in West Africa have an edge, as they would on any place question, but the city is known well beyond the region. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 26 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; every claim is standard. Seed: 4 (medium): many know the name but not the country. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "49d9c3cf126f7a7cf89cd645ec9d334cbeb5a65da456b34a025c81111d699aec",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Mali",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Timbuktu, country=ML",
+              "excerpt": "{\"name\":\"Timbuktu\",\"lat\":\"16.77348\",\"lng\":\"-3.00742\",\"country\":\"ML\",\"admin1\":\"08\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Timbuktu is in Mali, not Niger, Mauritania or Chad.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Timbuktu was a great centre of Islamic scholarship in the 15th and 16th centuries.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In English 'Timbuktu' is used as a byword for a remote, almost mythical place.",
+              "confidence": "certain"
+            },
+            "note": "The explanation's 'many people think it is a made-up name' rests on this byword usage."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Timbuktu has historic mud-brick mosques such as Djinguereber and large collections of old manuscripts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d0d441b277488c9874aecd043fae79de51647c8b8ae76bb7f45657451ae651d0",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Mali",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Timbuktu, country=ML",
+              "excerpt": "Timbuktu ML lat 16.77348, lng -3.00742",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Dataset places Timbuktu in Mali."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Timbuktu is not in Niger, Mauritania or Chad.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Timbuktu was once a major centre of Islamic scholarship.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Timbuktu is used as a byword for a remote, almost mythical place.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Timbuktu has historic mud-brick mosques (Djinguereber, Sankore, Sidi Yahia) and collections of old manuscripts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The desert city of Timbuktu, once a great centre of Islamic learning, is in which country?",
+  "answer": "Mali",
+  "wrong": ["Niger", "Mauritania", "Chad"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.24,
+    "estimator": "v0"
+  }
+}

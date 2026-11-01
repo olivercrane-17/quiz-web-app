@@ -1,0 +1,205 @@
+{
+  "id": "p.food.0162",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-science", "dairy", "fermentation"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The bacteria turn milk sugar into lactic acid, which sets the milk proteins and gives the tang. One classic strain, Lactobacillus bulgaricus, is named after Bulgaria.",
+  "learnMore": "Yogurt",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Yoghurt is made by fermenting milk with lactic acid bacteria."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Yoghurt is not made by yeasts, moulds or viruses."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Yoghurt bacteria convert lactose into lactic acid, which makes the milk proteins set and gives a tangy taste."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The yoghurt bacterium Lactobacillus bulgaricus (reclassified as Lactobacillus delbrueckii subsp. bulgaricus) is named after Bulgaria."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c4). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: yeasts are the closest call, because kefir uses yeasts as well as bacteria, but yoghurt itself is a bacterial culture. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: yoghurt is eaten worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 26 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: 'live cultures' and probiotic labels have made the bacteria well known. Doubts: none. c4 gives the bacterium's revised scientific name in brackets, in the claim only.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f8209a72849f81f8bd5c0c65bec3fd5c1f42411b12c9c00383e4265737294476",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Bacteria",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Yoghurt is milk fermented by lactic acid bacteria.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Yoghurt is not made by yeasts, moulds or viruses.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The bacteria turn lactose into lactic acid, which sets the milk proteins and gives the tang.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lactobacillus bulgaricus, described by the Bulgarian Stamen Grigorov in 1905 and now L. delbrueckii subsp. bulgaricus, is named after Bulgaria.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. No pinned dataset covers it and this check's share of the batch search cap went to claims with numbers and dates, so it still needs dataset or web evidence (a follow-up) before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "357fe94d077ff79df2b93ae4958959afde23fdb60a8f8133fb62c142e2cdbdce",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Bacteria",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Yoghurt is milk fermented by lactic acid bacteria.",
+              "confidence": "certain"
+            },
+            "note": "Kefir involves yeasts as well, but the question is about yoghurt."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Yeasts, moulds and viruses are not the yoghurt starter.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The bacteria turn lactose into lactic acid, which sets the milk proteins and gives the tang.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lactobacillus bulgaricus, now Lactobacillus delbrueckii subsp. bulgaricus, is named for Bulgaria, where it was isolated in 1905.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation calls L. bulgaricus a 'classic strain'. It is a species or subspecies; a strain is a lineage within it. 'Classic species' or 'subspecies' is exact."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk explanation c4 (etymology) rests on knowledge alone in both checks; no pinned dataset covers it and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which microbes turn milk into yoghurt?",
+  "answer": "Bacteria",
+  "wrong": ["Yeasts", "Moulds", "Viruses"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.312,
+    "estimator": "v0"
+  }
+}

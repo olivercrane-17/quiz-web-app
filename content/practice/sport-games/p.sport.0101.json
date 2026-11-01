@@ -1,0 +1,218 @@
+{
+  "id": "p.sport.0101",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["olympics", "mottos", "latin"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Pierre de Coubertin borrowed the phrase from his friend Henri Didon, a Dominican priest and headmaster. In 2021 the IOC added a fourth word, 'Communiter', meaning 'together'.",
+  "learnMore": "Olympic motto",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "The Latin motto 'Citius, Altius, Fortius' means 'faster, higher, stronger'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "'Fortius' means 'stronger', not 'further', 'braver' or 'longer'."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Pierre de Coubertin adopted the motto from his friend Henri Didon, a Dominican priest and headmaster."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "recent_change",
+      "text": "In 2021 the IOC added the Latin word 'Communiter', meaning 'together', to the Olympic motto."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; c1, c2, c4 are high and c3 is standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor); the standard claim carries none of those triggers and states a rule or a well-known fact. datasets: no pinned dataset covers mottoes or the IOC's 2021 decision, so checker A needs web evidence for c1, c2 and c4. rivalTest: 'Further' is the strongest rival, because 'altius' and 'fortius' share an ending and a player may guess distance; but 'altius' is 'higher' and 'fortius' is 'stronger' in every Latin dictionary. 'Braver' and 'longer' have no Latin basis here. The key holds. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 27 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: c3 is a well-documented attribution but not everyday knowledge; if a checker rates it below certain, the Didon clause can be dropped without touching the key.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "52d1f9a9258d90b95d5c615fc1069b349351771fb9b7385eb53407741824a998",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Stronger",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Citius, Altius, Fortius translates as faster, higher, stronger, the Olympic motto adopted in 1894.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "refuted",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Latin fortis means both strong and brave (as in fortes fortuna adiuvat, fortune favours the brave), so fortius can be rendered more bravely as well as more strongly. Further and longer are definitely wrong; braver is a defensible literal rendering, although the motto's established translation is stronger.",
+              "confidence": "certain"
+            },
+            "note": "The claim is false as written for 'braver', so the Braver option is not definitely wrong (§4 rule 3). Further and Longer are fine."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Henri Didon, a Dominican priest who headed the Albert-le-Grand school at Arcueil, used the phrase for school sport, and his friend Coubertin took it up as the Olympic motto.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In July 2021 the IOC Session in Tokyo approved adding Communiter, meaning together, to the motto.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "second_answer",
+            "severity": "fix",
+            "note": "Braver: Latin fortis also means brave, so a Latin-literate player can argue that fortius is 'braver'. Swap that distractor for one no reading of fortius supports."
+          },
+          {
+            "type": "outdated",
+            "severity": "note",
+            "note": "Since 2021 the official motto adds Communiter; the stem calls the three-word form 'The Olympic motto'. The explanation covers the change, and 'The original Olympic motto' would be exact."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "fail"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0551f2454be13bea430cb49b2c7eae6451d94f77dda97606ff9e70261f1f2799",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Stronger",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IOC gives the English rendering of Citius, Altius, Fortius as Faster, Higher, Stronger.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fortius is the third word of the motto and is rendered 'stronger'. 'Further' and 'longer' are not senses of it. 'Braver' is a secondary dictionary sense of fortis/fortius but is not how the motto is translated.",
+              "confidence": "certain"
+            },
+            "note": "Confirmed for the motto's standard translation. See the ambiguity note."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Henri Didon, a Dominican friar who directed a school at Arcueil, used the phrase for his pupils' sport; his friend Pierre de Coubertin took it for the Olympic movement.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IOC Session of July 2021 approved adding Communiter, 'together', to the motto.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Latin fortis means both strong and brave, so a Latin reader could defend 'Braver' as a literal sense of fortius. The stem asks for the motto's standard English translation, which is Stronger, so the key stands. Optional hardening: say 'official English translation' in the stem."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "A fail, B pass. A refuted c2: 'Braver' is a defensible rendering of fortius, because Latin fortis means brave as well as strong, and B's note concedes the same reading, so the item has a second defensible answer (§3.2). A also notes the motto has carried 'Communiter' since 2021, so 'The original Olympic motto' would be exact. A real problem, not a misreading, so no tiebreak (§9.7); the fix changes a distractor and its claim, and c1 and c4 rest on knowledge alone. Cut. Redraft under a new id with a distractor no reading of fortius supports.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The Olympic motto 'Citius, Altius, Fortius' is Latin for 'faster, higher' and what?",
+  "answer": "Stronger",
+  "wrong": ["Further", "Braver", "Longer"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.93,
+    "spread": 0.249,
+    "estimator": "v0"
+  }
+}

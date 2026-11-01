@@ -1,0 +1,316 @@
+{
+  "id": "p.food.0135",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-history", "pasta", "italy"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "In 1154 the geographer al-Idrisi described a pasta industry at Trabia, Sicily. Tomatoes reached Italy from the Americas in the 1500s, and tomato sauce for pasta came much later.",
+  "learnMore": "History of pasta",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In 1154 the geographer al-Idrisi recorded dried pasta being made at Trabia in Sicily."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Tomatoes, native to the Americas, are recorded growing in Italy by the 1540s."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Tomato sauces for pasta appear in Italian cookbooks only from the late 17th century onward, long after tomatoes arrived."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c2, c3). Datasets: geonames-cities lists Trabia (country IT, admin2 PA, the province of Palermo in Sicily); the dates rest on knowledge and need web evidence. Rival test: the popular story that Marco Polo brought pasta from China in the 1290s would still put pasta first, so no version of the myth flips the answer; b uses the 1540s records (Mattioli's 1544 herbal, the 1548 Medici basket), and an earlier arrival in Spain changes nothing. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: pasta and tomatoes are global foods; the dates are equally unknown everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 29 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: many players know tomatoes came from the Americas, but pasta with tomato sauce feels timeless. Doubts: c1, c2 and c3 need web evidence; c3 is hedged to 'from the late 17th century onward' (Antonio Latini's tomato sauce of 1692).",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b7746febfdd4395f8232c2fd7f6edf36612dea925d49c2cb64173efed93cefd8",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Dried pasta made in Sicily",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In 1154 the geographer al-Idrisi described itriyya, dried pasta, made at Trabia near Palermo and exported widely.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. This record's call corroborates it ('His 1154 geography describes large mill complexes at Trabia, near Palermo, making itriyya that was exported widely'), but the summary names no source and a talk page is among its results, so it counts at Tier C (§9.5.2). Still needs dataset or web evidence before acceptance."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mattioli described the tomato in Italy in 1544, and tomatoes from a Medici estate are recorded in 1548.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. The same call cites Mattioli's 1544 herbal, but it counts at Tier C for the reason given under c1. Still needs evidence."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "history of pasta in Italy: al-Idrisi 1154 dried pasta made at Trabia Sicily, first records of tomatoes in Italy in the 1540s, first cookbook pairing tomato sauce with pasta",
+              "results": [
+                {
+                  "title": "Pasta",
+                  "url": "https://en.wikipedia.org/wiki/Pasta"
+                },
+                {
+                  "title": "Spaghetti",
+                  "url": "https://en.wikipedia.org/wiki/Spaghetti"
+                },
+                {
+                  "title": "Tomato sauce",
+                  "url": "https://en.wikipedia.org/wiki/Tomato_sauce"
+                },
+                {
+                  "title": "Amatriciana",
+                  "url": "https://en.wikipedia.org/wiki/Amatriciana"
+                },
+                {
+                  "title": "Noodles",
+                  "url": "https://en.wikipedia.org/wiki/Noodles"
+                },
+                {
+                  "title": "Lasagna",
+                  "url": "https://en.wikipedia.org/wiki/Lasagna"
+                },
+                {
+                  "title": "Italian cuisine",
+                  "url": "https://en.wikipedia.org/wiki/Italian_cuisine"
+                },
+                {
+                  "title": "Talk:Pasta/Archive 1",
+                  "url": "https://en.wikipedia.org/wiki/Talk:Pasta/Archive_1"
+                },
+                {
+                  "title": "Pasta al pomodoro",
+                  "url": "https://en.wikipedia.org/wiki/Pasta_pomodoro"
+                },
+                {
+                  "title": "Marinara sauce",
+                  "url": "https://en.wikipedia.org/wiki/Marinara_sauce"
+                }
+              ],
+              "summaryExcerpt": "Antonio Latini's Lo Scalco alla Moderna (1692, 1694) is usually cited as the first Italian cookbook with a tomato sauce, though it is not a pasta recipe. ... Most sources credit Francesco Leonardi's L'Apicio moderno (1790) as the first written record of pasta with tomato sauce.",
+              "tiers": ["B", "C"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Checker doubt. The late-17th-century date belongs to the first published tomato sauce (Latini, 1692), which was not for pasta; tomato sauce with pasta is first recorded about a century later (Leonardi, 1790). Read strictly as a bound ('only from ... onward') it is not false, but it points to the wrong century."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c3 conflates the first Italian tomato sauce (Latini, 1692, not a pasta recipe) with the first tomato sauce for pasta (usually credited to Leonardi, 1790). Restate c3 (for example 'Tomato sauce for pasta is first recorded in an Italian cookbook in 1790') or leave it undated as the explanation's 'much later' already is. The player-facing explanation is accurate."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "db897cea6e51effbfb0744c7233e3c9eba3c5d9c6745e3d8c483127490eaed18",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Dried pasta made in Sicily",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Al-Idrisi's geography of 1154 describes Trabia near Palermo making itriyya, dried pasta strands, in large quantities for export.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mattioli described the tomato in Italy in 1544 and a Medici household letter of 1548 records it, so tomatoes were recorded in Italy by the 1540s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "earliest Italian cookbook recipe tomato sauce Latini 1692 Lo scalco alla moderna; first recipe pasta with tomato sauce Corrado 1773 Leonardi 1790",
+              "results": [
+                {
+                  "title": "Tomato sauce",
+                  "url": "https://en.wikipedia.org/wiki/Tomato_sauce"
+                },
+                {
+                  "title": "Neapolitan rag%C3%B9",
+                  "url": "https://en.wikipedia.org/wiki/Neapolitan_rag%C3%B9"
+                },
+                {
+                  "title": "Antonio Latini",
+                  "url": "https://en.wikipedia.org/wiki/Antonio_Latini"
+                },
+                {
+                  "title": "Amatriciana sauce",
+                  "url": "https://en.wikipedia.org/wiki/Amatriciana_sauce"
+                },
+                {
+                  "title": "how did tomatoes become an italian staple p5gge9",
+                  "url": "https://www.pbs.org/video/how-did-tomatoes-become-an-italian-staple-p5gge9"
+                },
+                {
+                  "title": "The World's First Tomato Sauce Recipe",
+                  "url": "https://crystallyn.substack.com/p/the-worlds-first-tomato-sauce-recipe"
+                },
+                {
+                  "title": "Welcome to",
+                  "url": "https://www.raos.com/pages/sauce-101"
+                },
+                {
+                  "title": "napolicious.pastagarofalo.it",
+                  "url": "https://napolicious.pastagarofalo.it/en/?p=5813"
+                },
+                {
+                  "title": "the tomato part 2",
+                  "url": "https://victoriaflexner.substack.com/p/the-tomato-part-2"
+                },
+                {
+                  "title": "unpodipepe.ca",
+                  "url": "https://unpodipepe.ca/tag/traditional-recipes/page/2/"
+                },
+                {
+                  "title": "www.lyonandturnbull.com",
+                  "url": "https://www.lyonandturnbull.com/auctions/rare-books-manuscripts-maps-and-photographs-589/lot/316"
+                },
+                {
+                  "title": "il pomodoro e due volte americano",
+                  "url": "https://littleeataly.substack.com/p/il-pomodoro-e-due-volte-americano"
+                },
+                {
+                  "title": "Francesco Leonardi",
+                  "url": "https://app.ckbk.com/authors/francesco-leonardi"
+                },
+                {
+                  "title": "Spanish Tomato Sauce by Antonio Latini",
+                  "url": "https://redsauceamerica.com/blog/?p=52"
+                },
+                {
+                  "title": "pueblo.extension.colostate.edu",
+                  "url": "https://pueblo.extension.colostate.edu/?p=4316"
+                },
+                {
+                  "title": "top of page",
+                  "url": "https://www.abowlofsugar.com/post/spaghetti-with-fresh-tomato-sauce-spaghetti-col-pomodoro-fresco-e-la-cipolla"
+                },
+                {
+                  "title": "introduction to italian tomato sauce",
+                  "url": "https://mindfuleating.foodandwineaesthetics.com/44-2/tasting-italian-tomato-sauce/introduction-to-italian-tomato-sauce/"
+                },
+                {
+                  "title": "Fact-checked by Grok 5 months ago",
+                  "url": "https://grokipedia.com/page/Neapolitan_sauce"
+                }
+              ],
+              "summaryExcerpt": "His sauce was labeled \"Spanish style\" and was meant for boiled dishes, meat, and \"other things,\" not pasta. ... Corrado, 1773: Accounts differ. ... Leonardi, 1790: Sources consistently name this as the first pasta-with-tomato-sauce recipe.",
+              "tiers": ["B", "C"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The earliest printed Italian tomato sauce (Latini, 1692) was for boiled dishes and meat, not pasta; the search names Leonardi (1790) as the first pasta-with-tomato-sauce recipe and calls Corrado (1773) uncertain. 'Tomato sauces for pasta appear ... from the late 17th century' therefore misdates the pasta use by about a century, although as a bare lower bound it is true. The explanation's own wording ('came much later') is safe."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c3: Latini's 1692 tomato sauce was not for pasta. The first pasta-with-tomato-sauce recipe found is from 1790 (Leonardi), with 1773 (Corrado) disputed. Restate at the precision supported, for example 'the first printed Italian tomato sauce recipe dates from 1692, and pasta with tomato sauce appears in cookbooks only in the later 1700s'."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "A and B both revise on c3: the 1692 sauce was not for pasta, so the claim misdates tomato sauce with pasta by about a century, and c1 and c2 rest on knowledge only (A's call counts at Tier C). Restating c3 is a claim change, and two revises cannot be settled by a tiebreak (§9.7). Cut.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first in Italy?",
+  "a": "Dried pasta made in Sicily",
+  "b": "Tomatoes grown in Italy",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "earliest record in Italy",
+  "unit": "year",
+  "values": {
+    "a": 1154,
+    "b": 1548
+  },
+  "valueDisplay": {
+    "a": "recorded by 1154",
+    "b": "recorded in the 1540s"
+  },
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.282,
+    "estimator": "v0"
+  }
+}

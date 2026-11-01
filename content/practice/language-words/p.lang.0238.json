@@ -1,0 +1,205 @@
+{
+  "id": "p.lang.0238",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["scripts", "greek", "punctuation"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The Greek question mark looks exactly like a semicolon, and Unicode treats the two as equivalent. Greek's own semicolon is a raised dot, the ano teleia.",
+  "learnMore": "Greek question mark",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Greek writing uses a mark identical in shape to the semicolon (;) as its question mark."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Greek does not use a colon, a raised dot or a full stop as its question mark; the raised dot is its semicolon."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In Unicode the Greek question mark, U+037E, is canonically equivalent to the semicolon, U+003B."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Greek semicolon is a raised dot, the ano teleia."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 1 high (number) and 3 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers punctuation; c3 can be checked against the Unicode Character Database. rivalTest: Argued for the raised dot, the expert's trap: it is the Greek semicolon. No option shows a question mark itself, so the item tests the surprise without a misread word. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: Greek letters are familiar worldwide from science and maths. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 26 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "03db5ebc8101dc2d807fb1ece3ef786af5e781a0eff6f55718e2bdbf05a9ba4b",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "A semicolon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Greek question mark has the shape of a semicolon (;).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Greek marks questions with the semicolon-shaped sign; the raised dot (ano teleia) is its semicolon, and neither the colon nor the full stop marks a question.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Unicode gives U+037E GREEK QUESTION MARK a canonical singleton decomposition to U+003B SEMICOLON.",
+              "confidence": "certain"
+            },
+            "note": "Re-runnable check: in Node 22 (Unicode 17.0, ICU 78.3) the NFC and NFD forms of U+037E are both U+003B. That is a computation, which this record's evidence kinds cannot hold, so the claim stays knowledge-only here. High-risk (number). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Greek semicolon is the ano teleia, a raised dot.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "07e261f2c1a2e349bfa003ac616b192d6ce77ef4f098f6d3eb5da595386a81ac",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "A semicolon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Greek question mark is shaped exactly like the semicolon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Greek does not use a colon, a raised dot or a full stop as its question mark; the raised dot (ano teleia) is its semicolon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Unicode U+037E GREEK QUESTION MARK is canonically equivalent to U+003B SEMICOLON.",
+              "confidence": "certain"
+            },
+            "note": "Checked in Node 22: the NFC and NFD forms of U+037E are U+003B."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Greek semicolon is a raised dot, the ano teleia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "trick",
+            "severity": "note",
+            "note": "In Greek the word semicolon names the raised dot, so the key 'A semicolon' means the Western semicolon shape. The explanation says this plainly; a reader who knows the raised dot is Greek's semicolon may hesitate."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, number) rests on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers it, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: B noted the Greek word for semicolon names the raised dot, which the explanation already defuses.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which mark does Greek writing use as its question mark?",
+  "answer": "A semicolon",
+  "wrong": ["A colon", "A raised dot", "A full stop"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.256,
+    "estimator": "v0"
+  }
+}

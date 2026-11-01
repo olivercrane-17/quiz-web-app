@@ -1,0 +1,228 @@
+{
+  "id": "p.geo.0120",
+  "status": "active",
+  "category": "geo",
+  "tags": ["rivers", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Its farthest headwaters are streams high in the Peruvian Andes, much nearer the Pacific than the Atlantic, yet the river flows east across the whole continent to the Atlantic.",
+  "learnMore": "Amazon River",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The Amazon River's most distant source is in the Andes of Peru."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Amazon River does not rise in Brazil, Colombia or Ecuador."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Amazon's headwaters in the Peruvian Andes are far closer to the Pacific Ocean than to the Atlantic."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Amazon River flows into the Atlantic Ocean."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is a superlative (most distant source) and the key of a counterintuitive item, so high; it needs a web result from checker A. Datasets: none: natural-earth's centerline file has the Amazonas but not its source streams. Rival test: Brazil is the obvious wrong pick, since most of the river is there; Colombia and Ecuador have Amazon tributaries, but the source of the main stem is Peruvian. Against the key: the 'most distant source' has been argued between the Apurímac and Mantaro headwaters, but both candidates are in Peru, so the key holds either way. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the Amazon is famous everywhere. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 29 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none beyond the source debate, which does not touch the key.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "676053974a92689c5db2e886cbd94bb8f8473807b5caa22d40fd6078e403b362",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Peru",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_rivers_lake_centerlines.geojson",
+              "locator": "name=Amazonas, Ucayali, Marañón, Madeira, Mamoré, Grande (Bolivia), Purús, Japurá, Caquetá, Negro; featurecla River",
+              "excerpt": "Ucayali upstream end [-71.668747,-15.336376]; Marañón upstream end [-76.616662,-9.913348]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Summing segment lengths from the Amazonas feature's lower end, the Ucayali head is the most distant (about 4671 km, against 4192 for the Marañón and 3466 for the Madeira-Mamoré system). Both headstream ends fall inside Peru in ne_110m_admin_0_countries. That the point is in the Andes is from knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_rivers_lake_centerlines.geojson",
+              "locator": "name=Ucayali and name=Marañón, featurecla River",
+              "excerpt": "Ucayali upstream end [-71.668747,-15.336376]; Marañón upstream end [-76.616662,-9.913348]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Both headstreams of the main stem rise in Peru (point-in-polygon against ne_110m_admin_0_countries), not in Brazil, Colombia or Ecuador."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Amazon's Andean sources lie within a few hundred kilometres of the Pacific but thousands from the Atlantic mouth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Amazon empties into the Atlantic in northern Brazil.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ec0fe2b775813e57dc8db6028709dd0b4b04a3de071594177754edfce8eed2a5",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Peru",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Every candidate for the Amazon system's most distant source (Nevado Mismi and the Apurimac, the Maranon, the Mantaro) is in the Peruvian Andes.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: no dataset covers this. Needs dataset or web evidence in the other check (I could not search: the shared WebSearch budget was spent). Superlative: the claim holds whichever Peruvian source wins."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Amazon's sources are not in Brazil, Colombia or Ecuador.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Peruvian headwaters are roughly 150 to 200 km from the Pacific coast and thousands of kilometres from the Atlantic mouth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Amazon flows into the Atlantic Ocean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "regional",
+            "severity": "note",
+            "note": "In Brazil the river is named Solimoes above its meeting with the Rio Negro, and 'Amazonas' starts near Manaus, so some Brazilian players may think it 'rises' in Brazil. The standard geographic answer is Peru and the explanation defuses the trap. No change needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 carries natural-earth evidence in pass A, which traced the headstream lengths to Peru (§9.9 rule 3). Lint clean, no myth hits. B's regional note on the Solimões name is defused by the explanation. Dedupe pairs it with p.book.0230 (same answer): that item asks where Paddington Bear came from, a different fact.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In which country does the Amazon River rise?",
+  "answer": "Peru",
+  "wrong": ["Brazil", "Colombia", "Ecuador"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.24,
+    "spread": 0.243,
+    "estimator": "v0"
+  }
+}

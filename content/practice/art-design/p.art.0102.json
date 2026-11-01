@@ -1,0 +1,211 @@
+{
+  "id": "p.art.0102",
+  "status": "cut",
+  "category": "art",
+  "tags": ["paintings", "dutch-golden-age", "portraits"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "It is a tronie, a study of a face or character rather than a portrait of a known sitter. Fewer than 40 paintings by Vermeer survive.",
+  "learnMore": "Girl with a Pearl Earring",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Johannes Vermeer painted Girl with a Pearl Earring."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Rembrandt, Frans Hals and Jan Steen did not paint Girl with a Pearl Earring."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Girl with a Pearl Earring is a tronie, a study of a face or character type, and its sitter is unidentified."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Fewer than 40 surviving paintings are attributed to Vermeer."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: Vermeer is in neither artist dataset, and no dataset lists works, so c4 needs a web or reference source. Rival test: argued for Rembrandt, Hals and Steen, all Dutch Golden Age painters of the same decades, but none is ever credited with this painting; against the key, the attribution to Vermeer is undisputed. Volatility: evergreen; c4 is written as a bound (fewer than 40) so a single new attribution cannot break it; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the painting is internationally famous through the novel and film of the same name. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: none on the key; c4 is bounded because counts of accepted Vermeers run from about 34 to 37.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "055c7580d6d5326889fbdbdbbecd40d7176c1a300260481029fafe1e91f542ea",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "Johannes Vermeer",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Girl with a Pearl Earring, in the Mauritshuis, is by Johannes Vermeer of Delft.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Rembrandt, Frans Hals and Jan Steen are other Dutch painters of the period; none of them painted it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Mauritshuis describes the picture as a tronie, a study of a head, and the model is unknown.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Only about 34 to 37 paintings are attributed to Vermeer, so fewer than 40 survive.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vermeer was a Dutch painter who worked in Delft.",
+              "confidence": "certain"
+            },
+            "note": "Pass A addition (role key, ref stem, risk standard): 'Johannes Vermeer was a Dutch painter'. No writer claim states it."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "51a44923b192625a317c56c32083bf497a0417763aeef960b4b929f73cce200d",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "Johannes Vermeer",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Johannes Vermeer painted Girl with a Pearl Earring, now in the Mauritshuis in The Hague.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Rembrandt, Frans Hals and Jan Steen did not paint it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Mauritshuis describes it as a tronie, a character study, and the sitter is not known.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Vermeer's surviving output is usually counted at roughly 34 to 37 paintings, so 'fewer than 40' holds under every common count.",
+              "confidence": "certain"
+            },
+            "note": "The bound is the safe rung of the precision ladder. High-risk: counts only with external evidence in the other check (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c4 (explanation, number) rests on knowledge alone in both checks: checker A's searches ran out and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Only explanation facts lack evidence: redraft under a new id with them evidenced, bounded or dropped.",
+      "decidedAt": "2026-11-01T04:15:28Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which Dutch painter created Girl with a Pearl Earring?",
+  "answer": "Johannes Vermeer",
+  "wrong": ["Rembrandt van Rijn", "Frans Hals", "Jan Steen"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.365,
+    "estimator": "v0"
+  }
+}

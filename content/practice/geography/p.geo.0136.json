@@ -1,0 +1,248 @@
+{
+  "id": "p.geo.0136",
+  "status": "active",
+  "category": "geo",
+  "tags": ["cities", "silk-road", "central-asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Timur, the conqueror known in the West as Tamerlane, made it the seat of his empire and filled it with mosques and madrasas.",
+  "learnMore": "Samarkand",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Samarkand is in Uzbekistan."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Samarkand is not in Kazakhstan, Turkmenistan or Iran."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Registan in Samarkand is a square framed by blue-tiled madrasas."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Timur, known in the West as Tamerlane, made Samarkand the seat of his empire."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Timur built mosques and madrasas in Samarkand."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; all standard; no dates. Datasets: geonames-cities: Samarkand UZ admin1 10, lat 39.65456, lng 66.96445 (c1). Rival test: Kazakhstan and Turkmenistan are the neighbouring Central Asian states, and Iran shares the Persian heritage of Samarkand's architecture, so all are real confusions. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a famous Silk Road city; the reasoning needs only a sense of Central Asia. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none. This replaces an Edo draft that duplicated p.hist.0129.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e19c3c4d20323984853497deb2513e3d331feacbd9908b3cf313c8dcc169f7de",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Uzbekistan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Samarkand is a city in Uzbekistan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Samarkand is not in Kazakhstan, Turkmenistan or Iran.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Registan is framed by three blue-tiled madrasas.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Timur, called Tamerlane in the West, made Samarkand his capital.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Samarkand gained mosques and madrasas under Timur's building programme, such as the Bibi-Khanym Mosque.",
+              "confidence": "certain"
+            },
+            "note": "Read broadly: Timur himself built the Bibi-Khanym Mosque, while madrasas of his reign were commissioned by his family (his wife Saray Mulk Khanum, his grandson Muhammad Sultan)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2fc713adadd306f838eeee7c2c5857f8ba99d55427ac9005a880d12a03c0b20c",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Uzbekistan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Samarkand,country=UZ,admin1=10",
+              "excerpt": "Samarkand UZ/10: lat 39.65456, lng 66.96445",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "GeoNames places Samarkand in Uzbekistan (country code UZ)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Samarkand is not in Kazakhstan, Turkmenistan or Iran.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Registan is a square framed by three madrasas faced with blue tiles.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Timur (Tamerlane) made Samarkand the capital of his empire.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Timur had mosques and madrasas built in Samarkand.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed at certain; every claim is standard risk, so knowledge suffices (§9.5.3). Lint clean, no myth hits. A's note on the madrasas reads 'filled it with' broadly, as both checks confirmed at certain.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0158",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The Silk Road city of Samarkand, famous for the blue-tiled Registan square, is in which country?",
+  "answer": "Uzbekistan",
+  "wrong": ["Kazakhstan", "Turkmenistan", "Iran"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.251,
+    "estimator": "v0"
+  }
+}

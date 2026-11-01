@@ -1,0 +1,194 @@
+{
+  "id": "p.sci.0216",
+  "status": "active",
+  "category": "sci",
+  "tags": ["chemistry", "word-origins", "noble-gases"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Krypton comes from kryptos, 'hidden', as in cryptic. Its fellow noble gases have telling names too: neon means 'new', argon 'lazy' and xenon 'stranger'.",
+  "learnMore": "Krypton",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name krypton comes from the Greek kryptos, meaning 'hidden'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Neon comes from the Greek for 'new', argon from the Greek for 'lazy' or 'idle', and xenon from the Greek for 'stranger'; none of these is the meaning of krypton."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The English word cryptic comes from the same Greek root as krypton."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors and no warnings for this item. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high (the C26 floor). datasets: ptable Krypton summary ('from Greek: kryptos, the hidden one') supports c1; ptable summaries for neon, argon and xenon give no etymology, so c2 and c3 need web evidence, and c1 wants a second source independent of ptable's Wikipedia text. rivalTest: Each distractor is the real meaning of another noble gas's name, so a player who half-remembers the set is tempted, yet each is definitely wrong for krypton. Against the key: kryptos, hidden, is the standard etymology; the gas was found hiding in the leftovers of liquefied air in 1898. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 24 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "38ae3ae88d21a2cce114cf2cb40360db3dfe36b6acd6583dca3b7218a925a1cd",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "Hidden",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[name=Krypton].summary",
+              "excerpt": "Krypton (from Greek:κρυπτός kryptos \"the hidden one\")",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "ptable is built from Wikipedia."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Neon comes from Greek neos 'new', argon from argos 'idle' or 'lazy', and xenon from xenos 'stranger' or 'foreigner'; only krypton means 'hidden'.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cryptic comes, through Late Latin crypticus, from Greek kryptikos, built on kryptos 'hidden', the same root as krypton.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "08704527eb3943c6be396064320b8c7e8da0cdbb65afef7282f398cf263573ee",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "Hidden",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Krypton",
+              "excerpt": "Krypton (from Greek:κρυπτός kryptos \"the hidden one\") is a chemical element with symbol Kr",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Dataset summary (Wikipedia-derived) gives the etymology directly."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Neon is from Greek neos 'new', argon from argos 'idle or lazy', xenon from xenos 'stranger'.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English 'cryptic' and 'crypt' come, via Latin, from Greek kryptos 'hidden', the root of krypton.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c2 (distractor, etymology) and c3 (explanation, etymology) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Only c1 carries dataset evidence (ptable). Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sci.0118",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The noble gas krypton takes its name from the Greek word for what?",
+  "answer": "Hidden",
+  "wrong": ["New", "Lazy", "Stranger"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.27,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "id": "p.film.0137",
+  "status": "active",
+  "category": "film",
+  "tags": ["performers", "fantasy", "tolkien"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Christopher Lee, who played the wizard Saruman, had hoped to play Gandalf. Lee had also met J. R. R. Tolkien in person.",
+  "learnMore": "Gandalf",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Ian McKellen played Gandalf in Peter Jackson's Lord of the Rings and Hobbit films."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Christopher Lee played Saruman, and Patrick Stewart and Anthony Hopkins were not in Peter Jackson's Tolkien films."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Christopher Lee had hoped to be cast as Gandalf."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Christopher Lee met J. R. R. Tolkien in person."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Christopher Lee is the planted trap: he played the other great wizard, Saruman, and wanted Gandalf. Stewart and Hopkins are British actors of similar age and fame. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a New Zealand and US production seen worldwide; recognition only. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 22 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "28e47220ee379262dbe871ce43fd473ed98043a86821321ab90914f789d445cd",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Ian McKellen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "McKellen plays Gandalf in Jackson's Lord of the Rings and Hobbit trilogies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lee played Saruman; Stewart and Hopkins were not in those films.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lee, a lifelong Tolkien reader, had wanted the part of Gandalf.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lee had met Tolkien in person, the only member of the cast who did.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6c7192aa171ad9e3c0856c16677538d0a9b9e437e134551dc2254a1770a16695",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Ian McKellen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Ian McKellen played Gandalf in Peter Jackson's Lord of the Rings and Hobbit films.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Christopher Lee played Saruman; Stewart and Hopkins were not in Jackson's Tolkien films.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Christopher Lee had hoped to play Gandalf.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Christopher Lee met Tolkien in person.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed at certain; all four claims are standard risk, so knowledge evidence suffices (§9.5.3). Lint and dedupe clean, no myth hits. Style and balance fine: an easy mc with a strong in-film distractor.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:03:43Z",
+      "nearestId": "p.film.0165",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:03:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which actor played the wizard Gandalf in Peter Jackson's Tolkien films?",
+  "answer": "Ian McKellen",
+  "wrong": ["Christopher Lee", "Patrick Stewart", "Anthony Hopkins"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.82,
+    "spread": 0.348,
+    "estimator": "v0"
+  }
+}

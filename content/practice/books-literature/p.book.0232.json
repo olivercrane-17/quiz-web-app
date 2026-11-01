@@ -1,0 +1,200 @@
+{
+  "id": "p.book.0232",
+  "status": "checking",
+  "category": "book",
+  "tags": ["childrens-books", "fairy-tales"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "The giant's chant is older than the printed tale: in King Lear, written around 1606, Shakespeare's Edgar says 'Fie, foh, and fum, I smell the blood of a British man.'",
+  "learnMore": "Jack and the Beanstalk",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In the fairy tale Jack and the Beanstalk, Jack climbs a beanstalk to a giant's castle in the clouds."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Hansel, Tom Thumb and Aladdin are heroes of other tales and do not climb the beanstalk."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "In King Lear, Edgar says 'Fie, foh, and fum, I smell the blood of a British man.'"
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "King Lear, written around 1606, is older than the earliest printed version of Jack and the Beanstalk, from the 18th century."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: children's and young-adult books. lint: content:check reports no errors on this item and no warnings. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. rivalTest: Tom Thumb is the other English fairy-tale hero, Hansel the German one and Aladdin the Arabian Nights one; only Jack climbs the beanstalk. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: the work is known well beyond any one country and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has about the same chance as one in London or Chicago. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 30 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: nothing of either kind to check in a practice item. doubts: c4: the earliest printed version is usually given as The Story of Jack Spriggins and the Enchanted Bean, of 1734; the claim stays at '18th century' so a small difference in sources cannot break it. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7fc7dfa7e01ce93da31073c1560a4ca8c1ff7402d99bc665cc29a095e9914440",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "Jack",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Jack climbs the beanstalk to the giant's castle in the sky.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hansel, Tom Thumb and Aladdin are heroes of other tales.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In King Lear, Act 3, Scene 4, Edgar as Poor Tom says 'Fie, foh, and fum, I smell the blood of a British man.'",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "King Lear dates from about 1605 to 1606, while Jack and the Beanstalk is first known in print from the 1730s (Round About Our Coal Fire, 1734), so the play is older.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d20e3afc76cebbdaa2e39b29f7dfade1cd51753722f1ea956090025b9636914d",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "Jack",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "In Jack and the Beanstalk, Jack climbs a beanstalk to a giant's castle in the clouds.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Hansel (Hansel and Gretel), Tom Thumb and Aladdin are heroes of other tales and climb no beanstalk.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In King Lear (Act 3, scene 4) Edgar, as Poor Tom, says 'Fie, foh, and fum, I smell the blood of a British man'.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "King Lear (about 1606) is older than any printed Jack and the Beanstalk. I recall a 1734 chapbook (Jack Spriggins) and Tabart's 1807 version as the early prints, but cannot settle which counts as the tale.",
+              "confidence": "likely"
+            },
+            "note": "checker_doubt c4: no search was possible (budget exhausted). The core of the claim, that Lear predates the printed tale, is safe; the added \"from the 18th century\" depends on whether the 1734 chapbook is counted as a version of the tale."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "checker_doubt c4: \"the earliest printed version of Jack and the Beanstalk, from the 18th century\" depends on counting a 1734 chapbook as the tale, and some accounts date the first full printed version to 1807. I could not settle it without a search. The player-facing explanation (\"older than the printed tale\") is true either way, so restate c4 as \"King Lear is older than any printed version of the tale\" or evidence the date with a Tier A or B source."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "Which fairy-tale hero climbs a beanstalk to a giant's castle in the clouds?",
+  "answer": "Jack",
+  "wrong": ["Hansel", "Tom Thumb", "Aladdin"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.96,
+    "spread": 0.227,
+    "estimator": "v0"
+  }
+}

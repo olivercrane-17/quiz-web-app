@@ -1,0 +1,186 @@
+{
+  "id": "p.food.0134",
+  "status": "active",
+  "category": "food",
+  "tags": ["desserts", "baking", "france"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Apples cooked in butter and sugar are covered with pastry, baked, then flipped onto a plate. The tart is named after the Tatin sisters, who served it at their hotel in France.",
+  "learnMore": "Tarte Tatin",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "A classic tarte Tatin is made with apples, caramelized in butter and sugar under a pastry lid, then turned out upside down."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "A classic tarte Tatin is not made with cherries, peaches or plums."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The tarte Tatin is named after the Tatin sisters, who served it at their hotel in Lamotte-Beuvron, France."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c3). Datasets: geonames-cities lists Lamotte-Beuvron (country FR), the town in c3; the naming itself rests on knowledge. Rival test: cooks make tatins with pears and other fruit, so the stem says classic and pears are not an option. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the tart is on menus internationally. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 32 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: apples are the obvious and right guess for most. Doubts: none. The story that the tart began as an accident is left out as legend.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ae7f0e8e4227f45a9eb65e0cad9fa45878dbbd18af47ee896fcd73aa757db525",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Apples",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tarte Tatin is apples caramelized in butter and sugar under a pastry lid, baked and turned out upside down.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The classic tart is not made with cherries, peaches or plums.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It is named after Stéphanie and Caroline Tatin, who served it at their Hôtel Tatin in Lamotte-Beuvron, Loir-et-Cher.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only, so it still needs dataset or web evidence before acceptance (§9.9 rule 3). A combined call (counted in p.food.0157's record) said the tart is named after the sisters who ran the hotel, but its result list for this part includes Talk:Tarte Tatin (Tier C), it names no source, and it never names Lamotte-Beuvron, so it is not used."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "640e9fbf5dabf4845ea2e6e358d494fb77819fd20cecbf07b2f9753a60046e52",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Apples",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Tarte Tatin is apples caramelised in butter and sugar under a pastry lid, baked and turned out upside down.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Peach, cherry and plum versions are variations, not the classic.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Tatin sisters, Stéphanie and Caroline, ran the Hotel Tatin at Lamotte-Beuvron, where the tart became famous.",
+              "confidence": "certain"
+            },
+            "note": "The accidental-invention story is legend and the item does not use it. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk explanation c3 (etymology) rests on knowledge alone in both checks; no pinned dataset covers it and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which fruit is used in a classic tarte Tatin, baked upside down under its pastry?",
+  "answer": "Apples",
+  "wrong": ["Cherries", "Peaches", "Plums"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.82,
+    "spread": 0.275,
+    "estimator": "v0"
+  }
+}

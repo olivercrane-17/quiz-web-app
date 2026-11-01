@@ -1,0 +1,215 @@
+{
+  "id": "p.geo.0242",
+  "status": "active",
+  "category": "geo",
+  "tags": ["estuaries", "borders", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Buenos Aires and Montevideo face each other across it. Its water is fresh near Buenos Aires and turns salty towards the open Atlantic.",
+  "learnMore": "Río de la Plata",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Río de la Plata estuary separates Argentina from Uruguay."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Paraguay, Brazil and Chile do not lie across the Río de la Plata from Argentina."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Buenos Aires and Montevideo stand on opposite shores of the Río de la Plata."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The water of the Río de la Plata is fresh near Buenos Aires and becomes salty towards the Atlantic."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors and one C22 warning: the same answer as p.sport.0102, which asks who won the first World Cup, a different fact; related, not a duplicate, for the editor to confirm with related_ok. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: mledoze-countries: URY borders ARG and BRA (c1). geonames-cities: Buenos Aires, AR, -34.61315, -58.37723, and Montevideo, UY, -34.90328, -56.18816, on the estuary's two shores (c3). Rival test: Paraguay is the name-alike trap and upstream on the same river system; Brazil and Chile are Argentina's big neighbours. Against the key: nothing. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Buenos Aires and Montevideo are well known; reasoning from the two cities works anywhere. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; every claim is standard. Seed: 3 (medium): Paraguay catches some players. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e75f85b52a5871ac284a654da4e80dc5af601902843bdb728ea23f6f6efc1fe2",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Uruguay",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Río de la Plata estuary separates Argentina from Uruguay.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Paraguay is landlocked, Brazil lies north of Uruguay and Chile lies across the Andes; none faces Argentina across the Río de la Plata.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Buenos Aires and Montevideo stand on opposite shores of the Río de la Plata.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The estuary's water is fresh near Buenos Aires and grows saltier towards the Atlantic.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f621888ef68cf45f186f1298bd207ea51807104913fcea3bdc9e87050fe2f9cf",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Uruguay",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Rio de la Plata estuary lies between Argentina (Buenos Aires) and Uruguay (Montevideo).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Paraguay, Brazil and Chile do not touch the Rio de la Plata.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Buenos Aires and Montevideo stand on opposite shores of the Rio de la Plata.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Rio de la Plata is fresh near Buenos Aires and grows salty towards the Atlantic.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits. Dedupe: p.sport.0102 asks who won the first World Cup, a different fact, so related_ok.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.sport.0102",
+      "score": 0.614,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The wide estuary of the Río de la Plata separates Argentina from which country?",
+  "answer": "Uruguay",
+  "wrong": ["Paraguay", "Brazil", "Chile"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.271,
+    "estimator": "v0"
+  }
+}

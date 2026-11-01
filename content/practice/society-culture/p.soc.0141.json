@@ -1,0 +1,255 @@
+{
+  "id": "p.soc.0141",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["money", "word-origins", "currencies"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Coins from the mines of Joachimsthal (modern Jáchymov) in Bohemia were called joachimsthalers, then thalers. English turned the name into dollar, and Spanish silver dollars later carried the word around the world.",
+  "learnMore": "Thaler",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word 'dollar' comes from 'thaler', short for joachimsthaler, a silver coin named after the mining valley of Joachimsthal (Jáchymov), in modern Czechia."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Joachimsthal is not in modern Germany, Spain or the Netherlands."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Coins minted at Joachimsthal were called joachimsthalers, shortened to thalers."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The English word dollar developed from thaler, through Low German and Dutch daler."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Spanish silver dollar (the peso) spread the word dollar internationally."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: geonames-cities confirms Jáchymov in CZ (lat 50.35846, lng 12.93465, admin1 81). The etymology claims need web evidence. rivalTest: Germany is the strongest pull, because thaler is a German word and the town was German-speaking, but the valley lies in Czechia; Spain (the Spanish dollar) and the Netherlands (the Dutch daalder) are real links in the word's history. Argued against the key: Jáchymov is in the Czech Republic, on the German border. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: the dollar is known worldwide; Czechia is the CLDR short name, with Czech Republic the familiar alternative. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 32 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 5: few people know the valley, though Bohemia is a reasonable guess for anyone who knows its silver mines. doubts: this is money history with an etymology; the editor may prefer Language & Words. I kept it here because the knowledge needed is the coin's history.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5f976f05189b24da6166cd204363a47d27ee88778bb508b9ccef9c2219d683cd",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Czechia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dollar comes from thaler, short for Joachimsthaler, the coins first struck from silver mined at Joachimsthal (Jáchymov), which is in modern Czechia.",
+              "confidence": "certain"
+            },
+            "note": "The location half is also in geonames-cities 1.1.65 (cities.json: Jáchymov, country CZ, admin1 81, which admin1.json names the Carlsbad Region). The etymology, the high-risk part, rests on knowledge. High-risk (etymology): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Jáchymov, country=CZ",
+              "excerpt": "{\"name\":\"Jáchymov\",\"lat\":\"50.35846\",\"lng\":\"12.93465\",\"country\":\"CZ\",\"admin1\":\"81\",\"admin2\":\"0412\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Jáchymov (Joachimsthal) is in Czechia (admin1.json: CZ.81 is the Carlsbad Region), so it is not in Germany, Spain or the Netherlands."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Joachimsthaler was shortened to thaler (taler).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The English word dollar came through Low German and Dutch daler.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Spanish dollar (the peso of eight reales) circulated worldwide and was called a dollar in English, which spread the word.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Jáchymov lies in the Ore Mountains of north-west Bohemia, in the Karlovy Vary (Carlsbad) Region of Czechia.",
+              "confidence": "certain"
+            },
+            "note": "Checker A addition (role explanation, ref explanation, risk standard): Joachimsthal (Jáchymov) is in Bohemia."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "22831752b22bfdb687aaf38dd50cbff6bf3a2583ef22572c9dbaebaede2edf4c",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Czechia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dollar comes from thaler, short for Joachimsthaler, a silver coin from the mining valley of Joachimsthal (Jáchymov) in Bohemia, now Czechia.",
+              "confidence": "certain"
+            },
+            "note": "The location half is dataset-confirmed under c2; the etymology half is knowledge only. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Jáchymov, country=CZ",
+              "excerpt": "{\"name\":\"Jáchymov\",\"lat\":\"50.35846\",\"lng\":\"12.93465\",\"country\":\"CZ\",\"admin1\":\"81\",\"admin2\":\"0412\"} (admin1.json: CZ.81 = Carlsbad Region)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The mining valley of the thaler, Jáchymov, is in Czechia. The same file also lists a small town called Joachimsthal in Germany (Brandenburg), a homonym unrelated to the coin; the claim's wording should name the mining valley."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Coins minted at Joachimsthal were called joachimsthalers, shortened to thalers.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The English word dollar developed from thaler through Low German and Dutch daler.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Spanish silver dollar (the peso) carried the word dollar around the world.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Claim c2 says 'Joachimsthal is not in modern Germany', yet a small town named Joachimsthal exists in Brandenburg. The thaler's valley is Jáchymov in Czechia, so the key is safe; only the claim text needs 'the mining valley of the thaler (Jáchymov)'. No player-facing change."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, etymology), c3 (explanation, etymology) and c4 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them (the dataset evidence recorded covers other claims), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims. A redraft must also clear the near-duplicate flag against p.music.0249 (same answer), and c2 should name the mining valley (Jáchymov), since a German town is also called Joachimsthal (B).",
+      "decidedAt": "2026-11-01T04:34:42Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The word 'dollar' comes from the thaler, a silver coin named after a mining valley in which modern country?",
+  "answer": "Czechia",
+  "wrong": ["Germany", "Spain", "Netherlands"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.16,
+    "spread": 0.2,
+    "estimator": "v0"
+  }
+}

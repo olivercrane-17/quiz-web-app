@@ -1,0 +1,205 @@
+{
+  "id": "p.lang.0160",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["world-languages", "basque", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Basque, or its direct ancestor, was spoken in the region before the Romans brought Latin, the ancestor of Spanish and French. No proposed link to another family has won general acceptance.",
+  "learnMore": "Basque language",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Basque is a language isolate: no relationship between Basque and any other language family has been proven."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Basque or its direct ancestor was spoken in the region before Latin arrived with the Romans."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Spanish and French descend from Latin."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Proposed links between Basque and other language families have not been generally accepted."
+    }
+  ],
+  "writerNotes": "Most players assume a European language must be related to its neighbours, so they say false; counterintuitive is true. The key is a claim about every other language family, a superlative in disguise, so it is high with that reason (the schema has no counterintuitive reason). Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: cldr-languages lists eu as Basque by name only; no dataset covers language families; rival test: argued for Aquitanian as a relative: it is usually treated as an ancient form of Basque itself, not a separate relative, so the isolate claim stands; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: a fact about Europe that no country's schooling owns; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ca71a4c6a780c56b08bb23ee04d4d09b2b37a52b1dbfbe8b110ad25d16ac0eaa",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Basque is a language isolate: no relationship to any other language family has been accepted.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Basque, or a direct ancestor such as Aquitanian, was spoken in the region before Latin arrived with the Romans.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Spanish and French descend from Latin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Proposed links, to Caucasian languages, Iberian and others, have not won general acceptance.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "05d21db930aabf0e0fe363549784ab5dbf1e18615469456de0eba057e5a6e156",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Basque is a language isolate: no relationship with any other language family has been established.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: proposed links (Caucasian, Iberian, Dene-Caucasian) are not accepted, so 'no proven relatives' is accurate."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Basque, or its direct ancestor, was spoken in the region before Latin arrived.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Spanish and French descend from Latin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "No proposed link between Basque and another family has won general acceptance.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "style",
+            "severity": "note",
+            "note": "Reads as a plain fact rather than a myth or a truly surprising truth (guide section 3.6: true/false only for myths and surprising truths). Many people do not know Basque stands alone, so the editor may accept it as a surprising truth; I flag it, no change asked."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, superlative) and c2 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: B noted it reads as a plain fact rather than a surprising truth (§3.6).",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Linguists class Basque, spoken in Spain and France, as an isolate, a language with no proven relatives.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.239,
+    "estimator": "v0"
+  }
+}

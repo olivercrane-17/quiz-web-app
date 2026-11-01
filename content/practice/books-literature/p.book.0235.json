@@ -1,0 +1,200 @@
+{
+  "id": "p.book.0235",
+  "status": "cut",
+  "category": "book",
+  "tags": ["childrens-books", "finnish-literature"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Jansson belonged to Finland's Swedish-speaking minority and wrote in Swedish. From 1954 she also drew a Moomin comic strip for London's Evening News.",
+  "learnMore": "Tove Jansson",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Tove Jansson, creator of the Moomins, was from Finland."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Tove Jansson was not Swedish, Norwegian or Danish."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Jansson belonged to Finland's Swedish-speaking minority and wrote her Moomin books in Swedish."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "From 1954 Tove Jansson drew a Moomin comic strip for the London Evening News."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: children's and young-adult books. lint: content:check reports no errors on this item; C22 warns: same answer as p.lang.0124 (the country called Suomi), a different fact, so the editor can record related_ok. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. The tooling's riskReason list has no counterintuitive value, so the key of this counterintuitive item carries checker_doubt. datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. rivalTest: Sweden is the planted trap because she wrote in Swedish; Norway and Denmark are the other Nordic countries. She was born and lived in Helsinki, so Finland holds. Counterintuitive: her books were written in Swedish, so many players assume she was Swedish; the explanation defuses it. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: the work is known well beyond any one country and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has about the same chance as one in London or Chicago. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 23 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: nothing of either kind to check in a practice item. doubts: none. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0b6afa35956fa93c0495f63f738b4cd036a49d60a665fc84e48925ff5494f7b7",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "Finland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tove Jansson (1914 to 2001), creator of the Moomins, was a Finnish writer and artist born in Helsinki.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "She was Finnish, not Swedish, Norwegian or Danish, though she wrote in Swedish.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "She belonged to Finland's Swedish-speaking minority and wrote the Moomin books in Swedish.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Her Moomin comic strip for the London Evening News began in 1954.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "898b3c52362c8b0b6498456b65c3dca6cd97db61663888bf01cc413fb1ba546b",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "Finland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tove Jansson, creator of the Moomins, was born in Helsinki and was a Finnish citizen.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Sweden tempts because she wrote in Swedish, but the stem asks which country she came from, and the answer is Finland. High-risk (checker_doubt): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "She was Finnish by nationality, not Swedish, Norwegian or Danish, though she belonged to the Swedish-speaking minority and her mother was Swedish-born.",
+              "confidence": "certain"
+            },
+            "note": "Fine as a nationality claim; the minority background is exactly what the explanation tells players."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jansson belonged to Finland's Swedish-speaking minority and wrote her Moomin books in Swedish.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "From 1954 Jansson drew a daily Moomin strip for London's Evening News.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, checker_doubt) and c4 (explanation, date) rest on knowledge alone in both: neither checker could search (both report the shared web budget spent) and no pinned dataset covers them. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, never a relabel. The key itself needs that evidence, so redraft under a new id once a dataset or a Tier A or B search can carry them. Its C22 flag (a shared answer with p.lang.0124, a different fact) would be related_ok.",
+      "decidedAt": "2026-11-01T04:44:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Tove Jansson, creator of the Moomins, came from which country?",
+  "answer": "Finland",
+  "wrong": ["Sweden", "Norway", "Denmark"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.175,
+    "estimator": "v0"
+  }
+}

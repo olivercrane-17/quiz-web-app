@@ -1,0 +1,212 @@
+{
+  "id": "p.geo.0148",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "equator", "cities"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "They are near mirror images across the Equator: Singapore about 1.3° north of it, Nairobi about 1.3° south. Nairobi's highland setting still gives it cool nights.",
+  "learnMore": "Nairobi",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Singapore lies at about 1.3° N."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Nairobi lies at about 1.3° S."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Nairobi stands in highlands, which give it cool nights despite being close to the Equator."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 and c2 are latitudes, so high; c3 is standard. Datasets: geonames-cities: Singapore SG lat 1.28967; Nairobi KE admin1 05 lat -1.28333. Gap 2.57°, above the 0.5° guard. Rival test: many players place Singapore south of the Equator because Indonesia's islands lie south of it, so Singapore is a real pull; the coordinates settle it. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: two global hub cities on different continents. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 26 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: not marked counterintuitive: the pull is a coin flip rather than a confident belief.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0e301b16951953fadc0fade0403c7604ab72ad52595b81f79f37a8c98a843041",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Nairobi",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Singapore, country=SG, admin1=",
+              "excerpt": "{\"name\":\"Singapore\",\"lat\":\"1.28967\",\"lng\":\"103.85007\",\"country\":\"SG\",\"admin1\":\"\",\"admin2\":\"\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "1.28967 rounds to 1.3° N."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Nairobi, country=KE, admin1=05",
+              "excerpt": "{\"name\":\"Nairobi\",\"lat\":\"-1.28333\",\"lng\":\"36.81667\",\"country\":\"KE\",\"admin1\":\"05\",\"admin2\":\"\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "-1.28333 rounds to 1.3° S."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Nairobi stands at about 1,800 m, so its nights are cool despite the Equator's closeness.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "da9c2977753bf0f5ce2abda449a55b59b5f5623bd72fc12fc2360590522f5cac",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Nairobi",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Singapore,country=SG,admin1=",
+              "excerpt": "Singapore SG/: lat 1.28967, lng 103.85007",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Nairobi,country=KE,admin1=05",
+              "excerpt": "Nairobi KE/05: lat -1.28333, lng 36.81667",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Nairobi stands at roughly 1.7 to 1.8 km above sea level, which keeps its nights cool despite the latitude.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c2 carry geonames-cities evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which city is further south?",
+  "a": "Singapore",
+  "b": "Nairobi",
+  "answer": "b",
+  "relation": "further_south",
+  "measure": "latitude of the city centre",
+  "unit": "° latitude",
+  "values": {
+    "a": 1.29,
+    "b": -1.28
+  },
+  "valueDisplay": {
+    "a": "1.3° N",
+    "b": "1.3° S"
+  },
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.098,
+    "estimator": "v0"
+  }
+}

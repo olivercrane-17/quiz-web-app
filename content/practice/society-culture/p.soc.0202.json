@@ -1,0 +1,219 @@
+{
+  "id": "p.soc.0202",
+  "status": "active",
+  "category": "soc",
+  "tags": ["festivals", "chinese-zodiac", "calendars", "china"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "In a popular legend the animals raced across a river, and the rat rode on the ox's back before leaping ahead at the finish. The pig comes last.",
+  "learnMore": "Chinese zodiac",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The rat is the first animal in the 12-year cycle of the Chinese zodiac."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In the Chinese zodiac the ox is second, the tiger third and the dragon fifth, so none of them comes first."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "A popular legend tells of a race across a river in which the rat rode on the ox's back and jumped ahead to finish first."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The pig is the last of the 12 animals of the Chinese zodiac."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: festivals and calendars. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers the zodiac; c1 and c2 are high-risk order claims that need web evidence. rivalTest: the ox is the planted trap from the race legend, the dragon is the best-known sign and the tiger comes third. Argued against the key: versions of the legend differ in detail, but the calendar order always starts with the rat. Vietnam's zodiac swaps the rabbit for a cat, which does not touch first place. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: known across East and Southeast Asia and the Chinese diaspora; elsewhere it is a fair guess with the race legend as a foothold for anyone who has heard it. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 28 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 4 (medium): a coin flip for casual players outside East Asia, close to certain inside it. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4dcae2c3bdafd8177e51d44c945d6cde594421ab3d56d1c268ad09640538954c",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "Rat",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The twelve-animal cycle starts with the Rat.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The order is Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig, so the Ox is 2nd, the Tiger 3rd and the Dragon 5th.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the Great Race legend the animals crossed a river; the Rat rode on the Ox's back and leapt off at the end to finish first.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Pig is the twelfth and last animal of the cycle.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "aab22e63016e18b131ef23ee3f5d75b645d16d352db797337b862e63826364ff",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "Rat",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The twelve-animal cycle opens with the Rat.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Vietnam swaps the rabbit for the cat, but the rat still opens every regional version. Tiger and dragon never do."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Order of the cycle: rat, ox, tiger, rabbit, dragon. So ox is second, tiger third and dragon fifth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the Great Race legend the rat rode on the ox's back and sprang ahead at the finish to place first.",
+              "confidence": "certain"
+            },
+            "note": "Tellings differ in small details; this is the standard one and the claim is worded as a legend."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The pig (boar) is the twelfth and last animal.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, first), c2 (distractor, number), c3 (explanation, first) and c4 (explanation, number) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. The gap includes the key, a label or a distractor, so the redraft needs evidence for the question itself. Redraft under a new id.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.lang.0102",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which animal comes first in the 12-year cycle of the Chinese zodiac?",
+  "answer": "Rat",
+  "wrong": ["Ox", "Dragon", "Tiger"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.231,
+    "estimator": "v0"
+  }
+}

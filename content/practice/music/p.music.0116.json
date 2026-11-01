@@ -1,0 +1,220 @@
+{
+  "id": "p.music.0116",
+  "status": "cut",
+  "category": "music",
+  "tags": ["classical", "beethoven", "mozart"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Beethoven was 20 when Mozart died, so they were alive at the same time for about 21 years. As a teenager he even travelled to Vienna, possibly hoping to study with Mozart.",
+  "learnMore": "Ludwig van Beethoven",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Ludwig van Beethoven was born in December 1770."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Wolfgang Amadeus Mozart died in December 1791."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Beethoven was 20 years old when Mozart died, so their lives overlapped by about 21 years."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "As a teenager, Beethoven travelled to Vienna, possibly hoping to study with Mozart."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers these music facts (the manifest holds geographic, scientific, Nobel, Olympic and art-collection data), so each high-risk claim needs web evidence from the checkers. I used no WebSearch. Rival test: argued for 'Mozart's death': players picture Beethoven as Mozart's successor and assume his birth came later, which is the trap; Beethoven was born in December 1770 and Mozart died in December 1791, 21 years apart, well past the 10-year guard. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both composers are known worldwide. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: Beethoven's exact birthday is unknown (he was baptized on 17 December 1770), so c1 says December 1770 and the reveal shows the year only. Whether he met Mozart on the 1787 trip is unproven, so c4 says 'possibly hoping'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7a4363241799de9965a5f021bb8afab06113af54d716b78cf59f8c574542f25b",
+        "startedAt": "2026-11-01T02:00:29Z",
+        "finishedAt": "2026-11-01T02:19:40Z",
+        "coldSolve": {
+          "answerGiven": "Beethoven's birth",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Beethoven was born in Bonn in December 1770 (baptized 17 December).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mozart died in Vienna on 5 December 1791.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Born in mid-December 1770, Beethoven was 20 when Mozart died in early December 1791, so their lives overlapped by almost 21 years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3). Arithmetic on c1 and c2; this schema has no calculation entry, so it rests on knowledge."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In 1787, aged 16, Beethoven travelled to Vienna, perhaps hoping to study with Mozart.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1b44f852b935a6106299bc99b27f2bd8088b18d7ec684e6c8869747540140756",
+        "startedAt": "2026-11-01T02:05:28Z",
+        "finishedAt": "2026-11-01T02:26:16Z",
+        "coldSolve": {
+          "answerGiven": "Beethoven's birth",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Beethoven was baptised on 17 December 1770, so he was born about 16 December 1770.",
+              "confidence": "certain"
+            },
+            "note": "Wording note: his exact birth day is unrecorded; December 1770 is the standard statement and the year is not in doubt. High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mozart died on 5 December 1791.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Beethoven was 20 on 5 December 1791, so the two men's lives overlapped by about 21 years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Beethoven made a trip to Vienna in 1787, aged 16, perhaps hoping to study with Mozart.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Beethoven's exact birth day is unrecorded (baptised 17 December 1770). The year and month are the standard statement and the comparison holds on any date from 1770 to 1772, so no change is needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic01e",
+        "at": "2026-11-01T02:04:12Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (date), c2 (date) and c3 (number) rest on knowledge only: neither check ran a search (A's records say WebSearch was refused) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with evidence or without the risky detail. B's note: Beethoven's birth day is unrecorded (baptised 17 December 1770).",
+      "decidedAt": "2026-11-01T04:20:00Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Beethoven's birth",
+  "b": "Mozart's death",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year it happened",
+  "unit": "year",
+  "values": {
+    "a": 1770,
+    "b": 1791
+  },
+  "valueDisplay": {
+    "a": "1770",
+    "b": "1791"
+  },
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.184,
+    "estimator": "v0"
+  }
+}

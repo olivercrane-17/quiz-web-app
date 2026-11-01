@@ -1,0 +1,242 @@
+{
+  "id": "p.geo.0146",
+  "status": "active",
+  "category": "geo",
+  "tags": ["antipodes", "maps", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Beijing lies at about 40° N, 116° E, so its opposite point is about 40° S, 64° W, in Argentina. Tunnel from most of the United States and you would surface in the Indian Ocean.",
+  "learnMore": "Antipodes",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The antipode of Beijing, at about 40° S, 64° W, lies in Argentina."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The antipode of Beijing does not lie in Chile, Brazil or the United States."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Beijing lies at about 40° N, 116° E."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The antipodes of most of the contiguous United States lie in the Indian Ocean."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 and c3 carry coordinates and c4 says 'most', so all are high; c2 is standard. Datasets: geonames-cities: Beijing CN admin1 22 lat 39.9075, lng 116.39723 (c3). The antipode is lat -39.9075, lng -63.60277; a point-in-polygon test against natural-earth ne_110m_admin_0_countries puts it inside Argentina (c1, c2). For c4 I took a 0.5° grid of 3,350 points inside the contiguous United States polygon: none of their antipodes falls on land at the 110m scale, and all lie between 25° and 49° S and 55° and 113° E, in the Indian Ocean. Rival test: the United States is the trap from the 'dig a hole to China' saying run in reverse; Chile is the near miss on the same latitude, but at 64° W the point is well east of the Andes; Brazil does not reach 40° S. A good reasoner can get there: flip the hemisphere and add 180° of longitude. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: uses only coordinates and a world map. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 35 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "347f90f9c699ace3bb9ba647668791273e910bd7dc6d3b9d58a4372ab7fc9a0e",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Argentina",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "point [-63.60277,-39.9075] (antipode of GeoNames Beijing 39.9075, 116.39723)",
+              "excerpt": "contained by the feature with \"ADMIN\": \"Argentina\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Antipode computed as latitude times -1 and longitude minus 180, from geonames-cities Beijing. About 40° S, 64° W."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "point [-63.60277,-39.9075]",
+              "excerpt": "contained by the feature with \"ADMIN\": \"Argentina\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "So it is in none of Chile, Brazil or the United States."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Beijing, country=CN, admin1=22",
+              "excerpt": "{\"name\":\"Beijing\",\"lat\":\"39.9075\",\"lng\":\"116.39723\",\"country\":\"CN\",\"admin1\":\"22\",\"admin2\":\"11876380\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "39.9075, 116.39723: about 40° N, 116° E."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "ADMIN=United States of America, mainland polygon; every country polygon",
+              "excerpt": "3350 grid points at 0.5° spacing inside the mainland polygon; antipodes on land: 0; antipode range 55.5 to 112.5° E, 25.5 to 49° S",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Every sampled antipode falls in open ocean between Africa and Australia, north of 60° S, so in the Indian Ocean. The 110m file omits a few tiny islands there (Amsterdam, Saint-Paul, Kerguelen), which leaves 'most' intact."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "131a9f123e34e8db9096bb809c5b7f0e688d0d52a911e0c74b28447fa09d0a9f",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Argentina",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "point-in-polygon of the antipode of Beijing (GeoNames 39.9075 N, 116.39723 E)",
+              "excerpt": "Antipode -39.91, -63.60 lies inside: Argentina",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 110 km inland from the 110m coastline vertex, so the coarse scale does not matter."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "same point-in-polygon test",
+              "excerpt": "Only Argentina contains the antipode, so not Chile, Brazil or the United States",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Beijing,country=CN,admin1=22",
+              "excerpt": "Beijing CN/22: lat 39.9075, lng 116.39723",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "antipodes of a 0.5 degree grid over the contiguous US polygon",
+              "excerpt": "3350 grid points; 0 antipodes on land; antipode longitudes 55.5 to 112.5 E, latitudes -49.0 to -25.5: the southern Indian Ocean",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The 110m file omits small islands such as Kerguelen, which a thin northern sliver of the US maps to, so 'most' is the right word."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1, c3 and c4 carry natural-earth and geonames-cities evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. Dedupe pairs it with p.hist.0225 (same answer): that item asks about Eva Perón, a different fact.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.hist.0225",
+      "score": 0.633,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "If you tunnelled straight through Earth's centre from Beijing, in which country would you come out?",
+  "answer": "Argentina",
+  "wrong": ["Chile", "Brazil", "United States"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.161,
+    "estimator": "v0"
+  }
+}

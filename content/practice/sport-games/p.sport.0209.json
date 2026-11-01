@@ -1,0 +1,206 @@
+{
+  "id": "p.sport.0209",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["football", "referees", "world-cup"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "English referee Ken Aston had the idea while stopped at traffic lights in London, after language mix-ups at the 1966 World Cup. Cards were first used at the 1970 tournament.",
+  "learnMore": "Ken Aston",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Referee Ken Aston based the yellow and red card system on traffic lights."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The card system was not modelled on railway signals, motor-racing flags or ships' signal flags."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Ken Aston thought of the cards while waiting at traffic lights in London, after confusion over cautions and sendings-off at the 1966 World Cup."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Yellow and red cards were first used at the 1970 men's World Cup in Mexico."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 2 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup holds results and goals only, so it cannot confirm anything about cards; c1, c3 and c4 need web evidence (FIFA or quality press). rivalTest: Railway signals and motor-racing flags also use yellow for caution and red for stop, which is what makes them tempting, but Aston's own account names traffic lights. Ships' signal flags are a coded alphabet, not a caution system. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 30 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: The traffic-light origin rests on Aston's own account, widely reported; c3 dates it to after the 1966 tournament.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f96f9321cdaf9621de3b1554a957175dac42721e1d10393416a9f42a624f1011",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Traffic lights",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ken Aston modelled the yellow and red cards on traffic lights: yellow to caution, red to stop.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The documented origin is the traffic-light idea, not railway, motor-racing or naval signals.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Aston had the idea at traffic lights on Kensington High Street in London, after confusion over cautions in the England v Argentina quarter-final of the 1966 World Cup.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The card system was introduced at the 1970 World Cup in Mexico.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). No red card was actually shown until 1974; 'first used' here means the system was first in force in 1970, which is the usual statement."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "161015028ee6bae3484a841f52f84369cf1fd5334a24183f0a3b80432665cf93",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Traffic lights",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ken Aston, then head of FIFA's referees, based the yellow and red card system on traffic lights.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: motor-racing flags (yellow caution, red stop) mirror the cards, but the documented origin is Aston's traffic-light idea, so the flags option is wrong."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The standard account of the cards' origin names traffic lights, not railway signals, motor-racing flags or ships' signal flags.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Aston is reported to have had the idea at a red light in London after the 1966 World Cup quarter-final between England and Argentina, where cautions and a sending-off had been unclear to players and press.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yellow and red cards were first used at the 1970 World Cup in Mexico.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says language mix-ups while the claim says confusion over cautions and sendings-off. Both describe the England v Argentina game, but the explanation could use the claim's wording so every displayed fact is a checked claim."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, date) and c4 (explanation, first) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Checker B's note also applies: the explanation's 'language mix-ups' drifts from claim c3, so the redraft should state the checked claim. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The yellow and red cards used by football (soccer) referees were inspired by what?",
+  "answer": "Traffic lights",
+  "wrong": ["Railway signals", "Motor-racing flags", "Ships' signal flags"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.223,
+    "estimator": "v0"
+  }
+}

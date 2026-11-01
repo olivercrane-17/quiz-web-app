@@ -1,0 +1,205 @@
+{
+  "id": "p.food.0241",
+  "status": "cut",
+  "category": "food",
+  "tags": ["chocolate", "italy", "nuts"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Turin chocolatiers are said to have stretched scarce cocoa with local hazelnuts when Napoleon's blockade cut trade in the early 1800s. Nutella descends from the same paste.",
+  "learnMore": "Gianduja",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Gianduja is chocolate blended with ground hazelnuts."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Gianduja is not made with almonds, walnuts or pistachios."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Gianduja is said to have been developed in Turin in the early 1800s, when Napoleon's Continental System made cocoa scarce."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Nutella was developed from Piedmontese gianduja-style hazelnut pastes."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c3). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Almonds and pistachios fill other Italian sweets, which is why they tempt. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: hazelnut chocolate spread is sold worldwide, which is the foothold. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: Nutella makes it easy for most players. Doubts: the blockade origin is a widely told story rather than a documented event, so c3 and the explanation say 'is said to have'; checker B should judge whether that hedge is enough.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "368db0938c8ae7bd5aa17d58c4fac35ce153f873c2cd5f4a7a56072f0983f70d",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Hazelnuts",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gianduja is chocolate blended with hazelnut paste.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Gianduja is not made with almonds, walnuts or pistachios.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The usual story is that Turin chocolatiers stretched scarce cocoa with Piedmont hazelnuts under Napoleon's Continental System, from 1806.",
+              "confidence": "certain"
+            },
+            "note": "The claim is hedged ('is said to'), which matches the story's status. High-risk (date): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ferrero's Nutella grew out of Piedmontese gianduja-style hazelnut spreads.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ac602a7ac9a7a90bdca43a9d8b1a8d7e0bfe6e95083eb050bb1658e5f033d8df",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Hazelnuts",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gianduja is chocolate blended with ground hazelnuts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gianduja is not made with almonds, walnuts or pistachios as its ground nut.",
+              "confidence": "certain"
+            },
+            "note": "Taken literally the claim is a little absolute (some rules let makers add almond pieces, and almond-hazelnut variants exist), but the ground nut that defines Turin gianduja is hazelnut."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "By the usual story, Turin chocolatiers stretched scarce cocoa with hazelnuts when Napoleon's Continental System cut trade in the early 1800s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nutella descends from Piedmontese gianduja-style hazelnut paste.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Almond or almond-and-hazelnut gianduja exists outside Turin, so 'Almonds' is not absurd as an option. The stem's 'from Turin' and 'ground nut' keep the key unique."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c3 (explanation, date) rests on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7). For a redraft: almond gianduja exists, so the stem must keep 'from Turin' (B).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Gianduja, a chocolate paste from Turin, is blended with which ground nut?",
+  "answer": "Hazelnuts",
+  "wrong": ["Almonds", "Walnuts", "Pistachios"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.4,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "id": "p.geo.0143",
+  "status": "active",
+  "category": "geo",
+  "tags": ["capitals", "cities", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Casablanca is the business hub and Marrakesh, whose name gave us the word Morocco, draws the tourists, but parliament and the royal palace are in Rabat.",
+  "learnMore": "Rabat",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Rabat is the capital of Morocco."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Casablanca, Marrakesh and Fez are Moroccan cities, but none of them is the capital."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Casablanca is Morocco's main business centre, and Marrakesh is a major destination for tourists."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The English name Morocco comes from the name of the city of Marrakesh."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Morocco's parliament and main royal palace are in Rabat."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is high under the C26 floor (counterintuitive; schema has no 'counterintuitive' riskReason, so checker_doubt) and c4 is an etymology; the rest are standard. Datasets: mledoze-countries cca3=MAR capital Rabat; country-codes MAR Capital Rabat. As a current-capital key, c1 also needs a Tier A or B web result (§3.4); Morocco is not on the excluded-capitals list. c4 needs a web result too. Rival test: Casablanca is the confident wrong answer (biggest and best known), Marrakesh the second, and Fez an old imperial capital, so each is a real confusion; the explanation defuses the first two. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Morocco's cities are known worldwide through travel and film. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 26 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "64c8a20f5242e7733a836eb35d901848ebf6a8718e7f841e887e0f2ca9c513e9",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Rabat",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MAR",
+              "excerpt": "MAR: \"capital\": [\"Rabat\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Capital key: §3.4 also asks for a Tier A or B web result beside the dataset record. That could not be gathered this session (WebSearch quota exhausted), so the editor should get one before acceptance."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Casablanca, Marrakesh and Fez are major Moroccan cities, and Rabat, not any of them, is the capital.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Casablanca is Morocco's economic centre and Marrakesh its best-known tourist city.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The European names for Morocco (Spanish Marruecos, English Morocco) come from the name of Marrakesh.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only. No pinned dataset covers this, and WebSearch was unavailable this session (the turn's shared search quota was exhausted before any search ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Morocco's parliament and the main royal palace, Dar al-Makhzen, are in Rabat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8153197ec0cc4118d24200a4a0d1833ef1d47a7b93243c32c49391cdefbee04d",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Rabat",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MAR",
+              "excerpt": "MAR (Morocco): capital [\"Rabat\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Capital claim: sections 3.4 and 9.9 also want a Tier A or B web result beside the dataset. I could not search, so that half must come from the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MAR",
+              "excerpt": "MAR (Morocco): capital [\"Rabat\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Rabat is the only capital listed."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Casablanca is Morocco's main business and commercial centre, and Marrakesh is a leading tourist destination.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The English name Morocco comes (via Spanish Marruecos and Portuguese Marrocos) from the name of Marrakesh.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: no dataset covers this. Needs dataset or web evidence in the other check (I could not search: the shared WebSearch budget was spent). High-risk etymology."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Morocco's parliament and the king's principal palace, Dar al-Makhzen, are in Rabat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c4 (explanation, etymology) rest on knowledge alone in both checks: no pinned dataset covers them and neither checker could search. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with web evidence, or with the claim stepped down or dropped. c1 also names a current capital and lacks the Tier A or B web result §3.4 requires.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which city is the capital of Morocco?",
+  "answer": "Rabat",
+  "wrong": ["Casablanca", "Marrakesh", "Fez"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.223,
+    "estimator": "v0"
+  }
+}

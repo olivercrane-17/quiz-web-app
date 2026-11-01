@@ -1,0 +1,212 @@
+{
+  "id": "p.soc.0158",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["inventions", "money", "cards"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Its founder Frank McNamara is said to have dreamed it up after forgetting his wallet at a dinner. The first cards were made of cardboard and accepted at a few dozen New York restaurants.",
+  "learnMore": "Diners Club International",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Diners Club card, launched in New York in 1950, was first used to pay at restaurants."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Diners Club card was not first meant for petrol stations, hotels or department stores."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Frank McNamara is said to have conceived the card after forgetting his wallet when dining out."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The first Diners Club cards were made of cardboard and accepted at a few dozen New York restaurants."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers payment history; c1 and c4 need web evidence. rivalTest: petrol stations and department stores issued their own store cards earlier, so they tempt; hotels came later. Argued against the key: the name itself says diners, and the first members could pay only at restaurants. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: fair everywhere; the name is the foothold. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 34 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 2: the name gives it away to most. doubts: the forgotten-wallet story is a company legend, which 'is said to' marks.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "56250a3ad3876a88970d091cd77b6c5e21d0430627c528978542d29d1970bb43",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Restaurants",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Diners Club, launched in New York in 1950, began as a card for paying at restaurants.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was not first meant for petrol stations, hotels or department stores.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The founding story says Frank McNamara thought of it after finding himself without his wallet at a dinner.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first Diners Club cards were cardboard. Launch accounts I know put the number of restaurants that took them at 14 or 27, so 'a few dozen' may overstate it.",
+              "confidence": "unsure"
+            },
+            "note": "Uncertain: the restaurant count is not settled by my knowledge, and no search could be run. See the issue. High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Checker doubt on c4: 'accepted at a few dozen New York restaurants'. The cardboard card is right, but the launch figures I know are 14 or 27 restaurants, which reads as a dozen or two rather than a few dozen, and no web search was possible in this pass to settle the count. Step down the precision ladder (for example 'accepted at first only by a small group of New York restaurants') or confirm the figure with a Tier A or B source."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "495e6d2f6515bed4429c00d46c72e5b192b2bc2ea687525695699bd989ee7a8c",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Restaurants",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Diners Club card was launched in New York in 1950 and first used to pay at restaurants.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was not first meant for petrol stations, hotels or department stores.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Frank McNamara is said to have conceived the card after forgetting his wallet at a restaurant dinner.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first cardboard Diners Club cards worked at only a limited number of New York restaurants; my recollection is 14 at the start and about 27 soon after, fewer than 'a few dozen'.",
+              "confidence": "likely"
+            },
+            "note": "Cannot be confirmed as written. I could not search (the shared WebSearch budget was exhausted) and my recollection contradicts 'a few dozen'."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "The explanation says the first cards were accepted at 'a few dozen' New York restaurants. From memory the launch network was about 14 restaurants (some accounts say 27), short of a few dozen. Use a hedge the evidence supports ('a handful of', or an exact figure once a source confirms it); it is a high-risk number."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "cut",
+      "reason": "Both checks revise and leave c4 uncertain: 'accepted at a few dozen New York restaurants' conflicts with both checkers' recollection of about 14 at launch (27 soon after). Stepping down the precision ladder changes claim c4, which needs two fresh checks, and with no passing check a tiebreak cannot apply (§9.7). High-risk c1 also rests on knowledge alone. Cut; redraft under a new id with a bounded figure ('a small group of') and web evidence.",
+      "decidedAt": "2026-11-01T04:34:42Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The Diners Club card, launched in New York in 1950, was first used for paying at which kind of business?",
+  "answer": "Restaurants",
+  "wrong": ["Petrol stations", "Hotels", "Department stores"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.74,
+    "spread": 0.216,
+    "estimator": "v0"
+  }
+}

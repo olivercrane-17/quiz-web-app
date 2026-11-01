@@ -1,0 +1,279 @@
+{
+  "id": "p.food.0103",
+  "status": "active",
+  "category": "food",
+  "tags": ["fruit", "botany", "surprising-truths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "A botanical berry grows from a single flower's ovary, as grapes, tomatoes, chillies and bananas do. A strawberry is a swollen flower base, and each pip on its skin is a tiny fruit.",
+  "learnMore": "Berry (botany)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "In botany, a banana is a berry and a strawberry is not."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A berry in the botanical sense is a fleshy fruit that develops from the single ovary of one flower; grapes, tomatoes, chillies and bananas are examples."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A strawberry's flesh is the swollen receptacle, or flower base, and each pip on its surface is an achene, a small fruit holding a seed."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: the only way to argue 'false' is the everyday meaning of berry, and the statement says 'botanically', which closes that door. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both fruits are sold everywhere, and the botanical point is the same in every country. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 33 words. Myths: screened against content/reference/myths.json; no entry matches; the claims avoid the wording of the bananas-grow-on-trees myth. Mystery and encore checks: not applicable to a practice item. Seed: 3: a well-travelled fun fact, so many players know it, but the everyday meaning of berry pulls others to 'false'. Doubts: none. Botanists class the banana as a berry and the strawberry as an aggregate accessory fruit.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8bed609bb723817d4f827df0c561ce0b1184df40d87c583ab2f27d34d65ed03d",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "banana fruit is botanically a berry, genus Musa, while the strawberry is not a true berry",
+              "results": [
+                {
+                  "title": "Fruit",
+                  "url": "https://en.wikipedia.org/wiki/Fruits"
+                },
+                {
+                  "title": "Banana",
+                  "url": "https://en.wikipedia.org/wiki/Banana"
+                },
+                {
+                  "title": "Strawberry",
+                  "url": "https://www.britannica.com/plant/strawberry"
+                },
+                {
+                  "title": "Berry",
+                  "url": "https://www.britannica.com/science/berry-plant-reproductive-body"
+                },
+                {
+                  "title": "berry - Students",
+                  "url": "https://kids.britannica.com/students/article/berry/273195"
+                },
+                {
+                  "title": "Berry",
+                  "url": "https://www.britannica.com/topic/berry-food"
+                },
+                {
+                  "title": "Accessory fruit",
+                  "url": "https://www.britannica.com/science/accessory-fruit"
+                },
+                {
+                  "title": "Personalized Soups: Personalized Large Language Model Alignment via Post-hoc Parameter Merging",
+                  "url": "https://arxiv.org/pdf/2310.11564"
+                },
+                {
+                  "title": "Berry",
+                  "url": "https://en.wikipedia.org/wiki/Berry"
+                },
+                {
+                  "title": "Musa plant named ‘Poquito’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP26424"
+                }
+              ],
+              "summaryExcerpt": "Wikipedia's banana article describes it as an elongated, edible fruit that is botanically a berry produced by several kinds of large treelike herbaceous flowering plants in the genus Musa. ... Britannica says the strawberry fruit is considered an \"accessory fruit\" and is not a true berry.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Counterintuitive key with a myth-like reading, so it got web evidence. The summary attributes both halves to named Tier B results (Wikipedia's Banana article, Britannica's Strawberry entry). An earlier call is not used and is counted here: query 'botanical berry definition banana counts as a berry but strawberry is not, accessory fruit receptacle achenes' (Wikipedia and Britannica only). Its summary applied the strawberry passage ('botanically, it is not a berry; it is an aggregate-accessory fruit') to the banana and reported a conflict; no Banana page was among its results."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A berry in botany is a fleshy fruit without a stone formed from the single ovary of one flower; grapes, tomatoes, chillies and bananas qualify.",
+              "confidence": "certain"
+            },
+            "note": "Some texts call fruits from an inferior ovary, the banana among them, epigynous or false berries; they are still berries in the sense the explanation gives."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "banana fruit is botanically a berry, genus Musa, while the strawberry is not a true berry",
+              "results": [
+                {
+                  "title": "Fruit",
+                  "url": "https://en.wikipedia.org/wiki/Fruits"
+                },
+                {
+                  "title": "Banana",
+                  "url": "https://en.wikipedia.org/wiki/Banana"
+                },
+                {
+                  "title": "Strawberry",
+                  "url": "https://www.britannica.com/plant/strawberry"
+                },
+                {
+                  "title": "Berry",
+                  "url": "https://www.britannica.com/science/berry-plant-reproductive-body"
+                },
+                {
+                  "title": "berry - Students",
+                  "url": "https://kids.britannica.com/students/article/berry/273195"
+                },
+                {
+                  "title": "Berry",
+                  "url": "https://www.britannica.com/topic/berry-food"
+                },
+                {
+                  "title": "Accessory fruit",
+                  "url": "https://www.britannica.com/science/accessory-fruit"
+                },
+                {
+                  "title": "Personalized Soups: Personalized Large Language Model Alignment via Post-hoc Parameter Merging",
+                  "url": "https://arxiv.org/pdf/2310.11564"
+                },
+                {
+                  "title": "Berry",
+                  "url": "https://en.wikipedia.org/wiki/Berry"
+                },
+                {
+                  "title": "Musa plant named ‘Poquito’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP26424"
+                }
+              ],
+              "summaryExcerpt": "Its fleshy part is the swollen flower receptacle, not the ovary, and the true fruits are the small achenes on the surface.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The sentence continues the summary's Britannica Strawberry attribution."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Some botanical texts class the banana as an epigynous (false) berry because it forms from an inferior ovary. It is still a berry in the single-ovary sense the explanation uses, so the key stands; a player who knows the term may query it."
+          }
+        ],
+        "searchesUsed": 2,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f418365ec010fa22be509243233439f898a105ca05a89a55f39e5fcef18fdf17",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Botanists class the banana as a berry (a fleshy fruit from one ovary) and the strawberry as an aggregate accessory fruit, not a true berry.",
+              "confidence": "certain"
+            },
+            "note": "Tried the pedant reading: the banana plant is a giant herb, but the question is about the fruit. Wording 'unlike strawberries' is exact. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A botanical berry is a fleshy fruit from a single flower with one ovary; grapes, tomatoes, chillies and bananas fit.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The strawberry's flesh is the swollen receptacle; the pips on the outside are achenes, each a small one-seeded fruit.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. Key c1 and explanation c3 carry Tier B web evidence in pass A. A's note on epigynous (false) berries leaves the key standing: the banana is still a berry in the single-ovary sense the explanation gives (§9.7).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.sci.0121",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Botanically, bananas are berries, unlike strawberries.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.64,
+    "spread": 0.271,
+    "estimator": "v0"
+  }
+}

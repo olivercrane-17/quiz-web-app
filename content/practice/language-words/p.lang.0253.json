@@ -1,0 +1,220 @@
+{
+  "id": "p.lang.0253",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["dictionaries", "german", "brothers-grimm"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Jacob and Wilhelm Grimm began their Deutsches Wörterbuch in 1838 but died with it unfinished. Later scholars completed it in 1961, 33 years after the OED's first edition.",
+  "learnMore": "Deutsches Wörterbuch",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Grimms' Deutsches Wörterbuch was completed in 1961."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The first edition of the Oxford English Dictionary was completed in 1928."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Jacob and Wilhelm Grimm began the Deutsches Wörterbuch in 1838."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Both Grimm brothers died before the dictionary was finished."
+    }
+  ],
+  "writerNotes": "Counterintuitive: the Grimms belong to the 1800s, so most players expect their dictionary to finish first; it took until 1961. Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 3 high (date) and 1 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers dictionaries; 33 years in the explanation is 1961 minus 1928. rivalTest: Argued for the Grimms through their start date, 1838, decades before the OED began: the measure is completion, and the stem says completed. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: the Grimms are world-famous for their fairy tales, and the OED is the best-known English dictionary. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 28 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "886c3fa7d506a789df60b3791c5f2dbe8bcc77fb67e83d963ec0a1243fc9afb8",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "The Oxford English Dictionary",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Deutsches Wörterbuch begun by the Grimms was completed in 1961.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first edition of the Oxford English Dictionary, issued in parts from 1884, was completed in 1928.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jacob and Wilhelm Grimm began the Deutsches Wörterbuch in 1838.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Wilhelm Grimm died in 1859 and Jacob in 1863, long before the dictionary was finished.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4536fc58c3262a6194b5d4a9a77f8f44909604af28e1249e5c2574732bfbd596",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "The Oxford English Dictionary",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Grimms' Deutsches Woerterbuch was completed in 1961.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first edition of the Oxford English Dictionary was completed in 1928.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jacob and Wilhelm Grimm began the Deutsches Woerterbuch in 1838.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Wilhelm (died 1859) and Jacob (died 1863) both died before the dictionary was finished.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'Completed' is exact only for first editions: the OED has never been finished and is still being revised. The values are first-edition dates, and adding 'first edition' to the stem would remove the quibble."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (label, date), c2 (label, date) and c3 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: B noted 'completed' is exact only for first editions, since the OED is still being revised; say 'first edition' in the stem.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which dictionary was completed first?",
+  "a": "The Grimms' German dictionary",
+  "b": "The Oxford English Dictionary",
+  "answer": "b",
+  "relation": "earlier",
+  "measure": "year the first edition was completed",
+  "unit": "year",
+  "values": {
+    "a": 1961,
+    "b": 1928
+  },
+  "valueDisplay": {
+    "a": "1961",
+    "b": "1928"
+  },
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.238,
+    "estimator": "v0"
+  }
+}

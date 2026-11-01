@@ -1,0 +1,187 @@
+{
+  "id": "p.film.0261",
+  "status": "active",
+  "category": "film",
+  "tags": ["animation", "disney", "quotations"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "She says 'Magic mirror on the wall'. The film also won Walt Disney an honorary Oscar: one full-size statuette and seven small ones.",
+  "learnMore": "Snow White and the Seven Dwarfs (1937 film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "In Snow White and the Seven Dwarfs (1937), the Queen addresses the mirror as 'Magic mirror on the wall', not 'Mirror, mirror on the wall'."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "The Queen's line in the film is 'Magic mirror on the wall, who is the fairest one of all?'"
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Walt Disney received an honorary Academy Award for Snow White and the Seven Dwarfs, made up of one full-size statuette and seven miniature ones."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Arguing for the statement: 'Mirror, mirror' is how most people quote the line, and some retellings of the fairy tale use it; but the 1937 film's Queen says 'Magic mirror'. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: one of the most widely seen animated films; the quotation is short and verified word for word, as §1.5 asks. The stem shortens the title so it does not echo the guide's encore e.0008, which asks for the film's year. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 23 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: seeded Hard: most players will say true, which is the point of a myth item, and the item is counterintuitive as §8.2 requires.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a01abd12b0e11449179bac7fb1db39e7ddc78ffff7129f08d1d27b85acd27eb2",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the 1937 Disney film the Queen says 'Magic mirror on the wall'; 'Mirror, mirror' is a popular misquotation.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Her line is 'Magic mirror on the wall, who is the fairest one of all?'",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In 1939 Walt Disney received an honorary Oscar for Snow White made of one full-size statuette and seven miniature ones.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "802aa4103ccea94d0ce9149701182c3c18124945a64c67cf347d3659077e6ece",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the 1937 Snow White the Queen says \"Magic mirror on the wall\", not \"Mirror, mirror on the wall\".",
+              "confidence": "certain"
+            },
+            "note": "Rival test: \"Mirror, mirror\" is a common misquote (the film never uses it); the Grimm text has \"Looking-glass, looking-glass\". The statement as written (the line begins \"Mirror, mirror\") is false. High-risk (quotation): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Queen's line is \"Magic mirror on the wall, who is the fairest one of all?\"",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Walt Disney received an honorary Oscar for Snow White: one full-size statuette and seven miniature ones.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1, c2 and c3 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "In Disney's animated Snow White (1937), the Queen's famous line begins 'Mirror, mirror on the wall'.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.264,
+    "estimator": "v0"
+  }
+}

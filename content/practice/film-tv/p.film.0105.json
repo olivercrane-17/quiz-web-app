@@ -1,0 +1,240 @@
+{
+  "id": "p.film.0105",
+  "status": "cut",
+  "category": "film",
+  "tags": ["classic-cinema", "hitchcock", "directors"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "A passenger reads a newspaper with before-and-after photos of Hitchcock in an advert for a made-up diet drug, Reduco. He had lost a lot of weight himself.",
+  "learnMore": "Lifeboat (1944 film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "ref": "stem",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Lifeboat (1944) takes place entirely in a lifeboat."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "risk": "standard",
+      "text": "In Lifeboat, Hitchcock appears in before-and-after photos in a newspaper advertisement for a fictional weight-loss product."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Hitchcock does not appear in Lifeboat as a floating body, on a passing ship or as a voice on the radio."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The weight-loss product in the advertisement is called Reduco."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hitchcock had lost a large amount of weight by dieting shortly before Lifeboat was made."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Hitchcock said he considered playing a corpse floating past the boat and dropped the idea, so the floating body is a strong but definitely wrong lure. The film has no ship or radio cameo. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 27 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: the rejected corpse idea stays in these notes and never reaches player text.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7e7f54d19708c25effb6df8a5f52e4648032f76e9ac1bf22ade69f5cc2680b83",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "In a newspaper advert",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lifeboat, released in 1944, is set wholly aboard one lifeboat after a ship is sunk.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hitchcock's cameo is in a newspaper a passenger reads: before-and-after photos of him in a slimming advertisement.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He appears only in that advertisement, not as a floating body, a figure on a ship or a voice on the radio.",
+              "confidence": "certain"
+            },
+            "note": "Hitchcock said he had considered playing a floating corpse, which makes that distractor tempting but still wrong."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The fictional slimming product in the advertisement is Reduco.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hitchcock had recently lost a great deal of weight on a diet, and his own before-and-after photos were used.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9bf5211726cc4d68551a6187faa78b0322bebbaf05f976f20c137526c3e8b56b",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "In a newspaper advert",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lifeboat (1944) is set on one lifeboat for essentially its whole length.",
+              "confidence": "certain"
+            },
+            "note": "The film opens on the sinking ship's funnel before settling into the boat, so 'entirely' is the usual shorthand, not a frame count."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hitchcock's cameo is a before-and-after photo pair in a newspaper advert for a fictional reducing product.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He does not appear as a floating body, aboard a passing ship or as a radio voice.",
+              "confidence": "certain"
+            },
+            "note": "The Reduco advert is his only appearance."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The advertised product is called Reduco.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hitchcock had lost a great deal of weight by dieting shortly before the film.",
+              "confidence": "certain"
+            },
+            "note": "Standard account; the claim keeps the figure out, which is wise."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'Takes place entirely in a small boat' is the standard description, but the first shot is the sinking ship's funnel. 'Almost entirely' would be airtight; no change needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 rests on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Lifeboat (1944) takes place entirely in a small boat. How did Alfred Hitchcock make his usual cameo?",
+  "answer": "In a newspaper advert",
+  "wrong": [
+    "As a body floating past",
+    "On a passing warship",
+    "As a voice on the radio"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.25,
+    "spread": 0.12,
+    "estimator": "v0"
+  }
+}

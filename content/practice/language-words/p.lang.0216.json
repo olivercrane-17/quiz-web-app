@@ -1,0 +1,257 @@
+{
+  "id": "p.lang.0216",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["borrowed-words", "norwegian", "sport"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Norwegian ski comes from Old Norse skíð, a split length of wood. English took it up in the 1880s, around the time Fridtjof Nansen crossed Greenland on skis.",
+  "learnMore": "Skiing",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "English borrowed 'ski' from Norwegian."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "'Ski' did not come into English from German, Finnish or Russian."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Norwegian ski comes from Old Norse skíð, a split length of wood."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "'Ski' is recorded in English from the 1880s."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Fridtjof Nansen crossed Greenland on skis in 1888."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed, 5 high (etymology, date) and 0 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers etymology. rivalTest: Swedish shares the Old Norse root, so it is kept out of the options. German and Finnish are snowy-country guesses with their own words for skis. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: skiing is known worldwide even where it never snows, and the answer is reachable from the sport's Scandinavian image. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 28 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "94a1be953e7bee81fd5e3b8c6b6aa38f037e408194ea0dc98f96f16e99619ee3",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Norwegian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English took the word ski from Norwegian.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ski is a Norwegian loan, not a German, Finnish or Russian one.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Norwegian ski descends from Old Norse skíð, a split piece or billet of wood, also used for a snowshoe.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ski became established in English in the 1880s, but I cannot say for certain that no earlier English record exists; I recall possible sporadic 18th-century uses in forms such as skie.",
+              "confidence": "likely"
+            },
+            "note": "Not confirmed. A first-record date needs a dictionary check, and none was possible in this run. If an earlier English record exists, recorded from the 1880s is wrong as written, while the explanation's took it up in the 1880s would still hold as the date the word caught on. High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Fridtjof Nansen led the first crossing of the Greenland ice sheet, on skis, in 1888.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Checker doubt (the schema has no checker_doubt issue type, so it is filed as wording): c4 is uncertain. I cannot confirm that ski is first recorded in English in the 1880s, and earlier sporadic uses may exist. Get a dictionary record (first known use) through a follow-up, or reword c4 to the defensible version, that the word came into common English use in the 1880s, which the explanation already says."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ab84bae80d2c5a73be0ac351d4c19f013df8e688341b017607b461b4e81818f2",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Norwegian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English took ski from Norwegian ski, which comes from Old Norse skid.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "English did not borrow ski from German, Finnish or Russian.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Old Norse skid meant a stick or split piece of wood, also a snowshoe.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "refuted",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dictionaries I know date the English noun ski to the mid-18th century (about 1755, from translations of Scandinavian travel and natural-history writing). The 1880s is when skiing and the word spread widely, not the first record.",
+              "confidence": "likely"
+            },
+            "note": "Refuted as written, because it says recorded from the 1880s. I could not search (the web budget was used up), so this rests on recall of dictionary dating; a tiebreak with external evidence should settle it. The explanation's 'English took it up in the 1880s' blurs first record with wide adoption."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Fridtjof Nansen led the first crossing of Greenland, on skis, in 1888.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Added claim: the English noun ski is first recorded in the 1750s (about 1755), long before the 1880s.",
+              "confidence": "likely"
+            },
+            "note": "Offered as the correction to c4. Unverified for lack of search budget."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "The 1880s date treats the word's arrival in English as that decade, but it was already in English print in the 18th century. Reword to what every source agrees on (borrowed from Norwegian, widely used as skiing spread in the 1880s), or give the true first record."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "fail"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "A revise and B fail, so no check passed and a tiebreak cannot stand in for one (§9.9 rule 2). B refuted c4 ('ski' recorded in English from the 1880s), recalling an 18th-century English record, and A rated c4 uncertain for the same reason, so the problem is real. The fix changes a claim, which a wording-only rewrite cannot do, so it is cut. c1, c2, c3 and c5 are also high-risk on knowledge alone in both checks. For a redraft under a new id: say the word came into wide English use in the 1880s, as skiing spread, instead of dating its first record.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The word 'ski' came into English from which language?",
+  "answer": "Norwegian",
+  "wrong": ["German", "Finnish", "Russian"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.26,
+    "estimator": "v0"
+  }
+}

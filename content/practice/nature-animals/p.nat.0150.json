@@ -1,0 +1,307 @@
+{
+  "id": "p.nat.0150",
+  "status": "cut",
+  "category": "nat",
+  "tags": ["plants", "flowers", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Young sunflowers do track the Sun as they grow, but once the flowers open, most heads stay facing east. Warming up in the morning sun helps them draw more bees.",
+  "learnMore": "Heliotropism",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Mature sunflower heads do not follow the Sun across the sky each day; most stay facing east."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Young, growing sunflower plants turn to follow the Sun during the day."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "East-facing sunflower heads warm up faster in the morning and attract more pollinating insects than west-facing heads."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: three listed. c1 is high because it is the key of a counterintuitive item, so C26 sets it high; the tooling's riskReason enum has no counterintuitive value yet (guide v1.1 adds one), so checker_doubt stands in for it. I raised c3 to high (checker_doubt) because it rests on one well-known study rather than general knowledge; one search on sunflower heliotropism should cover c1 and c3. c2 is standard. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: argued for true: the plant's name in several languages means 'turns with the sun', and young plants really do; the statement says 'in full bloom', which is the stage that stops turning. That wording is what makes it a myth and not a trick. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: sunflowers are grown worldwide. style: Oxford spelling, plain hyphens only, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches; the belief is common but not yet on the list. mystery and encore: nothing of either kind in a true/false item. doubts: none on the key.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "12dae2810282a30395c77e65ae5b10334dd7a52d3b17bae6d9752382790718e7",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "sunflower heliotropism study: young sunflowers track the sun, mature flower heads face east, east-facing heads warm faster in the morning and receive more pollinator visits",
+              "results": [
+                {
+                  "title": "Circadian regulation of sunflower heliotropism, floral orientation, and pollinator visits",
+                  "url": "https://www.science.org/doi/10.1126/science.aaf9793"
+                },
+                {
+                  "title": "Regional prevailing wind directions cannot explain the global east facing of mature sunflower inflorescences: testing a hypothesis using wind data - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12335399/"
+                },
+                {
+                  "title": "Sunflower inflorescences absorb maximum light energy if they face east and afternoons are cloudier than mornings",
+                  "url": "https://www.nature.com/articles/s41598-020-78243-z"
+                },
+                {
+                  "title": "Mature Sunflower Inflorescences Face Geographical East to Maximize Absorbed Light Energy: Orientation of Helianthus annuus Heads Studied by Drone Photography",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8969559/"
+                },
+                {
+                  "title": "Common sunflower",
+                  "url": "https://en.wikipedia.org/wiki/Common_sunflower"
+                },
+                {
+                  "title": "How do sunflowers follow the Sun—and to what end?",
+                  "url": "https://www.science.org/doi/10.1126/science.aah4439"
+                },
+                {
+                  "title": "Helianthus",
+                  "url": "https://en.wikipedia.org/wiki/Sunflowers"
+                },
+                {
+                  "title": "East‐facing Helianthus annuus has maximal number and mass of kernel‐filled seeds: Seed traits versus head orientation",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10168033/"
+                },
+                {
+                  "title": "Why young sunflowers follow the sun",
+                  "url": "https://www.science.org/content/article/why-young-sunflowers-follow-sun"
+                },
+                {
+                  "title": "Regional prevailing wind directions cannot explain the global east facing of mature sunflower inflorescences: testing a hypothesis using wind data",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12335399/"
+                }
+              ],
+              "summaryExcerpt": "Supported by the 2016 Science paper (Atamian et al.): Young plants track the sun during the day and reset to face east overnight, while mature plants stop moving with their heads pointing east. ... A drone survey of 14 plantations and about 2,800 heads supports the geographic-east orientation.",
+              "tiers": ["A"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Atamian and colleagues, Science 2016 (Tier A), named by the summary. The dispute this summary reports concerns c3 only."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "sunflower heliotropism study: young sunflowers track the sun, mature flower heads face east, east-facing heads warm faster in the morning and receive more pollinator visits",
+              "results": [
+                {
+                  "title": "Circadian regulation of sunflower heliotropism, floral orientation, and pollinator visits",
+                  "url": "https://www.science.org/doi/10.1126/science.aaf9793"
+                },
+                {
+                  "title": "Regional prevailing wind directions cannot explain the global east facing of mature sunflower inflorescences: testing a hypothesis using wind data - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12335399/"
+                },
+                {
+                  "title": "Sunflower inflorescences absorb maximum light energy if they face east and afternoons are cloudier than mornings",
+                  "url": "https://www.nature.com/articles/s41598-020-78243-z"
+                },
+                {
+                  "title": "Mature Sunflower Inflorescences Face Geographical East to Maximize Absorbed Light Energy: Orientation of Helianthus annuus Heads Studied by Drone Photography",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8969559/"
+                },
+                {
+                  "title": "Common sunflower",
+                  "url": "https://en.wikipedia.org/wiki/Common_sunflower"
+                },
+                {
+                  "title": "How do sunflowers follow the Sun—and to what end?",
+                  "url": "https://www.science.org/doi/10.1126/science.aah4439"
+                },
+                {
+                  "title": "Helianthus",
+                  "url": "https://en.wikipedia.org/wiki/Sunflowers"
+                },
+                {
+                  "title": "East‐facing Helianthus annuus has maximal number and mass of kernel‐filled seeds: Seed traits versus head orientation",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10168033/"
+                },
+                {
+                  "title": "Why young sunflowers follow the sun",
+                  "url": "https://www.science.org/content/article/why-young-sunflowers-follow-sun"
+                },
+                {
+                  "title": "Regional prevailing wind directions cannot explain the global east facing of mature sunflower inflorescences: testing a hypothesis using wind data",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12335399/"
+                }
+              ],
+              "summaryExcerpt": "Young plants track the sun during the day and reset to face east overnight, while mature plants stop moving with their heads pointing east.",
+              "tiers": ["A"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "sunflower heliotropism study: young sunflowers track the sun, mature flower heads face east, east-facing heads warm faster in the morning and receive more pollinator visits",
+              "results": [
+                {
+                  "title": "Circadian regulation of sunflower heliotropism, floral orientation, and pollinator visits",
+                  "url": "https://www.science.org/doi/10.1126/science.aaf9793"
+                },
+                {
+                  "title": "Regional prevailing wind directions cannot explain the global east facing of mature sunflower inflorescences: testing a hypothesis using wind data - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12335399/"
+                },
+                {
+                  "title": "Sunflower inflorescences absorb maximum light energy if they face east and afternoons are cloudier than mornings",
+                  "url": "https://www.nature.com/articles/s41598-020-78243-z"
+                },
+                {
+                  "title": "Mature Sunflower Inflorescences Face Geographical East to Maximize Absorbed Light Energy: Orientation of Helianthus annuus Heads Studied by Drone Photography",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8969559/"
+                },
+                {
+                  "title": "Common sunflower",
+                  "url": "https://en.wikipedia.org/wiki/Common_sunflower"
+                },
+                {
+                  "title": "How do sunflowers follow the Sun—and to what end?",
+                  "url": "https://www.science.org/doi/10.1126/science.aah4439"
+                },
+                {
+                  "title": "Helianthus",
+                  "url": "https://en.wikipedia.org/wiki/Sunflowers"
+                },
+                {
+                  "title": "East‐facing Helianthus annuus has maximal number and mass of kernel‐filled seeds: Seed traits versus head orientation",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10168033/"
+                },
+                {
+                  "title": "Why young sunflowers follow the sun",
+                  "url": "https://www.science.org/content/article/why-young-sunflowers-follow-sun"
+                },
+                {
+                  "title": "Regional prevailing wind directions cannot explain the global east facing of mature sunflower inflorescences: testing a hypothesis using wind data",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12335399/"
+                }
+              ],
+              "summaryExcerpt": "Mature plants' permanent eastward orientation makes for warmer flower faces, which may be responsible for a large increase in pollinator visits, according to a Science news summary, which reports the figure as five times more than in west-facing mature plants. Disputed: A 2024 study by Takács and colleagues, cited in later work, found that the pollinator visits of sunflower inflorescences in Helianthus annuus plantations are independent of head orientation.",
+              "tiers": ["A", "B"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The 2016 study linked warmer east-facing heads to about five times more pollinator visits, but a 2024 field study found visits independent of head orientation. Sources disagree, so the claim fails as written (§9.5.2)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "outdated",
+            "severity": "fix",
+            "note": "The explanation's second sentence ('Warming up in the morning sun helps them draw more bees') rests on the 2016 study and is disputed by a 2024 field study (Takács and colleagues). Rewrite it to what the sources agree on, for example that east-facing heads warm up faster in the morning sun, or drop the pollinator clause. The key is unaffected."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "839958774a6a1689b1b3d1a5648e6c37cb63e738938a7001b186ca2e26760fc6",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mature sunflower heads stop following the Sun and most face east.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Young, growing sunflowers turn to follow the Sun during the day.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "East-facing sunflower heads warm faster in the morning and draw more pollinator visits than west-facing heads.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "cut",
+      "reason": "Cut (§9.7, §9.5.2). A revise: c3 says east-facing heads warm faster and attract more pollinators, which rests on the 2016 Science study and is contradicted by a 2024 field study that found visits independent of head orientation. Peer-reviewed sources conflict, so c3 fails as written and a tiebreak cannot confirm it; dropping the clause changes a claim, which needs two fresh checks. Redraft under a new id without the pollinator clause (the myth and c1, c2 are sound).",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Sunflowers in full bloom turn their heads to follow the Sun across the sky each day.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.18,
+    "spread": 0.34,
+    "estimator": "v0"
+  }
+}

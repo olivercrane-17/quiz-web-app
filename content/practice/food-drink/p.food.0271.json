@@ -1,0 +1,255 @@
+{
+  "id": "p.food.0271",
+  "status": "cut",
+  "category": "food",
+  "tags": ["inventions", "kitchens", "noodles"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Raytheon's first microwave ovens, sold in 1947, stood almost as tall as a person and went mainly to restaurants. Momofuku Ando launched instant noodles in Japan in 1958.",
+  "learnMore": "Microwave oven",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Raytheon's first microwave ovens went on sale in 1947."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Momofuku Ando launched the first instant noodles, Chikin Ramen, in Japan in 1958."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The first microwave ovens stood almost as tall as a person and were sold mainly to restaurants and other businesses."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed; risk is at or above the C26 floor (high: c1, c2, c3). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Home countertop microwaves came only in the late 1960s, which could tempt a player to say noodles; the label says microwave ovens went on sale, which happened in 1947. The gap is 11 years. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both are used worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: many players think of microwaves as a 1970s kitchen gadget. Doubts: none on the order.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "577fa2c9d3a330c03cacec1a4436b27e6351d96775c24c330e8ad0996e420e4b",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Microwave ovens go on sale",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Raytheon's Radarange, the first microwave oven sold, came out in 1947.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Momofuku Ando's company, Nissin, launched Chikin Ramen, the first instant noodles, on 25 August 1958.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1947 Radarange stood about 1.8 m tall, weighed about 340 kg and went to restaurants, ships and railways.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e15b34fb75134cf34a4325f70e43bdf662ed4aebab5bde174de389cf2b016329",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Microwave ovens go on sale",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Raytheon's first Radarange is dated 1947 in many sources, but others date its first commercial model to 1954 and the first home oven to 1955.",
+              "confidence": "likely"
+            },
+            "note": "The first-sale year is reported inconsistently, and the key depends on it, because 1955 is only three years before the noodles."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Momofuku Ando launched Chikin Ramen, the first instant noodles, in Japan in 1958.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first Radarange ovens were about as tall as a person and sold mainly to restaurants and businesses.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "fix",
+            "note": "checker_doubt c1: sources differ on when microwave ovens went on sale (Radarange 1947, the commercial 1161 model 1954, the first home oven 1955, a countertop home model 1967). The key holds for 1947, 1954 and 1955, but 1954 and 1955 are only three to four years before 1958, which would fail the 10-year guard (C17), and a player who counts home ovens would pick the noodles. Get dataset or web evidence for a first sale in 1947, or relabel (for example 'The first commercial microwave oven') and widen the gap."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-pfood02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "15c87e60abb146ba6faed598abef2db7a4f5b9b0bff912517edaba10069be321",
+      "startedAt": "2026-11-01T04:51:56Z",
+      "finishedAt": "2026-11-01T05:00:50Z",
+      "coldSolve": {
+        "answerGiven": "Microwave ovens go on sale",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Raytheon's Radarange, the first microwave oven offered for sale, came out in the late 1940s and is usually dated 1947 (I also recall 1946 for a first restaurant installation). A later commercial model followed in 1954, the first home oven in 1955 and the countertop home oven in 1967.",
+            "confidence": "likely"
+          },
+          "note": "Disputed claim: pass B left it uncertain. I am sure the first sales came well before 1958, but not of the exact year 1947, which the display shows and which sets the C17 gap. No external evidence could be gathered: this run's one WebSearch call was refused because the turn's shared search limit (200 calls across all agents) was already used up, and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Momofuku Ando's company, Nissin, launched Chikin Ramen, the first instant noodles, in Japan in August 1958.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed (A and B both confirmed it on knowledge), but high-risk with no external evidence in any check, so rule 3 still needs dataset or web evidence. No external evidence could be gathered: this run's one WebSearch call was refused because the turn's shared search limit (200 calls across all agents) was already used up, and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The first Radarange ovens were about 1.8 m tall and were sold to restaurants and other businesses, not homes.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed (A and B both confirmed it on knowledge), but high-risk with no external evidence in any check, so rule 3 still needs dataset or web evidence. No external evidence could be gathered: this run's one WebSearch call was refused because the turn's shared search limit (200 calls across all agents) was already used up, and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        }
+      ],
+      "issues": [
+        {
+          "type": "ambiguity",
+          "severity": "note",
+          "note": "On pass B's ambiguity fix: I read it as a note. The label and measure ask when microwave ovens were first sold, and every first-sale date I know (the commercial Radarange of the late 1940s, the first home oven in 1955) comes before 1958, so no reading flips the key. The 1954 model and the 1967 countertop oven are later milestones, and the explanation names the 1947 restaurant ovens. What stays open is the exact year in c1."
+        },
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "checker_doubt c1: the first-sale year 1947 needs a Tier A or B source before the tiebreak can pass, and c2 and c3 (high-risk firsts) also lack external evidence in every check. Re-run the tiebreak with web evidence; if no source settles the year, the label value cannot stay as written (§9.2)."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Pass T revised, so rule 2 cannot pass: A passed, B revised (c1 uncertain), and an accept on a split needs a passing tiebreak (§9.7, §9.9). T could not confirm 1947 as the first-sale year, which sets the display and the C17 gap, and its one search was refused when the shared WebSearch limit ran out; high-risk 'first' claims c1 to c3 rest on knowledge in every check. B's fix, relabelling to the first commercial microwave oven so a 1954 or 1955 reading cannot shrink the gap, changes the label and its claim, so it needs two fresh checks. Redraft under a new id with web evidence for the Radarange's first sale and the 1958 noodle launch.",
+      "decidedAt": "2026-11-01T05:26:46Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Microwave ovens go on sale",
+  "b": "Instant noodles go on sale",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year first sold",
+  "unit": "year",
+  "values": {
+    "a": 1947,
+    "b": 1958
+  },
+  "valueDisplay": {
+    "a": "1947",
+    "b": "1958"
+  },
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.214,
+    "estimator": "v0"
+  }
+}

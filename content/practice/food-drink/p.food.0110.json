@@ -1,0 +1,185 @@
+{
+  "id": "p.food.0110",
+  "status": "active",
+  "category": "food",
+  "tags": ["national-dishes", "north-africa", "cookware"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The tall lid catches rising steam, which condenses and runs back down, so the stew stays moist and tender with little added liquid.",
+  "learnMore": "Tajine",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Tagine is the name of both a slow-cooked North African stew and the earthenware pot with a conical lid in which it is cooked."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Couscous, harira and shakshuka are North African dishes that do not share their name with a cone-lidded clay pot."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A tagine's conical lid collects steam, which condenses and returns to the dish, so little added liquid is needed."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: couscous is steamed in a pot, but that pot is the couscoussier and has no cone lid; harira is a soup and shakshuka is cooked in a pan. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: tagine is known worldwide as a Moroccan and North African dish. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 23 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: the cone-lidded pot is a famous image. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "86f64fc3cc7cfc7933df7ca49f43c9d7daae1f744bcc57c01be822c8b10ea67a",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Tagine",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tagine is both a slow-cooked Maghrebi stew and the earthenware pot with a conical lid it is cooked in.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Couscous, harira and shakshuka are not named after a cone-lidded clay pot.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The conical lid returns condensed steam to the dish, so little added liquid is needed.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3391762fd28c5c93793c53b211065cfede8d50fd388601a0bf5d3dfbecb7d231",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Tagine",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Tagine (tajine) names both the slow-cooked stew and the clay pot with a conical lid.",
+              "confidence": "certain"
+            },
+            "note": "Tested couscous: the dish is steamed in a couscoussier, a different word. No second answer."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Harira is a soup, shakshuka a pan dish of eggs in sauce, couscous a semolina dish; none shares its name with a cone-lidded pot.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The conical lid lets steam rise, condense on the cooler cone and drip back, so little water is needed.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which North African stew shares its name with the cone-lidded clay pot it is cooked in?",
+  "answer": "Tagine",
+  "wrong": ["Couscous", "Harira", "Shakshuka"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.75,
+    "spread": 0.27,
+    "estimator": "v0"
+  }
+}

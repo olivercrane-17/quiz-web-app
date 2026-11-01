@@ -1,0 +1,249 @@
+{
+  "id": "p.lang.0172",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["scripts", "ancient-egypt", "timelines"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The stone's decree honours Ptolemy V, of the same Greek-speaking dynasty as Cleopatra. It repeats one text in hieroglyphs, demotic script and Greek, which let scholars crack hieroglyphs.",
+  "learnMore": "Rosetta Stone",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The decree carved on the Rosetta Stone was issued in 196 BC."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Cleopatra VII became queen of Egypt in 51 BC."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Rosetta Stone's decree honours Ptolemy V, of the Ptolemaic dynasty to which Cleopatra VII belonged."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Rosetta Stone carries the same decree in hieroglyphs, demotic script and ancient Greek."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Rosetta Stone was the key to deciphering Egyptian hieroglyphs."
+    }
+  ],
+  "writerNotes": "About 145 years apart. Players who know the stone is Ptolemaic can reason to it; others expect the stone to be far older or Cleopatra far earlier. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers it; rival test: argued that the stone was carved some time after the decree; the stele was set up soon after 196 BC, still far before 51 BC; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: both are world-famous; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ef0e66f79b6dd98685ca6f287698a2cf55bf489022981865d270e66ef6cadd21",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "The Rosetta Stone is carved",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The decree on the Rosetta Stone, issued at Memphis in honour of Ptolemy V, dates from 196 BC.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cleopatra VII came to the throne in 51 BC, on her father's death.",
+              "confidence": "certain"
+            },
+            "note": "Rival test on the label 'Cleopatra becomes queen': the first Ptolemaic queen of that name, Cleopatra I, married Ptolemy V in 193 BC, so on any reading the stone comes first. High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The decree honours Ptolemy V, of the Ptolemaic dynasty to which Cleopatra VII belonged.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The stone carries the same decree in hieroglyphs, demotic and ancient Greek.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Rosetta Stone was the key to deciphering Egyptian hieroglyphs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "44a1040bef5cf7c837481b33d8666b5f68688b332dd1555423b22abfeb3f3160",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "The Rosetta Stone is carved",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Memphis decree on the Rosetta Stone dates to 196 BC (27 March), under Ptolemy V.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cleopatra VII became queen of Egypt in 51 BC.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The decree honours Ptolemy V, of the Ptolemaic dynasty that Cleopatra VII belonged to.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The stone carries one decree in hieroglyphs, demotic and Greek.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Greek text let Champollion and others decipher hieroglyphs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "The label says 'Cleopatra' without a number. Every Ptolemaic queen of that name reigned after 196 BC (the first, Cleopatra I, married Ptolemy V around 193 BC), so the answer is the same on any reading. Optional: write 'Cleopatra VII'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (label, date) and c2 (label, date) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: B suggested 'Cleopatra VII' in the label.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "The Rosetta Stone is carved",
+  "b": "Cleopatra becomes queen of Egypt",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year it happened",
+  "unit": "year",
+  "values": {
+    "a": -196,
+    "b": -51
+  },
+  "valueDisplay": {
+    "a": "196 BC",
+    "b": "51 BC"
+  },
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.096,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "id": "p.lang.0135",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["names-of-things", "keyboards", "technology"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Q, W, E, R, T and Y are the first six letters on the top row. Christopher Latham Sholes settled the layout for his typewriters in the 1870s.",
+  "learnMore": "QWERTY",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The QWERTY layout is named after the first six letters of its top letter row: Q, W, E, R, T and Y."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "QWERTY is not an inventor's initials, a Dutch town or a Morse code signal."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Christopher Latham Sholes developed the QWERTY layout for his typewriters in the 1870s."
+    }
+  ],
+  "writerNotes": "Very easy for anyone looking at a keyboard; the reveal adds the typewriter. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers it; rival test: the other three are plausible-sounding name sources that do not apply; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: QWERTY or a close variant (QWERTZ, AZERTY) is on keyboards worldwide, and the stem names the QWERTY layout; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: I avoided the popular claim that the layout was designed to slow typists, which is disputed",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8643c1ad34262874d663b1d9fa1c97d031ee175102a6ee62144aab0120524c45",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Its top-row letters",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "QWERTY is the first six letters of the top letter row: Q, W, E, R, T and Y.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "QWERTY is not an inventor's initials, a Dutch town or a Morse code signal.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Christopher Latham Sholes worked out the QWERTY arrangement for his typewriters during the 1870s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0e03fd3127402678f0940f08d3140b760ad9d160b8660aba11408904b57c5428",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Its top-row letters",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "QWERTY spells the first six keys of the top letter row of the standard layout.",
+              "confidence": "certain"
+            },
+            "note": "The number row sits above the letters, so 'top row' in the stem's option is loose; the claim's wording (first six letters of its top letter row) is the precise one."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "QWERTY is not initials of an inventor, a Dutch town or a Morse signal.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Christopher Latham Sholes developed the layout for his typewriters, finalising it around 1873 for the Remington model.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The option 'Its top-row letters' is loose: the digit row is the top row, and QWERTY is only the first six letters of the top letter row. The explanation and claim c1 are precise, and no other option competes, so I do not ask for a change."
+          },
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Two distractors (a Morse code signal, a Dutch town) are not real confusions and make the key easy by elimination (guide section 4, rules 2 and 5). Optional upgrade."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, number) and c3 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: B noted 'Its top-row letters' is loose (the digit row sits above) and two distractors are fillers.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The QWERTY keyboard layout is named after what?",
+  "answer": "Its top-row letters",
+  "wrong": ["Its inventor's initials", "A Dutch town", "A Morse code signal"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.85,
+    "spread": 0.274,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "id": "p.hist.0202",
+  "status": "cut",
+  "category": "hist",
+  "tags": ["exploration", "portugal", "india"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Bartolomeu Dias had rounded the Cape of Good Hope ten years earlier. At Malindi, in modern Kenya, da Gama took on a local pilot to guide him across the Indian Ocean.",
+  "learnMore": "Vasco da Gama",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Vasco da Gama's fleet reached Calicut in India in 1498 after sailing around Africa, the first European voyage to do so."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Bartolomeu Dias rounded the Cape in 1488 but turned back before India, Cabral reached India in 1500, and Magellan did not lead the 1498 voyage."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Bartolomeu Dias rounded the Cape of Good Hope in 1488, ten years before da Gama reached India."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "At Malindi, in modern Kenya, da Gama took on a local pilot who guided his fleet across the Indian Ocean to India."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: exploration and encounters. Lint: content:check reports no errors on this item and no warnings. Claims: every checkable statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, named after, comes from, means). Datasets: no pinned dataset covers these historical facts, so checker A needs web evidence for every high-risk claim. Rival test: Cabral also sailed around Africa to India, but in 1500; Dias rounded the Cape in 1488 and never reached India; Magellan served in India from 1505. The year 1498 leaves only da Gama. Volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. Regional: the people and events are covered in world history teaching and international reference works, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. Style: Oxford spelling, straight quotes, plain hyphens only, explanation of 31 words. Myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: The pilot's identity is disputed (Ahmad ibn Majid is often named), so the explanation only says a local pilot. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-phist02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "430fbfc823a032bfa116d16cb18573bb887820cbe4e5a84ea6d622e92ba3ed56",
+        "startedAt": "2026-11-01T03:08:23Z",
+        "finishedAt": "2026-11-01T03:28:50Z",
+        "coldSolve": {
+          "answerGiven": "Vasco da Gama",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vasco da Gama's fleet rounded the Cape of Good Hope and reached Calicut in May 1498, the first European voyage to reach India by sea around Africa.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and WebSearch was unavailable this run (the shared search budget was used up), so it still needs dataset or web evidence from check B or a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dias rounded the Cape in 1488 and turned back; Cabral's fleet reached India in 1500; Magellan's voyage was 1519 to 1522. None led the 1498 voyage.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was unavailable this run (the shared search budget was used up), so it still needs dataset or web evidence from check B or a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Bartolomeu Dias rounded the Cape of Good Hope in 1488, ten years before da Gama reached India.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was unavailable this run (the shared search budget was used up), so it still needs dataset or web evidence from check B or a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "At Malindi the sultan supplied da Gama with an experienced pilot, who guided the fleet across the Arabian Sea to the Malabar coast.",
+              "confidence": "certain"
+            },
+            "note": "The pilot was probably a Gujarati or Arab navigator lent by the ruler of Malindi, so 'local' means engaged there (see the wording note)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation and c4 call the Malindi pilot 'local'. He was a pilot supplied by the sultan of Malindi, probably a Gujarati or Arab navigator, so 'an experienced pilot' would be safer. Not wrong as it stands."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-phist02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cd59e56d0b615d2904d1db4a6fe330565faca5e53ca52b5a3a3200874fe49cb0",
+        "startedAt": "2026-11-01T03:07:26Z",
+        "finishedAt": "2026-11-01T03:30:41Z",
+        "coldSolve": {
+          "answerGiven": "Vasco da Gama",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Da Gama's fleet reached Calicut in May 1498 after rounding southern Africa, the first European sea voyage to India by that route.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Cabral reached India in 1500, Dias turned back in 1488 and Magellan belongs to a later generation. Only da Gama fits 1498."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dias rounded the Cape in 1488 but turned back before India; Cabral reached India in 1500; Magellan did not lead the 1498 voyage.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dias rounded the Cape of Good Hope in 1488, ten years before da Gama reached India in 1498.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "At Malindi, on the coast of modern Kenya, da Gama obtained a local pilot for the Indian Ocean crossing in 1498.",
+              "confidence": "certain"
+            },
+            "note": "The pilot's identity is disputed, but the claim does not name him."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-phist02e",
+        "at": "2026-11-01T03:04:29Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-phist02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, first), c2 (distractor, date) and c3 (explanation, date) rest on knowledge alone in both checks: neither check recorded a search (checker A reports the shared search budget used up), and §9.7 gives a pass/pass item no tiebreak. Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down. On redraft, A suggests 'an experienced pilot' over 'a local pilot'.",
+      "decidedAt": "2026-11-01T04:41:34Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which Portuguese navigator reached India by sailing around Africa in 1498?",
+  "answer": "Vasco da Gama",
+  "wrong": ["Bartolomeu Dias", "Pedro Álvares Cabral", "Ferdinand Magellan"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.435,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "id": "p.sci.0212",
+  "status": "active",
+  "category": "sci",
+  "tags": ["chemistry", "elements", "periodic-table"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "He predicted the properties of several missing elements. Gallium, scandium and germanium were discovered between 1875 and 1886 and closely matched his forecasts.",
+  "learnMore": "Dmitri Mendeleev",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Dmitri Mendeleev published his periodic table in 1869, leaving gaps for elements not yet discovered."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Antoine Lavoisier died in 1794, John Dalton is known for his atomic theory, and Marie Curie was born in 1867; none of them published the 1869 periodic table."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mendeleev predicted the properties of several undiscovered elements."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Gallium was discovered in 1875, scandium in 1879 and germanium in 1886."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The properties of gallium, scandium and germanium closely matched Mendeleev's predictions for them."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors and no warnings for this item. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high (the C26 floor). datasets: ptable Scandium (summary 'discovered in 1879') supports part of c4; ptable gives the discoverers of Gallium (Lecoq de Boisbaudran) and Germanium (Clemens Winkler) but not the years 1875 and 1886, so those need web evidence, as does c1. rivalTest: Lavoisier and Dalton are famous founders of chemistry, and Curie is the best-known chemist of all, but Lavoisier died in 1794 and Curie was two years old in 1869. Against the key: Lothar Meyer drew up a similar table around 1870 and John Newlands proposed his law of octaves in 1865, but neither is an option, and the stem's gaps and 1869 date point to Mendeleev alone. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 23 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "eb578dfb32bf9754118de9bd4e6c699a0142381711c40831b6a8f1e8bb33869b",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "Dmitri Mendeleev",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[name=Hafnium].summary",
+              "excerpt": "Its existence was predicted by Dmitri Mendeleev in 1869, though it was not identified until 1923",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "ptable's hafnium record says Mendeleev predicted that element in 1869, which carries the date and the gap left for an undiscovered element; that the prediction came from his 1869 periodic table is knowledge (certain). ptable is built from Wikipedia."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lavoisier was executed in 1794, Dalton is known for his atomic theory of the early 1800s, and Marie Curie was born in 1867; none of them produced the 1869 table.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). nobel-laureates-2016 gives Marie Curie's birth as 1867-11-07, but Lavoisier's 1794 death has no external evidence here, so the knowledge entry carries the claim."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mendeleev forecast the properties of missing elements he called eka-aluminium, eka-boron and eka-silicon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lecoq de Boisbaudran found gallium in 1875, Nilson found scandium in 1879 and Winkler found germanium in 1886.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). ptable's scandium summary says 'It was discovered in 1879', but gallium's and germanium's years have no external evidence here."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gallium, scandium and germanium closely matched Mendeleev's predicted eka-aluminium, eka-boron and eka-silicon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "adb8661f3179b8be818cffab1e45c0f57a379c01e4238f12f97337ac1f186470",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "Dmitri Mendeleev",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mendeleev published his periodic table in 1869 and left gaps for undiscovered elements.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lavoisier was guillotined in 1794, Dalton is the atomic-theory chemist, and Marie Curie was born in 1867.",
+              "confidence": "certain"
+            },
+            "note": "The pinned nobel-laureates-2016 file also gives Curie's birth as 1867-11-07. High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mendeleev predicted the properties of eka-aluminium, eka-boron and eka-silicon before they were found.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gallium was found in 1875, scandium in 1879 and germanium in 1886.",
+              "confidence": "certain"
+            },
+            "note": "The pinned ptable file names the discoverers (Lecoq de Boisbaudran, Nilson, Winkler) but gives no years. High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The three elements' densities, atomic weights and compounds closely matched Mendeleev's forecasts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c2 (distractor, date) and c4 (explanation, date) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Only c1 carries dataset evidence (ptable). Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which chemist published a periodic table in 1869, leaving gaps for elements still to be found?",
+  "answer": "Dmitri Mendeleev",
+  "wrong": ["Antoine Lavoisier", "John Dalton", "Marie Curie"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.239,
+    "estimator": "v0"
+  }
+}

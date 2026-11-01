@@ -1,0 +1,215 @@
+{
+  "id": "p.geo.0130",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "cities", "oceania"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Melbourne sits at about 37.8° S and Auckland at about 36.8° S. New Zealand's South Island, though, lies entirely further south than both.",
+  "learnMore": "Melbourne",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Melbourne lies at about 37.8° S."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Auckland lies at about 36.8° S."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "All of New Zealand's South Island lies further south than both Melbourne and Auckland."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 and c2 are latitudes, so high; c3 is standard and dataset-backed. Datasets: geonames-cities: Melbourne AU admin1 07 lat -37.814; Auckland NZ admin1 E7 lat -36.84853 (gap 0.97°, above the 0.5° guard). natural-earth ne_110m_admin_0_countries: New Zealand's South Island polygon spans -46.64 to -40.49, all south of both cities (c3). Rival test: New Zealand feels further south than Australia, so most players pick Auckland, which makes the item counterintuitive and Hard; the coordinates settle it. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both cities are well known worldwide. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1ace1b26576537fc9776bdaa044eea2517d2b47f264067d7620fd24b0d1d1bd3",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Melbourne",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Melbourne, country=AU, admin1=07",
+              "excerpt": "{\"name\":\"Melbourne\",\"lat\":\"-37.814\",\"lng\":\"144.96332\",\"country\":\"AU\",\"admin1\":\"07\",\"admin2\":\"24600\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "-37.814 rounds to 37.8° S."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Auckland, country=NZ, admin1=E7",
+              "excerpt": "{\"name\":\"Auckland\",\"lat\":\"-36.84853\",\"lng\":\"174.76349\",\"country\":\"NZ\",\"admin1\":\"E7\",\"admin2\":\"076\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "-36.84853 rounds to 36.8° S."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "ADMIN=New Zealand, South Island polygon",
+              "excerpt": "northernmost vertex latitude -40.493962",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The whole South Island polygon lies south of 40.4° S, beyond Melbourne (37.8° S) and Auckland (36.8° S)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c84a03ae56fef6fbf360c0ed508011f9b784cc5586c6587f4c725e4240c5039c",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Melbourne",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Melbourne,country=AU,admin1=07",
+              "excerpt": "Melbourne AU/07: lat -37.814, lng 144.96332",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Auckland,country=NZ,admin1=E7",
+              "excerpt": "Auckland NZ/E7: lat -36.84853, lng 174.76349",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The South Island's northern tip (Farewell Spit and Cape Farewell) is at about 40.5 degrees S, south of Melbourne and Auckland.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c2 carry geonames-cities evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. c3 also has natural-earth evidence in pass A.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which city is further south?",
+  "a": "Melbourne",
+  "b": "Auckland",
+  "answer": "a",
+  "relation": "further_south",
+  "measure": "latitude of the city centre",
+  "unit": "° latitude",
+  "values": {
+    "a": -37.81,
+    "b": -36.85
+  },
+  "valueDisplay": {
+    "a": "37.8° S",
+    "b": "36.8° S"
+  },
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.175,
+    "estimator": "v0"
+  }
+}

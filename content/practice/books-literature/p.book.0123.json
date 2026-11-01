@@ -1,0 +1,232 @@
+{
+  "id": "p.book.0123",
+  "status": "active",
+  "category": "book",
+  "tags": ["world-literature", "african-literature", "nobel-prize"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Chinua Achebe, a tempting guess, never won a Nobel Prize. Soyinka is chiefly a playwright, and his plays include Death and the King's Horseman.",
+  "learnMore": "Wole Soyinka",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Wole Soyinka won the 1986 Nobel Prize in Literature."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Chinua Achebe, Ben Okri and Amos Tutuola did not win the 1986 Nobel Prize in Literature."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Chinua Achebe never won a Nobel Prize."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Wole Soyinka is chiefly a playwright, and his plays include Death and the King's Horseman."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: world literature in translation. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item). Datasets: c1 and c2 checked in nobel-prizes (iaseth/nobel-prize-data, prize.json): year 1986, category literature, sole laureate id 663, Wole Soyinka; nobel-laureates-2016 (laureate.json) id 663 gives his birthplace as Abeokuta, Nigeria. c3: no Achebe in either Nobel file (Achebe died in 2013, so 'never' is closed). Rival test: Achebe is the planted trap; Okri won the Booker Prize, not the Nobel; Tutuola is a famous earlier Nigerian novelist. Soyinka is the only Nigerian Nobel laureate in Literature in the files. Counterintuitive: Chinua Achebe is the best-known Nigerian writer and the obvious guess. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 24 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "79ba7c8934a1cf7ea7df59974ba856b48ec3983dd100137042b18dfceed30e17",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "Wole Soyinka",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[category=literature, year=1986]",
+              "excerpt": "{\"year\":\"1986\",\"category\":\"literature\",\"laureates\":[{\"id\":\"663\",\"firstname\":\"Wole\",\"surname\":\"Soyinka\",\"motivation\":\"\\\"who in a wide cultural perspective and with poetic overtones fashions the drama of existence\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The pinned Nobel API copy gives Soyinka as the 1986 literature laureate."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[category=literature, year=1986]",
+              "excerpt": "{\"year\":\"1986\",\"category\":\"literature\",\"laureates\":[{\"id\":\"663\",\"firstname\":\"Wole\",\"surname\":\"Soyinka\",\"motivation\":\"\\\"who in a wide cultural perspective and with poetic overtones fashions the drama of existence\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Soyinka is the sole 1986 literature laureate (share 1), so Achebe, Okri and Tutuola did not win it."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Chinua Achebe (1930 to 2013) never received a Nobel Prize.",
+              "confidence": "certain"
+            },
+            "note": "Also checked in the pinned nobel-prizes file: no laureate surname Achebe in any category, 1901 to 2022."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Soyinka is above all a dramatist, and Death and the King's Horseman (1975) is one of his plays.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f544da52a94ec7958313e01d679d8a87b6b42292d9b45b9c1774a11b5514ca08",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "Wole Soyinka",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "category=literature, year=1986",
+              "excerpt": "{\"year\":\"1986\",\"category\":\"literature\",\"laureates\":[{\"id\":\"663\",\"firstname\":\"Wole\",\"surname\":\"Soyinka\",\"motivation\":\"\\\"who in a wide cultural perspective and with poetic overtones fashions the drama of existence\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "category=literature, year=1986",
+              "excerpt": "The 1986 literature prize lists a single laureate, Wole Soyinka (share 1), so Achebe, Okri and Tutuola did not win it; none of the three appears as a laureate anywhere in prize.json.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "all categories, surname=Achebe",
+              "excerpt": "No laureate with the surname Achebe in prize.json (1901 to 2022, all categories). Achebe died in 2013, so the record is complete for him.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Soyinka is above all a dramatist, and Death and the King's Horseman is one of his best-known plays.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Both checks pass; key and distractor claims have nobel-prizes dataset evidence in both checks.",
+      "decidedAt": "2026-11-01T04:03:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "nearestId": "p.hist.0163",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Nigerian writer was awarded the 1986 Nobel Prize in Literature?",
+  "answer": "Wole Soyinka",
+  "wrong": ["Chinua Achebe", "Ben Okri", "Amos Tutuola"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.402,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "id": "p.geo.0240",
+  "status": "active",
+  "category": "geo",
+  "tags": ["grasslands", "wildlife", "east-africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Kenya's Maasai Mara is the northern end of the same ecosystem, and the great herds cross between the two countries every year.",
+  "learnMore": "Serengeti",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The Serengeti lies mostly in Tanzania."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Serengeti does not lie mainly in Kenya, Uganda or Zambia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kenya's Maasai Mara is the northern part of the Serengeti ecosystem."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The wildebeest migration crosses between Tanzania's Serengeti and Kenya's Maasai Mara each year."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; c1 (checker_doubt) is high under the C26 floor, and c2, c3 and c4 are standard; c1 is high because the item is counterintuitive, and the schema's riskReason list has no 'counterintuitive', so checker_doubt stands in. Datasets: none covers parks or ecosystems (geonames-cities lists towns), so c1 needs a web result. Rival test: Kenya is the planted trap: safari images and the Maasai Mara make it the reflex answer. Uganda and Zambia are other safari countries. Against the key: the ecosystem crosses into Kenya, which is why the stem says 'mostly'. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Famous worldwide through wildlife films; the Kenya trap catches players everywhere. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 22 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c1 needs a Tier A or B web result. Seed: 3 (medium): many pick Kenya. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "42bcc4e111cf72a7a66dcb52c130cf0acf93b175367db2ba99cb6921d9a23063",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Tanzania",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Serengeti ecosystem lies mostly in northern Tanzania and extends into south-west Kenya as the Maasai Mara.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Serengeti is mainly in Tanzania, not Kenya, Uganda or Zambia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kenya's Maasai Mara is the northern part of the Serengeti-Mara ecosystem.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The great wildebeest migration moves between Tanzania's Serengeti and Kenya's Maasai Mara every year.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6ad53a551711b7a80810ebbdd4cd0ec685fc005a46e99d66a22b2e4e4894be72",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Tanzania",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Serengeti National Park and most of the Serengeti ecosystem lie in Tanzania; Kenya holds only the Maasai Mara at the northern end.",
+              "confidence": "certain"
+            },
+            "note": "Flagged high by the writer for the Kenya confusion. 'Mostly' is safe: the Tanzanian side is many times larger. Knowledge only (no web search available to me); needs pass A's external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Serengeti does not lie mainly in Kenya, Uganda or Zambia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Maasai Mara is the northern part of the Serengeti-Mara ecosystem.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The wildebeest migration moves between the Serengeti and the Maasai Mara each year.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key of a counterintuitive item) rests on knowledge alone in both checks: no pinned dataset covers it and neither checker could search (the shared WebSearch budget was spent before pass A ran). §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, which a wording-only edit cannot reach because the claims stay. Redraft under a new id with web evidence, or with the figure stepped down or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The Serengeti, famous for its great wildebeest migration, lies mostly in which country?",
+  "answer": "Tanzania",
+  "wrong": ["Kenya", "Uganda", "Zambia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.329,
+    "estimator": "v0"
+  }
+}

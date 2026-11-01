@@ -1,0 +1,191 @@
+{
+  "id": "p.geo.0261",
+  "status": "active",
+  "category": "geo",
+  "tags": ["maps", "projections", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Africa is about 14 times bigger. Greenland looks huge on the common Mercator map, which stretches lands near the poles far more than lands near the Equator.",
+  "learnMore": "Mercator projection",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Africa's area is about 14 times Greenland's, so the two are not roughly the same size."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Mercator projection enlarges areas far from the Equator much more than areas near it."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "On a Mercator map, Greenland looks about as big as Africa."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (number) is high under the C26 floor, and c2 and c3 are standard. Datasets: mledoze-countries: GRL area 2,166,086; the 54 independent African countries total 30,049,078 and all 59 African entries 30,318,417, which is 13.9 to 14.0 times Greenland (c1). Rival test: Argued for true: on the Mercator map in many classrooms Greenland and Africa look alike, which is the whole source of the belief; measured on the ground the gap is fourteenfold. No definition of either makes them close. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: The Mercator map is used worldwide, so the myth is global. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 27 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c2 and c3 are standard. Seed: 3 (medium): many players believe the map. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: none. Related: p.geo.0137 compares Africa with Russia, a different pair.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d2065cb37dc75c2eaca9ec00b993bac813cc5a8e0adb762826cc912cc9030ca2",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=GRL; region=Africa summed",
+              "excerpt": "GRL \"area\": 2166086; the 59 entries with region Africa sum to 30318417 (independent states only: 30049078)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Ratio 14.0 (13.9 for independent states only): about 14 times."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Mercator projection stretches areas more and more with distance from the Equator.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "On a Mercator world map Greenland looks about as large as Africa.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7922f2239200e6d7dac71e019d1dd87a6f56301bbdbb989b2d06fe3f1ce2b973",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "region=Africa (sum of area) against cca3=GRL",
+              "excerpt": "Sum of area over the 'Africa' region entries 30,318,417 km2 (independent states alone 30,049,078); GRL \"area\": 2166086. Ratio 14.0 (13.9 for independent states).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Number claim: 'about 14 times' holds, so 'roughly the same size' is false by a huge margin."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Mercator projection stretches areas more and more the further they lie from the Equator.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "On a standard Mercator world map Greenland looks about as large as Africa.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 (mledoze-countries) carries dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Greenland is roughly the same size as Africa.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.74,
+    "spread": 0.338,
+    "estimator": "v0"
+  }
+}

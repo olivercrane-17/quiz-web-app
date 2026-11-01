@@ -1,0 +1,352 @@
+{
+  "id": "p.geo.0250",
+  "status": "checking",
+  "category": "geo",
+  "tags": ["islands", "indian-ocean", "south-asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "The islands lie closer to Myanmar and Indonesia than to the Indian mainland. Their main town is more than 1,300 km from Chennai.",
+  "learnMore": "Andaman and Nicobar Islands",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The Andaman and Nicobar Islands belong to India."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Andaman and Nicobar Islands are not part of Myanmar, Thailand or Indonesia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Andaman and Nicobar Islands lie closer to Myanmar and Indonesia than to mainland India."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Port Blair is more than 1,300 km from Chennai."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Port Blair is the main town of the Andaman and Nicobar Islands."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors and one C22 warning: the same answer as p.sport.0113, which asks where snakes and ladders began, a different fact; related, not a duplicate, for the editor to confirm with related_ok. Claims: every checkable statement is listed, distractors included; c1 (checker_doubt) and c4 (number) are high under the C26 floor, and c2, c3 and c5 are standard. Datasets: geonames-cities: Port Blair, IN, 11.66613, 92.74635 (c1). Great-circle distances from those coordinates: Chennai, IN, 13.08784, 80.27847, about 1,363 km (c4); Pathein, MM, 16.77919, 94.73212, about 607 km; Banda Aceh, ID, 5.54167, 95.33333, about 738 km (c3). Rival test: Myanmar is the planted trap, much closer and across the Andaman Sea; Thailand faces the islands to the east, and Indonesia's Sumatra lies just south of the Nicobars. Against the key: nothing; the islands are an Indian union territory. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: South Asian players have an edge, as with any place question, but most players worldwide meet the islands only on a map. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; the key is high only because the item is counterintuitive. Seed: 5 (hard): most players pick by distance and miss it; reasoners recall Port Blair or the islands' Indian names. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: c1 is high under the C26 floor because the item is counterintuitive; the schema's riskReason list has no 'counterintuitive', so checker_doubt stands in.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "00ae7f3b4159ce775d933638c6a5b49e597f9fc466666cb98419bd32f81a42d5",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "India",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Port Blair, country=IN",
+              "excerpt": "{\"name\":\"Port Blair\",\"lat\":\"11.66613\",\"lng\":\"92.74635\",\"country\":\"IN\",\"admin1\":\"01\"}; admin1.json IN.01 = \"Andaman and Nicobar\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Andaman and Nicobar Islands are a union territory of India, not part of Myanmar, Thailand or Indonesia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "Port Blair and the nearest place in MM, ID and mainland IN",
+              "excerpt": "{\"name\":\"Port Blair\",\"lat\":\"11.66613\",\"lng\":\"92.74635\",\"country\":\"IN\",\"admin1\":\"01\"}; {\"name\":\"Labutta\",\"lat\":\"16.14948\",\"lng\":\"94.75898\",\"country\":\"MM\",\"admin1\":\"03\"}; {\"name\":\"Sabang\",\"lat\":\"5.88969\",\"lng\":\"95.31644\",\"country\":\"ID\",\"admin1\":\"01\"}; {\"name\":\"Konārka\",\"lat\":\"19.89021\",\"lng\":\"86.09761\",\"country\":\"IN\",\"admin1\":\"21\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Great-circle distances from Port Blair: 544 km to Labutta (Myanmar), 702 km to Sabang (Indonesia), 1,158 km to Konārka, the nearest mainland Indian place in the file."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Port Blair, country=IN; name=Chennai, country=IN",
+              "excerpt": "{\"name\":\"Port Blair\",\"lat\":\"11.66613\",\"lng\":\"92.74635\",\"country\":\"IN\",\"admin1\":\"01\"}; {\"name\":\"Chennai\",\"lat\":\"13.08784\",\"lng\":\"80.27847\",\"country\":\"IN\",\"admin1\":\"25\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Great-circle distance 1,363 km, more than 1,300 km. A route by sea is longer still."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The town long called Port Blair, on South Andaman, is the territory's capital and main town.",
+              "confidence": "certain"
+            },
+            "note": "Confirmed in substance, but see the outdated issue: the town's official name is now Sri Vijaya Puram."
+          }
+        ],
+        "issues": [
+          {
+            "type": "outdated",
+            "severity": "fix",
+            "note": "India renamed Port Blair as Sri Vijaya Puram in September 2024, so the explanation uses a superseded name (§3.3 names that changed, §3.4 recent changes). Fix: 'Its main town, Sri Vijaya Puram (formerly Port Blair), is more than 1,300 km from Chennai', with c4 and c5 restated to match. This rests on my knowledge: the shared WebSearch budget was used up before I could attach a source, and geonames-cities 1.1.65 still lists Port Blair, so the editor should confirm it with a web result."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "611fcb65f9a1e381dabebb8ea61b198dc146ca7e88a45190c3fe7332d9019ecb",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "India",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Port Blair, country=IN, admin1=Andaman and Nicobar",
+              "excerpt": "Port Blair IN, admin1 name 'Andaman and Nicobar', lat 11.66613, lng 92.74635",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Dataset places the islands' main town in India. Flagged high by the writer only for the place-name confusion; I know of no dispute over sovereignty. Knowledge confirms the union territory."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Andaman and Nicobar Islands are not part of Myanmar, Thailand or Indonesia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The northern Andamans lie close to Myanmar's Coco Islands and the southern Nicobars close to Sumatra, while the Indian mainland is over a thousand kilometres away.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Port Blair (IN) and name=Chennai (IN)",
+              "excerpt": "Port Blair 11.66613 N, 92.74635 E; Chennai 13.08784 N, 80.27847 E; great-circle distance 1,363 km (haversine, R = 6371.0088 km).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Number claim: more than 1,300 km holds with a 63 km margin."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Port Blair is the capital and main town of the Andaman and Nicobar Islands.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "rewrite",
+      "reason": "B passes, A revises (outdated): India renamed Port Blair as Sri Vijaya Puram in 2024, so the explanation no longer names the town. The facts stay those of c3, c4 and c5, so no claim changes, and adding the new name would add an unchecked fact. A's revise stands, so the item waits for a tiebreak T with external evidence on the renaming issue before any accept (§9.7). [wording-only rewrite by ed-pgeo02d at 2026-11-01T04:36:56Z of explanation; checks kept, packetSha256 re-stamped: pass A 9245a7c05f1e5c459ced5b207ad426b24587c8a67abf3413c2d944665297a353 -> 00ae7f3b4159ce775d933638c6a5b49e597f9fc466666cb98419bd32f81a42d5; pass B 90b6cc8a3385cebfb029535b74d8f89c58fa5fc305612286bdb13dcbe7c7eed3 -> 611fcb65f9a1e381dabebb8ea61b198dc146ca7e88a45190c3fe7332d9019ecb]",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-pgeo02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "868ed5a172647b4d15570108f6ac5a4b6c61db77b258b4571bb8b7b53b7bca1c",
+      "startedAt": "2026-11-01T04:58:12Z",
+      "finishedAt": "2026-11-01T05:11:28Z",
+      "coldSolve": {
+        "answerGiven": "India",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "dataset",
+          "evidence": {
+            "kind": "dataset",
+            "dataset": "geonames-cities",
+            "version": "1.1.65",
+            "file": "admin1.json",
+            "locator": "code=IN.01",
+            "excerpt": "{\"code\":\"IN.01\",\"name\":\"Andaman and Nicobar\"}",
+            "retrievedAt": "2026-11-01"
+          },
+          "note": "GeoNames lists the territory as a first-level division of India (country code IN), and its places in cities.json carry country IN and admin1 01, for example {\"name\":\"Port Blair\",\"lat\":\"11.66613\",\"lng\":\"92.74635\",\"country\":\"IN\",\"admin1\":\"01\",\"admin2\":\"640\"}. world-cities agrees (Port Blair,India,Andaman and Nicobar,1259385), but it is built from GeoNames, so it is no independent second source. High risk (checker_doubt): this dataset record is the external evidence. Cold solve India, high confidence."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "dataset",
+          "evidence": {
+            "kind": "dataset",
+            "dataset": "world-cities",
+            "version": "73c9f54ab9f305168c76d0802db151e30a157b28",
+            "file": "world-cities.csv",
+            "locator": "every row whose subcountry is Andaman and Nicobar (rows 14913, 15327, 16228, 17426)",
+            "excerpt": "Port Blair,India,Andaman and Nicobar,1259385 | Māyābandar,India,Andaman and Nicobar,1263259 | Diglipur,India,Andaman and Nicobar,1272607 | Rangat,India,Andaman and Nicobar,11184472",
+            "retrievedAt": "2026-11-01"
+          },
+          "note": "Every row for the territory has country India, and no Myanmar, Thailand or Indonesia row uses that subcountry. In geonames-cities admin1.json the only entry naming Andaman or Nicobar is IN.01; no MM, TH or ID entry does. Myanmar's Coco Islands sit at the north end of the same island chain but are not part of the Indian territory the stem names (note-level issue)."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "dataset",
+          "evidence": {
+            "kind": "dataset",
+            "dataset": "geonames-cities",
+            "version": "1.1.65",
+            "file": "cities.json",
+            "locator": "name=Diglipur and name=Campbell Bay (country IN, admin1 01); name=Parva I (IN, admin1 31, Mizoram); name=Labutta (MM); name=Sabang (ID, admin1 01)",
+            "excerpt": "{\"name\":\"Diglipur\",\"lat\":\"13.26667\",\"lng\":\"93\",\"country\":\"IN\",\"admin1\":\"01\",\"admin2\":\"639\"} {\"name\":\"Campbell Bay\",\"lat\":\"7.00832\",\"lng\":\"93.89419\",\"country\":\"IN\",\"admin1\":\"01\",\"admin2\":\"638\"} {\"name\":\"Parva I\",\"lat\":\"22.08556\",\"lng\":\"92.64658\",\"country\":\"IN\",\"admin1\":\"31\",\"admin2\":\"287\"} {\"name\":\"Labutta\",\"lat\":\"16.14948\",\"lng\":\"94.75898\",\"country\":\"MM\",\"admin1\":\"03\",\"admin2\":\"MMR017D004\"} {\"name\":\"Sabang\",\"lat\":\"5.88969\",\"lng\":\"95.31644\",\"country\":\"ID\",\"admin1\":\"01\",\"admin2\":\"1172\"}",
+            "retrievedAt": "2026-11-01"
+          },
+          "note": "Haversine on GeoNames coordinates (mean Earth radius 6,371 km), nearest pair over all nine IN.01 places: nearest mainland Indian place 981 km (Diglipur to Parva I; Lakshadweep, IN.14, left out as islands), nearest Myanmar place 372 km (Diglipur to Labutta), nearest Indonesian place 200 km (Campbell Bay to Sabang). From Port Blair itself: 1,158 km to the nearest mainland place (Konārka, Odisha), 544 km to Labutta, 702 km to Sabang. Towns stand in for coastlines, but the margins are wide."
+        },
+        {
+          "claimId": "c4",
+          "verdict": "confirmed",
+          "method": "dataset",
+          "evidence": {
+            "kind": "dataset",
+            "dataset": "geonames-cities",
+            "version": "1.1.65",
+            "file": "cities.json",
+            "locator": "name=Port Blair, country=IN; name=Chennai, country=IN",
+            "excerpt": "{\"name\":\"Port Blair\",\"lat\":\"11.66613\",\"lng\":\"92.74635\",\"country\":\"IN\",\"admin1\":\"01\",\"admin2\":\"640\"} {\"name\":\"Chennai\",\"lat\":\"13.08784\",\"lng\":\"80.27847\",\"country\":\"IN\",\"admin1\":\"25\",\"admin2\":\"603\"}",
+            "retrievedAt": "2026-11-01"
+          },
+          "note": "Great-circle distance from these coordinates by haversine (mean Earth radius 6,371 km): 1,363 km. A straight line is the shortest possible distance, so any sea or air route is longer still, and 'more than 1,300 km' holds with about 60 km to spare. High risk (number): this dataset record is the external evidence."
+        },
+        {
+          "claimId": "c5",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Port Blair, on South Andaman, is the capital and largest town of the Andaman and Nicobar Islands; India renamed it Sri Vijaya Puram in September 2024.",
+            "confidence": "certain"
+          },
+          "note": "No web search ran: the shared turn-wide WebSearch budget was exhausted (my one call was refused before it ran), so this rests on knowledge. The pinned city datasets list Port Blair in the territory but carry no capital flag or population (world-cities only says each of its four rows has 15,000 people or more). Standard risk."
+        }
+      ],
+      "issues": [
+        {
+          "type": "ambiguity",
+          "severity": "note",
+          "note": "Myanmar's Coco Islands lie just north of North Andaman on the same island chain, but they are not part of the Andaman and Nicobar Islands, the Indian union territory the stem names. A player who knows them still answers India, so Myanmar is no second answer."
+        },
+        {
+          "type": "outdated",
+          "severity": "note",
+          "note": "India renamed Port Blair Sri Vijaya Puram in September 2024 (my knowledge; no search could run). Claims c4 and c5 use the old name, but the player-facing explanation says only 'their main town', so nothing a player sees is out of date. If the town is ever named in player-facing text, use 'Sri Vijaya Puram (formerly Port Blair)'."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "pass"
+    }
+  },
+  "format": "mc",
+  "stem": "The Andaman and Nicobar Islands belong to which country?",
+  "answer": "India",
+  "wrong": ["Myanmar", "Thailand", "Indonesia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.474,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "id": "p.sport.0266",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["winter-olympics", "figure-skating", "olympic-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Figure skating was held at the 1908 Summer Olympics in London, 16 years before the first Winter Games. Ice hockey also made its debut at a Summer Games, in 1920.",
+  "learnMore": "Figure skating at the 1908 Summer Olympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Figure skating was first contested at the Olympics at the 1908 Summer Games in London."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Ski jumping was first contested at the Olympics at the 1924 Winter Games in Chamonix."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Ice hockey made its Olympic debut at the 1920 Summer Games in Antwerp."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed, 3 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so are both label claims of this counterintuitive comparison. datasets: olympic-editions, edition_metadata.csv: edition_ids 5 (1908 Summer, London), 7 (1920 Summer, Antwerpen) and 29 (1924 Winter, Chamonix) confirm the Games; the event programmes are not in the file, so c1 to c3 need web evidence. The gap is 16 years, well past the separation guard. rivalTest: Ski jumping is the trap: it is a classic Nordic sport and was at the first Winter Games, so players assume the winter sports started together in 1924. Figure skating's 1908 debut at a Summer Games is documented, so the order cannot flip. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 30 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: Counterintuitive is true because most players will think no winter sport predates the Winter Games.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9ccc652fdb5180cecc4438b5ee030dcca841e724b400fb3d7cb2030e7e2f4d83",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Figure skating",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Figure skating was held at the London 1908 Olympics, its first Olympic appearance.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). olympic-editions confirms only the London 1908 edition (edition_id=5)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ski jumping was first held at the Chamonix 1924 Winter Games.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ice hockey made its Olympic debut at the Antwerp 1920 Summer Games.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=29, the earliest row with season Winter",
+              "excerpt": "29,1924 Winter,1924,Winter,Chamonix,France,1924-01-24,1924-02-05",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Checker addition (role explanation, risk high, riskReason date; the record schema has no addedClaim field, so it is stated here): 'The first Winter Olympics were held in 1924, 16 years after figure skating's Olympic debut in 1908.' The explanation says '16 years before the first Winter Games', but no claim gives the year of the first Winter Games. Dataset: the earliest row with season Winter is 1924 (Chamonix), and 1924 - 1908 = 16."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "33f9f70b171ef2fe455174c53ef0aa4c34b41a6cb605e3ce9fc62f74ff4df783",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Figure skating",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Figure skating was first contested at the Olympics at the 1908 London Summer Games.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: ski jumping had no earlier Olympic appearance than the first Winter Games."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ski jumping was first contested at the Olympics at the 1924 Chamonix Winter Games.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ice hockey made its Olympic debut at the 1920 Summer Games in Antwerp.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (label, date), c2 (label, date) and c3 (explanation, date) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. A's addition on the first Winter Games carries dataset evidence, but c1 to c3 do not. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which became an Olympic sport first?",
+  "a": "Figure skating",
+  "b": "Ski jumping",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of first Olympic appearance",
+  "unit": "year",
+  "values": {
+    "a": 1908,
+    "b": 1924
+  },
+  "valueDisplay": {
+    "a": "London 1908",
+    "b": "Chamonix 1924"
+  },
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.199,
+    "estimator": "v0"
+  }
+}

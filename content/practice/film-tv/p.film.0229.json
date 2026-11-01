@@ -1,0 +1,199 @@
+{
+  "id": "p.film.0229",
+  "status": "checking",
+  "category": "film",
+  "tags": ["animation", "comedy", "france"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Their babble, a jumble of words from several languages, is voiced by co-director Pierre Coffin. The film was animated in Paris by the French studio Mac Guff.",
+  "learnMore": "Despicable Me",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The Minions first appeared in Despicable Me (2010)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Minions do not appear in Megamind, Shrek or Madagascar."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Minions' voices, a mix of words from several languages, were performed by the co-director Pierre Coffin."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Despicable Me was animated in Paris by the French studio Mac Guff, whose animation unit Illumination later bought."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Megamind is the trap: another animated comedy of the same year about a villain who turns good; Shrek and Madagascar are other studio hits. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a worldwide release animated in France; the Minions need no language to be understood. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 27 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "09ae56a5697ced44050bb73a71dc949ad08d89121ee61e5db345613c3297c3ac",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "Despicable Me",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Minions made their debut as Gru's helpers in Despicable Me (2010).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Minions are Illumination characters and appear in none of Shrek, Madagascar or Megamind.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Co-director Pierre Coffin voices the Minions in a gibberish made of several languages.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Despicable Me was animated at Mac Guff in Paris, whose animation arm Illumination later bought.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "87b8e34f34c6f4d30c48956e2f4f07db9914e42df769da36ebfc0b18eef792ee",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "Despicable Me",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Minions made their screen debut in Despicable Me (2010).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Minions do not appear in Megamind, Shrek or Madagascar.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Megamind has a fish sidekick named Minion and Madagascar has penguins, but neither is a yellow goggled Minion."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Co-director Pierre Coffin voices the Minions in a babble made of words from several languages.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Despicable Me was animated in Paris by Mac Guff; Illumination later acquired Mac Guff's animation operation.",
+              "confidence": "likely"
+            },
+            "note": "The displayed half (animated in Paris by Mac Guff) is certain. The clause that Illumination later bought the studio's animation unit I believe is right, but I cannot certify the exact wording (animation unit or the whole studio, and the year) without a source, and no search was possible this turn."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Claim c4 carries a clause (Illumination later bought Mac Guff's animation unit) that the explanation does not show and that I could not verify. Source it with a search, or drop the clause from the claim; the displayed explanation sentence (animated in Paris by Mac Guff) is fine."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "In which animated film did the yellow, goggle-wearing Minions first appear?",
+  "answer": "Despicable Me",
+  "wrong": ["Megamind", "Shrek", "Madagascar"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.92,
+    "spread": 0.523,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "id": "p.film.0168",
+  "status": "cut",
+  "category": "film",
+  "tags": ["film-making", "3d-film", "1920s"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "The Power of Love opened in Los Angeles in 1922, watched through red-and-green glasses. Gone with the Wind premiered in Atlanta in December 1939.",
+  "learnMore": "The Power of Love (1922 film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The Power of Love, which opened in Los Angeles in 1922, was the first 3D feature film shown to a paying audience."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Gone with the Wind premiered in Atlanta in December 1939."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Audiences watched The Power of Love through red-and-green glasses."
+    }
+  ],
+  "writerNotes": "3D feels modern, which pulls guesses toward Gone with the Wind. Seventeen years apart. Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Arguing for Gone with the Wind: 3D feels like a 1950s or 2000s novelty, but a 3D feature played to paying audiences in 1922. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 24 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: The Power of Love is a lost film; its 1922 3D premiere is well documented, but c1 needs a Tier A or B source.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1a9d0424802805844c4bc06f98a12184fcd05305ed3bc8441464d273ad13b7be",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "The first 3D feature film premiere",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Power of Love opened in Los Angeles in September 1922 and is usually cited as the first 3D feature shown to a paying audience.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gone with the Wind premiered in Atlanta on 15 December 1939.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was shown in red-and-green anaglyph, watched through matching glasses.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "68b5082313b57d19a806e5fa67a9b802af06830e25c6ddb07dee624751a27a6d",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "The first 3D feature film premiere",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Power of Love, shown in Los Angeles in 1922, is widely described as the first 3D feature shown to a paying audience.",
+              "confidence": "likely"
+            },
+            "note": "I cannot confirm this 'first' at certain: another feature, Bwana Devil (1952), is also widely called the first 3D feature, so the first is contested. Needs external evidence. No search was possible."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gone with the Wind premiered in Atlanta in December 1939.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Audiences watched The Power of Love through red-and-green glasses.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "second_answer",
+            "severity": "fix",
+            "note": "Label A, 'The first 3D feature film premiere', rests on a contested first. Many players know Bwana Devil (1952) as the first 3D feature, and that reading reverses the key against Gone with the Wind (1939). The player never sees The Power of Love, which only the explanation names. Name the event in the label (for example the premiere of The Power of Love), which leaves a foothold-free item, or cut it. The two labels are also not parallel."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-pfilm01t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "556c909ab50d993005de7b661d5d060c3a7296db481f076bef92655c552cfc8a",
+      "startedAt": "2026-11-01T04:36:12Z",
+      "finishedAt": "2026-11-01T04:41:18Z",
+      "coldSolve": {
+        "answerGiven": "The first 3D feature film premiere",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The Power of Love, projected in red and green anaglyph at the Ambassador Hotel Theater in Los Angeles in September 1922, is the film usually credited as the earliest 3D feature shown to an outside audience.",
+            "confidence": "likely"
+          },
+          "note": "Disputed claim: pass B left it uncertain. A high-risk first, so the tiebreak needs dataset or web evidence, and none could be gathered: no pinned dataset covers film history, and the one WebSearch call this run made was refused because the shared per-turn search limit was already used up, so no search ran. I am sure of the 1922 Los Angeles screening and that standard accounts put it first, but not of the 'paying audience' wording, and the first is open to scope (see the issue)."
+        }
+      ],
+      "issues": [
+        {
+          "type": "ambiguity",
+          "severity": "fix",
+          "note": "On the disputed issue I side with pass B in substance. Label a states an unscoped first. The usual account (The Power of Love, Los Angeles, 1922) supports the key, but a player who takes Bwana Devil (1952), the film that started the 1950s 3D boom, as the first 3D feature gets the reverse order against Gone with the Wind (1939). §3.5 asks for a contested first to become a documented event, so scope the label (for example, the first 3D feature shown to the public) and put both labels in the same form (§2.6). The key itself need not change. Separately, c2 (a high-risk date) carries only knowledge in passes A and B, so it still needs external evidence before rule 3 can pass."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Second pass. A pass, B revise, T revise: B and T both read label a as an unscoped, contested first, since a player who takes Bwana Devil (1952) as the first 3D feature reverses the key (§3.5), and T could not confirm c1 with external evidence. c2, a high-risk date, has knowledge only in both checks (§9.9 rule 3). The fix is a new label a, which changes a claim, so it needs fresh checks rather than a wording fix (§9.7). The labels are also not parallel (§2.6).",
+      "decidedAt": "2026-11-01T04:57:54Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "The first 3D feature film premiere",
+  "b": "The premiere of Gone with the Wind",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of the premiere",
+  "unit": "year",
+  "values": {
+    "a": 1922,
+    "b": 1939
+  },
+  "valueDisplay": {
+    "a": "1922",
+    "b": "December 1939"
+  },
+  "predicted": {
+    "p": 0.26,
+    "spread": 0.204,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "id": "p.art.0167",
+  "status": "active",
+  "category": "art",
+  "tags": ["sculpture", "artists", "modern-art"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Bourgeois, born in 1911, made her giant spider sculpture Maman in 1999, in her late eighties, twelve years after Warhol died.",
+  "learnMore": "Louise Bourgeois",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Louise Bourgeois was born in 1911."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Andy Warhol was born in 1928."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Louise Bourgeois made her giant spider sculpture Maman in 1999."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Andy Warhol died in 1987, twelve years before Bourgeois made Maman."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Bourgeois was in her late eighties in 1999."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: c1 checked in moma-artists (ConstituentID 710, 1911 to 2010) and tate-artists (id 2351, born 1911, Paris); c2 and the death year in c4 in moma-artists (ConstituentID 6246, 1928 to 1987) and tate-artists (id 2121, born 1928, Pittsburgh); c5 is arithmetic on c1. Rival test: argued for Warhol: he is the classic 1960s name, while Bourgeois's famous spiders date from the 1990s; the datasets put Bourgeois 17 years earlier. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both are internationally known; a player who knows neither still has a fair coin, and the explanation pays off. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: c3 needs a source.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4f4a71e106f1ab6f055b7bf0d1292444eab244e1019a6e4098f6dfbd050d02e0",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "Louise Bourgeois",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=710 (DisplayName=Louise Bourgeois)",
+              "excerpt": "\"DisplayName\": \"Louise Bourgeois\", \"ArtistBio\": \"American, born France. 1911–2010\", \"BeginDate\": 1911",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Tate agrees (id 2351, yearOfBirth 1911)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=6246 (DisplayName=Andy Warhol)",
+              "excerpt": "\"DisplayName\": \"Andy Warhol\", \"ArtistBio\": \"American, 1928–1987\", \"BeginDate\": 1928",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Tate agrees (id 2121, yearOfBirth 1928)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bourgeois made the original steel Maman in 1999.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "tate-artists",
+              "version": "a51d8afc988ed083557e2950f4d0b644e7719f4a",
+              "file": "artist_data.csv",
+              "locator": "id=2121 (name=Warhol, Andy)",
+              "excerpt": "2121,\"Warhol, Andy\",Male,1928–1987,1928,1987,\"Pittsburgh, United States\",\"New York, United States\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The dataset carries the 1987 death; 'twelve years before Maman' is 1999 minus 1987 and leans on c3, which is knowledge only."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Born in December 1911, she was 87 for most of 1999: her late eighties.",
+              "confidence": "certain"
+            },
+            "note": "Arithmetic on c1 (dataset) and c3 (knowledge only). High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "fa75b61027d2a89758f7f3febc52f0e329d57d5e20e1850b9dde8c0ab4b963d9",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "Louise Bourgeois",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=710",
+              "excerpt": "{\"DisplayName\":\"Louise Bourgeois\",\"ArtistBio\":\"American, born France. 1911–2010\",\"Nationality\":\"American\",\"BeginDate\":1911,\"EndDate\":2010}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "BeginDate 1911."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=6246",
+              "excerpt": "{\"DisplayName\":\"Andy Warhol\",\"ArtistBio\":\"American, 1928–1987\",\"Nationality\":\"American\",\"BeginDate\":1928,\"EndDate\":1987}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "BeginDate 1928."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bourgeois made the giant spider sculpture Maman in 1999 (first shown at Tate Modern in 2000).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=6246",
+              "excerpt": "{\"DisplayName\":\"Andy Warhol\",\"ArtistBio\":\"American, 1928–1987\",\"Nationality\":\"American\",\"BeginDate\":1928,\"EndDate\":1987}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "EndDate 1987; 1999 minus 1987 is twelve years."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Bourgeois was born in December 1911, so she was 87 for most of 1999 and 88 at its end: her late eighties.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, date), c5 (explanation, number) rest on knowledge alone in both checks: checker A's searches ran out and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Only explanation facts lack evidence: redraft under a new id with them evidenced, bounded or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.hist.0170",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which artist was born first?",
+  "a": "Louise Bourgeois",
+  "b": "Andy Warhol",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of birth",
+  "unit": "year",
+  "values": {
+    "a": 1911,
+    "b": 1928
+  },
+  "valueDisplay": {
+    "a": "born 1911",
+    "b": "born 1928"
+  },
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.112,
+    "estimator": "v0"
+  }
+}

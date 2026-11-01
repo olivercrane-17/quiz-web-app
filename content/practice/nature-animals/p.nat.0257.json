@@ -1,0 +1,213 @@
+{
+  "id": "p.nat.0257",
+  "status": "checking",
+  "category": "nat",
+  "tags": ["senses", "taste", "fish", "fresh-water"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Catfish carry taste buds over their whiskers, fins and skin as well as in their mouths, so they can taste food in murky water before they reach it.",
+  "learnMore": "Channel catfish",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A channel catfish has more than 100,000 taste buds."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "An adult human has up to about 10,000 taste buds."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Catfish have taste buds on their barbels (whiskers), fins and skin as well as in the mouth."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Catfish can taste food in the water before reaching it."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed; high: c1 (number, a comparison label) and c2 (number, a comparison label); standard: c3 and c4. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on catfish and human taste bud counts should cover c1 to c3. rivalTest: Argued for the human, the obvious pick, which is why counterintuitive is set. Both values are bounds: sources put channel catfish at well over 100,000 (often around 175,000) and adults at 2,000 to 10,000, so the catfish wins by at least ten times under any figure on offer. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: catfish are farmed and eaten on every inhabited continent. style: Oxford spelling, plain hyphens only, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a comparison item. doubts: none on the order of magnitude; the bounds are written so that differing counts never flip the answer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "60fdf1d039ddf706a9dee5e716b6e98b71f648f5d0ab65bab57dfee25271beca",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "A channel catfish",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A channel catfish has well over 100,000 taste buds spread over its body; estimates I know run to about 175,000 or more.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "An adult human has roughly 2,000 to 10,000 taste buds, so up to about 10,000.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Catfish have taste buds on their barbels, fins and skin as well as in the mouth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Catfish taste dissolved chemicals in the water and can detect food before reaching it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3f3c262102ad595ae55b25edd020c040bfc83d4148d8d146519cf86585472890",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "A channel catfish",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A channel catfish has taste buds over its whole body, on the order of tens of thousands to well over a hundred thousand; I am not sure the published figure clears 100,000.",
+              "confidence": "likely"
+            },
+            "note": "The direction (far more than a human) is certain; the exact lower bound 'more than 100,000' is not. Not retrieved here: no search budget was available."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "An adult human has a few thousand taste buds, with the highest commonly quoted estimates around 10,000.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Catfish have taste buds on the barbels, fins and skin as well as in the mouth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Catfish can taste food in the water before reaching it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c1 'more than 100,000' is a high-risk number I could not confirm; common figures run from about 100,000 to 175,000 and some sources say less. Use a bound that every source clears (for example 'tens of thousands', against about 10,000 for a person) or confirm the figure externally. The answer is unaffected."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ]
+  },
+  "format": "comparison",
+  "stem": "Which has more taste buds?",
+  "a": "A channel catfish",
+  "b": "An adult human",
+  "answer": "a",
+  "relation": "more",
+  "measure": "taste buds on the body",
+  "unit": "taste buds",
+  "values": {
+    "a": 100000,
+    "b": 10000
+  },
+  "valueDisplay": {
+    "a": "more than 100,000",
+    "b": "up to about 10,000"
+  },
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.24,
+    "estimator": "v0"
+  }
+}

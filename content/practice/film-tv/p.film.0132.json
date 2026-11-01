@@ -1,0 +1,217 @@
+{
+  "id": "p.film.0132",
+  "status": "active",
+  "category": "film",
+  "tags": ["world-cinema", "africa", "festivals"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "It began in Ouagadougou. Its top prize, the Golden Stallion of Yennenga, honours a legendary warrior princess said to be the mother of the Mossi people.",
+  "learnMore": "FESPACO",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "FESPACO was first held in 1969 in Ouagadougou, in the country that is Burkina Faso (then Upper Volta)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "FESPACO did not begin in Senegal, Mali or Cameroon."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The festival's top prize, the Golden Stallion of Yennenga, is named after a legendary princess."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In legend, the warrior princess Yennenga is the mother of the Mossi people."
+    }
+  ],
+  "writerNotes": "Upper Volta stays out of player text on purpose: p.hist.0156 asks which country was called Upper Volta, and C22 pairs the two items on their shared answer. Related, not the same fact. Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: mledoze-countries (cca3=BFA) and geonames-cities (Ouagadougou, BF) place Ouagadougou in Burkina Faso; the 1969 founding needs web evidence. Rival test: Senegal, Mali and Cameroon are French-speaking West and Central African countries with strong film traditions (Ousmane Sembène was Senegalese), so each tempts. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: an African festival; the French acronym and the options give reasoners a foothold. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 26 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: the festival became biennial only later, so the stem says first held in 1969 and avoids every two years.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ed1090fd70219eb25e8e82faffa052ee9c526c8f6ee67f106a251503bc1416b7",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Burkina Faso",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The festival that became FESPACO was first held in Ouagadougou, in Upper Volta (Burkina Faso since 1984), in 1969.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It did not begin in Senegal, Mali or Cameroon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The top prize, the Étalon de Yennenga (Golden Stallion of Yennenga), is named after the legendary princess Yennenga.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mossi tradition makes the warrior princess Yennenga the mother of the Mossi people.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1f4febfce0b70da11cc3b2534bf1b5343045b9278fad104e5ae960b20a3fa15f",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Burkina Faso",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "FESPACO was first held in 1969 in Ouagadougou, in what was then Upper Volta and is now Burkina Faso.",
+              "confidence": "certain"
+            },
+            "note": "The datasets confirm Burkina Faso exists as a country but carry no festival data; knowledge only."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "FESPACO did not begin in Senegal, Mali or Cameroon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Golden Stallion of Yennenga is named after the legendary princess Yennenga.",
+              "confidence": "certain"
+            },
+            "note": "Etymology, high-risk; needs check A's external evidence."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In legend Yennenga is the mother of the founder of the Mossi people.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 and c3 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered. Dedupe also flagged p.hist.0156 (0.77, same answer, similar wording); not ruled on.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0217",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "FESPACO, a pan-African film festival first held in 1969, began in which modern country?",
+  "answer": "Burkina Faso",
+  "wrong": ["Senegal", "Mali", "Cameroon"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.18,
+    "spread": 0.216,
+    "estimator": "v0"
+  }
+}

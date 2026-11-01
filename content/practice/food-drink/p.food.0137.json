@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0137",
+  "status": "active",
+  "category": "food",
+  "tags": ["fruit", "citrus", "botany"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Many familiar citrus fruits descend from a few wild ancestors, chiefly pomelo, mandarin, citron and papeda. Grapefruit later arose in the Caribbean from a pomelo and sweet orange cross.",
+  "learnMore": "Orange (fruit)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The sweet orange (Citrus x sinensis) originated as a hybrid of the pomelo and the mandarin."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The lemon, lime and grapefruit are not the second parent of the sweet orange; the grapefruit is itself a descendant of the sweet orange."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Many cultivated citrus fruits descend from a few ancestral species, chiefly the pomelo, the mandarin, the citron and the papedas."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The grapefruit arose in the Caribbean as a cross between the pomelo and the sweet orange."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: grapefruit is the tempting distractor, but it is the orange's child, not its parent; genome studies put the mandarin and the pomelo behind the sweet orange (with later backcrossing to mandarin, which keeps the mandarin as the answer). Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: all five fruits are sold worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 29 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: few people know the parentage, but the orange's size and taste between mandarin and pomelo give a foothold. Doubts: c1 rests on genome studies; I rated it standard because it is settled botany, but a checker who rates it below certain should mark it high and look for evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5b764dbdf2eaa77529981b6a93ced9f3e26ebc554d6c39498c55a14a836b63d4",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Mandarin",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Genome studies show the sweet orange descends from a pomelo and mandarin cross, backcrossed with mandarin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lemon, lime and grapefruit are not its second parent; the grapefruit descends from the sweet orange and the pomelo.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most cultivated citrus descends from a few ancestral species: pomelo, mandarin, citron and the papedas.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The grapefruit arose in the Caribbean (Barbados, 18th century) from a pomelo and sweet orange cross.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9548897779d92a4198e0eaea28c5cb63fea6f1f0ddfe8dddf88ceb216340a86f",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Mandarin",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Genome studies (Wu and colleagues, Nature Genetics 2014 and Nature 2018) show sweet orange is a pomelo by mandarin hybrid, with a mostly mandarin genome.",
+              "confidence": "certain"
+            },
+            "note": "Tested lemon, grapefruit and lime as the second parent: they are each a separate hybrid and not a parent of sweet orange."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lemon is citron by sour orange, key lime is citron by a papeda, grapefruit is pomelo by sweet orange.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cultivated citrus descends mainly from four ancestors: pomelo, mandarin, citron and papeda species.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Grapefruit arose in the Caribbean, in Barbados, as a pomelo by sweet orange cross.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.food.0268",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The sweet orange arose as a cross between the pomelo and which other citrus fruit?",
+  "answer": "Mandarin",
+  "wrong": ["Lemon", "Lime", "Grapefruit"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.266,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "id": "p.music.0227",
+  "status": "cut",
+  "category": "music",
+  "tags": ["classical", "myths", "mozart"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "The 'Mozart effect' began with a 1993 study of college students, who briefly did slightly better on a spatial puzzle after hearing a Mozart sonata. It never tested babies.",
+  "learnMore": "Mozart effect",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "No scientific study has shown that listening to Mozart makes babies more intelligent."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The idea of a 'Mozart effect' began with a 1993 study by Rauscher, Shaw and Ky."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 1993 study tested college students, not babies."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In the 1993 study, students who had just listened to a Mozart sonata did slightly better on a spatial reasoning task for a short time."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the statement and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers psychology studies, so every claim needs web evidence from the checkers. I used no WebSearch. Rival test: argued for 'true': the claim was widely repeated in the 1990s, and some places even handed out classical CDs to new parents; but the original study tested college students on a short spatial task, and later reviews found the effect small or absent. Argued against the key: no study has shown higher intelligence in babies. c1 is high because it is the key claim of a counterintuitive item (C26 floor); the schema's riskReason list has no counterintuitive value, so it carries checker_doubt. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the myth spread worldwide, and the statement needs no local knowledge. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None. The item states the science and gives no advice.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f0f4dc7258867b8f661c2b1e6cfb2478a866be65a45d2bf17205fc6f4e0604b5",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "No study has shown that listening to Mozart raises babies' intelligence; the 1993 research used students, and later meta-analyses found little or no lasting effect.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Mozart-effect craze followed Rauscher, Shaw and Ky's 1993 letter in Nature, but Alfred Tomatis had already promoted a 'Mozart effect' in his 1991 book Pourquoi Mozart?",
+              "confidence": "likely"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). Doubted as written: 'the idea began with' the 1993 study looks wrong if Tomatis's earlier 'Mozart effect' counts. See the wording issue."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1993 study's subjects were college students; no babies were tested.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "After hearing a Mozart sonata the students scored a little higher on spatial tasks, and the gain faded within about 10 to 15 minutes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Claim c2 and the explanation's first sentence say the 'Mozart effect' began with the 1993 study, but Alfred Tomatis wrote about a Mozart effect in his 1991 book Pourquoi Mozart?, so a confident player could dispute it. Suggested wording: 'The Mozart-effect craze took off after a 1993 study of college students...'. Checker doubt on c2; the key (c1) is not affected."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "89c84dc6f0b9e2815d5e071c64c5e985a81ca1af2a3b18fabedc01552d4df108",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "No credible study has shown that listening to Mozart makes babies more intelligent; the 1993 finding concerned a brief spatial-task boost in adults and later reviews found little or no effect.",
+              "confidence": "certain"
+            },
+            "note": "Consensus claim, not a provable universal. The absolute wording 'No scientific study' is the weak spot; 'research has not shown' would be safer. Needs check A's external evidence (a systematic review or meta-analysis of the effect would do)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The popular Mozart effect craze began with the 1993 Nature paper by Rauscher, Shaw and Ky.",
+              "confidence": "certain"
+            },
+            "note": "Nuance only: the phrase 'Mozart effect' was coined earlier, in 1991, by Alfred Tomatis, but the research claim and the craze date from 1993."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1993 study tested college students, not babies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "After listening to a Mozart sonata for two pianos, the students scored higher on a spatial reasoning task for about 10 to 15 minutes.",
+              "confidence": "certain"
+            },
+            "note": "The original paper reported a gain of about 8 to 9 points of spatial IQ, so 'slightly' is a soft word; later work found the effect small."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c1 is an absolute ('No scientific study has shown'). The statement itself is safely false, but the claim and explanation read better as 'research has not shown'. Also 'It never tested babies' is ambiguous: it means the 1993 study, since later studies did test children."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "cut",
+      "reason": "A revise, B pass. A's issue is real, not a misreading: the phrase 'Mozart effect' predates the 1993 study (Alfred Tomatis used it in 1991), and B's own note on c2 concedes the same, so the explanation's first sentence and claim c2 as written are contestable. The fix ('the Mozart-effect craze took off after a 1993 study') changes a claim, so it is not a wording-only rewrite, and a tiebreak would confirm the problem rather than clear it (§9.7). Every claim is also high risk on knowledge only. Cut. Redraft under a new id with c2 reworded, B's softer key wording ('research has not shown'), 'That study never tested babies' for the ambiguous last sentence, and web evidence.",
+      "decidedAt": "2026-11-01T04:32:21Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Scientists have shown that listening to Mozart makes babies more intelligent.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.228,
+    "estimator": "v0"
+  }
+}

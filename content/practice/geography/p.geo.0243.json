@@ -1,0 +1,249 @@
+{
+  "id": "p.geo.0243",
+  "status": "active",
+  "category": "geo",
+  "tags": ["borders", "rainforests", "central-america"],
+  "region": "global",
+  "volatility": "slow",
+  "reviewBy": "2028-10-31",
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The Pan-American Highway, which otherwise links Alaska with southern Argentina, stops on either side of the gap, so drivers ship their cars around it.",
+  "learnMore": "Darién Gap",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Darién Gap lies between Colombia and Panama."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Costa Rica does not border Colombia, and Colombia's borders with Venezuela and Ecuador do not cross the Darién Gap."
+    },
+    {
+      "id": "c3",
+      "role": "key",
+      "ref": "stem",
+      "risk": "standard",
+      "text": "No road crosses the Darién Gap."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Pan-American Highway is broken at the Darién Gap and otherwise runs from Alaska to southern Argentina."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Drivers on the Pan-American Highway ship their vehicles around the Darién Gap."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: mledoze-countries: PAN borders COL and CRI; COL borders BRA, ECU, PAN, PER, VEN, with no Costa Rica (c1, c2). Rival test: Costa Rica is Panama's other neighbour, and Venezuela and Ecuador are Colombia's; each is a geographic near-miss. Against the key: nothing; the gap straddles the Colombia-Panama border. Volatility: slow, because c3 to c5 describe the absence of a road, which a future road through the gap would change, however unlikely that looks. The schema requires a reviewBy date for slow items, so I entered 1 October 2028 as a suggestion; the editor sets the final date at acceptance. Regional: The Darién Gap is known to travellers and from the news worldwide; the map reasoning (what lies between Colombia and Central America) works anywhere. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 24 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; every claim is standard. Seed: 3 (medium): many reason that Panama is the country next to Colombia. Counterintuitive: false. Doubts: the item says nothing about migration through the gap, which is a sensitive and changing subject.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b98c1c0787e3aa8078ea02f743f9bf9348aafc51e5855e522f3e5e6dd7ef36d3",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Panama",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Darién Gap is the roadless forest on the Panama-Colombia border.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=COL, CRI",
+              "excerpt": "COL \"borders\": [\"BRA\",\"ECU\",\"PAN\",\"PER\",\"VEN\"]; CRI \"borders\": [\"NIC\",\"PAN\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Costa Rica has no land border with Colombia; the Venezuela and Ecuador borders are far from the Darién."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "No road crosses the Darién Gap.",
+              "confidence": "certain"
+            },
+            "note": "True to mid-2026; volatility slow suits it, since a road could be built."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Pan-American Highway runs from Alaska to southern Argentina except for the break at the Darién Gap.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Overland travellers ship their vehicles between Panama and Colombia to get round the Darién Gap.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c49ee0055bb26d9b34475b538d7c58f404b2551447992a3940035b91de4bfbc5",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Panama",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Darien Gap is a roadless forest region on the border between Panama and Colombia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Costa Rica does not border Colombia, and Colombia's borders with Venezuela and Ecuador are far from the Darien.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "No road crosses the Darien Gap, as far as my knowledge to mid-2026 goes.",
+              "confidence": "certain"
+            },
+            "note": "Time-sensitive in principle, which is why the writer set volatility slow. True to the cut-off; the editor should set reviewBy."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Pan-American Highway runs from Alaska to southern Argentina except for the Darien Gap.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Travellers ship their vehicles around the Darien Gap, by sea or air.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits. Volatility slow (a road could one day cross the gap), so reviewBy is set within 24 months.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.geo.0135",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The roadless jungle of the Darién Gap separates Colombia from which country?",
+  "answer": "Panama",
+  "wrong": ["Costa Rica", "Venezuela", "Ecuador"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.374,
+    "estimator": "v0"
+  }
+}

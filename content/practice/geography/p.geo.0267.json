@@ -1,0 +1,219 @@
+{
+  "id": "p.geo.0267",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "cities", "maps"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Algiers sits at about 36.7° N and Tokyo at about 35.7° N. Tunis, at about 36.8° N, also lies further north than Tokyo.",
+  "learnMore": "Algiers",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Algiers lies at about 36.7° N."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Tokyo lies at about 35.7° N."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Tunis lies at about 36.8° N, further north than Tokyo."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (number), c2 (number) and c3 (number) are high under the C26 floor. Datasets: geonames-cities: Algiers, DZ, 36.73225, 3.08746; Tokyo, JP, 35.6895, 139.69171; Tunis, TN, 36.81897, 10.16579 (c1 to c3). The gap is about 1.0 degree, above the 0.5 degree guard. Rival test: Africa feels southern and Japan northern, which is the trap. The centres settle it, and the gap of a degree is far larger than any reasonable choice of point inside either city. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Both are capital cities known worldwide; no capital claim is made, only latitudes. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset. Seed: 5 (hard): most players pick Tokyo. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ae3dc8db678721faeb6ba83a2c7597d7817ef597efb4e066f1d6d7f6121878d0",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Algiers",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Algiers, country=DZ",
+              "excerpt": "{\"name\":\"Algiers\",\"lat\":\"36.73225\",\"lng\":\"3.08746\",\"country\":\"DZ\",\"admin1\":\"01\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "36.732 rounds to 36.7."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Tokyo, country=JP",
+              "excerpt": "{\"name\":\"Tokyo\",\"lat\":\"35.6895\",\"lng\":\"139.69171\",\"country\":\"JP\",\"admin1\":\"40\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "35.690 rounds to 35.7."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Tunis, country=TN",
+              "excerpt": "{\"name\":\"Tunis\",\"lat\":\"36.81897\",\"lng\":\"10.16579\",\"country\":\"TN\",\"admin1\":\"36\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "36.819 rounds to 36.8, north of Tokyo's 35.7."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b683f5d8caae7dfcfeadec0638907f5f419c53c1db820544484d815ec92a7a53",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Algiers",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Algiers, country=DZ",
+              "excerpt": "Algiers DZ lat 36.73225",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 36.7 N."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Tokyo, country=JP",
+              "excerpt": "Tokyo JP lat 35.6895",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 35.7 N; Algiers is 1.04 degrees further north, over the 0.5 degree guard."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Tunis, country=TN",
+              "excerpt": "Tunis TN lat 36.81897",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 36.8 N, further north than Tokyo."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1, c2 and c3 (geonames-cities) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which city is further north?",
+  "a": "Algiers",
+  "b": "Tokyo",
+  "answer": "a",
+  "relation": "further_north",
+  "measure": "latitude of the city centre",
+  "unit": "° N",
+  "values": {
+    "a": 36.73,
+    "b": 35.69
+  },
+  "valueDisplay": {
+    "a": "36.7° N",
+    "b": "35.7° N"
+  },
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.186,
+    "estimator": "v0"
+  }
+}

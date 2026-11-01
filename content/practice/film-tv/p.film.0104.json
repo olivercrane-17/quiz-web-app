@@ -1,0 +1,216 @@
+{
+  "id": "p.film.0104",
+  "status": "active",
+  "category": "film",
+  "tags": ["classic-cinema", "performers", "1960s"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Truman Capote, who wrote the original novella, wanted Marilyn Monroe for the part. Hepburn's black Givenchy dress from the opening scene became a fashion icon.",
+  "learnMore": "Breakfast at Tiffany's (film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Audrey Hepburn played Holly Golightly in Breakfast at Tiffany's (1961)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Grace Kelly, Marilyn Monroe and Elizabeth Taylor did not play Holly Golightly."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Truman Capote, author of the novella Breakfast at Tiffany's, wanted Marilyn Monroe to play Holly."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hepburn's black dress in the film's opening scene was designed by Hubert de Givenchy."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Monroe is the lure, because Capote wanted her, but she was not cast. Kelly and Taylor were stars of the same years who never played Holly. Katharine Hepburn is left out so that two Hepburns cannot point at the key. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 25 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: c3 rests on Capote's widely reported comments and should be confirmed from a reference work.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e88fb7f9309c1bd212cf4cd5eaa46dc1f3c2b682752ca36f1f825c7e16653e49",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Audrey Hepburn",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hepburn played Holly Golightly in Blake Edwards's Breakfast at Tiffany's (1961).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kelly, Monroe and Taylor did not play Holly; the part went to Hepburn.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Capote, author of the source novella, had wanted Monroe for Holly and resented the choice of Hepburn.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The black dress Hepburn wears in the opening scene outside Tiffany's was a Givenchy design.",
+              "confidence": "certain"
+            },
+            "note": "'Became a fashion icon' in the explanation is evaluative and uncontroversial, so it is not listed as a separate claim."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "23db8b4f58fbcf39e1fdf4dc4d04b1d55f9a35f31685b86dc4e2d1e70fda7e45",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Audrey Hepburn",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Audrey Hepburn played Holly Golightly in Breakfast at Tiffany's (1961).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Kelly, Monroe and Taylor did not play Holly Golightly in the film.",
+              "confidence": "certain"
+            },
+            "note": "Monroe is the famous near-miss, which makes her a good decoy."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Truman Capote, who wrote the novella, wanted Marilyn Monroe for the role.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hubert de Givenchy designed Hepburn's black dress in the opening scene.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c1 rests on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which actress played Holly Golightly in Breakfast at Tiffany's (1961)?",
+  "answer": "Audrey Hepburn",
+  "wrong": ["Grace Kelly", "Marilyn Monroe", "Elizabeth Taylor"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.84,
+    "spread": 0.368,
+    "estimator": "v0"
+  }
+}

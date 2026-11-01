@@ -1,0 +1,221 @@
+{
+  "id": "p.geo.0223",
+  "status": "active",
+  "category": "geo",
+  "tags": ["islands", "volcanoes", "pacific"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Its islands were built by volcanoes over a hotspot deep beneath the Pacific plate, and the Big Island keeps growing as lava flows reach the sea.",
+  "learnMore": "Hawaii",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Hawaii, a Pacific island group, is a state of the United States."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Fiji, Samoa and Tonga are independent countries, not US states."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Hawaiian Islands were built by volcanoes over a hotspot beneath the Pacific plate."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Lava flows reaching the sea have added new land to the island of Hawaii, the Big Island."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: mledoze-countries: FJI, WSM and TON are independent members of the UN (c2). Rival test: Samoa is the trap a pedant might raise, because American Samoa is a US territory; it is not a state, and the option names independent Samoa. Fiji and Tonga are independent too. Against the key: nothing. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Hawaii is world-famous, so it falls under the guide's exception for sub-national places. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 26 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; every claim is standard. Seed: 1 (easy): almost everyone knows it; the growing island is the surprise. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "028dbe582545af6e35d3320a83df81b204c03db97f85805f190e2f56a8cf045b",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Hawaii",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hawaii, an island group in the central Pacific, became the 50th US state.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "country-codes",
+              "version": "2d84034a0cae19ea5444b78c2131304a5c7f4bb9",
+              "file": "country-codes.csv",
+              "locator": "ISO3166-1-Alpha-3=FJI, WSM, TON, ASM",
+              "excerpt": "FJI is_independent \"Yes\"; WSM \"Yes\"; TON \"Yes\"; ASM \"Territory of US\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Fiji, Samoa and Tonga are independent. The eastern Samoan islands form American Samoa, a US territory but not a state, so no option is a second answer."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Hawaiian Islands formed as the Pacific plate moved over a volcanic hotspot.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lava from Kilauea entering the sea has added new land to the island of Hawaii.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e4ae0e3c44b275ac03d4ae6d27bbedb3f35f793f7f1872cd40f219935e60f382",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Hawaii",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hawaii is a Pacific island chain and the 50th state of the United States.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=FJI, WSM, TON, ASM",
+              "excerpt": "FJI, WSM and TON: \"independent\": true, \"unMember\": true. ASM (American Samoa): \"independent\": false, a US territory rather than a state.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Rival test on 'Samoa': the independent state is Samoa; American Samoa is a US territory, not a state, so no option fits the stem except Hawaii."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Hawaiian Islands were built by volcanoes as the Pacific plate moved over a hotspot.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lava flows entering the sea from Kilauea have added new land to the island of Hawaii.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Pacific island group is a state of the United States?",
+  "answer": "Hawaii",
+  "wrong": ["Fiji", "Samoa", "Tonga"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.95,
+    "spread": 0.423,
+    "estimator": "v0"
+  }
+}

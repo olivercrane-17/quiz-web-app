@@ -1,0 +1,245 @@
+{
+  "id": "p.food.0129",
+  "status": "active",
+  "category": "food",
+  "tags": ["spice", "japan", "botany"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Its relatives include horseradish and mustard. Their heat comes from vapours that rise into the nose, unlike chilli heat, which burns the tongue and lingers.",
+  "learnMore": "Wasabi",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Wasabi (Eutrema japonicum) belongs to the cabbage family, Brassicaceae, and is prepared by grating its rhizome, a thick stem."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Wasabi is not a member of the ginger, onion or mint family."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Horseradish and mustard are also members of the cabbage family, Brassicaceae."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The pungency of wasabi, horseradish and mustard is caused by volatile isothiocyanates that rise into the nasal passages."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Chilli heat, by contrast, is felt in the mouth and lasts longer."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: ginger is the trap, because both are grated pungent rhizomes eaten with sushi; the botany is settled. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: wasabi is served with sushi worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 25 words. Myths: screened against content/reference/myths.json; no entry matches; the claims avoid the tongue-map wording. Mystery and encore checks: not applicable to a practice item. Seed: 4: the mustard-like heat is a foothold, and ginger pulls many. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "032a85a482c18e63af6677d34798525e6abacf90ef5aaab71ada228f756074ae",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Cabbage family",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Wasabi, Eutrema japonicum, is in the cabbage family, and its rhizome, a thick stem, is what is grated.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Wasabi is not in the ginger, onion or mint family.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Horseradish and mustard are also Brassicaceae.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Their pungency comes from volatile isothiocyanates, such as allyl isothiocyanate, which reach the nose.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Capsaicin is not volatile, so chilli heat stays in the mouth and lingers longer.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0347243b64914b217b6ed228172a7136ac83d934b9194f75fe0b9a6e2cc4731d",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Cabbage family",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Wasabi (Eutrema japonicum) is in the cabbage or mustard family, Brassicaceae; the part grated is the rhizome, a thick underground stem.",
+              "confidence": "certain"
+            },
+            "note": "'Stem' for a rhizome is botanically right."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The ginger family is Zingiberaceae, the onion family Amaryllidaceae and the mint family Lamiaceae; wasabi is in none.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Horseradish and mustard are in Brassicaceae.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The pungency of these plants comes from volatile isothiocyanates that reach the nasal passages.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Chilli heat burns the mouth and lingers; the wasabi hit rises into the nose and fades fast.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.food.0109",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Real wasabi is grated from the stem of a plant in which family?",
+  "answer": "Cabbage family",
+  "wrong": ["Ginger family", "Onion family", "Mint family"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.26,
+    "spread": 0.231,
+    "estimator": "v0"
+  }
+}

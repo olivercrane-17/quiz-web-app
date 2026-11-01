@@ -1,0 +1,211 @@
+{
+  "id": "p.food.0203",
+  "status": "cut",
+  "category": "food",
+  "tags": ["national-dishes", "egypt", "legumes"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Falafel in the Levant is usually made with chickpeas, but Egyptian cooks grind soaked dried fava beans with plenty of fresh herbs, which turn the inside green.",
+  "learnMore": "Falafel",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Egyptian falafel (ta'ameya) is made mainly from dried fava beans, also called broad beans."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Ta'ameya is not made mainly from chickpeas, red lentils or mung beans."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Falafel in the Levant is usually made with chickpeas."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Ta'ameya is made from soaked, ground dried fava beans mixed with fresh herbs, which make the inside green."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Chickpeas are the planted trap: most players know falafel as a chickpea dish, which is true in the Levant but not in Egypt. Red lentils and mung beans make other fritters, not ta'ameya. Against the key: some modern Egyptian cooks add a little chickpea, which 'mainly' covers. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: falafel is sold worldwide; the Egyptian variant is a reasoning step from 'not the usual one', and both bean names are given. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: the obvious answer is wrong, so most players miss it. Doubts: none on the key. Both English names are in the option because UK players say broad beans and others say fava.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f89ac9197b348999f55ea490d55d952f68f03b93fe89cf5203a2bd6983be2091",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Fava (broad) beans",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Egyptian ta'ameya is made from soaked dried fava (broad) beans rather than chickpeas.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt, set by the writer): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The base of ta'ameya is fava beans, not chickpeas, red lentils or mung beans.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Levantine falafel is usually made from chickpeas (some places mix in fava beans).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ta'ameya mixes ground soaked fava beans with fresh herbs such as parsley, dill and coriander, which colour the inside green.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "style",
+            "severity": "note",
+            "note": "The key is the only option with a bracketed second name. The bracket is right under §3.3, but a test-wise player may read it as a cue; a parallel form such as 'Chickpeas (garbanzos)' would remove it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4c6acd3507b1c838eca27389d44c5159a3c051cfcaee87b2a03587c923488b2c",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Fava (broad) beans",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Egyptian ta'ameya is made from dried, soaked fava (broad) beans and not from chickpeas.",
+              "confidence": "certain"
+            },
+            "note": "The writer marked this checker_doubt. My knowledge is firm (the Egyptian version is the fava one), but the claim is high-risk. High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ta'ameya is not built on chickpeas, red lentils or mung beans.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Levantine falafel is usually made with chickpeas.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ta'ameya mixes ground fava beans with fresh herbs such as parsley, coriander and dill, which turn the inside green.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The key is the longest option and the only one with a bracket ('Fava (broad) beans'), a small test-wise cue. The bracket is justified by the two-names rule, so this is only a note."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 (key, the writer's doubt) rests on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7). For a redraft: the key is the only option with a bracketed second name (A, B).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Egyptian falafel, called ta'ameya, is made mainly from which ingredient?",
+  "answer": "Fava (broad) beans",
+  "wrong": ["Chickpeas", "Red lentils", "Mung beans"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.2,
+    "spread": 0.286,
+    "estimator": "v0"
+  }
+}

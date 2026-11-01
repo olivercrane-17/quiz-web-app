@@ -1,0 +1,189 @@
+{
+  "id": "p.sport.0239",
+  "status": "active",
+  "category": "sport",
+  "tags": ["shogi", "chess", "japan"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Captured pieces change sides and can later be dropped onto almost any empty square, so the board rarely empties as a game goes on.",
+  "learnMore": "Shogi",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In shogi a captured piece joins the capturing player's side and can be put back on the board as that player's own piece."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "In shogi captured pieces are not removed from the game, swapped for pawns or returned to their owner."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A captured shogi piece can be dropped onto an empty square, subject to a few restrictions."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed, 0 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: No dataset covers game rules; the drop rule is the defining rule of shogi and any rule book states it. All claims are standard. rivalTest: 'Remove it from the game' is the planted trap, because that is the rule in chess and xiangqi. Swapping for a pawn and returning the piece are plausible guesses with no basis in the rules. Players drop captured pieces as their own, so the key holds. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 24 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "428d5cf75a53fd2df002a240f604369e50a58247374314c5dfb8a7280cd04d32",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Put it back as their own",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In shogi a captured piece goes into the captor's hand and can be dropped back onto the board as the captor's own piece.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Captured pieces are never removed from play, swapped for pawns or handed back.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A piece in hand can be dropped on an empty square, with a few limits (for example no second unpromoted pawn on a file and no pawn drop giving immediate mate).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0df9e04d1afeea616bfa69adeb2dc356d0ef7425d589cc7146877c67eb5ec8ce",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Put it back as their own",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In shogi a captured piece joins the capturing player's side and can later be dropped onto the board as that player's own piece.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Captured shogi pieces are not removed from the game, swapped for pawns or returned to their owner.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A captured piece may be dropped on an empty square, with limits such as no second unpromoted pawn in a file and no pawn drop that gives checkmate.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Both checks pass; all three claims are standard risk and confirmed at certain in both checks. The four options are parallel actions of similar length, and the key does not echo the stem. Style and balance reviewed.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:37:40Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:37:40Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In shogi, the Japanese form of chess, what can a player do with a piece they have captured?",
+  "answer": "Put it back as their own",
+  "wrong": [
+    "Remove it from the game",
+    "Swap it for a pawn",
+    "Return it to its owner"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.291,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "id": "p.art.0168",
+  "status": "active",
+  "category": "art",
+  "tags": ["art-movements", "abstraction", "artists"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Kandinsky trained in law and economics and left for art school in Munich at about 30, when Picasso was already a gifted teenage painter.",
+  "learnMore": "Wassily Kandinsky",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Wassily Kandinsky was born in 1866."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Pablo Picasso was born in 1881."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kandinsky studied law and economics before becoming an artist."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Kandinsky moved to Munich to study art in 1896, at about 30."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Picasso was an accomplished painter in his teens."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: c1 checked in moma-artists (ConstituentID 2981, BeginDate 1866) and tate-artists (id 1382, born 1866, Moskva); c2 in moma-artists (ConstituentID 4609, 1881 to 1973) and tate-artists (id 1767, born 1881, Málaga). Rival test: argued for Picasso: he dominates early modern art, and abstraction feels like the later step; the datasets put Kandinsky 15 years earlier. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both painters are world-famous. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: not marked counterintuitive: I expect players to split rather than fall for one side; c4 needs a source.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0e4a3f4219dc3ddc526857a7bd88b89f85b5b610248ae84784e01e89ec13b8f9",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "Wassily Kandinsky",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "tate-artists",
+              "version": "a51d8afc988ed083557e2950f4d0b644e7719f4a",
+              "file": "artist_data.csv",
+              "locator": "id=1382 (name=Kandinsky, Wassily)",
+              "excerpt": "1382,\"Kandinsky, Wassily\",Male,1866–1944,1866,1944,\"Moskva, Rossiya\",\"Neuilly-sur-Seine, France\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "MoMA agrees (Vasily Kandinsky, ConstituentID=2981, 'Born 1866')."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=4609 (DisplayName=Pablo Picasso)",
+              "excerpt": "\"DisplayName\": \"Pablo Picasso\", \"ArtistBio\": \"Spanish, 1881–1973\", \"BeginDate\": 1881",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Tate agrees (id 1767, yearOfBirth 1881)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kandinsky studied law and economics at Moscow University.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He left Moscow for art school in Munich in 1896, aged 29 to 30.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Picasso was painting accomplished academic pictures by 14 or 15, such as First Communion (1896).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8e08dcbdccf0c9eaf0013891e6ec77d579a66e8ff00ec28da2221f531687bb8a",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "Wassily Kandinsky",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=2981",
+              "excerpt": "{\"DisplayName\":\"Vasily Kandinsky\",\"ArtistBio\":\"Born 1866, Russian Empire (now Russia); died 1944, France\",\"Nationality\":\"French\",\"BeginDate\":1866,\"EndDate\":1944}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "BeginDate 1866 under MoMA's spelling Vasily. tate-artists agrees (id=1382: name=Kandinsky, Wassily; dates=1866–1944; yearOfBirth=1866; yearOfDeath=1944; placeOfBirth=Moskva, Rossiya)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=4609",
+              "excerpt": "{\"DisplayName\":\"Pablo Picasso\",\"ArtistBio\":\"Spanish, 1881–1973\",\"Nationality\":\"Spanish\",\"BeginDate\":1881,\"EndDate\":1973}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "BeginDate 1881."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kandinsky studied law and economics before turning to art.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kandinsky moved to Munich to study art in 1896, aged 30.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Picasso was already an accomplished painter in his teens (born in 1881).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c4 (explanation, date) rests on knowledge alone in both checks: checker A's searches ran out and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Only explanation facts lack evidence: redraft under a new id with them evidenced, bounded or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.hist.0170",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which artist was born first?",
+  "a": "Wassily Kandinsky",
+  "b": "Pablo Picasso",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of birth",
+  "unit": "year",
+  "values": {
+    "a": 1866,
+    "b": 1881
+  },
+  "valueDisplay": {
+    "a": "born 1866",
+    "b": "born 1881"
+  },
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.151,
+    "estimator": "v0"
+  }
+}

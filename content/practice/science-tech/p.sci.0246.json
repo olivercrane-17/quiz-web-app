@@ -1,0 +1,270 @@
+{
+  "id": "p.sci.0246",
+  "status": "active",
+  "category": "sci",
+  "tags": ["earth-science", "atmosphere", "gases"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Argon makes up almost 1% of dry air, many times more than carbon dioxide. Most of it came from the slow radioactive decay of potassium in rocks.",
+  "learnMore": "Argon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "After nitrogen and oxygen, argon is the most abundant gas in dry air."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Carbon dioxide (about 0.04%), hydrogen and helium each make up far less of dry air than argon does."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Argon makes up almost 1% (about 0.93%) of dry air."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Dry air holds many times more argon than carbon dioxide."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Most of the argon in Earth's atmosphere is argon-40, produced by the radioactive decay of potassium-40 in rocks."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors and no warnings for this item. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key claim, because the item is counterintuitive (the C26 floor). datasets: ptable Argon summary ('the third most common gas in the Earth's atmosphere, at 0.934% ... 23 times as abundant as ... carbon dioxide (400 ppmv)') supports c1, c3 and c4; ptable is built from Wikipedia, so c1 wants one independent source, and c5 needs web evidence. rivalTest: Carbon dioxide is the planted trap, because it is the gas everyone hears about; the stem says dry air because water vapour can outrank argon in humid air. Against the key: argon is about 0.93% of dry air against about 0.04% for carbon dioxide. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 27 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: The carbon dioxide share is rising, so the explanation says many times more instead of a ratio; it would have to grow more than twentyfold to change the key. Related to p.sci.0116 (nitrogen) but a different fact. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "162157bd184585ce62071bca90cdcd1a6c211a553df1d1ffaf64fc47a9037145",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "Argon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[name=Argon].summary",
+              "excerpt": "Argon is the third most common gas in the Earth's atmosphere, at 0.934% (9,340 ppmv)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "ptable (built from Wikipedia) ranks argon third in the atmosphere, behind nitrogen and oxygen; dry air leaves the ranking unchanged."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dry air holds about 0.04% carbon dioxide, about 0.0005% helium and even less hydrogen, all far below argon's 0.93%.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). ptable's argon record gives carbon dioxide at 400 ppmv with argon 23 times as abundant, but says nothing of hydrogen or helium."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[name=Argon].summary",
+              "excerpt": "Argon is the third most common gas in the Earth's atmosphere, at 0.934% (9,340 ppmv)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "0.934% is 'almost 1% (about 0.93%)'."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[name=Argon].summary",
+              "excerpt": "23 times as abundant as the next most common non-condensing atmospheric gas, carbon dioxide (400 ppmv)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "About 99.6% of atmospheric argon is argon-40, made by the radioactive decay of potassium-40 in rocks.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4f1f80aac8c7e5cf1153e7c71cacf98ed2247a93d4df2320832383b6b92ce1fd",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "Argon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Argon",
+              "excerpt": "Argon is the third most common gas in the Earth's atmosphere, at 0.934% (9,340 ppmv)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Dataset summary is Wikipedia-derived; it also puts water vapour (about 4,000 ppmv average) below argon."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Argon",
+              "excerpt": "23 times as abundant as the next most common non-condensing atmospheric gas, carbon dioxide (400 ppmv)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Dataset covers carbon dioxide (400 ppmv, about 0.04 percent); hydrogen (about 0.5 ppm) and helium (about 5 ppm) are far lower by knowledge."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Argon",
+              "excerpt": "at 0.934% (9,340 ppmv)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Matches 'almost 1 percent (about 0.93 percent)'."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Argon",
+              "excerpt": "23 times as abundant as the next most common non-condensing atmospheric gas, carbon dioxide (400 ppmv)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "9,340 ppmv against 400 ppmv is more than twenty times."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "About 99.6 percent of atmospheric argon is argon-40, produced by potassium-40 decaying in rock.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c5 (explanation, number) rests on knowledge alone in both checks, with no dataset or web evidence for it in either. Only c1, c2 and c3 carry dataset evidence (ptable). Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sci.0116",
+      "score": 0.48,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which gas ranks third in dry air, after nitrogen and oxygen?",
+  "answer": "Argon",
+  "wrong": ["Carbon dioxide", "Hydrogen", "Helium"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.253,
+    "estimator": "v0"
+  }
+}

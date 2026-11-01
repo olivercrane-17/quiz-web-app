@@ -1,0 +1,187 @@
+{
+  "id": "p.soc.0233",
+  "status": "active",
+  "category": "soc",
+  "tags": ["institutions", "united-nations", "security-council"],
+  "region": "global",
+  "volatility": "slow",
+  "reviewBy": "2028-10-31",
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Article 23 names the five permanent members as they stood in 1945. Its list was never revised, though Russia took over the Soviet seat in December 1991.",
+  "learnMore": "United Nations Security Council",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Article 23 of the UN Charter names the Union of Soviet Socialist Republics among the permanent members of the Security Council."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Article 23 lists the five permanent members by their 1945 names, and that list has never been changed, although the article was amended in 1965 to enlarge the council."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Russia took over the Soviet Union's permanent seat on the Security Council in December 1991."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: how institutions work (the UN, courts, heads of state, laws). lint: content:check shows no errors for this item. claims: every checkable statement in the statement and explanation is listed, with risk at or above the C26 floor and raised where honest. Counterintuitive is true, so the key claim is high under C26, carrying the reason it also holds. datasets: no pinned dataset covers the Charter; c1 to c3 need web evidence (the Charter text on the UN's own site is the Tier A source). rivalTest: argued for false: the Soviet Union ceased to exist in 1991, so it seems the text must have been updated. Argued against: the 1965 amendment changed only the number of elected members, and the permanent members are still named as in 1945, so true stands. volatility: slow, because a Charter amendment could change the wording, though none has touched the names since 1945; the schema needs a reviewBy date for slow items, so 31 October 2028 is entered as a suggestion and the editor sets the final date at acceptance; no time words, and nothing rests on knowledge newer than mid-2026. regional: the Security Council is known worldwide; nobody is advantaged. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 27 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 5 (hard): most players assume the text was updated. doubts: none; the item says nothing about any seat other than the Soviet one.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c8c0baa02e80824b106ca6888035c5f02ffb2d3fea2a7e32a1de6765b1ce437d",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Article 23(1) of the Charter names the Republic of China, France, the USSR, the United Kingdom and the United States as permanent members.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1963 amendment, in force from 1965, enlarged the council from 11 to 15 members but left the list of permanent members unchanged.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Russia took over the Soviet seat in December 1991, notified by Yeltsin's letter of 24 December.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "547833ba4f08b7b988bafc7be282fb21fda002de596f972523ef08ae68fe4552",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Article 23(1) of the Charter names the Republic of China, France, the USSR, the UK and the US as permanent members.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the USSR no longer exists, but the statement is about the text of the Charter, which still names it. The explanation says so."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Article 23 still lists the five by their 1945 names; the 1965 amendment only enlarged the Council from 11 to 15 members.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Russia took over the Soviet permanent seat in December 1991.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, number), c2 (explanation, date) and c3 (explanation, date) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. The gap includes the key, a label or a distractor, so the redraft needs evidence for the question itself. Redraft under a new id.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sport.0107",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The UN Charter's list of permanent Security Council members includes the Soviet Union.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.18,
+    "estimator": "v0"
+  }
+}

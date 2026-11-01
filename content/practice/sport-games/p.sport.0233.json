@@ -1,0 +1,268 @@
+{
+  "id": "p.sport.0233",
+  "status": "active",
+  "category": "sport",
+  "tags": ["world-cup", "football", "hungary"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Hungary had thrashed the same opponents 8-3 in the group stage and led the final 2-0 after eight minutes, but Helmut Rahn scored the winner with six minutes left.",
+  "learnMore": "Miracle of Bern",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "West Germany beat Hungary 3-2 in the 1954 World Cup final in Bern."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Uruguay, Austria and Brazil did not play in the 1954 final."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Hungary beat West Germany 8-3 in the group stage of the 1954 World Cup."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Hungary led the 1954 final 2-0 after eight minutes."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Helmut Rahn scored West Germany's winning goal in the 84th minute of the 1954 final."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed, 5 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup, 1954/worldcup.json: Matchday 2, Hungary v West Germany on 20 June 1954 at the St. Jakob Stadium, Basel, 8-3; Final, Hungary v West Germany on 4 July 1954 at the Wankdorf Stadium, Bern, 2-3. These confirm c1 to c3. The 1954 file has no scorers or minutes, so c4 and c5 need web evidence. rivalTest: Uruguay and Austria were the other semi-finalists and Brazil a quarter-finalist, so all three were in Switzerland and plausible. Only West Germany reached the final against Hungary. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 29 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2fb6bed0648782141ea527d3f41acbe08ec2c6447c2333eedbb53db8c69a1bda",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "West Germany",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1954/worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "{\"round\": \"Final\", ... \"date\": \"1954-07-04\" ... \"team1\": \"Hungary\" ... \"team2\": \"West Germany\" ... \"score\": [2, 3] ... \"ground\": \"Wankdorf Stadium, Bern\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Final, 4 July 1954, Wankdorf Stadium, Bern: Hungary 2, West Germany 3."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1954/worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "{\"round\": \"Final\", ... \"date\": \"1954-07-04\" ... \"team1\": \"Hungary\" ... \"team2\": \"West Germany\" ... \"score\": [2, 3] ... \"ground\": \"Wankdorf Stadium, Bern\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The 1954 final was Hungary v West Germany, so Uruguay, Austria and Brazil were not in it."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1954/worldcup.json",
+              "locator": "matches[date=1954-06-20, group=Group 2, Hungary v West Germany]",
+              "excerpt": "\"date\": \"1954-06-20\" ... \"team1\": \"Hungary\" ... \"team2\": \"West Germany\" ... \"score\": [8, 3] ... \"group\": \"Group 2\" ... \"ground\": \"St. Jakob Stadium, Basel\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Group 2, 20 June 1954 at Basel: Hungary 8, West Germany 3."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Puskás (6th minute) and Czibor (8th) put Hungary 2-0 up in the final.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). worldcup 1954 carries no goal minutes."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Helmut Rahn scored West Germany's winner in the 84th minute.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9d17cf4ba01c6074b110b38ac781634136e3a8b765e18374bc7107b2992ba28e",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "West Germany",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1954/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "Final, 1954-07-04: Hungary [2,3] West Germany, Wankdorf Stadium, Bern",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1954/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "Final, 1954-07-04: Hungary [2,3] West Germany, Wankdorf Stadium, Bern",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The finalists were Hungary and West Germany, so Uruguay, Austria and Brazil did not play in the final."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1954/worldcup.json",
+              "locator": "Hungary v West Germany, group stage",
+              "excerpt": "Matchday 2, 1954-06-20: Hungary [8,3] West Germany, St. Jakob Stadium, Basel",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ferenc Puskás scored in the 6th minute and Zoltán Czibor in the 8th, so Hungary led 2-0 after eight minutes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Helmut Rahn scored West Germany's winning goal in the 84th minute.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c4 (explanation, number) and c5 (explanation, number) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Only c4 and c5 (the explanation's minutes) are missing: c1 to c3 carry worldcup evidence in both checks, and the 1954 file holds no goal minutes. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which team beat Hungary 3-2 in the 1954 men's World Cup final, the 'Miracle of Bern'?",
+  "answer": "West Germany",
+  "wrong": ["Uruguay", "Austria", "Brazil"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.233,
+    "estimator": "v0"
+  }
+}

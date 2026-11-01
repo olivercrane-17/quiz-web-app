@@ -1,0 +1,199 @@
+{
+  "id": "p.film.0121",
+  "status": "cut",
+  "category": "film",
+  "tags": ["world-cinema", "india", "bollywood"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Chennai is the hub of Tamil cinema, nicknamed Kollywood after its Kodambakkam district, and Kolkata is home to Bengali cinema, centred on its Tollygunge area.",
+  "learnMore": "Bollywood",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Mumbai is the centre of the Hindi-language film industry known as Bollywood."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Delhi, Kolkata and Chennai are not the home of Bollywood."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Tamil cinema, based in Chennai, is nicknamed Kollywood after the Kodambakkam district."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Bengali cinema is centred on the Tollygunge area of Kolkata."
+    }
+  ],
+  "writerNotes": "The explanation leaves out the Bombay plus Hollywood blend on purpose: p.geo.0118 asks which city was formerly Bombay, and C22 pairs the two items on their shared answer. Related, not the same fact. Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: geonames-cities lists Mumbai (IN), which supports only the place name; no dataset covers film industries. Rival test: Chennai and Kolkata are real film centres (Tamil and Bengali cinema), which makes them good lures, but Hindi cinema centres on Mumbai. Delhi is a common guess as India's best-known city abroad. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a non-US production; the options can be reasoned from names, eras and languages without local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 25 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "34b224f31d924439b1f64875aae0f9b8c77a48989f9766290568e9e54993019f",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Mumbai",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bollywood is the Hindi-language film industry centred in Mumbai.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bollywood is based in Mumbai, not Delhi, Kolkata or Chennai.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kollywood, the Tamil film industry in Chennai, takes its name from the Kodambakkam district.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bengali cinema's studios are concentrated in Tollygunge, Kolkata.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e8830ec7d914d98ee7014aef1b803779f0119da325cce7fb92ad9f4867bb922d",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Mumbai",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Mumbai is the centre of Hindi-language cinema, called Bollywood.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Delhi, Kolkata and Chennai are not the home of Bollywood.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Chennai's Tamil industry is nicknamed Kollywood, from the Kodambakkam district.",
+              "confidence": "certain"
+            },
+            "note": "Etymology, high-risk; the usual account is Kodambakkam plus Hollywood. Needs check A's external evidence."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bengali cinema is centred on Tollygunge in Kolkata.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c3 rests on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered. Dedupe also flagged p.geo.0118 (same answer); not ruled on.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which Indian city is the centre of Hindi-language cinema, nicknamed Bollywood?",
+  "answer": "Mumbai",
+  "wrong": ["Delhi", "Kolkata", "Chennai"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.429,
+    "estimator": "v0"
+  }
+}

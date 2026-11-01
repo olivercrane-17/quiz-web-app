@@ -1,0 +1,189 @@
+{
+  "id": "p.lang.0252",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["word-origins", "science-history", "jobs"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Computer, meaning a person who did calculations, was in use by the 1640s. William Whewell coined physicist only in 1840; people such as Newton were natural philosophers.",
+  "learnMore": "Computer (occupation)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "'Computer', meaning a person who calculates, was in English use by the 1640s at the latest."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "William Whewell coined the word 'physicist' in 1840."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Before the word physicist, scientists such as Isaac Newton were called natural philosophers."
+    }
+  ],
+  "writerNotes": "Counterintuitive: computer feels modern and physicist feels old, so most players pick physicist; the computer label wins by two centuries. Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed, 2 high (date) and 1 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers word histories. rivalTest: Value a is stored at the bounded precision every source supports: the OED cites computer from 1613, other references give the 1640s, and either way it is about 200 years before 1840. Argued for physics as a far older subject: the subject is old, but the word physicist is Whewell's. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: both words are used in every variety of English. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 27 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2b813f61fca010c4fa57ce47d8ec3a5766e156dbdc49be37a25d2f83510661f3",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Computer",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Computer, meaning a person who calculates, is recorded in English from the early 17th century, so it was in use by the 1640s at the latest.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "William Whewell coined physicist in The Philosophy of the Inductive Sciences, published in 1840.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Before physicist existed, people such as Isaac Newton were called natural philosophers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b1cda449459ca07fbebb469539069cbe0363f599e8091ff20246ec4795a66689",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Computer",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Computer, a person who computes, was in English use by the early 1600s and certainly by the 1640s.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "William Whewell coined physicist in 1840 (The Philosophy of the Inductive Sciences).",
+              "confidence": "certain"
+            },
+            "note": "I know of no earlier English physicist in the sense used here."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Before physicist, students of nature such as Newton were called natural philosophers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "trick",
+            "severity": "note",
+            "note": "Counterintuitive on purpose, since players may think of the machine. The stem asks about the word, so the reading is fair, and the explanation defuses it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (label, date) and c2 (label, date) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which word is older in English?",
+  "a": "Computer",
+  "b": "Physicist",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of the earliest known use in English",
+  "unit": "year",
+  "values": {
+    "a": 1640,
+    "b": 1840
+  },
+  "valueDisplay": {
+    "a": "by the 1640s",
+    "b": "1840"
+  },
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.2,
+    "estimator": "v0"
+  }
+}

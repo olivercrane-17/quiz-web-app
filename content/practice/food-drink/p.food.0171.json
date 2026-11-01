@@ -1,0 +1,221 @@
+{
+  "id": "p.food.0171",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-history", "sugar", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Cane sugar was a costly import, sold by apothecaries as a spice and medicine. It became cheap through Caribbean plantations worked by enslaved Africans.",
+  "learnMore": "History of sugar",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Honey was the main sweetener in medieval Europe before cane sugar became widely available."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Maple syrup and agave syrup are products of the Americas, unknown in medieval Europe, and date syrup was a Middle Eastern sweetener; none was medieval Europe's main sweetener."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In medieval Europe, cane sugar was an expensive import, often sold by apothecaries as a spice and a medicine."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sugar became cheap and plentiful through plantations in the Caribbean that used the forced labour of enslaved Africans."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: maple and agave syrups are ruled out by geography, which is the foothold; date syrup was used around the Mediterranean's southern and eastern shores, but never as Europe's main sweetener. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: medieval Europe is the setting, but the reasoning (what was available before the Americas) works anywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 24 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: honey is the natural answer for most. Doubts: none. Slavery is stated as history, plainly.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "58d34f904dfbf3f504fe63967ab02cd39ed990cd338afa2abd70808ec03ee3c3",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Honey",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Honey was medieval Europe's main sweetener before cane sugar became widely available.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Maple and agave syrups come from the Americas, unknown to medieval Europe, and date syrup belongs to the Middle East.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cane sugar was a costly import in medieval Europe, often sold by apothecaries as a spice and medicine.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Caribbean plantations worked by enslaved Africans made sugar cheap and plentiful.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "000d4607ab1722b243a82b3bf9660e7e48ce240d9c5bfb58d8674b0ed8e9a061",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Honey",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Honey was the main sweetener of medieval Europe, with cane sugar a rare luxury.",
+              "confidence": "certain"
+            },
+            "note": "Fruit syrups and grape must were also used, mostly in the south, but honey is the standard answer."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Maple syrup and agave syrup are New World products; date syrup was a Middle Eastern sweetener.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cane sugar was an expensive import sold by apothecaries as a spice and medicine.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sugar became cheap through Caribbean plantations that used enslaved African labour.",
+              "confidence": "certain"
+            },
+            "note": "Slavery appears only as plain history, which the sensitivity rule allows."
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "Three options end in 'syrup' and the key, Honey, is the odd one out in form. A test-wise player who picks the odd one out is right. Consider making the options the same form."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. B's note that Honey is the odd one out among three syrups is weighed: the item is easy on knowledge alone and each syrup is a real sweetener a player can consider. Accepted as written (§4, §9.7).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.food.0273",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Before cane sugar became common, what was the main sweetener in medieval Europe?",
+  "answer": "Honey",
+  "wrong": ["Maple syrup", "Agave syrup", "Date syrup"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.9,
+    "spread": 0.264,
+    "estimator": "v0"
+  }
+}

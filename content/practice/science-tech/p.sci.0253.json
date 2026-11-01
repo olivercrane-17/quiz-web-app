@@ -1,0 +1,208 @@
+{
+  "id": "p.sci.0253",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["maths", "probability", "puzzles"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Your first pick is right only 1 time in 3. The host never opens the car's door, so in the other 2 cases out of 3, the car is behind the door left closed.",
+  "learnMore": "Monty Hall problem",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In the Monty Hall problem, when the host knowingly opens another door to show a goat, switching wins the car with probability 2/3, about 67%."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Switching wins with probability 2/3, not 25%, 33% or 50%; 33% is the chance of winning by staying with the first pick."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The contestant's first pick hides the car with probability 1/3."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In the other 2 out of 3 cases, the car is behind the remaining closed door, because the host never reveals the car."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors and no warnings for this item. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key claim, because the item is counterintuitive (the C26 floor). datasets: no dataset is needed; c1 to c4 are a probability calculation anyone can re-run. rivalTest: 50% is the planted trap, the answer most people give, and 33% is the chance of winning by staying. Against the key: the result holds only if the host always opens a goat door that is not your pick, and the stem states both: the host always opens another door and always shows a goat, which he can do only because he knows where the car is. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 34 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: The famous disputes over this puzzle came from versions that left the host's rules unstated; this stem fixes them, so I see one defensible answer. 2/3 rounds to 67%. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f34a7b3dc4ba70d9106574737b6c32a6750e702294fc5e511dac3a78210bf475",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "67%",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "If the host knowingly opens a goat door and always offers the switch, switching wins with probability 2/3, about 67%.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). Pure arithmetic or a unit definition that a calculation would confirm (§9.5.4); the record schema has no calculation kind, so it is recorded as knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Switching wins 2/3 of the time and staying 1/3 (about 33%), so 25%, 33% and 50% are all wrong for switching.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). Pure arithmetic or a unit definition that a calculation would confirm (§9.5.4); the record schema has no calculation kind, so it is recorded as knowledge."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "With one car behind three doors, the first pick is right with probability 1/3.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). Pure arithmetic or a unit definition that a calculation would confirm (§9.5.4); the record schema has no calculation kind, so it is recorded as knowledge."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "When the first pick is wrong (probability 2/3), the host must open the other goat door, so the door left closed hides the car.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). Pure arithmetic or a unit definition that a calculation would confirm (§9.5.4); the record schema has no calculation kind, so it is recorded as knowledge."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8650c5d2403996c2dbd76372bab0ec02b58af7159070cef4701945a8b8692d9b",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "67%",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In the standard Monty Hall game, where the host knows and always reveals a goat, switching wins with probability 2/3.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Switching wins 2/3 of the time and staying 1/3, so 25 and 50 percent are wrong.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The first pick holds the car with probability 1/3.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In the other 2/3 of cases the car is behind the unopened door because the host never reveals it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "The 2/3 answer needs a host who knows and always shows a goat. 'Always opens another door to show a goat' states the policy well enough, and the 'host picks at random' variant is worded differently, but adding 'who knows where the car is' would close the last loophole."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, number), c2 (distractor, number), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. For a redraft, B suggests saying the host knows where the car is, which closes the last loophole. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T04:50:16Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Three doors, one car. After your pick, the host always opens another door to show a goat. How often does switching win?",
+  "answer": "67%",
+  "wrong": ["25%", "33%", "50%"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.27,
+    "spread": 0.422,
+    "estimator": "v0"
+  }
+}

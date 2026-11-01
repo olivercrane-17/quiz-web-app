@@ -1,0 +1,221 @@
+{
+  "id": "p.food.0124",
+  "status": "active",
+  "category": "food",
+  "tags": ["national-dishes", "west-africa", "rice"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Nigeria, Ghana, Senegal and their neighbours all have proud versions, and the friendly rivalry between Nigerians and Ghanaians over whose is better is known as the jollof wars.",
+  "learnMore": "Jollof rice",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Jollof rice is a West African dish of rice cooked in a spiced tomato sauce."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Jollof rice is not a traditional dish of East Africa, the Caribbean or South Asia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Nigeria, Ghana and Senegal, among other West African countries, each have their own versions of jollof rice."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The friendly rivalry between Nigerians and Ghanaians over whose jollof is better is popularly called the jollof wars."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: the Caribbean and South Asia have their own spiced rice dishes (rice and peas, biryani), which makes them tempting, but jollof is West African. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: West African players have an edge, but jollof is widely known through the diaspora and online. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: well known in Africa, Europe and North America's big cities; less so elsewhere. Doubts: none. I left the name's link to the old Wolof (Jolof) state out, to keep the claims standard.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8bf9163330799a1ac184705070867599c9a647001a5b49fa232401dd1261f149",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "West Africa",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jollof rice is a West African dish of rice cooked in a spiced tomato sauce.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It is not a traditional dish of East Africa, the Caribbean or South Asia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nigeria, Ghana, Senegal and other West African countries each have their own versions.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The friendly rivalry between Nigerians and Ghanaians over whose jollof is better is called the jollof wars.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6109f49afb2b3a857470bce97d813b9d1b5ce59c7b55d1ad385f9d5572d9058f",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "West Africa",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Jollof is a West African one-pot dish of rice cooked in a spiced tomato and pepper sauce.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "There is no East African or South Asian jollof tradition; Caribbean and American rice-and-tomato dishes descend from West African jollof.",
+              "confidence": "certain"
+            },
+            "note": "Tested the Caribbean: diaspora versions exist but do not make it a traditional dish of the region."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Nigeria, Ghana and Senegal (where it relates to thieboudienne) each cook their own jollof.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "'Jollof wars' is the popular name for the friendly Nigeria and Ghana rivalry over whose jollof is better.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "East Africa and West Africa share a word, so a test-wise player who looks for the pair is down to a coin flip. Consider replacing East Africa with a region that does not pair with the key."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. B's note that East Africa pairs with the key is weighed: it is the real confusion for players who know jollof is African, and the Caribbean and South Asia still tempt. Accepted as written (§4, §9.7).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.food.0250",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Jollof rice, cooked in a spiced tomato sauce, is a celebrated dish of which region?",
+  "answer": "West Africa",
+  "wrong": ["East Africa", "The Caribbean", "South Asia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.446,
+    "estimator": "v0"
+  }
+}

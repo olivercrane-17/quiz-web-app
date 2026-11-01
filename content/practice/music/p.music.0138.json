@@ -1,0 +1,216 @@
+{
+  "id": "p.music.0138",
+  "status": "cut",
+  "category": "music",
+  "tags": ["world-music", "south-africa", "singers"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Her 'Click Song' is sung in Xhosa, her mother tongue, which uses click consonants. Barred from returning home in 1960, she spent about 30 years in exile, campaigning against apartheid.",
+  "learnMore": "Miriam Makeba",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Miriam Makeba, known as Mama Africa, was from South Africa."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Miriam Makeba was not from Kenya, Nigeria or Ghana."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Makeba's Click Song is sung in Xhosa, a language with click consonants, and Xhosa was her mother tongue."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Makeba was barred from returning to South Africa in 1960 and lived in exile for about 30 years, campaigning against apartheid."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers these music facts (the manifest holds geographic, scientific, Nobel, Olympic and art-collection data), so each high-risk claim needs web evidence from the checkers. I used no WebSearch. Rival test: argued for Kenya (she recorded the Swahili song Malaika), Ghana and Nigeria; she was born in Johannesburg, so the key stands. Apartheid appears only in the explanation, never in the stem. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Makeba is one of Africa's best-known singers worldwide, and 'Mama Africa' gives no single country away. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: c4's 'about 30 years' covers 1960 to 1990; she returned after Nelson Mandela's release. C22 pairs this item with p.food.0127 (rooibos), which shares only the answer South Africa; the facts differ, so I suggest related_ok.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4fda6a744ed6f5c2038088ed48f7191425ba4771c4d80c400fb2d7e624b353a7",
+        "startedAt": "2026-11-01T02:00:29Z",
+        "finishedAt": "2026-11-01T02:19:40Z",
+        "coldSolve": {
+          "answerGiven": "South Africa",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Miriam Makeba, called Mama Africa, was South African, born in Johannesburg.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "She was not from Kenya, Nigeria or Ghana.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Click Song (Qongqothwane) is a traditional Xhosa song, and Xhosa has click consonants. That Xhosa was Makeba's mother tongue I rate only likely: her father was Xhosa and her mother Swazi.",
+              "confidence": "likely"
+            },
+            "note": "Doubt on the 'mother tongue' half only; the rest I hold as certain. Needs external evidence or a rewording (see the issue)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "South Africa barred her return in 1960, and she lived in exile until 1990, campaigning against apartheid.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Checker doubt on c3 (§9.4 step 4; this schema has no checker_doubt type): that Xhosa was Makeba's mother tongue. Her father was Xhosa and her mother Swazi, and I rate the claim likely, not certain. Get external evidence for it, or reword the explanation to 'sung in Xhosa, a language with click consonants'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pmusic01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8a79098d264b6148e7e76826123716fefcc072900ef0729d76b3eaa8ff4bdff6",
+        "startedAt": "2026-11-01T02:05:28Z",
+        "finishedAt": "2026-11-01T02:26:16Z",
+        "coldSolve": {
+          "answerGiven": "South Africa",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Makeba was born in Johannesburg and was South African.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "She was not from Kenya, Nigeria or Ghana.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Click Song is a Xhosa song, but I cannot state with certainty that Xhosa was her mother tongue: her father was Xhosa and her mother Swazi.",
+              "confidence": "unsure"
+            },
+            "note": "Uncertain on the phrase 'her mother tongue'. Suggest dropping it and saying only that the song is sung in Xhosa."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Her passport was cancelled in 1960 when she tried to return, and she stayed abroad about 30 years until 1990.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "fix",
+            "note": "The stem's nickname 'Mama Africa' echoes the key 'South Africa', the only option containing the word Africa. A test-wise player gets a cue without knowing Makeba (guide section 4, rule 6, no option that echoes the stem). Drop the nickname from the stem or move it into the explanation."
+          },
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Claim c3 says Xhosa was her mother tongue. Her father was Xhosa and her mother Swazi, so 'mother tongue' is not safe to state. Say only that the Click Song is sung in Xhosa."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic01e",
+        "at": "2026-11-01T02:04:12Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "cut",
+      "reason": "Both checks revise, so no tiebreak can settle it (§9.7, revise and revise). B's giveaway issue (the nickname 'Mama Africa' echoes the key 'South Africa', guide §4 rule 6) needs a stem change, and both checks doubt c3 (Xhosa as her mother tongue), which needs a claim change: both are rewrites that need two fresh checks, and high-risk c4 (date) has no external evidence either. Cut; redraft under a new id without the nickname, saying only that the Click Song is sung in Xhosa.",
+      "decidedAt": "2026-11-01T04:20:00Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Singer Miriam Makeba, known as 'Mama Africa', came from which country?",
+  "answer": "South Africa",
+  "wrong": ["Kenya", "Nigeria", "Ghana"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.301,
+    "estimator": "v0"
+  }
+}

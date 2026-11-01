@@ -19,14 +19,82 @@ import {
   buildDedupeIndex,
   contentTokens,
   dedupeEntry,
+  dedupeRecordFor,
   flaggedPairs,
   guideExamples,
+  namesSealedKind,
   nearestTo,
   pairScore,
+  type DedupeMatch,
 } from "./dedupe.ts";
 import { bankDedupeIndex } from "./lint/index.ts";
 
 afterAll(removeTempDirs);
+
+describe("the stored dedupe record", () => {
+  const AT = "2026-11-03T09:00:00Z";
+  const match = (nearestId: string, nearestSealed = false): DedupeMatch => ({
+    nearestId,
+    score: 0.42,
+    reason: "low overlap",
+    nearestSealed,
+  });
+  /** The pattern the secret scan refuses in public JSON (scripts/checks). */
+  const SEALED_ID = /^(?:m\.[a-z]+\.\d{4}|e\.\d{4}|r\.[a-z0-9-]+\.\d{2})$/;
+
+  it("knows the id spaces of the sealed pools, guide examples included", () => {
+    for (const id of [
+      "m.geo.0101",
+      "e.0123",
+      "r.around-the-world.05",
+      "guide:m.geo.0001",
+      "guide:e.0004",
+      "guide:r.screen-time.90",
+      "fx.m.geo.0101",
+    ])
+      expect(namesSealedKind(id), id).toBe(true);
+    for (const id of ["p.geo.0101", "guide:p.geo.0001", "sealed", null])
+      expect(namesSealedKind(id), String(id)).toBe(false);
+  });
+
+  it("never stores a sealed-shaped id in a plaintext item, guide examples of sealed kinds included", () => {
+    for (const [nearest, sealed] of [
+      ["m.geo.0105", true],
+      ["guide:m.geo.0001", false],
+      ["guide:e.0004", false],
+      ["guide:r.screen-time.90", false],
+    ] as const) {
+      const record = dedupeRecordFor(false, match(nearest, sealed), AT, "unique");
+      expect(record, nearest).toEqual({
+        checkedAt: AT,
+        nearestId: "sealed",
+        score: null,
+        verdict: "unique",
+      });
+      expect(SEALED_ID.test(String(record.nearestId))).toBe(false);
+    }
+  });
+
+  it("keeps public neighbours and every neighbour of a sealed item as they are", () => {
+    expect(
+      dedupeRecordFor(false, match("guide:p.geo.0001"), AT, "related_ok"),
+    ).toEqual({
+      checkedAt: AT,
+      nearestId: "p.geo.0001",
+      score: 0.42,
+      verdict: "related_ok",
+    });
+    expect(dedupeRecordFor(false, match("p.hist.0203"), AT, "unique")).toEqual(
+      expect.objectContaining({ nearestId: "p.hist.0203", score: 0.42 }),
+    );
+    // A sealed item's own file is an envelope, so it may name its neighbour.
+    const sealedSide = dedupeRecordFor(true, match("guide:e.0004"), AT, "unique");
+    expect(sealedSide).toEqual(
+      expect.objectContaining({ nearestId: "e.0004", score: 0.42 }),
+    );
+    expect(SEALED_ID.test(String(sealedSide.nearestId))).toBe(true);
+  });
+});
 
 const stop = new Set(["the", "of", "in"]);
 const entry = (raw: Record<string, unknown>) => {

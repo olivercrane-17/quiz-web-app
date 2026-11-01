@@ -1,0 +1,222 @@
+{
+  "id": "p.geo.0255",
+  "status": "active",
+  "category": "geo",
+  "tags": ["coasts", "countries", "central-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Belize is the reverse, facing the Caribbean with no Pacific shore. El Salvador is also the smallest country in Central America by area.",
+  "learnMore": "El Salvador",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "El Salvador has a Pacific coast and no Caribbean coast."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Honduras, Guatemala and Nicaragua each have coasts on both the Caribbean and the Pacific."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Belize has a Caribbean coast and no Pacific coast."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "El Salvador is the smallest country in Central America by area."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; c4 (superlative) is high under the C26 floor, and c1, c2 and c3 are standard. Datasets: mledoze-countries Central America sub-region areas: SLV 21,041, BLZ 22,966, CRI 51,100, PAN 75,417, GTM 108,889, HND 112,492, NIC 130,373 (c4). SLV borders GTM and HND only. Coasts are in no pinned dataset, so c1 to c3 are standard knowledge. Rival test: Honduras is the closest call, because its Pacific coast is only a short stretch on the Gulf of Fonseca; Guatemala's Caribbean coast is short too. Nicaragua has long coasts on both. Against the key: nothing. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Equally obscure to most players outside the Americas; a map in the mind is enough to reason it out. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset. Seed: 5 (hard): most players guess. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4aa679e48dbb39e77c0544396bfb37c9d938c63cef5d4a22b5f650d34332b244",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "El Salvador",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "El Salvador has only a Pacific coast.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Guatemala, Honduras and Nicaragua each have both Caribbean and Pacific coasts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Belize faces only the Caribbean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "subregion=Central America, by area",
+              "excerpt": "SLV 21041; BLZ 22966; CRI 51100; PAN 75417; GTM 108889; HND 112492; NIC 130373",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "El Salvador has the smallest area in the subregion, just under Belize."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d8d0602f4499a6929dd5129114fcc90580b539febec81ccc2bccb4259e80d1e5",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "El Salvador",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "El Salvador has a Pacific coast and no Caribbean coast.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Honduras, Guatemala and Nicaragua each have coasts on both the Caribbean and the Pacific.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Belize has a Caribbean coast and no Pacific coast.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "subregion=Central America",
+              "excerpt": "Areas in km2: El Salvador 21041, Belize 22966, Costa Rica 51100, Panama 75417, Guatemala 108889, Honduras 112492, Nicaragua 130373.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "El Salvador is the smallest by 1,925 km2 over Belize."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c4 (mledoze-countries) carries dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Central American country has a Pacific coast but no Caribbean coast?",
+  "answer": "El Salvador",
+  "wrong": ["Honduras", "Guatemala", "Nicaragua"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.255,
+    "estimator": "v0"
+  }
+}

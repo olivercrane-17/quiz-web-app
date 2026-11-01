@@ -1,0 +1,241 @@
+{
+  "id": "p.geo.0138",
+  "status": "active",
+  "category": "geo",
+  "tags": ["enclaves", "borders", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Eswatini comes close but also borders Mozambique. Lesotho is one of only three countries entirely encircled by another; San Marino and Vatican City are both inside Italy.",
+  "learnMore": "Lesotho",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Lesotho's only neighbour is South Africa, which surrounds it completely."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Eswatini also borders Mozambique, and Botswana and Namibia border several countries, so none of them is surrounded by South Africa."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Lesotho, San Marino and Vatican City are the only three countries entirely surrounded by a single other country."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "San Marino and Vatican City are both surrounded by Italy."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 and c3 say 'only' (c3 also a number), so high; c2 and c4 are standard. Datasets: mledoze-countries cca3=LSO borders ZAF only, landlocked true (c1); SWZ borders MOZ, ZAF; BWA borders NAM, ZAF, ZMB, ZWE; NAM borders AGO, BWA, ZAF, ZMB (c2). Filtering the file for landlocked entries with exactly one neighbour returns LSO, SMR and VAT, and SMR and VAT both border ITA only (c3, c4). Rival test: Eswatini is the honest trap, almost enclosed but touching Mozambique; Botswana and Namibia are neighbours with long borders elsewhere. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: southern African geography known from school maps. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 27 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f02a131671afad4bd4672292bd81148129b1b3c361a8da2aeda368ae1b271f9c",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Lesotho",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LSO",
+              "excerpt": "LSO: \"landlocked\": true, \"borders\": [\"ZAF\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Landlocked with ZAF its only neighbour, so South Africa surrounds it."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SWZ; cca3=BWA; cca3=NAM",
+              "excerpt": "SWZ: \"borders\": [\"MOZ\",\"ZAF\"] | BWA: \"borders\": [\"NAM\",\"ZAF\",\"ZMB\",\"ZWE\"] | NAM: \"borders\": [\"AGO\",\"BWA\",\"ZAF\",\"ZMB\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Eswatini also borders MOZ; Botswana and Namibia border several countries."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LSO; cca3=SMR; cca3=VAT",
+              "excerpt": "LSO: \"independent\": true, \"landlocked\": true, \"borders\": [\"ZAF\"] | SMR: \"independent\": true, \"landlocked\": true, \"borders\": [\"ITA\"] | VAT: \"independent\": true, \"landlocked\": true, \"borders\": [\"ITA\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Filtering independent: true, landlocked: true and exactly one neighbour returns LSO, SMR, VAT only. Countries with one neighbour and a coast (such as Monaco or The Gambia) are not surrounded."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SMR; cca3=VAT",
+              "excerpt": "SMR: \"borders\": [\"ITA\"] | VAT: \"borders\": [\"ITA\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b9b6da872fe69cbf08ae25560ffb6d304979e7036b7462edbc56280432f136ba",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Lesotho",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LSO",
+              "excerpt": "LSO (Lesotho): borders [\"ZAF\"]; landlocked true",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SWZ, cca3=BWA, cca3=NAM",
+              "excerpt": "SWZ (Eswatini): borders [\"MOZ\",\"ZAF\"] | BWA (Botswana): borders [\"NAM\",\"ZAF\",\"ZMB\",\"ZWE\"] | NAM (Namibia): borders [\"AGO\",\"BWA\",\"ZAF\",\"ZMB\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LSO, cca3=SMR, cca3=VAT",
+              "excerpt": "Landlocked records with exactly one neighbour, computed over all 250: LSO, SMR, VAT",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Other single-neighbour countries (Canada, Portugal, Qatar and so on) all have a sea coast, so only these three are fully enclosed."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SMR, cca3=VAT",
+              "excerpt": "SMR (San Marino): borders [\"ITA\"] | VAT (Vatican City): borders [\"ITA\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c3 carry mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which country is completely surrounded by South Africa?",
+  "answer": "Lesotho",
+  "wrong": ["Eswatini", "Botswana", "Namibia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.203,
+    "estimator": "v0"
+  }
+}

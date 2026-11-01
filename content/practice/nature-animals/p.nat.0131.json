@@ -1,0 +1,396 @@
+{
+  "id": "p.nat.0131",
+  "status": "active",
+  "category": "nat",
+  "tags": ["insects", "bees", "flies", "anatomy"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "A bee's 4 wings hook together in flight, so they look like 2. True flies really have 2: the hind pair has shrunk into knobs called halteres that help them balance.",
+  "learnMore": "Halteres",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Honeybees have 4 wings, in 2 pairs."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Houseflies have 2 wings."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A bee's forewings and hindwings are linked by tiny hooks (hamuli) in flight."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In true flies the hind wings are reduced to halteres, which help with balance in flight."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed; c1 and c2 hold numbers, so they are high. One search on bee and fly wing counts should cover both. c3 and c4 are standard. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: exact counts, so the separation guard is met. Argued against the key: a bee looks two-winged because its wings are hooked together, which the explanation uses as the foothold; it has 4. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: both insects are found worldwide. style: Oxford spelling, plain hyphens only, explanation of 31 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a comparison item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "82d13033bcf1c15e2c5e01c8597b9ed1e21fde74b7043af625fc9c19ebe96490",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "A honeybee",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many wings does a honeybee have, and how many wings does a housefly have (Diptera halteres)",
+              "results": [
+                {
+                  "title": "Housefly",
+                  "url": "https://en.wikipedia.org/wiki/Housefly"
+                },
+                {
+                  "title": "Wing vein abnormality analysis in honeybee (Apis mellifera L. 1758) populations from Iran",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11335744/"
+                },
+                {
+                  "title": "Diptera",
+                  "url": "https://www.britannica.com/animal/dipteran"
+                },
+                {
+                  "title": "Flies and mosquitoes: Order Diptera - The Australian Museum",
+                  "url": "https://australian.museum/learn/animals/insects/flies-and-mosquitoes-order-diptera/"
+                },
+                {
+                  "title": "Variation of honey bee wings in southwestern Asia",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12717058/"
+                },
+                {
+                  "title": "Honeybee wings hold antibiofouling and antimicrobial clues for improved applications in health care and industries",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10113161/"
+                },
+                {
+                  "title": "Automated flying insect separator",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/11793172"
+                },
+                {
+                  "title": "Aerodynamics, sensing and control of insect-scale flapping-wing flight - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4841661/"
+                },
+                {
+                  "title": "Dataset of wing venation measurements for Apis mellifera caucasica, A. mellifera carnica and A. mellifera mellifera (Hymenoptera: Apidae), their hybrids and backcrosses",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7423776/"
+                }
+              ],
+              "summaryExcerpt": "Honeybees have four wings, and houseflies have two. Honeybee: Each honeybee has two pairs of wings. The forewings are about twice the length of the hindwings, and a row of hooks links the two wings on each side.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Wikipedia 'Housefly', Britannica 'Diptera', the Australian Museum and PMC honeybee-wing papers. The USPTO patent in the list is not what these sentences rest on."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many wings does a honeybee have, and how many wings does a housefly have (Diptera halteres)",
+              "results": [
+                {
+                  "title": "Housefly",
+                  "url": "https://en.wikipedia.org/wiki/Housefly"
+                },
+                {
+                  "title": "Wing vein abnormality analysis in honeybee (Apis mellifera L. 1758) populations from Iran",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11335744/"
+                },
+                {
+                  "title": "Diptera",
+                  "url": "https://www.britannica.com/animal/dipteran"
+                },
+                {
+                  "title": "Flies and mosquitoes: Order Diptera - The Australian Museum",
+                  "url": "https://australian.museum/learn/animals/insects/flies-and-mosquitoes-order-diptera/"
+                },
+                {
+                  "title": "Variation of honey bee wings in southwestern Asia",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12717058/"
+                },
+                {
+                  "title": "Honeybee wings hold antibiofouling and antimicrobial clues for improved applications in health care and industries",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10113161/"
+                },
+                {
+                  "title": "Automated flying insect separator",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/11793172"
+                },
+                {
+                  "title": "Aerodynamics, sensing and control of insect-scale flapping-wing flight - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4841661/"
+                },
+                {
+                  "title": "Dataset of wing venation measurements for Apis mellifera caucasica, A. mellifera carnica and A. mellifera mellifera (Hymenoptera: Apidae), their hybrids and backcrosses",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7423776/"
+                }
+              ],
+              "summaryExcerpt": "Housefly: Houseflies are true flies (order Diptera), and they fly with only one pair of wings. The hind pair has become small balance organs called halteres",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many wings does a honeybee have, and how many wings does a housefly have (Diptera halteres)",
+              "results": [
+                {
+                  "title": "Housefly",
+                  "url": "https://en.wikipedia.org/wiki/Housefly"
+                },
+                {
+                  "title": "Wing vein abnormality analysis in honeybee (Apis mellifera L. 1758) populations from Iran",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11335744/"
+                },
+                {
+                  "title": "Diptera",
+                  "url": "https://www.britannica.com/animal/dipteran"
+                },
+                {
+                  "title": "Flies and mosquitoes: Order Diptera - The Australian Museum",
+                  "url": "https://australian.museum/learn/animals/insects/flies-and-mosquitoes-order-diptera/"
+                },
+                {
+                  "title": "Variation of honey bee wings in southwestern Asia",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12717058/"
+                },
+                {
+                  "title": "Honeybee wings hold antibiofouling and antimicrobial clues for improved applications in health care and industries",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10113161/"
+                },
+                {
+                  "title": "Automated flying insect separator",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/11793172"
+                },
+                {
+                  "title": "Aerodynamics, sensing and control of insect-scale flapping-wing flight - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4841661/"
+                },
+                {
+                  "title": "Dataset of wing venation measurements for Apis mellifera caucasica, A. mellifera carnica and A. mellifera mellifera (Hymenoptera: Apidae), their hybrids and backcrosses",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7423776/"
+                }
+              ],
+              "summaryExcerpt": "The wings of honeybee are arranged in two pairs, connected by a row of hooks on the back wing.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many wings does a honeybee have, and how many wings does a housefly have (Diptera halteres)",
+              "results": [
+                {
+                  "title": "Housefly",
+                  "url": "https://en.wikipedia.org/wiki/Housefly"
+                },
+                {
+                  "title": "Wing vein abnormality analysis in honeybee (Apis mellifera L. 1758) populations from Iran",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11335744/"
+                },
+                {
+                  "title": "Diptera",
+                  "url": "https://www.britannica.com/animal/dipteran"
+                },
+                {
+                  "title": "Flies and mosquitoes: Order Diptera - The Australian Museum",
+                  "url": "https://australian.museum/learn/animals/insects/flies-and-mosquitoes-order-diptera/"
+                },
+                {
+                  "title": "Variation of honey bee wings in southwestern Asia",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12717058/"
+                },
+                {
+                  "title": "Honeybee wings hold antibiofouling and antimicrobial clues for improved applications in health care and industries",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10113161/"
+                },
+                {
+                  "title": "Automated flying insect separator",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/11793172"
+                },
+                {
+                  "title": "Aerodynamics, sensing and control of insect-scale flapping-wing flight - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4841661/"
+                },
+                {
+                  "title": "Dataset of wing venation measurements for Apis mellifera caucasica, A. mellifera carnica and A. mellifera mellifera (Hymenoptera: Apidae), their hybrids and backcrosses",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7423776/"
+                }
+              ],
+              "summaryExcerpt": "True flies have only one pair of functional wings used for flight. The second pair of wings is reduced to knobs called halteres, which are used for balance.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4cd89ce14b16bebb7a71d8ccd8b822c45e88c152f919964a367bbb45fcdea5d9",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "A honeybee",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Honeybees have 4 wings in two pairs.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Houseflies have 2 wings.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A bee's forewings and hindwings are joined by small hooks (hamuli) in flight.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In true flies the hind wings are reduced to halteres, which help with balance.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "A pedant could count the housefly's halteres as modified hindwings, which would make 4 wing-derived structures against the bee's 4. The explanation already says true flies have 2 wings, so the key stands."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; high-risk c1 (web in A), c2 (web in A). Style, distractors and balance reviewed. B's halteres note is already answered by the explanation (true flies have 2 wings).",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.sci.0150",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which insect has more wings?",
+  "a": "A honeybee",
+  "b": "A housefly",
+  "answer": "a",
+  "relation": "more",
+  "measure": "number of wings",
+  "unit": "wings",
+  "values": {
+    "a": 4,
+    "b": 2
+  },
+  "valueDisplay": {
+    "a": "4 wings",
+    "b": "2 wings"
+  },
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.094,
+    "estimator": "v0"
+  }
+}

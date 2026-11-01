@@ -1,0 +1,230 @@
+{
+  "id": "p.geo.0241",
+  "status": "active",
+  "category": "geo",
+  "tags": ["borders", "names", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "It is often confused with Slovakia, which lies further north-east and also borders Austria and Hungary. Slovenia even has a short stretch of Adriatic coast.",
+  "learnMore": "Slovenia",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Slovenia borders Italy, Austria, Hungary and Croatia."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Slovakia borders neither Italy nor Croatia, Switzerland borders neither Hungary nor Croatia, and Serbia borders neither Italy nor Austria."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Slovakia lies north-east of Slovenia and borders Austria and Hungary."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Slovenia has a short coastline on the Adriatic Sea."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: mledoze-countries: SVN borders AUT, HRV, ITA, HUN, landlocked false (c1, c4); SVK borders AUT, CZE, HUN, POL, UKR (c2, c3); CHE borders include AUT and ITA but neither HUN nor HRV; SRB borders HRV and HUN but neither ITA nor AUT (c2). Rival test: Slovakia is the famous name confusion and shares two of the four neighbours; Switzerland borders Italy and Austria; Serbia borders Hungary and Croatia. Each fits half the list. Against the key: nothing. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: A European subject, but the reasoning is pure map logic, testable option by option from any country. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset. Seed: 4 (medium): the Slovakia trap and the two half-fits make it a coin flip for casual players. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "471cb412140537e12cc4a2dcde45cff1f7bd725b671787db05bc3e1167236aa4",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Slovenia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SVN",
+              "excerpt": "\"borders\": [\"AUT\",\"HRV\",\"ITA\",\"HUN\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SVK, CHE, SRB",
+              "excerpt": "SVK \"borders\": [\"AUT\",\"CZE\",\"HUN\",\"POL\",\"UKR\"]; CHE \"borders\": [\"AUT\",\"FRA\",\"ITA\",\"LIE\",\"DEU\"]; SRB \"borders\": [\"BIH\",\"BGR\",\"HRV\",\"HUN\",\"UNK\",\"MKD\",\"MNE\",\"ROU\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Slovakia lies north-east of Slovenia and borders both Austria and Hungary.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Slovenia has a short Adriatic coastline on the Gulf of Trieste.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "944d3284eaf4dc7c915689302ae2ccccfddffc3c2c75b903c3b8bcde76c660b5",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Slovenia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SVN",
+              "excerpt": "\"borders\": [\"AUT\",\"HRV\",\"ITA\",\"HUN\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Exactly the four neighbours named in the stem; no other country has all four."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SVK, CHE, SRB",
+              "excerpt": "SVK \"borders\": [\"AUT\",\"CZE\",\"HUN\",\"POL\",\"UKR\"] (no ITA, HRV); CHE \"borders\": [\"AUT\",\"FRA\",\"ITA\",\"LIE\",\"DEU\"] (no HUN, HRV); SRB \"borders\": [\"BIH\",\"BGR\",\"HRV\",\"HUN\",\"UNK\",\"MKD\",\"MNE\",\"ROU\"] (no ITA, AUT)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SVK",
+              "excerpt": "\"borders\": [\"AUT\",\"CZE\",\"HUN\",\"POL\",\"UKR\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Borders Austria and Hungary; 'north-east' of Slovenia is geography I know to be right."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Slovenia has a short Adriatic coastline between Italy and Croatia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which country borders Italy, Austria, Hungary and Croatia?",
+  "answer": "Slovenia",
+  "wrong": ["Slovakia", "Switzerland", "Serbia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.218,
+    "estimator": "v0"
+  }
+}

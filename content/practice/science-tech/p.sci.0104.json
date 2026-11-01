@@ -1,0 +1,205 @@
+{
+  "id": "p.sci.0104",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["space", "light", "sun"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Sunlight is a mix of every colour, which looks white. Air scatters blue light out of the beam, tinting the Sun yellow from the ground and turning the sky blue.",
+  "learnMore": "Sunlight",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Seen from space, above Earth's atmosphere, the Sun looks white."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The yellow, orange or red look of the Sun from the ground is caused by Earth's atmosphere, not by the light the Sun gives off."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sunlight contains all the visible colours, which together look white."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Air scatters blue light more strongly than other colours, which makes the sky look blue and the Sun look yellower from the ground."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors; its one warning is C25 on c2 (sun-is-yellow), expected because the item debunks that myth. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers this, so checker A needs web evidence for c1, the high-risk key. rivalTest: Yellow is the planted trap, since the Sun looks yellow from the ground; above the atmosphere it is recorded as white, and orange or red apply only low in the sky, through thick air. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 30 words. myths: c2 resembles sun-is-yellow in content/reference/myths.json by design, because the item debunks that myth, and c4 explains the same myth, so one check must carry web evidence for both. mystery and encore: not applicable to a practice multiple-choice item. doubts: None on the key. The Sun's output peaks near green, but the mix of all visible colours reads as white to the eye, which is all the item claims. The key's riskReason is checker_doubt only because the schema has no counterintuitive reason; it is high under the C26 floor for the key of a counterintuitive item. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5edd5e18eaebe27764f698facf15e2961bfe0a2c58f0c103e5625b82ff1d0afd",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "White",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Above the atmosphere the Sun's light, a broad spectrum mixing all visible wavelengths, looks white to the eye, and astronauts describe the Sun as white.",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8). The writer marked it checker_doubt; this run rates it certain. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Sun's yellowish, orange or red look from the ground comes from the atmosphere scattering blue light out of the direct beam, more strongly near the horizon; the light the Sun emits is close to white.",
+              "confidence": "certain"
+            },
+            "note": "Myth-screen hit (sun-is-yellow): it clears only with dataset or web evidence in a confirming check (§9.9 rule 5), and this run had none to give."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sunlight contains the whole visible spectrum, and those colours together look white.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Rayleigh scattering is stronger at shorter wavelengths, so air scatters blue most, making the sky blue and leaving the direct sunlight slightly yellower.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1c7489e4f65f63b91c51a8679bf2626bd7be13304d868c2418f86d69bea765b1",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "White",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Seen from above the atmosphere the Sun looks white: its light is broad-spectrum, close to a 5,800 K blackbody, and sits near the white point. Yellow is a ground-level effect and a spectral-class nickname.",
+              "confidence": "certain"
+            },
+            "note": "The writer flagged this as checker_doubt. My knowledge agrees with the usual astronomy statement that the Sun is white from space, but this is the item's counterintuitive key, so it needs external evidence in check A. High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Scattering and absorption by air make a low or ground-level Sun look yellow, orange or red. The light leaving the Sun is not that colour.",
+              "confidence": "certain"
+            },
+            "note": "Myth hit (sun-is-yellow): clears only with dataset or web evidence in one check."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sunlight spans all visible wavelengths and the mix looks white.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Rayleigh scattering is stronger for short wavelengths, so blue is scattered out of the direct beam: blue sky, yellower Sun from the ground.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "second_answer",
+            "severity": "note",
+            "note": "Rival answer is Yellow: the Sun is a G2V star nicknamed a yellow dwarf, and its chromaticity sits a little on the warm side of the white point. The stem fixes the viewpoint (seen from space, above the atmosphere) and the explanation names the atmosphere, so I do not count it as a second answer. Keep the perceived-colour wording in c1 (looks white) and do not harden it to a claim about the spectrum."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, checker_doubt) rests on knowledge alone in both checks, with no dataset or web evidence for it in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced. Claim c2 also matches the known myth sun-is-yellow, which only dataset or web evidence in a confirming check clears (rule 5), and the item shares its answer with p.soc.0252 and p.lang.0230 (dedupe 0.63 and 0.57).",
+      "decidedAt": "2026-11-01T04:27:18Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Seen from space, above Earth's atmosphere, what colour is the Sun?",
+  "answer": "White",
+  "wrong": ["Yellow", "Orange", "Red"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.178,
+    "estimator": "v0"
+  }
+}

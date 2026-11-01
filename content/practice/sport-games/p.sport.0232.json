@@ -1,0 +1,243 @@
+{
+  "id": "p.sport.0232",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["world-cup", "football", "trophies"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The collie sniffed out the trophy, wrapped in newspaper, on a walk with his owner in south London. Brazil won it outright in 1970, and it was stolen again in 1983.",
+  "learnMore": "Pickles (dog)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In March 1966 a dog named Pickles found the stolen Jules Rimet Trophy under a hedge in south London."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The trophy was not found by a taxi driver, a police officer or a schoolboy."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Pickles was a collie, and the trophy was wrapped in newspaper when he found it on a walk with his owner."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Brazil won the Jules Rimet Trophy outright by winning the World Cup for a third time in 1970."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Jules Rimet Trophy was stolen again, in Rio de Janeiro, in 1983."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed, 3 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup, 1970/worldcup.json: Final, Brazil v Italy on 21 June 1970, 4-1, with Brazil's earlier wins in the 1958 and 1962 finals, confirms Brazil's third title in c4. The theft, the find and the 1983 theft need web evidence. rivalTest: A taxi driver, a police officer and a schoolboy are the finders a player would expect in a crime story; the surprise is the dog. Pickles's owner was with him, but the stem asks who found it, and every account credits Pickles. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 31 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: I did not say the trophy was never recovered after 1983, because that could change.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f3b1d3bda825889030219965a21d7a5ddcac26b4bb69f54b9769b957fd33c234",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "A dog named Pickles",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In March 1966 the dog Pickles, out with his owner in Upper Norwood, south London, found the stolen Jules Rimet Trophy under a hedge.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The finder was the dog Pickles, not a taxi driver, a police officer or a schoolboy.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pickles was a collie cross, and the trophy was wrapped in newspaper when he found it on a walk with his owner, David Corbett.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1970/worldcup.json",
+              "locator": "matches[round=Final] in the 1970, 1962 and 1958 files",
+              "excerpt": "1970: \"date\": \"1970-06-21\" ... \"team1\": \"Brazil\" ... \"team2\": \"Italy\" ... \"score\": [4, 1] | 1962: \"team1\": \"Brazil\" ... \"team2\": \"Czechoslovakia\" ... \"score\": [3, 1] | 1958: \"team1\": \"Sweden\" ... \"team2\": \"Brazil\" ... \"score\": [2, 5]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Brazil won the 1958, 1962 and 1970 finals, so 1970 was its third title. That a third win let Brazil keep the trophy for good rests on my knowledge (certain)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The trophy was stolen again in December 1983 from the Brazilian football federation's offices in Rio de Janeiro and was never recovered.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "845e74f920c7e95de9bcaddefd069983594f7a6b33cff7bd4f1f3da61fe201f1",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "A dog named Pickles",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "On 27 March 1966, a week after the theft, the dog Pickles sniffed out the Jules Rimet Trophy under a hedge in Norwood, south London.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Accounts credit the dog Pickles, walking with his owner David Corbett, not a schoolboy, a taxi driver or a police officer.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pickles was a collie, and the trophy was wrapped in newspaper and tied with string.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1958, 1962 and 1970 worldcup.json",
+              "locator": "round=Final, Brazil",
+              "excerpt": "Final, 1958-06-29: Sweden [2,5] Brazil, Råsunda Stadium, Solna | Final, 1962-06-17: Brazil [3,1] Czechoslovakia, Estadio Nacional, Santiago | Final, 1970-06-21: Brazil [4,1] Italy, Estadio Azteca, Mexico City",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The file shows Brazil winning the 1958, 1962 and 1970 finals, so 1970 was their third win. That a third win meant keeping the trophy outright is the competition's rule and rests on knowledge."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Jules Rimet Trophy was stolen from the Brazilian football confederation in Rio de Janeiro in December 1983 and has never been recovered.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The key is the only option that is a named individual, and a dog among three human roles. Test-wise players may pick the odd one out. A parallel set, such as three generic roles plus A dog, or four named individuals, would remove the cue. It is a note because the story is the point of the item."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, date) and c5 (explanation, date) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Checker B's giveaway note also applies: the key is the only named individual among generic roles, so the redraft needs a parallel option set. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In March 1966 the stolen men's World Cup trophy was found under a hedge in London. Who found it?",
+  "answer": "A dog named Pickles",
+  "wrong": ["A taxi driver", "A police officer", "A schoolboy"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.45,
+    "spread": 0.309,
+    "estimator": "v0"
+  }
+}

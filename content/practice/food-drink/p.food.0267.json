@@ -1,0 +1,247 @@
+{
+  "id": "p.food.0267",
+  "status": "cut",
+  "category": "food",
+  "tags": ["cheese", "archaeology", "food-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Pottery sieves from Poland, about 7,000 years old, still carry traces of milk fat, so farmers were straining curds some 2,000 years before anyone wrote.",
+  "learnMore": "History of cheese",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The earliest known evidence of cheese-making, milk-fat residues in pottery sieves from Poland, dates from around 5200 BC."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The earliest known true writing, in Mesopotamia and Egypt, dates from around 3200 BC."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Milk-fat residues in the Polish sieves suggest early farmers were separating curds from whey."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed; risk is at or above the C26 floor (high: c1, c2). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Older marks and symbols exist, but scholars date true writing to about 3200 BC; even if writing began a few centuries earlier, the gap of about 2,000 years keeps the answer. A new find of older cheese would only widen it. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: neither label needs local knowledge, and players can reason from early farming. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 25 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: many players assume writing came with the first civilizations, before cheese. Doubts: none on the order; the cheese date rests on residue studies that checker A should evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "40526a0cf2c2225a29533b848f935c217d25fd36e7c15fc432df6ef484350dc4",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "The earliest known cheese-making",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Milk-fat residues in perforated pottery sieves from Kuyavia, Poland, about 7,000 years old (sixth millennium BC), are reported as the earliest direct evidence of cheese-making.",
+              "confidence": "certain"
+            },
+            "note": "Croatian pottery with cheese residues of similar age (about 7,200 years) is also reported, so 'around 5200 BC' holds for the earliest evidence either way, and the comparison is not close. High-risk (date): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The first true writing, Mesopotamian cuneiform and Egyptian hieroglyphs, dates from around 3200 BC.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The residues in the sieves suggest the farmers were straining curds from whey.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7302daaa2e2bc6a929cfa462f0b45c85fe7780e1c804a4dde71f7317129be14a",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "The earliest known cheese-making",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The earliest known evidence of cheese-making is milk-fat residue in pottery sieves from Kuyavia, Poland, dated to the sixth millennium BC; the figure I recall most often is about 5500 BC, not 5200 BC.",
+              "confidence": "likely"
+            },
+            "note": "The stored figure does not match the number I recall most often. The order against writing is safe either way."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The earliest true writing (Mesopotamian proto-cuneiform, Egyptian hieroglyphs) dates from around 3300 to 3200 BC.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The residues in the Polish sieves suggest curds were being separated from whey.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "checker_doubt c1: 'around 5200 BC' and 'about 7,000 years old' do not match the figure I recall for the Kuyavia sieves, the sixth millennium BC, often given as about 5500 BC. The order against writing is safe, but the displayed year and the explanation must match a source. Use 'the sixth millennium BC' or about 7,500 years, with dataset or web evidence."
+          },
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "The label says 'writing', while the claim says 'true writing'. Proto-writing symbols (Jiahu, Vinča) are older than the cheese evidence, so the key depends on the usual narrow meaning. 'Earliest known' labels can also be overtaken by new finds; consider a slow volatility with a reviewBy."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-pfood02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "c6cfdfdb8d9dc09efda6ced9fa6779c31cfbb887bad9a2eaf2bdf6818d3d31da",
+      "startedAt": "2026-11-01T04:51:56Z",
+      "finishedAt": "2026-11-01T05:00:50Z",
+      "coldSolve": {
+        "answerGiven": "The earliest known cheese-making",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The Kuyavia sieves from Poland, with milk-fat residues, are dated to the sixth millennium BC and are reported as the earliest direct evidence of cheese-making. The figures I recall for them run from about 5500 BC to about 7,000 years ago; I do not recall 5200 BC for these sieves, and about 7,200 years ago is the age I recall for pottery residues from Croatia.",
+            "confidence": "likely"
+          },
+          "note": "Disputed claim: pass B left it uncertain. I side with B on substance. The order against writing is safe under every figure I know, each at least 1,500 years before writing, but the displayed 'around 5200 BC' and the explanation's 'about 7,000 years old' need a source that gives that date for the Polish sieves. No external evidence could be gathered: this run's one WebSearch call was refused because the turn's shared search limit (200 calls across all agents) was already used up, and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "True writing appears in Mesopotamia (proto-cuneiform at Uruk) and in Egypt (early hieroglyphs) around 3300 to 3200 BC.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed (A and B both confirmed it on knowledge), but high-risk with no external evidence in any check, so rule 3 still needs dataset or web evidence. No external evidence could be gathered: this run's one WebSearch call was refused because the turn's shared search limit (200 calls across all agents) was already used up, and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "checker_doubt c1: I agree with pass B's fix. The stored value and display of the cheese label (around 5200 BC) and the explanation's 'about 7,000 years old' must match a Tier A or B source for the Kuyavia sieves, and the figures I recall for them differ (about 5500 BC, and about 7,000 years). Either a re-run tiebreak finds such a source, or the display steps down to what every source agrees on, such as 'the sixth millennium BC' (§9.2, §9.5.2). The key is safe either way."
+        },
+        {
+          "type": "ambiguity",
+          "severity": "note",
+          "note": "On pass B's note about proto-writing (the Jiahu and Vinča signs): I agree it is a note, not a fix. The usual reading of 'the earliest known writing' is Mesopotamian and Egyptian writing, which c2 names. B's point that an 'earliest known' label can be overtaken by new finds is the editor's call (slow volatility with a reviewBy)."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Pass T revised, so rule 2 cannot pass: A passed, B revised (c1 uncertain), and an accept on a split needs a passing tiebreak (§9.7, §9.9). T sided with B: the figures it recalls for the Kuyavia sieves (about 5500 BC, about 7,000 years) do not match the stored 'around 5200 BC', and its one search was refused when the shared WebSearch limit ran out. Stepping the label down to 'the sixth millennium BC' changes claim c1, the value and the explanation, so it needs two fresh checks. The order holds under every figure: redraft under a new id with that bounded date, web evidence for c1 and c2, and slow volatility, since an 'earliest known' label can be overtaken.",
+      "decidedAt": "2026-11-01T05:26:46Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "The earliest known cheese-making",
+  "b": "The earliest known writing",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "date of the earliest evidence",
+  "unit": "year",
+  "values": {
+    "a": -5200,
+    "b": -3200
+  },
+  "valueDisplay": {
+    "a": "around 5200 BC",
+    "b": "around 3200 BC"
+  },
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.255,
+    "estimator": "v0"
+  }
+}

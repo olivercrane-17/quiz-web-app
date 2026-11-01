@@ -1,0 +1,271 @@
+{
+  "id": "p.geo.0126",
+  "status": "active",
+  "category": "geo",
+  "tags": ["capes", "africa", "maps"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The Cape of Good Hope, made famous by early sailors, lies about 150 km (95 miles) to the west-north-west. Cape Agulhas is where the Atlantic and Indian oceans officially meet.",
+  "learnMore": "Cape Agulhas",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Cape Agulhas is the southernmost point of mainland Africa."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Cape of Good Hope, Cape Guardafui and Cape Verde all lie north of Cape Agulhas."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Cape of Good Hope lies about 150 km (95 miles) west-north-west of Cape Agulhas."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Early European voyages made the Cape of Good Hope far better known than Cape Agulhas."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The International Hydrographic Organization places the boundary between the Atlantic and Indian oceans at Cape Agulhas."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is a superlative and the key of a counterintuitive item, c3 carries a distance, so both are high; the rest are standard. Datasets: natural-earth ne_50m_geography_regions_points: Cape Agulhas lat -34.801182, lng 19.993472; Cape of Good Hope lat -34.307311, lng 18.441206; Gees Gwardafuy (Cape Guardafui) lat 11.812855; Cape Verde lat 14.732312 (c2). The great-circle distance from Agulhas to Good Hope is about 152 km, 94.7 miles, on a bearing of about 291 degrees, west-north-west (c3, by calculation from those points). For c1, ne_110m_admin_0_countries puts the southernmost African polygon point at -34.82 in South Africa, at Agulhas. Rival test: the Cape of Good Hope is the confident wrong answer, which is why the item is counterintuitive; Cape Guardafui (the tip of the Horn of Africa) and Cape Verde (near Dakar) are Africa's other famous extreme capes, so they are real confusions of the same kind. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a famous point on every world map. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 30 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "28de13e85c61cecf601342d00e525da639d7aa22f656d6e9a85b16dde75086ad",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Cape Agulhas",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "featurecla=cape, region=Africa; and ne_110m_admin_0_countries CONTINENT=Africa",
+              "excerpt": "Cape Agulhas [19.993419,-34.80108] is the most southerly African cape (next: Cape of Good Hope [18.441295,-34.307184]); the southernmost vertex of all African polygons is [19.616405,-34.819166] in South Africa",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The polygon vertex lies at the same latitude as the cape point, about 35 km west of it, a generalization of the 110m coastline."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Cape of Good Hope; name=Gees Gwardafuy (Cape Guardafui); name=Cape Verde (name_en Cap-Vert); name=Cape Agulhas",
+              "excerpt": "Cape of Good Hope [18.441295,-34.307184]; Gees Gwardafuy [51.258314,11.822029]; Cape Verde [-17.47173,14.732489]; Cape Agulhas [19.993419,-34.80108]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "All three distractors have latitudes north of Cape Agulhas."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Cape Agulhas; name=Cape of Good Hope",
+              "excerpt": "Cape Agulhas [19.993419,-34.80108]; Cape of Good Hope [18.441295,-34.307184]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Great-circle distance 152.4 km (94.7 miles), initial bearing 290.7°, which is west-north-west."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dias and da Gama's voyages made the Cape of Good Hope the famous landmark, while Cape Agulhas stayed little known.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IHO's limits of oceans and seas run the Atlantic-Indian boundary down the meridian of Cape Agulhas (20° E).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e25ca46ac6a4571e58be1c015b8732d98275736ddd010dd6e67b5a375d637164",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Cape Agulhas",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Cape Agulhas; name=Cape of Good Hope",
+              "excerpt": "Cape Agulhas lat -34.80; Cape of Good Hope lat -34.31 (Agulhas is further south)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset settles the contested pair. That no other African point lies further south is textbook knowledge, certain."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Cape of Good Hope; name=Cape Verde; name=Cape Agulhas",
+              "excerpt": "Cape of Good Hope lat -34.31; Cape Verde lat 14.73; Cape Agulhas lat -34.80",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Cape Guardafui (Somalia, about 11.8 N) is not in the dataset: knowledge, certain."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Cape Agulhas; name=Cape of Good Hope",
+              "excerpt": "Great-circle distance 152.4 km (94.7 miles), bearing from Agulhas 291 degrees (west-north-west)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Matches 'about 150 km (95 miles)'."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Early European voyages to India made the Cape of Good Hope famous; Cape Agulhas stayed much less known.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IHO's Limits of Oceans and Seas places the Atlantic-Indian Ocean boundary on the meridian of Cape Agulhas (20 degrees E).",
+              "confidence": "certain"
+            },
+            "note": "Standard-risk label, but it is an organization's definition: the other check may want web evidence."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "One distractor is 'Cape Verde'. In an English-language question, most players will read it as the island country (Cabo Verde), not the headland of that name near Dakar. It does not create a second answer, because the stem asks for a cape, but it adds noise. Could be 'Cape Bon' or 'Cape Hangklip'. No change needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c3 carry natural-earth evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. B's Cape Verde note: the option is wrong under either reading, the headland near Dakar or the islands, so no second answer.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which cape is the southernmost point of the African continent?",
+  "answer": "Cape Agulhas",
+  "wrong": ["Cape of Good Hope", "Cape Guardafui", "Cape Verde"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.2,
+    "spread": 0.305,
+    "estimator": "v0"
+  }
+}

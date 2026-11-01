@@ -1,0 +1,253 @@
+{
+  "id": "p.film.0155",
+  "status": "cut",
+  "category": "film",
+  "tags": ["film-making", "cinema-history", "words"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Early previews were shown after the main feature, trailing it, which gave them the name. Cinemas moved them to the start because many people left when the feature ended.",
+  "learnMore": "Trailer (promotion)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "A short preview that advertises a film is called a trailer."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "A prologue opens a story, a montage is a sequence of edited shots, and credits list the people who made a film."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Trailers got their name because early ones were shown after the main feature."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Cinemas moved trailers to before the feature because many people left when the feature ended."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Prologue, montage and credits are real film terms of the same kind; none means an advertisement. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 29 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: the name's origin is widely repeated and should be confirmed from a reference work; the second explanation sentence can go if it proves weak.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9f5ce7925f9d1b358b63320e1822e49a648e92b9bd72b88b3f732bc0bd716710",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Trailer",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A short preview advertising a coming film is called a trailer.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A prologue opens a story, a montage is a sequence of edited shots, and credits list the people who made the film.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The usual explanation is that early trailers were shown after the main feature, hence the name; I cannot confirm that this is the established origin rather than a repeated story.",
+              "confidence": "likely"
+            },
+            "note": "Checker doubt; see the issue. High-risk (etymology), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The usual account says cinemas moved trailers before the feature because audiences left once it ended; same doubt as c3.",
+              "confidence": "likely"
+            },
+            "note": "Checker doubt; see the issue."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Checker doubt on c3 and c4 (the record schema has no checker_doubt issue type): the account that trailers got their name from being shown after the feature, and moved forward because audiences left, is widely repeated, but I could not confirm it against a Tier A or B source because no search could run this session. It needs a dictionary or reference result in a follow-up, or the explanation should use a different, verified fact."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "853d2413d39f545dba2fa793f4fc5998389522b298dfcdf6991b87e117515d02",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Trailer",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A short preview advertising a film is a trailer.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A prologue opens a story, a montage is an edited sequence, credits list the makers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Trailers got their name because early ones were shown after the main feature.",
+              "confidence": "certain"
+            },
+            "note": "Etymology, high-risk; the standard account. Needs check A's external evidence."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cinemas moved them before the feature because many people left when it ended.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-pfilm01t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "cb73db40f42dd1e101b0c5041e22ac2248b2495da78ca3de24191cb6f49f4f63",
+      "startedAt": "2026-11-01T04:36:12Z",
+      "finishedAt": "2026-11-01T04:41:18Z",
+      "coldSolve": {
+        "answerGiven": "Trailer",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c3",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The usual account says the name comes from early previews being screened after the main feature, so they trailed it.",
+            "confidence": "likely"
+          },
+          "note": "Disputed claim: pass A left it uncertain. A high-risk etymology, so the tiebreak needs dataset or web evidence, and none could be gathered. No pinned dataset covers film history, and the one WebSearch call this run made was refused because the shared per-turn search limit was already used up, so no search ran. My own knowledge rates the account likely, not certain: it is widely repeated, but origin stories like this are a known folk-etymology risk (§9.10)."
+        },
+        {
+          "claimId": "c4",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The same account says cinemas moved previews ahead of the feature because audiences walked out once the feature ended.",
+            "confidence": "likely"
+          },
+          "note": "Disputed claim: pass A left it uncertain. It is part of the same origin story as c3 and stands or falls with it. No external evidence could be gathered, for the same reasons."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "Checker doubt on c3 and c4 (the record schema has no checker_doubt type). Without dataset or web evidence this tiebreak cannot stand in for pass A on those claims, so it does not pass. A Tier A or B dictionary or reference result on the origin of the term would settle both; otherwise the explanation needs a different, verified fact. The key (c1) and the distractors (c2) match my cold solve and my knowledge, and neither was disputed."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Second pass. A revise, B pass, T revise: the tiebreak found no dataset or web evidence for c3, a high-risk etymology that A and T rate only likely, or for c4, which stands or falls with it, so T cannot stand in for A (§9.9 rules 2 and 3; an accept dry run is refused on both). Dropping the origin story changes the claims, so no wording fix applies. The key and distractors are sound: redraft under a new id with an explanation built on a verified fact.",
+      "decidedAt": "2026-11-01T04:57:54Z"
+    }
+  },
+  "format": "mc",
+  "stem": "What is the name for a short preview that advertises a film before its release?",
+  "answer": "Trailer",
+  "wrong": ["Prologue", "Montage", "Credits"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.96,
+    "spread": 0.365,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,272 @@
+{
+  "id": "p.sport.0142",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["world-cup", "football", "penalties"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Brazil beat Italy after a 0-0 draw at the Rose Bowl in Pasadena, California, when Roberto Baggio sent Italy's last kick over the bar. Italy won the next shoot-out final, in 2006.",
+  "learnMore": "1994 FIFA World Cup final",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The 1994 men's World Cup final, Brazil against Italy, was the first World Cup final decided by a penalty shoot-out."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 1978 and 1986 finals were won without a shoot-out, and the 2006 shoot-out final came after 1994."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The 1994 final finished 0-0 after extra time at the Rose Bowl in Pasadena, and Brazil won the shoot-out 3-2."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Roberto Baggio took Italy's last penalty in the 1994 shoot-out and shot over the bar."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Italy beat France on penalties in the 2006 men's World Cup final."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup: no final from 1930 to 1990 has a penalties (p) score (c1, c2); 1994/worldcup.json, Final, 17 July 1994, Brazil v Italy, ft 0-0, et 0-0, p 3-2, 'Rose Bowl, Pasadena' (c3); 2006/worldcup.json, Final, Italy v France, ft 1-1, et 1-1, p 5-3 (c5). Baggio's miss (c4) is not in the files, which hold no shoot-out details. rivalTest: 2006 is the trap, being the other famous shoot-out final, but it came second; 1978 and 1986 were settled in play (1978 in extra time). Only 1994 fits 'first'. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 32 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a7e6a1d3b37a670551cfb679d45fdb1907c1d4b1d1d55fa487cd635ee05794b2",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "1994",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 1994/worldcup.json",
+              "locator": "matches[round=Final] score fields",
+              "excerpt": "1990: {\"date\":\"1990-07-08\",\"team1\":\"West Germany\",\"team2\":\"Argentina\",\"score\":[1,0],\"ground\":\"Stadio Olimpico, Rome\"} | 1994: {\"date\":\"1994-07-17\",\"team1\":\"Brazil\",\"team2\":\"Italy\",\"score\":{\"p\":[3,2],\"et\":[0,0],\"ft\":[0,0]},\"ground\":\"Rose Bowl, Pasadena\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "1994 is the first final in the dataset whose score has a penalties field (p); every final from 1930 to 1990 has none, and 1950 had no final."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1978, 1986 and 2006 worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "1978: {\"date\":\"1978-06-25\",\"team1\":\"Netherlands\",\"team2\":\"Argentina\",\"score\":{\"et\":[1,3],\"ft\":[1,1]},\"ground\":\"Estadio Monumental, Buenos Aires\"} | 1986: {\"date\":\"1986-06-29\",\"team1\":\"Argentina\",\"team2\":\"West Germany\",\"score\":[3,2],\"ground\":\"Estadio Azteca, Mexico City\"} | 2006: {\"date\":\"2006-07-09\",\"team1\":\"Italy\",\"team2\":\"France\",\"score\":{\"p\":[5,3],\"et\":[1,1],\"ft\":[1,1],\"ht\":[1,1]},\"ground\":\"Olympiastadion, Berlin\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "1978 was won in extra time and 1986 in 90 minutes; the 2006 shoot-out came after 1994."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1994/worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "{\"round\":\"Final\",\"date\":\"1994-07-17\",\"team1\":\"Brazil\",\"team2\":\"Italy\",\"score\":{\"p\":[3,2],\"et\":[0,0],\"ft\":[0,0]},\"ground\":\"Rose Bowl, Pasadena\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Roberto Baggio took Italy's last penalty in the 1994 shoot-out and put it over the bar.",
+              "confidence": "certain"
+            },
+            "note": "The dataset holds no shoot-out takers. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2006/worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "{\"round\":\"Final\",\"date\":\"2006-07-09\",\"team1\":\"Italy\",\"team2\":\"France\",\"score\":{\"p\":[5,3],\"et\":[1,1],\"ft\":[1,1],\"ht\":[1,1]},\"ground\":\"Olympiastadion, Berlin\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1998, 2002 and 2006 worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "1998: {\"date\":\"1998-07-12\",\"team1\":\"Brazil\",\"team2\":\"France\",\"score\":[0,3],\"ground\":\"Stade de France, Saint-Denis\"} | 2002: {\"date\":\"2002-06-30\",\"team1\":\"Germany\",\"team2\":\"Brazil\",\"score\":[0,2],\"ground\":\"International Stadium Yokohama, Yokohama\"} | 2006: {\"date\":\"2006-07-09\",\"team1\":\"Italy\",\"team2\":\"France\",\"score\":{\"p\":[5,3],\"et\":[1,1],\"ft\":[1,1],\"ht\":[1,1]},\"ground\":\"Olympiastadion, Berlin\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Added by checker A. Role explanation, risk high (first). Claim: The 2006 final was the next World Cup final after 1994 to be decided by a penalty shoot-out. 1998 and 2002 were won in normal time."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "632d973d12bb088da4dc89d61fd3cd18507042910ddd64970ded11ff2dad7447",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "1994",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 1994/worldcup.json (one file per year)",
+              "locator": "round=Final, penalty field",
+              "excerpt": "The first final whose score carries a \"p\" (penalty) field is 1994: {\"p\":[3,2],\"et\":[0,0],\"ft\":[0,0]} for Brazil v Italy. The finals of 1930 to 1990 have none (1934, 1966, 1978 went to extra time only).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1978/worldcup.json, 1986/worldcup.json, 2006/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "1978 Netherlands v Argentina {\"et\":[1,3],\"ft\":[1,1]}; 1986 Argentina v West Germany [3,2]; 2006 Italy v France {\"p\":[5,3],\"et\":[1,1],\"ft\":[1,1]}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1994/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "{\"round\":\"Final\",\"date\":\"1994-07-17\",\"team1\":\"Brazil\",\"team2\":\"Italy\",\"score\":{\"p\":[3,2],\"et\":[0,0],\"ft\":[0,0]},\"ground\":\"Rose Bowl, Pasadena\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Roberto Baggio took Italy's last penalty in 1994 and shot over the bar.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2006/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "{\"round\":\"Final\",\"date\":\"2006-07-09\",\"team1\":\"Italy\",\"team2\":\"France\",\"score\":{\"p\":[5,3],\"et\":[1,1],\"ft\":[1,1],\"ht\":[1,1]},...}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c4 (explanation, date) rests on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In which year was a men's World Cup final first decided by a penalty shoot-out?",
+  "answer": "1994",
+  "wrong": ["1978", "1986", "2006"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.251,
+    "estimator": "v0"
+  }
+}

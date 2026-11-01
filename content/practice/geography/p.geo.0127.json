@@ -1,0 +1,228 @@
+{
+  "id": "p.geo.0127",
+  "status": "active",
+  "category": "geo",
+  "tags": ["canals", "maps", "central-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Panama's isthmus bends in an S-shape, so the canal runs roughly north-west to south-east. Panama City, at the Pacific end, lies east of Colón, at the Atlantic end.",
+  "learnMore": "Panama Canal",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Pacific entrance of the Panama Canal, beside Panama City, lies further east than its Atlantic entrance at Colón."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Isthmus of Panama curves in an S-shape."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Panama Canal runs roughly from north-west to south-east."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Panama City lies at about 79.5° W and Colón at about 79.9° W."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 and c4 compare longitudes, so both are high; c2 and c3 are standard. Datasets: geonames-cities: Colón PA admin1 04 lat 9.36025, lng -79.90019; Panama City PA admin1 08 lat 8.9936, lng -79.51973. The Pacific end is about 0.38° (some 40 km) east of the Atlantic end (c1, c4). The canal's terminal ports, Balboa and Cristóbal, sit beside these cities in the same east-west order. Rival test: argued for false: intuition says the Pacific is 'west', and the statement sounds like a trick, but it rests on measured coordinates and is a well-known quirk of the canal; nothing in it depends on a misread word. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the Panama Canal is world-famous; the fact is pure map geography. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 28 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none. Seeded 5 and counterintuitive: most players will answer false.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7102c720ef4f46aab63fdef58a000c514e09af6891c8bc6c3bae6555d2243d9c",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Panama City, country=PA, admin1=08; name=Colón, country=PA, admin1=04",
+              "excerpt": "{\"name\":\"Panama City\",\"lat\":\"8.9936\",\"lng\":\"-79.51973\",\"country\":\"PA\",\"admin1\":\"08\",\"admin2\":\"0808\"} | {\"name\":\"Colón\",\"lat\":\"9.36025\",\"lng\":\"-79.90019\",\"country\":\"PA\",\"admin1\":\"04\",\"admin2\":\"0301\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Panama City at longitude -79.51973 is east of Colón at -79.90019. The canal entrances sit beside these cities, which is from knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Isthmus of Panama bends in an S shape, running roughly east-west.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The canal runs from Colón in the north-west to Panama City in the south-east.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Panama City, country=PA, admin1=08; name=Colón, country=PA, admin1=04",
+              "excerpt": "{\"name\":\"Panama City\",\"lat\":\"8.9936\",\"lng\":\"-79.51973\",\"country\":\"PA\",\"admin1\":\"08\",\"admin2\":\"0808\"} | {\"name\":\"Colón\",\"lat\":\"9.36025\",\"lng\":\"-79.90019\",\"country\":\"PA\",\"admin1\":\"04\",\"admin2\":\"0301\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "-79.51973 rounds to 79.5° W and -79.90019 to 79.9° W."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "fc62e92927ac5c8b68f8e3b865c284fe38b550c9c94f40552e47de28b4451d3a",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Panama City,country=PA,admin1=08; name=Colón,country=PA,admin1=04",
+              "excerpt": "Panama City PA/08: lat 8.9936, lng -79.51973 | Colón PA/04: lat 9.36025, lng -79.90019",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Panama City -79.51973 is east of Colon -79.90019. The canal entrances sit beside these two cities."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Isthmus of Panama curves in an S-shape, east-west along most of its length.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "From the Atlantic (Colon) end to the Pacific (Panama City) end the canal runs north-west to south-east.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Panama City,country=PA,admin1=08; name=Colón,country=PA,admin1=04",
+              "excerpt": "Panama City PA/08: lat 8.9936, lng -79.51973 | Colón PA/04: lat 9.36025, lng -79.90019",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c4 carry geonames-cities evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The Panama Canal's Pacific entrance lies further east than its Atlantic entrance.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.223,
+    "estimator": "v0"
+  }
+}

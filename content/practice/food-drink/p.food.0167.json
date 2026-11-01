@@ -1,0 +1,229 @@
+{
+  "id": "p.food.0167",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-history", "spice", "india"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Chillies, native to the Americas, reached India after 1500 on European ships. Romans had imported Indian black pepper some 1,500 years earlier. Before chillies, Indian cooks got heat from pepper and ginger.",
+  "learnMore": "Chili pepper",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Black pepper imported from India was widely used in Roman cooking by the 1st century AD."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Chilli peppers, native to the Americas, reached India only after 1500, carried by European traders."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Before chillies arrived, Indian cooking got its heat from black pepper, ginger and other seasonings."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c2). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: the gap is about 1,400 years whichever dates are taken (Roman pepper trade from the 1st century BC, chillies no earlier than 1498), so the answer is safe. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Indian players may know the chilli's late arrival; for everyone else it is a surprise. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 32 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: Indian food is so closely linked with chilli that many players assume it is ancient. Doubts: c1 and c2 need dated evidence. The explanation says European ships rather than naming the Portuguese, so it gives nothing away to p.food.0153.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ac9a004e64df0b1ec4f42bf5c8dc1e54a16ca5fa2655c7bca965ff1e8b643811",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Romans cooking with black pepper",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "By the 1st century AD Rome imported Indian black pepper in bulk; Pliny the Elder complained of the cost, and Domitian built pepper warehouses (horrea piperataria) in Rome.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed on certain knowledge only. Two calls, both counted here. The first (query 'chili peppers native to the Americas reached India after 1500 with Portuguese traders; ancient Romans imported black pepper from India by the 1st century AD; sweet potatoes grown in Polynesia centuries before Columbus reached the Americas in 1492') said its results did not confirm the 1st-century date, and it counts at Tier C (unattributed, a Tier C preprint among its results). The Britannica-only call confirms Roman trade in Indian pepper and tributes levied in pepper, but gives no date. Still needs evidence. The comparison holds on any date before 1500."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "black pepper from India in ancient Roman trade and cooking, and when chili peppers from the Americas were introduced to India by the Portuguese",
+              "results": [
+                {
+                  "title": "English Words from India",
+                  "url": "https://www.britannica.com/topic/List-of-English-Words-from-India"
+                },
+                {
+                  "title": "Spice trade",
+                  "url": "https://www.britannica.com/money/spice-trade"
+                },
+                {
+                  "title": "black pepper - Scholars",
+                  "url": "https://kids.britannica.com/scholars/article/black-pepper/15499"
+                },
+                {
+                  "title": "Indian cuisine",
+                  "url": "https://www.britannica.com/topic/Indian-cuisine"
+                },
+                {
+                  "title": "Black pepper",
+                  "url": "https://www.britannica.com/plant/black-pepper-plant"
+                },
+                {
+                  "title": "Black pepper",
+                  "url": "https://www.britannica.com/topic/black-pepper-spice"
+                },
+                {
+                  "title": "Method and composition for treating oral pain using capsaicin",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/5788982"
+                },
+                {
+                  "title": "Mycobiota and Natural Incidence of Aflatoxins, Ochratoxin A, and Citrinin in Indian Spices Confirmed by LC-MS/MS",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4503550/"
+                },
+                {
+                  "title": "Volatiles of Black Pepper Fruits (Piper nigrum L.)",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6930617/"
+                }
+              ],
+              "summaryExcerpt": "The results describe Portuguese traders as the ones who brought chilies to India, but they don't give a precise year. One source says that Portuguese traders of the 16th century introduced a range of New World produce, including potatoes, tomatoes, papayas, guavas, cashews, and chillies, and that these all thrived in the Indian tropical climate.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Britannica-only query; the results are Britannica pages plus two PubMed Central papers and a patent (Tier A). The 16th century is after 1500."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Before chillies, Indian cooks got heat from black pepper, long pepper, ginger and mustard.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 2,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "95679a9ea4639d4af693ddad93c69c054ca99755dc3a1b726151c865587391f4",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Romans cooking with black pepper",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Black pepper from India was a major Roman import by the 1st century AD, as Pliny the Elder's complaints about its price show.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Chillies are from the Americas and reached India with the Portuguese in the 16th century, after da Gama's arrival in 1498; none before.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Before chillies, Indian dishes got heat from black and long pepper, ginger and mustard.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "fix",
+            "note": "'Indians cooking with chillies' has a second reading: Indigenous peoples of the Americas, long called Indians, cooked with chillies thousands of years before Roman pepper, which flips the answer. Relabel as 'Cooks in India using chillies' or 'People in India cooking with chillies'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "B revise: the label Indians cooking with chillies can be read as Indigenous Americans, who cooked with chillies long before Roman pepper, which flips the answer (§3.2). Relabelling changes a claim-bearing label, and c1 has no countable external evidence (A's calls count at Tier C or give no date), so a tiebreak cannot save it as written. Cut.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Romans cooking with black pepper",
+  "b": "Indians cooking with chillies",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "approximate date",
+  "unit": "year",
+  "values": {
+    "a": 100,
+    "b": 1500
+  },
+  "valueDisplay": {
+    "a": "by the 1st century AD",
+    "b": "after 1500"
+  },
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.327,
+    "estimator": "v0"
+  }
+}

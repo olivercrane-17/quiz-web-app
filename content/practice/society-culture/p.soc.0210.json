@@ -1,0 +1,217 @@
+{
+  "id": "p.soc.0210",
+  "status": "active",
+  "category": "soc",
+  "tags": ["festivals", "chinese-new-year", "china", "lanterns"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "It falls on the first full moon of the lunar year. Families hang lanterns, guess riddles written on them and eat sweet rice balls called tangyuan.",
+  "learnMore": "Lantern Festival",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Lantern Festival, on the 15th day of the first lunar month, marks the end of the Chinese New Year celebrations."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Dragon Boat Festival, Mid-Autumn Festival and Qingming Festival fall at other times of the year."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The Lantern Festival falls on the first full moon of the lunar year."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Lantern Festival customs include hanging lanterns, guessing riddles written on them and eating sweet rice balls called tangyuan (also yuanxiao)."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: festivals and calendars. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers festivals; c1 and c3 need web evidence. rivalTest: the Mid-Autumn Festival also falls on a 15th day at a full moon, which makes it the trap, but in the eighth month; the Dragon Boat Festival is on the fifth day of the fifth month and Qingming in early April. p.food.0242 asks about mooncakes and the Mid-Autumn Festival with the Lantern Festival as a distractor: related, not the same fact. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: Chinese New Year is celebrated worldwide, and the lantern name gives a foothold. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 26 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 3 (medium): many guess it from the lanterns; the Mid-Autumn Festival pulls others. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "bb27f14517758686f6cd7d2cb984a0f4e0577f3ffa15d9ffce75e1883b012ad3",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "Lantern Festival",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Lantern Festival (Yuanxiao) on the 15th day of the first lunar month closes the New Year period.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Dragon Boat Festival falls on the 5th day of the 5th month, the Mid-Autumn Festival on the 15th day of the 8th month, and Qingming in early April.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 15th day of the first lunar month is the first full moon of the lunar year.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lantern Festival customs include hanging lanterns, guessing riddles written on them and eating tangyuan, also called yuanxiao.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c000d463ff604fe0a9556356fcb3930ee39ea83e226a0f8587358bca6efc1113",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "Lantern Festival",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Lantern Festival is on the 15th day of the first lunar month and ends the New Year celebrations.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dragon Boat is the 5th day of the 5th lunar month, Mid-Autumn the 15th of the 8th, and Qingming is in early April.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lunar months start at the new moon, so the 15th day of month one is the first full moon of the lunar year.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lanterns, lantern riddles and sweet rice balls (tangyuan, yuanxiao) are Lantern Festival customs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, number) and c3 (explanation, first) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. The gap includes the key, a label or a distractor, so the redraft needs evidence for the question itself. Redraft under a new id.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which festival, on the 15th day of the first lunar month, closes the Chinese New Year celebrations?",
+  "answer": "Lantern Festival",
+  "wrong": ["Dragon Boat Festival", "Mid-Autumn Festival", "Qingming Festival"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.193,
+    "estimator": "v0"
+  }
+}

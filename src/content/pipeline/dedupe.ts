@@ -20,10 +20,14 @@
  * as "a public item" with no id, score or reason, and look for a plaintext
  * item's nearest neighbour among public entries only. `--reveal` shows the
  * pair. Stored records follow: a plaintext item whose nearest is sealed
- * records `nearestId: "sealed"` and `score: null`.
+ * records `nearestId: "sealed"` and `score: null`. So does one whose nearest
+ * is a guide example of a sealed kind (a mystery, encore or room question,
+ * such as `m.geo.0001`): its id has the shape of a sealed id, and nothing
+ * reading a public file (the secret scan included) can tell the two apart.
  */
 import type { AnswerEntity } from "../schema/answer-lists.ts";
 import { SEALED_NEAREST } from "../schema/verification.ts";
+import { parseItemId } from "./ids.ts";
 import { foldName, foldedWords } from "./text.ts";
 
 export const DEDUPE_FLAG = 0.5;
@@ -384,8 +388,23 @@ export function entityNamer(
 }
 
 /**
+ * True when `id` (a bank id, or a guide entry's `guide:<id>`) lies in a
+ * sealed pool's id space: a mystery, encore or room question. The guide's
+ * reserved example ids (batch 00, rooms 90 to 99, such as `e.0004`) have the
+ * same shape as sealed ones.
+ */
+export function namesSealedKind(id: string | null): boolean {
+  if (id === null) return false;
+  const pool = parseItemId(id.replace(/^guide:/, ""))?.pool;
+  return pool === "mystery" || pool === "encore" || pool === "room";
+}
+
+/**
  * The verification.dedupe record for an item, safe for the item's own file:
- * a plaintext item never stores a sealed neighbour's id or score.
+ * a plaintext item never stores a sealed neighbour's id or score, and never
+ * any id in a sealed pool's id space, so a nearest guide example of a sealed
+ * kind is stored the same way (`nearestId: "sealed"`, `score: null`).
+ * content:decide and `content:dedupe -- --write` both write through here.
  */
 export function dedupeRecordFor(
   selfSealed: boolean,
@@ -398,7 +417,10 @@ export function dedupeRecordFor(
   score: number | null;
   verdict: "unique" | "related_ok" | "duplicate";
 } {
-  if (!selfSealed && match.nearestSealed) {
+  if (
+    !selfSealed &&
+    (match.nearestSealed || namesSealedKind(match.nearestId))
+  ) {
     return { checkedAt, nearestId: SEALED_NEAREST, score: null, verdict };
   }
   return {

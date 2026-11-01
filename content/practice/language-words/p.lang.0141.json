@@ -1,0 +1,221 @@
+{
+  "id": "p.lang.0141",
+  "status": "active",
+  "category": "lang",
+  "tags": ["scripts", "arabic", "writing-systems"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Hebrew, Persian and Urdu scripts also run right to left. Numbers are the exception: in Arabic text, multi-digit numbers are still read from left to right.",
+  "learnMore": "Arabic script",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Arabic script is written from right to left."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Arabic script is not written left to right or top to bottom."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hebrew script and the Arabic-based scripts of Persian and Urdu are also written right to left."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Multi-digit numbers in Arabic text read from left to right."
+    }
+  ],
+  "writerNotes": "Two distractors on purpose: bottom to top would be filler. The number fact surprises even people who know the direction. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers writing direction; rival test: top to bottom is how Chinese and Japanese were traditionally written, which is why it tempts; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: Arabic signs are seen worldwide; a fair easy item; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4ac8182366bff048135f95d1034ed1fa27d2172dcd7440e7261ab26ff205ce88",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Right to left",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Arabic script is written from right to left.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Arabic is not written left to right or top to bottom.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hebrew script, and the Arabic-based scripts of Persian and Urdu, also run right to left.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Arabic text, numbers are written with the most significant digit on the left, so their digits run left to right.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Explanation and c4 say numbers are 'read' left to right. That is true of the written order of digits, but spoken Arabic puts units before tens (25 is 'five and twenty'), so 'written' would be more exact than 'read'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c7c11bb1e36c9d30a3769ad580e28b9661e7c64469f9bd891811142a64dd9313",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Right to left",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Arabic script is written from right to left.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It is not written left to right or top to bottom.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hebrew script, and the Arabic-based scripts used for Persian and Urdu, also run right to left.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Numbers in Arabic text are written with the most significant digit first, so they read left to right.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "accept",
+      "reason": "Both checks pass, with every claim standard and certain in both. A's note on 'read' versus 'written' for the digits of a number is a nuance, not an error, and both checks confirmed c4 as worded. Three options by design, since a fourth direction would be filler (§4 rule 9).",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:43Z",
+      "nearestId": "p.lang.0227",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In which direction is Arabic script written?",
+  "answer": "Right to left",
+  "wrong": ["Left to right", "Top to bottom"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.9,
+    "spread": 0.237,
+    "estimator": "v0"
+  }
+}

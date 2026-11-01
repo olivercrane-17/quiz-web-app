@@ -1,0 +1,248 @@
+{
+  "id": "p.nat.0210",
+  "status": "checking",
+  "category": "nat",
+  "tags": ["mammals", "giraffes", "africa", "rainforest"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Okapis and giraffes are the only living members of the giraffe family. Male okapis even have short, skin-covered horns, and both strip leaves with long, flexible tongues.",
+  "learnMore": "Okapi",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The okapi belongs to the giraffe family, Giraffidae."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Zebras, antelopes and tapirs belong to other families (the horse family, the cattle and antelope family, and the tapir family), not the giraffe family."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The okapi and the giraffe are the only living members of the giraffe family, Giraffidae."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Male okapis have short, skin-covered horns (ossicones), like those of giraffes."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Okapis and giraffes use long, flexible tongues to strip leaves."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed; high: c1 (checker_doubt, standing in for counterintuitive, which the tooling's riskReason enum lacks; C26 makes the key of a counterintuitive item high) and c3 (superlative); standard: c2, c4 and c5. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on the okapi and the giraffe family should cover c1, c3 and c4. rivalTest: Argued for the zebra, the trap the stripes set, which is why counterintuitive is set. The horse was dropped as a distractor because it shares the zebra's family, which would let a test-wise player strike both at once; the antelope tempts because, like the giraffe, it is an even-toed grazer of the African plains. Argued against the key: each giraffe species counts as a giraffe, so the split of giraffes into several species does not create a second answer. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: okapis live in the rainforests of the Democratic Republic of the Congo; the stem names the region, and the foothold (stripes against family) needs no local knowledge. style: Oxford spelling, plain hyphens only, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none. c3 holds 'only', which the tooling's riskReason enum lacks, so it is marked superlative, as the guide treats 'only' over a fixed set.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "21f6956c0d40c7ae56697e14b4128a30ce65be199f4cd7af0edfec84f4926a6d",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "Giraffe",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The okapi (Okapia johnstoni) belongs to Giraffidae, the giraffe family.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Zebras are equids, antelopes are bovids and tapirs are tapirids, so none of them is a giraffid.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The giraffe family survives as two genera only: Okapia (the okapi) and Giraffa (the giraffes).",
+              "confidence": "certain"
+            },
+            "note": "Confirmed as c3 is worded (the okapi and the giraffe, read as two kinds). The explanation's 'only two living members' is a count that depends on taxonomy; see x1 and the wording issue. High-risk (superlative): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Male okapis carry short, skin-covered ossicones; females lack them or have only small bumps.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Okapis and giraffes both strip leaves with long, prehensile tongues.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "By genus the giraffe family has two living members, Okapia and Giraffa. By species it has two only if every giraffe belongs to one species, and several authorities now treat the giraffe as four species.",
+              "confidence": "likely"
+            },
+            "note": "Addition (role explanation, high risk: number). Claim: 'Okapis and giraffes are the only two living members of the giraffe family' (the explanation's first sentence). True by genus, contestable by species, so uncertain as written. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "The explanation's 'the only two living members of the giraffe family' holds by genus (Okapia and Giraffa) but not by species if the giraffe is split, as several authorities now split it into four species. Drop 'two' (for example 'the only living members of the giraffe family') so it holds under either taxonomy. See x1."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ea00dd0d253c63cc13d28c71f8dca9cf2b01f39715b035d3ccbed05cd33c7216",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "Giraffe",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The okapi belongs to Giraffidae, the giraffe family.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Zebras are equids, antelopes are bovids and tapirs are tapirids, so none is in the giraffe family.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Giraffidae has only two living genera, Giraffa and Okapia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Male okapis have short, skin-covered ossicones, as giraffes do.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Okapis and giraffes both have very long, flexible tongues that they use to strip leaves.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "rewrite",
+      "reason": "Wording only (§9.7), the fix A asks for: 'the only two living members of the giraffe family' becomes 'the only living members of the giraffe family', which is claim c3 exactly as both checks confirmed it, so the explanation no longer depends on whether the giraffe is one species or four (A's addition x1). No claim changes. A's revise verdict stands and high-risk c1 and c3 still lack external evidence, so the item waits for a tiebreak T with external evidence (§9.7, §9.9 rules 2 and 3). [wording-only rewrite by ed-pnat02d at 2026-11-01T04:21:42Z of explanation; checks kept, packetSha256 re-stamped: pass A 5f30c6e3c170c0247b1431deb02d76e578b2deef6437c70dab74aa6f17d73abe -> 21f6956c0d40c7ae56697e14b4128a30ce65be199f4cd7af0edfec84f4926a6d; pass B a3057d01953ede5b3e9006e9f167a945f433957adc580d1aac6b573c192780c3 -> ea00dd0d253c63cc13d28c71f8dca9cf2b01f39715b035d3ccbed05cd33c7216]",
+      "decidedAt": "2026-11-01T04:21:42Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The okapi of Central Africa has zebra-like stripes on its legs. Which animal's family does it belong to?",
+  "answer": "Giraffe",
+  "wrong": ["Zebra", "Antelope", "Tapir"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.235,
+    "estimator": "v0"
+  }
+}

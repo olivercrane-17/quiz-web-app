@@ -1,0 +1,221 @@
+{
+  "id": "p.book.0116",
+  "status": "active",
+  "category": "book",
+  "tags": ["comics", "french-comics"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The druid Getafix brews it, with mistletoe among the ingredients. Obelix needs none, because he fell into the cauldron as a baby and the effect stayed.",
+  "learnMore": "Asterix",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In Asterix, a magic potion brewed by the druid Getafix gives the Gauls superhuman strength."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Gauls owe their strength to the potion, not to boar meat, a ring or a charm."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mistletoe is among the ingredients of Getafix's potion."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Obelix fell into a cauldron of the potion as a baby, so its effect on him is permanent."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: comics and graphic novels. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means). Datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for any claim they rate below certain (all claims here are standard). Rival test: Roast boar is Obelix's favourite food and the likeliest wrong pick; ring and charm are generic fantasy sources. The potion is the series' central device. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: Asterix is best known in Europe, but it is translated into over a hundred languages and the potion is the answer a fantasy-literate player reaches by reasoning, so the item stays fair elsewhere. Style: Oxford spelling, plain hyphens only, explanation of 26 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "265b58819e9c983e2de5bbd61c00f839a5c4a14550e51d6c0c36a4a09385770e",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "A magic potion",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The druid Getafix brews the magic potion that gives the Gauls superhuman strength.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Their strength comes from the potion, not from boar, a ring or a charm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mistletoe, cut with a golden sickle, is a key ingredient of the potion.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Obelix fell into the cauldron as a baby, so the potion's effect on him is permanent.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "05abded7604b0e4a1f18c354229fc6c61b4198fab4ee37e6d54887b485b72ef9",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "A magic potion",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "In Asterix the druid Getafix's magic potion gives the villagers superhuman strength.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The villagers love roast boar, but their strength comes from the potion, not from a ring or charm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mistletoe, cut with Getafix's golden sickle, is the best-known ingredient of the potion.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Obelix fell into the potion cauldron as a baby and his strength never wears off.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'The Gauls' here means the villagers of Asterix's village, not Gauls in general. Harmless for the intended reading, and two of the distractors (charm, ring) are generic fillers rather than real confusions."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Both checks pass on certain knowledge; all claims standard. B's note on two generic distractors is a quality note, not a defect; the boar distractor carries the item.",
+      "decidedAt": "2026-11-01T04:03:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "nearestId": "p.book.0273",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In the Asterix comics, what gives the Gauls their superhuman strength?",
+  "answer": "A magic potion",
+  "wrong": ["Roast wild boar", "A sacred ring", "A lucky charm"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.84,
+    "spread": 0.335,
+    "estimator": "v0"
+  }
+}

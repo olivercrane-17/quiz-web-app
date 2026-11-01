@@ -1,0 +1,252 @@
+{
+  "id": "p.food.0111",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-history", "agriculture", "nobel-prizes"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "His short-stemmed, disease-resistant wheat sharply raised harvests in Mexico and South Asia, part of the shift in farming known as the Green Revolution.",
+  "learnMore": "Norman Borlaug",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Norman Borlaug bred high-yield, disease-resistant wheat varieties."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Norman Borlaug was awarded the 1970 Nobel Peace Prize, for his contribution to the green revolution."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Borlaug's prize-winning breeding work was on wheat, not on rice, maize or soya beans."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Borlaug's semi-dwarf, disease-resistant wheat varieties greatly increased harvests in Mexico and in South Asia, notably India and Pakistan."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "This rise in crop yields is known as the Green Revolution."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c2). Datasets: c2 checked in nobel-prizes (prize.json, year 1970, category peace): laureate Norman Borlaug, share 1, motivation 'for having given a well-founded hope - the green revolution'. The motivation does not name wheat, so c1 rests on knowledge. Rival test: rice is the strong distractor, because Green Revolution rice (IR8) came from IRRI, a different programme; Borlaug's own breeding was wheat. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the Green Revolution is taught as world history; Indian and Mexican players may know Borlaug better, which seems fair for a global figure. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 23 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: few know Borlaug, but wheat is a reasonable guess for many. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6ef276a239bc39cecc79bbd22c22365924791108d39937fa706d130d6887906a",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Wheat",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Borlaug bred high-yielding, disease-resistant semi-dwarf wheat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=\"1970\", category=\"peace\"]",
+              "excerpt": "{\"year\":\"1970\",\"category\":\"peace\",\"laureates\":[{\"id\":\"528\",\"firstname\":\"Norman\",\"surname\":\"Borlaug\",\"motivation\":\"\\\"for having given a well-founded hope - the green revolution\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The Nobel record gives the 1970 Peace Prize to Borlaug, citing the green revolution."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Borlaug's prize-winning breeding was on wheat; the Green Revolution's rice varieties came from IRRI, not from him.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "His semi-dwarf wheats sharply raised yields in Mexico and then in India and Pakistan in the 1960s.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "That rise in yields is known as the Green Revolution.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "428f85e68ed631dfc973d4768e9ddaeb01146836db23ce4e4e730e5ec3683c72",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Wheat",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Borlaug bred semi-dwarf, rust-resistant, high-yield wheat in Mexico.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=1970, category=peace]",
+              "excerpt": "\"firstname\":\"Norman\",\"surname\":\"Borlaug\",\"motivation\":\"\\\"for having given a well-founded hope - the green revolution\\\"\",\"share\":\"1\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "High-risk date claim with external evidence: the dataset lists Borlaug as sole Peace laureate of 1970, and its motivation names the green revolution, which matches the claim's paraphrase."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Borlaug led wheat breeding; maize was led by colleagues in the same Mexican programme and rice by IRRI, so wheat is the work the prize recognised.",
+              "confidence": "certain"
+            },
+            "note": "Tried maize: Borlaug later promoted maize and sorghum in Africa, but that was not the prize-winning breeding. Wheat is the only defensible answer."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Semi-dwarf wheat lifted yields in Mexico, India and Pakistan from the 1960s.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The surge in crop yields is called the Green Revolution.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. The 1970 prize (c2) has nobel-prizes dataset evidence in both checks. Dedupe flag reviewed: the nearest items test other facts, so related_ok (§9.9 rule 5).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Norman Borlaug won the 1970 Nobel Peace Prize for his work breeding high-yield varieties of which crop?",
+  "answer": "Wheat",
+  "wrong": ["Rice", "Maize", "Soya beans"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.437,
+    "estimator": "v0"
+  }
+}

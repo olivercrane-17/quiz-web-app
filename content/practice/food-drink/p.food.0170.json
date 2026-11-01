@@ -1,0 +1,185 @@
+{
+  "id": "p.food.0170",
+  "status": "active",
+  "category": "food",
+  "tags": ["national-dishes", "italy", "pizza"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "True Neapolitan pizza is baked very quickly in a wood-fired oven, which puffs and chars its soft rim, called the cornicione in Italian.",
+  "learnMore": "Pizza Margherita",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The pizza Margherita originated in Naples."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The pizza Margherita did not originate in Rome, Milan or Venice."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Neapolitan pizza is baked very quickly in a wood-fired oven, which puffs and chars its soft rim, called the cornicione."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: geonames-cities lists Naples (country IT, admin2 NA); the dish's origin rests on knowledge. Rival test: Rome has its own pizza styles, but the Margherita is Neapolitan; the story that it was named for Queen Margherita in 1889 is disputed, so the item does not use it. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: pizza is eaten everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 23 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 1: a very easy opener. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "3ee9dc7d9d9861e25f68d8807a4d0c8de16e65ae1caf5e37ecd8d7de686a467c",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Naples",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The pizza Margherita comes from Naples.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It did not originate in Rome, Milan or Venice.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Neapolitan pizza bakes in about a minute or two in a wood-fired oven, which puffs and chars the rim, the cornicione.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2794c826541854451606dc6b11a7984da98987ede692ed0cdda706bd495d8b67",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Naples",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pizza Margherita is a Neapolitan pizza, tied to Raffaele Esposito and the year 1889.",
+              "confidence": "certain"
+            },
+            "note": "The Queen Margherita story is a legend, but the key is only the city, and no other city competes."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Rome, Milan and Venice are not the birthplace of pizza Margherita.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Neapolitan pizza bakes very fast in a wood-fired oven, and the puffed charred rim is called the cornicione.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Italian city is the home of the pizza Margherita?",
+  "answer": "Naples",
+  "wrong": ["Rome", "Milan", "Venice"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.78,
+    "spread": 0.295,
+    "estimator": "v0"
+  }
+}

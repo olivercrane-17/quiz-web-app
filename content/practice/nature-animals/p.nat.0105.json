@@ -1,0 +1,285 @@
+{
+  "id": "p.nat.0105",
+  "status": "active",
+  "category": "nat",
+  "tags": ["mammals", "marsupials", "australia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Koalas evolved fingerprints separately from primates, probably to help grip branches and handle eucalyptus leaves. The ridges form loops and whorls much like ours.",
+  "learnMore": "Koala",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Koalas have fingerprints that closely resemble human fingerprints."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Kangaroos, wombats and Tasmanian devils do not have human-like fingerprints."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Koala fingerprints evolved independently of primate fingerprints."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Koala fingerprints may help them grip branches and handle food."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Koala fingerprint ridges form loops and whorls like human ones."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed, all standard: no number or trigger word. c4 is hedged with 'may' and 'probably' in the text because the purpose is a hypothesis. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: primates also have fingerprints, so the options are all marsupials and none is a primate. Kangaroos, wombats and Tasmanian devils have no such ridges. Argued against the key: the koala resemblance is a well-known finding from forensic comparisons in the 1990s. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: Australian animals, but the koala is known worldwide and the foothold (grasping hands) needs no local knowledge. style: Oxford spelling, plain hyphens only, explanation of 24 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: I am confident on c1 and c2; c3 rests on koalas and primates being distant lineages, which is settled.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "745584a409aca50b797221442dc6321e62ad3b9fa6cb5ad01c7656cf66837664",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Koala",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Koalas have finger ridges that are very hard to tell from human fingerprints (Henneberg and colleagues, 1996).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Among the four marsupials offered, only the koala is known for human-like fingerprints.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Koala fingerprints evolved convergently; their close relatives and most marsupials lack them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ridges are thought to aid grip when climbing and handling leaves.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Koala print ridges show loops, whorls and arches like human prints.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "32c2a08e9239e8fb324c3f843572934141e8e03354be84d7e9b35301914eb17a",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Koala",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "koala fingerprints indistinguishable from human; do wombats or kangaroos have fingerprints friction ridges marsupials",
+              "results": [
+                {
+                  "title": "Fingerprint ridges allow primates to regulate grip",
+                  "url": "https://www.pnas.org/doi/pdf/10.1073/pnas.2001055117"
+                },
+                {
+                  "title": "Fingerprint",
+                  "url": "https://en.wikipedia.org/wiki/Fingerprint"
+                },
+                {
+                  "title": "Hand",
+                  "url": "https://en.wikipedia.org/wiki/Hand"
+                },
+                {
+                  "title": "Topological summaries of fingerprint ridge patterns carry identity information",
+                  "url": "https://arxiv.org/pdf/2606.22029"
+                },
+                {
+                  "title": "Scanning device using high-resolution moisture discriminating optics",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/12608973"
+                },
+                {
+                  "title": "System and method for identifying features of a friction ridge signature based on information representing a topography of friction ridges",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/10740902"
+                },
+                {
+                  "title": "System and method for identifying features of a friction ridge signature based on information representing a topography of friction ridges",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/11302013"
+                },
+                {
+                  "title": "The evaluation of latent fingerprints exposed to different snow conditions and their usability in forensics",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12643014/"
+                },
+                {
+                  "title": "System and method for generating a representation of variations in elevation of friction ridges in a friction ridge pattern",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/10032063"
+                }
+              ],
+              "summaryExcerpt": "A Wikipedia article on fingerprints reports that according to one study, even with an electron microscope, it can be quite difficult to distinguish between the fingerprints of a koala and a human. A PNAS paper on grip notes that fingerprints are unique to primates and koalas.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Wikipedia (Fingerprint) and a PNAS paper on grip both single out koalas as the only non-primates with fingerprints; the first says even electron microscopy struggles to separate koala from human prints."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Among Australian marsupials only the koala is known for human-like fingerprints; kangaroos, wombats and Tasmanian devils are not.",
+              "confidence": "certain"
+            },
+            "note": "The search did not mention wombats or kangaroos directly, but the PNAS line that fingerprints are unique to primates and koalas agrees."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Koalas and primates are only distantly related, so koala fingerprints arose independently (convergent evolution).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fingerprint ridges are thought to improve grip; for koalas that fits climbing and handling leaves, and the claim is hedged with \"may\".",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Koala fingerprint patterns include the loops and whorls seen in human prints.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 5 claims confirmed in both checks; no high-risk claims; knowledge confirmations at certain, plus c1 web in B. Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which animal has fingerprints that look remarkably like a human's?",
+  "answer": "Koala",
+  "wrong": ["Kangaroo", "Wombat", "Tasmanian devil"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.23,
+    "estimator": "v0"
+  }
+}

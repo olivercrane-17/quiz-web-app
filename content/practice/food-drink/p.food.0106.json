@@ -1,0 +1,205 @@
+{
+  "id": "p.food.0106",
+  "status": "cut",
+  "category": "food",
+  "tags": ["tea", "drinks", "food-science"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Both come from the same shrub, Camellia sinensis. For green tea the leaves are heated soon after picking to stop oxidation; for black tea they are rolled and left to darken.",
+  "learnMore": "Black tea",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Black tea differs from green tea mainly in processing: black tea leaves are allowed to oxidize fully, while green tea leaves are heated to stop oxidation."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Black and green tea come from the same plant species, Camellia sinensis, and black tea is defined neither by older leaves nor by smoking."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "For green tea, the leaves are steamed or pan-fired soon after picking, which stops oxidation."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "For black tea, the leaves are withered, rolled and left to oxidize, which darkens them."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: 'a different plant' is the planted misconception; Assam tea uses the assamica variety, but that is still Camellia sinensis, and green tea can be made from it too. Smoked leaves describe one black tea, lapsang souchong, not what makes black tea black. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: tea is drunk everywhere, and the misconception is common in every tea-drinking country. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 31 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: I expect most players to pick 'a different plant'. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a56befeb071ea6be83fa5b43c142d2fa9e184a37da291bfd55ec3ae42df14192",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Oxidized leaves",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Black and green tea come from the same leaves; black tea is left to oxidize fully, while green tea is heated soon after picking to stop oxidation.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. No pinned dataset covers it and this check's share of the batch search cap went to claims with numbers and dates, so it still needs dataset or web evidence (a follow-up) before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Both come from Camellia sinensis; black tea is defined by oxidation, not by leaf age or smoking (smoked teas such as lapsang souchong are a special case).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Green tea leaves are steamed (the Japanese way) or pan-fired (the Chinese way) soon after picking, which stops the oxidizing enzymes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Black tea leaves are withered, rolled and left to oxidize, which turns them dark.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Black tea is often made from the assamica variety and green tea from the sinensis variety of the same species, so a pedant could argue for 'A different plant'. Both are Camellia sinensis, and the stem's 'mainly' covers it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e60d50565f57c4605c1959b6c7fd969eb6085c2a1ff8e51c7e18091a8956569d",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Oxidized leaves",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Black tea leaves are withered, rolled and fully oxidised; green tea leaves are heated soon after picking to stop oxidation. Both are the same species.",
+              "confidence": "certain"
+            },
+            "note": "Tried 'a different plant': var. assamica leans to black tea and var. sinensis to green, but both are Camellia sinensis, so processing is the main difference. Tried 'smoked leaves': lapsang souchong is a smoked specialty, not the definition. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "All true tea comes from Camellia sinensis; black tea is not defined by leaf age or by smoking.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Green tea leaves are steamed (Japan) or pan-fired (China) soon after picking, which stops oxidation.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Black tea leaves are withered, rolled to break the cells and left to oxidise until they darken, then dried.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk key c1 (counterintuitive key claim) rests on knowledge alone in both checks; no pinned dataset covers it and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "What mainly makes black tea different from green tea?",
+  "answer": "Oxidized leaves",
+  "wrong": ["A different plant", "Older leaves", "Smoked leaves"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.247,
+    "estimator": "v0"
+  }
+}

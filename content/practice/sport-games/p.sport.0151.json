@@ -1,0 +1,214 @@
+{
+  "id": "p.sport.0151",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["paralympics", "olympic-history", "rome"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "They followed the Rome Olympics. Neurologist Ludwig Guttmann had begun the movement in 1948 with archery for spinal injury patients, many of them war veterans, at Stoke Mandeville Hospital in England.",
+  "learnMore": "1960 Summer Paralympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The 1960 games in Rome, then called the International Stoke Mandeville Games, are recognized as the first Paralympic Games."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "London, Tokyo and Munich did not host the 1960 games; Tokyo hosted the next Paralympics, in 1964."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 1960 Paralympic Games in Rome were held shortly after the 1960 Rome Olympics."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Ludwig Guttmann started the Stoke Mandeville Games in 1948 with an archery contest for patients with spinal injuries, many of them war veterans."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: olympic-editions gives the 1960 Rome Olympics as 25 August to 11 September 1960 (edition_id 15), which supports 'followed' in c3 once the Paralympic dates (18 to 25 September 1960) are confirmed; the dataset has no Paralympic rows, so c1, c2 and c4 need web evidence from checker A. rivalTest: London is the near miss through Stoke Mandeville, which sits outside London in Buckinghamshire; Tokyo hosted the second Paralympics in 1964; Munich hosted the 1972 Olympics but the Paralympics that year were in Heidelberg. Rome is undisputed for 1960. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 31 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: The 1960 event was renamed the first Paralympics retrospectively, which the stem's 'later recognized as' covers.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a428c18d190f79f20ffa30ed7f1433e9b02eb6dca006da9442e57bf3c5a84849",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Rome",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1960 games in Rome, then the 9th International Stoke Mandeville Games, are counted as the first Paralympic Games.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "London, Tokyo and Munich did not host the 1960 games; Tokyo hosted the next Paralympics, in 1964.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Rome games were held from 18 to 25 September 1960, after the Olympics had closed.",
+              "confidence": "certain"
+            },
+            "note": "olympic-editions row 15 dates the Rome Olympics 25 August to 11 September 1960; the Paralympic dates rest on knowledge. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ludwig Guttmann held the first Stoke Mandeville Games on 29 July 1948, an archery contest for ex-service patients with spinal injuries.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ludwig Guttmann, a German-born neurologist, ran the spinal injuries centre at Stoke Mandeville Hospital in England.",
+              "confidence": "certain"
+            },
+            "note": "Added by checker A. Role explanation, risk standard. Claim: Ludwig Guttmann was a neurologist working at Stoke Mandeville Hospital in England."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "42e002b203757d8440ef5588148168740dac3da5b0cd178956e3be00826ea2d5",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Rome",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1960 Games in Rome (the ninth International Stoke Mandeville Games) are recognised by the International Paralympic Committee as the first Paralympic Games.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "London, Tokyo and Munich did not host in 1960; Tokyo hosted the next Paralympics, in 1964.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Rome Paralympics ran in September 1960, shortly after the Rome Olympics (25 August to 11 September in the olympic-editions file).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ludwig Guttmann began the Stoke Mandeville Games in 1948 with an archery contest for spinal-injury patients, many of them war veterans.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, first), c2 (distractor, date), c3 (explanation, date) and c4 (explanation, date) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which city hosted the 1960 Games later recognized as the first Paralympics?",
+  "answer": "Rome",
+  "wrong": ["London", "Tokyo", "Munich"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.238,
+    "estimator": "v0"
+  }
+}

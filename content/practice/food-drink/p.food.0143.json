@@ -1,0 +1,280 @@
+{
+  "id": "p.food.0143",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-history", "sauces", "surprising-truths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Eighteenth-century recipes used mushrooms, walnuts, oysters or anchovies. Tomato ketchup spread in the 1800s and gradually took over the name.",
+  "learnMore": "Ketchup",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In 18th-century England, ketchups were made from ingredients such as mushrooms and walnuts, without tomatoes."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "18th-century ketchup recipes used ingredients including mushrooms, walnuts, oysters and anchovies."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Tomato ketchup spread during the 19th century and came to dominate the name."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c2, c3). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: 'early English ketchups' could be read as the first tomato ketchups, but the statement names the ingredients, and the earliest English ketchups predate tomato versions. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: tomato ketchup is sold everywhere, so the surprise travels. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 20 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: it sounds made up, so many will answer false. Doubts: all three claims need dated evidence; one web source on the history of ketchup should cover them.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e4fa5cea3b9975f38450e3810af8f4d48800b98952b7e86ae74a5fc3b0d730b2",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English ketchups of the 1700s were made from mushrooms, walnuts and other non-tomato ingredients, as in the recipes of Eliza Smith (1727), Hannah Glasse (1747) and Richard Briggs (1788).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed on certain knowledge only. Two calls, both counted here, corroborate it without a countable dated source. One (Wikipedia and Britannica) gives Richard Briggs's 1788 recipes for mushroom and walnut ketchup, but it names no source for that sentence and three talk pages are among its results, so it counts at Tier C. The other (query 'ketchup history: early English ketchups made from mushrooms, walnuts or oysters in the 1700s, tomato ketchup later in the 1800s', Britannica only, Tier B) says ketchup in Britain was a puree based on mushrooms, unripe walnuts or oysters, but gives no date. Still needs dated evidence before acceptance."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "history of ketchup: 18th-century English ketchup recipes made from mushrooms, walnuts, oysters or anchovies, before tomato ketchup spread in the 19th century",
+              "results": [
+                {
+                  "title": "Mushroom ketchup",
+                  "url": "https://en.wikipedia.org/wiki/Mushroom_ketchup"
+                },
+                {
+                  "title": "Ketchup",
+                  "url": "https://en.wikipedia.org/wiki/Ketchup"
+                },
+                {
+                  "title": "Ketchup",
+                  "url": "https://www.britannica.com/topic/ketchup"
+                },
+                {
+                  "title": "Talk:Mushroom ketchup",
+                  "url": "https://en.wikipedia.org/wiki/Talk:Mushroom_ketchup"
+                },
+                {
+                  "title": "William Kitchiner",
+                  "url": "https://en.wikipedia.org/wiki/William_Kitchiner"
+                },
+                {
+                  "title": "British cuisine",
+                  "url": "https://en.wikipedia.org/wiki/British_cuisine"
+                },
+                {
+                  "title": "Talk:Ketchup/Archive 1",
+                  "url": "https://en.wikipedia.org/wiki/Talk:Ketchup/Archive_1"
+                },
+                {
+                  "title": "Cuisine of Antebellum America",
+                  "url": "https://en.wikipedia.org/wiki/Cuisine_of_Antebellum_America"
+                },
+                {
+                  "title": "Talk:Ketchup",
+                  "url": "https://en.wikipedia.org/wiki/Talk:Ketchup"
+                },
+                {
+                  "title": "James Mease",
+                  "url": "https://en.wikipedia.org/wiki/James_Mease"
+                }
+              ],
+              "summaryExcerpt": "Richard Briggs's The English Art of Cookery (first published 1788) includes recipes for both mushroom and walnut ketchup. ... William Kitchiner's The Cook's Oracle (1817) includes eleven ketchup recipes, including two each for mushroom, walnut and tomato ketchups, one each for cucumber, oyster, cockle and mussel ketchups. ... One early mushroom recipe is credited to Eliza Smith, and it used anchovies and horseradish. ... Dating is inconsistent across sources.",
+              "tiers": ["B", "C"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Checker doubt. Mushrooms and walnuts are dated to the 18th century (Briggs, 1788), and anchovies are in Eliza Smith's recipe (1727, from my knowledge), but the only dated oyster ketchup found is Kitchiner's of 1817. Britannica's call lists oysters among British ketchup bases without a date."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tomato ketchup recipes appear from 1812 (James Mease), and tomato ketchup came to dominate during the 19th century; Heinz sold it from 1876.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed on certain knowledge only. The Tier C call above gives Mease's 1812 recipe and Heinz's 1876 launch, and the Britannica call gives Heinz 1876, but neither plainly says tomato ketchup took over the name. Still needs evidence."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "No dated source found puts oyster ketchup in the 18th century (the dated one is Kitchiner, 1817), so c2 and the explanation's 'Eighteenth-century recipes used mushrooms, walnuts, oysters or anchovies' are in doubt on oysters. Evidence an 18th-century oyster ketchup, drop 'oysters', or loosen the date ('Early English recipes ...'), which Britannica's list of mushrooms, unripe walnuts or oysters supports. The statement's key (True) is unaffected."
+          }
+        ],
+        "searchesUsed": 2,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bde804f3177c6877c6de5f1472ea70ab3977d0141f80d33195ab0f98477b80ce",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Eighteenth-century English cookbooks, such as Hannah Glasse's of 1747, give ketchup recipes based on mushrooms, walnuts and anchovies with no tomato.",
+              "confidence": "certain"
+            },
+            "note": "Surprising truth, not a myth. The claim is about English recipes of the 18th century, which is what the cookbooks show; American tomato ketchup recipes come later. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Eighteenth-century ketchups were made from mushrooms, walnuts, oysters and anchovies.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tomato ketchup recipes appear from the early 1800s (an American one in 1812) and the tomato kind came to dominate the name during the 19th century.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-pfood01t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "f2482d5f96870bb3a605dbd15848caf513e174cc09a0f242a28703fb36541ace",
+      "startedAt": "2026-11-01T04:51:06Z",
+      "finishedAt": "2026-11-01T04:59:00Z",
+      "coldSolve": {
+        "answerGiven": "True",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "English cookery books of the 1700s give ketchup (catchup) recipes built on mushrooms, walnuts and other non-tomato bases; recipes for tomato ketchup only appear in the early 1800s.",
+            "confidence": "certain"
+          },
+          "note": "High-risk (date). Knowledge only, which counts neither for a tiebreak nor for the high-risk rule: this claim still has no dataset or web evidence in any check. No dataset covers it, and this run could not search (the one call was refused by the session's web search limit and returned nothing)."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Mushroom, walnut and anchovy ketchups are well attested in 18th-century English recipes. Oyster ketchup is attested in early 19th-century books, but I cannot place an oyster ketchup recipe in the 1700s with certainty.",
+            "confidence": "likely"
+          },
+          "note": "The disputed claim (checker A left it uncertain). Mushrooms, walnuts and anchovies I would accept; oysters dated to the 18th century I cannot confirm. No external evidence was gathered here (no dataset covers it, and no search could run), so the claim stays uncertain."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Tomato ketchup recipes appear from the early 1800s, commercial bottled tomato ketchup followed later in the century, and by about 1900 ketchup without a qualifier meant the tomato kind.",
+            "confidence": "certain"
+          },
+          "note": "High-risk (date). Knowledge only, which counts neither for a tiebreak nor for the high-risk rule: this claim still has no dataset or web evidence in any check. No search could run in this pass."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "c2 and the explanation put oysters among 18th-century ketchup bases, and no check has a dated source for that: a third check cannot confirm it either. The tiebreak does not support keeping oysters in an 18th-century list. Drop oysters, or loosen the date to early recipes. Separately, c1, c2 and c3 are all high-risk and none has dataset or web evidence in any check, so the item needs a check with web evidence on each before it can be accepted, whatever the rewrite."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "Second pass. A revise, B pass, T revise: like A, the tiebreak leaves c2 uncertain, because no check dates an oyster ketchup to the 18th century (the dated one A found is from 1817). A revise tiebreak cannot stand in for A (§9.9 rule 2). The high-risk date claims c1, c2 and c3 also lack countable dataset or web evidence in any confirming check, so rule 3 fails too. Dropping oysters or loosening the date changes claim c2 and the explanation, so no wording fix applies (§9.7). Cut; a redraft needs dated Tier A or B evidence for every claim.",
+      "decidedAt": "2026-11-01T05:21:47Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Early English ketchups were made without tomatoes, from ingredients such as mushrooms and walnuts.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.313,
+    "estimator": "v0"
+  }
+}

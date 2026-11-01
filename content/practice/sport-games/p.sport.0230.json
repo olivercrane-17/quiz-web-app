@@ -1,0 +1,198 @@
+{
+  "id": "p.sport.0230",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["winter-olympics", "olympic-history", "france"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "It was billed as an International Winter Sports Week and recognized as the first Winter Olympics only afterwards. St Moritz hosted the second, in 1928.",
+  "learnMore": "1924 Winter Olympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The first Winter Olympics were held at Chamonix, France, in 1924."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "St Moritz hosted the Winter Olympics in 1928 and 1948, Lake Placid in 1932 and 1980, and Oslo in 1952."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The 1924 Chamonix event was held as an International Winter Sports Week and was recognized by the IOC as the first Winter Olympics afterwards."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed, 3 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: olympic-editions, edition_metadata.csv: edition_id 29 (1924 Winter, Chamonix, France, 24 January to 5 February 1924) is the earliest Winter edition in the file; edition_ids 30 and 33 (1928 and 1948, Sankt Moritz), 31 and 41 (1932 and 1980, Lake Placid) and 34 (1952, Oslo) confirm c2. The 'International Winter Sports Week' name in c3 needs web evidence. rivalTest: St Moritz is the trap, as the host of the second and fifth Winter Games and the most famous winter resort. Lake Placid and Oslo also hosted early Winter Games. None of them hosted in 1924. Oslo is a city, which the stem's 'town' covers loosely; a pedant gains nothing from it, because the key is a town. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 25 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Figure skating and ice hockey had already appeared at Summer Games before 1924, but the stem asks about the first Winter Olympics, which were Chamonix.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7cc8b760c51fb1d7727d7bc7d290b09e464f808db0963b1861a8d3f3f4d5153a",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Chamonix",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=29, the earliest row with season Winter",
+              "excerpt": "29,1924 Winter,1924,Winter,Chamonix,France,1924-01-24,1924-02-05",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The earliest row with season Winter is 1924 Winter at Chamonix, France, 24 January to 5 February 1924; no Winter edition comes before it."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=30, 33, 31, 41 and 34",
+              "excerpt": "30,1928 Winter,1928,Winter,Sankt Moritz,Switzerland | 33,1948 Winter,1948,Winter,Sankt Moritz,Switzerland | 31,1932 Winter,1932,Winter,Lake Placid,United States | 41,1980 Winter,1980,Winter,Lake Placid,United States | 34,1952 Winter,1952,Winter,Oslo,Norway",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Rows: 1928 and 1948 Winter at Sankt Moritz, 1932 and 1980 Winter at Lake Placid, 1952 Winter at Oslo."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Chamonix 1924 was staged as an International Winter Sports Week, and the IOC recognized it afterwards as the first Winter Olympic Games.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=29 and 30, the first two rows with season Winter in year order",
+              "excerpt": "29,1924 Winter,1924,Winter,Chamonix,France | 30,1928 Winter,1928,Winter,Sankt Moritz,Switzerland",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Checker addition (role explanation, risk high, riskReason date; the record schema has no addedClaim field, so it is stated here): 'St Moritz hosted the second Winter Olympics, in 1928.' The explanation says 'St Moritz hosted the second, in 1928', but c2 gives the year without the ordinal. Dataset: in year order the second row with season Winter is 1928 at Sankt Moritz, after 1924 at Chamonix."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c56297d3cfb4b478603304747543945719238e437cf2f0be8fb5cd37f3913365",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Chamonix",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=29 (1924 Winter), earliest Winter edition",
+              "excerpt": "29,1924 Winter,1924,Winter,Chamonix,France,1924-01-24,1924-02-05; no Winter edition in the file is earlier than 1924",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "Winter editions 1928, 1932, 1948, 1952, 1980",
+              "excerpt": "30,1928 Winter,1928,Winter,Sankt Moritz,Switzerland,1928-02-11,1928-02-17 | 33,1948 Winter,1948,Winter,Sankt Moritz,Switzerland,1948-01-30,1948-02-08 | 31,1932 Winter,1932,Winter,Lake Placid,United States,1932-02-04,1932-02-13 | 41,1980 Winter,1980,Winter,Lake Placid,United States,1980-02-13,1980-02-24 | 34,1952 Winter,1952,Winter,Oslo,Norway,1952-02-15,1952-02-25",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Sankt Moritz (1928, 1948), Lake Placid (1932, 1980) and Oslo (1952) all match."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1924 Chamonix event was staged as an International Winter Sports Week, and the IOC recognised it afterwards as the first Winter Olympics.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, first) rests on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Only c3 is missing: c1 and c2 carry olympic-editions evidence in both checks, and A's addition on St Moritz as the second host was confirmed by A alone. Redraft under a new id with this fact evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which town hosted the first Winter Olympics, in 1924?",
+  "answer": "Chamonix",
+  "wrong": ["St Moritz", "Lake Placid", "Oslo"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.214,
+    "estimator": "v0"
+  }
+}

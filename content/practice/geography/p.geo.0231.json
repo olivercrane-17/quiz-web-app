@@ -1,0 +1,265 @@
+{
+  "id": "p.geo.0231",
+  "status": "active",
+  "category": "geo",
+  "tags": ["internet", "microstates", "pacific"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Tuvalu is a chain of Pacific atolls covering only about 26 km², and licensing the domain has brought it welcome income for years.",
+  "learnMore": ".tv",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The internet country code domain of Tuvalu is .tv."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Tonga's internet domain is .to, Trinidad and Tobago's is .tt and Tajikistan's is .tj."
+    },
+    {
+      "id": "c3",
+      "role": "key",
+      "ref": "stem",
+      "risk": "standard",
+      "text": "Tuvalu has earned money by licensing .tv, which is popular with television and video websites."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Tuvalu's land area is about 26 km²."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Tuvalu is a chain of atolls in the Pacific."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; c4 (number) is high under the C26 floor, and c1, c2, c3 and c5 are standard. Datasets: mledoze-countries cca3=TUV: tld .tv, area 26, region Oceania (c1, c4, c5); TON tld .to, TTO .tt, TJK .tj (c2). country-codes: TUV TLD .tv, TON .to, TTO .tt, TJK .tj (c1, c2, a second publisher). Rival test: Every distractor begins with T, so the letters alone do not settle it; Tonga is also a Pacific island state that has sold its own domain, which makes it the strongest pull. Against the key: nothing; .tv is Tuvalu's ISO code. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: The domain is seen worldwide on streaming and video sites; the country is equally obscure everywhere, and the 'tv' letters give a foothold. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c3 is standard knowledge; a checker who doubts it can confirm it with one search. Seed: 4 (medium): a coin flip for most, solvable by matching the letters to the country's name. Counterintuitive: false. Doubts: none; the explanation avoids any figure for the income, which varies by year and contract.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a06690439fe679ce8d3de005746330400479bc7c1194f80514a4dff3689f5e4a",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Tuvalu",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=TUV",
+              "excerpt": "\"tld\": [\".tv\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=TON, TTO, TJK",
+              "excerpt": "TON \"tld\": [\".to\"]; TTO \"tld\": [\".tt\"]; TJK \"tld\": [\".tj\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tuvalu licenses its .tv domain to a registry operator, and the fees, driven by television and video sites, have been a large share of its government income.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=TUV",
+              "excerpt": "\"area\": 26",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tuvalu is a chain of low reef islands and atolls in the western Pacific.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "14f9ec2b19d6e085987e15630ec80de4db7aab9fb8f2b6546a80dc6167a9ed1e",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Tuvalu",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=TUV",
+              "excerpt": "\"tld\": [\".tv\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=TON, TTO, TJK",
+              "excerpt": "TON \"tld\": [\".to\"]; TTO \"tld\": [\".tt\"]; TJK \"tld\": [\".tj\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tuvalu licenses the .tv domain to a commercial operator and earns income from it, because television and video sites use the .tv suffix.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=TUV",
+              "excerpt": "\"area\": 26 (km2)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Number matches 'about 26 km2'."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tuvalu is a Polynesian island nation of atolls and reef islands in the Pacific.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c4 (mledoze-countries) carries dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which country's internet domain, .tv, has earned it money from television and video websites?",
+  "answer": "Tuvalu",
+  "wrong": ["Tonga", "Trinidad and Tobago", "Tajikistan"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.336,
+    "estimator": "v0"
+  }
+}

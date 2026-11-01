@@ -1,0 +1,247 @@
+{
+  "id": "p.food.0113",
+  "status": "active",
+  "category": "food",
+  "tags": ["spice", "botany", "vanilla"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Vanilla is native to Mexico and Central America. Elsewhere growers pollinate each flower by hand, using a method found on Réunion by Edmond Albius, an enslaved boy.",
+  "learnMore": "Vanilla",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Vanilla is obtained from the cured seed pods of orchids of the genus Vanilla, mainly Vanilla planifolia."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Vanilla pods are not produced by a bean plant (legume), a palm or a lily, even though they are often called vanilla beans."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The vanilla orchid is native to Mexico and Central America."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Outside its native range, vanilla flowers are usually pollinated by hand."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The hand-pollination technique used for vanilla was devised on Réunion by Edmond Albius, an enslaved boy."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c5). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: 'bean plant' is the planted trap, from the name vanilla bean; the vanilla orchid is a climbing vine, which is why 'vine' is not an option. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: vanilla is used worldwide; the orchid fact is surprising everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: the bean name pulls many players, but the orchid fact is fairly well known. Doubts: c5 is less famous than the rest, so I rated it high: Albius worked out the method in 1841, aged about 12. Sensitivity: slavery is stated as history, plainly.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2271fa675d335a4e3c3ba26e9acd56de6f0d9ee01cee4a2fb1bc73f4ec5263ad",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Orchid",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vanilla pods are the cured fruit of Vanilla orchids, chiefly Vanilla planifolia.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. No pinned dataset covers it and this check's share of the batch search cap went to claims with numbers and dates, so it still needs dataset or web evidence (a follow-up) before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vanilla 'beans' are orchid pods, not legumes, and come from neither a palm nor a lily.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Vanilla planifolia is native to Mexico and Central America.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Outside its native range each vanilla flower is pollinated by hand.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In 1841 Edmond Albius, a 12-year-old enslaved boy on Réunion, devised the quick hand-pollination method still used.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. No pinned dataset covers it and this check's share of the batch search cap went to claims with numbers and dates, so it still needs dataset or web evidence (a follow-up) before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "fecc54e6942f8dad6088e14694c93668baf90f2a000baae46d9b7f6d8a66c862",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Orchid",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vanilla is the cured fruit capsule of Vanilla orchids, chiefly Vanilla planifolia.",
+              "confidence": "certain"
+            },
+            "note": "'Seed pods' is a loose but standard phrase for the capsule. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vanilla is an orchid, not a legume, palm or lily; 'bean' only describes the pod's shape.",
+              "confidence": "certain"
+            },
+            "note": "The Bean plant option tempts through the word bean, which is a plausible belief and not a misread word."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vanilla planifolia is native to Mexico and Central America.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Outside Mexico the natural pollinators are missing, so growers pollinate the flowers by hand.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Edmond Albius, a twelve-year-old enslaved boy on Réunion, devised in 1841 the thumb-and-stick hand pollination still used; Charles Morren's hand pollination in 1837 was not practical.",
+              "confidence": "certain"
+            },
+            "note": "The 'first' nuance (Morren) does not touch the claim, which says the technique used for vanilla was devised by Albius. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk key c1 (counterintuitive key claim) and explanation c5 (writer's doubt) rest on knowledge alone in both checks; no pinned dataset covers them and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Vanilla comes from the cured seed pods of which kind of plant?",
+  "answer": "Orchid",
+  "wrong": ["Bean plant", "Palm", "Lily"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.226,
+    "estimator": "v0"
+  }
+}

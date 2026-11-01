@@ -1,0 +1,295 @@
+{
+  "id": "p.food.0153",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-history", "japan", "portugal"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Portuguese traders and missionaries reached Japan in the 1540s. A Portuguese dish of battered green beans, peixinhos da horta, or little fish from the garden, is often named as tempura's ancestor.",
+  "learnMore": "Tempura",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The battered, deep-fried cooking that became tempura was introduced to Japan by Portuguese traders and missionaries."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Tempura-style frying was not introduced to Japan by the Dutch, the Spanish or the British."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Portuguese traders and missionaries reached Japan in the 1540s."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The Portuguese dish peixinhos da horta, green beans fried in batter, whose name means 'little fish from the garden', is often cited as an ancestor of tempura."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c3, c4). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: the Dutch are the planted trap, as the famous European traders at Nagasaki, but they arrived later; Spanish friars reached Japan too, yet tempura is credited to the Portuguese. The name's origin is disputed, so the item avoids it. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: tempura is known worldwide; the history is equally unfamiliar everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 31 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: tempura feels entirely Japanese, so most players miss it. Doubts: c1 and c4 need a web source; c4 is hedged as 'often cited'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "403160c51c2513e947a103d8362ce98c3eded65e0b9238f1b30c3926c9438ac3",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "The Portuguese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "origin of tempura: battered deep-fried cooking introduced to Japan by Portuguese missionaries and traders who arrived in the 1540s, Portuguese peixinhos da horta little fish of the garden",
+              "results": [
+                {
+                  "title": "Tempura",
+                  "url": "https://en.wikipedia.org/wiki/Tempura"
+                },
+                {
+                  "title": "Peixinhos da horta",
+                  "url": "https://en.wikipedia.org/wiki/Peixinhos_da_horta"
+                },
+                {
+                  "title": "Nagasaki",
+                  "url": "https://en.wikipedia.org/wiki/%E9%95%B7%E5%B4%8E"
+                },
+                {
+                  "title": "Tempura",
+                  "url": "https://www.britannica.com/topic/tempura"
+                },
+                {
+                  "title": "Portuguese cuisine",
+                  "url": "https://en.wikipedia.org/wiki/Portuguese_cuisine"
+                },
+                {
+                  "title": "Fritter",
+                  "url": "https://en.wikipedia.org/wiki/Fritter"
+                },
+                {
+                  "title": "Deep frying",
+                  "url": "https://en.wikipedia.org/wiki/Deep_frying"
+                },
+                {
+                  "title": "Talk:Tempura",
+                  "url": "https://en.wikipedia.org/wiki/Talk:Tempura"
+                },
+                {
+                  "title": "Japan–Portugal relations",
+                  "url": "https://en.wikipedia.org/wiki/Japan%E2%80%93Portugal_relations"
+                },
+                {
+                  "title": "List of deep-fried foods",
+                  "url": "https://en.wikipedia.org/wiki/List_of_deep_fried_foods"
+                }
+              ],
+              "summaryExcerpt": "Sources credit Portuguese sailors with bringing the dish, which Wikipedia names as Antonio da Mota and Francisco Zeimoto. It was introduced to Japan by Portuguese sailors Antonio da Mota and Francisco Zeimoto in the sixteenth century. Britannica places the first appearance of the dish in Nagasaki in the 16th century, and says it later became a specialty of Edo.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Attributed to Wikipedia's Tempura article and Britannica (Tier B). The summary also cites Britannica that the technique was very probably borrowed from Portuguese merchants. A talk page in the results (Tier C, not a source) calls the dish's origin unclear; no reference source disagrees."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Dutch arrived in Japan only in 1609 and the British later still; neither they nor the Spanish are credited with tempura.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Portuguese traders reached Tanegashima in 1543, and Jesuit missionaries under Francis Xavier arrived in 1549.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed on certain knowledge only. The call names the first Portuguese arrivals (Antonio da Mota and Francisco Zeimoto) but its summary found no source stating the 1540s. Still needs evidence before acceptance."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "origin of tempura: battered deep-fried cooking introduced to Japan by Portuguese missionaries and traders who arrived in the 1540s, Portuguese peixinhos da horta little fish of the garden",
+              "results": [
+                {
+                  "title": "Tempura",
+                  "url": "https://en.wikipedia.org/wiki/Tempura"
+                },
+                {
+                  "title": "Peixinhos da horta",
+                  "url": "https://en.wikipedia.org/wiki/Peixinhos_da_horta"
+                },
+                {
+                  "title": "Nagasaki",
+                  "url": "https://en.wikipedia.org/wiki/%E9%95%B7%E5%B4%8E"
+                },
+                {
+                  "title": "Tempura",
+                  "url": "https://www.britannica.com/topic/tempura"
+                },
+                {
+                  "title": "Portuguese cuisine",
+                  "url": "https://en.wikipedia.org/wiki/Portuguese_cuisine"
+                },
+                {
+                  "title": "Fritter",
+                  "url": "https://en.wikipedia.org/wiki/Fritter"
+                },
+                {
+                  "title": "Deep frying",
+                  "url": "https://en.wikipedia.org/wiki/Deep_frying"
+                },
+                {
+                  "title": "Talk:Tempura",
+                  "url": "https://en.wikipedia.org/wiki/Talk:Tempura"
+                },
+                {
+                  "title": "Japan–Portugal relations",
+                  "url": "https://en.wikipedia.org/wiki/Japan%E2%80%93Portugal_relations"
+                },
+                {
+                  "title": "List of deep-fried foods",
+                  "url": "https://en.wikipedia.org/wiki/List_of_deep_fried_foods"
+                }
+              ],
+              "summaryExcerpt": "The Portuguese dish is made from vegetables, not fish. It is usually prepared with green beans in a wheat-flour-based batter that are then deep-fried. Its name translates roughly to \"little fish from the vegetable garden,\" because the battered pieces resemble small colorful fish. ... Wikipedia's tempura article says peixinhos da horta was a dish often eaten during Lent or Ember days to fulfill the fasting and abstinence rules for Catholics.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dish appears in Wikipedia's Tempura article as part of tempura's origin. The disputed etymology of the word tempura in the same summary is not claimed by the item."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2f8317d538f8850ebcbc13c051c8491d483e332587fea2f25b59c854dedec2cb",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "The Portuguese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The standard account credits Portuguese traders and Jesuit missionaries of the 16th century with bringing batter-frying to Japan.",
+              "confidence": "certain"
+            },
+            "note": "Tried the Spanish (Franciscans came in the 1590s) and the Dutch (confined to Dejima from 1641): neither is credited. The origin of a dish is rarely documented, so the credit is conventional. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Dutch, Spanish and British are not credited with tempura.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Portuguese traders reached Japan in 1543 and Francis Xavier's Jesuit mission followed in 1549, so both arrived in the 1540s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Peixinhos da horta, green beans fried in batter, means little fish of the garden and is often named as a forerunner of tempura.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The stem states the Portuguese origin of tempura as settled. It is the standard account, but a hedge such as 'are credited with introducing' would protect it from a pedant."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk explanation c3 (date) rests on knowledge alone in both checks; no pinned dataset covers it and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which European visitors to Japan introduced the battered, deep-fried cooking that became tempura?",
+  "answer": "The Portuguese",
+  "wrong": ["The Dutch", "The Spanish", "The British"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.234,
+    "estimator": "v0"
+  }
+}

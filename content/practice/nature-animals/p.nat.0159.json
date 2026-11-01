@@ -1,0 +1,368 @@
+{
+  "id": "p.nat.0159",
+  "status": "cut",
+  "category": "nat",
+  "tags": ["dinosaurs", "fossils", "timelines"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Stegosaurus had died out by about 145 million years ago. T. rex lived around 68 to 66 million years ago, so less time separates it from us than from Stegosaurus.",
+  "learnMore": "Tyrannosaurus",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The time between Stegosaurus and Tyrannosaurus rex is greater than the time between Tyrannosaurus rex and the present day."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Stegosaurus lived in the Late Jurassic and had died out by about 145 million years ago."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Tyrannosaurus rex lived about 68 to 66 million years ago."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: three listed, all high: c2 and c3 are dates, and c1 follows from them by arithmetic (145 minus 68 is 77 million years, more than 68), so a calculation entry can confirm it once c2 and c3 are confirmed. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: argued for false: both are famous dinosaurs, so players assume they lived together. Margin: even taking the latest date for Stegosaurus and the earliest for T. rex, the gap between them is about 77 million years against at most 68 million since T. rex. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: both dinosaurs are known worldwide. style: Oxford spelling, plain hyphens only, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches; the humans-and-dinosaurs entry is about people meeting dinosaurs, which this item never claims. mystery and encore: nothing of either kind in a true/false item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "902252d86536a6f041852e22187d871cc35e5a99f2e3498d7fdb070b18e89255",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "when did Stegosaurus live and when did Tyrannosaurus rex live (million years ago); how old are the earliest dinosaur fossils and the oldest widely accepted flowering plant (angiosperm) fossils",
+              "results": [
+                {
+                  "title": "The David H. Koch Hall of Fossils–Deep Time",
+                  "url": "https://www.si.edu/newsdesk/factsheets/david-h-koch-hall-fossils-deep-time"
+                },
+                {
+                  "title": "Tyrannosaurus",
+                  "url": "https://en.wikipedia.org/wiki/T._Rex"
+                },
+                {
+                  "title": "dinosaurs at a glance - Kids",
+                  "url": "https://kids.britannica.com/kids/article/dinosaurs-at-a-glance/611164"
+                },
+                {
+                  "title": "Tyrannosaurus rex Fossil",
+                  "url": "https://www.amnh.org/exhibitions/permanent/saurischian-dinosaurs/tyrannosaurus-rex"
+                },
+                {
+                  "title": "Tyrannosaurus rex",
+                  "url": "https://www.britannica.com/animal/Tyrannosaurus-rex"
+                },
+                {
+                  "title": "11 Questions About Stegosaurus",
+                  "url": "https://www.amnh.org/explore/videos/dinosaurs-and-fossils/11-questions-stegosaurus"
+                },
+                {
+                  "title": "Apex Stegosaurus Fossil",
+                  "url": "https://www.amnh.org/exhibitions/apex-stegosaurus-fossil"
+                },
+                {
+                  "title": "Dinosaur Facts",
+                  "url": "https://www.amnh.org/dinosaurs/dinosaur-facts"
+                },
+                {
+                  "title": "Stegosaurus",
+                  "url": "https://www.britannica.com/animal/Stegosaurus"
+                },
+                {
+                  "title": "Diminutive fleet-footed tyrannosauroid narrows the 70-million-year gap in the North American fossil record",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6385174/"
+                }
+              ],
+              "summaryExcerpt": "Gap: The AMNH states that the amount of time between Stegosaurus and T. rex is 80 million years. ... Tyrannosaurus rex: Estimates vary by source. The Smithsonian gives 67–66 million years ago, the American Museum of Natural History gives 69 to 66 million years ago, and Britannica gives about 80 million and 66 million years ago for the known fossils.",
+              "tiers": ["B"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The AMNH's statement of an 80-million-year gap supports the key. But this call and the two follow-ups counted here (W9; W10, a Britannica-only call, query 'Tyrannosaurus rex lived how many million years ago, Late Cretaceous, Britannica') report Britannica dating T. rex to about 80 to 66 million years ago (its tyrannosaur article) and about 100 to 66 million (its main entry). On those figures an early T. rex would sit closer to Stegosaurus, which Britannica ends at about 144 million, than to us, so Tier B sources disagree on the key's premise (§9.5.2). My own view: the dated specimens (Trix about 67 million, Peter about 66.8, Tufts-Love about 66.3) and the late Maastrichtian formations make 68 to 66 million right, and the statement true."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "when did Stegosaurus live and when did Tyrannosaurus rex live (million years ago); how old are the earliest dinosaur fossils and the oldest widely accepted flowering plant (angiosperm) fossils",
+              "results": [
+                {
+                  "title": "The David H. Koch Hall of Fossils–Deep Time",
+                  "url": "https://www.si.edu/newsdesk/factsheets/david-h-koch-hall-fossils-deep-time"
+                },
+                {
+                  "title": "Tyrannosaurus",
+                  "url": "https://en.wikipedia.org/wiki/T._Rex"
+                },
+                {
+                  "title": "dinosaurs at a glance - Kids",
+                  "url": "https://kids.britannica.com/kids/article/dinosaurs-at-a-glance/611164"
+                },
+                {
+                  "title": "Tyrannosaurus rex Fossil",
+                  "url": "https://www.amnh.org/exhibitions/permanent/saurischian-dinosaurs/tyrannosaurus-rex"
+                },
+                {
+                  "title": "Tyrannosaurus rex",
+                  "url": "https://www.britannica.com/animal/Tyrannosaurus-rex"
+                },
+                {
+                  "title": "11 Questions About Stegosaurus",
+                  "url": "https://www.amnh.org/explore/videos/dinosaurs-and-fossils/11-questions-stegosaurus"
+                },
+                {
+                  "title": "Apex Stegosaurus Fossil",
+                  "url": "https://www.amnh.org/exhibitions/apex-stegosaurus-fossil"
+                },
+                {
+                  "title": "Dinosaur Facts",
+                  "url": "https://www.amnh.org/dinosaurs/dinosaur-facts"
+                },
+                {
+                  "title": "Stegosaurus",
+                  "url": "https://www.britannica.com/animal/Stegosaurus"
+                },
+                {
+                  "title": "Diminutive fleet-footed tyrannosauroid narrows the 70-million-year gap in the North American fossil record",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6385174/"
+                }
+              ],
+              "summaryExcerpt": "Stegosaurus: It lived in the Late Jurassic, approximately 159 million to 144 million years ago. The Smithsonian dates one specimen to 152 million years ago.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Britannica and the Smithsonian. 'Died out by about 145 million' fits. The disagreement reported in this call concerns T. rex, not Stegosaurus."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Tyrannosaurus rex fossils age, Maastrichtian stage, how many million years ago did T. rex live",
+              "results": [
+                {
+                  "title": "Tyrannosaurus",
+                  "url": "https://en.wikipedia.org/wiki/Tyrannosaurus"
+                },
+                {
+                  "title": "Tylosaurus",
+                  "url": "https://en.wikipedia.org/wiki/Tylosaurus"
+                },
+                {
+                  "title": "Tyrannosaur",
+                  "url": "https://www.britannica.com/animal/tyrannosaur"
+                },
+                {
+                  "title": "Specimens of Tyrannosaurus",
+                  "url": "https://en.wikipedia.org/wiki/Specimens_of_Tyrannosaurus"
+                },
+                {
+                  "title": "Tyrannosaur - Hell Creek Discoveries & Classification",
+                  "url": "https://www.britannica.com/animal/tyrannosaur/Hell-Creek-discoveries"
+                },
+                {
+                  "title": "Tyrannosaurus rex",
+                  "url": "https://www.britannica.com/animal/Tyrannosaurus-rex"
+                },
+                {
+                  "title": "Tyrannosaurus rex",
+                  "url": "https://www.amnh.org/explore/ology/ology-cards/003-tyrannosaurus-rex"
+                },
+                {
+                  "title": "Trix (dinosaur)",
+                  "url": "https://en.wikipedia.org/wiki/Trix_(dinosaur)"
+                },
+                {
+                  "title": "Fossilized T. Rex Bones",
+                  "url": "https://ucmp.berkeley.edu/education/explorations/tours/intro/Introkto4b/trex.html"
+                },
+                {
+                  "title": "A giant tyrannosaur from the Campanian–Maastrichtian of southern North America and the evolution of tyrannosaurid gigantism",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10784284/"
+                }
+              ],
+              "summaryExcerpt": "T. rex lived near the end of the Cretaceous, in the late Maastrichtian, roughly 66 to 68 million years ago. Stage and dates: Wikipedia places the fossil-bearing formations in the late Maastrichtian, 69 to 66 million years ago. Its later discussion gives the established Maastrichtian range as about 68–66 Ma. Broader estimates: Britannica gives a wider window, about 80 million and 66 million years ago. That lower bound reaches back into the Campanian, and the broader range is likely why some sources differ.",
+              "tiers": ["B"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Wikipedia, AMNH and the Smithsonian give about 69 or 68 to 66 million years; Britannica gives 80 to 66 (and W10 adds a 100 to 66 span on its main T. rex entry). Sources disagree, so the claim fails as written."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "fix",
+            "note": "Sources disagree on when T. rex lived: Wikipedia, AMNH and the Smithsonian give about 69 or 68 to 66 million years ago, Britannica 80 to 66 (about 100 to 66 on its main entry). The statement and the explanation's '68 to 66 million years ago' therefore fail as written under §9.5.2. A wording every source supports: 'The last T. rex lived closer in time to us than to the last Stegosaurus' (about 66 against about 145 million years ago). Or a tiebreak could weigh the dated specimens and the AMNH's 80-million-year gap."
+          }
+        ],
+        "searchesUsed": 3,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "66b9be1fc053623ff0b1f257fafdd8e69d6b101751d79fd5e126be063d24dfe3",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tyrannosaurus rex (about 68 to 66 million years ago) is nearer in time to the present than to Stegosaurus (about 155 to 145 million years ago).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Stegosaurus lived in the Late Jurassic and was gone by about 145 million years ago.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tyrannosaurus rex lived about 68 to 66 million years ago.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-pnat01t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "e704e793c0d55a3bf4ecbcf1b6f26fc7523cf41df10afe768414d5024eda651d",
+      "startedAt": "2026-11-01T04:37:06.168Z",
+      "finishedAt": "2026-11-01T04:43:03.303Z",
+      "coldSolve": {
+        "answerGiven": "True",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "Stegosaurus belongs to the Late Jurassic, roughly 155 to 145 million years ago, and T. rex to the very end of the Cretaceous, about 68 to 66 million years ago. Even the narrowest pairing (the youngest Stegosaurus against the oldest T. rex) leaves at least 145 minus 68, or 77 million years, between them, while T. rex is at most about 68 million years from the present.",
+            "confidence": "certain"
+          },
+          "note": "Knowledge only. No dataset in content/datasets/manifest.json covers geological ages, and the one WebSearch call this run attempted was refused because the session-wide search limit had been reached, so no search ran (searchesUsed 0; the batch was already at 30 of its 26-search cap). Under §9.7 this result does not count as external evidence for a disputed claim. If the A/B split is over this claim, pass T needs a rerun with web evidence (content:record --replace)."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "Stegosaurus fossils come from Late Jurassic rocks (Kimmeridgian to Tithonian stages), mainly the Morrison Formation of the western United States, with finds in Portugal too. The Jurassic ended about 145 million years ago, so the genus was gone by then.",
+            "confidence": "certain"
+          },
+          "note": "Knowledge only. No dataset in content/datasets/manifest.json covers geological ages, and the one WebSearch call this run attempted was refused because the session-wide search limit had been reached, so no search ran (searchesUsed 0; the batch was already at 30 of its 26-search cap). Under §9.7 this result does not count as external evidence for a disputed claim. If the A/B split is over this claim, pass T needs a rerun with web evidence (content:record --replace)."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "T. rex fossils come from the latest Cretaceous (late Maastrichtian) rocks of western North America, such as the Hell Creek and Lance formations, about 68 to 66 million years old. The species ends with the end-Cretaceous extinction about 66 million years ago.",
+            "confidence": "certain"
+          },
+          "note": "Knowledge only. No dataset in content/datasets/manifest.json covers geological ages, and the one WebSearch call this run attempted was refused because the session-wide search limit had been reached, so no search ran (searchesUsed 0; the batch was already at 30 of its 26-search cap). Under §9.7 this result does not count as external evidence for a disputed claim. If the A/B split is over this claim, pass T needs a rerun with web evidence (content:record --replace)."
+        }
+      ],
+      "issues": [
+        {
+          "type": "trick",
+          "severity": "note",
+          "note": "Read with Stegosaurus in its usual sense, the Late Jurassic genus, the statement holds by a wide margin (at least 77 against at most 68 million years). Some taxonomists have proposed folding the Early Cretaceous stegosaur Wuerhosaurus into Stegosaurus as S. homheni, which could undo the comparison under that very broad reading of the genus. The statement and explanation plainly mean the Late Jurassic animal, so no change is needed."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "pass"
+    },
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "cut",
+      "reason": "Cut (§9.7, §9.9 rule 3, §9.2). A revise: the key c1 and c3 are uncertain because A's Tier B results report a conflict on when T. rex lived (Britannica about 80 to 66 million years ago, others 69 or 68 to 66). B passed on knowledge only. The tiebreak passed, also on knowledge only: its one search was refused at the session limit, with the batch already at 30 of its 26 searches. So T cannot stand in for A on c1 and c3, and neither high-risk claim has dataset or web evidence in a confirming check. Evidence ran out within the cap, so the claims move down the precision ladder or go (§9.2), and a changed claim needs two fresh checks. Redraft under a new id on what every source agrees on: the last T. rex, about 66 million years ago, against the last Stegosaurus, gone by about 145 million, with both boundaries taken from the geological time scale. Dedupe: nearest is guide example p.hist.0002 at 0.40, a different fact on the same template.",
+      "decidedAt": "2026-11-01T04:59:45Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Tyrannosaurus rex lived closer in time to us than to Stegosaurus.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.362,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "id": "p.sport.0201",
+  "status": "active",
+  "category": "sport",
+  "tags": ["olympics", "ancient-greece", "olympic-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Olympia's temple held Phidias's gold and ivory statue of Zeus, one of the Seven Wonders. Other festivals honoured other gods: Apollo at Delphi, Poseidon at Corinth.",
+  "learnMore": "Ancient Olympic Games",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The ancient Olympic Games at Olympia were held in honour of Zeus."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The ancient Olympic Games did not honour Apollo, Poseidon or Athena, who were honoured at the Pythian Games, the Isthmian Games and the Panathenaic Games."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Statue of Zeus at Olympia, made by Phidias in gold and ivory, was one of the Seven Wonders of the Ancient World."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Pythian Games at Delphi honoured Apollo, and the Isthmian Games near Corinth honoured Poseidon."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 1 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: No pinned dataset covers ancient festivals; olympic-editions starts in 1896. c3 needs web evidence (a museum, Britannica or a classics reference) for the Seven Wonders listing. rivalTest: Apollo, Poseidon and Athena are the trap because each had a Panhellenic or civic festival of games of its own (Pythian, Isthmian, Panathenaic). The Nemean Games also honoured Zeus, but Nemea is not in the stem, which names Olympia, so the key cannot be argued away. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 26 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None on the key. c3 is high only because of the number word in 'Seven Wonders'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6ab2f8115a3a6c9925eeba070f2db531fd940e596bd3e912126f5a9dc0ea5645",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Zeus",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Olympic festival at Olympia was a religious festival for Zeus, whose sanctuary and great temple stood there.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Apollo was honoured at the Pythian Games at Delphi, Poseidon at the Isthmian Games near Corinth and Athena at the Panathenaia in Athens; the Olympics were for Zeus.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Phidias made the seated chryselephantine (gold and ivory) Zeus for the temple at Olympia, and it is one of the classic Seven Wonders of the Ancient World.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Pythian Games at Delphi were held for Apollo and the Isthmian Games at the Isthmus of Corinth for Poseidon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4f71f9a17bd77d3fbff438649a5a86ab47b8b47ae50db13c9baf4e82d9d6a10d",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Zeus",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The ancient Olympic festival at Olympia was dedicated to Zeus, whose temple there housed his great cult statue.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Athena, Apollo and Poseidon each had their own festival (Panathenaic, Pythian, Isthmian), so Zeus is the only one of the four tied to Olympia."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Apollo's festival was the Pythian Games at Delphi, Poseidon's the Isthmian Games near Corinth and Athena's the Panathenaic Games at Athens.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Phidias made the seated gold-and-ivory statue of Zeus at Olympia around 435 BC, and it appears on the usual list of the Seven Wonders of the Ancient World.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Pythian Games at Delphi honoured Apollo and the Isthmian Games on the Isthmus of Corinth honoured Poseidon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, number) rests on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. c3 is high only for the number word in 'Seven Wonders', but a claim at the C26 floor is never relabelled standard (§9.2). Redraft under a new id with this fact evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The ancient Olympic Games at Olympia were held in honour of which Greek god?",
+  "answer": "Zeus",
+  "wrong": ["Apollo", "Poseidon", "Athena"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.351,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "id": "p.sport.0123",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["chess", "rules", "stalemate"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "This is stalemate. It can rescue a player who is far behind, so a player with a big material lead has to take care to leave the opponent a legal move.",
+  "learnMore": "Stalemate",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "In chess, when the player to move has no legal move and is not in check, the position is stalemate and the game is drawn."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Stalemate is neither a win nor a loss for either player, and a player may not pass a turn in chess."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Stalemate can save a player who is behind in material, so the stronger side must avoid leaving the opponent without a legal move."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed; c1 is high and c2, c3 are standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item; the standard claims carry none of those triggers and state rules or well-known facts. datasets: no pinned dataset covers chess rules; the FIDE Laws of Chess define stalemate as a draw. rivalTest: 'A loss for that player' is the planted trap, because being unable to move feels like losing; 'A win for that player' and 'They miss a turn' are guesses borrowed from games where a blocked player wins or passes. Under the FIDE Laws the game is drawn, so only the key is right. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 31 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: C26 makes the key of a counterintuitive item high, and the schema has no 'counterintuitive' riskReason, so c1 uses checker_doubt, as other batches did. The stem avoids the word 'not' (C06) by saying 'under no attack'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "290ebac9cf8cd1192117cab8c6af32c4737d4ab20b4b77374def75c64c68a429",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "A draw",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Under the Laws of Chess, a player to move who has no legal move and is not in check is stalemated, and the game is drawn.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Stalemate is a draw, not a win or loss, and chess has no passing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Stalemate lets a side that is behind escape with a draw, so the stronger side must leave the opponent a legal move.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "97622d694cbf3b57a04218ebbfb3956a874f11ce9e4e88908c09f812464c2444",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "A draw",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Under the FIDE Laws of Chess, a player with no legal move whose king is not in check is stalemated and the game is drawn.",
+              "confidence": "certain"
+            },
+            "note": "The writer flagged this for doubt. I have no doubt about the modern rule; the external source for the record would be the FIDE Laws."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Stalemate is a draw, not a win or loss, and chess has no passing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Stalemate is a standard defensive resource for the side that is behind.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Historical rules differed (stalemate was a win for the stalemated side in shatranj, and a loss for the stalemating side in some older European rules). 'In chess' means the modern laws every player knows, so the key stands."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 (key, checker_doubt) rests on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The writer's checker_doubt flag on c1 needs a source such as the FIDE Laws of Chess. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In chess, if the player to move has no legal move and their king is under no attack, what is the result?",
+  "answer": "A draw",
+  "wrong": [
+    "A win for that player",
+    "A loss for that player",
+    "They miss a turn"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.67,
+    "spread": 0.297,
+    "estimator": "v0"
+  }
+}

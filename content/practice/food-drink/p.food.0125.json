@@ -1,0 +1,363 @@
+{
+  "id": "p.food.0125",
+  "status": "cut",
+  "category": "food",
+  "tags": ["coffee", "drinks", "caffeine"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Robusta has nearly twice the caffeine of arabica, which is thought to help the plant fend off insects. It tastes more bitter and often goes into instant coffee and espresso blends.",
+  "learnMore": "Coffea canephora",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Arabica coffee beans typically contain about 1.2 to 1.5% caffeine by dry weight."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Robusta coffee beans typically contain about 2.2 to 2.7% caffeine by dry weight."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Caffeine is thought to help protect coffee plants from insects."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Robusta coffee tastes more bitter than arabica and is widely used in instant coffee and espresso blends."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c2). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: published ranges differ (some give arabica 0.8 to 1.7% and robusta 1.7 to 4%), but every source I know puts robusta well above arabica, close to double. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both bean names appear on coffee packets worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 31 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: arabica is the famous premium bean, so most players will pick it. Doubts: c1 and c2 need a web source; the values compare the lower ends of the usual ranges, and the ratio of about 1.8 clears the guard easily.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "dd2bf0a0543c9ab92092bdaec29cfa9c40fc9cd8ea77961ec64fa2460b80eeb2",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Robusta",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "caffeine content by dry weight of arabica beans compared with robusta beans percent",
+              "results": [
+                {
+                  "title": "Coffee bean",
+                  "url": "https://en.wikipedia.org/wiki/Coffee_bean"
+                },
+                {
+                  "title": "Coffea canephora",
+                  "url": "https://en.wikipedia.org/wiki/Coffea_canephora"
+                },
+                {
+                  "title": "Coffee",
+                  "url": "https://en.wikipedia.org/wiki/Roasted_coffee"
+                },
+                {
+                  "title": "Coffee - Brewing, Roasting, Varieties",
+                  "url": "https://www.britannica.com/topic/coffee/Using-coffee"
+                },
+                {
+                  "title": "Coffea canephora robusta",
+                  "url": "https://www.britannica.com/plant/Coffea-canephora-robusta"
+                },
+                {
+                  "title": "Coffea liberica",
+                  "url": "https://en.wikipedia.org/wiki/Coffea_excelsa"
+                },
+                {
+                  "title": "Low caffeine coffee",
+                  "url": "https://en.wikipedia.org/wiki/Low_caffeine_coffee"
+                },
+                {
+                  "title": "Coffee",
+                  "url": "https://www.britannica.com/topic/coffee"
+                },
+                {
+                  "title": "Coffee production",
+                  "url": "https://www.britannica.com/topic/coffee-production"
+                },
+                {
+                  "title": "Coffee cherry",
+                  "url": "https://www.britannica.com/plant/coffee-cherry"
+                }
+              ],
+              "summaryExcerpt": "One Wikipedia coffee bean entry reports that arabica beans contain 0.8–1.4% caffeine and robusta beans contain 1.7–4.0% caffeine. The same article gives a broader range of 1.0% and 2.5% by weight of dry green coffee beans overall. ... A Wikipedia article on liberica coffee lists 1.61 g/100 g for arabica and 2.26 g/100 g for robusta, which is about 1.6% and 2.3%.",
+              "tiers": ["B"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Checker doubt. Tier B sources give arabica 0.8 to 1.4% or about 1.6%, not the label's about 1.2 to 1.5%, and the summary reports that the figures disagree. Not refuted (the ranges overlap), but not agreed."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "caffeine content by dry weight of arabica beans compared with robusta beans percent",
+              "results": [
+                {
+                  "title": "Coffee bean",
+                  "url": "https://en.wikipedia.org/wiki/Coffee_bean"
+                },
+                {
+                  "title": "Coffea canephora",
+                  "url": "https://en.wikipedia.org/wiki/Coffea_canephora"
+                },
+                {
+                  "title": "Coffee",
+                  "url": "https://en.wikipedia.org/wiki/Roasted_coffee"
+                },
+                {
+                  "title": "Coffee - Brewing, Roasting, Varieties",
+                  "url": "https://www.britannica.com/topic/coffee/Using-coffee"
+                },
+                {
+                  "title": "Coffea canephora robusta",
+                  "url": "https://www.britannica.com/plant/Coffea-canephora-robusta"
+                },
+                {
+                  "title": "Coffea liberica",
+                  "url": "https://en.wikipedia.org/wiki/Coffea_excelsa"
+                },
+                {
+                  "title": "Low caffeine coffee",
+                  "url": "https://en.wikipedia.org/wiki/Low_caffeine_coffee"
+                },
+                {
+                  "title": "Coffee",
+                  "url": "https://www.britannica.com/topic/coffee"
+                },
+                {
+                  "title": "Coffee production",
+                  "url": "https://www.britannica.com/topic/coffee-production"
+                },
+                {
+                  "title": "Coffee cherry",
+                  "url": "https://www.britannica.com/plant/coffee-cherry"
+                }
+              ],
+              "summaryExcerpt": "One Wikipedia coffee bean entry reports that arabica beans contain 0.8–1.4% caffeine and robusta beans contain 1.7–4.0% caffeine. ... A Wikipedia article on liberica coffee lists 1.61 g/100 g for arabica and 2.26 g/100 g for robusta, which is about 1.6% and 2.3%.",
+              "tiers": ["B"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Checker doubt. Robusta is given as 1.7 to 4.0% or about 2.3%, against the label's about 2.2 to 2.7%; the summary reports the disagreement. Every source still puts robusta above arabica, so the key is safe."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Caffeine is thought to deter insects and other herbivores, one suggested reason for robusta's higher level.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Robusta tastes harsher and more bitter than arabica and goes largely into instant coffee and espresso blends.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "caffeine content by dry weight of arabica beans compared with robusta beans percent",
+              "results": [
+                {
+                  "title": "Coffee bean",
+                  "url": "https://en.wikipedia.org/wiki/Coffee_bean"
+                },
+                {
+                  "title": "Coffea canephora",
+                  "url": "https://en.wikipedia.org/wiki/Coffea_canephora"
+                },
+                {
+                  "title": "Coffee",
+                  "url": "https://en.wikipedia.org/wiki/Roasted_coffee"
+                },
+                {
+                  "title": "Coffee - Brewing, Roasting, Varieties",
+                  "url": "https://www.britannica.com/topic/coffee/Using-coffee"
+                },
+                {
+                  "title": "Coffea canephora robusta",
+                  "url": "https://www.britannica.com/plant/Coffea-canephora-robusta"
+                },
+                {
+                  "title": "Coffea liberica",
+                  "url": "https://en.wikipedia.org/wiki/Coffea_excelsa"
+                },
+                {
+                  "title": "Low caffeine coffee",
+                  "url": "https://en.wikipedia.org/wiki/Low_caffeine_coffee"
+                },
+                {
+                  "title": "Coffee",
+                  "url": "https://www.britannica.com/topic/coffee"
+                },
+                {
+                  "title": "Coffee production",
+                  "url": "https://www.britannica.com/topic/coffee-production"
+                },
+                {
+                  "title": "Coffee cherry",
+                  "url": "https://www.britannica.com/plant/coffee-cherry"
+                }
+              ],
+              "summaryExcerpt": "Britannica says robusta coffee is cheaper to produce, has twice the caffeine content of Arabica. Another Wikipedia entry puts it at about 40–50% more caffeine than arabica. ... The sources disagree on the ratio, from about 1.4× to 2×, so the figures are best treated as approximate.",
+              "tiers": ["B"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Checker addition (role explanation, ref explanation, risk high, riskReason number): 'Robusta has nearly twice the caffeine of arabica.' The writer listed no claim for this ratio. Sources put it anywhere from about 1.4 to 2 times, so 'nearly twice' is not agreed."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "The label values on the reveal (arabica about 1.2 to 1.5%, robusta about 2.2 to 2.7%) and the explanation's 'nearly twice' are not what every reputable source says: Tier B sources give arabica 0.8 to 1.4% or about 1.6%, robusta 1.7 to 4.0% or about 2.3%, and the ratio as 1.4 to 2 times. The key is safe. Restate the labels and the ratio at a precision all sources share (for example 'markedly more caffeine, often 1.5 to 2 times as much') or back the stated ranges with a Tier A source."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "49092407c5fda3a0024af568bd41bdac4bb8d174449d3271759ffc3f472617ed",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Robusta",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Arabica beans are usually quoted at about 1.2 to 1.5 percent caffeine by dry weight.",
+              "confidence": "certain"
+            },
+            "note": "Published ranges vary a little (roughly 0.9 to 1.7 percent); the item states typical values. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Robusta beans are usually quoted at about 2.2 to 2.7 percent caffeine by dry weight.",
+              "confidence": "certain"
+            },
+            "note": "Published ranges vary (up to about 4 percent); the ordering, about double arabica, is not in doubt. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Caffeine acts as a natural pesticide and is thought to protect coffee plants from insects.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Robusta is harsher and more bitter than arabica and is common in instant coffee and some espresso blends.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "A revise: A's Tier B results disagree with the label ranges c1 and c2 and with the explanation's nearly twice (A's x1), and the call reports the conflict. A conflict fails the claim as written (§9.5.2). The fix restates labels, values and display, a claim change that needs fresh checks, so cut. The key (robusta has more caffeine) is safe for a redraft under a new id.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which coffee bean contains more caffeine?",
+  "a": "Arabica",
+  "b": "Robusta",
+  "answer": "b",
+  "relation": "more",
+  "measure": "typical caffeine content of the beans, by dry weight",
+  "unit": "%",
+  "values": {
+    "a": 1.2,
+    "b": 2.2
+  },
+  "valueDisplay": {
+    "a": "about 1.2 to 1.5%",
+    "b": "about 2.2 to 2.7%"
+  },
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.249,
+    "estimator": "v0"
+  }
+}

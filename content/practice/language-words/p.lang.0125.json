@@ -1,0 +1,260 @@
+{
+  "id": "p.lang.0125",
+  "status": "active",
+  "category": "lang",
+  "tags": ["place-names", "armenian", "countries"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Armenians call themselves Hay, and -stan, a Persian ending meaning land, gives Hayastan. The same ending turns up in Kazakhstan, Uzbekistan and Afghanistan.",
+  "learnMore": "Names of Armenia",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Armenians call their country Hayastan."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Kazakhstan, Uzbekistan and Azerbaijan are not called Hayastan in their own languages."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Armenians' own name for themselves is Hay."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The ending -stan comes from Persian and means land or place."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kazakhstan, Uzbekistan and Afghanistan also end in -stan."
+    }
+  ],
+  "writerNotes": "The -stan ending pulls players toward Central Asia, so counterintuitive is true and the explanation turns the trap into the lesson. Key risk is high because it is the key of a counterintuitive item; the schema has no counterintuitive riskReason, so it carries etymology, the nearest honest reason. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: mledoze-countries cca3=ARM altSpellings include 'Hayastan' and name.native.hye is Հայաստան; KAZ, UZB and AZE native names differ; rival test: Azerbaijan is the neighbour that tempts most; its own name is Azərbaycan; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: a fair puzzle anywhere: the foothold is the -stan ending everyone has seen; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a9373314d1806cc6b1c15a7e67ce5e3c508257ae2c0861cb59553985aec6118d",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Armenia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=ARM, altSpellings",
+              "excerpt": "ARM altSpellings [\"AM\",\"Hayastan\",\"Republic of Armenia\",\"Հայաստանի Հանրապետություն\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The file also gives the native name in Armenian script, which romanizes as Hayastan."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=KAZ, UZB and AZE, name.native",
+              "excerpt": "KAZ name.native.kaz {\"official\":\"Қазақстан Республикасы\",\"common\":\"Қазақстан\"} | UZB name.native.uzb {\"official\":\"O'zbekiston Respublikasi\",\"common\":\"O‘zbekiston\"} | AZE name.native.aze {\"official\":\"Azərbaycan Respublikası\",\"common\":\"Azərbaycan\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Armenians call themselves Hay, plural Hayer.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ending -stan is the Persian suffix meaning land or place of.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Kazakhstan, Uzbekistan and Afghanistan all end in -stan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ce3e8d94d5d235afcff2c64c4de996db25fb9fc58ca4023bb96f5db8091a71c1",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Armenia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=ARM name.native.hye.common",
+              "excerpt": "ARM: \"Հայաստան\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset gives the Armenian-script name; its standard transliteration is Hayastan (the transliteration is mine)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=KAZ name.native.kaz.common; cca3=UZB name.native.uzb.common; cca3=AZE name.native.aze.common",
+              "excerpt": "KAZ: \"Қазақстан\"; UZB: \"O‘zbekiston\"; AZE: \"Azərbaycan\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "None of the three native names is Hayastan."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Armenians call themselves Hay (plural Hayer); Hayastan is land of the Hay.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ending -stan is Persian for place or land, from Old Persian.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Kazakhstan, Uzbekistan and Afghanistan all end in -stan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, etymology) and c4 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "People in which country call their homeland Hayastan?",
+  "answer": "Armenia",
+  "wrong": ["Kazakhstan", "Uzbekistan", "Azerbaijan"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.213,
+    "estimator": "v0"
+  }
+}

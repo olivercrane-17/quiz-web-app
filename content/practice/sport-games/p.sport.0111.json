@@ -1,0 +1,220 @@
+{
+  "id": "p.sport.0111",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["olympics", "host-cities", "paris"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Paris first hosted in 1900, when events were spread over about five months alongside a World's Fair. In 2024 it became the second city to host three times, after London.",
+  "learnMore": "Paris 2024 Olympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Paris hosted the Summer Olympics in 1924 and in 2024."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "London (1908, 1948, 2012), Los Angeles (1932, 1984) and Amsterdam (1928) did not host the Summer Olympics in both 1924 and 2024."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Paris hosted the 1900 Summer Olympics alongside the 1900 World's Fair, with events spread over about five months."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "With the 2024 Games, Paris became the second city to host the Summer Olympics three times, after London."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: olympic-editions, edition_metadata.csv: rows 1924 Summer Paris (5 to 27 July 1924), 2024 Summer Paris (26 July to 11 August 2024) and 1900 Summer Paris (no dates in the file) confirm c1 and the three Paris editions; London has 1908, 1948 and 2012, Los Angeles 1932 and 1984, Amsterdam 1928 (c2, c4). The 1906 Athens row is the Intercalated Games, which the IOC does not recognize, so Athens has two recognized editions and London stays the first triple host. The 1900 schedule and World's Fair link (c3) need web evidence. rivalTest: London is the strongest distractor as the other triple host, but its Games were 1908, 1948 and 2012; Los Angeles has 1932 and 1984; Amsterdam only 1928. Only Paris has both 1924 and 2024. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 30 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8b9616750b185cc6fe98624bddc8b8ee1bb322ee42aa35cb7d3aa04050aec1e1",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Paris",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=8; edition_id=63",
+              "excerpt": "8,1924 Summer,1924,Summer,Paris,France,1924-07-05,1924-07-27,3255,45,131,27 | 63,2024 Summer,2024,Summer,Paris,France,2024-07-26,2024-08-11,10763,206,329,47",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "Summer rows for London, Los Angeles and Amsterdam",
+              "excerpt": "5,1908 Summer,1908,Summer,London,Great Britain,1908-07-13,1908-07-25,2024,23,110,24 | 12,1948 Summer,1948,Summer,London,Great Britain,1948-07-29,1948-08-14,4421,59,153,27 | 52,1944 Summer,1944,Summer,London,Great Britain,,,,,, | 54,2012 Summer,2012,Summer,London,Great Britain,2012-07-27,2012-08-12,10518,205,303,39 | 10,1932 Summer,1932,Summer,Los Angeles,United States,1932-07-30,1932-08-14,1924,47,131,26 | 21,1984 Summer,1984,Summer,Los Angeles,United States,1984-07-28,1984-08-12,6800,140,221,28 | 9,1928 Summer,1928,Summer,Amsterdam,Netherlands,1928-07-28,1928-08-12,3296,46,125,24",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "London's 1944 row (52) has no dates: those Games were cancelled. None of the three cities has a 1924 or 2024 Summer row."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1900 Paris Olympics were held as part of the Exposition Universelle, the World's Fair, with events spread from mid-May to late October 1900.",
+              "confidence": "certain"
+            },
+            "note": "olympic-editions row 2 confirms only that Paris hosted in 1900; its dates are blank. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "Summer rows for Paris and London",
+              "excerpt": "2,1900 Summer,1900,Summer,Paris,France,,,1241,26,95,22 | 8,1924 Summer,1924,Summer,Paris,France,1924-07-05,1924-07-27,3255,45,131,27 | 63,2024 Summer,2024,Summer,Paris,France,2024-07-26,2024-08-11,10763,206,329,47 | 5,1908 Summer,1908,Summer,London,Great Britain,1908-07-13,1908-07-25,2024,23,110,24 | 12,1948 Summer,1948,Summer,London,Great Britain,1948-07-29,1948-08-14,4421,59,153,27 | 54,2012 Summer,2012,Summer,London,Great Britain,2012-07-27,2012-08-12,10518,205,303,39",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Leaving out London 1944 (row 52, cancelled) and the 1906 Intercalated Games at Athens (row 4, not recognised by the IOC), only London and Paris have three Summer Games; London's third was 2012, Paris's 2024."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "dd09df8fb0e0c26f0b6c7dfc9f3b34aebbf988a4cad2a95f2c73b8cde67207b3",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Paris",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "city=Paris, season=Summer",
+              "excerpt": "8,1924 Summer,1924,Summer,Paris,France,1924-07-05,1924-07-27 ... 63,2024 Summer,2024,Summer,Paris,France,2024-07-26,2024-08-11",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "Summer rows for London, Los Angeles, Amsterdam",
+              "excerpt": "London: 1908 (5), 1948 (12), 2012 (54); Los Angeles: 1932 (10), 1984 (21); Amsterdam: 1928 (9). None has a 1924 or 2024 Summer row.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The Los Angeles 2028 Games are in the future and not in the file."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Paris 1900 ran from mid-May to late October (about five and a half months) as part of the Exposition Universelle.",
+              "confidence": "certain"
+            },
+            "note": "The dataset leaves the 1900 opening and closing dates blank, so this rests on knowledge. 14 May to 28 October is 167 days."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "derived host counts, official Summer editions",
+              "excerpt": "Paris: 1900, 1924, 2024; London: 1908, 1948, 2012; Athina: 1896, 2004; Los Angeles: 1932, 1984; Tokyo: 1964, 2020. London reached three in 2012, Paris in 2024.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "1906 Intercalated and cancelled editions excluded."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c3 (explanation, number) rests on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which city hosted the Summer Olympics in 1924 and again exactly 100 years later?",
+  "answer": "Paris",
+  "wrong": ["London", "Los Angeles", "Amsterdam"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.508,
+    "estimator": "v0"
+  }
+}

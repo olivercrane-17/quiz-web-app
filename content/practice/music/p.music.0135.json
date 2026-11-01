@@ -1,0 +1,233 @@
+{
+  "id": "p.music.0135",
+  "status": "active",
+  "category": "music",
+  "tags": ["world-music", "brazil", "bossa-nova"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Antônio Carlos Jobim and Vinícius de Moraes wrote it about a real teenager, Helô Pinheiro, who walked past their favourite bar on her way to the beach.",
+  "learnMore": "The Girl from Ipanema",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Ipanema, the beach in the title of The Girl from Ipanema, is in Rio de Janeiro."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Ipanema beach is not in São Paulo, Salvador or Lisbon."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Antônio Carlos Jobim wrote the music of The Girl from Ipanema and Vinícius de Moraes the Portuguese lyrics."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The song was inspired by Helô Pinheiro, a teenager who walked past the songwriters' regular bar on her way to the beach."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: geonames-cities lists Ipanema in Brazil with admin1 21 (Rio de Janeiro state) and admin2 3304557, the same municipality code as Rio de Janeiro itself (-22.98436, -43.20285), which supports c1; a second Ipanema in Minas Gerais (admin1 15) is a homonym, which is why the stem says 'a beach'. I used no WebSearch. Rival test: argued for Salvador, Brazil's other famous beach city, and São Paulo, its biggest city; Ipanema is in Rio, so the key stands. Lisbon tempts players who link bossa nova with the Portuguese language. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the song is one of the most recorded in the world, and Rio's beaches are famous everywhere. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: The bar in c4 was the Veloso; I kept its name out. C22 pairs this item with p.soc.0111 (Rio's Carnival and the Sambadrome), which shares only the answer Rio de Janeiro; the facts differ, so I suggest related_ok.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0b8f112de5529b5bf6d9b7db9ae2e08736a70f7ba939b859b8d4bd082e640322",
+        "startedAt": "2026-11-01T02:00:29Z",
+        "finishedAt": "2026-11-01T02:19:40Z",
+        "coldSolve": {
+          "answerGiven": "Rio de Janeiro",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ipanema is a beach and district of Rio de Janeiro.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ipanema beach is not in São Paulo, Salvador or Lisbon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jobim wrote the music and Vinícius de Moraes the Portuguese words.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The song was inspired by the teenager Helô Pinheiro, who passed the songwriters' usual bar on her way to the beach.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Girl from Ipanema is a bossa nova standard.",
+              "confidence": "certain"
+            },
+            "note": "Checker addition x1: role key, ref stem, risk standard. Claim: The Girl from Ipanema is a bossa nova song. The stem's premise, which no writer claim states."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b068a92b6c67bb99beca6c87f7b0e0a5c61f565462b57483ef23cb6f45fabee2",
+        "startedAt": "2026-11-01T02:05:28Z",
+        "finishedAt": "2026-11-01T02:26:16Z",
+        "coldSolve": {
+          "answerGiven": "Rio de Janeiro",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Ipanema is a beach and neighbourhood in Rio de Janeiro.",
+              "confidence": "certain"
+            },
+            "note": "Wording: the title names the neighbourhood as much as the beach, but the city is unambiguous."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Ipanema is not in Sao Paulo, Salvador or Lisbon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jobim wrote the music and Vinícius de Moraes the Portuguese words.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The song was inspired by teenager Helô Pinheiro walking past the writers' bar on her way to the beach.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Ipanema is a neighbourhood as well as a beach, and the song title names the neighbourhood. The city is unambiguous, so this is only a nicety: 'a beach district' would be tighter than 'a beach'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic01e",
+        "at": "2026-11-01T02:04:12Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "accept",
+      "reason": "Both checks pass and every claim is standard risk, confirmed at certain by A and B, so §9.9 rule 3 needs no external evidence. Lint clean, no myth hit. A's addition x1 (it is a bossa nova song) is a standard stem premise that B's record does not dispute; B's note that Ipanema is a beach district is a nicety, not a fix.",
+      "decidedAt": "2026-11-01T04:20:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:20:00Z",
+      "nearestId": "p.film.0232",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:20:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The bossa nova song 'The Girl from Ipanema' is named after a beach in which city?",
+  "answer": "Rio de Janeiro",
+  "wrong": ["São Paulo", "Salvador", "Lisbon"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.2,
+    "estimator": "v0"
+  }
+}

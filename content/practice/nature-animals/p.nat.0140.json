@@ -1,0 +1,215 @@
+{
+  "id": "p.nat.0140",
+  "status": "active",
+  "category": "nat",
+  "tags": ["reptiles", "turtles", "ocean-life"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Warmer sand produces mostly females and cooler sand mostly males, so a hot beach can tilt a whole season's hatchlings towards females.",
+  "learnMore": "Temperature-dependent sex determination",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In sea turtles, the temperature of the nest during incubation determines the sex of the hatchlings."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "In sea turtles, hatchling sex is not decided by the father's genes, the mother's age or the size of the egg."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In sea turtles, warmer incubation temperatures produce more females and cooler ones more males."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hot nesting beaches can produce hatchlings that are overwhelmingly female."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed, all standard; no temperature figures, which would add numbers. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: 'the father's genes' is the trap for players who reason from mammals, where the father's sperm decides sex. Argued against the key: temperature-dependent sex determination is textbook for sea turtles. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: sea turtles nest on tropical beaches worldwide. style: Oxford spelling, plain hyphens only, explanation of 22 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "64ee3e158dc5a012452d024047b37758fadc5f93de916b4ec6b798e82bf4a607",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "The nest temperature",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sea turtles have temperature-dependent sex determination: the nest temperature sets the hatchlings' sex.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sea turtle sex is not set by the father's genes, the mother's age or the egg's size.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Warmer nests produce more females and cooler nests more males.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Very warm nesting beaches can produce almost all-female hatchlings, as found for northern Great Barrier Reef green turtles.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "58f7876aeacde5a6819d0c603eaa6a7b419427e67fb8cdd442e62677866aeb94",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "The nest temperature",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In sea turtles the nest temperature during incubation sets the sex of the hatchlings.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hatchling sex is not decided by the father's genes, the mother's age or the egg size.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Warmer incubation gives more females and cooler incubation more males.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Very hot nesting beaches can produce hatchlings that are overwhelmingly female.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; no high-risk claims; every knowledge confirmation at certain. Style, distractors and balance reviewed. Accepted after the wording-only fix in decisions1. (earlier, rewrite by ed-pnat01d: Oxford spelling (§3.3): 'toward' becomes 'towards'. No claim changes. [wording-only rewrite by ed-pnat01d at 2026-11-01T04:05:52Z of explanation; checks kept, packetSha256 re-stamped: pass A cd2d3c4d80658c501af24cbc900a61760ee115a07dc683c9e7672aa36b30313a -> 64ee3e158dc5a012452d024047b37758fadc5f93de916b4ec6b798e82bf4a607; pass B e2600f2c6e1e25e3978fa381055df0565c70b03bafa7a57a81371170460715ef -> 58f7876aeacde5a6819d0c603eaa6a7b419427e67fb8cdd442e62677866aeb94])",
+      "decidedAt": "2026-11-01T04:06:01Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:06:01Z",
+      "nearestId": "p.nat.0169",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:06:01Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In sea turtles, what decides whether an egg hatches as a male or a female?",
+  "answer": "The nest temperature",
+  "wrong": ["The father's genes", "The mother's age", "The size of the egg"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.24,
+    "estimator": "v0"
+  }
+}

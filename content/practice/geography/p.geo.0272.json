@@ -1,0 +1,206 @@
+{
+  "id": "p.geo.0272",
+  "status": "active",
+  "category": "geo",
+  "tags": ["deserts", "area", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The Sahara covers about 9 million km², stretching across North Africa from the Atlantic coast into Egypt and Sudan. Australia covers about 7.7 million km².",
+  "learnMore": "Sahara",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Sahara Desert covers about 9 million km²."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Australia's total area is about 7.7 million km²."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Sahara stretches across North Africa from the Atlantic coast into Egypt and Sudan."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (number) and c2 (number) are high under the C26 floor, and c3 is standard. Datasets: mledoze-countries: AUS area 7,692,024 (c2). The Sahara's area is in no pinned dataset. Rival test: Australia is a whole continent, so most players assume it is bigger; the desert is bigger. Against the key: published figures for the Sahara run from about 8.6 to 9.4 million km², depending on where its edges are drawn, and even the smallest beats Australia by more than 10%, so the item stores the round 9 million and the 1.1 guard still holds at the low end. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Both are known everywhere. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c1 needs a Tier A or B web result. Seed: 4 (medium): many pick Australia. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: the Sahara's edges are a matter of definition, which is why c1 is approximate.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a74746486f28e7d852bdff84a1c69df38e1cfdddb0522770399a0bb05780c913",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "The Sahara Desert",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Sahara covers about 9 million km² (often given as 9.2 million).",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=AUS",
+              "excerpt": "\"area\": 7692024",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Sahara spans North Africa from the Atlantic coast to the Red Sea, taking in much of Egypt and Sudan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "08d5b55957a2364c0edbe5d41787ea31a6651046ec4b3172d586105e54ada7c2",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "The Sahara Desert",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Sahara covers roughly 9 million km2; common figures run from about 9.0 to 9.4 million km2 depending on how its edges are drawn.",
+              "confidence": "certain"
+            },
+            "note": "High-risk number. Knowledge only (no web search available to me; no pinned dataset covers deserts); needs pass A's external evidence. Every figure I know exceeds Australia's 7.7 million, even the roughly 8.5 million km2 sometimes given for the continent with New Guinea."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=AUS",
+              "excerpt": "\"area\": 7692024",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Sahara stretches across North Africa from the Atlantic coast to the Red Sea, covering parts of Egypt and Sudan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (the Sahara's area, one side of the comparison) rests on knowledge alone in both checks: no pinned dataset covers it and neither checker could search (the shared WebSearch budget was spent before pass A ran). §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, which a wording-only edit cannot reach because the claims stay. Redraft under a new id with web evidence, or with the figure stepped down or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0151",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which is bigger by area?",
+  "a": "The Sahara Desert",
+  "b": "Australia",
+  "answer": "a",
+  "relation": "larger",
+  "measure": "area",
+  "unit": "km²",
+  "values": {
+    "a": 9000000,
+    "b": 7692024
+  },
+  "valueDisplay": {
+    "a": "about 9 million km²",
+    "b": "about 7.7 million km²"
+  },
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.238,
+    "estimator": "v0"
+  }
+}

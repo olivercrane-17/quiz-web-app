@@ -1,0 +1,269 @@
+{
+  "id": "p.food.0258",
+  "status": "active",
+  "category": "food",
+  "tags": ["nutrition", "nobel-prizes", "rice"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Working in Java, he saw that chickens fed polished rice developed a similar illness, while those fed whole rice did not. The missing nutrient was vitamin B1, thiamine.",
+  "learnMore": "Christiaan Eijkman",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Christiaan Eijkman shared the 1929 Nobel Prize in Physiology or Medicine for work showing that beriberi was linked to a diet of polished white rice."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Beriberi was not linked to diets of raw fish, cassava or maize."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Eijkman worked in Java, in the Dutch East Indies."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Chickens fed polished rice developed a beriberi-like illness, while chickens fed unpolished rice did not."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Beriberi is caused by a lack of thiamine, vitamin B1."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). Datasets: nobel-prizes (prize.json, year 1929, category medicine) lists Christiaan Eijkman 'for his discovery of the antineuritic vitamin', shared with Sir Frederick Hopkins, which confirms the prize and year in c1. Rival test: Maize is linked to pellagra and cassava to a different deficiency illness, so each is a real diet-disease confusion; neither is beriberi. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: rice is a staple across Asia and Africa, and players can reason from the vitamin story. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: few players know the history, but rice is reachable from Java. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9a81e0b3b0a7bac856a3dfe6c9b9333ced6fd5ad81caf06892ae71494979e016",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Polished white rice",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1929, category=medicine, laureates id=319",
+              "excerpt": "{\"id\":\"319\",\"firstname\":\"Christiaan\",\"surname\":\"Eijkman\",\"motivation\":\"\\\"for his discovery of the antineuritic vitamin\\\"\",\"share\":\"2\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The record fixes the shared 1929 prize in Physiology or Medicine (share 2; the other half went to Sir Frederick Hopkins, id 320) and its motivation, the antineuritic vitamin (thiamine). That the discovery came from linking beriberi to polished rice is the standard history of his Java work (see c4), from knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Eijkman's work linked beriberi to polished rice, not to raw fish, cassava or maize.",
+              "confidence": "certain"
+            },
+            "note": "In general nutrition, thiaminase in raw fish can add to thiamine deficiency, so the claim is true in the stem's frame (Eijkman's finding). As answers, the three options are definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Eijkman did the work in Batavia, Java, in the Dutch East Indies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "His chickens fed polished rice developed a polyneuritis like beriberi, while chickens fed unpolished rice did not.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Beriberi is caused by a lack of thiamine, vitamin B1.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c2 is worded more broadly than the item needs, since raw fish (through thiaminase) can contribute to thiamine deficiency. Read as 'Eijkman did not link beriberi to raw fish, cassava or maize' it is exact; the player-facing text is fine."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "eaa86eba95fec780249f03a1f15a82a6df764bdb78a139d34bf52d373ea14051",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Polished white rice",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1929, category=medicine",
+              "excerpt": "Christiaan Eijkman, share 2, 'for his discovery of the antineuritic vitamin'; Sir Frederick Hopkins, share 2, same year and category",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset confirms the year, the category and that the prize was shared with Hopkins. That Eijkman's finding was the polished-rice link is from my own knowledge (certain)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Eijkman linked beriberi to polished rice, not to raw fish, cassava or maize.",
+              "confidence": "certain"
+            },
+            "note": "The claim text is broader than the item needs: later research links thiaminase-rich raw fish to thiamine deficiency. It holds for what Eijkman linked, which is the only reading the stem allows; see the wording note."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Eijkman worked in Java, in the Dutch East Indies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Eijkman's chickens fed polished rice developed beriberi-like polyneuritis, while those fed unpolished rice did not.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Beriberi results from thiamine (vitamin B1) deficiency.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The key ('Polished white rice') is the longest and most specific option (19 characters against 5 to 8), which a test-wise player may favour; it stays under the C07 limit."
+          },
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Distractor claim c2 should be scoped to 'Eijkman did not link beriberi to ...', because raw-fish diets with thiaminase have since been linked to thiamine deficiency. The item's stem already confines the question to Eijkman."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Both checks pass. High-risk c1 (the shared 1929 prize) has nobel-prizes dataset evidence in both checks; the other claims are standard and confirmed at certain. The notes that c2 reads too broadly are weighed: the stem confines it to what Eijkman linked, as both checks read it. B's length cue stays inside C07.",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "nearestId": "p.hist.0163",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Christiaan Eijkman shared a 1929 Nobel Prize after linking the disease beriberi to a diet of what?",
+  "answer": "Polished white rice",
+  "wrong": ["Raw fish", "Cassava", "Maize"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.222,
+    "estimator": "v0"
+  }
+}

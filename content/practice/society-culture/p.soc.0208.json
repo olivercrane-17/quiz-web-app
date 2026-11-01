@@ -1,0 +1,190 @@
+{
+  "id": "p.soc.0208",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["calendars", "christianity", "islam"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The monk Dionysius Exiguus devised AD numbering in 525 for his Easter tables. Caliph Umar adopted the Hijri calendar around 638, counting from Muhammad's move to Medina in 622.",
+  "learnMore": "Anno Domini",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Dionysius Exiguus introduced the AD (Anno Domini) system of numbering years in AD 525, in his tables for calculating Easter."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Hijri calendar, which counts years from the Hijra, was adopted under Caliph Umar around AD 638."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Hijra, Muhammad's migration from Mecca to Medina, took place in AD 622."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: festivals and calendars. lint: content:check shows no errors for this item. claims: every checkable statement in the labels, values and explanation is listed, one label claim per side, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers calendar history; c1 to c3 need web evidence. rivalTest: the gap is about 113 years, far beyond the separation guard; sources that give 637 or 639 for the Hijri calendar's adoption change nothing. Argued against the key: AD numbering spread slowly (Bede popularized it in the 8th century), but the label says 'introduced', which is 525. b01's p.soc.0108 asks which event year 1 of the Islamic calendar marks; this item compares when the two year-counts were introduced, a related but different fact. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: both calendars are used worldwide, and neither side needs one country's schooling. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 29 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 3 (medium): most players pick AD, some guess the Islamic count is older. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6fc6b27e59338b8c63ca5ed0aafd1fd795b9da3321af0b35d1d7900656572cc4",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "Numbering years AD (Anno Domini)",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dionysius Exiguus introduced Anno Domini year numbering in 525, in his Easter table, in place of the era of Diocletian.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Caliph Umar instituted the Hijri era around 637 to 638 (17 AH), counting years from the Hijra.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Muhammad's migration from Mecca to Medina, the Hijra, took place in 622.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8f7cd7a7eb33105b887b0da8d0a35f890f5ef0570c433e40a026dbd10130a113",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "Numbering years AD (Anno Domini)",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dionysius Exiguus devised the Anno Domini count in 525, in his Easter table.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Hijri era was set under Caliph Umar around 638 (AH 17).",
+              "confidence": "certain"
+            },
+            "note": "Sources range from 637 to 639; 'around' covers it, and AD is earlier on every reading."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Muhammad's move from Mecca to Medina is dated to 622.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "'Introduced' is read as devised or instituted: AD in 525, Hijri in about 638. A player who reads it as 'came into general use' could argue for Hijri, because AD only spread from the 8th century on. The explanation mixes 'devised' (AD) with 'adopted' (Hijri); one verb for both, such as 'instituted', would close that gap. The key itself stands."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (label, date), c2 (label, date) and c3 (explanation, date) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. The gap includes the key, a label or a distractor, so the redraft needs evidence for the question itself. Checker B also asks for one verb for both systems ('instituted'), since AD dating spread only from the 8th century. Redraft under a new id.",
+      "decidedAt": "2026-11-01T04:47:17Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which was introduced first?",
+  "a": "Numbering years AD (Anno Domini)",
+  "b": "Numbering years from the Hijra",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year the system was introduced",
+  "unit": "year",
+  "values": {
+    "a": 525,
+    "b": 638
+  },
+  "valueDisplay": {
+    "a": "AD 525",
+    "b": "around AD 638"
+  },
+  "predicted": {
+    "p": 0.54,
+    "spread": 0.128,
+    "estimator": "v0"
+  }
+}

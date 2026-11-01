@@ -1,0 +1,190 @@
+{
+  "id": "p.sport.0138",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["olympics", "golf", "rugby", "timelines"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Golf was played at Paris 1900 and St. Louis 1904, then vanished for 112 years. It returned at Rio 2016, the same Games at which rugby sevens made its debut.",
+  "learnMore": "Golf at the Summer Olympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Golf was first played at the Olympics at the 1900 Paris Games."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Rugby sevens made its Olympic debut at the 2016 Rio de Janeiro Games."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Golf was also played at the 1904 St. Louis Olympics, then left the programme until Rio 2016, 112 years later."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so are both label claims of this counterintuitive comparison. datasets: olympic-editions confirms the 1900 Paris, 1904 St. Louis and 2016 Rio de Janeiro Summer editions but not their sports, so c1 to c3 need web evidence from checker A. The 112 years in c3 is arithmetic (2016 minus 1904). rivalTest: Both sports were added to the Rio 2016 programme together, so most players think golf is the newcomer, which is the trap. The gap is 116 years, so no date dispute can flip it. The label says rugby sevens, because 15-a-side rugby union was an Olympic sport from 1900 to 1924. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 30 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ef65f50d340216dbb85775a237e57cac8c739c420557a1bea53850a258acbe6c",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Golf at the Olympics",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Golf was first played at the Olympics at Paris 1900.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rugby sevens made its Olympic debut at Rio de Janeiro 2016.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Golf was played again at St. Louis 1904, then not until Rio 2016, 112 years later.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9b7e6fde91b11d1e1e9c46e235dc2ca42237a13925b533133c801f1cc9090fa6",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Golf at the Olympics",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Golf was on the programme at the 1900 Paris Games, its first Olympic appearance.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rugby sevens made its Olympic debut at Rio 2016.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Golf was also played at St. Louis 1904, then dropped until Rio 2016, a gap of 112 years (arithmetic re-run).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "trick",
+            "severity": "note",
+            "note": "Golf's return and rugby sevens' debut both happened at Rio 2016, so a player who only knows that may read the pair as a tie. The measure (first appearance) decides it, but the stem 'Which came first?' does not say so on the face of the card. Optional: label the sides 'Golf's first Olympics' and 'Rugby sevens' first Olympics'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (label, first), c2 (label, first) and c3 (explanation, date) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. B: golf's return and rugby sevens' debut were both at Rio 2016, so label the sides by first appearance. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Golf at the Olympics",
+  "b": "Rugby sevens at the Olympics",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of its first Olympic appearance",
+  "unit": "year",
+  "values": {
+    "a": 1900,
+    "b": 2016
+  },
+  "valueDisplay": {
+    "a": "Paris 1900",
+    "b": "Rio de Janeiro 2016"
+  },
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.248,
+    "estimator": "v0"
+  }
+}

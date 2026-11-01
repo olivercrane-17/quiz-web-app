@@ -1,0 +1,258 @@
+{
+  "id": "p.lang.0148",
+  "status": "active",
+  "category": "lang",
+  "tags": ["world-languages", "romansh", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Romansh grew from the Latin spoken in the Alps in Roman times and lives on mainly in the canton of Graubünden. Romania's language is Romanian, a separate descendant of Latin.",
+  "learnMore": "Romansh language",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Romansh is one of Switzerland's four national languages, with German, French and Italian."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Romansh is not a national language of Romania, Italy or Austria."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Romansh developed from the Latin spoken in the Alpine region in Roman times."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Romansh is spoken mainly in the canton of Graubünden."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Romanian is a separate Romance language descended from Latin."
+    }
+  ],
+  "writerNotes": "The name pulls players toward Romania, so counterintuitive is true; the explanation defuses it. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: mledoze-countries cca3=CHE languages {fra, gsw, ita, roh: 'Romansh'}; rival test: Italy has related Ladin and Friulian, but Romansh itself is Swiss; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: Switzerland and Romania are known worldwide; the foothold is the name trap itself; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none; content:check pairs it with p.art.0143 (Helvetica) only through the shared answer Switzerland, a different fact, so I suggest related_ok",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d6be1f68ad7ad4bd3f3225c52e32275b7a459d02008582b9f5aacd733bca5cf3",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Switzerland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=CHE, languages",
+              "excerpt": "CHE languages {\"fra\":\"French\",\"gsw\":\"Swiss German\",\"ita\":\"Italian\",\"roh\":\"Romansh\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Four languages. The file names the German one 'Swiss German'; the four national languages are German, French, Italian and Romansh."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=ROU, ITA and AUT, languages",
+              "excerpt": "ROU languages {\"ron\":\"Romanian\"} | ITA languages {\"ita\":\"Italian\"} | AUT languages {\"bar\":\"Austro-Bavarian German\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Romansh developed from the Latin spoken in the Alpine region in Roman times.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Romansh is spoken mainly in the canton of Graubünden.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Romanian is a separate Romance language, also descended from Latin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6cd1724c15d5009e386f1e2265dd17b9064651dfb2a7a7fef993f1abfec96354",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Switzerland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=CHE languages",
+              "excerpt": "CHE: {\"fra\":\"French\",\"gsw\":\"Swiss German\",\"ita\":\"Italian\",\"roh\":\"Romansh\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset lists four Swiss languages, Romansh among them; national status (German, French, Italian, Romansh) is from my knowledge of the Swiss constitution."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=ITA languages; cca3=ROU languages; cca3=AUT languages",
+              "excerpt": "ITA: {\"ita\":\"Italian\"}; ROU: {\"ron\":\"Romanian\"}; AUT: {\"bar\":\"Austro-Bavarian German\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "None of the three lists Romansh. Romania is the echo-word trap."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Romansh descends from the Latin spoken in the Alps in Roman times.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Romansh is spoken mainly in the canton of Graubunden.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Romanian is a separate Romance language from Latin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "accept",
+      "reason": "Both checks pass. The high-risk key c1 (four national languages) and c2 carry mledoze-countries dataset evidence in both checks, and c3 to c5 are standard and certain in both. The explanation defuses the Romania trap. Dedupe: shares the answer Switzerland with p.art.0143 (Helvetica), p.food.0249 (milk chocolate) and p.music.0109 (Eurovision); all different facts.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:43Z",
+      "nearestId": "p.food.0249",
+      "score": 0.66,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Romansh is a national language of which country?",
+  "answer": "Switzerland",
+  "wrong": ["Romania", "Italy", "Austria"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.167,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "id": "p.geo.0260",
+  "status": "cut",
+  "category": "geo",
+  "tags": ["climate", "deserts", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Record heat comes from subtropical deserts such as Death Valley and the Sahara, where dry, cloudless air lets the sun bake the ground. Humid equatorial air rarely gets that hot.",
+  "learnMore": "Highest temperature recorded on Earth",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The hottest air temperatures on Earth are recorded in subtropical deserts, not close to the Equator."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Death Valley and the Sahara are among the places with the hottest air temperatures ever recorded."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Dry, cloudless desert air lets the sun heat the ground strongly."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Humid air near the Equator rarely reaches the extreme temperatures of subtropical deserts."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (superlative) and c2 (superlative) are high under the C26 floor, and c3 and c4 are standard. Datasets: geonames-cities can place the record sites far from the Equator (Death Valley lies at about 36 N, the hottest Saharan stations near 30 to 35 N), but no dataset holds temperatures, so c1 and c2 need web evidence. Rival test: Argued for true: the Equator gets the most direct sunshine over a year, which is why the belief is so common; but cloud, rain and humidity cap equatorial temperatures, while clear desert skies let the ground bake. The record holders all lie roughly 25 to 40 degrees from the Equator. The statement is false under any reasonable reading. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: A belief held everywhere; no regional knowledge needed. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 30 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c1 and c2 need a Tier A or B web result (one search should cover both). Seed: 4 (medium): many players believe the myth. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: the famous 1913 Death Valley reading is disputed, so c2 says 'among the places' and the item never quotes a figure.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ab2a51f78cbdd512fa10ce443a89f23aaa2e5935c79a8d8f27e1a16a5e124155",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The highest air temperatures ever measured come from subtropical deserts around 25 to 37° N, such as Death Valley and the Sahara and Middle East deserts, not the equatorial belt.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Death Valley holds the officially accepted world record of 56.7 °C (1913), and stations in the Sahara have recorded readings above 50 °C.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dry, cloudless desert air lets strong sunshine heat the ground intensely.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Humid, cloudy equatorial air rarely goes much above about 35 °C.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bb32bfae1544a27e0dc085eba68e5b81918d78e43ea0e0cc26599b579edfbf75",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The highest air temperatures ever recorded come from subtropical deserts (Death Valley, 56.7 C in 1913; the Sahara and Arabian deserts), none of them close to the Equator.",
+              "confidence": "certain"
+            },
+            "note": "High-risk superlative. Knowledge only (no web search was available to me); counts only with external evidence from pass A (guide 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Death Valley holds the highest reliably measured air temperature; Saharan stations (for example Kebili in Tunisia and Ouargla in Algeria) have recorded readings above 50 C.",
+              "confidence": "certain"
+            },
+            "note": "High-risk superlative, phrased softly ('among the places'). The Libyan 58 C reading was struck out by the WMO in 2012, but other Saharan readings still qualify. Knowledge only (no web search available to me); needs pass A's external evidence."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dry, cloudless desert air lets the sun heat the ground strongly.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Humid equatorial air rarely reaches the extreme temperatures of subtropical deserts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'Hottest air temperatures' and 'close to the Equator' are loose. All record highs come from subtropical deserts, so the statement is false as intended, but a reader thinking of the hottest average temperatures (for example Dallol in Ethiopia) could hesitate. Optional: 'The highest air temperature ever recorded was measured close to the Equator'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, superlative) and c2 (explanation, superlative) rest on knowledge alone in both checks: no pinned dataset covers them and neither checker could search (the shared WebSearch budget was spent before pass A ran). §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, which a wording-only edit cannot reach because the claims stay. Redraft under a new id with web evidence, or with the figure stepped down or dropped.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    }
+  },
+  "format": "tf",
+  "stem": "The hottest air temperatures on Earth are recorded close to the Equator.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.259,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "id": "p.food.0104",
+  "status": "active",
+  "category": "food",
+  "tags": ["baking", "bread", "food-science"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Kneading lines gluten strands up into an elastic web that traps gas from the yeast. Rye flour forms a weak gluten network and rice flour none, so their breads rise less.",
+  "learnMore": "Gluten",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Gluten, formed from wheat proteins when flour is mixed with water, gives bread dough its elasticity."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Casein is a milk protein, collagen an animal connective-tissue protein and albumin a protein of egg white and blood; none forms the stretchy network of bread dough."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kneading develops gluten into an elastic network that traps the gas produced by yeast."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Rye and rice flours form little or no gluten, so breads made from them rise less than wheat breads."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: casein, collagen and albumin are all real food proteins, so each tempts, and none builds dough; nothing argues against the key. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: wheat bread is eaten worldwide and gluten is a household word. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 33 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: gluten is widely known from food labels. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "155004ca1017a79e71c7e913447f410d52f5e5ac5bc47692500dbea4cb4cfd90",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Gluten",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "When wheat flour is wetted, gliadin and glutenin form gluten, the elastic network that lets dough stretch.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Casein is the main milk protein, collagen the connective-tissue protein and albumin the protein of egg white and blood plasma; none forms the dough network.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kneading develops the gluten network, which traps the carbon dioxide made by yeast.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rye and rice flours form little or no gluten network, so breads made from them rise less than wheat bread.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c7d27ee9cd8501e6e061a13b37413e9bc271ca4b9b19b09987118bd85e51ed29",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Gluten",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gluten forms when the wheat proteins glutenin and gliadin are hydrated and worked, and it gives dough its elasticity.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Casein is the main milk protein, albumin the protein of egg white and blood, collagen the connective tissue protein; none forms the dough network.",
+              "confidence": "certain"
+            },
+            "note": "No second answer."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kneading aligns the gluten into an elastic web that traps the carbon dioxide yeast produces.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rice flour has no gluten. Rye flour has gluten-type proteins but forms only a weak network, so rye and rice breads rise less than wheat bread.",
+              "confidence": "certain"
+            },
+            "note": "Rye does contain gluten proteins (secalin) and is not safe in coeliac disease. 'Little or no' is defensible because rye's network is weak, but see the wording note."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c4: rye flour does contain gluten-forming proteins and is off limits in coeliac disease. 'Little or no' is defensible because rye forms a weak network, yet a reader could take it as rye being low in gluten. Consider 'rice flour, which has none, and rye, whose gluten network is weak'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Accepted after the wording-only clarity fix to the explanation recorded in decisions1 (§9.7, §9.9). (earlier, rewrite by ed-pfood01d: Wording only (§9.7), from B's note: rye or rice flour, which form little or no gluten could be read as rye being low in gluten, which matters to coeliac readers. The explanation now says rye forms a weak gluten network and rice none, which is what c4 states. No claim changes. [wording-only rewrite by ed-pfood01d at 2026-11-01T04:17:24Z of explanation; checks kept, packetSha256 re-stamped: pass A bb4f0e44de8f7346201f4e6d7dfb2da2c282ad206d85afed8bb1e7352616fa49 -> 155004ca1017a79e71c7e913447f410d52f5e5ac5bc47692500dbea4cb4cfd90; pass B 36075a5e47f4e683de456ec27224615c6682d8fffda6bcae020202b88e60dddb -> c7d27ee9cd8501e6e061a13b37413e9bc271ca4b9b19b09987118bd85e51ed29])",
+      "decidedAt": "2026-11-01T04:17:32Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:32Z",
+      "nearestId": "p.food.0115",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:32Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which protein network, formed when wheat flour meets water, gives bread dough its stretch?",
+  "answer": "Gluten",
+  "wrong": ["Casein", "Collagen", "Albumin"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.269,
+    "estimator": "v0"
+  }
+}

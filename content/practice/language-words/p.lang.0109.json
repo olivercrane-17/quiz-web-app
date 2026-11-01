@@ -1,0 +1,257 @@
+{
+  "id": "p.lang.0109",
+  "status": "checking",
+  "category": "lang",
+  "tags": ["word-origins", "months", "ancient-rome"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "The Romans called it Quintilis, the fifth month, because their year once began in March. It was renamed in Caesar's honour in 44 BC, the year of his death, and August later honoured Augustus.",
+  "learnMore": "July",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "July is named in honour of Julius Caesar."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "July is not named after Mark Antony, Augustus or Pompey."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Before it was renamed, July was called Quintilis, 'fifth', because the early Roman year began in March."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The month was renamed in Caesar's honour in 44 BC, the year of his death."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "August is named after Augustus."
+    }
+  ],
+  "writerNotes": "Augustus is the natural trap and the explanation hands him his own month. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers it; rival test: Augustus has August; Antony and Pompey have no month; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: month names and Caesar are known worldwide; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none; content:check pairs this item with p.book.0161 only through the shared answer Julius Caesar (a Shakespeare play there), a different fact, so I suggest related_ok",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "912580a15d76d997de35d7af5285c1a77f87a7a7d8fe42ef117b85d34eda4fdb",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Julius Caesar",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "July (Latin Iulius) honours Julius Caesar, who was born in that month.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "July honours Caesar and August honours Augustus. No month is named after Mark Antony or Pompey; Antony only proposed the renaming.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "July was Quintilis, the fifth month, because the oldest Roman year began in March.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The month took the name Iulius in 44 BC, the year Caesar was killed.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "August, formerly Sextilis, was renamed in honour of Augustus.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "As I know the ancient accounts, the renaming was voted among the honours Caesar received in his lifetime, early in 44 BC, and the new name was first used for the month in July 44 BC, after the Ides of March.",
+              "confidence": "likely"
+            },
+            "note": "Added from the explanation, role explanation, risk high (date): 'It was renamed for Caesar after his death in 44 BC.' I doubt the 'after his death' part (see issues) and had no search available to settle it, so it stays uncertain."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Checker doubt on x1. The explanation says July 'was renamed for Caesar after his death in 44 BC'. To my knowledge the renaming was decreed among the honours voted to Caesar while he was alive, and the name first applied to July 44 BC, after his death, so 'after his death' is misleading at best. c4 already has a safe form: 'in 44 BC, the year of his death'. Suggested explanation: 'It was renamed in Caesar's honour in 44 BC, the year he was killed, and August later honoured Augustus.'"
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "58ff3d6886d81aba0997911858a361c8fa171188934ac68feaf5e2b743277187",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Julius Caesar",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "July (Latin Iulius) replaced the old name Quintilis in honour of Julius Caesar, born in that month.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Augustus has August, Mark Antony proposed the renaming but is not the honoree, and Pompey has no month.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Antony moved the change in 44 BC, yet 'in honour of' still points to Caesar."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Quintilis means fifth; the early Roman year began in March, which made it the fifth month.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Quintilis became Iulius in 44 BC, after Caesar was assassinated in March of that year.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "August (formerly Sextilis) was renamed for Augustus.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The key echoes the stem word: 'July' and 'Julius'. Same intrinsic cue as the window item; easy band, no change asked."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "rewrite",
+      "reason": "Applies A's fix. The explanation said July was renamed 'after his death in 44 BC', which A doubted (x1, uncertain): the renaming was voted among Caesar's honours and first applied to July 44 BC. The explanation now states c4 exactly ('in 44 BC, the year of his death'), so no claim changes. A's revise still stands and c1 to c5 rest on knowledge only in both checks, so the item awaits a tiebreak with web evidence on c1 to c5 (§9.7) and is accepted only if T passes. Dedupe for that accept: shares the answer with p.book.0161 (the Shakespeare play), a different fact. [wording-only rewrite by ed-plang01d at 2026-11-01T04:15:43Z of explanation; checks kept, packetSha256 re-stamped: pass A 48c833a1e16b2fd43125ce52503cddab6af052f0c4e114e4f049c9cefb4cd0a5 -> 912580a15d76d997de35d7af5285c1a77f87a7a7d8fe42ef117b85d34eda4fdb; pass B 26a6f1af6454daa5554099d0dcccf2688a13a6f2919a7313929e98f6fb4e0d86 -> 58ff3d6886d81aba0997911858a361c8fa171188934ac68feaf5e2b743277187]",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The month of July was named in honour of which Roman?",
+  "answer": "Julius Caesar",
+  "wrong": ["Mark Antony", "Augustus", "Pompey the Great"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.92,
+    "spread": 0.346,
+    "estimator": "v0"
+  }
+}

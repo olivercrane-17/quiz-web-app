@@ -1,0 +1,207 @@
+{
+  "id": "p.sport.0204",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["boxing", "olympics", "rome-1960"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "He took light-heavyweight gold aged 18. He changed his name in 1964, soon after beating Sonny Liston to become world heavyweight champion.",
+  "learnMore": "Muhammad Ali",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Muhammad Ali, then named Cassius Clay, won the Olympic light-heavyweight boxing gold medal at the 1960 Rome Olympics."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Sonny Liston, Joe Frazier and Floyd Patterson were other boxers, not names that Muhammad Ali used."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Cassius Clay was 18 when he won Olympic gold in 1960."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Clay took the name Muhammad Ali in 1964, shortly after beating Sonny Liston for the world heavyweight title."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 3 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: olympic-editions, edition_metadata.csv: edition_id 15 (1960 Summer, Roma, Italy) confirms the Games; the boxing result, his age and the name change are not in any pinned dataset, so c1, c3 and c4 need web evidence. rivalTest: The distractors are famous heavyweights of the same era, so a player who knows Ali's story but not his birth name has to think. Floyd Patterson won Olympic gold too, but in 1952 and as Patterson, so he cannot be argued for. Liston, Frazier and Patterson never fought as Muhammad Ali. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 22 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Ali died in 2016; the item states only his public achievements and his name change, with no comment on his beliefs.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8465f2409f158e45e36e05ceafb0a6a068516f262ebe64fef049c7ead1450957",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Cassius Clay",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cassius Clay won the light-heavyweight boxing gold at the Rome 1960 Olympics, beating Zbigniew Pietrzykowski in the final.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). olympic-editions confirms only that the Rome 1960 Games took place (edition_id=15), not the medal."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Liston, Frazier and Patterson were heavyweights in their own right; Ali's only other name was his birth name, Cassius Clay.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Clay was born on 17 January 1942, so he was 18 at the Rome final in September 1960.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Clay beat Liston for the heavyweight title in February 1964 and was given the name Muhammad Ali in March 1964.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e153fd95e6e335a217787076f7c7a3e83b830463a25c795532fa2b0ab52079e6",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Cassius Clay",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cassius Clay won the light-heavyweight boxing gold at the Rome Games in September 1960 and became Muhammad Ali in 1964.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Patterson (1952 gold), Frazier (1964 gold) and Liston (no Olympic medal) are other boxers, and none is a name Ali ever used."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Sonny Liston, Joe Frazier and Floyd Patterson were three other boxers, never names used by Ali.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ali was born on 17 January 1942 and won the Rome final in September 1960, so he was 18.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Clay beat Sonny Liston for the heavyweight title on 25 February 1964 and took the name Muhammad Ali a few days later.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "sensitivity",
+            "severity": "note",
+            "note": "Cassius Clay is the name Ali rejected. The stem leads with Muhammad Ali and asks for the earlier name as history, which keeps the tone respectful. The editor may want the explanation to say that he rejected the old name."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, date), c3 (explanation, number) and c4 (explanation, date) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Checker B's sensitivity note also applies to the redraft: say in the explanation that he rejected the name Cassius Clay. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Under which name did Muhammad Ali win Olympic boxing gold at the 1960 Rome Games?",
+  "answer": "Cassius Clay",
+  "wrong": ["Sonny Liston", "Joe Frazier", "Floyd Patterson"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.395,
+    "estimator": "v0"
+  }
+}

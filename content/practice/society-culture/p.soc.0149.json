@@ -1,0 +1,241 @@
+{
+  "id": "p.soc.0149",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["symbols", "medicine", "greek-myth"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The winged staff with two snakes is the caduceus of Hermes, messenger of the gods and patron of traders. Its use as a medical emblem, common in the US, is a long-standing mix-up.",
+  "learnMore": "Rod of Asclepius",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The Rod of Asclepius shows a single snake coiled around a staff."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Two snakes with wings is the caduceus, a snake around a bowl is the Bowl of Hygieia, and a snake eating its tail is the ouroboros."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The caduceus, a winged staff with two snakes, is the staff of Hermes."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hermes was the messenger of the gods and a patron of merchants."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The caduceus is often used as a medical symbol, especially in the United States, although the traditional symbol of medicine is the Rod of Asclepius."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers symbols; c1 and c3 need web evidence. rivalTest: the caduceus is the planted trap, because it appears on many medical badges, so counterintuitive is true; the Bowl of Hygieia (pharmacy) and the ouroboros are other real snake symbols. Argued against the key: Asclepius's rod carries one serpent in every classical depiction. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: the WHO emblem and many ambulances show the rod worldwide; the US caduceus use is named as such. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 33 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 4. doubts: none. riskReason: counterintuitive is true, so the key claim is high under C26; the CNT-1 claim schema has no 'counterintuitive' riskReason, so it carries checker_doubt as the stand-in for the counterintuitive floor.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f4323e917941f4dfa4dc220e6bd9bf8f98819c583fad2e8331601c431e121c6d",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "One snake on a staff",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Rod of Asclepius is a single snake coiled around a staff.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The winged staff with two snakes is the caduceus, the snake with a bowl is the Bowl of Hygieia, and the snake swallowing its tail is the ouroboros.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The caduceus, a winged staff with two snakes, is the staff of Hermes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hermes was the messenger of the gods and a patron of merchants and travellers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The caduceus is widely, if mistakenly, used as a medical symbol, especially in the United States (by the US Army Medical Corps from 1902).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8a2cef2e9402c6bab53e3fd46e597d564443e9e740d3f3db0fa671e3a5ccd707",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "One snake on a staff",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Rod of Asclepius shows a single snake coiled round a staff.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Two snakes with wings is the caduceus, a snake round a bowl is the Bowl of Hygieia and a snake eating its tail is the ouroboros.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The caduceus is Hermes' winged staff with two snakes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hermes was messenger of the gods and a patron of merchants.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The caduceus is often used as a medical symbol, especially in the United States, though the traditional symbol is the Rod of Asclepius.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The stem says 'Rod' and only the key option says 'staff', a quiet synonym cue. Consider wording the caduceus option 'Two snakes on a winged staff' so every staff-bearing option mentions one."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, writer's checker_doubt), c2 (distractor, number) and c3 (explanation, number) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims. In a redraft, word the caduceus option as 'Two snakes on a winged staff' so the key is not the only staff option (B).",
+      "decidedAt": "2026-11-01T04:34:42Z"
+    }
+  },
+  "format": "mc",
+  "stem": "What does the Rod of Asclepius, the ancient Greek symbol of medicine, show?",
+  "answer": "One snake on a staff",
+  "wrong": [
+    "Two snakes and wings",
+    "A snake round a bowl",
+    "A snake eating its tail"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.168,
+    "estimator": "v0"
+  }
+}

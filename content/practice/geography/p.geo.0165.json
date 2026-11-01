@@ -1,0 +1,222 @@
+{
+  "id": "p.geo.0165",
+  "status": "active",
+  "category": "geo",
+  "tags": ["seas", "oceania", "pacific"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Sydney and Auckland face each other across it, about 2,150 km (1,340 miles) apart. To the north it meets the Coral Sea.",
+  "learnMore": "Tasman Sea",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Tasman Sea lies between Australia and New Zealand."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Coral Sea, the Arafura Sea and the Timor Sea lie off Australia's north and north-east coasts, not between Australia and New Zealand."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Sydney and Auckland are about 2,150 km (1,340 miles) apart."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Tasman Sea meets the Coral Sea to the north."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c3 carries a distance, so high; the rest are standard. Datasets: geonames-cities: Sydney AU lat -33.86785, lng 151.20732; Auckland NZ lat -36.84853, lng 174.76349; great-circle distance about 2,156 km, 1,340 miles (c3, by calculation). Rival test: the Coral Sea is the nearest rival, bordering the Tasman to the north; the Arafura and Timor seas lie off northern Australia. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Oceania's best-known sea. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 22 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none. I left out the naming after Abel Tasman so no etymology needs a source.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ae5bca11a4381b58391bebe26c66fc1cc0d48f2119c275cebc1723786e710ba5",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Tasman Sea",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Tasman Sea separates Australia from New Zealand.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Coral, Arafura and Timor seas border Australia's north-east and north coasts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Sydney, country=AU, admin1=02; name=Auckland, country=NZ, admin1=E7",
+              "excerpt": "{\"name\":\"Sydney\",\"lat\":\"-33.86785\",\"lng\":\"151.20732\",\"country\":\"AU\",\"admin1\":\"02\",\"admin2\":\"\"} | {\"name\":\"Auckland\",\"lat\":\"-36.84853\",\"lng\":\"174.76349\",\"country\":\"NZ\",\"admin1\":\"E7\",\"admin2\":\"076\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Great-circle distance 2156 km (1340 miles)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Tasman Sea adjoins the Coral Sea to the north.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0b27fd3b1abc3e649d8d0fe64298b364f412f707e36ed75911441ec75a3f2d83",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Tasman Sea",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Tasman Sea lies between south-east Australia and New Zealand.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Coral, Arafura and Timor seas lie off Australia's north and north-east coasts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Sydney,country=AU,admin1=02; name=Auckland,country=NZ,admin1=E7",
+              "excerpt": "Sydney AU/02: lat -33.86785, lng 151.20732 | Auckland NZ/E7: lat -36.84853, lng 174.76349",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Great-circle distance 2156 km (1340 miles): matches about 2,150 km (1,340 miles)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Tasman Sea meets the Coral Sea to the north.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c3 carry geonames-cities evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0001",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which sea lies between Australia and New Zealand?",
+  "answer": "Tasman Sea",
+  "wrong": ["Coral Sea", "Arafura Sea", "Timor Sea"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.54,
+    "spread": 0.161,
+    "estimator": "v0"
+  }
+}

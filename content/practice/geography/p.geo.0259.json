@@ -1,0 +1,181 @@
+{
+  "id": "p.geo.0259",
+  "status": "cut",
+  "category": "geo",
+  "tags": ["capitals", "cities", "turkiye"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "The capital is Ankara, chosen when the republic was founded in 1923. Istanbul had been the capital of the Ottoman Empire for centuries before that.",
+  "learnMore": "Ankara",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Istanbul is not the capital of Türkiye; the capital is Ankara."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Ankara became the capital of Türkiye in 1923, when the republic was founded."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Istanbul was the capital of the Ottoman Empire for centuries."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (checker_doubt) and c2 (date) are high under the C26 floor, and c3 is standard; c1 is high because the item is counterintuitive, and the schema's riskReason list has no 'counterintuitive', so checker_doubt stands in. Datasets: mledoze-countries cca3=TUR: capital Ankara (c1). Türkiye is not in content/reference/capitals-excluded.json's launch list (§3.4), and its capital has not moved since 1923. Rival test: Argued for true: Istanbul is the country's famous city, its old imperial capital and the city on two continents, which is exactly why so many people believe it; but the capital of the republic is Ankara. Nobody disputes this. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: A widely held belief everywhere; the myth is not one country's. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c1 is a capital claim, so it needs a Tier A or B web result besides the dataset (§3.4); one search should also cover the date in c2. Seed: 3 (medium): many players believe the myth. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: none. The statement says 'the Republic of Türkiye' so it cannot be read as being about the Ottoman era. The guide example m.hist.0001 has Istanbul as its answer; the wording here keeps clear of its clues.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5bc6fa9b35ea57de4c6053e2b7a07ef38c8c9fa6cbf0f0907cbd2c5213e4674d",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=TUR",
+              "excerpt": "\"capital\": [\"Ankara\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "country-codes (another publisher) agrees: TUR Capital \"Ankara\". The §3.4 capital rule also asks for a Tier A or B web result, which this check could not add (the shared WebSearch budget was used up), so the editor still needs one."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ankara was made the capital on 13 October 1923, shortly before the republic was proclaimed on 29 October 1923.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Istanbul (Constantinople) was the Ottoman capital from 1453 until the empire's end.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "11d829b982ad78639d1001132e928b677fff96d2fa5ababb5bbed99a08324260",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=TUR",
+              "excerpt": "\"capital\": [\"Ankara\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Dataset half of the capital rule (guide 3.4). The Tier A or B web result is not in my record because no web search was available to me, so pass A's web evidence must supply it. Turkiye is not on the excluded-capitals list. I am certain of the fact."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ankara was named the capital in October 1923, shortly before the republic was proclaimed that month.",
+              "confidence": "certain"
+            },
+            "note": "High-risk date, certain at year level. Knowledge only (no web search available to me); needs pass A's external evidence. See the wording note on the two-week gap."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Istanbul (Constantinople) was the Ottoman capital for centuries until 1922.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Ankara was named capital on 13 October 1923, a little before the republic was proclaimed on 29 October 1923. 'Chosen when the republic was founded in 1923' is right at year level and close in time, but a pedant can point to the two-week gap. Optional: 'chosen in 1923, as the republic was founded'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but c1 names a country's current capital, and §3.4 with §9.9 rule 3 needs a Tier A or B web result beside the mledoze-countries record; neither checker could search. High-risk c2 (date) also rests on knowledge alone in both checks. The editor cannot supply evidence without taking a checker's role (§0.2). Redraft under a new id with the web result recorded in a check.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Istanbul serves as the capital of the Republic of Türkiye.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.319,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "id": "p.food.0120",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-words", "pasta", "italy"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "The small domes are pressed with a thumb and come from Puglia in southern Italy. Farfalle means butterflies, linguine little tongues and vermicelli little worms.",
+  "learnMore": "Orecchiette",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The Italian name orecchiette means 'little ears'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "In Italian, farfalle means 'butterflies', linguine 'little tongues' and vermicelli 'little worms'."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Orecchiette are a pasta from Puglia (Apulia) in southern Italy, traditionally shaped by pressing small pieces of dough with the thumb."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c2). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: each distractor has its own well-documented name meaning, so none can mean little ears; players who picture the ear-shaped domes, or know orecchio, reach the key. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: all four pastas are sold internationally; Italian speakers have an edge, as with any food word. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 25 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: most players will not know the word, but the shape is a real foothold. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6a4fee6519a1c723f186e9d577272ffbdbb71ddf5817a33db95e8ffb4451a485",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Orecchiette",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "word origins of food names: burrito Spanish diminutive of burro little donkey; orecchiette Italian for little ears; grenadine from French grenade pomegranate",
+              "results": [
+                {
+                  "title": "Burrito",
+                  "url": "https://en.wikipedia.org/wiki/Burrito"
+                },
+                {
+                  "title": "Orecchiette",
+                  "url": "https://en.wikipedia.org/wiki/Orecchiette"
+                },
+                {
+                  "title": "Burrito",
+                  "url": "https://www.britannica.com/topic/burrito"
+                },
+                {
+                  "title": "What is the history of the burrito?",
+                  "url": "https://beyond.britannica.com/what-is-the-history-of-the-burrito"
+                },
+                {
+                  "title": "Taco",
+                  "url": "https://en.wikipedia.org/wiki/Taco"
+                },
+                {
+                  "title": "Grenadine",
+                  "url": "https://en.wikipedia.org/?title=Grenadine"
+                },
+                {
+                  "title": "Ciceri e tria",
+                  "url": "https://en.wikipedia.org/wiki/Ciceri_e_tria"
+                },
+                {
+                  "title": "List of English words of Spanish origin",
+                  "url": "https://en.wikipedia.org/wiki/List_of_English_words_of_Spanish_origin"
+                },
+                {
+                  "title": "List of foods named after places",
+                  "url": "https://en.wikipedia.org/wiki/List_of_foods_named_after_places"
+                },
+                {
+                  "title": "Grenadine Definition & Meaning",
+                  "url": "https://www.britannica.com/dictionary/grenadine"
+                }
+              ],
+              "summaryExcerpt": "The name comes from orecchia, the Italian word for ear, plus the diminutive suffix -etta. The name orecchiette derives from the Italian orecchia (\"ear\") with the diminutive suffix -etta.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Ear plus a diminutive, in the plural, is 'little ears'. Same call as p.food.0107 (counted there); every result is Tier B."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Italian farfalle means butterflies, linguine little tongues (from lingua) and vermicelli little worms (from verme).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. No pinned dataset covers it and this check's share of the batch search cap went to claims with numbers and dates, so it still needs dataset or web evidence (a follow-up) before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Orecchiette are the pasta of Puglia, shaped by pressing small pieces of dough with the thumb.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b7314128b739bc5ba96c4d692c888c7f1e409480fc2beb043f4006bbbad49527",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Orecchiette",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Orecchiette is the diminutive plural of orecchia, ear, so it means little ears.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Farfalla is butterfly, lingua is tongue (linguine, little tongues), verme is worm (vermicelli, little worms).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Orecchiette are a hand-shaped pasta of Puglia, pressed with the thumb.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk distractor c2 (etymologies) rests on knowledge alone in both checks; no pinned dataset covers it and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.music.0164",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which pasta's Italian name means 'little ears'?",
+  "answer": "Orecchiette",
+  "wrong": ["Farfalle", "Linguine", "Vermicelli"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.231,
+    "estimator": "v0"
+  }
+}

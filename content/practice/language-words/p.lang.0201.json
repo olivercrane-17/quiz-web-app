@@ -1,0 +1,219 @@
+{
+  "id": "p.lang.0201",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["place-names", "countries", "south-america", "spanish"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Ecuador is simply Spanish for equator. The line also crosses Colombia and Brazil, and the highland city of Quito lies less than 30 km south of it.",
+  "learnMore": "Ecuador",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name Ecuador is the Spanish word for the Equator."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Colombia, Brazil and Peru are not named after the Equator."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Equator crosses Colombia and Brazil."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Quito lies less than 30 km south of the Equator."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors for this item and one warning, C22, for the editor: p.geo.0169 shares the answer Ecuador but asks which countries Brazil does not border, a different fact; related, not a duplicate. claims: 4 listed, 3 high (etymology, number) and 1 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: geonames-cities: Quito (country EC, admin1 18) at lat -0.22985, about 25.6 km south of the Equator, so c4 holds at its bounded precision; mledoze-countries cca3=ECU gives the name Ecuador. No dataset covers the etymology in c1 and c2. rivalTest: Argued for Colombia and Brazil, which the Equator also crosses: Colombia is named after Columbus and Brazil after the brazilwood tree. Peru lies south of the line and takes its name from elsewhere. Equatorial Guinea also carries the word but is in Africa and is not an option. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: the Equator and Ecuador are school geography everywhere. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 27 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "54cec0a858d916cc4b50a6ee9a891cd8a588625613c1ed59351c55fc6008e661",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Ecuador",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ecuador is the Spanish word for the equator, and the country is named for the line that runs through it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Colombia is named after Christopher Columbus, Brazil after brazilwood and Peru after a local name (Biru); none of the three refers to the Equator.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "features ADMIN=Colombia and ADMIN=Brazil, bbox",
+              "excerpt": "\"bbox\":[-78.990935,-4.298187,-66.876326,12.437303] (Colombia); \"bbox\":[-73.987235,-33.768378,-34.729993,5.244486] (Brazil)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Both latitude ranges span 0. A point-in-polygon test on the pinned polygons puts latitude 0 inside Colombia from about 75.5 to 70.25 degrees west and inside Brazil from about 70 to 50.5 degrees west, so the Equator crosses both (Peru's polygon stops at 0.057 degrees south)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Quito, country=EC",
+              "excerpt": "{\"name\":\"Quito\",\"lat\":\"-0.22985\",\"lng\":\"-78.52495\",\"country\":\"EC\",\"admin1\":\"18\",\"admin2\":\"1701\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Latitude 0.22985 degrees south. At about 111 km per degree of latitude that is about 25.5 km south of the Equator, inside the claim's bound of 30 km."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cee4bcbf9ed3104b00d60f87df13b54bcb09715ee3fcc93a832a6b456dc5dfb1",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Ecuador",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Ecuador is the Spanish word for the equator, and the country is named after it.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Brazil (brazilwood), Colombia (Columbus) and Peru (a native name) are not about the equator. High-risk etymology, so it counts only with external evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Colombia honours Columbus, Brazil comes from brazilwood and Peru from a native name; none refers to the equator.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "ADMIN=Colombia; ADMIN=Brazil (outer ring latitudes)",
+              "excerpt": "Colombia -4.298 to 12.437 and Brazil -33.768 to 5.244: both outer rings span 0 degrees. Peru -18.348 to -0.057 does not.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Computed from the polygon vertices with node."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Quito, country=EC",
+              "excerpt": "{\"name\":\"Quito\",\"lat\":\"-0.22985\",\"lng\":\"-78.52495\",\"country\":\"EC\",\"admin1\":\"18\"}: 0.22985 degrees x 111.195 km = 25.6 km south of the equator",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "City-centre point; under 30 km."
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "Equator and Ecuador share most of their letters, so any reader can match them without Spanish. Acceptable at easy level. No second answer: Peru stops just short of the equator."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, etymology) and c2 (distractor, etymology) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: it shares the answer Ecuador with p.geo.0169 (the countries Brazil does not border), a different fact, so related_ok. B noted the Equator and Ecuador look alike, which is acceptable at easy level.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which South American country is named after the Equator?",
+  "answer": "Ecuador",
+  "wrong": ["Colombia", "Brazil", "Peru"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.94,
+    "spread": 0.448,
+    "estimator": "v0"
+  }
+}

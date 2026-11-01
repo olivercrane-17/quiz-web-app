@@ -1,0 +1,139 @@
+{
+  "id": "p.art.0260",
+  "status": "cut",
+  "category": "art",
+  "tags": ["architecture", "ancient-rome", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "A vomitorium was a passageway that let crowds pour in and out of an amphitheatre or theatre. The name comes from the Latin for 'to spew forth', describing people, not dinners.",
+  "learnMore": "Vomitorium",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "A Roman vomitorium was a passage through which crowds entered and left an amphitheatre or theatre, not a room for vomiting."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word vomitorium comes from the Latin vomere, to spew forth, describing the crowds pouring out."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge; the item is counterintuitive, so the key claim is high-risk. Datasets: no dataset covers this; c1 and c2 need a source. Rival test: argued for true: Roman writers such as Seneca mock diners who vomited, so the practice is attested; but the word vomitorium names the exits, never a room for it, so the statement as written is false. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a myth repeated in many countries' schools and films. Style: Oxford spelling, straight quotes, no en or em dashes, explanation of 31 words. Myths: c1 matches vomitorium-for-vomiting in myths.json by design, since the item debunks it. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: none on the key.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2d8148918b9a5a5133be6c9e7aa123c70b889cf5672b166155b41611a20f6dcb",
+        "startedAt": "2026-11-01T02:15:00Z",
+        "finishedAt": "2026-11-01T02:51:14Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Vomitoria are the passages that let crowds into and out of Roman amphitheatres and theatres; the feast-room meaning is a modern myth.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3). Myth screen: this claim matches a known myth, so it clears only with dataset or web evidence in one check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The word comes from vomere, to spew forth, describing crowds pouring out, as Macrobius used it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3eb04418c450b326bda6a2dbdc20253574870994f7f8d375e94808d8af8483fc",
+        "startedAt": "2026-11-01T02:25:00Z",
+        "finishedAt": "2026-11-01T02:51:43Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A vomitorium was a passage in an amphitheatre or theatre through which crowds entered and left, not a room for vomiting.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up. Myth screen hit: it needs dataset or web evidence in a confirming check to clear."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The word comes from Latin vomere, to spew forth, describing crowds pouring out.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-part02e",
+        "at": "2026-11-01T02:27:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, etymology) and c2 (explanation, etymology) rest on knowledge alone in both checks: neither checker could run a web search (the shared search limit was spent before this batch's checks) and neither check records dataset evidence for them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. The myths screen is open for the same reason: c1 matches a known myth and needs dataset or web evidence in a confirming check (§9.9 rule 5). Redraft under a new id with these facts evidenced (a dataset record or a Tier A or B search) or bounded.",
+      "decidedAt": "2026-11-01T04:30:36Z"
+    }
+  },
+  "format": "tf",
+  "stem": "In ancient Rome, a vomitorium was a room where feasting diners went to throw up.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.218,
+    "estimator": "v0"
+  }
+}

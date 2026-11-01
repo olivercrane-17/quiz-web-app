@@ -1,0 +1,223 @@
+{
+  "id": "p.sci.0230",
+  "status": "active",
+  "category": "sci",
+  "tags": ["human-body", "medicine", "hormones"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Insulin was first used to treat a person with diabetes in Toronto in 1922. Frederick Banting and John Macleod shared the 1923 Nobel Prize for its discovery.",
+  "learnMore": "Insulin",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Insulin is made by the pancreas, in the beta cells of its islets."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The liver, spleen and gallbladder do not make insulin."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Insulin was first used to treat a person with diabetes in Toronto in 1922."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Frederick Banting and John Macleod shared the 1923 Nobel Prize in Physiology or Medicine for the discovery of insulin."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors and no warnings for this item. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high (the C26 floor). datasets: nobel-prizes, year 1923, category medicine, laureates 313 (Frederick G. Banting) and 314 (John Macleod), motivation 'for the discovery of insulin', supports c4; c3 needs web evidence. rivalTest: The liver is the lure, because it stores sugar and responds to insulin; the spleen and gallbladder sit nearby. Against the key: insulin comes only from the pancreas. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 27 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: The item states facts and gives no medical advice. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "55ad476e3f5a90a56533ef1d5eb665c28f75abdafbe69b9889a1d05f3cd9f76a",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "The pancreas",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Insulin is produced by the beta cells of the pancreatic islets.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The liver, spleen and gallbladder do not make insulin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In January 1922 Leonard Thompson, a 14-year-old at Toronto General Hospital, became the first person with diabetes treated with insulin.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=1923, category=medicine]",
+              "excerpt": "{\"year\":\"1923\",\"category\":\"medicine\",\"laureates\":[{\"id\":\"313\",\"firstname\":\"Frederick G.\",\"surname\":\"Banting\",\"motivation\":\"\\\"for the discovery of insulin\\\"\",\"share\":\"2\"},{\"id\":\"314\",\"firstname\":\"John\",\"surname\":\"Macleod\",\"motivation\":\"\\\"for the discovery of insulin\\\"\",\"share\":\"2\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Banting and Macleod shared the 1923 prize 'for the discovery of insulin'."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "a52623322f7675916ce18d4b75d4e12a52ffdf16cdb8c10dd25afa1c1091b7a5",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "The pancreas",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Insulin is made by the beta cells of the pancreatic islets.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The liver, spleen and gallbladder do not make insulin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Leonard Thompson, a teenager with diabetes, received the first insulin injections at Toronto General Hospital in January 1922.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1923, category=medicine",
+              "excerpt": "Frederick G. Banting and John Macleod, motivation: \"for the discovery of insulin\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Pinned Nobel file lists exactly these two laureates for 1923."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, first) rests on knowledge alone in both checks, with no dataset or web evidence for it in either. Only c4 carries dataset evidence (nobel-prizes). Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sci.0229",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which organ makes insulin, the hormone that controls the amount of sugar in the blood?",
+  "answer": "The pancreas",
+  "wrong": ["The liver", "The spleen", "The gallbladder"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.76,
+    "spread": 0.271,
+    "estimator": "v0"
+  }
+}

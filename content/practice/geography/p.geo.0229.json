@@ -1,0 +1,249 @@
+{
+  "id": "p.geo.0229",
+  "status": "active",
+  "category": "geo",
+  "tags": ["lakes", "siberia", "asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "It reaches down more than 1,600 m, and it holds about a fifth of all the unfrozen fresh water on Earth's surface.",
+  "learnMore": "Lake Baikal",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Lake Baikal is in Russia."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Lake Baikal is not in Mongolia, Kazakhstan or China."
+    },
+    {
+      "id": "c3",
+      "role": "key",
+      "ref": "stem",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Lake Baikal is the deepest lake on Earth."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Lake Baikal is more than 1,600 m deep at its deepest point."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Lake Baikal holds about a fifth of the unfrozen fresh water on Earth's surface."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; c3 (superlative), c4 (number) and c5 (number) are high under the C26 floor, and c1 and c2 are standard. Datasets: natural-earth ne_50m_lakes holds Lake Baikal as a polygon in southern Siberia, north of the Mongolian border (c1, c2). No dataset gives depth or volume. Rival test: Mongolia is the pull, because the lake lies close to its northern border; Kazakhstan and China are big neighbours with famous lakes of their own. Against the key: nothing; the lake lies wholly in Russia. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Baikal is world-famous as the deepest lake, and the stem's 'deepest' claim is undisputed. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 22 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c3, c4 and c5 need a web result (one search should cover the depth and the share of fresh water). Seed: 2 (easy): most players know Baikal is in Siberia. Counterintuitive: false. Doubts: the share of fresh water is quoted between about 20% and 23%, so c5 says 'about a fifth'; the depth is about 1,640 m, so c4 uses a safe bound.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "29de7e708be04fbc7469a457c67fa2681cacee458f2104fbe48a16ba384917c2",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Russia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lake Baikal is in southern Siberia, Russia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lake Baikal lies wholly in Russia, north of Mongolia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lake Baikal is the deepest lake in the world.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lake Baikal's maximum depth is about 1,640 m.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lake Baikal holds roughly 20 to 23% of the world's unfrozen surface fresh water, about a fifth.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "446630f08881a870e3dcd65ad95550dcf0272d4321d340a470c93500e2c04fdf",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Russia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lake Baikal lies in southern Siberia, in Russia, north of Mongolia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lake Baikal is not in Mongolia, Kazakhstan or China; it lies wholly in Russia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lake Baikal is the deepest lake on Earth, with a maximum depth of about 1,640 m.",
+              "confidence": "certain"
+            },
+            "note": "High-risk superlative. Knowledge only (no web search was available to me); counts only with external evidence from pass A (guide 9.5.3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The maximum depth of Lake Baikal is about 1,640 m (1,642 m in common references), above 1,600 m.",
+              "confidence": "certain"
+            },
+            "note": "High-risk number. Knowledge only (no web search was available to me); counts only with external evidence from pass A (guide 9.5.3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lake Baikal holds about 20 percent of the world's unfrozen surface fresh water.",
+              "confidence": "certain"
+            },
+            "note": "High-risk number; sources give 20 to 23 percent, so 'about a fifth' is safe. Knowledge only (no web search available to me); needs pass A's external evidence."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (key in the stem, superlative), c4 and c5 (explanation numbers) rest on knowledge alone in both checks: no pinned dataset covers them and neither checker could search (the shared WebSearch budget was spent before pass A ran). §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, which a wording-only edit cannot reach because the claims stay. Redraft under a new id with web evidence, or with the figure stepped down or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Lake Baikal, the deepest lake on Earth, lies in which country?",
+  "answer": "Russia",
+  "wrong": ["Mongolia", "Kazakhstan", "China"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.309,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,507 @@
+{
+  "id": "p.nat.0143",
+  "status": "active",
+  "category": "nat",
+  "tags": ["dinosaurs", "plants", "fossils", "timelines"],
+  "region": "global",
+  "volatility": "slow",
+  "reviewBy": "2028-11-01",
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Dinosaurs appear in the fossil record about 100 million years before the oldest widely accepted fossils of flowering plants. Early dinosaurs lived among ferns, cycads and conifers, and grasses came later still.",
+  "learnMore": "Flowering plant",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The oldest widely accepted dinosaur fossils are about 230 million years old."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The oldest widely accepted flowering plant fossils are about 130 million years old."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Dinosaurs existed for about 100 million years before flowering plants appeared."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Early dinosaurs lived among plants such as ferns, cycads and conifers."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Grasses are a later branch of the flowering plants."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed; c1 to c3 hold numbers, so they are high. c3 is arithmetic on c1 and c2 (230 minus 130 is 100 million years), so a calculation entry can confirm it once they are confirmed. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: the dinosaur-among-flowers picture is the planted trap. Margin: even disputed claims of older flowers, at about 160 to 175 million years, are far younger than the first dinosaurs, so the order holds under every date on offer. volatility: slow: 'oldest widely accepted fossils' is a record that a new find can move, as the guide's sharks-and-trees example notes, although no plausible find flips the answer (disputed Triassic pollen claims are not widely accepted). The guide leaves reviewBy null in a draft for the editor to set at acceptance, but the CNT-1 schema refuses a slow item without one, so I entered a placeholder 24 months from drafting; the editor should reset it from the acceptance date, which an accept edit allows because no packet shows the field; no time words, and nothing rests on knowledge newer than mid-2026. regional: a global fact with no local knowledge. style: Oxford spelling, plain hyphens only, explanation of 27 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a comparison item. doubts: the displayed values are rounded to the figures most references use; I am confident of the order.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c753ecd8980af15c9469ea31a8f8a9c0a15ccd02fb2efc7201a9f73fcd79a591",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Dinosaurs",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "age in million years of the oldest known dinosaur fossils (Ischigualasto Formation, Eoraptor, Herrerasaurus) and of the oldest widely accepted flowering plant fossils (Early Cretaceous angiosperm pollen, Montsechia, Archaefructus)",
+              "results": [
+                {
+                  "title": "Herrerasaurus ischigualastensis",
+                  "url": "https://www.britannica.com/animal/Herrerasaurus-ischigualastensis"
+                },
+                {
+                  "title": "Dinosaur",
+                  "url": "https://en.wikipedia.org/wiki/Pachypodosauria"
+                },
+                {
+                  "title": "Herrerasaurus",
+                  "url": "https://en.wikipedia.org/wiki/Herrerasaurus"
+                },
+                {
+                  "title": "Herrerasauria",
+                  "url": "https://en.wikipedia.org/wiki/Herrerasauria"
+                },
+                {
+                  "title": "Eoraptor - Students",
+                  "url": "https://kids.britannica.com/students/article/Eoraptor/390681"
+                },
+                {
+                  "title": "Eoraptor",
+                  "url": "https://en.wikipedia.org/wiki/Eoraptor"
+                },
+                {
+                  "title": "Eodromaeus Adds Context to Dinosaur Origins",
+                  "url": "https://www.smithsonianmag.com/science-nature/eodromaeus-adds-context-to-dinosaur-origins-91973732/"
+                },
+                {
+                  "title": "Fossils May Represent Oldest Dinos Yet",
+                  "url": "https://www.science.org/content/article/fossils-may-represent-oldest-dinos-yet"
+                },
+                {
+                  "title": "Portal:Reptiles/Reptile articles/16",
+                  "url": "https://en.wikipedia.org/wiki/Portal:Reptiles/Reptile_articles/16"
+                },
+                {
+                  "title": "Where did dinosaurs come from?",
+                  "url": "https://www.nhm.ac.uk/discover/where-did-dinosaurs-come-from.html"
+                },
+                {
+                  "title": "Angiosperm - Paleobotany, Evolution, Reproduction",
+                  "url": "https://www.britannica.com/plant/angiosperm/Paleobotany-and-evolution"
+                },
+                {
+                  "title": "Cretaceous",
+                  "url": "https://en.wikipedia.org/wiki/Cretaceous"
+                },
+                {
+                  "title": "Fossil history of flowering plants",
+                  "url": "https://en.wikipedia.org/wiki/Fossil_history_of_flowering_plants"
+                },
+                {
+                  "title": "Montsechia, an ancient aquatic angiosperm",
+                  "url": "https://www.pnas.org/doi/pdf/10.1073/pnas.1509241112"
+                },
+                {
+                  "title": "Montsechia vidalii",
+                  "url": "https://www.britannica.com/plant/Montsechia-vidalii"
+                },
+                {
+                  "title": "Montsechia, an ancient aquatic angiosperm",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1509241112"
+                },
+                {
+                  "title": "Archaefructus",
+                  "url": "https://en.wikipedia.org/wiki/Archaefructus"
+                },
+                {
+                  "title": "These Are the Oldest Known Flowers in the World",
+                  "url": "https://www.smithsonianmag.com/science-nature/oldest-known-flowers-world-180956962/"
+                },
+                {
+                  "title": "Montsechia, an ancient aquatic angiosperm - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4568254/"
+                }
+              ],
+              "summaryExcerpt": "The Ischigualasto Formation is radiometrically dated at 231–230 million years old, and it has produced Eoraptor, Herrerasaurus, and other early dinosaurs. ... Bottom line: The oldest dinosaurs in these formations are about 231–230 million years old",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Santa Maria Formation dinosaurs at about 233 million years are also 'about 230 million'. The summary's note that source ages differ somewhat is a spread within this precision, not a conflict."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "age in million years of the oldest known dinosaur fossils (Ischigualasto Formation, Eoraptor, Herrerasaurus) and of the oldest widely accepted flowering plant fossils (Early Cretaceous angiosperm pollen, Montsechia, Archaefructus)",
+              "results": [
+                {
+                  "title": "Herrerasaurus ischigualastensis",
+                  "url": "https://www.britannica.com/animal/Herrerasaurus-ischigualastensis"
+                },
+                {
+                  "title": "Dinosaur",
+                  "url": "https://en.wikipedia.org/wiki/Pachypodosauria"
+                },
+                {
+                  "title": "Herrerasaurus",
+                  "url": "https://en.wikipedia.org/wiki/Herrerasaurus"
+                },
+                {
+                  "title": "Herrerasauria",
+                  "url": "https://en.wikipedia.org/wiki/Herrerasauria"
+                },
+                {
+                  "title": "Eoraptor - Students",
+                  "url": "https://kids.britannica.com/students/article/Eoraptor/390681"
+                },
+                {
+                  "title": "Eoraptor",
+                  "url": "https://en.wikipedia.org/wiki/Eoraptor"
+                },
+                {
+                  "title": "Eodromaeus Adds Context to Dinosaur Origins",
+                  "url": "https://www.smithsonianmag.com/science-nature/eodromaeus-adds-context-to-dinosaur-origins-91973732/"
+                },
+                {
+                  "title": "Fossils May Represent Oldest Dinos Yet",
+                  "url": "https://www.science.org/content/article/fossils-may-represent-oldest-dinos-yet"
+                },
+                {
+                  "title": "Portal:Reptiles/Reptile articles/16",
+                  "url": "https://en.wikipedia.org/wiki/Portal:Reptiles/Reptile_articles/16"
+                },
+                {
+                  "title": "Where did dinosaurs come from?",
+                  "url": "https://www.nhm.ac.uk/discover/where-did-dinosaurs-come-from.html"
+                },
+                {
+                  "title": "Angiosperm - Paleobotany, Evolution, Reproduction",
+                  "url": "https://www.britannica.com/plant/angiosperm/Paleobotany-and-evolution"
+                },
+                {
+                  "title": "Cretaceous",
+                  "url": "https://en.wikipedia.org/wiki/Cretaceous"
+                },
+                {
+                  "title": "Fossil history of flowering plants",
+                  "url": "https://en.wikipedia.org/wiki/Fossil_history_of_flowering_plants"
+                },
+                {
+                  "title": "Montsechia, an ancient aquatic angiosperm",
+                  "url": "https://www.pnas.org/doi/pdf/10.1073/pnas.1509241112"
+                },
+                {
+                  "title": "Montsechia vidalii",
+                  "url": "https://www.britannica.com/plant/Montsechia-vidalii"
+                },
+                {
+                  "title": "Montsechia, an ancient aquatic angiosperm",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1509241112"
+                },
+                {
+                  "title": "Archaefructus",
+                  "url": "https://en.wikipedia.org/wiki/Archaefructus"
+                },
+                {
+                  "title": "These Are the Oldest Known Flowers in the World",
+                  "url": "https://www.smithsonianmag.com/science-nature/oldest-known-flowers-world-180956962/"
+                },
+                {
+                  "title": "Montsechia, an ancient aquatic angiosperm - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4568254/"
+                }
+              ],
+              "summaryExcerpt": "The earliest widely accepted evidence is monosulcate (single-grooved) pollen grains from the late Valanginian (~134 Ma) found in Israel and Italy. ... Montsechia, an aquatic plant from Spain, is dated to 130 million to 125 million years ago. ... Archaefructus, from the Yixian Formation in China, is approximately 125 million years old",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Pollen at about 134 million years and macrofossils at 130 to 125 million: 'about 130 million' holds at the stated precision. The Triassic pollen claim is reported as not widely accepted, which the item's measure already allows for."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "age in million years of the oldest known dinosaur fossils (Ischigualasto Formation, Eoraptor, Herrerasaurus) and of the oldest widely accepted flowering plant fossils (Early Cretaceous angiosperm pollen, Montsechia, Archaefructus)",
+              "results": [
+                {
+                  "title": "Herrerasaurus ischigualastensis",
+                  "url": "https://www.britannica.com/animal/Herrerasaurus-ischigualastensis"
+                },
+                {
+                  "title": "Dinosaur",
+                  "url": "https://en.wikipedia.org/wiki/Pachypodosauria"
+                },
+                {
+                  "title": "Herrerasaurus",
+                  "url": "https://en.wikipedia.org/wiki/Herrerasaurus"
+                },
+                {
+                  "title": "Herrerasauria",
+                  "url": "https://en.wikipedia.org/wiki/Herrerasauria"
+                },
+                {
+                  "title": "Eoraptor - Students",
+                  "url": "https://kids.britannica.com/students/article/Eoraptor/390681"
+                },
+                {
+                  "title": "Eoraptor",
+                  "url": "https://en.wikipedia.org/wiki/Eoraptor"
+                },
+                {
+                  "title": "Eodromaeus Adds Context to Dinosaur Origins",
+                  "url": "https://www.smithsonianmag.com/science-nature/eodromaeus-adds-context-to-dinosaur-origins-91973732/"
+                },
+                {
+                  "title": "Fossils May Represent Oldest Dinos Yet",
+                  "url": "https://www.science.org/content/article/fossils-may-represent-oldest-dinos-yet"
+                },
+                {
+                  "title": "Portal:Reptiles/Reptile articles/16",
+                  "url": "https://en.wikipedia.org/wiki/Portal:Reptiles/Reptile_articles/16"
+                },
+                {
+                  "title": "Where did dinosaurs come from?",
+                  "url": "https://www.nhm.ac.uk/discover/where-did-dinosaurs-come-from.html"
+                },
+                {
+                  "title": "Angiosperm - Paleobotany, Evolution, Reproduction",
+                  "url": "https://www.britannica.com/plant/angiosperm/Paleobotany-and-evolution"
+                },
+                {
+                  "title": "Cretaceous",
+                  "url": "https://en.wikipedia.org/wiki/Cretaceous"
+                },
+                {
+                  "title": "Fossil history of flowering plants",
+                  "url": "https://en.wikipedia.org/wiki/Fossil_history_of_flowering_plants"
+                },
+                {
+                  "title": "Montsechia, an ancient aquatic angiosperm",
+                  "url": "https://www.pnas.org/doi/pdf/10.1073/pnas.1509241112"
+                },
+                {
+                  "title": "Montsechia vidalii",
+                  "url": "https://www.britannica.com/plant/Montsechia-vidalii"
+                },
+                {
+                  "title": "Montsechia, an ancient aquatic angiosperm",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1509241112"
+                },
+                {
+                  "title": "Archaefructus",
+                  "url": "https://en.wikipedia.org/wiki/Archaefructus"
+                },
+                {
+                  "title": "These Are the Oldest Known Flowers in the World",
+                  "url": "https://www.smithsonianmag.com/science-nature/oldest-known-flowers-world-180956962/"
+                },
+                {
+                  "title": "Montsechia, an ancient aquatic angiosperm - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4568254/"
+                }
+              ],
+              "summaryExcerpt": "The gap between the two groups is roughly 100 million years.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Triassic floras were dominated by ferns, cycads, ginkgos and conifers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Grasses are flowering plants that arose and spread late, long after the first flowers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c83389da66521eb6d149e6bffce1d60fb62ec9cf5f0798f4648b1e580992f2b6",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Dinosaurs",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The oldest widely accepted dinosaur fossils are about 230 million years old (Late Triassic).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The oldest widely accepted flowering plant fossils are about 130 million years old (Early Cretaceous).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "On the fossil record dinosaurs preceded flowering plants by about 100 million years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Early dinosaurs lived among ferns, cycads and conifers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Grasses are a later branch of the flowering plants.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "The comparison measure (age of the oldest widely accepted fossils) is stripped before play, so players see only \"Which came first?\" and the two labels. Fossil dates make the key safe. The explanation says \"before the first flowers appeared\", which drops that hedge; consider \"before the oldest known flowering plant fossils\"."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 5 claims confirmed in both checks; high-risk c1 (web in A), c2 (web in A), c3 (web in A). Style, distractors and balance reviewed. Accepted after the wording-only fix in decisions1. Volatility slow (oldest widely accepted fossils can move), so reviewBy is set to 2028-11-01, 24 months after acceptance (§2.3). (earlier, rewrite by ed-pnat01d: Wording only (§9.7): the first sentence now states the gap between the oldest widely accepted fossils, the item's own measure, as A's note asks, instead of 'before the first flowers appeared', which drops that hedge. It restates c1 and c2 (230 and 130 million years, both confirmed, with web evidence in A). No claim changes. [wording-only rewrite by ed-pnat01d at 2026-11-01T04:05:52Z of explanation; checks kept, packetSha256 re-stamped: pass A 40ace57be5d4a4cb0f07c07c712756a5880ea3facc93e486e8e638e52608c6a4 -> c753ecd8980af15c9469ea31a8f8a9c0a15ccd02fb2efc7201a9f73fcd79a591; pass B fcb2b785f1cbf505ae515360574da6c15194a191a6561b948282490443465bf5 -> c83389da66521eb6d149e6bffce1d60fb62ec9cf5f0798f4648b1e580992f2b6])",
+      "decidedAt": "2026-11-01T04:06:01Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:06:01Z",
+      "nearestId": "p.nat.0246",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:06:01Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Dinosaurs",
+  "b": "Flowering plants",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "age of the oldest widely accepted fossils",
+  "unit": "year",
+  "values": {
+    "a": -230000000,
+    "b": -130000000
+  },
+  "valueDisplay": {
+    "a": "about 230 million years ago",
+    "b": "about 130 million years ago"
+  },
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.197,
+    "estimator": "v0"
+  }
+}

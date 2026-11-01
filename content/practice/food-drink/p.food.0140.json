@@ -1,0 +1,251 @@
+{
+  "id": "p.food.0140",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-science", "sweets", "ingredients"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Gelatin is broken-down collagen, extracted by heating animal tissue in water. Vegetarian versions often use agar, from red seaweed, while jam sets thanks to pectin, found in fruit.",
+  "learnMore": "Gelatin",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Gelatin is usually made from collagen extracted from animal skin, bones and connective tissue."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Gelatin is not made from red seaweed, citrus peel or cassava starch, which give agar, pectin and tapioca starch."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Gelatin is partly broken-down collagen, extracted by heating animal tissues in water."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Agar, a gelling agent made from red seaweed, is used in vegetarian alternatives to gelatin."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Jam sets because of pectin, found in fruit."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: each distractor is the source of another gelling or thickening agent, which makes them real confusions, and none is gelatin. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: gummy sweets are sold everywhere; the stem gives both sweets and candy, and avoids 'jelly', which means different things in the UK and the US. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: most adults know gelatin is an animal product, from vegetarian and religious food rules. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d2d7a29394a2a7c1dd9b8e4601b194b80e00244527e89c61d938475835a90497",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Animal skin and bones",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gelatin is made from collagen extracted from animal skin, bones and connective tissue.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Red seaweed gives agar, citrus peel gives pectin and cassava gives tapioca starch, not gelatin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gelatin is partly broken-down collagen, extracted by heating animal tissue in water.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Agar, from red seaweed, is the usual vegetarian gelling agent.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Jam sets because of pectin from the fruit.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2826c1c16a1385023d5dbdbfdec5e697c3d0ee58c243dfe130e39c1c6648cb40",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Animal skin and bones",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gelatin is hydrolysed collagen from pig skin, cattle hides and bones.",
+              "confidence": "certain"
+            },
+            "note": "'Usually' covers fish gelatin. No second answer."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Agar comes from red seaweed, pectin from citrus peel and apples, tapioca starch from cassava.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gelatin is partly broken-down collagen, extracted by heating animal tissue in water.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Agar is a gelling agent from red seaweed used in vegetarian alternatives to gelatin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Jam sets because of pectin in the fruit.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The key is the longest option (21 characters against 14, 11 and 11) and the only two-noun one. The lint passes, but test-wise players lean to the longest answer. Consider lengthening two distractors toward 18 to 21 characters."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Accepted after the wording-only fix to the explanation recorded in decisions1. B's note that the key is the longest option is weighed: the lint passes, the gap is modest and every distractor is a real gelling source (§4, §9.7). (earlier, rewrite by ed-pfood01d: Wording only (§9.7): the explanation opened Gelatin is collagen, which a chemist would query; it now reads Gelatin is broken-down collagen, which is what c3 states (partly broken-down collagen). No claim changes. [wording-only rewrite by ed-pfood01d at 2026-11-01T04:17:24Z of explanation; checks kept, packetSha256 re-stamped: pass A 8dd4d53243a959d142378f4f86a951c830e7dcb92613cce1fa02c98bed60cf23 -> d2d7a29394a2a7c1dd9b8e4601b194b80e00244527e89c61d938475835a90497; pass B b978abfbac81ff84ec2cfd33d8f46534487e8bf3c19df6fe5d00f889dc1d7322 -> 2826c1c16a1385023d5dbdbfdec5e697c3d0ee58c243dfe130e39c1c6648cb40])",
+      "decidedAt": "2026-11-01T04:17:32Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:32Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:32Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Gelatin, which makes gummy sweets (candy) chewy, is usually made from what?",
+  "answer": "Animal skin and bones",
+  "wrong": ["Red seaweed", "Citrus peel", "Cassava starch"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.74,
+    "spread": 0.335,
+    "estimator": "v0"
+  }
+}

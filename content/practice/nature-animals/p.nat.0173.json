@@ -1,0 +1,362 @@
+{
+  "id": "p.nat.0173",
+  "status": "active",
+  "category": "nat",
+  "tags": ["ocean-life", "squid", "deep-sea", "timelines"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Japanese researchers photographed a live giant squid with a camera on a baited line off the Ogasawara Islands. Until then, the animal was known mainly from dead or dying specimens.",
+  "learnMore": "Giant squid",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The first crewed Moon landing, Apollo 11, took place in July 1969."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The first photographs of a live giant squid in its natural deep-sea habitat were taken in September 2004, off Japan's Ogasawara Islands."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Japanese researchers photographed the squid with a camera attached to a baited line."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Before those photographs, giant squid were known mainly from dead or dying specimens found at the surface or washed ashore."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed; c1 and c2 hold dates, so they are high (c2 is also a first). c3 and c4 are standard. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: the trap is that photographing an animal on our own planet feels easier than a Moon landing, which is why counterintuitive is set. Margin: 35 years, far beyond the separation guard. Argued against the key: 'deep-sea photos' excludes earlier pictures of dead or stranded squid. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: both events are known worldwide. style: Oxford spelling, plain hyphens only, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a comparison item. doubts: none; c1 and c2 may need separate searches, because few sources state both.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "dd7a8eed81b09b99018436f4e8c898ec08590110e82d32b02a8440f85601351b",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "First crewed Moon landing",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Great Pyramid of Giza completion date (Khufu, around 2560 BC); Apollo 11 first crewed Moon landing date July 1969",
+              "results": [
+                {
+                  "title": "Apollo 11",
+                  "url": "https://www.britannica.com/topic/Apollo-11"
+                },
+                {
+                  "title": "Apollo 11 Mission Overview - NASA",
+                  "url": "https://www.nasa.gov/history/apollo-11-mission-overview/"
+                },
+                {
+                  "title": "Apollo 11",
+                  "url": "https://en.wikipedia.org/wiki/Apolo_11"
+                },
+                {
+                  "title": "Great Pyramid of Giza",
+                  "url": "https://www.britannica.com/place/Great-Pyramid-of-Giza"
+                },
+                {
+                  "title": "Apollo 11: The Moon Landing",
+                  "url": "https://airandspace.si.edu/explore/stories/apollo-11-moon-landing"
+                },
+                {
+                  "title": "Apollo",
+                  "url": "https://www.britannica.com/science/Apollo-space-program"
+                },
+                {
+                  "title": "List of missions to the Moon",
+                  "url": "https://en.wikipedia.org/wiki/List_of_missions_to_the_Moon"
+                },
+                {
+                  "title": "Apollo program",
+                  "url": "https://en.wikipedia.org/wiki/Apollo_program"
+                },
+                {
+                  "title": "Apollo 11 Timeline",
+                  "url": "https://airandspace.si.edu/explore/stories/apollo-missions/apollo-11-moon-landing/apollo-11-timeline"
+                },
+                {
+                  "title": "APOLLO 11",
+                  "url": "https://history.nasa.gov/SP-4029/Apollo_11a_Summary.htm"
+                }
+              ],
+              "summaryExcerpt": "Apollo 11: The Moon landing was on July 20, 1969. The lunar module Eagle of the Apollo 11 mission landed on the Moon on July 20, 1969. The mission launched on July 16 and returned on July 24.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "NASA and the Smithsonian's National Air and Space Museum (Tier A) with Britannica and Wikipedia. Same call as the p.nat.0119 pyramid evidence, counted there; the disagreement it reports concerns the pyramid, not Apollo 11."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "first photographs of a live giant squid in its natural deep-sea habitat, Kubodera and Mori, Ogasawara Islands, camera on a baited line, year and month",
+              "results": [
+                {
+                  "title": "Giant squid",
+                  "url": "https://en.wikipedia.org/wiki/Giant_squid"
+                },
+                {
+                  "title": "List of giant squid specimens and sightings (2001–2014)",
+                  "url": "https://en.wikipedia.org/wiki/List_of_giant_squid_specimens_and_sightings_(2001%E2%80%932014)"
+                },
+                {
+                  "title": "First-ever observations of a live giant squid in the wild",
+                  "url": "https://royalsocietypublishing.org/doi/abs/10.1098/rspb.2005.3158"
+                },
+                {
+                  "title": "Tsunemi Kubodera",
+                  "url": "https://en.wikipedia.org/wiki/Tsunemi_Kubodera"
+                },
+                {
+                  "title": "Kyoichi Mori",
+                  "url": "https://en.wikipedia.org/wiki/Kyoichi_Mori"
+                },
+                {
+                  "title": "Giant Squid on Baited Camera",
+                  "url": "https://ocean.si.edu/ocean-life/invertebrates/giant-squid-baited-camera"
+                },
+                {
+                  "title": "Stunning Squid Pictures",
+                  "url": "https://ocean.si.edu/ocean-life/invertebrates/stunning-squid-pictures"
+                },
+                {
+                  "title": "First-ever observations of a live giant squid in the wild - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/16321779/"
+                },
+                {
+                  "title": "The Giant Squid: Dragon of the Deep",
+                  "url": "https://www.smithsonianmag.com/science-nature/the-giant-squid-dragon-of-the-deep-18784038/"
+                },
+                {
+                  "title": "Giant and colossal squid: Revealing the secrets of the largest invertebrates",
+                  "url": "https://www.nhm.ac.uk/discover/giant-and-colossal-squid-revealing-secrets-largest-invertebrates.html"
+                }
+              ],
+              "summaryExcerpt": "The answer is 30 September 2004. Tsunemi Kubodera and Kyoichi Mori photographed the squid off the Ogasawara Islands, and the images were released in 2005. Date and location: It was only on 30 September 2004 that a live giant squid was photographed in its natural deep-water habitat, off the Ogasawara Islands, by Tsunemi Kubodera and Kyoichi Mori.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Kubodera and Mori's paper in the Proceedings of the Royal Society B (Tier A) is in the list, with the Smithsonian and Wikipedia."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "first photographs of a live giant squid in its natural deep-sea habitat, Kubodera and Mori, Ogasawara Islands, camera on a baited line, year and month",
+              "results": [
+                {
+                  "title": "Giant squid",
+                  "url": "https://en.wikipedia.org/wiki/Giant_squid"
+                },
+                {
+                  "title": "List of giant squid specimens and sightings (2001–2014)",
+                  "url": "https://en.wikipedia.org/wiki/List_of_giant_squid_specimens_and_sightings_(2001%E2%80%932014)"
+                },
+                {
+                  "title": "First-ever observations of a live giant squid in the wild",
+                  "url": "https://royalsocietypublishing.org/doi/abs/10.1098/rspb.2005.3158"
+                },
+                {
+                  "title": "Tsunemi Kubodera",
+                  "url": "https://en.wikipedia.org/wiki/Tsunemi_Kubodera"
+                },
+                {
+                  "title": "Kyoichi Mori",
+                  "url": "https://en.wikipedia.org/wiki/Kyoichi_Mori"
+                },
+                {
+                  "title": "Giant Squid on Baited Camera",
+                  "url": "https://ocean.si.edu/ocean-life/invertebrates/giant-squid-baited-camera"
+                },
+                {
+                  "title": "Stunning Squid Pictures",
+                  "url": "https://ocean.si.edu/ocean-life/invertebrates/stunning-squid-pictures"
+                },
+                {
+                  "title": "First-ever observations of a live giant squid in the wild - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/16321779/"
+                },
+                {
+                  "title": "The Giant Squid: Dragon of the Deep",
+                  "url": "https://www.smithsonianmag.com/science-nature/the-giant-squid-dragon-of-the-deep-18784038/"
+                },
+                {
+                  "title": "Giant and colossal squid: Revealing the secrets of the largest invertebrates",
+                  "url": "https://www.nhm.ac.uk/discover/giant-and-colossal-squid-revealing-secrets-largest-invertebrates.html"
+                }
+              ],
+              "summaryExcerpt": "Method: The camera was on a line with bait. It was taken in 2004 by two Japanese researchers who had suspended a long line from their research vessel with a camera and bait attached.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Before 2004, giant squid were known from carcasses, stranded or dying animals and remains in sperm whale stomachs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bcc656cd4b761593cfb603293e8610002b76cea1ea54b404a61481cf69a51e0b",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "First crewed Moon landing",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Apollo 11, the first crewed Moon landing, took place in July 1969.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first photographs of a live giant squid in its deep-sea habitat were taken in September 2004 off Japan's Ogasawara Islands.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Researchers photographed the squid with a camera attached to a baited line.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Before those photographs giant squid were known mainly from dead or dying specimens at the surface or washed ashore.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; high-risk c1 (web in A), c2 (web in A). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.hist.0003",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "First crewed Moon landing",
+  "b": "First deep-sea photos of a giant squid",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year it happened",
+  "unit": "year",
+  "values": {
+    "a": 1969,
+    "b": 2004
+  },
+  "valueDisplay": {
+    "a": "July 1969",
+    "b": "September 2004"
+  },
+  "predicted": {
+    "p": 0.85,
+    "spread": 0.349,
+    "estimator": "v0"
+  }
+}

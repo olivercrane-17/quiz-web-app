@@ -1,0 +1,355 @@
+{
+  "id": "p.food.0157",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-words", "desserts", "dance"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Anna Pavlova toured Australia and New Zealand in the 1920s, and both countries claim the dessert as their own.",
+  "learnMore": "Pavlova (dessert)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The pavlova is named after the Russian ballerina Anna Pavlova."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The pavlova is not named after an opera singer, a racehorse or a film star."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Anna Pavlova toured Australia and New Zealand in the 1920s."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Australia and New Zealand both claim to have created the pavlova."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c3). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: the naming is undisputed; only the country of origin is contested, and the item reports that dispute instead of taking a side, as CONTENT_GUIDE 1.10 asks. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the dessert is known internationally; Australians and New Zealanders have an edge. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 19 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: Anna Pavlova is famous, and the dessert's lightness hints at dance. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "983694406b7f905233706832260866fa5eed3ef6c8762d96fdcce365f7edeee0",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Ballerina",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "foods named after people and places: pavlova named after ballerina Anna Pavlova and her 1920s tours of Australia and New Zealand; Cheddar cheese named after Cheddar village in Somerset; tarte Tatin named after the Tatin sisters' hotel in Lamotte-Beuvron",
+              "results": [
+                {
+                  "title": "Pavlova",
+                  "url": "https://en.wikipedia.org/wiki/Pavlova"
+                },
+                {
+                  "title": "Pavlova",
+                  "url": "https://www.britannica.com/topic/pavlova"
+                },
+                {
+                  "title": "Portal:New Zealand/Selected article/49",
+                  "url": "https://en.wikipedia.org/wiki/Portal:New_Zealand/Selected_article/49"
+                },
+                {
+                  "title": "Anna Pavlova",
+                  "url": "https://www.britannica.com/biography/Anna-Pavlova"
+                },
+                {
+                  "title": "List of foods named after people",
+                  "url": "https://en.wikipedia.org/wiki/List_of_foods_named_after_people"
+                },
+                {
+                  "title": "List of English words of Russian origin",
+                  "url": "https://en.wikipedia.org/wiki/List_of_English_words_of_Russian_origin"
+                },
+                {
+                  "title": "Portal:New Zealand/Selected article",
+                  "url": "https://en.wikipedia.org/wiki/Portal:New_Zealand/Selected_article"
+                },
+                {
+                  "title": "Pavlova (alga)",
+                  "url": "https://en.wikipedia.org/wiki/Pavlova_(alga)"
+                },
+                {
+                  "title": "Dessert",
+                  "url": "https://en.wikipedia.org/wiki/Dessert"
+                },
+                {
+                  "title": "Sir Robert Helpmann",
+                  "url": "https://www.britannica.com/biography/Robert-Murray-Helpmann"
+                }
+              ],
+              "summaryExcerpt": "The dessert is named for ballerina Anna Pavlova. Its origin is disputed, and both nations claim the dish as a national symbol. Britannica says the name commemorates the fluffy tutus of the Russian ballet dancer Anna Pavlova, who toured Australasia in 1926 and 1929.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "One call that the tool split into three sub-searches (pavlova; Cheddar for p.food.0131; tarte Tatin for p.food.0134), each with its own result list; it is counted here. This is the pavlova list, exactly as returned, all Tier B, and the key sentence is attributed to Britannica."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The pavlova is not named after an opera singer, a racehorse or a film star.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "foods named after people and places: pavlova named after ballerina Anna Pavlova and her 1920s tours of Australia and New Zealand; Cheddar cheese named after Cheddar village in Somerset; tarte Tatin named after the Tatin sisters' hotel in Lamotte-Beuvron",
+              "results": [
+                {
+                  "title": "Pavlova",
+                  "url": "https://en.wikipedia.org/wiki/Pavlova"
+                },
+                {
+                  "title": "Pavlova",
+                  "url": "https://www.britannica.com/topic/pavlova"
+                },
+                {
+                  "title": "Portal:New Zealand/Selected article/49",
+                  "url": "https://en.wikipedia.org/wiki/Portal:New_Zealand/Selected_article/49"
+                },
+                {
+                  "title": "Anna Pavlova",
+                  "url": "https://www.britannica.com/biography/Anna-Pavlova"
+                },
+                {
+                  "title": "List of foods named after people",
+                  "url": "https://en.wikipedia.org/wiki/List_of_foods_named_after_people"
+                },
+                {
+                  "title": "List of English words of Russian origin",
+                  "url": "https://en.wikipedia.org/wiki/List_of_English_words_of_Russian_origin"
+                },
+                {
+                  "title": "Portal:New Zealand/Selected article",
+                  "url": "https://en.wikipedia.org/wiki/Portal:New_Zealand/Selected_article"
+                },
+                {
+                  "title": "Pavlova (alga)",
+                  "url": "https://en.wikipedia.org/wiki/Pavlova_(alga)"
+                },
+                {
+                  "title": "Dessert",
+                  "url": "https://en.wikipedia.org/wiki/Dessert"
+                },
+                {
+                  "title": "Sir Robert Helpmann",
+                  "url": "https://www.britannica.com/biography/Robert-Murray-Helpmann"
+                }
+              ],
+              "summaryExcerpt": "Britannica says the name commemorates the fluffy tutus of the Russian ballet dancer Anna Pavlova, who toured Australasia in 1926 and 1929. ... Another account credits a Wellington hotel chef with creating it during the 1926 visit.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Tours of Australasia in 1926 and 1929, with a Wellington (New Zealand) visit in 1926: Australia and New Zealand in the 1920s."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "foods named after people and places: pavlova named after ballerina Anna Pavlova and her 1920s tours of Australia and New Zealand; Cheddar cheese named after Cheddar village in Somerset; tarte Tatin named after the Tatin sisters' hotel in Lamotte-Beuvron",
+              "results": [
+                {
+                  "title": "Pavlova",
+                  "url": "https://en.wikipedia.org/wiki/Pavlova"
+                },
+                {
+                  "title": "Pavlova",
+                  "url": "https://www.britannica.com/topic/pavlova"
+                },
+                {
+                  "title": "Portal:New Zealand/Selected article/49",
+                  "url": "https://en.wikipedia.org/wiki/Portal:New_Zealand/Selected_article/49"
+                },
+                {
+                  "title": "Anna Pavlova",
+                  "url": "https://www.britannica.com/biography/Anna-Pavlova"
+                },
+                {
+                  "title": "List of foods named after people",
+                  "url": "https://en.wikipedia.org/wiki/List_of_foods_named_after_people"
+                },
+                {
+                  "title": "List of English words of Russian origin",
+                  "url": "https://en.wikipedia.org/wiki/List_of_English_words_of_Russian_origin"
+                },
+                {
+                  "title": "Portal:New Zealand/Selected article",
+                  "url": "https://en.wikipedia.org/wiki/Portal:New_Zealand/Selected_article"
+                },
+                {
+                  "title": "Pavlova (alga)",
+                  "url": "https://en.wikipedia.org/wiki/Pavlova_(alga)"
+                },
+                {
+                  "title": "Dessert",
+                  "url": "https://en.wikipedia.org/wiki/Dessert"
+                },
+                {
+                  "title": "Sir Robert Helpmann",
+                  "url": "https://www.britannica.com/biography/Robert-Murray-Helpmann"
+                }
+              ],
+              "summaryExcerpt": "Its origin is disputed, and both nations claim the dish as a national symbol.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "49bd5c29987e38be15e044f1be9ae311b4b36d59d9e19f4d98b6c68490b9f22b",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Ballerina",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pavlova is named for the Russian ballerina Anna Pavlova; both Australian and New Zealand claimants agree on the namesake.",
+              "confidence": "certain"
+            },
+            "note": "The disputed point is who invented it, not who it is named for. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "It is not named for an opera singer (Peach Melba honours Nellie Melba), a racehorse or a film star.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Anna Pavlova toured Australia and New Zealand in the 1920s (1926 and again in 1929).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Australia and New Zealand both claim to have created pavlova.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "style",
+            "severity": "note",
+            "note": "Guide section 1.10 names pavlova among contested origin stories. The key here is the namesake, which both claimant countries agree on, so I judge it inside the rule; the editor should accept it knowingly."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. c1, c3 and c4 carry Tier B web evidence in pass A. B's §1.10 note is weighed: the key is the namesake, which Australia and New Zealand agree on, not the contested origin, and the explanation takes no side.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The meringue dessert pavlova is named after a famous what?",
+  "answer": "Ballerina",
+  "wrong": ["Opera singer", "Racehorse", "Film star"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.41,
+    "estimator": "v0"
+  }
+}

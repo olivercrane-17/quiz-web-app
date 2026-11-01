@@ -1,0 +1,215 @@
+{
+  "id": "p.geo.0234",
+  "status": "active",
+  "category": "geo",
+  "tags": ["rivers", "cities", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The White Nile flows north from Lake Victoria, while the Blue Nile tumbles down from Lake Tana in the highlands of Ethiopia.",
+  "learnMore": "Khartoum",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Blue Nile and the White Nile meet at Khartoum."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Cairo and Aswan lie downstream on the main Nile, and Juba lies upstream on the White Nile."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The White Nile flows north from the Lake Victoria region."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Blue Nile flows from Lake Tana in the Ethiopian Highlands."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: geonames-cities: Khartoum, SD, 15.55177, 32.53241. natural-earth ne_50m_rivers_lake_centerlines: the Blue Nile (El Bahr el Azraq) and White Nile (El Bahr el Abyad) lines both end within about 10 km of that point, where the Nile line begins (c1). Juba, SS, 4.85165, 31.58247, lies far upstream (c2). Rival test: Cairo is the famous Nile city, Aswan the famous dam town, and Juba stands on the White Nile, so each tempts. Against the key: nothing; the confluence at Khartoum is the defining fact of the city. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Nobody's local knowledge; the Nile is world-famous and its two branches are textbook geography. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 22 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; every claim is standard. Seed: 4 (medium): a coin flip for casual players, gettable by knowing the branches meet in Sudan. Counterintuitive: false. Doubts: none; the item says nothing about Sudan's government, which moved during the war that began in 2023.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "59f793efe94e92d2ddbc2af1be8852c50e74c58c998e535432b53ba0049454cf",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Khartoum",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Blue Nile and White Nile join at Khartoum to form the Nile.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cairo and Aswan are downstream on the united Nile in Egypt; Juba, in South Sudan, is upstream on the White Nile.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The White Nile flows north out of the Lake Victoria region.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Blue Nile flows out of Lake Tana in the Ethiopian Highlands.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "056cf6f297f0ad3cde1dadea00abcee02e97763209a1f4bee3f849cbfb11c3c4",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Khartoum",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Blue Nile and the White Nile meet at Khartoum, Sudan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cairo and Aswan are downstream on the main Nile in Egypt; Juba is upstream on the White Nile in South Sudan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The White Nile flows north from the Lake Victoria region.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Blue Nile rises at Lake Tana in the Ethiopian Highlands.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In which city do the Blue Nile and the White Nile meet?",
+  "answer": "Khartoum",
+  "wrong": ["Cairo", "Aswan", "Juba"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.272,
+    "estimator": "v0"
+  }
+}

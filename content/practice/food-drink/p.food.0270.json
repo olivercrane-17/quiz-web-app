@@ -1,0 +1,200 @@
+{
+  "id": "p.food.0270",
+  "status": "active",
+  "category": "food",
+  "tags": ["drinks", "chocolate", "coffee"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Cacao residues turn up in Central American pottery from about 1500 BC. The earliest reliable evidence of coffee drinking comes from 1400s Yemen, where Sufis drank it to stay awake for night prayers.",
+  "learnMore": "History of chocolate",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Chemical traces in pottery show that people in Mesoamerica drank cacao by about 1500 BC."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The earliest reliable evidence of coffee drinking comes from Sufi communities in Yemen in the 15th century."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sufis in Yemen drank coffee to stay awake during night-time prayers."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed; risk is at or above the C26 floor (high: c1, c2). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Some studies push cacao use even earlier, which only widens the gap of about 3,000 years; legends put coffee earlier, but the evidence starts in the 1400s. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both drinks are known everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 33 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: many players know cacao was an ancient American drink. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "642d930824d369bba4e045e72e904be8878145bf7f1f8acce732e1692e9c4a85",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "People drink cacao",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Residues in Mesoamerican pottery, at Paso de la Amada in Chiapas and Puerto Escondido in Honduras, show cacao drinks between roughly 1900 and 1100 BC.",
+              "confidence": "certain"
+            },
+            "note": "Older cacao residues, about 3300 BC at Santa Ana-La Florida in Ecuador, are also reported, so 'by about 1500 BC' is a safe lower bound and the comparison is not close. High-risk (date): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The earliest credible evidence of coffee drinking is from 15th-century Yemen, among Sufis.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (superlative): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yemeni Sufis drank coffee to stay awake for night devotions.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "dcb777b9f6716ce236504cc2376b22f6dd0119e654a2faa5f7dbba17898a569a",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "People drink cacao",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Residue studies of pottery from Mesoamerica show cacao drinks by about 1500 BC (some finds are older, around 1900 BC).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The earliest reliable evidence for coffee drinking comes from Sufi circles in 15th-century Yemen.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yemeni Sufis drank coffee to stay awake for night prayers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (label, date) and c2 (label, superlative) rest on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7).",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.nat.0246",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "People drink cacao",
+  "b": "People drink coffee",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "date of the earliest evidence",
+  "unit": "year",
+  "values": {
+    "a": -1500,
+    "b": 1450
+  },
+  "valueDisplay": {
+    "a": "by about 1500 BC",
+    "b": "the 1400s AD"
+  },
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.326,
+    "estimator": "v0"
+  }
+}

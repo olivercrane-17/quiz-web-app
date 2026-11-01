@@ -1,0 +1,303 @@
+{
+  "id": "p.nat.0119",
+  "status": "cut",
+  "category": "nat",
+  "tags": ["fossils", "mammoths", "ice-age", "timelines"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Woolly mammoths survived on Wrangel Island, off north-eastern Siberia, for centuries after the pyramid was built, dying out about 4,000 years ago. Mainland herds had vanished long before.",
+  "learnMore": "Woolly mammoth",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Great Pyramid of Giza was completed around 2560 BC."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The last known woolly mammoths, on Wrangel Island, died out about 4,000 years ago."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Wrangel Island lies in the Arctic Ocean off north-eastern Siberia."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mainland woolly mammoth populations had died out long before the Wrangel Island population."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed. c1 and c2 hold dates, so they are high. c3 is standard geography and c4 is worded without numbers. datasets: natural-earth's geography regions file has no Wrangel Island entry, and no pinned dataset covers mammoths or the pyramid, so c1 and c2 need web evidence from checker A. rivalTest: the 'ancient' mammoth pulls guesses its way, which is why counterintuitive is set. Margin: about 4,000 years ago is roughly 2000 BC, some 500 years after the pyramid; published dates for the last mammoths sit between about 4,000 and 3,700 years ago, all after the pyramid, and pyramid estimates move by decades, not centuries. The separation guard is met many times over. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: both events are known worldwide; nothing local. style: Oxford spelling, plain hyphens only, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a comparison item. doubts: none on the order of events; the value for b is the rounded figure the sources give.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ffde54a4187dca6cee82a010f2f832b435140910821beedca391fffe15228570",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "The Great Pyramid of Giza is finished",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Great Pyramid of Giza completion date (Khufu, around 2560 BC); Apollo 11 first crewed Moon landing date July 1969",
+              "results": [
+                {
+                  "title": "Apollo 11",
+                  "url": "https://www.britannica.com/topic/Apollo-11"
+                },
+                {
+                  "title": "Apollo 11 Mission Overview - NASA",
+                  "url": "https://www.nasa.gov/history/apollo-11-mission-overview/"
+                },
+                {
+                  "title": "Apollo 11",
+                  "url": "https://en.wikipedia.org/wiki/Apolo_11"
+                },
+                {
+                  "title": "Great Pyramid of Giza",
+                  "url": "https://www.britannica.com/place/Great-Pyramid-of-Giza"
+                },
+                {
+                  "title": "Apollo 11: The Moon Landing",
+                  "url": "https://airandspace.si.edu/explore/stories/apollo-11-moon-landing"
+                },
+                {
+                  "title": "Apollo",
+                  "url": "https://www.britannica.com/science/Apollo-space-program"
+                },
+                {
+                  "title": "List of missions to the Moon",
+                  "url": "https://en.wikipedia.org/wiki/List_of_missions_to_the_Moon"
+                },
+                {
+                  "title": "Apollo program",
+                  "url": "https://en.wikipedia.org/wiki/Apollo_program"
+                },
+                {
+                  "title": "Apollo 11 Timeline",
+                  "url": "https://airandspace.si.edu/explore/stories/apollo-missions/apollo-11-moon-landing/apollo-11-timeline"
+                },
+                {
+                  "title": "APOLLO 11",
+                  "url": "https://history.nasa.gov/SP-4029/Apollo_11a_Summary.htm"
+                }
+              ],
+              "summaryExcerpt": "Great Pyramid of Giza: Sources place its completion in the early 25th century BCE, rather than at a single year near 2560 BC. It was built by Khufu (Cheops), the second king of Egypt's 4th dynasty (c. 2543–c. 2436 bce), and was completed in the early 25th century bce.",
+              "tiers": ["B"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The summary, drawing on Britannica's 'Great Pyramid of Giza', dates completion to the early 25th century BCE, not around 2560 BC. Other chronologies put Khufu at about 2589 to 2566 BC, which is where the familiar 2560 figure comes from. Sources disagree, so the label fails as written (§9.5.2). The comparison is safe under either chronology: both put the pyramid at least 450 years before the last mammoths (about 2000 BC). This call also serves p.nat.0173 and is counted here."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "when did the last woolly mammoths die out on Wrangel Island and when was the Great Pyramid of Giza completed; and when was a live giant squid first photographed in its deep-sea habitat, compared with the date of the Apollo 11 Moon landing",
+              "results": [
+                {
+                  "title": "Wrangel Island",
+                  "url": "https://en.wikipedia.org/wiki/Wrangel_Island"
+                },
+                {
+                  "title": "Woolly mammoth",
+                  "url": "https://en.wikipedia.org/wiki/Woolly_mammoth"
+                },
+                {
+                  "title": "Functional architecture of deleterious genetic variants in the Wrangel Island mammoth genome",
+                  "url": "https://www.biorxiv.org/content/10.1101/137455.full.pdf"
+                },
+                {
+                  "title": "Temporal genetic change in the last remaining population of woolly mammoth - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2894910/"
+                },
+                {
+                  "title": "Excess of genomic defects in a woolly mammoth on Wrangel island - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5333797/"
+                },
+                {
+                  "title": "Mammoth",
+                  "url": "https://en.wikipedia.org/wiki/Mammoth"
+                },
+                {
+                  "title": "Climate Change, Humans, and the Extinction of the Woolly Mammoth - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2276529/"
+                },
+                {
+                  "title": "Mammoth",
+                  "url": "https://www.britannica.com/animal/mammoth-extinct-mammal"
+                },
+                {
+                  "title": "Excess of genomic defects in a woolly mammoth on Wrangel island",
+                  "url": "https://arxiv.org/pdf/1606.06336"
+                }
+              ],
+              "summaryExcerpt": "Wrangel Island mammoths: The search results put the last survivors at roughly 4,000 years ago. One source describes the population as persisting until about 2000 BC. An examination of a fossil tooth discovered in 2015 indicated that a tiny population of mammoths persisted on Wrangel Island... as late as 4,300 years ago.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Wikipedia ('Woolly mammoth', 'Wrangel Island') and PMC genome papers. The bioRxiv and arXiv entries in the list are preprint copies of the PMC mammoth papers. The other parts of this four-part query returned nothing, so W22 was run for the pyramid."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Wrangel Island lies in the Arctic Ocean north of Chukotka, off north-eastern Siberia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mainland woolly mammoths were gone by about 10,000 years ago; island populations lasted thousands of years longer.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "fix",
+            "note": "c1: the summary of Britannica dates the Great Pyramid's completion to the early 25th century BCE, while other chronologies give about 2560 BC. Move the label down the precision ladder to what every source supports, such as 'about 4,500 years ago', which fits both. The comparison and its key are unaffected."
+          }
+        ],
+        "searchesUsed": 2,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5bea676e521b839f06cc1fe59747b77ad4535a26b7dd31a4ac01148587dd0e38",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "The Great Pyramid of Giza is finished",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Great Pyramid of Giza was completed around 2560 BC.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The last known woolly mammoths, on Wrangel Island, died out about 4,000 years ago, around 2000 BC.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Wrangel Island lies in the Arctic Ocean off north-eastern Siberia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mainland mammoth populations died out roughly 10,000 years ago, long before the Wrangel Island group.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "cut",
+      "reason": "Cut as a duplicate in substance (§9.9 rule 5). It tests the same fact as p.hist.0164 (woolly mammoths on Wrangel Island outlived the building of the Great Pyramid of Giza), although dedupe scores the pair only 0.46. One item per fact: the fact stays with p.hist.0164. A's revise on c1 (completion around 2560 BC, which chronologies place anywhere from about 2560 to the early 25th century BC) would also have needed a tiebreak or a claim change.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "The Great Pyramid of Giza is finished",
+  "b": "The last woolly mammoths die out",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year it happened",
+  "unit": "year",
+  "values": {
+    "a": -2560,
+    "b": -2000
+  },
+  "valueDisplay": {
+    "a": "around 2560 BC",
+    "b": "about 4,000 years ago"
+  },
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.246,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "id": "p.film.0232",
+  "status": "cut",
+  "category": "film",
+  "tags": ["world-cinema", "brazil", "photography"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Fernando Meirelles and Kátia Lund cast many young residents of Rio's favelas, most of whom had never acted before. The film earned four Oscar nominations, including Best Director.",
+  "learnMore": "City of God (2002 film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "City of God (2002) follows Rocket, a boy from the Cidade de Deus housing project in Rio de Janeiro, who becomes a photographer."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Central Station, Elite Squad and Black Orpheus are Brazilian films that do not follow a boy who becomes a photographer."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "City of God was directed by Fernando Meirelles, with Kátia Lund as co-director."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Much of the cast of City of God were young people from Rio's favelas with no acting experience."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "City of God received four Academy Award nominations, including Best Director."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Black Orpheus and Elite Squad are also set in Rio's favelas, which makes them strong traps, but their heroes are a tram driver and a police captain. Central Station follows a boy and a retired teacher crossing Brazil. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a Brazilian production; the photographer detail is the foothold for anyone who has heard of the film. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 28 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a3a52e87b32cacdaf5a7b2d2bd2d6d55e55cb7a6b7cebc93990f32a04e783c15",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "City of God",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "City of God (2002) is narrated by Rocket (Buscapé), who grows up in the Cidade de Deus housing project and becomes a photographer.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Central Station follows a letter writer and a boy, Elite Squad a police captain and Black Orpheus a tram driver; none follows a boy who becomes a photographer.",
+              "confidence": "certain"
+            },
+            "note": "Black Orpheus was a Brazil, France and Italy co-production by a French director and was France's Oscar entry, so 'Brazilian film' is loose for it; the distractor still works, because its point is the plot."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fernando Meirelles directed City of God, with Kátia Lund as co-director.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most of the young cast came from Rio's favelas and had never acted before.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "City of God was nominated for four Oscars at the 2004 ceremony: Director, Adapted Screenplay, Cinematography and Editing.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c2 calls Black Orpheus a Brazilian film; it was a Brazil, France and Italy co-production by a French director and France's Oscar entry. Harmless to the item, which tests the plot."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "872f7b672263d0266d78529d113deacc64a2e10773edf953c0a4a03aac19452b",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "City of God",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "City of God follows Rocket, a boy from the Cidade de Deus housing project in Rio, who becomes a photographer.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Central Station, Elite Squad and Black Orpheus do not follow a boy who becomes a photographer.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: none fits. Black Orpheus is set in Rio but is a French-Brazilian-Italian co-production directed by a Frenchman (Marcel Camus), so \"Brazilian films\" is loose for it."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fernando Meirelles directed City of God, with Kátia Lund as co-director.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Much of the cast were young people from Rio's favelas with no acting experience.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "City of God received four Academy Award nominations, including Best Director.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Claim c2 calls Black Orpheus a Brazilian film. It is Rio-set and Portuguese-language, but a French-Brazilian-Italian co-production that won France's Palme d'Or and Oscar. It still fails the stem, so the key is safe; the distractor is just a little weaker than intended."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 and c5 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered. Both checkers also noted that c2 calls Black Orpheus a Brazilian film, though it was a French-led co-production by a French director.",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which Brazilian film follows a boy from a Rio de Janeiro housing project who grows up to become a photographer?",
+  "answer": "City of God",
+  "wrong": ["Central Station", "Elite Squad", "Black Orpheus"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.352,
+    "estimator": "v0"
+  }
+}

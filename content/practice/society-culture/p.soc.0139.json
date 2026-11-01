@@ -1,0 +1,251 @@
+{
+  "id": "p.soc.0139",
+  "status": "active",
+  "category": "soc",
+  "tags": ["money", "currencies", "japan"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Yen means 'round object' or 'circle'. China's yuan and Korea's won come from the same Chinese character, a reminder of the round silver coins once traded across East Asia.",
+  "learnMore": "Japanese yen",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Japan's Meiji government introduced the yen in 1871."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The won, the yuan and the baht are the currencies of Korea, China and Thailand, not Japan."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Yen means 'round object' or 'circle' in Japanese."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The names yen, yuan and won all come from the same Chinese character, meaning round."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The name refers to round coins, especially the silver coins traded across East Asia in the 19th century."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: currency-codes (codes-all.csv, row JAPAN, Yen, JPY, 392) confirms the currency; the 1871 date and the etymologies need web evidence. rivalTest: won and yuan share the yen's root, so they are the closest confusions; baht is another East or South-East Asian currency. Argued against the key: the New Currency Act of 1871 created the yen. volatility: evergreen: the stem is a dated historical event (1871), so it cannot go stale if Japan's currency ever changed. regional: the yen is one of the best-known currencies in the world. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 29 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 2. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4f91292bb969719e6fec9cb531844001d44754a0665399e3134f33e190c0f5a6",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Yen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Meiji government's New Currency Act of 1871 introduced the yen.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "currency-codes",
+              "version": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+              "file": "codes-all.csv",
+              "locator": "AlphabeticCode=KRW (line 130), CNY (line 51), THB (line 239), JPY (line 123)",
+              "excerpt": "KOREA (THE REPUBLIC OF),Won,KRW,410,0, | CHINA,Yuan Renminbi,CNY,156,2, | THAILAND,Baht,THB,764,2, | JAPAN,Yen,JPY,392,0,",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The won, yuan and baht are the currencies of Korea, China and Thailand, and Japan's is the yen."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Japanese word en (yen) means circle or round.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yen, yuan and won all go back to the same Chinese character for round (yuan), of which the Japanese character for yen is a simplified form.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The name round was applied to round coins, above all the Spanish and Mexican silver dollars traded across 19th-century East Asia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f329c2e16d18013ea0c97cd3af63c47e3097d4cffeff759748b6405b44b76342",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Yen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Japan's Meiji government introduced the yen in 1871 (the New Currency Act).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The won, yuan and baht are the currencies of Korea, China and Thailand, not Japan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yen (円, formerly 圓) means a round object or circle.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yen, yuan and won all derive from the Chinese character for 'round' (圓).",
+              "confidence": "certain"
+            },
+            "note": "The yuan is also written 元 in formal use, but the round-coin origin (圓) is the standard account. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The names refer to round coins, notably the silver (Spanish or Mexican) dollars traded across East Asia in the 19th century.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, date), c3 (explanation, etymology) and c4 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them (the dataset evidence recorded covers other claims), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0271",
+      "score": 0.125,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which currency did Japan's Meiji government introduce in 1871?",
+  "answer": "Yen",
+  "wrong": ["Won", "Yuan", "Baht"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.91,
+    "spread": 0.424,
+    "estimator": "v0"
+  }
+}

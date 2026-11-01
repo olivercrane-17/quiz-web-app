@@ -1,0 +1,241 @@
+{
+  "id": "p.food.0204",
+  "status": "cut",
+  "category": "food",
+  "tags": ["national-dishes", "canada", "cheese"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "It took off in rural Quebec in the 1950s. Fresh curds squeak against the teeth, and the hot gravy softens them without fully melting them.",
+  "learnMore": "Poutine",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Poutine is a Canadian dish of chips (French fries) with cheese curds and gravy."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Poutine is not a Belgian, French or Irish dish."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Poutine became popular in rural Quebec in the 1950s."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Fresh cheese curds squeak against the teeth when eaten."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "On poutine the hot gravy softens the curds without fully melting them."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c3). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Belgium is the trap for players who link fries with Belgium, and France for the French-sounding name; neither claims the dish. Against the key: the dish is Quebecois, which is Canadian. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the stem gives both names for chips and describes the dish, so a player anywhere can reason from Quebec's French. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 25 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: widely known, with the French name as a foothold. Doubts: several Quebec towns claim the first poutine, so the explanation dates it only to the 1950s and names no town.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d30c66e9482ad95574a33cfd0358e950ad722e822eaa0affefb7aaedecf6623e",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Canadian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Poutine, chips (fries) with cheese curds and brown gravy, is a dish from Quebec, Canada.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Belgium, France and Ireland have chips, but poutine comes from Quebec.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Poutine first appeared in snack bars of rural Quebec (Centre-du-Quebec) in the late 1950s; its spread across the province came mainly in the 1960s and 1970s.",
+              "confidence": "likely"
+            },
+            "note": "I cannot confirm that it became popular, or 'took off', within the 1950s. The origin stories (Warwick around 1957, Drummondville and Victoriaville later) support only that it appeared in the late 1950s. High-risk (date), left uncertain. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Fresh cheese curds squeak against the teeth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hot gravy softens fresh curds without melting them fully.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c3: 'It took off in rural Quebec in the 1950s' says more than the origin stories support. 'It first appeared in rural Quebec snack bars in the late 1950s' keeps to what is documented, and still needs external evidence."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "53211a302f5e7a72188c02305ec8915fd0b5b5bd7627b60e64a9760c6c97c5b1",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Canadian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Poutine is a Quebec and Canadian dish of fries topped with cheese curds and gravy.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Belgium, France and Ireland have chip traditions of their own, but poutine is not one of their dishes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Poutine is generally said to have first appeared in rural Quebec snack bars in the late 1950s; wide popularity came in later decades.",
+              "confidence": "likely"
+            },
+            "note": "I am sure of the late-1950s appearance, not of popularity then, so 'took off' or 'became popular' in the 1950s may overstate."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Fresh cheese curds squeak when bitten.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Hot gravy softens poutine's curds without fully melting them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "checker_doubt c3: sources I know date poutine's first appearance, not its popularity, to the late 1950s, with wide spread in later decades. Reword claim and explanation to 'appeared in rural Quebec in the late 1950s' and get dataset or web evidence."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks revise: neither could confirm c3 (poutine became popular in rural Quebec in the 1950s); both say the sources support only a first appearance in the late 1950s and ask to soften it. That fix changes claim c3, so it needs two fresh checks, and a revise/revise pair cannot pass rule 2, because a tiebreak stands in for one check only (§9.7). Cut; redraft under a new id with the softer date and external evidence.",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Poutine, chips (French fries) topped with cheese curds and gravy, is a classic of which cuisine?",
+  "answer": "Canadian",
+  "wrong": ["Belgian", "French", "Irish"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.76,
+    "spread": 0.49,
+    "estimator": "v0"
+  }
+}

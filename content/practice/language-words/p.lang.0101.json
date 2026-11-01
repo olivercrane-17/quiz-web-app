@@ -1,0 +1,177 @@
+{
+  "id": "p.lang.0101",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["borrowed-words", "japanese", "emoji"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Emoji joins Japanese e, picture, and moji, written character. Its likeness to the English word 'emotion' is a coincidence, which is why so many people assume the two are related.",
+  "learnMore": "Emoji",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word 'emoji' comes from Japanese e (picture) and moji (written character)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The Japanese parts of 'emoji' do not mean emotion and icon, face and symbol, or feeling and sign."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The resemblance between 'emoji' and the English word 'emotion' is a coincidence; the two words are unrelated."
+    }
+  ],
+  "writerNotes": "The planted trap is 'Emotion and icon', the folk link most people make; the explanation defuses it, so counterintuitive is true. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers etymology, so c1 to c3 need a reference or web check; rival test: argued for each distractor; none matches the Japanese parts e and moji; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: the word is used in English everywhere and the foothold is in the word itself, so no country's schooling decides it; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no entry in myths.json matches; mystery and encore checks: not applicable to a practice item; doubts: none on the key; I avoided naming the first emoji set or its designer, which sources dispute",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "37a5a752dfb564478deaa1a9b66e499db201162d3f53c052aa8bdf8e1dd09be7",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Picture and character",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Emoji is Japanese e (picture) plus moji (written character, letter).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Neither e nor moji means emotion, face, feeling, icon, symbol or sign: the parts mean picture and character.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Emoji has no link to English 'emotion'. The likeness is accidental, which is why the false link is so widely assumed.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Explanation: 'is a coincidence, which is why so many people assume the two are related' makes the coincidence the cause of the assumption, when it is the likeness that misleads. Something like 'is a coincidence, though it leads many people to assume...' reads better. No fact changes."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0089a1c743e4d8d06bcdfe24a841f6973a2578db4a70eb6ebc1002da4e289b02",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Picture and character",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Emoji joins Japanese e (picture) and moji (character, letter): a picture character.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the three wrong options all lean on the false 'emotion' link; none glosses a real Japanese element."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Japanese elements are e and moji only, so none of the three rival glosses (feeling and sign, emotion and icon, face and symbol) is a translation of the word.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dictionaries state that emoji is unrelated to emotion or emoticon; the similar look is accidental.",
+              "confidence": "certain"
+            },
+            "note": "Defuses the trap the item sets."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, etymology), c2 (distractor, etymology) and c3 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: A noted the explanation makes the coincidence the cause of the mix-up, when the likeness is what misleads.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The word 'emoji' comes from Japanese words meaning what?",
+  "answer": "Picture and character",
+  "wrong": ["Emotion and icon", "Face and symbol", "Feeling and sign"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.226,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,291 @@
+{
+  "id": "p.sci.0214",
+  "status": "active",
+  "category": "sci",
+  "tags": ["chemistry", "gases", "density"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Hydrogen is about half as dense as helium and once lifted giant airships. Party balloons use helium instead because, unlike hydrogen, it cannot catch fire.",
+  "learnMore": "Hydrogen",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Hydrogen gas has a density of about 0.09 g per litre at 0 °C and normal atmospheric pressure."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Helium gas has a density of about 0.18 g per litre at 0 °C and normal atmospheric pressure."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Hydrogen gas is about half as dense as helium gas."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hydrogen was used to lift large airships."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Helium does not burn, while hydrogen is highly flammable."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors and no warnings for this item. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high (the C26 floor). datasets: ptable Hydrogen (density 0.08988) and Helium (density 0.1786), both gases at 0 °C and 1 atm in the file's density field, support c1 and c2; c3 is a calculation (0.08988 / 0.1786 is about 0.50). rivalTest: Helium tempts because floating party balloons are filled with it. Against the key: hydrogen has the lowest density of any gas, about half that of helium, under any shared temperature and pressure, and the stem's 'litre for litre' fixes the measure. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 25 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: None. I worded the measure so that C22 no longer pairs this item with the guide's mystery example m.sci.0001 (helium), whose facts differ. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ca8dc782f7622af872d53fd8d9650abb197ba9c308b83dbebc0d8b52d5c8cb4b",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "Hydrogen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[name=Hydrogen].density",
+              "excerpt": "\"name\": \"Hydrogen\" ... \"density\": 0.08988, \"density_unit\": \"g/L\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "ptable gives gas densities in g/L; 0.08988 g/L is the standard figure at 0 °C and 1 atm, so 'about 0.09 g per litre' holds. ptable is built from Wikipedia."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[name=Helium].density",
+              "excerpt": "\"name\": \"Helium\" ... \"density\": 0.1786, \"density_unit\": \"g/L\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "0.1786 g/L is the standard figure at 0 °C and 1 atm, so 'about 0.18 g per litre' holds."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[name=Hydrogen].density; elements[name=Helium].density",
+              "excerpt": "\"name\": \"Hydrogen\" ... \"density\": 0.08988 | \"name\": \"Helium\" ... \"density\": 0.1786",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "0.08988 / 0.1786 = 0.503, so hydrogen is about half as dense as helium (arithmetic on the two dataset values)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hydrogen filled large rigid airships, the Hindenburg among them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Helium is inert and cannot burn, whereas hydrogen is highly flammable.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Party balloons are filled with helium rather than hydrogen.",
+              "confidence": "certain"
+            },
+            "note": "Checker addition (role explanation, risk standard): 'Party balloons are filled with helium rather than hydrogen.' The explanation states it and no writer claim covers it."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5059f13d7c2652def6dd4445b8a3f86339ca787f5de7b245f6943238df69d736",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "Hydrogen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Hydrogen",
+              "excerpt": "\"density\": 0.08988, \"density_unit\": \"g/L\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Dataset gives the gas density in g/L; the 0 degree Celsius, 1 atmosphere conditions come from the standard data it reproduces."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Helium",
+              "excerpt": "\"density\": 0.1786, \"density_unit\": \"g/L\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Same convention as hydrogen."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Hydrogen and name=Helium",
+              "excerpt": "density 0.08988 and 0.1786 g/L; 0.08988 / 0.1786 = 0.503",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Ratio computed from the two dataset values."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hydrogen filled large airships such as Zeppelins and the Hindenburg.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Helium is inert and does not burn, whereas hydrogen is highly flammable.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "accept",
+      "reason": "A and B pass; all five writer claims are confirmed in both checks. High-risk c1 to c3 carry ptable dataset evidence in both checks (hydrogen 0.08988 and helium 0.1786 g per litre, which I re-read in the pinned file; the ratio is 0.50), and standard c4 and c5 are confirmed at certain in both. A's addition x1 (party balloons are filled with helium) is a standard, everyday premise of the explanation that B's record also takes as given: it confirms c4 and c5 beside it and raises no issue. Lint clean, dedupe unique (nearest, a guide example, 0.34), no myth hit. A medium comparison (p 0.56) whose trap, helium as the gas that lifts balloons, the explanation defuses.",
+      "decidedAt": "2026-11-01T04:50:16Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:50:16Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:50:16Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which gas is lighter, litre for litre?",
+  "a": "Hydrogen",
+  "b": "Helium",
+  "answer": "a",
+  "relation": "lighter",
+  "measure": "weight of a litre at 0 °C and sea-level pressure",
+  "unit": "g per litre",
+  "values": {
+    "a": 0.0899,
+    "b": 0.1786
+  },
+  "valueDisplay": {
+    "a": "about 0.09 g per litre",
+    "b": "about 0.18 g per litre"
+  },
+  "predicted": {
+    "p": 0.56,
+    "spread": 0.363,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "id": "p.sci.0218",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["chemistry", "metals", "electricity"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Copper comes a close second and costs far less, which is why it fills our electrical wires. Gold is used on connectors because it resists corrosion.",
+  "learnMore": "Silver",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "At room temperature, silver has the highest electrical conductivity of any metal."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Copper, gold and aluminium all conduct electricity less well than silver, with copper second."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Copper is much cheaper than silver and is the usual metal in electrical wiring."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Gold is used to coat electrical connectors because it resists corrosion."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors; its one warning is C22, a same-answer pair with p.soc.0240 (the pound sterling's pound of silver; p.book.0105, Dorothy's silver shoes, also shares the key), different facts, so I suggest related_ok. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key claim, because the item is counterintuitive (the C26 floor). datasets: ptable Silver summary ('possesses the highest electrical conductivity') supports c1, and ptable Copper ('very high thermal and electrical conductivity') fits c2, but ptable is built from Wikipedia, so checker A needs one independent web source for c1. rivalTest: Copper is the planted trap, because it is the metal in wires; gold tempts through its use in electronics; aluminium carries power lines. Against the key: conductivities at 20 °C are about 63, 60, 41 and 38 million siemens per metre for silver, copper, gold and aluminium, so silver wins clearly. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 26 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Superconductors conduct better at very low temperatures, which is why the stem says room temperature. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f843ed7f72450371b2f9ed7c6dc117f1efed48d9a84d3f961087865e693f2ab8",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "Silver",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[name=Silver].summary",
+              "excerpt": "it possesses the highest electrical conductivity, thermal conductivity and reflectivity of any metal",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "ptable (built from Wikipedia) states it without a temperature; silver leads at room temperature."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "At room temperature silver conducts best, copper is a close second, then gold, then aluminium.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). ptable's silver record shows the others conduct less well, but copper's second place has no external evidence here."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Copper costs far less than silver and is the standard metal for electrical wiring.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Connectors are often gold-plated because gold does not corrode or tarnish.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "493ff6ed19a554677b3973f9518fd89a8935a87d42a2f267be2bc762b644373d",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "Silver",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "name=Silver",
+              "excerpt": "\"it possesses the highest electrical conductivity, thermal conductivity and reflectivity of any metal\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Dataset summary states it directly (silver 6.3e7 S/m vs copper 5.96e7)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Conductivity order is silver, copper, gold, aluminium, so copper is second and gold and aluminium trail it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Copper costs a small fraction of silver and is the standard wiring metal.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gold plating on connectors resists corrosion and keeps contact resistance low.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c2 (distractor, superlative) rests on knowledge alone in both checks, with no dataset or web evidence for it in either. Only c1 carries dataset evidence (ptable). Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. It is also a same-answer near-duplicate of p.soc.0240 (0.61) and p.book.0105 (0.56), so a redraft should test a different fact. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T04:50:16Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which metal conducts electricity better than any other at room temperature?",
+  "answer": "Silver",
+  "wrong": ["Copper", "Gold", "Aluminium"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.223,
+    "estimator": "v0"
+  }
+}

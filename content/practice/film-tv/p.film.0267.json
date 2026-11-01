@@ -1,0 +1,232 @@
+{
+  "id": "p.film.0267",
+  "status": "checking",
+  "category": "film",
+  "tags": ["classic-cinema", "colour", "hitchcock"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Colour is no guide to age. Psycho came out in 1960, more than 20 years after Gone with the Wind, and Hitchcock made it in black and white partly to save money.",
+  "learnMore": "Psycho (1960 film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Gone with the Wind, filmed in Technicolor, was released in 1939."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Psycho, filmed in black and white, was released in 1960."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hitchcock made Psycho in black and white partly to keep its costs down."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Psycho came out more than 20 years after Gone with the Wind."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Black and white suggests an older film, which pulls players toward Psycho; the 21-year gap makes the answer safe. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: two of the most famous Hollywood films; the trap is the colour, which works the same for everyone. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 32 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "927bd5f28543df8908425f9b396b700d8430b182978477f3b045d20791e6e083",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "Gone with the Wind, in Technicolor",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gone with the Wind, shot in Technicolor, premiered in December 1939.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Psycho, shot in black and white, was released in June 1960.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hitchcock made Psycho cheaply, in black and white, partly to save money and partly to keep the bloodshed bearable.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "From December 1939 to June 1960 is more than 20 years.",
+              "confidence": "certain"
+            },
+            "note": "Arithmetic on c1 and c2. High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "As I know it, principal photography ran from late November 1959 to early February 1960, with the shower scene filmed in December 1959, so 'shot in 1960' is at best half right.",
+              "confidence": "likely"
+            },
+            "note": "Added claim (role explanation, risk high, date): Hitchcock shot Psycho in 1960. The explanation says 'Hitchcock shot Psycho in black and white in 1960'. The release year (c2) is the safe fact; the shoot straddled 1959 and 1960. Not certain enough to refute without a source, so uncertain."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "The explanation says Hitchcock 'shot Psycho in black and white in 1960'. Filming straddled late 1959 and early 1960 (x1, uncertain); 'released Psycho' or 'made Psycho, released in 1960' keeps to the safe fact in c2."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d41c6d5425c7fa4180f39c74baf2c899511e6de64f9f9f8feb46695c78b5fc6c",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "Gone with the Wind, in Technicolor",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gone with the Wind, shot in Technicolor, was released in 1939.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Psycho, shot in black and white, was released in 1960.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hitchcock shot Psycho in black and white partly to keep its costs down.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Psycho came out 21 years after Gone with the Wind.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "rewrite",
+      "reason": "Applies checker A's fix. The explanation said Hitchcock 'shot Psycho in black and white in 1960', and A notes that filming began in late 1959 (A's addition x1, uncertain). The new wording keeps to the release year of c2 and states only what c2, c3 and c4 claim; no claim changes. A's revise verdict still stands, so the item awaits a tiebreak T with external evidence on c1, c2 and c4 before it can be accepted (§9.7, §9.9 rule 2). [wording-only rewrite by ed-pfilm02d at 2026-11-01T04:35:04Z of explanation; checks kept, packetSha256 re-stamped: pass A fb63d70a2a7f894ff49522945ad7a9565ed0ca06eb419494dab735fa7927acbc -> 927bd5f28543df8908425f9b396b700d8430b182978477f3b045d20791e6e083; pass B d05d441972f2d5d33b2fdc0daa8000add83f726638319c01d5cb99499ac62732 -> d41c6d5425c7fa4180f39c74baf2c899511e6de64f9f9f8feb46695c78b5fc6c]",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which film came first?",
+  "a": "Gone with the Wind, in Technicolor",
+  "b": "Psycho, in black and white",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of release",
+  "unit": "year",
+  "values": {
+    "a": 1939,
+    "b": 1960
+  },
+  "valueDisplay": {
+    "a": "1939",
+    "b": "1960"
+  },
+  "predicted": {
+    "p": 0.68,
+    "spread": 0.304,
+    "estimator": "v0"
+  }
+}

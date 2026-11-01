@@ -1,0 +1,200 @@
+{
+  "id": "p.food.0218",
+  "status": "cut",
+  "category": "food",
+  "tags": ["ingredients", "salt", "pakistan"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "It comes from the Salt Range in Pakistan's Punjab, hundreds of kilometres from the high Himalayan peaks. Traces of iron oxide give the rock salt its pink colour.",
+  "learnMore": "Himalayan salt",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Pink Himalayan salt is mined mainly in the Salt Range of Punjab, Pakistan, notably at the Khewra mine."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Pink Himalayan salt is not mined mainly in Nepal, India or China."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Salt Range lies hundreds of kilometres from the main Himalayan peaks."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The pink colour of Himalayan rock salt comes from traces of minerals, mainly iron oxide."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. C22 flags a shared answer with p.hist.0119, about the 1947 partition; the facts are unrelated (salt geology against a historical event), so the key stays Pakistan. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c3). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: geonames-cities lists Khewra, the mine town, in Pakistan (name Khewra, country PK, admin1 04), which supports the location in c1; the mining claim itself is in no dataset. Rival test: Nepal is the planted trap, from the word Himalayan; India and China share the range. Against the key: small amounts of pink rock salt come from elsewhere, which 'mainly' covers. The Khewra mine in Pakistan is the source the trade name refers to. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the salt is sold worldwide under the Himalayan name. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: the name points most players to Nepal. Doubts: c3 is written as a bounded distance, because exact figures vary with the peak chosen; 'Salt Range' and 'Khewra' are named so checkers can find evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "41a954a94023c7ad517d901b69ecab32feab29c9dd25706f1da712667a661f2d",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Pakistan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most pink 'Himalayan' salt is rock salt mined in Pakistan's Salt Range in Punjab, above all at the Khewra mine.",
+              "confidence": "certain"
+            },
+            "note": "geonames-cities (1.1.65, cities.json) lists Khewra at 32.6491, 73.01059 in country PK, admin1 04, which admin1.json names Punjab. That fixes the mine's location but says nothing about what is mined there, so it is not recorded as the evidence. High-risk (checker_doubt, set by the writer): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pink 'Himalayan' salt is not mined mainly in Nepal, India or China.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Salt Range lies roughly 300 km or more from the nearest great Himalayan peak (Nanga Parbat) and well over 1,000 km from the central Himalaya.",
+              "confidence": "certain"
+            },
+            "note": "geonames gives Khewra's coordinates, but no pinned dataset holds a Himalayan peak, so the distance could not be computed from data. High-risk (number): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Trace minerals, mainly iron oxide, colour the salt pink.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ed774020b61547f5040314a2f5c0a5b667f8e2c765c9b145166071b8cbad5ef0",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Pakistan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pink Himalayan salt is rock salt from the Salt Range in Punjab, Pakistan, chiefly the Khewra mine.",
+              "confidence": "certain"
+            },
+            "note": "The writer marked this checker_doubt. Knowledge is certain. High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nepal, India and China are not its main source.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Salt Range lies hundreds of kilometres from the main Himalayan peaks (my own coordinate estimate puts Khewra about 320 km from Nanga Parbat).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Trace iron oxide is the usual explanation for the pink colour.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, the writer's doubt) and c3 (explanation, number) rest on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Pink 'Himalayan' salt is mined mainly in which country?",
+  "answer": "Pakistan",
+  "wrong": ["Nepal", "India", "China"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.303,
+    "estimator": "v0"
+  }
+}

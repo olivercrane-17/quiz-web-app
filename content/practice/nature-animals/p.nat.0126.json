@@ -1,0 +1,406 @@
+{
+  "id": "p.nat.0126",
+  "status": "active",
+  "category": "nat",
+  "tags": ["mammals", "pandas", "myths", "asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The giant panda is a bear, while the red panda has a family of its own. Both grip bamboo with a thumb-like wrist bone, which each evolved separately.",
+  "learnMore": "Red panda",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The red panda (family Ailuridae) and the giant panda (family Ursidae) belong to different families."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The giant panda is a bear."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The red panda is classified in its own family, Ailuridae."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Both pandas have an enlarged wrist bone that works like a thumb for gripping bamboo."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The thumb-like wrist bones of the giant panda and the red panda evolved independently of each other."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed. c1 is high because it is the key of a counterintuitive item, so C26 sets it high; the tooling's riskReason enum has no counterintuitive value yet (guide v1.1 adds one), so checker_doubt stands in for it. I raised c5 to high (checker_doubt) because convergent evolution is less widely known than the rest; one search on the pandas' false thumbs should cover c1 and c5. c2 to c4 are standard. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: argued for true: the shared name, bamboo diet and false thumb all suggest kinship, and older books put the red panda with raccoons or bears, never in the bear family itself in modern taxonomy. Some taxonomists now split the red panda into a Himalayan and a Chinese species; that leaves its family unchanged. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: both pandas are known worldwide. style: Oxford spelling, plain hyphens only, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches; the shared-family belief is a common misconception the list does not hold yet. mystery and encore: nothing of either kind in a true/false item. doubts: none on the families.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "18b4a9dc0a386d0e3db3cab6e19f416ec72b63680f08e5b0ff40472a2232eaad",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "molecular phylogeny: hippos are the sister group of cetaceans, more closely related to whales than to pigs; red panda is not a bear, sole living member of Ailuridae, false thumb evolved convergently with giant panda",
+              "results": [
+                {
+                  "title": "Red panda",
+                  "url": "https://en.wikipedia.org/wiki/Red_panda"
+                },
+                {
+                  "title": "Evidence of a false thumb in a fossil carnivore clarifies the evolution of pandas",
+                  "url": "https://pnas.org/content/103/2/379"
+                },
+                {
+                  "title": "Ailuridae",
+                  "url": "https://en.wikipedia.org/wiki/Ailuridae"
+                },
+                {
+                  "title": "The position of Hippopotamidae within Cetartiodactyla",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.0409518102"
+                },
+                {
+                  "title": "Comparative genomics reveals convergent evolution between the bamboo-eating giant and red pandas",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1613870114"
+                },
+                {
+                  "title": "Early Miocene hippopotamids (Cetartiodactyla) constrain the phylogenetic and spatiotemporal settings of hippopotamid origin",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1001373107"
+                },
+                {
+                  "title": "Earliest giant panda false thumb suggests conflicting demands for locomotion and feeding",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9246853/"
+                },
+                {
+                  "title": "Evolution of cetaceans",
+                  "url": "https://en.wikipedia.org/wiki/Evolution_of_cetaceans"
+                },
+                {
+                  "title": "Progressive evolution of secondary aquatic adaptation in hippos and cetaceans",
+                  "url": "https://www.nature.com/articles/s41421-022-00483-2"
+                }
+              ],
+              "summaryExcerpt": "Red panda is not a bear: The red panda is placed by the most recent molecular-systematic DNA research into its own independent family, Ailuridae. That family sits within the superfamily Musteloidea alongside raccoons, skunks, and weasels, and it is not a bear (Ursidae).",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Wikipedia and PNAS in the list. The giant panda's place in Ursidae is textbook (see c2). The summary's mention of older classifications (a 1982 skull study, a 1995 mitochondrial analysis) is history, not a live conflict. Same call as p.nat.0101 c1, counted there."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The giant panda (Ailuropoda melanoleuca) is a bear, family Ursidae.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "molecular phylogeny: hippos are the sister group of cetaceans, more closely related to whales than to pigs; red panda is not a bear, sole living member of Ailuridae, false thumb evolved convergently with giant panda",
+              "results": [
+                {
+                  "title": "Red panda",
+                  "url": "https://en.wikipedia.org/wiki/Red_panda"
+                },
+                {
+                  "title": "Evidence of a false thumb in a fossil carnivore clarifies the evolution of pandas",
+                  "url": "https://pnas.org/content/103/2/379"
+                },
+                {
+                  "title": "Ailuridae",
+                  "url": "https://en.wikipedia.org/wiki/Ailuridae"
+                },
+                {
+                  "title": "The position of Hippopotamidae within Cetartiodactyla",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.0409518102"
+                },
+                {
+                  "title": "Comparative genomics reveals convergent evolution between the bamboo-eating giant and red pandas",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1613870114"
+                },
+                {
+                  "title": "Early Miocene hippopotamids (Cetartiodactyla) constrain the phylogenetic and spatiotemporal settings of hippopotamid origin",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1001373107"
+                },
+                {
+                  "title": "Earliest giant panda false thumb suggests conflicting demands for locomotion and feeding",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9246853/"
+                },
+                {
+                  "title": "Evolution of cetaceans",
+                  "url": "https://en.wikipedia.org/wiki/Evolution_of_cetaceans"
+                },
+                {
+                  "title": "Progressive evolution of secondary aquatic adaptation in hippos and cetaceans",
+                  "url": "https://www.nature.com/articles/s41421-022-00483-2"
+                }
+              ],
+              "summaryExcerpt": "The red panda is placed by the most recent molecular-systematic DNA research into its own independent family, Ailuridae.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "molecular phylogeny: hippos are the sister group of cetaceans, more closely related to whales than to pigs; red panda is not a bear, sole living member of Ailuridae, false thumb evolved convergently with giant panda",
+              "results": [
+                {
+                  "title": "Red panda",
+                  "url": "https://en.wikipedia.org/wiki/Red_panda"
+                },
+                {
+                  "title": "Evidence of a false thumb in a fossil carnivore clarifies the evolution of pandas",
+                  "url": "https://pnas.org/content/103/2/379"
+                },
+                {
+                  "title": "Ailuridae",
+                  "url": "https://en.wikipedia.org/wiki/Ailuridae"
+                },
+                {
+                  "title": "The position of Hippopotamidae within Cetartiodactyla",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.0409518102"
+                },
+                {
+                  "title": "Comparative genomics reveals convergent evolution between the bamboo-eating giant and red pandas",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1613870114"
+                },
+                {
+                  "title": "Early Miocene hippopotamids (Cetartiodactyla) constrain the phylogenetic and spatiotemporal settings of hippopotamid origin",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1001373107"
+                },
+                {
+                  "title": "Earliest giant panda false thumb suggests conflicting demands for locomotion and feeding",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9246853/"
+                },
+                {
+                  "title": "Evolution of cetaceans",
+                  "url": "https://en.wikipedia.org/wiki/Evolution_of_cetaceans"
+                },
+                {
+                  "title": "Progressive evolution of secondary aquatic adaptation in hippos and cetaceans",
+                  "url": "https://www.nature.com/articles/s41421-022-00483-2"
+                }
+              ],
+              "summaryExcerpt": "Convergent false thumb: The false thumb is an extension of a wrist bone, the radial sesamoid found in many carnivorans.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "molecular phylogeny: hippos are the sister group of cetaceans, more closely related to whales than to pigs; red panda is not a bear, sole living member of Ailuridae, false thumb evolved convergently with giant panda",
+              "results": [
+                {
+                  "title": "Red panda",
+                  "url": "https://en.wikipedia.org/wiki/Red_panda"
+                },
+                {
+                  "title": "Evidence of a false thumb in a fossil carnivore clarifies the evolution of pandas",
+                  "url": "https://pnas.org/content/103/2/379"
+                },
+                {
+                  "title": "Ailuridae",
+                  "url": "https://en.wikipedia.org/wiki/Ailuridae"
+                },
+                {
+                  "title": "The position of Hippopotamidae within Cetartiodactyla",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.0409518102"
+                },
+                {
+                  "title": "Comparative genomics reveals convergent evolution between the bamboo-eating giant and red pandas",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1613870114"
+                },
+                {
+                  "title": "Early Miocene hippopotamids (Cetartiodactyla) constrain the phylogenetic and spatiotemporal settings of hippopotamid origin",
+                  "url": "https://www.pnas.org/doi/10.1073/pnas.1001373107"
+                },
+                {
+                  "title": "Earliest giant panda false thumb suggests conflicting demands for locomotion and feeding",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9246853/"
+                },
+                {
+                  "title": "Evolution of cetaceans",
+                  "url": "https://en.wikipedia.org/wiki/Evolution_of_cetaceans"
+                },
+                {
+                  "title": "Progressive evolution of secondary aquatic adaptation in hippos and cetaceans",
+                  "url": "https://www.nature.com/articles/s41421-022-00483-2"
+                }
+              ],
+              "summaryExcerpt": "The giant panda and red panda evolved it independently. One review notes that a false thumb has been shown also to have evolved independently in the red panda and its distant relatives. A genomic study found that the two pandas independently evolved from meat-eating ancestors and possess adaptive pseudothumbs, making them ideal models for studying convergent evolution.",
+              "tiers": ["A"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Rests on the PNAS papers (false thumb in a fossil carnivore; comparative genomics of the two pandas) and a PMC paper, all Tier A."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "13c95254af7b04cdd091ff4bb11688af1085e3fc6ab9f359777d9328d51a6243",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Red pandas are in Ailuridae and giant pandas in Ursidae, so they are in different families.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The giant panda is a bear.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The red panda has its own family, Ailuridae.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Both pandas have an enlarged wrist bone that works like a thumb for gripping bamboo.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The two false thumbs arose separately (convergent evolution), because the pandas are not close relatives.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 5 claims confirmed in both checks; high-risk c1 (web in A), c5 (web in A). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The red panda belongs to the same family as the giant panda.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.219,
+    "estimator": "v0"
+  }
+}

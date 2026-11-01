@@ -1,0 +1,201 @@
+{
+  "id": "p.sport.0117",
+  "status": "checking",
+  "category": "sport",
+  "tags": ["badminton", "word-origins", "racket-sports"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The game was fashionable at Badminton House, the Duke of Beaufort's estate in Gloucestershire, in the 1870s. It grew from the old children's game battledore and shuttlecock.",
+  "learnMore": "Badminton",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Badminton is named after Badminton House, the Duke of Beaufort's country house in Gloucestershire, England."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name badminton does not come from an inventor, an Indian town or a breed of goose."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Badminton became fashionable at Badminton House in the 1870s."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Badminton developed from the children's game battledore and shuttlecock."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; c1, c2, c3 are high and c4 is standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor); the standard claim carries none of those triggers and states a rule or a well-known fact. datasets: no pinned dataset covers word origins or sport history, so c1 to c3 need web evidence from checker A. rivalTest: 'A town in India' is the near miss: British officers played an early form in India, sometimes called poona, but the sport's name is the house's. 'A breed of goose' tempts through the feathered shuttle, and 'A Victorian inventor' through the era. Only the house is right. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 27 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: The key is 24 characters, the limit for the 2 by 2 grid; C04 does not warn at 24.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a5f0116d3ae5efe3960e1304d501bc5d57076db090ed2cdf76f6405327d9355d",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "An English country house",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Badminton takes its name from Badminton House, the Duke of Beaufort's seat in Gloucestershire, England.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The name comes from that house, not from a person, a goose or an Indian town (in India the game was known as Poona, but that is not the source of 'badminton').",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The popular story puts the game at a Badminton House party around 1873, but the name was already used for a battledore game in the early 1860s, and when and why it took hold is unclear.",
+              "confidence": "likely"
+            },
+            "note": "Checker doubt on the decade."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Badminton grew out of the old game of battledore and shuttlecock.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Checker doubt on c3: 'fashionable at Badminton House in the 1870s' rests on the popular 1873 story; the name was in use for the game by the early 1860s and the timing is unclear. Drop the decade or source it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "28bb1c524e86277880b12593818df9b82edb99b9b265ad9a8c4e1c4f7613554e",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "An English country house",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Badminton takes its name from Badminton House, the Duke of Beaufort's country house in Gloucestershire.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The name does not come from an inventor, an Indian town or a goose breed; the Indian name of the game was Poona.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The game became fashionable at Badminton House in the 1870s (the year 1873 is usually given).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Badminton grew out of the children's game battledore and shuttlecock.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "The sport of badminton takes its name from what?",
+  "answer": "An English country house",
+  "wrong": ["A Victorian inventor", "A town in India", "A breed of goose"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.132,
+    "estimator": "v0"
+  }
+}

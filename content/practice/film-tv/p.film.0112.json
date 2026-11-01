@@ -1,0 +1,212 @@
+{
+  "id": "p.film.0112",
+  "status": "cut",
+  "category": "film",
+  "tags": ["blockbusters", "performers", "1980s"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Tom Selleck was the first choice, but his contract for the TV series Magnum, P.I. stopped him from taking the part.",
+  "learnMore": "Raiders of the Lost Ark",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Harrison Ford played Indiana Jones in Raiders of the Lost Ark (1981)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Tom Selleck, Kevin Costner and Kurt Russell did not play Indiana Jones."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Tom Selleck was the first choice to play Indiana Jones."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Selleck's contract for the TV series Magnum, P.I. stopped him from taking the role."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Selleck is a real near miss, chosen first but never cast; Costner and Russell were leading men of the same years. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 21 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "17b434ed691539feefe2f17b8da4d232b850b47492a8b765d0c45e1e8dcbffb6",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Harrison Ford",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ford played Indiana Jones in Raiders of the Lost Ark (1981).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Selleck, Costner and Russell never played Indiana Jones.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Selleck was cast or offered the part before Ford, but I cannot confirm he was the 'first choice': accounts differ, and Spielberg is often said to have proposed Ford early.",
+              "confidence": "likely"
+            },
+            "note": "Checker doubt; see the wording issue. High-risk (first), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "CBS would not release Selleck from Magnum, P.I., so he could not take the role.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c3 and the explanation call Tom Selleck 'the first choice'. Accounts agree he was cast, or offered the part, before Harrison Ford and lost it to his Magnum, P.I. contract, but they differ on whose first choice he was (Spielberg is often said to have suggested Ford before the wider search). 'Tom Selleck was cast first' or 'Tom Selleck was offered the part first' says what the record supports. c3 stays uncertain until reworded or evidenced (a checker doubt; the record schema has no checker_doubt issue type)."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "a9951aa2c8b16a18c8377d715425d0f038577a919c8cbfdb43d884d7471f08ee",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Harrison Ford",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Harrison Ford played Indiana Jones in Raiders of the Lost Ark (1981).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Selleck, Costner and Russell did not play Indiana Jones.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tom Selleck was offered and cast in the role before Ford, but accounts differ on whether he was the very first choice.",
+              "confidence": "likely"
+            },
+            "note": "I cannot stand behind 'first choice': casting accounts differ on who was approached first. 'Originally cast' is safe. Needs external evidence or a softer wording. No search was possible."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Selleck's Magnum, P.I. contract kept him from taking the part.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Claim c3 and the explanation say Selleck 'was the first choice'. I cannot confirm that exact ranking. Soften to 'Tom Selleck was originally cast' (or equivalent) or send c3 for external evidence."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks revise: neither could confirm claim c3 (Tom Selleck as 'the first choice'), and both ask for a softer claim such as 'originally cast'. That fix changes a claim, so it needs two fresh checks, and a revise/revise pair cannot pass rule 2 without them; high-risk c1 also has no external evidence. Cut (§9.7). Worth redrafting under a new id with the softer claim.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which actor played the archaeologist Indiana Jones in Raiders of the Lost Ark (1981)?",
+  "answer": "Harrison Ford",
+  "wrong": ["Tom Selleck", "Kevin Costner", "Kurt Russell"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.93,
+    "spread": 0.306,
+    "estimator": "v0"
+  }
+}

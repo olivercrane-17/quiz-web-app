@@ -1,0 +1,296 @@
+{
+  "id": "p.nat.0134",
+  "status": "active",
+  "category": "nat",
+  "tags": ["plants", "insects", "pollination"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "A fig is an inside-out cluster of flowers. A female fig wasp squeezes in through a tiny opening, often losing her wings, then pollinates the flowers and lays her eggs.",
+  "learnMore": "Fig wasp",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Wild figs are pollinated by fig wasps, which enter the fig to reach its flowers."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Bees, moths and beetles do not pollinate fig flowers, which are enclosed inside the fig."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A fig is an enclosed cluster of tiny flowers."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A female fig wasp enters through a narrow opening, often losing her wings, then pollinates the flowers and lays eggs inside."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed. c1 is high because it is the key of a counterintuitive item, so C26 sets it high; the tooling's riskReason enum has no counterintuitive value yet (guide v1.1 adds one), so checker_doubt stands in for it. c2 to c4 are standard botany. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: bees are the planted trap, since they pollinate most fruit. The stem says 'wild figs' because many cultivated figs set fruit without any pollination. Argued against the key: the fig and fig wasp partnership is the textbook case of an obligate mutualism. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: figs grow wild across the tropics and warm regions and are eaten worldwide. style: Oxford spelling, plain hyphens only, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "359865b170a5af56cc9aa17408bcc5ff1339bff5ef4f16abd1a790d9b36e4b05",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Wasps",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "botanically a banana is a berry while strawberries and raspberries are not berries and a cherry is a drupe; figs are pollinated by fig wasps that enter the syconium",
+              "results": [
+                {
+                  "title": "Fig",
+                  "url": "https://en.wikipedia.org/wiki/Fig"
+                },
+                {
+                  "title": "Syconium",
+                  "url": "https://www.britannica.com/science/syconium"
+                },
+                {
+                  "title": "Fruit",
+                  "url": "https://en.wikipedia.org/wiki/Fruit"
+                },
+                {
+                  "title": "Fig wasp",
+                  "url": "https://www.britannica.com/animal/fig-wasp"
+                },
+                {
+                  "title": "Fig tree named ‘S-64’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP27983"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawFortyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP26800"
+                },
+                {
+                  "title": "Ficus",
+                  "url": "https://www.britannica.com/plant/Ficus"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawThirtyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP24533"
+                },
+                {
+                  "title": "Fig Tree Named ‘Sequoia’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP20038"
+                }
+              ],
+              "summaryExcerpt": "Fig wasps and the syconium: The fig's fruit is a hollow syconium, and a specific wasp enters through a small opening at its apex to pollinate the flowers inside (the syconium is botanically an infructescence, containing multiple fruits; the ostiole is a narrow passage that lets the fig wasp enter and pollinate the flowers). Each fig species has its own pollinating wasp species",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Britannica 'Syconium' and 'Fig wasp' and Wikipedia 'Fig' (Tier B). The summary's nuance that common-type cultivated figs ripen without pollination fits the stem's 'wild figs', so no conflict. Same call as p.nat.0117, counted there."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Only fig wasps reach the enclosed flowers; bees, moths and beetles do not pollinate figs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "botanically a banana is a berry while strawberries and raspberries are not berries and a cherry is a drupe; figs are pollinated by fig wasps that enter the syconium",
+              "results": [
+                {
+                  "title": "Fig",
+                  "url": "https://en.wikipedia.org/wiki/Fig"
+                },
+                {
+                  "title": "Syconium",
+                  "url": "https://www.britannica.com/science/syconium"
+                },
+                {
+                  "title": "Fruit",
+                  "url": "https://en.wikipedia.org/wiki/Fruit"
+                },
+                {
+                  "title": "Fig wasp",
+                  "url": "https://www.britannica.com/animal/fig-wasp"
+                },
+                {
+                  "title": "Fig tree named ‘S-64’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP27983"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawFortyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP26800"
+                },
+                {
+                  "title": "Ficus",
+                  "url": "https://www.britannica.com/plant/Ficus"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawThirtyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP24533"
+                },
+                {
+                  "title": "Fig Tree Named ‘Sequoia’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP20038"
+                }
+              ],
+              "summaryExcerpt": "the syconium is botanically an infructescence, containing multiple fruits; the ostiole is a narrow passage that lets the fig wasp enter and pollinate the flowers",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The female fig wasp squeezes in through the ostiole, often tearing off her wings, then pollinates the flowers and lays eggs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7499d4db059007b5df3b6bca3389f6f106515b0fb1d31d1827a1603e160031b2",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Wasps",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Figs are pollinated by fig wasps, which enter the fig to reach its flowers.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Bees, moths and beetles do not pollinate fig flowers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A fig is an enclosed cluster of tiny flowers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A female fig wasp squeezes in through a narrow opening, often losing her wings, then pollinates and lays eggs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; high-risk c1 (web in A). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Wild figs depend on tiny insects that crawl inside the fig to pollinate its hidden flowers. What are they?",
+  "answer": "Wasps",
+  "wrong": ["Bees", "Moths", "Beetles"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.237,
+    "estimator": "v0"
+  }
+}

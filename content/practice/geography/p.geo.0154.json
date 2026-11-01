@@ -1,0 +1,219 @@
+{
+  "id": "p.geo.0154",
+  "status": "cut",
+  "category": "geo",
+  "tags": ["oceans", "pacific", "earth"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "The Pacific covers more than 160 million km², while all the land on Earth adds up to roughly 150 million km².",
+  "learnMore": "Pacific Ocean",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Pacific Ocean covers more area than all of Earth's land combined."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Atlantic, Indian and Arctic oceans are each smaller in area than Earth's total land area."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Pacific Ocean covers more than 160 million km²."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Earth's total land area is roughly 150 million km²."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1, c3 and c4 compare or state areas, so high; c3 is written as a lower bound because published Pacific areas differ with the marginal seas included. Datasets: mledoze-countries: the areas of all 250 entries, Antarctica's 14,000,000 km² included, sum to about 150.1 million km² (c4, as a cross-check; the file's areas include inland water, so the land-only figure is a little lower). No dataset gives ocean areas, so c1 and c3 need a web result. Rival test: the Atlantic is the only plausible rival, but at roughly 106 million km² it falls well short of the land total; nothing argues against the key. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a global fact. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 21 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "70d01750ffaafdb22bc0828bbb2f650128b2a425c9a803d4755733de0880ff70",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Pacific Ocean",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Pacific Ocean is larger than all the land on Earth put together.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only. No pinned dataset covers this, and WebSearch was unavailable this session (the turn's shared search quota was exhausted before any search ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). Holds under every area figure I know for the Pacific (about 155 to 169 million km²) against about 149 million km² of land."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Atlantic (well under 110 million km²), Indian (about 70 million) and Arctic (about 14 million) are each smaller than the land area.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most references give the Pacific about 165 to 169 million km², but some figures for it come out near 155 million km², depending on how marginal seas and the Southern Ocean are counted.",
+              "confidence": "likely"
+            },
+            "note": "High-risk and knowledge only (no pinned dataset covers ocean areas; WebSearch unavailable this session). From knowledge, not a retrieved source: published figures differ by definition, and at least one widely used reference figure is under 160 million km², so 'more than 160 million' is not safe as written."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "all 250 entries",
+              "excerpt": "sum of \"area\" over all entries with area > 0 = 150084803 (incl. ATA 14000000; SJM area -1 excluded)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "About 150 million km². Country areas include inland water, and the usual land figure is about 149 million km², so 'roughly 150 million' holds."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c3 is uncertain: the Pacific's area depends on the definition, and some reference figures fall under 160 million km². Suggest dropping the figure and keeping the comparison, e.g. 'The Pacific alone covers more than all the land on Earth, roughly 150 million km², put together', or name the definition behind the number. No external evidence could be gathered this session."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "aaa1174d4f89ea903e67b3a00b6bcd2b7718a426b125ebaa6e2f4c56ac2d9088",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Pacific Ocean",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Whichever figure is used for the Pacific (about 155 million km2 or more), it exceeds Earth's land area of about 149 million km2.",
+              "confidence": "certain"
+            },
+            "note": "High-risk comparison, knowledge only. The dataset below covers the land side. Knowledge only: no dataset covers this. Needs dataset or web evidence in the other check (I could not search: the shared WebSearch budget was spent)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Atlantic (about 77 to 106 million km2 by convention), the Indian Ocean (about 69 to 71 million) and the Arctic (about 14 to 15 million) are all far below 149 million km2.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Pacific's area depends on the convention: about 155.6 million km2 excluding marginal seas, and about 165 million km2 or more counting them, so 'more than 160 million' holds under one and fails under the other.",
+              "confidence": "likely"
+            },
+            "note": "Doubt is about the definition, not about the comparison. Conflicting figures fail the claim as written (section 9.5.2). I could not retrieve a source, because the shared search budget was spent. Knowledge only: high-risk and no dataset covers it. Needs dataset or web evidence in the other check (I could not search: the shared WebSearch budget was spent)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "all 250 records, sum of area",
+              "excerpt": "Sum of area = 150084802 km2, of which Antarctica (ATA) 14000000",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 150 million km2, in line with the usual figure of about 149 million."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "fix",
+            "note": "checker_doubt on c3: 'more than 160 million km2' depends on whether marginal seas count. Figures in common use run from about 155.6 million km2 (open ocean) to about 165 million km2 and above (with marginal seas). The key claim (the Pacific outsizes all land, about 149 million km2) is safe under every figure, but the explanation's '160 million' is not. Restate to what all sources agree on, for example 'more than 150 million km2' or 'about 165 million km2 counting its marginal seas'. This rests on my own knowledge of the two conventions; the other check or the editor should confirm the range with a Tier A or B result before choosing the wording."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "cut",
+      "reason": "A revise and B revise: both checks leave c3 ('more than 160 million km²') uncertain, because published areas for the Pacific depend on the definition. With no passing check a tiebreak cannot settle it (§9.9 rule 2), and the fix changes a claim, which needs two fresh checks. High-risk c1 also rests on knowledge alone. Redraft under a new id with a figure every source agrees on.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which ocean covers more of Earth's surface than all the land put together?",
+  "answer": "Pacific Ocean",
+  "wrong": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.85,
+    "spread": 0.249,
+    "estimator": "v0"
+  }
+}

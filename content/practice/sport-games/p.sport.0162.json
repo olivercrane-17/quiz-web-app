@@ -1,0 +1,275 @@
+{
+  "id": "p.sport.0162",
+  "status": "active",
+  "category": "sport",
+  "tags": ["world-cup", "football", "asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "It was also the first World Cup held in Asia. The opening match was played in Seoul, and Brazil beat Germany 2-0 in the final in Yokohama.",
+  "learnMore": "2002 FIFA World Cup",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "South Korea and Japan co-hosted the 2002 men's World Cup."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "ref": "stem",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The 2002 men's World Cup was the first World Cup with two host nations."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "No matches of the 2002 World Cup were played in China, Thailand or Malaysia."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The 2002 World Cup was the first held in Asia."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The opening match of the 2002 World Cup was played in Seoul, and Brazil beat Germany 2-0 in the final in Yokohama."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup, file 2002/worldcup.json: the grounds are ten South Korean and ten Japanese stadiums (c1, c3); the earliest match, 31 May 2002, France v Senegal, is at 'Seoul World Cup Stadium, Seoul', and the Final, 30 June 2002, is Germany 0-2 Brazil at 'International Stadium Yokohama, Yokohama' (c5); no earlier tournament has a ground in Asia (c4). That earlier tournaments each had one host (c2) is consistent with the grounds but needs web evidence for the host nations. rivalTest: China is the natural guess for a big Asian football market; Thailand and Malaysia are other Asian countries with strong football followings. None hosted a match, so the key holds. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 27 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "18cff26fbb91e701deee9be435456da97d5fbba85b96b9b413078c0184f53b93",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "South Korea",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2002/worldcup.json",
+              "locator": "distinct grounds",
+              "excerpt": "Seoul World Cup Stadium, Seoul | Munsu Cup Stadium, Ulsan | Asiad Main Stadium, Busan | Daegu World Cup Stadium, Daegu | Incheon Munhak Stadium, Incheon | Suwon World Cup Stadium, Suwon | Gwangju World Cup Stadium, Gwangju | Jeonju World Cup Stadium, Jeonju | Daejeon World Cup Stadium, Daejeon | Jeju World Cup Stadium, Jeju | Niigata Stadium, Niigata | Sapporo Dome, Sapporo | Kashima Soccer Stadium, Ibaraki | Saitama Stadium, Saitama | Shizuoka Stadium, Shizuoka | International Stadium Yokohama, Yokohama | Kobe Wing Stadium, Kobe | Miyagi Stadium, Miyagi | Nagai Stadium, Osaka | Ōita Stadium, Ōita",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Ten grounds in South Korean cities and ten in Japanese cities."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 2002/worldcup.json",
+              "locator": "ground cities per tournament",
+              "excerpt": "1930: Montevideo; 1934: Bologna/Turin/Florence; 1938: Paris/Reims/Toulouse; 1950: Rio de Janeiro/Belo Horizonte/São Paulo; 1954: Geneva/Lausanne/Bern; 1958: Malmö/Halmstad/Helsingborg; 1962: Arica/Santiago/Viña del Mar; 1966: London/Sheffield/Birmingham; 1970: Mexico City/Puebla/Toluca; 1974: West Berlin/Hamburg/Frankfurt; 1978: Buenos Aires/Mar del Plata/Rosario; 1982: Vigo/A Coruña/Gijón; 1986: Mexico City/Puebla/Toluca; 1990: Rome/Florence/Milan; 1994: Pontiac/Pasadena/Stanford; 1998: Saint-Denis/Montpellier/Bordeaux; 2002: Seoul/Ulsan/Busan/Daegu/Incheon/Suwon/Gwangju/Jeonju/Daejeon/Jeju/Niigata/Sapporo/Ibaraki/Saitama/Shizuoka/Yokohama/Kobe/Miyagi/Osaka/Ōita",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Every tournament from 1930 to 1998 was played in one country; 2002 is the first spread over two (South Korea and Japan). Mapping cities to countries is general knowledge."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2002/worldcup.json",
+              "locator": "distinct grounds",
+              "excerpt": "Seoul World Cup Stadium, Seoul | Munsu Cup Stadium, Ulsan | Asiad Main Stadium, Busan | Daegu World Cup Stadium, Daegu | Incheon Munhak Stadium, Incheon | Suwon World Cup Stadium, Suwon | Gwangju World Cup Stadium, Gwangju | Jeonju World Cup Stadium, Jeonju | Daejeon World Cup Stadium, Daejeon | Jeju World Cup Stadium, Jeju | Niigata Stadium, Niigata | Sapporo Dome, Sapporo | Kashima Soccer Stadium, Ibaraki | Saitama Stadium, Saitama | Shizuoka Stadium, Shizuoka | International Stadium Yokohama, Yokohama | Kobe Wing Stadium, Kobe | Miyagi Stadium, Miyagi | Nagai Stadium, Osaka | Ōita Stadium, Ōita",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "All 20 grounds are in South Korea or Japan; none is in China, Thailand or Malaysia."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 2002/worldcup.json",
+              "locator": "ground cities per tournament",
+              "excerpt": "1930: Montevideo; 1934: Bologna/Turin/Florence; 1938: Paris/Reims/Toulouse; 1950: Rio de Janeiro/Belo Horizonte/São Paulo; 1954: Geneva/Lausanne/Bern; 1958: Malmö/Halmstad/Helsingborg; 1962: Arica/Santiago/Viña del Mar; 1966: London/Sheffield/Birmingham; 1970: Mexico City/Puebla/Toluca; 1974: West Berlin/Hamburg/Frankfurt; 1978: Buenos Aires/Mar del Plata/Rosario; 1982: Vigo/A Coruña/Gijón; 1986: Mexico City/Puebla/Toluca; 1990: Rome/Florence/Milan; 1994: Pontiac/Pasadena/Stanford; 1998: Saint-Denis/Montpellier/Bordeaux",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "No ground before 2002 is in Asia."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2002/worldcup.json",
+              "locator": "earliest match; matches[round=Final]",
+              "excerpt": "{\"round\":\"Matchday 1\",\"date\":\"2002-05-31\",\"team1\":\"France\",\"team2\":\"Senegal\",\"ground\":\"Seoul World Cup Stadium, Seoul\"} | {\"round\":\"Final\",\"date\":\"2002-06-30\",\"team1\":\"Germany\",\"team2\":\"Brazil\",\"score\":[0,2],\"ground\":\"International Stadium Yokohama, Yokohama\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9562406a4372457682b85bb855e0c4ed13a9d84ba7b58a03b7154e229305a884",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "South Korea",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2002/worldcup.json",
+              "locator": "grounds",
+              "excerpt": "Grounds include Seoul, Ulsan, Busan, Daegu, Incheon, Suwon, Gwangju, Jeonju, Daejeon, Jeju (South Korea) and Niigata, Sapporo, Ibaraki, Saitama, Shizuoka, Yokohama, Kobe, Miyagi, Osaka, Oita (Japan).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 2002 World Cup was the first with two host nations; every earlier edition had one.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2002/worldcup.json",
+              "locator": "grounds",
+              "excerpt": "All 20 grounds in the file are in the South Korean and Japanese cities listed under c1; none is in China, Thailand or Malaysia.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 2002 World Cup was the first held in Asia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2002/worldcup.json",
+              "locator": "opening match and Final",
+              "excerpt": "{\"round\":\"Matchday 1\",\"date\":\"2002-05-31\",\"team1\":\"France\",\"team2\":\"Senegal\",\"score\":[0,1],...,\"ground\":\"Seoul World Cup Stadium, Seoul\"}; {\"round\":\"Final\",\"date\":\"2002-06-30\",\"team1\":\"Germany\",\"team2\":\"Brazil\",\"score\":[0,2],\"ground\":\"International Stadium Yokohama, Yokohama\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Both checks pass; high-risk c1 to c5 have worldcup dataset evidence in a confirming check (c2 and c4 in A). The dedupe flag was answered related_ok after a local check: the near item states a different fact.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which country co-hosted the 2002 men's World Cup with Japan, the first World Cup with two hosts?",
+  "answer": "South Korea",
+  "wrong": ["China", "Thailand", "Malaysia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.85,
+    "spread": 0.447,
+    "estimator": "v0"
+  }
+}

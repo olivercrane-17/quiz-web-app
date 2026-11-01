@@ -1,0 +1,199 @@
+{
+  "id": "p.food.0265",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-history", "california", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "They were popularized in California in the early 1900s, probably adapted from a Japanese cracker, tsujiura senbei. In China they are almost unknown.",
+  "learnMore": "Fortune cookie",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Fortune cookies did not originate in China."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Fortune cookies were popularized in California in the early 20th century."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Fortune cookies are probably adapted from a Japanese cracker called tsujiura senbei."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Fortune cookies are rarely eaten in China."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed; risk is at or above the C26 floor (high: c1, c2). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Which Californian bakery made the first one is disputed, so the key claim says only that the cookies did not originate in China, which every account agrees on. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: fortune cookies are served in Chinese restaurants across the world outside China. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 23 words. Myths: screened against content/reference/myths.json; c1 and c4 resemble fortune-cookies-chinese, by design: the item debunks that myth, so C25 warns and the checkers decide; both checks will need to confirm c1 with external evidence in one of them. Mystery and encore checks: not applicable to a practice item. Seed: 3: a common belief, though many players have heard otherwise. Doubts: c3 says 'probably', because the Japanese link rests on researchers' work on old bakery records.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2d5a5e0f45c75dba63e593d63ea2bc4efa07ec8588f496c3a25405739b2fcd81",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fortune cookies did not originate in China; they come from Japanese-American bakeries in California.",
+              "confidence": "certain"
+            },
+            "note": "Myth hit (fortune-cookies-chinese), confirmed against the myth from knowledge only, so the myths screen still needs dataset or web evidence in one check. High-risk (first): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fortune cookies were popularized in California, in San Francisco and Los Angeles, in the early 1900s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "They probably derive from tsujiura senbei, a Japanese fortune cracker.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fortune cookies are rare in China.",
+              "confidence": "certain"
+            },
+            "note": "Myth hit (fortune-cookies-chinese) on a standard claim: the myths screen still needs dataset or web evidence for it in one check."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "a66a8244de976e75ca4576bc5899b6360b22f7ddbd5e4b6f9f519af5a56ad762",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fortune cookies did not originate in China; they came from Japanese-American bakers in California.",
+              "confidence": "certain"
+            },
+            "note": "Debunks a listed myth; needs external evidence in a confirming check. High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fortune cookies were being made and popularised in California in the early 1900s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "They are probably adapted from the Japanese tsujiura senbei cracker.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fortune cookies are rarely eaten in China.",
+              "confidence": "certain"
+            },
+            "note": "This claim also matches the fortune-cookie myth entry; it debunks it."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, first) and c2 (explanation, date) rest on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7). The myths screen fails too: c1 and c4 match a known myth and carry no dataset or web evidence (§9.9 rule 5).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Fortune cookies were invented in China.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.368,
+    "estimator": "v0"
+  }
+}
