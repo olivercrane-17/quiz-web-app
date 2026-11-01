@@ -150,7 +150,7 @@ export function StartProblemCard({
         {words.practice ? (
           <Link
             href={PRACTICE_HREF as Route}
-            // Rarely followed, and PRA-1's route until the Wave 1 merge: no prefetch.
+            // Rarely followed: no prefetch.
             prefetch={false}
             className={buttonClasses({ variant: "text" })}
           >

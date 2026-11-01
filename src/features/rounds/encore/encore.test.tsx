@@ -269,7 +269,7 @@ describe("EncoreRound, the result", () => {
     await user.type(numberField(), "1200{Enter}");
     const heading = screen.getByRole("heading", { level: 2 });
     expect(heading).toHaveFocus();
-    expect(heading).toHaveAttribute("data-qz-focus", "reveal_heading");
+    expect(heading).toHaveAttribute("data-focus-target", "reveal_heading");
     fireEvent.keyDown(screen.getByRole("link", { name: /^Learn more/ }), {
       key: "Enter",
     });

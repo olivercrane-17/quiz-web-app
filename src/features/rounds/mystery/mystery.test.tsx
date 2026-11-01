@@ -98,9 +98,8 @@ describe("MysteryRound, guessing", () => {
       name: "The answer is A person",
     });
     expect(heading).toHaveFocus();
+    // The Daily's round area finds its focus targets by this attribute.
     expect(heading).toHaveAttribute("data-focus-target", "round_heading");
-    // DLY-1's round area finds its focus targets by this attribute.
-    expect(heading).toHaveAttribute("data-qz-focus", "round_heading");
     expect(screen.getByText("History")).toBeInTheDocument();
     expect(screen.getByText("Mystery 2 of 3")).toBeInTheDocument();
     expect(screen.getByText("Medium")).toBeInTheDocument();

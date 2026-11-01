@@ -403,13 +403,13 @@ describe("playing", () => {
       round: { open: { clue: 2 } },
     });
     expect(h.announced.at(-1)).toEqual({
-      message: "Not Liesl Varo. Clue 2, now worth 3: Echo clue 2",
+      message: "Not Liesl Varo. Clue 2 is in. Now worth 3. Echo clue 2",
       politeness: "polite",
     });
     await act(h, guess(ODILE));
     expect(h.state().view).toMatchObject({ phase: "revealed", score: 3 });
     expect(h.announced.at(-1)?.message).toBe(
-      "Knew it. Echo answer, solved on clue 2. 3 points.",
+      "Knew it. Echo answer. Solved on clue 2, 3 points.",
     );
     expect(h.state().focus).toMatchObject({ target: "reveal_heading" });
 
@@ -426,7 +426,7 @@ describe("playing", () => {
       score: 11,
     });
     expect(h.announced.at(-1)?.message).toBe(
-      "Bullseye. 4% off. The answer was 100.",
+      "Bullseye. 4% off. You said 104. The answer was 100.",
     );
     expect(h.finished).not.toHaveBeenCalled();
 

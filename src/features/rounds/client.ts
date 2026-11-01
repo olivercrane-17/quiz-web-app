@@ -10,7 +10,17 @@
  * only that module (unused exports are dropped from client chunks); confirm
  * the split with check:bundle once PRA-1 and MYS-1 merge. The family files
  * stay owned by PRA-1 and MYS-1.
+ *
+ * The answer-list store comes from here too: `useAnswerList(type)` hands a
+ * Mystery its `MysteryAnswerList`, re-rendering as the list loads, and
+ * `preloadAnswerLists(types)` warms the lists a run needs at its start
+ * (PRD §3.1.3).
  */
+export {
+  preloadAnswerLists,
+  useAnswerList,
+  type MysteryAnswerList,
+} from "./answer-list";
 export { ChoiceRound } from "./choice";
 export { EncoreRound } from "./encore";
 export { MysteryRound } from "./mystery";

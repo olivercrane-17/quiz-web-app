@@ -30,17 +30,21 @@
  * - **Waits.** While a call is in flight the controller ticks the run every
  *   500 ms, so "Checking…" appears after 1.5 s (PRD §3.0.2); a slow
  *   begin_round or finish raises `slowOpen` at 1.5 s for the same copy.
- * - **Announcements.** The plugin's announcement, worded by `labels.ts`;
- *   a withdrawn round's own words instead of a verdict; and none for choice
- *   verdicts, which ChoiceRound speaks itself in step with its reveal.
+ * - **Announcements.** The plugin's announcement in the round's own words
+ *   (`mysteryAnnouncementText`, `encoreAnnouncementText`), so every
+ *   controller that runs Mysteries and Encores speaks alike, with
+ *   `labels.ts` for anything a round leaves unworded; a withdrawn round's
+ *   own words instead of a verdict; and none for choice verdicts, which
+ *   ChoiceRound speaks itself in step with its reveal.
  */
 import {
   backendError,
   type BrowserContextInfo,
   type GameBackend,
 } from "@/backend";
+import { TUNABLES } from "@/config/tunables";
 import type { Clock } from "@/engine/clock";
-import type { PluginRegistry } from "@/engine/rounds";
+import type { Announcement, PluginRegistry } from "@/engine/rounds";
 import {
   CHECKING_AFTER_MS,
   FALLBACK_AFTER_MS,
@@ -72,6 +76,10 @@ import type {
   RunConfig,
   TimeZone,
 } from "@/engine/types";
+import {
+  encoreAnnouncementText,
+  mysteryAnnouncementText,
+} from "@/features/rounds";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
 import { announcementText } from "./labels";
@@ -197,6 +205,21 @@ const SPOKEN_BY_ROUND: ReadonlySet<string> = new Set([
   "correct",
   "wrong_choice",
 ]);
+
+/**
+ * A verdict in the words of the round that gave it (MYS-1's copy, the words
+ * every controller that runs Mysteries and Encores uses); `labels.ts` words
+ * anything the rounds leave to the screen.
+ */
+function verdictText(announcement: Announcement): string {
+  return (
+    mysteryAnnouncementText(announcement, {
+      optionsFromClue: TUNABLES.daily.optionsFromClue,
+    }) ??
+    encoreAnnouncementText(announcement) ??
+    announcementText(announcement)
+  );
+}
 
 /** Begin_round or finish failed with an error no retry mends (stale resyncs by itself). */
 function failedForGood(run: RunState): boolean {
@@ -515,10 +538,7 @@ export function createDailyController(
           return;
         }
         if (SPOKEN_BY_ROUND.has(command.announcement.kind)) return;
-        deps.announce(
-          announcementText(command.announcement),
-          command.politeness,
-        );
+        deps.announce(verdictText(command.announcement), command.politeness);
         return;
       }
       case "focus":

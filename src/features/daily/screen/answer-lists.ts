@@ -4,23 +4,24 @@
  * finishes loading: MYS-1's handles are immutable snapshots, and a list
  * that was still loading when the round mounted is replaced, not updated.
  *
- * MYS-1 builds the handle store and its hook (`useAnswerList(type)` and
- * `preloadAnswerLists(types)` in src/features/rounds/answer-list.ts), but
- * neither is exported through `@/features/rounds/client` yet, and a feature
- * may import another feature only through its barrels (§2.2). The Wave 1
- * merge exports both from that barrel; this hook then becomes
- * `return useAnswerList(meta?.answerType ?? null);`, and `onAttempt` in
- * model/browser.ts calls `preloadAnswerLists`. Nothing else in the Daily
- * changes.
+ * The handle is MYS-1's `MysteryAnswerList` (`answerListFor(type)` behind
+ * `useAnswerList`), so the guess field gets exact Enter, the announced
+ * match totals and retry on top of the plain contract. `onAttempt` in
+ * model/browser.ts warms the same store at the Daily's start with
+ * `preloadAnswerLists`, in parallel with clue 1 (PRD §3.1.3).
  *
- * Until then a Mystery gets no list, and stays finishable through Next clue
- * and the four options on its last clue (PRD §4.1.3 item 8).
+ * A list that fails to load reads `failed`, and the Mystery stays finishable
+ * through Next clue and the four options on its last clue (PRD §4.1.3
+ * item 8).
  */
 import type { RoundMeta } from "@/engine/types";
-import type { AnswerListHandle } from "@/features/rounds";
+import {
+  useAnswerList,
+  type MysteryAnswerList,
+} from "@/features/rounds/client";
 
 export function useRoundAnswerList(
-  _meta: RoundMeta | null,
-): AnswerListHandle | null {
-  return null;
+  meta: RoundMeta | null,
+): MysteryAnswerList | null {
+  return useAnswerList(meta?.answerType ?? null);
 }

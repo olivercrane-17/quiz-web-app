@@ -4,9 +4,8 @@
  * - `focusTargetProps` marks the element where one of the run machine's
  *   focus commands lands (ARCHITECTURE §4.5: `round_heading`,
  *   `clue_heading`, `reveal_heading`). The screen that runs the round finds
- *   it by attribute. DLY-1's round area queries `data-qz-focus`, and this
- *   lane named it `data-focus-target`, so both are set until the merge
- *   settles on one.
+ *   it by its `data-focus-target` attribute, as the Daily's round area
+ *   does.
  * - `continueOnEnter` makes Enter activate Continue on a reveal (PRD
  *   §3.0.3), unless the key lands on a control that has its own Enter.
  * - `keepFieldFocus` cancels the pointer-down blur, so a press on a button
@@ -18,12 +17,9 @@ import type { KeyboardEvent, MouseEvent } from "react";
 export type FocusTarget = "round_heading" | "clue_heading" | "reveal_heading";
 
 export function focusTargetProps(target: FocusTarget | null): {
-  "data-qz-focus"?: FocusTarget;
   "data-focus-target"?: FocusTarget;
 } {
-  return target === null
-    ? {}
-    : { "data-qz-focus": target, "data-focus-target": target };
+  return target === null ? {} : { "data-focus-target": target };
 }
 
 /** What has its own Enter: links, buttons and fields. */

@@ -5,7 +5,6 @@
  * (§7.3). Client code only; the controller itself stays framework-free.
  */
 import { getBackend } from "@/backend";
-import { loadAnswerList } from "@/content/loaders/answer-lists";
 import { PLUGINS } from "@/engine/rounds";
 import {
   parseIdempotencyKey,
@@ -15,6 +14,7 @@ import {
 } from "@/engine/types";
 import { track } from "@/features/analytics/track";
 import { bootClient } from "@/features/identity";
+import { preloadAnswerLists } from "@/features/rounds/client";
 import { systemClock } from "@/platform/clock";
 import { uuidV4 } from "@/platform/identity/local";
 import { announce } from "@/ui/announce";
@@ -94,15 +94,10 @@ export function browserDeps(): DailyControllerDeps {
     },
     onAttempt(snapshot) {
       // The client preloads the answer lists the Daily needs while clue 1
-      // shows (PRD §3.1.3), so suggestions are ready at the first keystroke.
-      // The Wave 1 merge warms MYS-1's handle store itself instead, with
-      // `preloadAnswerLists(types)` (see screen/answer-lists.ts).
-      const types = new Set(
-        snapshot.rounds.flatMap((meta) =>
-          meta.answerType === null ? [] : [meta.answerType],
-        ),
-      );
-      for (const type of types) void loadAnswerList(type);
+      // shows (PRD §3.1.3), so suggestions are ready at the first keystroke:
+      // MYS-1's handle store, the one each Mystery reads through
+      // `useAnswerList` (see screen/answer-lists.ts).
+      preloadAnswerLists(snapshot.rounds.map((meta) => meta.answerType));
     },
   };
 }
