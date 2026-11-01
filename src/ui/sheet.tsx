@@ -1,0 +1,262 @@
+"use client";
+
+/**
+ * Sheets and dialogs (DESIGN §6.10).
+ *
+ * - **Modal** (the default): the report sheet, the age band, the nickname
+ *   question, confirms, the streak sheet. A native `<dialog>` opened with
+ *   `showModal()`, so the page behind is inert, focus stays inside and the
+ *   browser draws the scrim. A bottom sheet on phones, centred (max 480 px)
+ *   from 768 px. Escape, the scrim and the close button call `onClose`;
+ *   without `onClose` the sheet can only be left through its own actions.
+ *   Focus moves to `initialFocusRef` (else the first control) on open and
+ *   back to the opener on close.
+ * - **Inline** (`modal={false}`): the explanation sheet of every reveal. It
+ *   sits in space the layout reserved, so nothing above it moves, and stays
+ *   until the player taps Continue. It is a labelled region; the round
+ *   decides where focus goes (usually `titleRef`, the reveal heading).
+ *
+ * The parent owns `open`. Children render only while open.
+ */
+import {
+  useEffect,
+  useId,
+  useRef,
+  type ReactNode,
+  type Ref,
+  type RefObject,
+} from "react";
+
+import { UI_COPY } from "./copy";
+import { cx } from "./cx";
+import { CrossIcon } from "./icons";
+
+export interface SheetProps {
+  open: boolean;
+  /** False for the explanation sheet. */
+  modal?: boolean;
+  title: ReactNode;
+  /** Keep the title for screen readers only. */
+  hideTitle?: boolean;
+  titleAs?: "h2" | "h3";
+  /** The title heading, focusable (tabIndex -1), for focus moves such as AC-DLY-18. */
+  titleRef?: Ref<HTMLHeadingElement>;
+  description?: ReactNode;
+  /** Modal only: Escape, the scrim and the close button. Omit for a sheet that must be answered. */
+  onClose?: () => void;
+  closeLabel?: string;
+  /** What takes focus when a modal sheet opens; the first control otherwise. */
+  initialFocusRef?: RefObject<HTMLElement | null>;
+  /** Short phones (under 740 px tall): the compact explanation sheet. */
+  compact?: boolean;
+  /** The bottom row: primary first on phones. */
+  actions?: ReactNode;
+  children?: ReactNode;
+  className?: string;
+  id?: string;
+}
+
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function SheetBody({
+  title,
+  hideTitle,
+  titleAs: Heading = "h2",
+  titleRef,
+  titleId,
+  description,
+  descriptionId,
+  actions,
+  children,
+  compact,
+  closeButton,
+}: Pick<
+  SheetProps,
+  | "title"
+  | "hideTitle"
+  | "titleAs"
+  | "titleRef"
+  | "description"
+  | "actions"
+  | "children"
+  | "compact"
+> & {
+  titleId: string;
+  descriptionId: string;
+  closeButton: ReactNode;
+}) {
+  return (
+    <div className={cx("flex flex-col", compact ? "gap-2 p-4" : "gap-4 p-5")}>
+      <span
+        aria-hidden="true"
+        className="mx-auto h-1 w-9 rounded-full bg-foreground/25 md:hidden"
+      />
+      <div className="flex items-start justify-between gap-3">
+        <Heading
+          ref={titleRef}
+          id={titleId}
+          tabIndex={-1}
+          className={cx(
+            "text-xl font-bold outline-none",
+            hideTitle && "sr-only",
+          )}
+        >
+          {title}
+        </Heading>
+        {closeButton}
+      </div>
+      {description === undefined ? null : (
+        <div id={descriptionId} className="text-base">
+          {description}
+        </div>
+      )}
+      {children}
+      {actions === undefined ? null : (
+        <div className="flex flex-col gap-3 md:flex-row-reverse md:justify-start">
+          {actions}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ModalSheet({
+  open,
+  onClose,
+  closeLabel = UI_COPY.close,
+  initialFocusRef,
+  className,
+  id,
+  description,
+  ...body
+}: SheetProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
+  const descriptionId = useId();
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (dialog === null || !open) return;
+    const opener =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    if (!dialog.hasAttribute("open")) {
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else dialog.setAttribute("open", "");
+    }
+    const target =
+      initialFocusRef?.current ??
+      dialog.querySelector<HTMLElement>(FOCUSABLE) ??
+      dialog;
+    target.focus();
+    return () => {
+      if (dialog.hasAttribute("open")) {
+        if (typeof dialog.close === "function") dialog.close();
+        else dialog.removeAttribute("open");
+      }
+      if (opener?.isConnected) opener.focus();
+    };
+  }, [open, initialFocusRef]);
+
+  const closeButton =
+    onClose === undefined ? null : (
+      <button
+        type="button"
+        aria-label={closeLabel}
+        onClick={onClose}
+        className="-m-2 inline-grid size-11 shrink-0 place-items-center rounded-xl outline-offset-[3px] hover:bg-foreground/5 focus-visible:outline-[3px] focus-visible:outline-foreground"
+      >
+        <CrossIcon />
+      </button>
+    );
+
+  return (
+    <dialog
+      ref={dialogRef}
+      id={id}
+      aria-labelledby={titleId}
+      aria-describedby={description === undefined ? undefined : descriptionId}
+      data-sheet="modal"
+      // Escape: let the browser close it, then report through onClose (below).
+      // A sheet without onClose must be answered, so Escape does nothing.
+      onCancel={(event) => {
+        if (onClose === undefined) event.preventDefault();
+      }}
+      // Closed by the browser (Escape) while the parent still has it open.
+      onClose={() => {
+        if (open) onClose?.();
+      }}
+      // A click on the scrim lands on the dialog itself, outside the body.
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose?.();
+      }}
+      // Browsers without showModal (and test DOMs) get Escape by hand.
+      onKeyDown={(event) => {
+        if (
+          event.key === "Escape" &&
+          typeof dialogRef.current?.showModal !== "function"
+        ) {
+          onClose?.();
+        }
+      }}
+      className={cx(
+        "mx-0 mt-auto mb-0 max-h-[85dvh] w-full max-w-none overflow-y-auto rounded-t-[28px] border-0 bg-background p-0 text-foreground shadow-[0_-8px_24px_0] shadow-foreground/15 backdrop:bg-foreground/40 md:m-auto md:w-[min(480px,calc(100%-2rem))] md:rounded-[28px]",
+        className,
+      )}
+    >
+      {open ? (
+        <SheetBody
+          {...body}
+          description={description}
+          titleId={titleId}
+          descriptionId={descriptionId}
+          closeButton={closeButton}
+        />
+      ) : null}
+    </dialog>
+  );
+}
+
+function InlineSheet({
+  open,
+  className,
+  id,
+  description,
+  initialFocusRef,
+  ...body
+}: SheetProps) {
+  const titleId = useId();
+  const descriptionId = useId();
+
+  useEffect(() => {
+    if (open) initialFocusRef?.current?.focus();
+  }, [open, initialFocusRef]);
+
+  if (!open) return null;
+  return (
+    <section
+      id={id}
+      aria-labelledby={titleId}
+      aria-describedby={description === undefined ? undefined : descriptionId}
+      data-sheet="inline"
+      className={cx(
+        "rounded-t-[28px] border border-foreground/25 bg-background text-foreground shadow-[0_-8px_24px_0] shadow-foreground/10",
+        className,
+      )}
+    >
+      <SheetBody
+        {...body}
+        description={description}
+        titleId={titleId}
+        descriptionId={descriptionId}
+        closeButton={null}
+      />
+    </section>
+  );
+}
+
+export function Sheet({ modal = true, ...props }: SheetProps) {
+  return modal ? <ModalSheet {...props} /> : <InlineSheet {...props} />;
+}

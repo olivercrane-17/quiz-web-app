@@ -1,0 +1,38 @@
+/**
+ * The `(host)` layout (ARCHITECTURE §2.1, DESIGN §10.4): the big screen.
+ * Designed at 1280 by 720 and scaled by one unit, `--u: min(1vw,
+ * 1.7778vh)`, so every size keeps its proportion from a laptop to a 4K TV,
+ * with everything 5% inside the edges for TVs that overscan. Under 1024 by
+ * 576 it shows a note instead of the host screen.
+ * `src/app/(host)/layout.tsx` re-exports it.
+ */
+import type { CSSProperties, ReactNode } from "react";
+
+import { IncidentBanner } from "@/features/incidents/banner";
+import { LiveRegions } from "@/ui/live-regions";
+
+import { SHELL_COPY } from "../copy";
+import { MAIN_ID } from "../landmarks";
+import { SkipLink } from "../skip-link";
+
+const SCALE = { "--u": "min(1vw, 1.7778vh)" } as CSSProperties;
+
+export default function HostLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex min-h-dvh flex-col" style={SCALE}>
+      <SkipLink />
+      <IncidentBanner />
+      <main
+        id={MAIN_ID}
+        tabIndex={-1}
+        className="flex flex-1 flex-col p-[5vmin] outline-none max-lg:hidden [@media(max-height:575px)]:hidden"
+      >
+        {children}
+      </main>
+      <p className="m-auto hidden max-w-md p-6 text-center text-lg font-semibold max-lg:block [@media(max-height:575px)]:block">
+        {SHELL_COPY.hostTooSmall}
+      </p>
+      <LiveRegions />
+    </div>
+  );
+}
