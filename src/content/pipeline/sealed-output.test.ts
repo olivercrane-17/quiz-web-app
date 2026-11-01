@@ -78,6 +78,8 @@ function expectNoJoin(output: string): void {
 }
 
 describe("sealed validation output", () => {
+  // Nine child processes run the content scripts: about 3 to 4.5 s alone,
+  // 7 to 8 s under shared-CPU load, past Vitest's 5 s default.
   it("never prints clues, answers, names, aliases or numbers", () => {
     const repo = tempDir("qz-sealed-out-");
     writeFileSync(join(repo, "package.json"), "{}\n");
@@ -249,5 +251,5 @@ describe("sealed validation output", () => {
     expect(node("dedupe", "--reveal").stdout).toMatch(
       /p\.geo\.0101 {2}m\.geo\.010\d|m\.geo\.010\d {2}p\.geo\.0101/,
     );
-  });
+  }, 30_000);
 });

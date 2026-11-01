@@ -4,11 +4,7 @@ import { describe, expect, it } from "vitest";
 import { createRng } from "../rng.ts";
 import { parseEntityId, type EntityId } from "../types/ids.ts";
 import { ROUND_FAMILY, ROUND_TYPES, type RoundMeta } from "../types/rounds.ts";
-import {
-  PLUGINS,
-  UnsupportedRoundTypeError,
-  pluginFor,
-} from "./index.ts";
+import { PLUGINS, UnsupportedRoundTypeError, pluginFor } from "./index.ts";
 import {
   createEchoRegistry,
   echoChoicePlugin,
