@@ -1,0 +1,218 @@
+{
+  "id": "p.film.0228",
+  "status": "active",
+  "category": "film",
+  "tags": ["blockbusters", "comedy", "1980s"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The outside shots show a real New York firehouse, Hook and Ladder Company 8 in Tribeca. The film's first ghost appears in the New York Public Library.",
+  "learnMore": "Ghostbusters",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In Ghostbusters (1984), the team's headquarters is a converted fire station."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Ghostbusters do not base themselves in a library, a hotel or a police station; the library and a hotel are places where they meet ghosts."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Exterior shots of the headquarters show the firehouse of Hook and Ladder Company 8 in Tribeca, New York."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The first ghost in Ghostbusters appears in the New York Public Library."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: The library and the hotel are the traps, since both are places in the film where the team meets ghosts. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a worldwide hit; the options are everyday buildings. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 27 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ef369ccf31f9317f6d6c3b8e334d049481d673c2756e95278711aebc5d03d329",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "A fire station",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Ghostbusters set up their base in a disused firehouse.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "They meet ghosts in the New York Public Library and the Sedgewick Hotel but base themselves in neither, nor in a police station.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The exterior is the Hook and Ladder Company 8 firehouse on North Moore Street in Tribeca.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The film opens with a librarian frightened by a ghost in the New York Public Library, its first ghost.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f89cec3667e17dd483f699a3ff0bc24343bf47da0a5577ec8ece195ab41c9fbf",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "A fire station",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Ghostbusters' headquarters is a converted old firehouse.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "They are not based in a library, a hotel or a police station; the library and a hotel are places where they meet ghosts.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: library and hotel are real settings in the film, so they lure, but neither is the base."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The exterior shots of the headquarters are of Hook and Ladder Company 8 in Tribeca, New York.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The film's first ghost appears in the New York Public Library.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1, c3 and c4 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.art.0224",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In Ghostbusters (1984), what kind of building do the ghost-catchers use as their headquarters?",
+  "answer": "A fire station",
+  "wrong": ["A library", "A hotel", "A police station"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.397,
+    "estimator": "v0"
+  }
+}

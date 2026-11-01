@@ -1,0 +1,191 @@
+{
+  "id": "p.geo.0159",
+  "status": "active",
+  "category": "geo",
+  "tags": ["borders", "rivers", "asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The border follows the lower Tumen River to the sea. China, North Korea and Russia all meet close to the river's mouth.",
+  "learnMore": "Tumen River",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "North Korea and Russia share a short land border."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The border between North Korea and Russia follows the lower Tumen River to the sea."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The borders of China, North Korea and Russia meet near the mouth of the Tumen River."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is high under the C26 floor (counterintuitive; schema has no 'counterintuitive' riskReason, so checker_doubt); the rest are standard. I left out the border's length so no number needs a source. Datasets: mledoze-countries cca3=PRK borders CHN, KOR, RUS, and RUS borders include PRK (c1). Rival test: argued for false: most maps show China wrapping round North Korea, so the Russian border is easy to miss; but it is a recognized land border along the Tumen. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a world-map surprise. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 22 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none. Reworded from 'shares a land border with Russia' so it no longer reads like p.geo.0108.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "babfeae230ec23302d6c70b775cec55db073cbe38dd4d3b2fd9995da0a437b53",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "ADMIN=North Korea and ADMIN=Russia, shared vertices",
+              "excerpt": "shared vertices include [130.64, 42.395024] and [130.780004, 42.220008]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The two polygons share a boundary about 23 km long at this scale, so a short land border; mledoze-countries also lists RUS among PRK's borders. The usual figure, about 17 to 18 km, is from knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The whole North Korea-Russia border follows the lower Tumen River down to the sea.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "China, North Korea and Russia meet on the Tumen a short way upstream of its mouth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cc255795f923c5be0b39d5579c261b3efe7dcca17661fca167651a011835f780",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=PRK, cca3=RUS",
+              "excerpt": "PRK (North Korea): borders [\"CHN\",\"KOR\",\"RUS\"] | RUS (Russia): borders [\"AZE\",\"BLR\",\"CHN\",\"EST\",\"FIN\",\"GEO\",\"KAZ\",\"PRK\",\"LVA\",\"LTU\",\"MNG\",\"NOR\",\"POL\",\"UKR\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Both lists contain the other. 'Short' (about 17 km) is knowledge, certain. The writer labelled the claim checker_doubt, so the other check should add a web result."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The North Korea-Russia border follows the lower Tumen River to the sea.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The China, North Korea and Russia borders meet near the mouth of the Tumen River.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 carry natural-earth and mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0108",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "North Korea and Russia are neighbours, joined by a short land border.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.264,
+    "estimator": "v0"
+  }
+}

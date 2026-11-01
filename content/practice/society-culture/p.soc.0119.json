@@ -1,0 +1,247 @@
+{
+  "id": "p.soc.0119",
+  "status": "active",
+  "category": "soc",
+  "tags": ["festivals", "islam", "ramadan"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Fitr means 'breaking the fast'. The other major Eid, Eid al-Adha, falls about ten weeks later, during the Hajj season, and recalls Abraham's willingness to sacrifice his son.",
+  "learnMore": "Eid al-Fitr",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Eid al-Fitr marks the end of Ramadan."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Eid al-Adha, Mawlid and Ashura do not mark the end of Ramadan."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "'Fitr' means breaking the fast."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Eid al-Adha falls about ten weeks after Eid al-Fitr, during the Hajj."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Eid al-Adha commemorates Abraham's willingness to sacrifice his son."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers festivals. c4 can be checked by counting: 1 Shawwal to 10 Dhu al-Hijjah is about 69 or 70 days. rivalTest: Eid al-Adha is the planted confusion; Mawlid (the Prophet's birthday) and Ashura are other Islamic observances. Argued against the key: Eid al-Fitr is held on 1 Shawwal, the day after Ramadan ends. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: known to Muslims everywhere and widely reported. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 2. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e79866d39163444fab36fc617120e33f7ffc11c4a6172d397bcd73c8cced8a16",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Eid al-Fitr",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Eid al-Fitr, on 1 Shawwal, ends the Ramadan fast.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Eid al-Adha (10 Dhu al-Hijjah), Mawlid (the Prophet's birthday) and Ashura (10 Muharram) do not end Ramadan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Arabic fitr means breaking the fast, so Eid al-Fitr is the festival of breaking the fast.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Eid al-Adha falls on 10 Dhu al-Hijjah, during the Hajj, about 68 to 70 days (around ten weeks) after 1 Shawwal.",
+              "confidence": "certain"
+            },
+            "note": "Arithmetic checked: Shawwal and Dhu al-Qadah have 29 or 30 days each, plus 9 days to 10 Dhu al-Hijjah, giving 67 to 69 days after 1 Shawwal. High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Eid al-Adha commemorates Abraham's (Ibrahim's) willingness to sacrifice his son.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8674bbef557470dcea2064f1831fba3c19faa689f9f38b0d5feadf76b3b50e75",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Eid al-Fitr",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Eid al-Fitr marks the end of Ramadan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Eid al-Adha, Mawlid and Ashura are other observances, not the end of Ramadan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fitr means breaking the fast; Eid al-Fitr is the festival of breaking the fast.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Eid al-Adha (10 Dhu al-Hijjah) falls about ten weeks after Eid al-Fitr (1 Shawwal), during the Hajj.",
+              "confidence": "certain"
+            },
+            "note": "Lunar months of 29 or 30 days put the gap at 67 to 69 days, 9.6 to 9.9 weeks. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Eid al-Adha commemorates Abraham's willingness to sacrifice his son.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, etymology) and c4 (explanation, number) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence, or with an explanation fact that is standard risk or dataset-backed.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.soc.0109",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which festival marks the end of Ramadan, the Muslim month of fasting?",
+  "answer": "Eid al-Fitr",
+  "wrong": ["Eid al-Adha", "Mawlid", "Ashura"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.341,
+    "estimator": "v0"
+  }
+}

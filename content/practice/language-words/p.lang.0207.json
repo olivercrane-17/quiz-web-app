@@ -1,0 +1,208 @@
+{
+  "id": "p.lang.0207",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["borrowed-words", "latin", "phrases", "poetry"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Horace used it in an ode published around 23 BC. Carpe literally means pluck, as you would pluck ripe fruit, so the advice is to enjoy the day while it lasts.",
+  "learnMore": "Carpe diem",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "'Carpe diem', from Horace's Odes, means 'seize the day', literally 'pluck the day'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "'Remember death' (memento mori), 'know yourself' and 'love conquers all' are other sayings, not the meaning of carpe diem."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Horace's Odes 1.11, which contains 'carpe diem', was published around 23 BC."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The Latin verb carpere means to pluck or pick, as fruit or flowers are picked."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 4 high (quotation, date, etymology) and 0 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers Latin literature. rivalTest: Each distractor is a famous saying of the same kind: remember death is memento mori, know yourself the Delphic maxim, and love conquers all Virgil's omnia vincit amor. None translates carpe diem. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: the phrase is used worldwide, in films, tattoos and mottoes. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 31 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d3ca213dfdfb893ae9a98f7d790e788198e187c6a8117b708844c503600216c2",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Seize the day",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Carpe diem comes from Horace, Odes 1.11, and is translated seize the day; carpe literally means pluck.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Memento mori means remember death, know yourself renders the Delphic maxim, and love conquers all renders Virgil's omnia vincit amor; none of them translates carpe diem.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Horace published the first three books of the Odes, which include Ode 1.11, around 23 BC.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Latin carpere means to pluck or pick, as fruit or flowers are picked.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "style",
+            "severity": "note",
+            "note": "Option 'Love conquers all' is a statement, while the stem asks what the phrase urges you to do and the other three options are imperatives, so a test-wise player can drop it on grammar alone (§4 rule 1). An imperative distractor would pull harder."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9225a9d7afa90f13162f2cfc15e4bb068b85711ba05d799e7ad09c4147f4b44d",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Seize the day",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Carpe diem is from Horace's Odes and means seize the day, literally pluck the day.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Memento mori is remember you must die, nosce te ipsum is know yourself and omnia vincit amor is love conquers all; none is carpe diem.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Horace's Odes, books 1 to 3, appeared around 23 BC; carpe diem is in Odes 1.11.",
+              "confidence": "certain"
+            },
+            "note": "High-risk date: counts only with external evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Latin carpere means to pluck, pick or seize.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, quotation), c2 (distractor, quotation), c3 (explanation, date) and c4 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: A noted 'Love conquers all' is a statement while the other options are imperatives, so it can be dropped on grammar alone (§4 rule 1). Use an imperative distractor.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The Latin phrase 'carpe diem', from the poet Horace, urges you to do what?",
+  "answer": "Seize the day",
+  "wrong": ["Remember death", "Know yourself", "Love conquers all"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.9,
+    "spread": 0.473,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,246 @@
+{
+  "id": "p.food.0261",
+  "status": "active",
+  "category": "food",
+  "tags": ["bread", "food-science", "surprising-truths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Staling is mostly starch molecules recrystallizing, not bread drying out, and that happens fastest at fridge temperatures. Freezing stops it, and warming stale bread briefly reverses it.",
+  "learnMore": "Staling",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Bread stales faster at refrigerator temperatures than at room temperature."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Bread staling is caused mainly by starch retrogradation, the recrystallization of starch, rather than by drying out."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Starch retrogradation in bread is fastest at temperatures just above freezing, such as those in a fridge."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Freezing bread halts staling."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Briefly reheating stale bread reverses much of the staling."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed; risk is at or above the C26 floor (high: c1, c3). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Mould grows more slowly in a fridge, which is the best argument for 'false'; but mould is spoilage, not staling, and the statement is about staleness. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: bread is eaten everywhere and the chemistry does not change. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: most players believe the fridge keeps bread fresh. Doubts: c3 is high because it states a superlative; it is the standard food-science account.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "71e56e1eda3189d2cc1e86224bc3a5db172ee99ee9adfe93dc0ed180d50f86f3",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bread firms, or stales, faster at fridge temperatures than at room temperature.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt, set by the writer): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Staling is mainly starch retrogradation (amylopectin recrystallizing), not just drying out.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Retrogradation in bread runs fastest just above freezing, as in a fridge, and nearly stops once the bread is frozen.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (superlative): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Frozen bread, at about minus 18 °C, barely stales.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Reheating to about 60 °C melts the starch crystals and reverses much of the staling for a while.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d1634f97b810efcf78cad4c29e6ed88329e7917339a002b6e636b1947bfff53a",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Starch retrogradation, the main cause of staling, is fastest at refrigerator temperatures, so bread stales faster in the fridge than at room temperature.",
+              "confidence": "certain"
+            },
+            "note": "The writer marked this checker_doubt. Knowledge is certain; it is mould, not staling, that the fridge slows. High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Staling is mainly starch retrogradation rather than drying out.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Retrogradation in bread is fastest at temperatures just above freezing, as in a fridge.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Freezing effectively halts staling.",
+              "confidence": "certain"
+            },
+            "note": "'Halts' is the usual shorthand; below the glass transition molecular mobility is negligible."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Brief reheating reverses much of the staling.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, the writer's doubt) and c3 (explanation, superlative) rest on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7).",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.food.0115",
+      "score": 0.133,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Bread goes stale faster in a fridge than on a kitchen counter.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.237,
+    "estimator": "v0"
+  }
+}

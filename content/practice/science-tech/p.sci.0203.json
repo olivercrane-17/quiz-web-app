@@ -1,0 +1,249 @@
+{
+  "id": "p.sci.0203",
+  "status": "active",
+  "category": "sci",
+  "tags": ["space", "light", "sun"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The Sun is about 150 million km away, so its light takes about 8 minutes 20 seconds to arrive. We always see the Sun as it was a few minutes earlier.",
+  "learnMore": "Sunlight",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Light from the Sun takes about 8 minutes to reach Earth."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Sunlight takes much longer than 8 seconds, and much less than 8 hours or 8 days, to reach Earth."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Sun's average distance from Earth is about 150 million km."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Over that distance, light takes about 8 minutes 20 seconds to travel from the Sun to Earth."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Because its light takes time to arrive, we see the Sun as it was a few minutes before."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors and no warnings for this item. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high (the C26 floor). datasets: no pinned dataset covers this; c3 needs web evidence (the astronomical unit is 149,597,870,700 m by IAU definition), and c1, c2 and c4 then follow by calculation with the speed of light, 299,792,458 m/s (149,597,871 km / 299,792 km/s is about 499 s). rivalTest: Every option uses the same number, so the player reasons from scale: light is fast, the Sun is far. 8 seconds is the tempting underestimate; 8 hours and 8 days overshoot by factors of 60 and more. Against the key: the travel time varies between about 8 min 10 s and 8 min 27 s over the year, always about 8 minutes. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 31 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None at this precision. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d5f113d6081a58c07cac33b59376fbd46348ab8f689b1eec616eec772e10a67a",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "About 8 minutes",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sunlight needs a little over 8 minutes to cross the gap to Earth.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "At about 8 minutes 20 seconds, the trip takes far longer than 8 seconds and far less than 8 hours or 8 days.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Earth's mean distance from the Sun, one astronomical unit, is about 149.6 million km.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "About 149.6 million km divided by the speed of light (about 300,000 km/s) is roughly 499 seconds, about 8 minutes 20 seconds.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Because the light takes over 8 minutes to arrive, we see the Sun as it was that long before.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5661a3b108410ca7fbed55fa18336d848967c518a11516bf039d1520b4b02bdf",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "About 8 minutes",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sunlight takes roughly 8.3 minutes (about 499 s) to reach Earth.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Eight seconds, hours or days are all far from the roughly 500 s travel time.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The mean Sun to Earth distance is about 150 million km (1 AU, 149.6 million km).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "150 million km at about 300,000 km/s is roughly 500 s, which is 8 min 20 s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Light needs minutes to cross the gap, so we always see the Sun as it was about eight minutes earlier.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, number), c2 (distractor, number), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Roughly how long does light from the Sun take to reach Earth?",
+  "answer": "About 8 minutes",
+  "wrong": ["About 8 seconds", "About 8 hours", "About 8 days"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.65,
+    "spread": 0.244,
+    "estimator": "v0"
+  }
+}

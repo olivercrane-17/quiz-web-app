@@ -1,0 +1,236 @@
+{
+  "id": "p.food.0245",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-science", "cooking", "chemistry"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "It is named after French chemist Louis-Camille Maillard, who described it in 1912, and it creates hundreds of flavour compounds. Caramelization, by contrast, browns sugar on its own.",
+  "learnMore": "Maillard reaction",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Maillard reaction between reducing sugars and amino acids browns toast, seared meat and roasted coffee beans."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Caramelization, oxidation and fermentation are not reactions between sugars and amino acids."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The Maillard reaction is named after the French chemist Louis-Camille Maillard, who described it in 1912."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Maillard reaction produces hundreds of different flavour compounds."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Caramelization is the browning of sugar by heat alone, without amino acids."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c3, c4). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Caramelization is the planted trap, since it also browns food; the stem's 'sugars and amino acids' rules it out. Against the key: toast and coffee also caramelize a little, but their browning is mainly Maillard chemistry. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the chemistry is the same in every kitchen, and the name is widely used by cooks. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: many players know caramelization but not the Maillard name. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "46cb15036d20818378c11b2f2354fe68e195d6a21c82c11232c4292341a93136",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Maillard reaction",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Maillard reaction of reducing sugars with amino acids browns toast, seared meat and roasted coffee.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Caramelization, oxidation and fermentation are not sugar and amino acid reactions.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The reaction is named after Louis-Camille Maillard, a French chemist who described it in 1912.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Maillard chemistry produces hundreds of distinct aroma and flavour compounds.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Caramelization is the browning of sugars by heat alone.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The stem asks 'Which reaction' and only the key contains the word 'reaction', an echo a test-wise player can follow (§4 rule 6). 'Which process' in the stem, or 'Maillard' alone as the option, would remove it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2380157fba7605c41ff82e1196bb633040cc69b9163782daf1775745f951093e",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Maillard reaction",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Maillard reaction between reducing sugars and amino acids browns toast, seared meat and roasted coffee.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Caramelisation, oxidation and fermentation are not sugar-and-amino-acid reactions.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The reaction is named after Louis-Camille Maillard, who described it in 1912.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Maillard reaction produces hundreds of flavour compounds.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Caramelisation is the browning of sugar by heat alone, without amino acids.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c3 (explanation, etymology) and c4 (explanation, number) rest on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7). For a redraft: only the key echoes the stem's 'reaction' (A).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which reaction between sugars and amino acids browns toast, seared steak and roasted coffee beans?",
+  "answer": "Maillard reaction",
+  "wrong": ["Caramelization", "Oxidation", "Fermentation"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.216,
+    "estimator": "v0"
+  }
+}

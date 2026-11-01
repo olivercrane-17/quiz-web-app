@@ -1,0 +1,199 @@
+{
+  "id": "p.geo.0264",
+  "status": "active",
+  "category": "geo",
+  "tags": ["scale", "maps", "oceania"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "From Steep Point in the west to Cape Byron in the east, mainland Australia spans about 4,000 km. The Moon's diameter is only about 3,475 km.",
+  "learnMore": "Moon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Mainland Australia's east-west extent is greater than the Moon's diameter."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Mainland Australia spans about 4,000 km from Steep Point in the west to Cape Byron in the east."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Moon's mean diameter is about 3,475 km."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (number), c2 (number) and c3 (number) are high under the C26 floor. Datasets: natural-earth ne_50m_geography_regions_points, featurecla cape: Steep Point, geometry 113.145196, -26.157464, and Cape Byron, 153.627992, -28.661974, the westernmost and easternmost points of the mainland; the great-circle distance between them is about 3,987 km (c1, c2). The Moon is in no pinned dataset. Rival test: Argued for false: the Moon looks like a world and Australia like one country on a globe, so most people assume the Moon is bigger across. The margin is about 15%, too wide for any choice of points or of the Moon's measure to close. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Both bodies are known to everyone. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 26 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c3 needs a Tier A or B web result (NASA or a reference work). Seed: 4 (medium): many will answer false. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ccb9120960a1d5a7a90a431d1518351dedc158c0c5291d0a08ab85c4e33ed2b2",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Steep Point; name=Cape Byron",
+              "excerpt": "{\"name\":\"Steep Point\",\"featurecla\":\"cape\",\"subregion\":\"Australia\",\"coordinates\":[113.145196,-26.157464]}; {\"name\":\"Cape Byron\",\"featurecla\":\"cape\",\"subregion\":\"Australia\",\"coordinates\":[153.627992,-28.661974]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Australia's mainland span is 3,987 km by great circle; the Moon's diameter (about 3,475 km, c3) rests on knowledge in this check, so c3 still needs external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Steep Point; name=Cape Byron",
+              "excerpt": "{\"name\":\"Steep Point\",\"featurecla\":\"cape\",\"subregion\":\"Australia\",\"coordinates\":[113.145196,-26.157464]}; {\"name\":\"Cape Byron\",\"featurecla\":\"cape\",\"subregion\":\"Australia\",\"coordinates\":[153.627992,-28.661974]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Great-circle distance 3,987 km: about 4,000 km."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Moon's mean diameter is about 3,474.8 km.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "25d90ca878b57b48dabf3b50e64972be21591a486a14a055345f6f207c55e124",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "Australia mainland polygon (110m)",
+              "excerpt": "Longitude range 113.34 E to 153.57 E (40.23 degrees): 3,986 km along 27 S, 4,204 km along 20 S, 3,709 km along 34 S.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The Moon's diameter comes from c3. Even the narrowest of these lines, 3,709 km, exceeds 3,475 km."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "Australia mainland polygon (110m)",
+              "excerpt": "Extreme longitudes 113.34 E and 153.57 E; width about 3,990 km at 27 S, where Steep Point (about 26 S) and Cape Byron (about 28.6 S) lie.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "'About 4,000 km' holds; the Geoscience Australia figure I recall is also 4,000 km."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Moon's mean diameter is about 3,475 km (mean radius 1,737 km).",
+              "confidence": "certain"
+            },
+            "note": "High-risk number. Knowledge only (no web search was available to me); counts only with external evidence from pass A (guide 9.5.3). I am certain of the value."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (the Moon's diameter) rests on knowledge alone in both checks: no pinned dataset covers it and neither checker could search (the shared WebSearch budget was spent before pass A ran). §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, which a wording-only edit cannot reach because the claims stay. Redraft under a new id with web evidence, or with the figure stepped down or dropped. c1 and c2 have natural-earth evidence, but the key compares against c3.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0001",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Mainland Australia is wider from east to west than the Moon is across.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.254,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "id": "p.lang.0256",
+  "status": "active",
+  "category": "lang",
+  "tags": ["world-languages", "welsh", "bible", "timelines"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Morgan's 1588 translation gave Welsh a standard written form and is often credited with helping it survive. Complete English Bibles existed from the 1530s, but the King James Version came in 1611.",
+  "learnMore": "William Morgan (bishop)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "William Morgan's complete Welsh translation of the Bible was published in 1588."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The King James Version of the Bible was published in 1611."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Morgan's Bible gave Welsh a standard literary form and is widely credited with helping the language survive."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Complete printed English Bibles existed from the 1530s, beginning with Miles Coverdale's in 1535."
+    }
+  ],
+  "writerNotes": "Counterintuitive: the King James Bible is so famous that most players assume it came first; the Welsh Bible is 23 years older. Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 3 high (date) and 1 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers publishing history. rivalTest: Argued for the English side through the earlier English Bibles (Coverdale, 1535): the label names the King James Version specifically, and the explanation says so. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: the King James Bible is known worldwide; the comparison needs no knowledge of Wales beyond the label. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 32 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1de68d9461b398884b2203d3450aec126c890665208a8b931224457928b33812",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "William Morgan's Welsh Bible",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "William Morgan's translation of the whole Bible into Welsh was published in 1588.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The King James Version of the Bible was published in 1611.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Morgan's Bible set the standard for literary Welsh and is widely credited with helping the language survive.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first complete printed English Bible was Miles Coverdale's of 1535.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c7e28b1acd71a165a616e0ad0f44775ee704ca32acfb413d48604ef4558936e2",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "William Morgan's Welsh Bible",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "William Morgan's complete Welsh Bible was published in 1588.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The King James Version was published in 1611.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Morgan's Bible gave Welsh a standard written form and helped the language survive.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Miles Coverdale's 1535 Bible was the first complete printed English Bible.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (label, date), c2 (label, date) and c4 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.book.0260",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which was published first?",
+  "a": "William Morgan's Welsh Bible",
+  "b": "The King James Bible",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year the complete Bible was published",
+  "unit": "year",
+  "values": {
+    "a": 1588,
+    "b": 1611
+  },
+  "valueDisplay": {
+    "a": "1588",
+    "b": "1611"
+  },
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.19,
+    "estimator": "v0"
+  }
+}

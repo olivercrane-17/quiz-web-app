@@ -1,0 +1,219 @@
+{
+  "id": "p.sport.0236",
+  "status": "active",
+  "category": "sport",
+  "tags": ["athletics", "sprinting", "world-records"],
+  "region": "global",
+  "volatility": "dated",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "At the 2008 Beijing Olympics he had run 9.69 seconds. A year later, at the World Championships in Berlin, he took 0.11 seconds off, averaging over 37 km/h (23 mph).",
+  "learnMore": "Usain Bolt",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "record",
+      "text": "Usain Bolt set the 100 m world record of 9.58 seconds at the World Championships in Berlin on 16 August 2009."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Bolt's time of 9.58 seconds was not run in 2008, 2012 or 2016."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Bolt won the 2008 Olympic 100 m in Beijing in 9.69 seconds."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "9.69 seconds minus 9.58 seconds is 0.11 seconds, and 100 m in 9.58 seconds is an average speed of about 37.6 km/h (about 23.3 mph)."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 4 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item. datasets: No pinned dataset covers athletics records; c1 to c3 need web evidence (World Athletics). c4 is arithmetic: 9.69 - 9.58 = 0.11; 100 / 9.58 = 10.438 m/s, times 3.6 = 37.58 km/h, divided by 1.609344 = 23.35 mph, which a calculation can confirm. rivalTest: 2008 is the planted trap, the year of his famous Beijing Olympic win; 2012 and 2016 are his later Olympic golds. The stem names Berlin and the 9.58 figure, which fit only 2009. Counterintuitive is true because the Olympic year is the obvious guess. volatility: dated: the stem fixes the fact to its year, so it cannot expire; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 30 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Volatility is dated: the stem fixes the record to the run he made, so the item stays true even if the record falls one day.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "572522264443b7730dacec166e771a802fe2c7d313e05f8fb6b632b7790d287f",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "2009",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bolt ran 9.58 in the 100 m final of the Berlin World Championships on 16 August 2009, a world record.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 9.58 dates from 2009, not 2008, 2012 or 2016.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bolt won the Beijing 2008 Olympic 100 m in 9.69.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "9.69 - 9.58 = 0.11 s; 100 m in 9.58 s is 10.44 m/s, or 37.58 km/h; 37.58 / 1.609344 = 23.35 mph.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). Arithmetic re-done (the schema has no calculation kind); it rests on c1 and c3."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c59ae0d07a745999badf28a2171d9a620994a9288d870f78d6c0805b55b9cd94",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "2009",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bolt ran 9.58 in the 100 m final at the World Championships in Berlin on 16 August 2009.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bolt's 9.58 was not run in 2008 (his Beijing time was 9.69), 2012 or 2016.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bolt won the 2008 Olympic 100 m in Beijing in 9.69 seconds.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "9.69 - 9.58 = 0.11 seconds, and 100 m in 9.58 seconds is about 10.44 m/s, which is about 37.6 km/h or 23.3 mph.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, record), c2 (distractor, date), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. c4 is arithmetic that a calculation entry could carry, but c1 to c3 still need a source. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.book.0127",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In which year did Usain Bolt set his 100 m world record of 9.58 seconds, in Berlin?",
+  "answer": "2009",
+  "wrong": ["2008", "2012", "2016"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.198,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "id": "p.film.0129",
+  "status": "active",
+  "category": "film",
+  "tags": ["world-cinema", "silent-film", "directors"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Its Odessa Steps sequence, with a baby carriage (pram) bouncing down the stairs, has been copied many times, including in The Untouchables (1987).",
+  "learnMore": "Battleship Potemkin",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Sergei Eisenstein directed Battleship Potemkin (1925)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Andrei Tarkovsky, Dziga Vertov and Vsevolod Pudovkin did not direct Battleship Potemkin; Tarkovsky's career began in the 1960s."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The film's Odessa Steps sequence shows a baby carriage rolling down the steps."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Untouchables (1987) restages the falling baby carriage on a station staircase."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Vertov and Pudovkin were Soviet directors of the same 1920s generation and Tarkovsky is the most famous Russian director; era logic rules him out. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a non-US production; the options can be reasoned from names, eras and languages without local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 23 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "033c8ef5226557cef2d35fa233301b09c79a946754e7fad3b8622e7bbacd7371",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Sergei Eisenstein",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Eisenstein directed Battleship Potemkin (1925).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Vertov and Pudovkin did not direct it, and Tarkovsky, born in 1932, made his first feature, Ivan's Childhood, in 1962.",
+              "confidence": "certain"
+            },
+            "note": "Tarkovsky's student shorts date from the late 1950s; his professional career began with his 1961 diploma film, so 'began in the 1960s' holds for his career as a director. High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Odessa Steps sequence includes a baby carriage bouncing down the steps.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "De Palma's The Untouchables (1987) restages the falling pram on the stairs of Chicago's Union Station.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "28dd8a63b825643b072f9803c02bed8d3f9e36910ccbd438f0ea0ffd6eade091",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Sergei Eisenstein",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Sergei Eisenstein directed Battleship Potemkin (1925).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tarkovsky, Vertov and Pudovkin did not direct it; Tarkovsky's professional career began around 1960.",
+              "confidence": "certain"
+            },
+            "note": "Tarkovsky's student shorts are from the 1950s, so 'career began in the 1960s' means his professional work. Not player-facing."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Odessa Steps sequence shows a pram rolling down the steps.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Untouchables (1987) restages the falling pram on a station staircase.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1, c2 and c4 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0101",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Who directed the Soviet silent film Battleship Potemkin (1925)?",
+  "answer": "Sergei Eisenstein",
+  "wrong": ["Andrei Tarkovsky", "Dziga Vertov", "Vsevolod Pudovkin"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.188,
+    "estimator": "v0"
+  }
+}

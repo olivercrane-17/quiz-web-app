@@ -1,0 +1,248 @@
+{
+  "id": "p.soc.0136",
+  "status": "active",
+  "category": "soc",
+  "tags": ["institutions", "nobel-prize", "norway"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Alfred Nobel's will gave the peace prize to a committee chosen by Norway's parliament. Sweden and Norway shared a king when he died in 1896; the other prizes are presented in Stockholm.",
+  "learnMore": "Nobel Peace Prize",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The Nobel Peace Prize is presented in Oslo, Norway."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Nobel Peace Prize is not presented in Stockholm, Geneva or Copenhagen."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Alfred Nobel's will specified that the peace prize be awarded by a committee of five people chosen by the Norwegian parliament (the Storting)."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Sweden and Norway were in a union under one king when Alfred Nobel died in 1896."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The other Nobel Prizes are presented in Stockholm."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: geonames-cities confirms Oslo, NO. nobel-prizes lists laureates but not ceremony venues, so c1, c3 and c4 need web evidence. rivalTest: Stockholm is the planted trap, since Nobel was Swedish and the other prizes are given there, so counterintuitive is true; Geneva and Copenhagen are other cities linked to peace and Scandinavia. Argued against the key: the peace prize has been presented in Oslo throughout. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: fair everywhere. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 32 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 4: most players assume Stockholm. doubts: none. riskReason: counterintuitive is true, so the key claim is high under C26; the CNT-1 claim schema has no 'counterintuitive' riskReason, so it carries checker_doubt as the stand-in for the counterintuitive floor.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "78e7a47b13d289562da8a75456a9075d628d0c2581d9aa6a0ce21ea8375c4794",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Oslo",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Nobel Peace Prize is presented in Oslo (in Oslo City Hall since 1990), unlike the other prizes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It is not presented in Stockholm, Geneva or Copenhagen.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nobel's will entrusted the peace prize to a committee of five people elected by the Norwegian parliament, the Storting.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sweden and Norway were united under one king from 1814 to 1905, and Nobel died in December 1896.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The other Nobel Prizes (and the economics prize) are presented in Stockholm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "13df85a6f87295f29b077cd5a092a4b676a0552fed8bc811787f5a45b11c915a",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Oslo",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Nobel Peace Prize is presented each 10 December in Oslo; the other prizes are presented in Stockholm.",
+              "confidence": "certain"
+            },
+            "note": "The writer's checker_doubt label needs the other check's external evidence; I know of no year in which the ceremony moved from Oslo. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It is not presented in Stockholm, Geneva or Copenhagen.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nobel's will gave the peace prize to a committee of five chosen by the Norwegian parliament (the Storting).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sweden and Norway were in a union under one king (1814 to 1905), and Nobel died in December 1896.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The other Nobel Prizes are presented in Stockholm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, writer's checker_doubt), c3 (explanation, number) and c4 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.food.0111",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In which city is the Nobel Peace Prize presented each year?",
+  "answer": "Oslo",
+  "wrong": ["Stockholm", "Geneva", "Copenhagen"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.266,
+    "estimator": "v0"
+  }
+}

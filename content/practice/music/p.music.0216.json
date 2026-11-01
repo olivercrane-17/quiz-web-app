@@ -1,0 +1,186 @@
+{
+  "id": "p.music.0216",
+  "status": "active",
+  "category": "music",
+  "tags": ["classical", "opera", "singers"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "With Plácido Domingo and José Carreras he formed the Three Tenors, who first sang together in Rome in July 1990, on the eve of the men's FIFA World Cup final.",
+  "learnMore": "Luciano Pavarotti",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Luciano Pavarotti was an operatic tenor."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Pavarotti was not a baritone, a bass or a countertenor."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Pavarotti, Plácido Domingo and José Carreras first performed together as the Three Tenors in Rome on 7 July 1990, the eve of the World Cup final."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers singers or concerts, so c3 needs web evidence from the checkers. I used no WebSearch. Rival test: argued for each distractor: baritone and bass are the other male voices and countertenor the highest, but Pavarotti was a tenor beyond dispute. Argued against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Pavarotti and the Three Tenors are known worldwide. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "65142c1a14f7d61de8dda84723691de190968b3ab63b4db9ba9c067e9140457a",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "Tenor",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pavarotti was an operatic tenor.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He sang tenor, not baritone, bass or countertenor.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first Three Tenors concert, with Domingo and Carreras, was at the Baths of Caracalla in Rome on 7 July 1990, the night before the World Cup final.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). Context only: the worldcup dataset (openfootball/worldcup.json@516d382, 1990/worldcup.json, round Final) dates the final 1990-07-08 at the Stadio Olimpico, Rome, which fits 'the eve of the final' but says nothing about the concert, so the result stays knowledge."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5cc2d1fd42e7e2db69e633b2bf4e4cb729b1987eacabb44183d89f4bc95079b2",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "Tenor",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Luciano Pavarotti was an operatic tenor.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Pavarotti was not a baritone, a bass or a countertenor.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pavarotti, Domingo and Carreras first performed together as the Three Tenors in Rome on 7 July 1990, the eve of the World Cup final.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c3 (first) rests on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The question itself rests on standard claims confirmed at certain, so a redraft under a new id can keep it with an explanation built from standard or evidenced facts. A's worldcup dataset record dates the 1990 final but not the concert, so c3 stays unevidenced.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "What type of singing voice made Luciano Pavarotti famous?",
+  "answer": "Tenor",
+  "wrong": ["Baritone", "Bass", "Countertenor"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.9,
+    "spread": 0.406,
+    "estimator": "v0"
+  }
+}

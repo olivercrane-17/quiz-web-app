@@ -1,0 +1,246 @@
+{
+  "id": "p.film.0231",
+  "status": "cut",
+  "category": "film",
+  "tags": ["world-cinema", "spain", "fantasy"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Del Toro is Mexican, but the film unfolds in rural Spain in 1944, five years after the war ended, as Franco's soldiers hunt rebels in the hills.",
+  "learnMore": "Pan's Labyrinth",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Pan's Labyrinth (2006) is set in Spain in 1944, after the Spanish Civil War."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Pan's Labyrinth is not set after the Mexican Revolution, the Russian Civil War or the Greek Civil War."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Guillermo del Toro is Mexican."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Spanish Civil War ended in 1939 with the victory of Franco's forces."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In the film, Francoist soldiers hunt rebels hiding in the hills."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: The Mexican Revolution is the planted trap, because del Toro is Mexican. The Greek Civil War (1946 to 1949) came after 1944, and the Russian Civil War ended in the early 1920s, so neither fits. The Second World War is left out of the options, because 1944 falls inside it. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a Spanish-language film from Spain and Mexico; a non-US production. The answer turns on reasoning from the director and the language. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 27 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "48be51fbb571e4077ca054a3ed44e7b8c2501b3708726081af6a03609e18c960",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "The Spanish Civil War",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pan's Labyrinth is set in Francoist Spain in 1944, after the civil war.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Its setting is post-civil-war Spain, not Mexico, Russia or Greece.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Guillermo del Toro is a Mexican film-maker.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Spanish Civil War ended in April 1939 with victory for Franco's Nationalists.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Captain Vidal's troops hunt guerrillas hiding in the hills.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pan's Labyrinth was written and directed by Guillermo del Toro.",
+              "confidence": "certain"
+            },
+            "note": "Added claim (role key, risk standard): Guillermo del Toro wrote and directed Pan's Labyrinth. The stem presupposes this; it is true."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8680924e13062d5768a4fcf67e9080111f6217a0bfea5c70373f01105e568039",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "The Spanish Civil War",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pan's Labyrinth is set in Spain in 1944, five years after the Spanish Civil War ended.",
+              "confidence": "certain"
+            },
+            "note": "Second war in play: it is also WWII (not an option). Of the options only the Spanish Civil War fits. High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The film is not set after the Mexican Revolution, the Russian Civil War or the Greek Civil War.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the Mexican Revolution lures through del Toro's nationality; the film is set in Francoist Spain."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Guillermo del Toro is Mexican.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Spanish Civil War ended in 1939 with Franco's victory.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "In the film, Francoist soldiers hunt rebels hiding in the hills.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 and c4 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Guillermo del Toro's dark fairy tale Pan's Labyrinth (2006) is set in the years after which war?",
+  "answer": "The Spanish Civil War",
+  "wrong": [
+    "The Mexican Revolution",
+    "The Russian Civil War",
+    "The Greek Civil War"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.224,
+    "estimator": "v0"
+  }
+}

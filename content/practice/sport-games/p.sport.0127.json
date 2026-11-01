@@ -1,0 +1,219 @@
+{
+  "id": "p.sport.0127",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["puzzles", "sudoku", "game-origins"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Dell Magazines in New York printed it in 1979 as Number Place, from a design by Howard Garns. The Japanese publisher Nikoli named it Sudoku in the 1980s.",
+  "learnMore": "Sudoku",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The modern sudoku puzzle was first published in the United States, by Dell Magazines in 1979, under the name Number Place."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The modern sudoku was not first published in Japan, Switzerland or the United Kingdom."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Number Place is credited to Howard Garns, an American architect and puzzle maker."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Japanese publisher Nikoli gave the puzzle the name Sudoku in the 1980s."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors; its one warning is C22 (score 0.58, same answer), because the key, United States, is also the key of p.book.0160, a literature question about an unrelated fact. I ask the editor for dedupe related_ok. claims: 4 listed; c1, c2, c4 are high and c3 is standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item; the standard claim carries none of those triggers and states a rule or a well-known fact. datasets: no pinned dataset covers puzzles, so c1, c2 and c4 need web evidence from checker A. rivalTest: Japan is the planted trap, through the name and Nikoli's role in popularizing it; the United Kingdom is where The Times started the 2004 craze; Switzerland tempts through Euler's Latin squares, which are older but are not sudoku. 'Modern' sets aside 19th-century French number puzzles, and France is not an option, so no distractor can be argued. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Some sources call the French puzzles of the 1890s forerunners; the stem says 'modern' for that reason.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a80ad652467a1d73d4685406c93f7c400ff3bdc0001519e2b255d407f1ae44e9",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "United States",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Number Place, the modern sudoku, first appeared in Dell Pencil Puzzles and Word Games in 1979.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was first published in the United States, not Japan, Switzerland or the United Kingdom.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Number Place is credited to Howard Garns, a retired American architect and freelance puzzle maker.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nikoli introduced the puzzle in Japan in 1984 under a name it shortened to Sudoku.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dell Publishing, the house behind Dell Magazines, was a New York publisher in 1979.",
+              "confidence": "certain"
+            },
+            "note": "Added by checker A. Role explanation, risk standard. Claim: Dell Magazines, which printed Number Place in 1979, was based in New York."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "94b3143dc48e21da9d38e138234199ed40ed458512d9000db14b4faec2620805",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "United States",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The modern 9x9 puzzle first appeared as Number Place in Dell's puzzle magazines in the United States in 1979.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The puzzle was not first published in Japan (Nikoli, from 1984), in Switzerland (Euler's Latin squares were mathematics, not a puzzle feature) or in the United Kingdom (The Times, from 2004).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Howard Garns, a retired architect and puzzle constructor from Indiana, is credited with Number Place.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nikoli gave the puzzle the name Sudoku (a Japanese phrase) in the 1980s.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "A player who ties 'sudoku' to its Japanese name could argue for Japan (Nikoli, 1984). The stem's 'first published' and 'modern' point to the 1979 Dell printing and the explanation defuses the Japan answer, so the key stands. Optional: 'first published (as Number Place)'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, first), c2 (distractor, first) and c4 (explanation, date) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. B: a player who ties the name to Nikoli could argue for Japan; 'first published (as Number Place)' would pin it. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In which country was the modern sudoku puzzle first published?",
+  "answer": "United States",
+  "wrong": ["Japan", "Switzerland", "United Kingdom"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.16,
+    "spread": 0.23,
+    "estimator": "v0"
+  }
+}

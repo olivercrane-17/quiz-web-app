@@ -1,0 +1,216 @@
+{
+  "id": "p.food.0216",
+  "status": "active",
+  "category": "food",
+  "tags": ["ingredients", "spice", "sauces"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Tamarind trees came from tropical Africa, yet the name comes from the Arabic tamr hindi, 'Indian date', after the sticky brown pulp.",
+  "learnMore": "Tamarind",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Tamarind pulp flavours Worcestershire sauce, sambar and many chutneys."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Carob, vanilla and okra pods do not supply the sour pulp in Worcestershire sauce or sambar."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The tamarind tree is native to tropical Africa."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word tamarind comes from the Arabic tamr hindi, meaning Indian date."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c4). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Every option is an edible pod: carob is sweet, vanilla aromatic and okra a vegetable, so 'sour pulp' leaves one. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: tamarind is used from Mexico to India to Thailand, and Worcestershire sauce is sold worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 22 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: many players have seen tamarind paste; the sour clue helps the rest. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b1d3005dfe9814928747f9c8215a320c6fafbe5134849da069dd3da903d1b98e",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Tamarind",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tamarind pulp is a souring agent in Worcestershire sauce, sambar and many chutneys.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Carob, vanilla and okra pods do not give that sour pulp.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tamarindus indica is generally held to be native to tropical Africa.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tamarind comes from Arabic tamr hindi, Indian date.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "34cd8119358e2c5fbd5a679e16354decc1bb755a54d198f4532bfac227e8d378",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Tamarind",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tamarind pulp gives sourness to Worcestershire sauce, sambar and many chutneys.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Carob, vanilla and okra pods do not supply the sour pulp in those dishes.",
+              "confidence": "certain"
+            },
+            "note": "Okra is cooked in sambar, but as a vegetable and not as the sour pulp."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tamarindus indica is native to tropical Africa.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "'Tamarind' comes from Arabic tamr hindi, Indian date.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c4 (explanation, etymology) rests on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7).",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0118",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which pod's sour, sticky pulp flavours Worcestershire sauce, south Indian sambar and many chutneys?",
+  "answer": "Tamarind",
+  "wrong": ["Carob", "Vanilla", "Okra"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.513,
+    "estimator": "v0"
+  }
+}

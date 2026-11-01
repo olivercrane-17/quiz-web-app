@@ -1,0 +1,206 @@
+{
+  "id": "p.lang.0225",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["place-names", "countries", "africa", "portuguese"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Portuguese explorer Pedro de Sintra named the coast's hills Serra Leoa in 1462. Nobody is sure why: perhaps their shape, or thunder rolling round them that sounded like roaring.",
+  "learnMore": "Sierra Leone",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "'Sierra Leone' comes from Portuguese Serra Leoa, 'lion mountains'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The name does not mean green hills, golden coast or river of rain."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Portuguese explorer Pedro de Sintra named the area's mountains Serra Leoa in 1462."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The reason for the lion name is uncertain; suggestions include the shape of the mountains and thunder that sounded like roaring."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 2 high (etymology, date) and 2 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: mledoze-countries cca3=SLE gives the name Sierra Leone; no dataset covers its etymology. rivalTest: Golden coast echoes Ghana's old name, the Gold Coast, and is the planted confusion. Leone is a foothold toward lion for many players. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: an African country's name, reachable from the Spanish and Italian look of its words. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 29 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "37d9aad3e8b1c2659ab90a6034f03158cc1d2a8238f1734a6ca6a7a465e76bbc",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Lion mountains",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sierra Leone comes from Portuguese Serra Leoa, usually rendered lion mountains.",
+              "confidence": "certain"
+            },
+            "note": "Portuguese leoa is strictly lioness; lion mountains is the usual English rendering, so the key option stands. See the note issue. High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The name does not mean green hills, golden coast or river of rain.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Portuguese navigator Pedro de Sintra named the mountains Serra Leoa in 1462.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Why the lion name was chosen is unknown; the shape of the mountains and thunder echoing like roaring are the usual suggestions.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Portuguese leoa means lioness, so a pedant may say the name means lioness mountains. Lion mountains is the standard rendering and the only animal option, so the key is safe; the explanation could mention lioness if the editor wants to pre-empt reports."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "97bcea28ece68f0bc5a5350871f5bf0a52852cec1eeb9514a1f4be284f849110",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Lion mountains",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sierra Leone comes from Portuguese Serra Leoa, lion mountains (strictly lioness).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The name does not mean green hills, a golden coast or a river of rain.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Portuguese explorer Pedro de Sintra named the mountains Serra Leoa in 1462.",
+              "confidence": "certain"
+            },
+            "note": "High-risk date: counts only with external evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The reason for the lion name is uncertain; the shape of the hills or thunder like roaring are the usual guesses.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, etymology) and c3 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: A noted Portuguese leoa is strictly lioness, so the explanation could say so to pre-empt reports.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Sierra Leone's name comes from Portuguese words meaning what?",
+  "answer": "Lion mountains",
+  "wrong": ["Green hills", "Golden coast", "River of rain"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.254,
+    "estimator": "v0"
+  }
+}

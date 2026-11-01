@@ -1,0 +1,218 @@
+{
+  "id": "p.film.0126",
+  "status": "active",
+  "category": "film",
+  "tags": ["world-cinema", "italy", "word-origins"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Federico Fellini named the film's pushy celebrity photographer Paparazzo. In the plural, his surname became the word for photographers who hound the famous.",
+  "learnMore": "La Dolce Vita",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word paparazzi comes from Paparazzo, a photographer character in Federico Fellini's La Dolce Vita (1960)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Roman Holiday (1953), Blow-Up (1966) and Bicycle Thieves (1948) are not the source of the word paparazzi."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Federico Fellini directed La Dolce Vita."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Paparazzi is the plural of the character's surname, Paparazzo."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Roman Holiday features a press photographer in Rome and Blow-Up a fashion photographer, so both tempt; neither is from 1960 or gave us the word. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a non-US production; the options can be reasoned from names, eras and languages without local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 23 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: c4 follows the usual dictionary account of paparazzi as the Italian plural of the surname.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "39d851ff58403a6200fbba07b39334b6644c7b753fb244c914acd882b71099f5",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "La Dolce Vita",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "'Paparazzi' comes from Paparazzo, the photographer in Fellini's La Dolce Vita (1960).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bicycle Thieves (1948), Roman Holiday (1953) and Blow-Up (1966) are not the source of the word.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fellini directed La Dolce Vita.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Paparazzi is the Italian plural of Paparazzo.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "a0c9824921e8107ba87f3447cadd93da6ad8751db1560d5fb577ee496a708640",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "La Dolce Vita",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The word paparazzi comes from Paparazzo, a photographer in Fellini's La Dolce Vita (1960).",
+              "confidence": "certain"
+            },
+            "note": "Etymology, high-risk; dictionaries trace the word to the film. Needs check A's external evidence. Roman Holiday has a photographer too, but the stem says 1960."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Roman Holiday (1953), Blow-Up (1966) and Bicycle Thieves (1948) are not the source of the word.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Federico Fellini directed La Dolce Vita.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Paparazzi is the plural of the character's surname, Paparazzo.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1, c2 and c4 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sci.0118",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The word 'paparazzi' comes from a photographer character in which 1960 film?",
+  "answer": "La Dolce Vita",
+  "wrong": ["Roman Holiday", "Blow-Up", "Bicycle Thieves"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.177,
+    "estimator": "v0"
+  }
+}

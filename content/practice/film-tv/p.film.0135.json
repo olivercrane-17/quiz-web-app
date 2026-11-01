@@ -1,0 +1,217 @@
+{
+  "id": "p.film.0135",
+  "status": "active",
+  "category": "film",
+  "tags": ["performers", "pixar", "awards"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Hanks won Best Actor two years running, for Philadelphia (1993) and Forrest Gump (1994). Spencer Tracy had done the same in the 1930s.",
+  "learnMore": "Tom Hanks",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Tom Hanks played Forrest Gump and voiced Woody in Toy Story."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Tim Allen voiced Buzz Lightyear, and neither he, Robin Williams nor Kevin Costner played Forrest Gump."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Hanks won the Best Actor Oscar for Philadelphia (1993) and for Forrest Gump (1994), in consecutive years."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Spencer Tracy also won Best Actor in consecutive years, in the 1930s."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Tim Allen voiced Buzz in the same film and Robin Williams was the era's other big comic voice actor; Costner was a 1990s leading man. None fits both roles. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 23 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7faa7659859f8f21d53fc9a0c62c58e2954a352cfad14c3bf9a5b6e88c93564c",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Tom Hanks",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Hanks played Forrest Gump and voices Woody in Toy Story.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tim Allen voices Buzz Lightyear; none of Allen, Williams or Costner played Gump.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hanks won Best Actor for Philadelphia and then for Forrest Gump, at consecutive ceremonies.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Spencer Tracy won Best Actor two years running, for Captains Courageous (1937) and Boys Town (1938).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "37238fe58bbfc0e50a6b040498a0344c2e48274ae2e3ae1f607d1675d6e49496",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Tom Hanks",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Tom Hanks played Forrest Gump and voiced Woody.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Tim Allen voiced Buzz Lightyear; Williams and Costner did not play Gump.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hanks won Best Actor for Philadelphia (film of 1993) and Forrest Gump (film of 1994), at consecutive ceremonies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Spencer Tracy won Best Actor at consecutive ceremonies in the late 1930s.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c3 and c4 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0102",
+      "score": 0.178,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which actor played Forrest Gump and voiced Woody in Toy Story?",
+  "answer": "Tom Hanks",
+  "wrong": ["Tim Allen", "Robin Williams", "Kevin Costner"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.93,
+    "spread": 0.467,
+    "estimator": "v0"
+  }
+}

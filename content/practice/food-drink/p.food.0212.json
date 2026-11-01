@@ -1,0 +1,236 @@
+{
+  "id": "p.food.0212",
+  "status": "cut",
+  "category": "food",
+  "tags": ["spice", "caribbean", "botany"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "It is the dried berry of Pimenta dioica, a tree native to the Caribbean and Central America. It got its English name because it tastes like cinnamon, nutmeg and cloves combined.",
+  "learnMore": "Allspice",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Allspice is the dried unripe berry of a single plant, Pimenta dioica, not a blend."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Allspice is not a spice blend, a dried bark or a ground root."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Pimenta dioica is native to the Caribbean and Central America."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Allspice was named in English because its flavour suggests a combination of cinnamon, nutmeg and cloves."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Allspice, called pimento in Jamaica, is a key ingredient of jerk seasoning."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c4). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: The blend is the planted trap, because the name sounds like a mixture and mixed-spice blends exist. Bark (cinnamon) and root (ginger) are real spice forms. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: allspice is used in cooking worldwide; the name trap works in every English-speaking country. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 31 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: many players assume a blend. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f795390095dc58cd7800d5a2a71244970ab87f9212a8804a199170a9a2203850",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "A single dried berry",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Allspice is one spice, the dried unripe berry of the Pimenta dioica tree, not a mixture.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt, set by the writer): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Allspice is not a blend, a bark or a root.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pimenta dioica is native to the Greater Antilles, southern Mexico and Central America.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The English name, from the 17th century, reflects a flavour that seems to combine cinnamon, nutmeg and cloves.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jamaicans call allspice pimento, and it is a key ingredient of jerk seasoning.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "34054a0469eabacc94dfb0db3c04d9ef207be2fe4927a3266dcda00f0dd83342",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "A single dried berry",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Allspice is the dried unripe berry of the Pimenta dioica tree, a single spice and not a mixture.",
+              "confidence": "certain"
+            },
+            "note": "The writer marked this checker_doubt. Knowledge is certain. High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Allspice is not a blend, a bark or a root.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pimenta dioica is native to the Caribbean (Greater Antilles), southern Mexico and Central America.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The English name 'allspice' reflects a flavour that resembles cinnamon, nutmeg and cloves combined.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Jamaica allspice is called pimento and is a key flavour of jerk seasoning.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "'A single dried berry' and 'A four-spice blend' are a pair of opposites, which hints that one of the two is the key (distractor rule 6). Not a blocker, since the blend option is the real myth."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, the writer's doubt) and c4 (explanation, etymology) rest on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7). For a redraft: two options form a pair of opposites (B).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Allspice, a key flavour in Jamaican jerk seasoning, is what?",
+  "answer": "A single dried berry",
+  "wrong": ["A four-spice blend", "A dried tree bark", "A ground root"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.217,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "id": "p.sport.0218",
+  "status": "active",
+  "category": "sport",
+  "tags": ["dice", "board-games", "maths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "So 1 sits opposite 6, 2 opposite 5 and 3 opposite 4, and the pips on all six faces add up to 21.",
+  "learnMore": "Dice",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "On a standard six-sided die, opposite faces add up to 7."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Opposite faces of a standard die do not add up to 6, 8 or 9."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "On a standard die, 1 is opposite 6, 2 opposite 5 and 3 opposite 4."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The pips on the six faces of a die total 21 (1 + 2 + 3 + 4 + 5 + 6)."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 4 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: No dataset covers dice. c4 is arithmetic (1 + 2 + 3 + 4 + 5 + 6 = 21), which a calculation confirms; c1 to c3 are the defining convention of a standard die and need a reference or web result. rivalTest: 6, 8 and 9 are the near numbers a guesser reaches for; one apart is acceptable here because the answer is a small exact count. A player can reason to 7 by pairing 1 with 6. Novelty dice break the rule, which is why the stem says standard. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 23 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c66f8ee08da04d22bee8be09e72d082eaf49881220dbe736b866a529157c8591",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "7",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Opposite faces of a standard die sum to seven.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "So no pair of opposite faces sums to 6, 8 or 9.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "1 is opposite 6, 2 opposite 5 and 3 opposite 4.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "1 + 2 + 3 + 4 + 5 + 6 = 21.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). Pure arithmetic, re-done here; the record schema has no calculation kind, so it is recorded as knowledge."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "198225e7df9988eb2be950010d9e0581b70d7d68e1f4f1ff2fb7a9dc5b968ba4",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "7",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "On a standard die the pairs of opposite faces are 1 and 6, 2 and 5, and 3 and 4, so each pair adds up to 7.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Opposite faces of a standard die never add up to 6, 8 or 9.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The opposite pairs of a standard die are 1 and 6, 2 and 5, and 3 and 4.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The six faces carry 1 + 2 + 3 + 4 + 5 + 6 = 21 pips in total.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, number), c2 (distractor, number), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. c4 is plain arithmetic that a calculation entry could carry, but c1 to c3 still need a source. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.music.0126",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "On a standard six-sided die, the numbers on opposite faces always add up to what?",
+  "answer": "7",
+  "wrong": ["6", "8", "9"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.78,
+    "spread": 0.235,
+    "estimator": "v0"
+  }
+}

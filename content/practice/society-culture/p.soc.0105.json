@@ -1,0 +1,250 @@
+{
+  "id": "p.soc.0105",
+  "status": "active",
+  "category": "soc",
+  "tags": ["calendars", "gregorian-calendar", "britain"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Wednesday 2 September 1752 was followed by Thursday 14 September. Catholic countries had dropped only 10 days in 1582, but the old Julian calendar had slipped one more day since then.",
+  "learnMore": "Calendar (New Style) Act 1750",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "When Britain and its colonies adopted the Gregorian calendar in 1752, 11 days were dropped."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The 1752 British change dropped neither 10 nor 13 days."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In Britain, Wednesday 2 September 1752 was followed by Thursday 14 September 1752."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Catholic countries dropped 10 days when they adopted the Gregorian calendar in 1582."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "By 1752 the Julian calendar was 11 days behind the Gregorian, one more than in 1582, because 1700 was a leap year only in the Julian calendar."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers calendars; c5 can be confirmed by calculation from the two leap-year rules, and c1 and c3 need web evidence. rivalTest: 10 is the 1582 skip and 13 the Julian-Gregorian gap from 1900 to 2100 (the guide's own p.soc.0001 shows it), so both distractors are real confusions; a fourth number would be filler. Argued against the key: the Calendar (New Style) Act 1750 removed eleven days in September 1752. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: the change covered Britain and its colonies, including those in North America; the arithmetic foothold (10 days in 1582 plus one more leap day) is open to anyone. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 31 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 5: few people know it, but a reasoner who knows the 1582 figure and the century leap rule can reach 11. doubts: none on the count. The learnMore names the act so the Wikipedia search lands on the right page.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "3d39d5ed89369fb0b7940809d633b14760a9bc558cb5012921d2628d62b9174f",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "11",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Britain's 1752 change to the Gregorian calendar removed 11 days.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The number removed was 11, not 10 or 13.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In Britain and its colonies, Wednesday 2 September 1752 was followed by Thursday 14 September 1752.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Catholic countries that adopted the reform in 1582 dropped ten days.",
+              "confidence": "certain"
+            },
+            "note": "Later Catholic adopters (1583 to 1587) also dropped ten days, so the explanation's line about 10 days stands. High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Because 1700 was a leap year in the Julian calendar but not in the Gregorian, the gap grew from 10 to 11 days, so it was 11 days by 1752.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "97acea23d609be28e748c10cfdcef4ff8d0817189b49d41461b45e8c1cabe7a9",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "11",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Britain and its colonies dropped 11 days when they changed in 1752 (2 September was followed by 14 September).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ten days is the 1582 figure and thirteen is the gap that had opened by 1900; neither is the 1752 figure.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Britain Wednesday 2 September 1752 was followed by Thursday 14 September 1752.",
+              "confidence": "certain"
+            },
+            "note": "Day-of-week calculation agrees: 13 September 1752 (proleptic Gregorian, the same day as 2 September Julian) is a Wednesday and 14 September a Thursday. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Catholic countries dropped ten days in 1582.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Julian 1700 had a leap day that Gregorian 1700 lacked, so the gap grew from ten to eleven days by 1752.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, number), c2 (distractor, number), c3 (explanation, date), c4 (explanation, number) and c5 (explanation, number) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0226",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "When Britain and its colonies switched to the Gregorian calendar in 1752, how many days were dropped?",
+  "answer": "11",
+  "wrong": ["10", "13"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.138,
+    "estimator": "v0"
+  }
+}

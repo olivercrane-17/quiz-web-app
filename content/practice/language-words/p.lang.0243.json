@@ -1,0 +1,231 @@
+{
+  "id": "p.lang.0243",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["grammar", "german", "spelling"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "German writes der Hund, the dog, and die Freiheit, freedom. English printers often capitalized nouns in the 1700s, and Danish did so until a spelling reform in 1948.",
+  "learnMore": "German orthography",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Standard German spelling capitalizes all nouns."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Standard modern Dutch, Swedish and Norwegian do not capitalize every noun."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "In German, der Hund means 'the dog' and die Freiheit means 'freedom', and both nouns take capitals."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "English printers in the 1700s often capitalized nouns."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Danish capitalized nouns until a spelling reform in 1948."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors for this item and one warning, C22, for the editor: p.book.0114 shares the answer German but asks which language Kafka wrote in, an unrelated fact. claims: 5 listed, 3 high (quotation, date) and 2 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers spelling rules. rivalTest: Danish is kept out because it capitalized nouns until 1948; Luxembourgish also capitalizes nouns but is not an option. Dutch is the nearest relative of German and the likeliest wrong pick. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: German is widely studied, and capitalized nouns are its best-known quirk. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 28 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "bdf967f0569b478ce7630d0658a1ebea7dec5d088d669cc8967e0c653f786ea7",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "German",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Standard German spelling capitalizes every noun.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Modern Dutch, Swedish and Norwegian capitalize proper nouns, not every noun.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Der Hund means the dog and die Freiheit means freedom, and both nouns take capitals.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English printers of the 17th and 18th centuries often capitalized common nouns.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Danish capitalized nouns until its 1948 spelling reform, which also brought in the letter å.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0cd00719a5dc6d719c3c0386f7dc812f6165dd13305f0248e9fb083adcaf931c",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "German",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Standard German capitalises all nouns.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Luxembourgish also does but is not offered; Dutch, Swedish and Norwegian do not."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Modern Dutch, Swedish and Norwegian do not capitalise every noun.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Der Hund (the dog) and die Freiheit (freedom) are written with capital letters.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "English printers in the 1700s often capitalised nouns.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Danish dropped noun capitals in a spelling reform in 1948.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, quotation), c4 (explanation, date) and c5 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In standard modern spelling, which language starts every noun with a capital letter?",
+  "answer": "German",
+  "wrong": ["Dutch", "Swedish", "Norwegian"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.78,
+    "spread": 0.354,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "id": "p.film.0211",
+  "status": "active",
+  "category": "film",
+  "tags": ["blockbusters", "superheroes", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Zamunda is the kingdom of Coming to America (1988). Black Panther became the first superhero film nominated for the Oscar for Best Picture.",
+  "learnMore": "Wakanda",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Most of Black Panther (2018) is set in the fictional African nation of Wakanda."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Zamunda, Genovia and Sokovia are fictional countries from other films, and Black Panther is not set in any of them."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Zamunda is the fictional African kingdom of Coming to America (1988)."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Black Panther was the first superhero film nominated for the Academy Award for Best Picture."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Zamunda is the planted trap: another fictional African kingdom, from a comedy. Genovia (The Princess Diaries) and Sokovia (another Marvel film) are fictional European countries. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a worldwide release; every option is invented, so no real-world local knowledge helps or hurts. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 23 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "37a6fc9554ea99ecc361e861cc5987fe73130d0fd32459c1a6f03b3d6e3ea206",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "Wakanda",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Black Panther (2018) is set mainly in Wakanda, T'Challa's hidden African kingdom.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Zamunda comes from Coming to America, Genovia from The Princess Diaries and Sokovia from Avengers: Age of Ultron.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Prince Akeem in Coming to America (1988) is heir to the fictional African kingdom of Zamunda.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Black Panther's Best Picture nomination, at the 2019 ceremony, was the first for a superhero film.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "aba0d843cfe353a48ec82f51c5a02658dddb0352679d6bd91adf03ce83863c07",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "Wakanda",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Most of Black Panther takes place in the fictional African nation of Wakanda.",
+              "confidence": "certain"
+            },
+            "note": "Some scenes are in Oakland and Busan, but \"most\" is correct. High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Zamunda (Coming to America), Genovia (The Princess Diaries) and Sokovia (Avengers: Age of Ultron) belong to other films.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Zamunda is the one other fictional African nation but belongs to Coming to America; Sokovia shares the MCU but is a European country."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Zamunda is the fictional African kingdom of the 1988 comedy Coming to America.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Black Panther was the first superhero film nominated for the Best Picture Oscar (2019 ceremony).",
+              "confidence": "certain"
+            },
+            "note": "A \"first\" claim. Earlier comic-book films such as Dick Tracy (1990) and The Dark Knight (2008) were not Best Picture nominees; Joker (2019) came later. High-risk (first): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1, c3 and c4 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0143",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In which fictional African nation is most of Black Panther (2018) set?",
+  "answer": "Wakanda",
+  "wrong": ["Zamunda", "Genovia", "Sokovia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.92,
+    "spread": 0.518,
+    "estimator": "v0"
+  }
+}

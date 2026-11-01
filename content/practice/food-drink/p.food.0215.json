@@ -1,0 +1,218 @@
+{
+  "id": "p.food.0215",
+  "status": "active",
+  "category": "food",
+  "tags": ["cheese", "greece", "dairy"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Protected rules allow up to 30% goat's milk, with the rest from sheep. The name comes from the Italian fetta, 'slice', after the way it is cut.",
+  "learnMore": "Feta",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Traditional Greek feta is made mainly from sheep's milk."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Feta is not made mainly from goat's, cow's or water buffalo milk."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Under its protected designation, feta may contain up to 30% goat's milk, with the rest sheep's milk."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name feta comes from the Italian fetta, meaning slice."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c3, c4). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Goat is the planted trap, because feta is tangy and goat's milk is allowed in it. Cow's milk feta-style cheeses exist outside Greece, which is why the stem says traditional Greek feta. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: feta is sold worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: goat pulls many players. Doubts: none on the key; c3 states the protected-designation rule checker A should confirm.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ae02b8ef9c721b488570b9afe817f52bc4be68a4e363f2a74ffa56d1d1945b9d",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Sheep",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Protected Greek feta is made from sheep's milk, or sheep's milk with some goat's milk.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt, set by the writer): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Feta is not made mainly from goat's, cow's or buffalo milk.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The protected designation allows up to 30% goat's milk, the rest sheep's milk.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Greek feta takes its name from Italian fetta, a slice.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4dc769da69281e67fec95a504f275ee6f8eeea9077a3c58f7a0848160697f2c2",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Sheep",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Traditional Greek feta is mainly sheep's milk, sometimes with some goat's milk.",
+              "confidence": "certain"
+            },
+            "note": "The writer marked this checker_doubt. Knowledge is certain. High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Feta is not mainly made from goat's, cow's or water buffalo milk.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The EU protected name for feta allows up to 30 per cent goat's milk, the rest being sheep's milk.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English 'feta' comes from Italian fetta, slice, by way of Modern Greek.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, the writer's doubt), c3 (explanation, number) and c4 (explanation, etymology) rest on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7).",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Traditional Greek feta is made mainly from which animal's milk?",
+  "answer": "Sheep",
+  "wrong": ["Goat", "Cow", "Water buffalo"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.212,
+    "estimator": "v0"
+  }
+}

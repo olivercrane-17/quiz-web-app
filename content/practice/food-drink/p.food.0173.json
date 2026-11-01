@@ -1,0 +1,335 @@
+{
+  "id": "p.food.0173",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-words", "drinks", "fruit"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Grenade is French for pomegranate, and a pomegranate appears on the coat of arms of Granada, in Spain. Many cheap grenadines swap the fruit for other flavourings.",
+  "learnMore": "Grenadine",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Grenadine takes its name from the French grenade, pomegranate, and was traditionally made from pomegranate juice."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Grenadine was not traditionally made from cherries, raspberries or redcurrants."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Grenade is the French word for pomegranate."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A pomegranate appears on the coat of arms of the Spanish city of Granada."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Many commercial grenadine syrups use flavourings other than pomegranate."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c3). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: cheap grenadines taste of red berries, which is the trap, and the stem says traditional for that reason. The explanation does not claim Granada's name comes from the fruit, which is disputed. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: grenadine is sold worldwide; French speakers have an edge. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: many players think of grenadine as a cherry or berry syrup. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c22c8ad6aa188a9381ff3519b22398c7784967f3310d1ff91c8fecbdc14a1ced",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Pomegranate",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "word origins of food names: burrito Spanish diminutive of burro little donkey; orecchiette Italian for little ears; grenadine from French grenade pomegranate",
+              "results": [
+                {
+                  "title": "Burrito",
+                  "url": "https://en.wikipedia.org/wiki/Burrito"
+                },
+                {
+                  "title": "Orecchiette",
+                  "url": "https://en.wikipedia.org/wiki/Orecchiette"
+                },
+                {
+                  "title": "Burrito",
+                  "url": "https://www.britannica.com/topic/burrito"
+                },
+                {
+                  "title": "What is the history of the burrito?",
+                  "url": "https://beyond.britannica.com/what-is-the-history-of-the-burrito"
+                },
+                {
+                  "title": "Taco",
+                  "url": "https://en.wikipedia.org/wiki/Taco"
+                },
+                {
+                  "title": "Grenadine",
+                  "url": "https://en.wikipedia.org/?title=Grenadine"
+                },
+                {
+                  "title": "Ciceri e tria",
+                  "url": "https://en.wikipedia.org/wiki/Ciceri_e_tria"
+                },
+                {
+                  "title": "List of English words of Spanish origin",
+                  "url": "https://en.wikipedia.org/wiki/List_of_English_words_of_Spanish_origin"
+                },
+                {
+                  "title": "List of foods named after places",
+                  "url": "https://en.wikipedia.org/wiki/List_of_foods_named_after_places"
+                },
+                {
+                  "title": "Grenadine Definition & Meaning",
+                  "url": "https://www.britannica.com/dictionary/grenadine"
+                }
+              ],
+              "summaryExcerpt": "Grenadine syrup was originally prepared from pomegranate juice, sugar, and water, with its name deriving from the French word grenade, for pomegranate (from the Latin grānātum, \"seeded\").",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Same call as p.food.0107 (counted there); every result is Tier B."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Traditional grenadine was a pomegranate syrup, not cherry, raspberry or redcurrant.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "word origins of food names: burrito Spanish diminutive of burro little donkey; orecchiette Italian for little ears; grenadine from French grenade pomegranate",
+              "results": [
+                {
+                  "title": "Burrito",
+                  "url": "https://en.wikipedia.org/wiki/Burrito"
+                },
+                {
+                  "title": "Orecchiette",
+                  "url": "https://en.wikipedia.org/wiki/Orecchiette"
+                },
+                {
+                  "title": "Burrito",
+                  "url": "https://www.britannica.com/topic/burrito"
+                },
+                {
+                  "title": "What is the history of the burrito?",
+                  "url": "https://beyond.britannica.com/what-is-the-history-of-the-burrito"
+                },
+                {
+                  "title": "Taco",
+                  "url": "https://en.wikipedia.org/wiki/Taco"
+                },
+                {
+                  "title": "Grenadine",
+                  "url": "https://en.wikipedia.org/?title=Grenadine"
+                },
+                {
+                  "title": "Ciceri e tria",
+                  "url": "https://en.wikipedia.org/wiki/Ciceri_e_tria"
+                },
+                {
+                  "title": "List of English words of Spanish origin",
+                  "url": "https://en.wikipedia.org/wiki/List_of_English_words_of_Spanish_origin"
+                },
+                {
+                  "title": "List of foods named after places",
+                  "url": "https://en.wikipedia.org/wiki/List_of_foods_named_after_places"
+                },
+                {
+                  "title": "Grenadine Definition & Meaning",
+                  "url": "https://www.britannica.com/dictionary/grenadine"
+                }
+              ],
+              "summaryExcerpt": "Grenadine syrup was originally prepared from pomegranate juice, sugar, and water, with its name deriving from the French word grenade, for pomegranate (from the Latin grānātum, \"seeded\").",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The arms of the city of Granada show a pomegranate, granada in Spanish.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Many commercial grenadines use other fruit flavours or artificial flavouring.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e6cc5a921e582b01dfbf28dacadf37a3732830c76de922f85b52ff8b983a9171",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Pomegranate",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Grenadine takes its name from French grenade, pomegranate, and was traditionally made from pomegranate juice and sugar.",
+              "confidence": "certain"
+            },
+            "note": "Tested cherry and raspberry: many modern grenadines taste of them, but the stem says traditional and the name settles it. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cherry, raspberry and redcurrant were not the traditional base.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Grenade is the French word for pomegranate.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A pomegranate (Spanish granada) appears in the arms of the city of Granada.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Many commercial grenadines use flavourings other than pomegranate.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. The etymologies c1 and c3 carry Tier B web evidence in pass A (§9.9 rule 3).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which fruit gave grenadine syrup its name and its traditional flavour?",
+  "answer": "Pomegranate",
+  "wrong": ["Cherry", "Raspberry", "Redcurrant"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.333,
+    "estimator": "v0"
+  }
+}

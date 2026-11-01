@@ -1,0 +1,217 @@
+{
+  "id": "p.art.0202",
+  "status": "active",
+  "category": "art",
+  "tags": ["paintings", "impressionism", "ballet"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "His wax sculpture Little Dancer Aged Fourteen wore a real fabric tutu and hair ribbon, which startled critics when it was shown in Paris in 1881.",
+  "learnMore": "Edgar Degas",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Edgar Degas is best known for paintings and pastels of ballet dancers."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Claude Monet, Camille Pissarro and Paul Cézanne are not known for pictures of ballet dancers."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Degas's wax sculpture Little Dancer Aged Fourteen was dressed in a real fabric tutu and bodice with a satin hair ribbon."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Little Dancer Aged Fourteen was first shown in Paris in 1881, at the sixth Impressionist exhibition, and startled critics."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: c1 artist record checked in moma-artists (ConstituentID 1465, Hilaire-Germain-Edgar Degas, French, 1834 to 1917) and tate-artists (id 988, born and died in Paris); the sculpture facts in c3 and c4 need a source. Rival test: Monet, Pissarro and Cézanne are French Impressionist-era painters of the same fame, but known for landscapes, city views and still lifes; Renoir was left out because he painted the odd dancer; against the key, Degas painted and drew dancers throughout his career. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: world-famous Impressionist; nothing local. Style: Oxford spelling, straight quotes, no en or em dashes, explanation of 26 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: c1 uses 'best known', so it is marked high as a superlative; 'Fourteen' in the title is a capitalized title word, not a number claim.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "78665e5ea58d72afa922aeeaa60a6c293dd09d0e74920c59962aca6e3ccd987e",
+        "startedAt": "2026-11-01T02:15:00Z",
+        "finishedAt": "2026-11-01T02:51:14Z",
+        "coldSolve": {
+          "answerGiven": "Edgar Degas",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ballet dancers are Degas's best-known subject; more than half of his works show dancers, in oil and in pastel.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Monet, Pissarro and Cézanne painted landscapes, rural scenes and still lifes, not ballet dancers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The original wax Little Dancer Aged Fourteen wore a real cloth bodice and tutu, with a satin ribbon tied in a wig of real hair.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The wax figure was first exhibited at the sixth Impressionist exhibition in Paris in 1881, where its realism shocked critics.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "31bf4c9b448531a037f74d4e8459927c496165efafaffc9c3906f1fca9165c9a",
+        "startedAt": "2026-11-01T02:25:00Z",
+        "finishedAt": "2026-11-01T02:51:43Z",
+        "coldSolve": {
+          "answerGiven": "Edgar Degas",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Degas is chiefly known for his ballet dancers in oil and pastel, plus the Little Dancer sculpture.",
+              "confidence": "certain"
+            },
+            "note": "Only high-risk because of 'best known'; Degas is the standard answer. Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Monet, Pissarro and Cezanne are known for landscapes, still lifes and portraits, not dancers.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Renoir and Toulouse-Lautrec also painted dancers or performers, but neither is an option."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1881 wax figure wore a cloth bodice, a gauze tutu, slippers and a satin ribbon in real hair.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Little Dancer Aged Fourteen was shown at the sixth Impressionist exhibition in Paris in April 1881 and shocked critics.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, superlative) and c4 (explanation, date) rest on knowledge alone in both checks: neither checker could run a web search (the shared search limit was spent before this batch's checks) and neither check records dataset evidence for them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Redraft under a new id with these facts evidenced (a dataset record or a Tier A or B search) or bounded.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part02e",
+        "at": "2026-11-01T02:27:51Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0123",
+      "score": 0.16,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which French painter is best known for pictures of ballet dancers, in oil paint and pastel?",
+  "answer": "Edgar Degas",
+  "wrong": ["Claude Monet", "Camille Pissarro", "Paul Cézanne"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.68,
+    "spread": 0.265,
+    "estimator": "v0"
+  }
+}

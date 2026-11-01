@@ -1,0 +1,199 @@
+{
+  "id": "p.book.0130",
+  "status": "cut",
+  "category": "book",
+  "tags": ["childrens-books", "swiss-literature"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Spyri wrote it in German and published it in two parts, in 1880 and 1881. Heidi is sent to Frankfurt and longs for her grandfather's Alpine hut.",
+  "learnMore": "Heidi",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Johanna Spyri's Heidi is set in the Swiss Alps."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Heidi is not set in the mountains of Austria, Italy or France."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Heidi was published in German in two parts, in 1880 and 1881."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In the novel, Heidi is taken to Frankfurt and longs to return to her grandfather's hut in the Alps."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: children's and young-adult books. Lint: content:check reports no errors; C22 warns because other categories share the answer Switzerland (when I checked: p.lang.0148 on Romansh at 0.66 and p.food.0132 on fondue at 0.61). They test different facts, so each pair is related, not a duplicate. Any later C22 flag on this item that shares only the country answer is the same case. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means). Datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. Rival test: Austria, Italy and France all share the Alps, so each is a real confusion; the stem says 'mountains' because part of the book is set in Frankfurt, Germany. Switzerland is certain. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 27 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8cb9d7dc436ad202f00afb86f1e768f51ad3dd6d38735d0a64feb2ea10bc6e16",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "Switzerland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Heidi is set in the Swiss Alps.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It is not set in the mountains of Austria, Italy or France.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Heidis Lehr- und Wanderjahre appeared in 1880 and Heidi kann brauchen, was es gelernt hat in 1881.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No dataset covers it and it fell outside the batch search cap, so it counts only with dataset or web evidence from check B or a follow-up (§9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Heidi is taken to Frankfurt as a companion for Clara and longs for her grandfather's Alpine hut.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bd7e0a003c9e80cc3c2cf079aef80b0d5086b78bd846ffd2e400ca5bd103c5a3",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "Switzerland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Heidi's home with her grandfather is in the Swiss Alps.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The mountains of the story are not Austrian, Italian or French.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Spyri published the first Heidi book in 1880 and the sequel in 1881.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Heidi is taken to Frankfurt as Clara's companion and longs to go home to the hut.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, date) rest on knowledge alone in both checks, and the batch's search cap is spent (29 of 26). Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:03:00Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Johanna Spyri's novel Heidi is set in the mountains of which country?",
+  "answer": "Switzerland",
+  "wrong": ["Austria", "Italy", "France"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.76,
+    "spread": 0.382,
+    "estimator": "v0"
+  }
+}

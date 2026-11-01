@@ -1,0 +1,216 @@
+{
+  "id": "p.film.0152",
+  "status": "active",
+  "category": "film",
+  "tags": ["film-making", "film-crew", "jobs"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The gaffer is the chief lighting technician. Their right-hand assistant is called the best boy, and the key grip runs the crew that rigs camera supports.",
+  "learnMore": "Gaffer (filmmaking)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "A film's gaffer is the head of the lighting and electrical department."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Sound recording, camera rigging and props are run by other crew members: the sound mixer, the key grip and the props master."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The gaffer's chief assistant is known as the best boy."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The key grip leads the crew that rigs camera supports such as dollies and cranes."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Camera rigging is the closest confusion, because grips and gaffers work side by side, but the key grip runs it. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 26 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: the gaffer's title is also chief lighting technician, the same job; c3 is marked high only because best boy trips the superlative floor.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ed9c6beadea4e2c173c69d83bdc0c51480169da7573327fb8fbed42ecaea4d34",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Lighting",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The gaffer is the chief lighting technician, head of the electrical department.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sound is the production sound mixer's job, camera supports the key grip's and props the props master's.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The gaffer's first assistant is the best boy (best boy electric).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (superlative), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The key grip runs the grips, who rig dollies, cranes and other camera supports.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7db19c031e8676d74647266353cadef58efb76a8684660152cda1886742e7a6c",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Lighting",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The gaffer heads the lighting and electrical department.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sound, camera rigging and props are run by the sound mixer, key grip and props master.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The gaffer's chief assistant is the best boy.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The key grip leads the crew that rigs dollies, cranes and other camera supports.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c3 rests on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0133",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "On a film set, what is the gaffer in charge of?",
+  "answer": "Lighting",
+  "wrong": ["Sound recording", "Camera rigging", "Props"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.161,
+    "estimator": "v0"
+  }
+}

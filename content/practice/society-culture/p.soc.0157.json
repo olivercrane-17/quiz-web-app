@@ -1,0 +1,242 @@
+{
+  "id": "p.soc.0157",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["inventions", "transport", "london"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "By day a policeman worked its semaphore arms by hand. Within weeks a gas leak made it explode, injuring the officer, and the idea was dropped for decades.",
+  "learnMore": "Traffic light",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The first traffic signal, installed outside the Houses of Parliament in London in December 1868, used red and green gas lamps at night."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The 1868 signal was not lit by electric bulbs, oil lamps or candles."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "By day, a police officer operated the signal's semaphore arms by hand."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In January 1869 the gas-lit signal exploded, injuring the policeman operating it."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The signal was removed, and traffic signals were not used in London again for decades."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers transport history; c1 and c4 need web evidence. rivalTest: electric bulbs tempt because modern lights are electric (they came only in the 1910s), oil lamps and candles were other light sources of the time. Argued against the key: the 1868 signal, designed by railway engineer John Peake Knight, was gas-lit. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: fair everywhere; era logic is the foothold. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 5. doubts: the injury is treated as history, in a factual tone.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "dcc36e09e9279b74bbc7eb2764cb306a9c0ddde86e69976b794b1ee61be96cb5",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Gas lamps",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "J. P. Knight's semaphore signal, installed near the Houses of Parliament in December 1868, showed red and green gas lamps at night.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was lit by gas, not by electric bulbs, oil lamps or candles.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In daytime a policeman worked its semaphore arms by hand.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "On 2 January 1869 the signal exploded, injuring the policeman operating it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was removed, and London had no traffic signals again until the 20th century.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The explosion is attributed to gas leaking from a supply line under the pavement.",
+              "confidence": "certain"
+            },
+            "note": "Checker A addition (role explanation, ref explanation, risk standard): The 1869 explosion was caused by a gas leak."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6d4d95ba64a309fe7109f1b6dad37bdb20b7b525a299f5aeb5fd64a9364fea88",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Gas lamps",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first traffic signal, a semaphore with red and green gas lamps for night, was set up outside the Houses of Parliament in December 1868.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was not lit by electric bulbs, oil lamps or candles.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "By day a police officer worked the semaphore arms by hand.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In January 1869 a gas leak blew up the signal and injured the officer operating it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The signal was removed and London did not use road signals again until the 1920s.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, first) and c4 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T04:34:42Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The first traffic signal, set up outside London's Houses of Parliament in 1868, was lit by what at night?",
+  "answer": "Gas lamps",
+  "wrong": ["Electric bulbs", "Oil lamps", "Candles"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.214,
+    "estimator": "v0"
+  }
+}

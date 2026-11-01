@@ -1,0 +1,218 @@
+{
+  "id": "p.lang.0134",
+  "status": "active",
+  "category": "lang",
+  "tags": ["names-of-things", "eponyms", "food-words"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "John Montagu, 4th Earl of Sandwich, is said to have asked for meat between slices of bread so he could eat without stopping work. His title comes from Sandwich, a town in Kent.",
+  "learnMore": "Sandwich",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The sandwich is named after John Montagu, 4th Earl of Sandwich, who lived from 1718 to 1792."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The man the sandwich is named after was an earl, not a duke, a bishop or a prince."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "According to a popular story, the Earl asked for meat between bread so that he could eat without interrupting what he was doing."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The earldom of Sandwich takes its name from Sandwich, a town in Kent, England."
+    }
+  ],
+  "writerNotes": "The anecdote is labelled 'is said to', and I left out the gambling version on purpose (sensitivity rule). Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers it; rival test: Admiral and Baron are left out because Montagu ran the Admiralty and also held a barony, which a pedant could argue; duke, bishop and prince are definitely wrong; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: sandwiches and the earl story are known worldwide; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e57dd95c27fcd5851e38a46674bfb9ee9865a8b28087ff94bb78662e765beddc",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Earl",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The sandwich is named after John Montagu, 4th Earl of Sandwich, who lived from 1718 to 1792.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "He held an earldom, not a dukedom, a bishopric or a princely title.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The popular story says he asked for meat between slices of bread so he would not have to stop what he was doing. Versions differ on whether he was at cards or at his desk, and the explanation's 'is said to' covers that.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The earldom takes its name from Sandwich, a town in Kent.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b2f081da9beca7d2417c7b9c11a4cb3e34045632dc240d809dfa90074ff1d4c0",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Earl",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "John Montagu, 4th Earl of Sandwich (1718 to 1792), is the man the sandwich is named after.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He held an earldom: not a dukedom, a bishopric or a princedom.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The popular story says he asked for meat between bread so he could keep working or gaming; it is a story, not proven.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The earldom takes its name from the town of Sandwich in Kent.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, etymology), c2 (distractor, etymology) and c3 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.book.0104",
+      "score": 0.16,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The sandwich is named after an 18th-century holder of which title?",
+  "answer": "Earl",
+  "wrong": ["Duke", "Bishop", "Prince"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.65,
+    "spread": 0.306,
+    "estimator": "v0"
+  }
+}

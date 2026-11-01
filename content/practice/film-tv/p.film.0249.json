@@ -1,0 +1,214 @@
+{
+  "id": "p.film.0249",
+  "status": "cut",
+  "category": "film",
+  "tags": ["film-making", "editing", "russia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Around 1920 he cut the same blank stare of actor Ivan Mozzhukhin with shots such as a bowl of soup and a coffin; audiences praised the actor's hunger and grief.",
+  "learnMore": "Kuleshov effect",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In Lev Kuleshov's editing experiment, around 1920, viewers read different emotions into the same neutral face depending on the shot it was edited with."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Kuleshov's experiment varied the shot placed beside the face, not the music, the lighting or the length of the shot."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kuleshov used footage of the actor Ivan Mozzhukhin with a blank expression."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kuleshov intercut the face with shots including a bowl of soup and a coffin, and viewers read hunger and grief into the same expression."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Music is the strongest distractor, because a score does change how a face reads; but Kuleshov's experiment varied the neighbouring image. Lighting and shot length are other real tools of mood that the experiment kept the same. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: Soviet film theory taught in film schools everywhere; a player can reason toward the key from the word 'editing' in the stem. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 30 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: Kuleshov's original footage is lost and accounts of the exact shots vary; c4 uses the images most sources agree on, and c1's date is given as around 1920 because sources range from 1918 to 1921.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e42eb3245f9a7b0b734e6395b5aa1ed8ff66c325dcc4781e248ea8f98c5f86a6",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "The shot it is cut with",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kuleshov's montage experiment, dated to roughly 1918 to 1921, showed viewers reading different feelings into one neutral face depending on the shot cut next to it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "What changed was the neighbouring shot, not music, lighting or shot length.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The face was the actor Ivan Mozzhukhin's.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cut with a bowl of soup, a dead child in a coffin and a woman, the same face read as hunger, grief and desire.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "381f30033c53a673ea4f08d5c547ab2511eb66a33cce93af6d35d300c9f6c6c7",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "The shot it is cut with",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In Kuleshov's experiment (around 1920), the same neutral face is reported to have been read as different emotions depending on the shot it was cut with.",
+              "confidence": "certain"
+            },
+            "note": "Textbook account of the reported result. High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The experiment varied the shot placed beside the face, not the music, the lighting or the length of the shot.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kuleshov used footage of the actor Ivan Mozzhukhin with a blank expression.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The face was cut with shots including a bowl of soup and a coffin, and viewers are said to have read hunger and grief into it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The Kuleshov effect rests on Pudovkin's and Kuleshov's later accounts: the footage is lost and modern replications are mixed. \"Showed\" in the stem is stronger than the evidence (\"is said to have shown\" would be safer); the key is still the textbook answer."
+          },
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Explanation says audiences \"praised the actor's hunger and grief\", which reads as if they praised hunger itself. Better: audiences praised his acting, reading hunger and grief into the same blank face."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 rests on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered. Checker B also noted that 'showed' overstates an experiment known from later accounts, and that 'praised the actor's hunger and grief' misreads; say audiences praised his acting.",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Lev Kuleshov's editing experiment showed that viewers read a neutral face differently depending on what?",
+  "answer": "The shot it is cut with",
+  "wrong": [
+    "The music played over it",
+    "The lighting on the face",
+    "The length of the shot"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.271,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0210",
+  "status": "active",
+  "category": "food",
+  "tags": ["cooking", "new-zealand", "pacific"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Stones are heated in a fire and laid in a pit, then baskets of meat and vegetables go on top. Everything is covered with cloths and earth and steams for hours.",
+  "learnMore": "Hāngī",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "A hāngī is a Māori earth oven in which food is cooked in a pit on heated stones."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "A hāngī does not cook food on a spit, in a clay oven or in a bamboo tube."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "For a hāngī, stones are heated in a fire and placed in a pit, and baskets of food are set on them."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The food is covered with wet cloths and earth and left to steam for hours."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Spit-roasting and clay ovens are real ways of feasting elsewhere, and bamboo-tube cooking is Southeast Asian; none is a hāngī. Against the key: some modern hāngī use steel baskets and covers, but still in a pit on hot stones. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: earth ovens are known across the Pacific (umu, lovo, imu), and 'pit' is reachable by reasoning from feast cooking anywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 31 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: many players outside the Pacific must reason toward it. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "482fc50c9769f5696ddfdbf5b3741349d0773ff6391fcd83c2a9a27c05fdd99c",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "In a pit of hot stones",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A hangi is a Maori earth oven: food cooks in a pit on heated stones.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A hangi does not use a spit, a clay oven or a bamboo tube.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Stones are heated in a fire, set in the pit, and baskets of food go on top.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The food is covered with wet cloths and earth and steams for several hours.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2e0622d1f1057cbb9ced60c14cbc46cf9467ce13cfd6f4df3eedf887db55f382",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "In a pit of hot stones",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A hangi is a Maori earth oven: food is cooked in a pit on heated stones.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A hangi does not use a spit, a clay oven or a bamboo tube.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Stones are heated in a fire, laid in the pit, and baskets of food are set on them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Wet cloths and earth cover the food, which steams for hours.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. The hāngī is reachable through the Pacific earth-oven foothold, so it stays fair outside New Zealand (§3.3). Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "nearestId": "p.geo.0165",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "For a Māori hāngī feast in New Zealand, how is the food cooked?",
+  "answer": "In a pit of hot stones",
+  "wrong": ["On a spit over flames", "In a clay oven", "In a bamboo tube"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.212,
+    "estimator": "v0"
+  }
+}

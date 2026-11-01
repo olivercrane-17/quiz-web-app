@@ -1,0 +1,202 @@
+{
+  "id": "p.sport.0172",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["swimming", "olympics", "records"],
+  "region": "global",
+  "volatility": "dated",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "That beat Mark Spitz's seven golds at Munich in 1972. One of the eight, the 100 m butterfly, Phelps won by a hundredth of a second.",
+  "learnMore": "Michael Phelps",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Michael Phelps won eight gold medals at the 2008 Beijing Olympics."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Ian Thorpe, Mark Spitz and Ryan Lochte did not win eight gold medals at Beijing 2008."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Mark Spitz won seven gold medals at the 1972 Munich Olympics."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Phelps won the 100 m butterfly at Beijing 2008 by 0.01 seconds."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: olympic-editions confirms the 2008 Beijing (8 to 24 August 2008) and 1972 Munich Summer Games but not individual results, so c1 to c4 need web evidence from checker A. rivalTest: Mark Spitz is the trap, with seven golds in 1972; Ian Thorpe and Ryan Lochte are star swimmers of the same era. Only Phelps won eight in 2008. The item is dated because 'beat Spitz's seven' is a record pinned to 2008. volatility: dated: the year in the text pins the fact, so it cannot expire; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 26 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7394c570eeababb921e776386402c271d053d922493198b023a5c33c27cee5bb",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Michael Phelps",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Michael Phelps won eight gold medals at Beijing 2008.",
+              "confidence": "certain"
+            },
+            "note": "olympic-editions row 53 confirms only the Games. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Spitz did not swim in 2008, Thorpe had retired, and Lochte won two golds at Beijing.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mark Spitz won seven golds at Munich 1972.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Phelps beat Milorad Čavić in the 2008 100 m butterfly by 0.01 s, 50.58 to 50.59.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cb967e3390c90f709494030473287427a6b2c833be33daf4df80124067dd1fa5",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Michael Phelps",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Michael Phelps won eight gold medals at Beijing 2008.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Thorpe had retired by 2006, Spitz's career ended in 1972, and Lochte won two golds at Beijing; none won eight.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mark Spitz won seven golds at Munich in 1972.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Phelps won the 100 m butterfly at Beijing by one hundredth of a second.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, number), c2 (distractor, number), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which swimmer won eight gold medals at the 2008 Beijing Olympics?",
+  "answer": "Michael Phelps",
+  "wrong": ["Ian Thorpe", "Mark Spitz", "Ryan Lochte"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.93,
+    "spread": 0.522,
+    "estimator": "v0"
+  }
+}

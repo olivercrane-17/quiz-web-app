@@ -1,0 +1,207 @@
+{
+  "id": "p.lang.0133",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["names-of-things", "eponyms", "toys"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "On a 1902 hunting trip, Roosevelt refused to shoot a captured bear. A cartoon of the scene inspired a Brooklyn shopkeeper to sell a stuffed toy as Teddy's bear.",
+  "learnMore": "Teddy bear",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The teddy bear is named after US President Theodore 'Teddy' Roosevelt."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The teddy bear is not named after Franklin D. Roosevelt, Abraham Lincoln or Woodrow Wilson."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "On a hunting trip in 1902, Theodore Roosevelt refused to shoot a bear that had been captured and tied up for him."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A newspaper cartoon of the incident inspired the Brooklyn shopkeeper Morris Michtom to sell a stuffed bear called Teddy's bear."
+    }
+  ],
+  "writerNotes": "Teddy as a nickname for Theodore is the foothold; Franklin D. Roosevelt is the same-surname trap. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers it; rival test: FDR shares the surname but was never Teddy; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: the toy is known worldwide and the stem only needs the nickname, not US civics; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: German makers Steiff produced toy bears at about the same time, so I avoided any claim about who made the first one",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "52712f14a1bff102059b4ed7d0b481b9d1116ea55e9f422e26b6a142d0f26789",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Theodore Roosevelt",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The teddy bear is named after Theodore 'Teddy' Roosevelt.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The name is not from Franklin D. Roosevelt, Abraham Lincoln or Woodrow Wilson.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In November 1902, on a hunt in Mississippi, Roosevelt refused to shoot a bear that had been tied to a tree for him.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Clifford Berryman's newspaper cartoon of the episode led the Brooklyn shopkeeper Morris Michtom to sell a stuffed bear as Teddy's bear.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5343580590f72141ef919921908c1826f0dad192838d58cf9c3a479800932e9d",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Theodore Roosevelt",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The teddy bear is named after Theodore 'Teddy' Roosevelt, 26th US president.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Franklin D. Roosevelt, Lincoln and Wilson are not the source; the Franklin option is the deliberate near-miss.",
+              "confidence": "certain"
+            },
+            "note": "Regional: Teddy Roosevelt and teddy bears are widely known; the FDR distractor is a fair confusion."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "On a Mississippi hunting trip in November 1902 Roosevelt refused to shoot a bear that had been captured and tied up.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Clifford Berryman's cartoon of the episode inspired Morris Michtom of Brooklyn to sell a stuffed bear he called Teddy's bear.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The stem word 'teddy' (short for Theodore) echoes the key 'Theodore Roosevelt'; the Franklin D. Roosevelt option is the only real competitor. Same intrinsic cue as the window and July items; easy band, no change asked."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, etymology), c2 (distractor, etymology) and c3 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The teddy bear is named after which US president?",
+  "answer": "Theodore Roosevelt",
+  "wrong": ["Franklin D. Roosevelt", "Abraham Lincoln", "Woodrow Wilson"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.77,
+    "spread": 0.284,
+    "estimator": "v0"
+  }
+}

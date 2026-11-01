@@ -1,0 +1,185 @@
+{
+  "id": "p.soc.0165",
+  "status": "active",
+  "category": "soc",
+  "tags": ["institutions", "courts", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Despite countless TV dramas, judges in England and Wales do not use gavels, and nor do Scotland's. In the US they are common, in courts and in Congress.",
+  "learnMore": "Gavel",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Judges in the courts of England and Wales do not use gavels."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Scottish courts do not use gavels either."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Gavels are common in US courtrooms and are used by the presiding officers of the US Congress."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers court practice; c1 and c2 need web evidence. rivalTest: argued for true: TV and stock photos show gavels constantly; argued against the key: the judiciary of England and Wales says its judges do not use them. One court reportedly has a clerk tap a gavel to announce the judge's entrance, which is not a judge calling for order. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: most Commonwealth courts follow the same practice; the trap (US television) works the same everywhere. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches; the editor may want to add it. mystery and encore: not applicable to a practice item. seed: 5: most players answer true. doubts: the clerk exception above is why the explanation speaks of judges only. riskReason: counterintuitive is true, so the key claim is high under C26; the CNT-1 claim schema has no 'counterintuitive' riskReason, so it carries checker_doubt as the stand-in for the counterintuitive floor. writer search: 1 call. Query: 'judges in England and Wales do not use gavels judiciary'. Results included fullfact.org 'No gavels please, we're British', iclr.co.uk 'Gavel bashing', judiciary.uk 'Traditions of the courts', legalcheek.com items and lawgazette.co.uk 'Does the gavel mistake really matter'. The summary said: 'Full Fact reports that judges in the courts of England and Wales don't use gavels', that 'the Scottish Court Service have told us that no gavels are thumped north of the border either', and that an exception is the Inner London Crown Court, 'where clerks use a gavel to alert parties in court of the entrance of the judge'. The judiciary page appeared only as a heading, so the call counts at Full Fact's tier.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "48e19df164a84c9ac0211ac7daf50d638e61c039e0527928de12342b2b8773b9",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Courts in England and Wales do not use gavels; judges call for order by voice.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gavels are not used in Scottish courts either.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gavels are used by many US judges and by the presiding officers of the US House and Senate.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "27affcfc8f0d289a6fa3da07e99d169e3a8334b08270f2a0d5a9ad65284ef660",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Judges in England and Wales do not use gavels; auctioneers and meeting chairs do.",
+              "confidence": "certain"
+            },
+            "note": "Universal negative from my knowledge: UK judges are widely reported not to use gavels, and I know of no exception. The writer flagged it checker_doubt, so it needs the other check's external evidence. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Scottish courts do not use gavels either.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Gavels are common in US courtrooms and are used by the presiding officers of Congress.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, writer's checker_doubt) rests on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Judges in the courts of England and Wales bang a gavel to call for order.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.128,
+    "estimator": "v0"
+  }
+}

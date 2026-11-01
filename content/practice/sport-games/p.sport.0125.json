@@ -1,0 +1,219 @@
+{
+  "id": "p.sport.0125",
+  "status": "active",
+  "category": "sport",
+  "tags": ["dominoes", "tile-games", "maths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Each tile pairs two ends from blank to six, and every pairing appears once: 21 tiles with two different ends plus 7 doubles. A double-nine set has 55.",
+  "learnMore": "Dominoes",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A standard double-six domino set has 28 tiles."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A double-six domino set does not have 24, 32 or 36 tiles."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In a double-six set every pairing of the values 0 to 6 appears exactly once, giving 21 tiles with two different ends and 7 doubles."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A double-nine domino set has 55 tiles."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: no pinned dataset covers games; c1, c3 and c4 follow from the definition of the set by arithmetic that anyone can re-run: 7 x 6 / 2 = 21 mixed tiles plus 7 doubles = 28, and 10 x 9 / 2 = 45 plus 10 doubles = 55. A checker still needs one external source that a double-six set is the standard one with 28 tiles. rivalTest: 32 and 36 tempt players who think of dominoes in multiples of eight or six; 24 is a guess from smaller sets. The count is fixed by the pairing rule, so none can be argued. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "580e5bf6a72a9bffcaa689a7c092b995bb695178ca43684223a4de7e10de6db0",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "28",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A double-six set has one tile for each pair of values 0 to 6: 7 doubles plus 21 mixed tiles, 28 in all ((7 x 8) / 2 = 28).",
+              "confidence": "certain"
+            },
+            "note": "Pure arithmetic; recorded as knowledge because the record schema has no calculation entry. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "With 28 tiles, a double-six set does not have 24, 32 or 36.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "7 choose 2 gives 21 tiles with two different ends, plus 7 doubles.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A double-nine set has 10 doubles and 45 mixed tiles, 55 in all.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bcdbc7f4c03053814ee2927ba879d8b7afd0d260f482d2d79b30d3e8b44b33ce",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "28",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A standard double-six domino set has 28 tiles.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "24, 32 and 36 do not match a double-six set; 32 is the size of a Chinese domino set.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Values 0 to 6 give C(7,2) = 21 tiles with two different ends plus 7 doubles, 28 in all (arithmetic re-run).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Values 0 to 9 give C(10,2) = 45 plus 10 doubles = 55 (arithmetic re-run).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, number), c2 (distractor, number), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.music.0126",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "How many tiles are in a standard double-six set of dominoes?",
+  "answer": "28",
+  "wrong": ["24", "32", "36"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.193,
+    "estimator": "v0"
+  }
+}

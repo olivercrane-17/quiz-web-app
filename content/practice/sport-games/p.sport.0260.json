@@ -1,0 +1,187 @@
+{
+  "id": "p.sport.0260",
+  "status": "active",
+  "category": "sport",
+  "tags": ["olympics", "rugby", "united-states"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "The US beat France in the deciding match both times, the second in Paris. Fifteen-a-side rugby then left the Olympics; only the shorter sevens game returned, in 2016.",
+  "learnMore": "Rugby union at the Summer Olympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The United States won the Olympic rugby union tournaments of 1920, in Antwerp, and 1924, in Paris."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In both 1920 and 1924 the United States beat France in the deciding match, the 1924 match being played in Paris."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Fifteen-a-side rugby union has not been played at the Olympics since 1924, and rugby sevens joined the Olympic programme in 2016."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed, 3 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item. datasets: olympic-editions, edition_metadata.csv: edition_ids 7 (1920 Summer, Antwerpen) and 8 (1924 Summer, Paris) confirm the Games; the rugby results are not in the file, so c1 to c3 need web evidence. rivalTest: The case for 'false' is that the US is not a rugby power, which is exactly why most players will doubt it. The results are well documented: the US beat France 8-0 in 1920 and 17-3 in 1924. Rugby was dropped after 1924, so no later champion exists in the 15-a-side game. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice true/false item. doubts: The 1920 tournament had only two teams, which is why c2 says 'deciding match' rather than 'final'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "095417ed18a2d5d999977f7146f1afd228d0ebb893fbb596be1f69095a986e41",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The United States won the Olympic rugby union tournaments of 1920 at Antwerp and 1924 at Paris.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). olympic-editions confirms only the Antwerpen 1920 and Paris 1924 editions (edition_id=7 and 8)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In 1920 the US beat France in the only match, and in 1924 it beat France in the deciding match at the Stade Olympique de Colombes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). Colombes lies just outside the city of Paris; 'played in Paris' holds in the sense of the Paris Games (the worldcup dataset itself labels the ground 'Stade Olympique de Colombes, Paris' for the 1938 final)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fifteen-a-side rugby has not been played at the Olympics since 1924, and rugby sevens joined the programme at Rio 2016.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4d16f4f0ca581b5b9f76c0ff57c52b906fa17f8ce974bc425df589c23fda97c5",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The United States won the Olympic rugby union tournaments of 1920 in Antwerp and 1924 in Paris.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The United States beat France in the deciding match both times: 8-0 in 1920 and 17-3 in 1924, the latter in Paris.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fifteen-a-side rugby has not been played at the Olympics since 1924, and rugby sevens joined the programme at Rio in 2016.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, date), c2 (explanation, date) and c3 (explanation, date) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The United States won Olympic gold in rugby union in both 1920 and 1924.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.135,
+    "estimator": "v0"
+  }
+}

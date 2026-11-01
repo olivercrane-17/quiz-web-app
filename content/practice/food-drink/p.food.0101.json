@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0101",
+  "status": "active",
+  "category": "food",
+  "tags": ["national-dishes", "spain", "rice"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The traditional Valencian version uses chicken, rabbit, green beans and butter beans rather than seafood, and cooks prize the crisp, toasted rice at the bottom, called socarrat.",
+  "learnMore": "Paella",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Paella originated in the Valencia region of eastern Spain."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Paella did not originate in Andalusia, Catalonia or Galicia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Traditional paella valenciana is made with chicken, rabbit, green beans and butter beans (garrofo) rather than seafood."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Socarrat is the crisp, toasted layer of rice at the bottom of a paella pan, and cooks prize it."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: geonames-cities confirms Valencia as a Spanish city (name Valencia, country ES, admin1 60), the only structured part; the dish's origin is not in any dataset. Rival test: Andalusia is the trap for players who link Spain with the south, and Catalonia has its own rice dishes, but neither is paella's home; I could not build a case for any distractor. Against the key: the dish is cooked all over Spain, which is why the stem asks where it comes from. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: paella is known worldwide, and the region is reasoned from Spanish geography, not taught in one country's schools. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: most players know paella is Spanish, and about half should reach Valencia. Doubts: none on the key. c3 describes the classic Valencian recipe; regional versions add snails or other beans, which the claim does not deny.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8e071cbebf52c5ec8333129c57e1e6f7a8a0a96dcfcc0d2b5fe98cda49845a3e",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Valencia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Paella is the rice dish of Valencia in eastern Spain, where it originated.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Paella is not Galician, Catalan or Andalusian in origin; it comes from the Valencian rice lands around the Albufera.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Paella valenciana is made with chicken, rabbit, flat green beans and garrofó butter beans, not seafood.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Socarrat is the toasted, crisp layer of rice on the bottom of the pan, and cooks prize it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cde78de5f847091a2a0029ff84f2a51ba869bec09e6491524dba0dc29cf8e6c5",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Valencia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Paella is a Valencian dish: the name is the Valencian word for the pan, and it grew up around the rice fields of the Albufera.",
+              "confidence": "certain"
+            },
+            "note": "Tried to break it with Catalonia (arros a la cassola is a different rice dish), Andalusia and Galicia (rice dishes exist, but no origin claim). Valencia stands."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Andalusia, Catalonia and Galicia all cook rice and seafood, but paella as a named dish is not theirs.",
+              "confidence": "certain"
+            },
+            "note": "No rival origin claim found."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Paella valenciana uses chicken, rabbit, flat green beans and garrofo (a large white bean); seafood belongs to other versions.",
+              "confidence": "certain"
+            },
+            "note": "Some recipes add snails or duck, which does not touch the claim."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Socarrat is the caramelised crust of rice that sticks to the bottom of the pan, and cooks value it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.music.0247",
+      "score": 0.3,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Paella, cooked in a wide, shallow pan, comes from which region of Spain?",
+  "answer": "Valencia",
+  "wrong": ["Andalusia", "Catalonia", "Galicia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.224,
+    "estimator": "v0"
+  }
+}

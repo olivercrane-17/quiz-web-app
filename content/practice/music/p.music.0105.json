@@ -1,0 +1,216 @@
+{
+  "id": "p.music.0105",
+  "status": "active",
+  "category": "music",
+  "tags": ["pop-rock", "blues", "band-names"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Brian Jones chose the name, borrowing it from Muddy Waters's song 'Rollin' Stone'. Waters, born in Mississippi, helped create the electric blues sound of Chicago.",
+  "learnMore": "Rollin' Stone",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The Rolling Stones took their name from Muddy Waters's song Rollin' Stone."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The band's name was not taken from a song by B.B. King, Howlin' Wolf or Robert Johnson."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Brian Jones chose the name The Rolling Stones."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Muddy Waters was born in Mississippi and was a leading figure of electric Chicago blues."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers these music facts (the manifest holds geographic, scientific, Nobel, Olympic and art-collection data), so each high-risk claim needs web evidence from the checkers. I used no WebSearch. Rival test: argued for Robert Johnson, the most famous early bluesman, and Howlin' Wolf, whose songs the Stones also covered; the name comes from Muddy Waters's 1950 recording Rollin' Stone, so the key stands. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the band is known worldwide; the blues names are the ones any rock fan meets, and the explanation teaches the link. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: c1 is a name origin, so it is high under the etymology rule; band histories document it well. c4 says 'a leading figure' to avoid a superlative.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a7e36f392423d74a28fe40c789173adffe75225fefc1155be1818ce2faa38183",
+        "startedAt": "2026-11-01T02:00:29Z",
+        "finishedAt": "2026-11-01T02:19:40Z",
+        "coldSolve": {
+          "answerGiven": "Muddy Waters",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The band named itself after Muddy Waters's song Rollin' Stone.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The name did not come from a B.B. King, Howlin' Wolf or Robert Johnson song.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Brian Jones came up with the name.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Muddy Waters was born in Mississippi and became a central figure of electric Chicago blues.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "63dbee1f2906f9b7f9c90c0ddd40e64fa12bfbecd89961bd13644e908c3dfd02",
+        "startedAt": "2026-11-01T02:05:28Z",
+        "finishedAt": "2026-11-01T02:26:16Z",
+        "coldSolve": {
+          "answerGiven": "Muddy Waters",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The band took its name from Muddy Waters's 1950 record Rollin' Stone.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: none of the other three bluesmen is credited with the source of the name. High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The name did not come from a song by B.B. King, Howlin' Wolf or Robert Johnson.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Brian Jones chose the band's name.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Muddy Waters, born in Mississippi, helped define Chicago electric blues.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c1 (etymology) rests on knowledge only: neither check ran a search (A's records say WebSearch was refused) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with evidence or without the risky detail.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pmusic01e",
+        "at": "2026-11-01T02:04:12Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The Rolling Stones took their name from a song by which blues musician?",
+  "answer": "Muddy Waters",
+  "wrong": ["B.B. King", "Howlin' Wolf", "Robert Johnson"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.189,
+    "estimator": "v0"
+  }
+}

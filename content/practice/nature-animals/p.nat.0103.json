@@ -1,0 +1,311 @@
+{
+  "id": "p.nat.0103",
+  "status": "active",
+  "category": "nat",
+  "tags": ["dinosaurs", "pterosaurs", "fossils", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Pterosaurs, pterodactyls included, were flying reptiles: close cousins of the dinosaurs, but on a separate branch. The dinosaurs that really took to the air became birds.",
+  "learnMore": "Pterosaur",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Pterodactyls and other pterosaurs were not dinosaurs."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Pterosaurs were flying reptiles closely related to dinosaurs but on a separate branch of the reptile family tree."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Birds evolved from dinosaurs."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: three listed. c1 is high because it is the key of a counterintuitive item, so C26 sets it high; the tooling's riskReason enum has no counterintuitive value yet (guide v1.1 adds one), so checker_doubt stands in for it. c2 and c3 are standard textbook palaeontology. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: the statement is false under both readings of pterodactyl: the genus Pterodactylus and the loose name for every pterosaur. Argued for true: some popular books call them flying dinosaurs, but no classification puts pterosaurs inside Dinosauria. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: a misconception shared worldwide through films and toys; no local knowledge needed. style: Oxford spelling, plain hyphens only, explanation of 26 words. myths: screened against content/reference/myths.json; no entry matches; this is a common misconception that the list does not hold yet. mystery and encore: nothing of either kind in a true/false item. doubts: none. Hard because most players will say true, which is why counterintuitive is set.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c07e560cd0777218c1ddd36557f5e0a49c8b3111266c76096bc78f5ee9424814",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "pterosaurs were not dinosaurs; birds are living theropod dinosaurs; crocodilians are the closest living relatives of birds",
+              "results": [
+                {
+                  "title": "Pterosaur",
+                  "url": "https://en.wikipedia.org/wiki/Pterosaur"
+                },
+                {
+                  "title": "Crocodylia",
+                  "url": "https://en.wikipedia.org/wiki/Crocodilian"
+                },
+                {
+                  "title": "Bird",
+                  "url": "https://en.wikipedia.org/wiki/Bird"
+                },
+                {
+                  "title": "Why Are Pterodactyls Not Dinosaurs?",
+                  "url": "https://www.britannica.com/story/why-are-pterodactyls-not-dinosaurs"
+                },
+                {
+                  "title": "The dinosauria",
+                  "url": "https://ucmp.berkeley.edu/taxa/verts/dinosauria/index.php"
+                },
+                {
+                  "title": "Archosaur",
+                  "url": "https://www.britannica.com/animal/archosaur"
+                },
+                {
+                  "title": "Powered flight potential approached by wide range of close avian relatives but achieved selectively",
+                  "url": "https://www.biorxiv.org/content/10.1101/2020.04.17.046169.full.pdf"
+                },
+                {
+                  "title": "Why a Pterosaur is Not a Dinosaur",
+                  "url": "https://www.smithsonianmag.com/science-nature/why-a-pterosaur-is-not-a-dinosaur-87082921/"
+                },
+                {
+                  "title": "Not a Bird, Not a Dinosaur: What Is a Pterosaur?",
+                  "url": "https://www.amnh.org/explore/news-blogs/on-exhibit-posts/not-a-bird-not-a-dinosaur-what-is-a-pterosaur"
+                }
+              ],
+              "summaryExcerpt": "Pterosaurs are not dinosaurs. Under the standard definition, dinosaurs are the descendants of the last common ancestor of Saurischia and Ornithischia, and that group excludes pterosaurs. Pterosaurs are often referred to by popular media or the general public as \"flying dinosaurs\", but they remain outside the dinosaur group.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The summary attributes this bullet to Britannica ('Why Are Pterodactyls Not Dinosaurs?', Tier B). The one bioRxiv preprint in the list is not cited. This call also serves p.nat.0135 and is counted here."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "pterosaurs were not dinosaurs; birds are living theropod dinosaurs; crocodilians are the closest living relatives of birds",
+              "results": [
+                {
+                  "title": "Pterosaur",
+                  "url": "https://en.wikipedia.org/wiki/Pterosaur"
+                },
+                {
+                  "title": "Crocodylia",
+                  "url": "https://en.wikipedia.org/wiki/Crocodilian"
+                },
+                {
+                  "title": "Bird",
+                  "url": "https://en.wikipedia.org/wiki/Bird"
+                },
+                {
+                  "title": "Why Are Pterodactyls Not Dinosaurs?",
+                  "url": "https://www.britannica.com/story/why-are-pterodactyls-not-dinosaurs"
+                },
+                {
+                  "title": "The dinosauria",
+                  "url": "https://ucmp.berkeley.edu/taxa/verts/dinosauria/index.php"
+                },
+                {
+                  "title": "Archosaur",
+                  "url": "https://www.britannica.com/animal/archosaur"
+                },
+                {
+                  "title": "Powered flight potential approached by wide range of close avian relatives but achieved selectively",
+                  "url": "https://www.biorxiv.org/content/10.1101/2020.04.17.046169.full.pdf"
+                },
+                {
+                  "title": "Why a Pterosaur is Not a Dinosaur",
+                  "url": "https://www.smithsonianmag.com/science-nature/why-a-pterosaur-is-not-a-dinosaur-87082921/"
+                },
+                {
+                  "title": "Not a Bird, Not a Dinosaur: What Is a Pterosaur?",
+                  "url": "https://www.amnh.org/explore/news-blogs/on-exhibit-posts/not-a-bird-not-a-dinosaur-what-is-a-pterosaur"
+                }
+              ],
+              "summaryExcerpt": "Pterosaurs and dinosaurs split from a shared ancestor, and the split is visible in the skeleton. ... Both agree that pterosaurs sit on the non-dinosaur side of the Avemetatarsalia split, and that they are not bird ancestors.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "pterosaurs were not dinosaurs; birds are living theropod dinosaurs; crocodilians are the closest living relatives of birds",
+              "results": [
+                {
+                  "title": "Pterosaur",
+                  "url": "https://en.wikipedia.org/wiki/Pterosaur"
+                },
+                {
+                  "title": "Crocodylia",
+                  "url": "https://en.wikipedia.org/wiki/Crocodilian"
+                },
+                {
+                  "title": "Bird",
+                  "url": "https://en.wikipedia.org/wiki/Bird"
+                },
+                {
+                  "title": "Why Are Pterodactyls Not Dinosaurs?",
+                  "url": "https://www.britannica.com/story/why-are-pterodactyls-not-dinosaurs"
+                },
+                {
+                  "title": "The dinosauria",
+                  "url": "https://ucmp.berkeley.edu/taxa/verts/dinosauria/index.php"
+                },
+                {
+                  "title": "Archosaur",
+                  "url": "https://www.britannica.com/animal/archosaur"
+                },
+                {
+                  "title": "Powered flight potential approached by wide range of close avian relatives but achieved selectively",
+                  "url": "https://www.biorxiv.org/content/10.1101/2020.04.17.046169.full.pdf"
+                },
+                {
+                  "title": "Why a Pterosaur is Not a Dinosaur",
+                  "url": "https://www.smithsonianmag.com/science-nature/why-a-pterosaur-is-not-a-dinosaur-87082921/"
+                },
+                {
+                  "title": "Not a Bird, Not a Dinosaur: What Is a Pterosaur?",
+                  "url": "https://www.amnh.org/explore/news-blogs/on-exhibit-posts/not-a-bird-not-a-dinosaur-what-is-a-pterosaur"
+                }
+              ],
+              "summaryExcerpt": "Most paleontologists place birds within Theropoda as a specialized subgroup, specifically within Maniraptora (index 3-9). Because of this, birds are the only surviving dinosaurs (index 3-1).",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ea7bab73623b382af843daab6696558ea3884ac030a7000de328dcb1aa255078",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pterosaurs, pterodactyls included, are a separate lineage of flying archosaurs that sits outside Dinosauria.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pterosaurs were flying reptiles, close relatives of the dinosaurs but on their own branch.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Birds descend from theropod dinosaurs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "Cross-item leak: the explanation says the dinosaurs that took to the air became birds, which hands over the key of p.nat.0135 (birds are the living dinosaurs). Keep the two apart in a session or soften the sentence."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 3 claims confirmed in both checks; high-risk c1 (web in A). Style, distractors and balance reviewed. B's note: the explanation's last sentence states the key of p.nat.0135 (birds are dinosaurs), so keep the two apart when runs and packs are built.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Pterodactyls were flying dinosaurs.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.33,
+    "spread": 0.18,
+    "estimator": "v0"
+  }
+}

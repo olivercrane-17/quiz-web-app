@@ -1,0 +1,218 @@
+{
+  "id": "p.geo.0152",
+  "status": "active",
+  "category": "geo",
+  "tags": ["islands", "borders", "southeast-asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Indonesia holds the western part of the island, which surrounds Oecusse, a small piece of Timor-Leste on the north coast.",
+  "learnMore": "Timor",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Timor-Leste and Indonesia share the island of Timor."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Australia, Papua New Guinea and the Philippines have no territory on Timor."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Indonesia holds the western part of Timor."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Oecusse, an exclave of Timor-Leste, lies on Timor's north coast, surrounded on land by Indonesian territory."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; all standard. Datasets: mledoze-countries cca3=TLS borders IDN only; AUS and PHL have empty border lists and PNG borders IDN only (c1, c2); cldr-territories TL 'Timor-Leste', TL-alt-variant 'East Timor'. Rival test: Australia is the nearest big neighbour across the Timor Sea and Papua New Guinea shares a different island with Indonesia, so both are real confusions. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a Southeast Asian map question with an obvious foothold in the name 'East Timor'. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 20 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "acc034082fad07478daccc670fe093f18b6a49db04f89cee47a325a6578025a9",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Indonesia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Timor is divided between Timor-Leste and Indonesia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Australia, Papua New Guinea and the Philippines hold no part of Timor.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "West Timor is Indonesian.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Oecusse is a Timor-Leste exclave on the north coast, surrounded on land by Indonesia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d43238500f32da474a621fdd227e2119a2f07244f629f829974a1dbe58c7ef18",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Indonesia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=TLS, cca3=IDN",
+              "excerpt": "TLS (Timor-Leste): borders [\"IDN\"] | IDN (Indonesia): borders [\"TLS\",\"MYS\",\"PNG\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Timor-Leste's only land border is with Indonesia, which fits one shared island."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Australia, Papua New Guinea and the Philippines hold no territory on Timor.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Indonesia (West Timor, part of East Nusa Tenggara) holds the western part of the island.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Oecusse-Ambeno is an exclave of Timor-Leste on Timor's north-west coast, surrounded on land by Indonesian territory.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed at certain; every claim is standard risk, so knowledge suffices (§9.5.3). Lint clean, no myth hits. Dedupe pairs it with p.music.0137 (same answer): that item asks about gamelan, a different fact.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.music.0137",
+      "score": 0.66,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Timor-Leste shares the island of Timor with which country?",
+  "answer": "Indonesia",
+  "wrong": ["Australia", "Papua New Guinea", "Philippines"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.275,
+    "estimator": "v0"
+  }
+}

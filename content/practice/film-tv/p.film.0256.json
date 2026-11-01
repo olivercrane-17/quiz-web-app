@@ -1,0 +1,247 @@
+{
+  "id": "p.film.0256",
+  "status": "active",
+  "category": "film",
+  "tags": ["classic-cinema", "france", "visual-effects"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Méliès found that stopping the camera mid-shot could make people vanish or transform, and built his films on such tricks. Ben Kingsley played him in Martin Scorsese's Hugo (2011).",
+  "learnMore": "A Trip to the Moon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Georges Méliès, a former stage magician, made A Trip to the Moon (1902)."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "risk": "standard",
+      "text": "In A Trip to the Moon, a capsule fired from a giant cannon lands in the eye of the Man in the Moon."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Louis Lumière, Abel Gance and Jean Renoir did not make A Trip to the Moon."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Méliès used stop tricks, halting the camera mid-shot, to make people vanish or change on screen."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Ben Kingsley played Georges Méliès in Martin Scorsese's Hugo (2011)."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Louis Lumière is the trap, as the other famous French pioneer of the 1890s; Gance and Renoir made their names later, in the 1920s and 1930s. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a French production and the most famous early film image; the 'stage magician' clue is a foothold for anyone. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 29 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8eaaaa07588cb7cefb5f21d609a1621902cdab4cc35ac1520e68be4777d6b761",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "Georges Méliès",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Méliès, a stage illusionist who owned the Théâtre Robert-Houdin, made A Trip to the Moon (Le Voyage dans la Lune) in 1902.",
+              "confidence": "certain"
+            },
+            "note": "He still ran his magic theatre while making films, so 'former' is loose but not wrong. moma-artists (ConstituentID=3918) lists Méliès as French, 1861 to 1938, but says nothing about the film, so it is not cited as evidence here. High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A shell fired from a giant cannon lands in the eye of the Man in the Moon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Louis Lumière, Abel Gance and Jean Renoir did not make it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Méliès used the stop trick, halting the camera mid-shot, to make people vanish or transform.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ben Kingsley played Méliès in Scorsese's Hugo (2011).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "709d222314e1c233cb47e1f672add9414e737974f3c60d50bcd0beca5ad9bd40",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "Georges Méliès",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Georges Méliès, a former stage magician, made A Trip to the Moon (1902).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "In A Trip to the Moon a capsule fired from a giant cannon lands in the eye of the Man in the Moon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Louis Lumière, Abel Gance and Jean Renoir did not make A Trip to the Moon.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Lumière is the nearest lure (a contemporary), but he made documentary-style shorts, not this film."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Méliès used the stop trick, halting the camera mid-shot, to make people vanish or change.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Ben Kingsley played Georges Méliès in Scorsese's Hugo (2011).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 and c5 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sci.0002",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which French stage magician made the 1902 film A Trip to the Moon, in which a space capsule lands in the Moon's eye?",
+  "answer": "Georges Méliès",
+  "wrong": ["Louis Lumière", "Abel Gance", "Jean Renoir"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.268,
+    "estimator": "v0"
+  }
+}

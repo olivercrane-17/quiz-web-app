@@ -1,0 +1,318 @@
+{
+  "id": "p.nat.0152",
+  "status": "active",
+  "category": "nat",
+  "tags": ["mammals", "elephants", "whales", "pregnancy"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "An elephant calf takes about 22 months to develop. A blue whale calf, far bigger, is born after 10 to 12 months, then grows fast on its mother's fat-rich milk.",
+  "learnMore": "Elephant",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "An African elephant's pregnancy lasts about 22 months."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A blue whale's pregnancy lasts about 10 to 12 months."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A newborn blue whale calf is far bigger than a newborn elephant calf."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Blue whale calves grow rapidly on their mother's very fat-rich milk."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed; c1 and c2 hold numbers, so they are high. c3 and c4 are standard. The value for b is 11, the middle of the 10 to 12 months that the claim and the reveal show. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: 'the bigger animal must take longer' is the planted trap, which is why counterintuitive is set. Margin: sources give about 22 months for the African elephant and about 10 to 12 for the blue whale, so the answer holds under every figure on offer, and the ratio is about 2. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: both animals are known worldwide; months read the same everywhere. style: Oxford spelling, plain hyphens only, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a comparison item. doubts: the blue whale figure is less precisely known than the elephant's, so it is shown as a range; the answer holds at either end of it.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d4851128fddb2edbe979a5b81a228f08640f19e47e6555cf5b9c5ed318e910c2",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "An African elephant",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "gestation period of the African elephant in months, and gestation period of the blue whale in months",
+              "results": [
+                {
+                  "title": "Mammal - Reproduction, Gestation, Lactation",
+                  "url": "https://www.britannica.com/animal/mammal/Reproduction"
+                },
+                {
+                  "title": "Balaenoptera musculus (blue whale)",
+                  "url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+                },
+                {
+                  "title": "Ovulation, pregnancy, placentation and husbandry in the African elephant (Loxodonta africana) - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1609400/"
+                },
+                {
+                  "title": "Gestation",
+                  "url": "https://www.britannica.com/science/gestation"
+                },
+                {
+                  "title": "Blue Whales - PMEL Acoustics Program",
+                  "url": "https://www.pmel.noaa.gov/acoustics/whales/whale-biology-blue.html"
+                },
+                {
+                  "title": "Blue whale",
+                  "url": "https://www.britannica.com/animal/blue-whale"
+                },
+                {
+                  "title": "blue whale - Students",
+                  "url": "https://kids.britannica.com/students/article/blue-whale/576928"
+                },
+                {
+                  "title": "Portal:Mammals/Selected articles",
+                  "url": "https://en.wikipedia.org/wiki/Portal:Mammals/Selected_articles"
+                },
+                {
+                  "title": "Blue Whale",
+                  "url": "https://www.fisheries.noaa.gov/species/blue-whale"
+                },
+                {
+                  "title": "Blue whale",
+                  "url": "https://en.wikipedia.org/wiki/Blue_whale"
+                }
+              ],
+              "summaryExcerpt": "African elephant: Estimates run about 21 to 22 months. One review of elephant reproduction reports a gestation length of 22 months, and Britannica gives a range of 21 to 22 months.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "A PMC review of elephant reproduction (Tier A) and Britannica."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "gestation period of the African elephant in months, and gestation period of the blue whale in months",
+              "results": [
+                {
+                  "title": "Mammal - Reproduction, Gestation, Lactation",
+                  "url": "https://www.britannica.com/animal/mammal/Reproduction"
+                },
+                {
+                  "title": "Balaenoptera musculus (blue whale)",
+                  "url": "https://animaldiversity.org/accounts/Balaenoptera_musculus/"
+                },
+                {
+                  "title": "Ovulation, pregnancy, placentation and husbandry in the African elephant (Loxodonta africana) - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1609400/"
+                },
+                {
+                  "title": "Gestation",
+                  "url": "https://www.britannica.com/science/gestation"
+                },
+                {
+                  "title": "Blue Whales - PMEL Acoustics Program",
+                  "url": "https://www.pmel.noaa.gov/acoustics/whales/whale-biology-blue.html"
+                },
+                {
+                  "title": "Blue whale",
+                  "url": "https://www.britannica.com/animal/blue-whale"
+                },
+                {
+                  "title": "blue whale - Students",
+                  "url": "https://kids.britannica.com/students/article/blue-whale/576928"
+                },
+                {
+                  "title": "Portal:Mammals/Selected articles",
+                  "url": "https://en.wikipedia.org/wiki/Portal:Mammals/Selected_articles"
+                },
+                {
+                  "title": "Blue Whale",
+                  "url": "https://www.fisheries.noaa.gov/species/blue-whale"
+                },
+                {
+                  "title": "Blue whale",
+                  "url": "https://en.wikipedia.org/wiki/Blue_whale"
+                }
+              ],
+              "summaryExcerpt": "Blue whale: Sources give a range of about 10 to 12 months. NOAA Fisheries says the best available science suggests the gestation period is approximately 10 to 12 months. Britannica's blue whale article uses about 12 months, and Animal Diversity Web lists 11 to 12 months.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "NOAA Fisheries (Tier A), named by the summary."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A newborn blue whale (several tonnes, about 7 m) is far bigger than a newborn elephant (about 100 kg).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Blue whale calves grow very fast on their mother's fat-rich milk.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "be2606c57a3e92229bbea16500827c9dc1d8d067b5df864529d72681f4de0396",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "An African elephant",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "An African elephant's pregnancy lasts about 22 months.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A blue whale's pregnancy lasts about 10 to 12 months.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A newborn blue whale calf is far bigger than a newborn elephant calf.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Blue whale calves grow fast on their mother's very fat-rich milk.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; high-risk c1 (web in A), c2 (web in A). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.nat.0137",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which has the longer pregnancy?",
+  "a": "An African elephant",
+  "b": "A blue whale",
+  "answer": "a",
+  "relation": "longer",
+  "measure": "length of pregnancy",
+  "unit": "months",
+  "values": {
+    "a": 22,
+    "b": 11
+  },
+  "valueDisplay": {
+    "a": "about 22 months",
+    "b": "10 to 12 months"
+  },
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.341,
+    "estimator": "v0"
+  }
+}

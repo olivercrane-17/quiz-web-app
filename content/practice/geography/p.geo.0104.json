@@ -1,0 +1,219 @@
+{
+  "id": "p.geo.0104",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "cities", "maps"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Paris sits at about 48.9° N and Seattle at about 47.6° N. Even Vancouver, at about 49.2° N, is barely further north than Paris.",
+  "learnMore": "Paris",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Paris lies at about 48.9° N."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Seattle lies at about 47.6° N."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Vancouver lies at about 49.2° N, a little north of Paris."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; every claim is a latitude, so all are high. Datasets: geonames-cities: Paris FR admin1 11 lat 48.85341; Seattle US WA lat 47.60621; Vancouver CA admin1 02 lat 49.24966. The gap is 1.25°, well above the 0.5° guard. Rival test: Seattle feels northern (rain, conifers, close to Canada) and Paris feels mid-latitude, which is the trap; the centre coordinates settle it, and no reasonable choice of point inside either city closes a gap of more than a degree. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both cities are world-famous; the reasoning is pure map knowledge. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 24 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none. Counterintuitive: most players expect the Pacific Northwest to be further north, and the explanation defuses that with Vancouver.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a5c31b3ba1de5acc574b55eba4f3dc91a7460a296562a2845294439b9df68278",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Paris",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Paris, country=FR, admin1=11",
+              "excerpt": "{\"name\":\"Paris\",\"lat\":\"48.85341\",\"lng\":\"2.3488\",\"country\":\"FR\",\"admin1\":\"11\",\"admin2\":\"75\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "48.85341 rounds to 48.9."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Seattle, country=US, admin1=WA",
+              "excerpt": "{\"name\":\"Seattle\",\"lat\":\"47.60621\",\"lng\":\"-122.33207\",\"country\":\"US\",\"admin1\":\"WA\",\"admin2\":\"033\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "47.60621 rounds to 47.6."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Vancouver, country=CA, admin1=02",
+              "excerpt": "{\"name\":\"Vancouver\",\"lat\":\"49.24966\",\"lng\":\"-123.11934\",\"country\":\"CA\",\"admin1\":\"02\",\"admin2\":\"5915\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "49.24966 rounds to 49.2, north of Paris at 48.85."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "94f7fd96315e7811d2310a7ab618e1bfba36097a16d55843169cc2c497b7e084",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Paris",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Paris,country=FR,admin1=11",
+              "excerpt": "Paris FR/11: lat 48.85341, lng 2.3488",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Seattle,country=US,admin1=WA",
+              "excerpt": "Seattle US/WA: lat 47.60621, lng -122.33207",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Vancouver,country=CA,admin1=02",
+              "excerpt": "Vancouver CA/02: lat 49.24966, lng -123.11934",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "49.25 N rounds to 49.2 here. Other references give 49.26 to 49.28, which would round to 49.3; 'about' covers it."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 to c3 carry geonames-cities evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. A good counterintuitive comparison, 1.2° apart.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which city is further north?",
+  "a": "Paris",
+  "b": "Seattle",
+  "answer": "a",
+  "relation": "further_north",
+  "measure": "latitude of the city centre",
+  "unit": "° N",
+  "values": {
+    "a": 48.85,
+    "b": 47.61
+  },
+  "valueDisplay": {
+    "a": "48.9° N",
+    "b": "47.6° N"
+  },
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.152,
+    "estimator": "v0"
+  }
+}

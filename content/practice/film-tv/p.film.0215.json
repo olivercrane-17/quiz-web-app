@@ -1,0 +1,211 @@
+{
+  "id": "p.film.0215",
+  "status": "cut",
+  "category": "film",
+  "tags": ["animation", "pixar", "mexico"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Families build ofrendas, altars decorated with marigolds and photographs of relatives who have died, to welcome their spirits home for the celebration.",
+  "learnMore": "Coco (2017 film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Coco (2017) is set during the Day of the Dead (Día de Muertos)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Coco is not set during Carnival, Cinco de Mayo or Las Posadas."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "During the Day of the Dead, families build ofrendas, altars with marigolds and photographs of relatives who have died."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The ofrendas are meant to welcome the spirits of the dead home."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Carnival, Cinco de Mayo and Las Posadas are all real celebrations in Mexico, so they tempt players who remember only the setting; the film's land of the dead points to the key. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a Mexican festival, explained in the film and the explanation; the film was released worldwide. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 22 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: the festival is described factually and respectfully (§3.7).",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "fd521c425b37d74d96f99ab4c12ee24a9d54db5b0a7460a0ffbfff858421069d",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "The Day of the Dead",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Coco (2017) takes place during Día de Muertos, the Day of the Dead.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The festival in Coco is the Day of the Dead, not Carnival, Cinco de Mayo or Las Posadas.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "For the Day of the Dead, families set up ofrendas decorated with marigolds and photographs of dead relatives.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ofrenda is meant to welcome the spirits of the dead back home.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Coco is a Pixar film whose hero is Miguel Rivera, a boy from a Mexican town.",
+              "confidence": "certain"
+            },
+            "note": "Added claim (role key, risk standard): Coco is a Pixar film about a Mexican boy called Miguel. The stem presupposes this; it is true."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "35848a7d798f062352c84d844e6573f4c44dbffc40a1a4b708e026b97ea4c4c1",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "The Day of the Dead",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Coco is set during Día de Muertos, the Day of the Dead.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Coco is not set during Carnival, Cinco de Mayo or Las Posadas.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Cinco de Mayo is the lure for people who conflate Mexican holidays, but the film is about Día de Muertos."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "For the Day of the Dead families build ofrendas decorated with marigolds and photographs of the dead.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ofrendas are meant to welcome the spirits of the dead home.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 rests on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Pixar's Coco (2017) follows a Mexican boy, Miguel, during which festival?",
+  "answer": "The Day of the Dead",
+  "wrong": ["Carnival", "Cinco de Mayo", "Las Posadas"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.82,
+    "spread": 0.386,
+    "estimator": "v0"
+  }
+}

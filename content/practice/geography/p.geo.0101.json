@@ -1,0 +1,242 @@
+{
+  "id": "p.geo.0101",
+  "status": "active",
+  "category": "geo",
+  "tags": ["landlocked", "borders", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Its neighbours, Switzerland and Austria, have no coast either, so reaching the sea means crossing at least two borders. Uzbekistan is the world's only other doubly landlocked country.",
+  "learnMore": "Liechtenstein",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Liechtenstein is landlocked, and its only neighbours, Switzerland and Austria, are landlocked too."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Luxembourg borders Belgium, France and Germany, Andorra borders France and Spain, and San Marino borders Italy, and all of those neighbours have a sea coast."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Travelling from Liechtenstein to the sea means crossing at least two international borders."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Liechtenstein and Uzbekistan are the only two doubly landlocked countries."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 and c4 are high under the C26 floor ('only'), c3 for its number; c2 is a plain border fact. Datasets: mledoze-countries cca3=LIE borders AUT, CHE and landlocked true; AUT and CHE landlocked true; LUX borders BEL, FRA, DEU; AND borders FRA, ESP; SMR borders ITA. For c4 I filtered the file for landlocked entries whose every neighbour is also landlocked: it returns LIE and UZB only (UZB borders AFG, KAZ, KGZ, TJK, TKM). c3 follows from c1. Rival test: Luxembourg pulls hardest (small, landlocked, wedged between big neighbours), but Belgium, France and Germany all have coasts; Andorra and San Marino fail the same way. Against the key: the Rhine gives Liechtenstein a river route to the North Sea, but a river is not a coast, so the key stands. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a European subject, but the reasoning needs only a mental map, so players anywhere can work it out option by option. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 28 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: c4 treats the Caspian as a lake, so Kazakhstan and Turkmenistan count as landlocked; that is the usual convention and the dataset's own flag. Seeded 5 because few players know the term, though a good reasoner can test each option's neighbours.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8e5159c2056803817d544c37ac9d2ed7b7127db876d4316db52fb447e0987758",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Liechtenstein",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LIE; cca3=AUT; cca3=CHE",
+              "excerpt": "LIE: \"landlocked\": true, \"borders\": [\"AUT\",\"CHE\"] | AUT: \"landlocked\": true, \"borders\": [\"CZE\",\"DEU\",\"HUN\",\"ITA\",\"LIE\",\"SVK\",\"SVN\",\"CHE\"] | CHE: \"landlocked\": true, \"borders\": [\"AUT\",\"FRA\",\"ITA\",\"LIE\",\"DEU\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "LIE's only neighbours are AUT and CHE, and all three carry landlocked: true."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LUX; cca3=AND; cca3=SMR; cca3=BEL; cca3=FRA; cca3=DEU; cca3=ESP; cca3=ITA",
+              "excerpt": "LUX: \"landlocked\": true, \"borders\": [\"BEL\",\"FRA\",\"DEU\"] | AND: \"landlocked\": true, \"borders\": [\"FRA\",\"ESP\"] | SMR: \"landlocked\": true, \"borders\": [\"ITA\"] | BEL: \"landlocked\": false, \"borders\": [\"FRA\",\"DEU\",\"LUX\",\"NLD\"] | FRA: \"landlocked\": false, \"borders\": [\"AND\",\"BEL\",\"DEU\",\"ITA\",\"LUX\",\"MCO\",\"ESP\",\"CHE\"] | DEU: \"landlocked\": false, \"borders\": [\"AUT\",\"BEL\",\"CZE\",\"DNK\",\"FRA\",\"LUX\",\"NLD\",\"POL\",\"CHE\"] | ESP: \"landlocked\": false, \"borders\": [\"AND\",\"FRA\",\"GIB\",\"PRT\",\"MAR\"] | ITA: \"landlocked\": false, \"borders\": [\"AUT\",\"FRA\",\"SMR\",\"SVN\",\"CHE\",\"VAT\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Each distractor borders only countries with landlocked: false, so each is singly landlocked."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LIE; cca3=AUT; cca3=CHE",
+              "excerpt": "LIE: \"landlocked\": true, \"borders\": [\"AUT\",\"CHE\"] | AUT: \"landlocked\": true, \"borders\": [\"CZE\",\"DEU\",\"HUN\",\"ITA\",\"LIE\",\"SVK\",\"SVN\",\"CHE\"] | CHE: \"landlocked\": true, \"borders\": [\"AUT\",\"FRA\",\"ITA\",\"LIE\",\"DEU\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Follows from the records: any route to the sea leaves Liechtenstein for landlocked Austria or Switzerland, then needs a second border."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=UZB; cca3=AFG; cca3=KAZ; cca3=KGZ; cca3=TJK; cca3=TKM",
+              "excerpt": "UZB: \"landlocked\": true, \"borders\": [\"AFG\",\"KAZ\",\"KGZ\",\"TJK\",\"TKM\"] | AFG: \"landlocked\": true, \"borders\": [\"IRN\",\"PAK\",\"TKM\",\"UZB\",\"TJK\",\"CHN\"] | KAZ: \"landlocked\": true, \"borders\": [\"CHN\",\"KGZ\",\"RUS\",\"TKM\",\"UZB\"] | KGZ: \"landlocked\": true, \"borders\": [\"CHN\",\"KAZ\",\"TJK\",\"UZB\"] | TJK: \"landlocked\": true, \"borders\": [\"AFG\",\"CHN\",\"KGZ\",\"UZB\"] | TKM: \"landlocked\": true, \"borders\": [\"AFG\",\"IRN\",\"KAZ\",\"UZB\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Filtering all 250 entries for landlocked: true with every neighbour also landlocked: true returns exactly LIE and UZB. This counts Kazakhstan and Turkmenistan as landlocked (the Caspian has no outlet), the usual convention."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "90c8fea2c4f4d76432fcbfdf6b1ed6318e0fef2b9b8283637523e4617fca95aa",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Liechtenstein",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LIE, cca3=AUT, cca3=CHE",
+              "excerpt": "LIE (Liechtenstein): borders [\"AUT\",\"CHE\"]; landlocked true | AUT (Austria): landlocked true | CHE (Switzerland): landlocked true",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LUX, cca3=AND, cca3=SMR, cca3=BEL, cca3=FRA, cca3=DEU, cca3=ESP, cca3=ITA",
+              "excerpt": "LUX (Luxembourg): borders [\"BEL\",\"FRA\",\"DEU\"]; landlocked true | AND (Andorra): borders [\"FRA\",\"ESP\"]; landlocked true | SMR (San Marino): borders [\"ITA\"]; landlocked true | BEL, FRA, DEU, ESP, ITA each: landlocked false",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Every neighbour listed has landlocked false in the dataset."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LIE, cca3=AUT, cca3=CHE, cca3=DEU, cca3=ITA, cca3=FRA, cca3=SVN",
+              "excerpt": "LIE borders AUT, CHE (landlocked true both) | AUT borders DEU, ITA, SVN among others; CHE borders FRA, ITA, DEU | DEU, ITA, FRA, SVN each landlocked false",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Shortest route from LIE to a coastal country is LIE to AUT or CHE to DEU, ITA, FRA or SVN: two borders."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=LIE, cca3=UZB",
+              "excerpt": "Computed over all 250 records: landlocked true with every neighbour landlocked true gives exactly LIE and UZB | UZB (Uzbekistan): borders [\"AFG\",\"KAZ\",\"KGZ\",\"TJK\",\"TKM\"]; landlocked true",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Uses the usual convention that the Caspian is not an ocean coast (the item's own explanation for item 0129 says the same)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1, c3 and c4 carry mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. The doubly landlocked filter returns Liechtenstein and Uzbekistan only, as the explanation says.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which European country is doubly landlocked, with only landlocked countries as its neighbours?",
+  "answer": "Liechtenstein",
+  "wrong": ["Luxembourg", "Andorra", "San Marino"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.162,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "id": "p.lang.0269",
+  "status": "active",
+  "category": "lang",
+  "tags": ["world-languages", "maltese", "europe", "arabic"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "It grew from the Arabic spoken in medieval Sicily and Malta, then took many words from Italian, Sicilian and English. Everyday words such as numbers stay close to Arabic.",
+  "learnMore": "Maltese language",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Maltese, written in the Latin alphabet, is a Semitic language descended from the Arabic spoken in medieval Sicily and Malta."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Maltese is not a Romance, Germanic or Celtic language, though it has many Italian and English loanwords."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Maltese has taken many words from Italian, Sicilian and English."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Maltese numbers such as wieħed, tnejn and tlieta (one, two, three) are close to their Arabic equivalents."
+    }
+  ],
+  "writerNotes": "Counterintuitive: Malta's position near Sicily and its Latin alphabet make Romance the obvious pick, and it is wrong. Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 2 high (checker_doubt, number) and 2 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: mledoze-countries cca3=MLT lists mlt (Maltese) and eng as official languages, and cldr-languages names mt as Maltese; neither covers language families. rivalTest: Argued for Romance through the many Italian loanwords: vocabulary was borrowed, but the grammar and core words are Semitic. c1's risk reason is checker_doubt, standing in for counterintuitive, which the tooling's enum lacks. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: a European language whose family most players can reason about from Malta's history. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 29 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b2f4c68ee96f78e85e5932e7bfb9c64ce873a4bf080e7f879a47692bc80d1bda",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Semitic, like Arabic",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Maltese, written in the Latin alphabet, is a Semitic language descended from the Arabic of medieval Sicily and Malta.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Maltese is not a Romance, Germanic or Celtic language, despite its many Italian and English loanwords.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Maltese has taken many words from Sicilian, Italian and English.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Maltese wieħed, tnejn and tlieta (one, two, three) are close to Arabic wahid, ithnan and thalatha.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b98a3f98853861a969dae44cfbf12efb91a5fc1b25e91731f194274d23b95eaa",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Semitic, like Arabic",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Maltese is a Semitic language descended from the Arabic of medieval Sicily and Malta, written in Latin script.",
+              "confidence": "certain"
+            },
+            "note": "The writer flagged doubt. This is the standard classification (Siculo-Arabic origin)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Maltese is not Romance, Germanic or Celtic, despite its loanwords.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Maltese has many loanwords from Italian, Sicilian and English.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Maltese wieħed, tnejn and tlieta are close to Arabic wahid, ithnan and thalatha.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, checker_doubt) and c4 (explanation, number) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. c1 also carries the writer's checker_doubt flag, which needs external evidence on its own (§9.7).",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.lang.0150",
+      "score": 0.343,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Maltese is written with Latin letters. To which language family does it belong?",
+  "answer": "Semitic, like Arabic",
+  "wrong": [
+    "Romance, like Italian",
+    "Germanic, like English",
+    "Celtic, like Irish"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.287,
+    "estimator": "v0"
+  }
+}

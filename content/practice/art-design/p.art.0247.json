@@ -1,0 +1,243 @@
+{
+  "id": "p.art.0247",
+  "status": "cut",
+  "category": "art",
+  "tags": ["paintings", "mughal-art", "india"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Akbar's workshop spent about 15 years painting it on cotton cloth in the 1560s and 1570s. Fewer than 200 of its pages survive, scattered among museums.",
+  "learnMore": "Hamzanama",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Hamzanama, illustrated with about 1,400 paintings, was made for the Mughal emperor Akbar."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Hamzanama was not made for Shah Jahan, Aurangzeb or Babur."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Akbar's painting workshop worked on the Hamzanama for about 15 years, in the 1560s and 1570s."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Hamzanama paintings were made on cotton cloth."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Fewer than 200 of the Hamzanama's paintings survive."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no dataset covers Mughal manuscripts. One writer WebSearch (Hamzanama Akbar 1,400 paintings cotton survive): the Victoria and Albert Museum, which holds pages (Tier A), gives 1,400 illustrations of which fewer than 200 survive, and The Art Newspaper agrees on 1,400 on cotton; other results put survivors nearer 100 to 140, all under 200. Rival test: Shah Jahan is the planted trap as the best-known Mughal (the Taj Mahal); Aurangzeb was famously cool towards painting; Babur founded the dynasty but died long before; Humayun was left out because he brought the first Persian painters to court; against the key, the Akbar Hamzanama is the standard name. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Mughal art is a staple of world art history; the foothold is the reign of the great patron emperor. Style: Oxford spelling, straight quotes, no en or em dashes, explanation of 26 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: the start date varies by source (1557 or 1562), so the explanation gives decades and a duration, and the survivor count is bounded at fewer than 200.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7e7c5c1882d811ad0f1faa2a2c2044baf0efa3d08cda423048056134b2f3d591",
+        "startedAt": "2026-11-01T02:15:00Z",
+        "finishedAt": "2026-11-01T02:51:14Z",
+        "coldSolve": {
+          "answerGiven": "Akbar",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Akbar commissioned the Hamzanama, about 1,400 large illustrations in 14 volumes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It was made for Akbar, not Babur, Shah Jahan or Aurangzeb.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The project ran for about 15 years, roughly from the early 1560s to the late 1570s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The paintings are on cotton cloth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Only a small fraction of the paintings survives; counts of about 200 are commonly given.",
+              "confidence": "unsure"
+            },
+            "note": "Checker doubt: the figures I know are 'about 200' as well as 'fewer than 200', so I cannot confirm 'fewer than 200' as written. External evidence needed, or step down the precision ladder (see issue)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Checker doubt on c5: 'Fewer than 200 of its pages survive' is a high-risk count I cannot confirm; figures of about 200 and of fewer than 200 both circulate. Without a source, step down the precision ladder, for example 'Only a small fraction of its paintings survive, scattered among museums'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-part02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "585e02ab18a34fb2e0f787e1b5d8affefa9fb869d852915f701d7ff13a39bcd0",
+        "startedAt": "2026-11-01T02:25:00Z",
+        "finishedAt": "2026-11-01T02:51:43Z",
+        "coldSolve": {
+          "answerGiven": "Akbar",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Hamzanama was made for Akbar and had about 1,400 large paintings.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "It was not made for Shah Jahan, Aurangzeb or Babur.",
+              "confidence": "certain"
+            },
+            "note": "Rival test done: no distractor fits."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Akbar's workshop worked on it for about fifteen years, roughly 1562 to 1577.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The paintings were made on cotton cloth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "I recall that about 200 of the paintings survive, and museum accounts say 'about' or 'some' 200, so 'fewer than 200' may overstate precision.",
+              "confidence": "likely"
+            },
+            "note": "The exact survivor count is not settled in my recollection. Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c5 says 'fewer than 200'; accounts I recall say about 200. Use 'about 200' or verify the exact figure with the museum literature."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-part02e",
+        "at": "2026-11-01T02:27:51Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part02d",
+      "decision": "cut",
+      "reason": "A and B both revise: neither can confirm c5's 'fewer than 200' surviving paintings (both recall figures of about 200), and both ask for a source or a step down the precision ladder. A revise/revise pair cannot pass §9.9 rule 2 without fresh checks, c5 is confirmed in neither check, and high-risk c1 (key, number) and c3 (explanation, number) rest on knowledge alone in both. Stepping c5 down changes a claim, which needs two fresh checks (§9.7). Dedupe also pairs it with p.hist.0248 (0.62, same answer). Cut. Redraft under a new id with 'only a fraction survive' and the 1,400 figure evidenced.",
+      "decidedAt": "2026-11-01T04:30:36Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The Hamzanama, an adventure story illustrated with about 1,400 large paintings, was made for which Mughal emperor?",
+  "answer": "Akbar",
+  "wrong": ["Shah Jahan", "Aurangzeb", "Babur"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.187,
+    "estimator": "v0"
+  }
+}

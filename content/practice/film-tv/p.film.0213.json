@@ -1,0 +1,215 @@
+{
+  "id": "p.film.0213",
+  "status": "active",
+  "category": "film",
+  "tags": ["world-cinema", "hong-kong", "stunts"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "As a boy he trained for years at a Peking opera school in Hong Kong, where he performed in a troupe called the Seven Little Fortunes with Sammo Hung.",
+  "learnMore": "Jackie Chan",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Jackie Chan is a Hong Kong action star known for performing his own stunts."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "risk": "standard",
+      "text": "Jackie Chan's films often show outtakes and failed stunts during the end credits."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Jet Li, Donnie Yen and Chow Yun-fat are not known for showing failed takes over their films' end credits."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "As a child, Jackie Chan trained at the China Drama Academy, a Peking opera school in Hong Kong, and performed in its troupe, the Seven Little Fortunes, with Sammo Hung."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Jet Li and Donnie Yen are martial-arts stars who also perform demanding fights, which makes them tempting; the end-credit outtakes are Chan's trademark. Chow Yun-fat is known for gunplay roles. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: Hong Kong cinema, known worldwide through Chan's films; a non-US production subject. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 29 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b345b440d4d90519194f323721fbf4b21aac9b8a4538ec4c5c980e26c275d066",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "Jackie Chan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Jackie Chan, the Hong Kong action star, is famous for doing his own stunts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "His films typically run outtakes and botched stunts under the end credits.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "End-credit blooper reels are Chan's trademark; Jet Li, Donnie Yen and Chow Yun-fat are not known for them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "As a boy Chan spent about a decade at the China Drama Academy, a Peking opera school in Hong Kong, performing in its Seven Little Fortunes troupe with Sammo Hung.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bfeaf32b0bd76f38b3d821a59df6a589951f4c32c67377061eb0ffadb24393b6",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "Jackie Chan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Jackie Chan is a Hong Kong action star famed for doing his own stunts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Chan's films routinely run outtakes and stunt mishaps over the closing credits.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Jet Li, Donnie Yen and Chow Yun-fat are not known for running failed takes over their credits.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Li and Yen are genuine martial artists who do their own fighting, so \"own stunts\" alone would not discriminate; the end-credit outtakes do, and they are Chan's trademark."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "As a child Chan studied at the China Drama Academy, a Peking opera school in Hong Kong, and performed with the Seven Little Fortunes alongside Sammo Hung.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed at certain, and all four claims are standard risk, so knowledge evidence suffices (§9.5.3). Lint and dedupe clean, no myth hits. An easy mc on Hong Kong cinema with tempting same-field distractors; it adds to the category's share from outside the US.",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:35:04Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:35:04Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Hong Kong action star is famous for doing his own stunts and showing the failed takes over the end credits?",
+  "answer": "Jackie Chan",
+  "wrong": ["Jet Li", "Donnie Yen", "Chow Yun-fat"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.534,
+    "estimator": "v0"
+  }
+}

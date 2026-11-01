@@ -1,0 +1,218 @@
+{
+  "id": "p.lang.0259",
+  "status": "active",
+  "category": "lang",
+  "tags": ["borrowed-words", "french", "transport", "jobs"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "French chauffer means to heat, so a chauffeur stoked the fires of steam engines. In the 1890s the name passed to the drivers of early motor cars, some of them steam-powered.",
+  "learnMore": "Chauffeur",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "French chauffeur first meant a stoker, a person who fires a steam engine, from chauffer, 'to heat'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The original sense of chauffeur was not a coachman, a footman or a messenger."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "French chauffer means 'to heat'."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In the 1890s the word passed to the drivers of early motor cars, some of which were steam-powered."
+    }
+  ],
+  "writerNotes": "Counterintuitive: a chauffeur drives, so coachman is the obvious pick, and it is wrong. Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 3 high (etymology, date) and 1 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers etymology. rivalTest: Argued for coachman, the earlier paid driver: the French word comes from chauffer, to heat, and named the stoker of a steam engine. Footman and messenger are other servants' jobs. The item replaces a 'lord' item that shared the answer bread with p.lang.0232. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: the word is the same in English and French, and paid drivers are universal. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 31 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "093cc546af7828db6ba4ffb6ba46fda8df6c21ce3345d344dc43f6d973874055",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "A stoker",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "French chauffeur first meant a stoker, someone who fed the fire of a steam engine, from chauffer, to heat.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first sense of chauffeur was stoker, not coachman, footman or messenger.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "French chauffer means to heat.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the 1890s chauffeur passed to the drivers of early motor cars, some of them steam-powered.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c169e700e955bce36d25a2cba3b9e121a4e57c978296e0d9e7ce96b8c63c5372",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "A stoker",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "French chauffeur first meant a stoker, from chauffer, to heat.",
+              "confidence": "certain"
+            },
+            "note": "The word also named late-18th-century brigands who burned victims' feet, but the stem's 'for a paid driver' frames the stoker sense."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It did not originally mean a coachman, a footman or a messenger.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Chauffer means to heat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The word passed to motor-car drivers in the 1890s.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, etymology), c3 (explanation, etymology) and c4 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.lang.0161",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The French word 'chauffeur', for a paid driver, first meant what kind of worker?",
+  "answer": "A stoker",
+  "wrong": ["A coachman", "A footman", "A messenger"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.271,
+    "estimator": "v0"
+  }
+}

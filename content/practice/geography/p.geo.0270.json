@@ -1,0 +1,249 @@
+{
+  "id": "p.geo.0270",
+  "status": "active",
+  "category": "geo",
+  "tags": ["area", "countries", "maps"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Paraguay covers about 407,000 km², roughly 14% more than Germany's 357,000 km². Common world maps stretch lands far from the Equator, which makes Germany look bigger.",
+  "learnMore": "Paraguay",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Paraguay's total area is about 407,000 km²."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Germany's total area is about 357,000 km²."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Paraguay is about 14% larger than Germany by area."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mercator-style world maps enlarge countries far from the Equator, such as Germany, more than countries nearer it, such as Paraguay."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (number), c2 (number) and c3 (number) are high under the C26 floor, and c4 is standard. Datasets: mledoze-countries: PRY area 406,752; DEU 357,114 (c1, c2); 406,752 divided by 357,114 is 1.139 (c3), above the 1.1 guard. Rival test: Germany is the economic giant and Paraguay a small-seeming landlocked country, which is the trap. Against the key: published areas vary by a few thousand km², far less than the 50,000 km² gap. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Both countries are known worldwide; the map distortion catches players everywhere. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 26 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c4 is standard. Seed: 5 (hard): most players pick Germany. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "94e99a6b8a8ffba7e68c9d59739e518d35bccb4cd066ea0419647d233188c262",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Paraguay",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=PRY",
+              "excerpt": "\"area\": 406752",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=DEU",
+              "excerpt": "\"area\": 357114",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=PRY, DEU",
+              "excerpt": "PRY \"area\": 406752; DEU \"area\": 357114",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Ratio 1.139: about 14% larger."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mercator-type maps enlarge high-latitude countries such as Germany far more than countries near the tropics such as Paraguay.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e2e9307e6fb1015443f4fc7b30364a485c3c789cce913df1c5032a9d637bde33",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Paraguay",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=PRY",
+              "excerpt": "\"area\": 406752",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=DEU",
+              "excerpt": "\"area\": 357114",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Other published totals for Germany (357,022 to 357,600) change nothing."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=PRY vs DEU",
+              "excerpt": "406752 / 357114 = 1.139, so Paraguay is about 14% larger.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Number claim; the stem's wording and the 1.1 separation guard are met."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Mercator projection enlarges areas far from the Equator, such as Germany, more than areas nearer it, such as Paraguay.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1, c2 and c3 (mledoze-countries) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which country is bigger by area?",
+  "a": "Paraguay",
+  "b": "Germany",
+  "answer": "a",
+  "relation": "larger",
+  "measure": "area",
+  "unit": "km²",
+  "values": {
+    "a": 406752,
+    "b": 357114
+  },
+  "valueDisplay": {
+    "a": "about 407,000 km²",
+    "b": "about 357,000 km²"
+  },
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.183,
+    "estimator": "v0"
+  }
+}

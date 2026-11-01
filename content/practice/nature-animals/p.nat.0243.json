@@ -1,0 +1,216 @@
+{
+  "id": "p.nat.0243",
+  "status": "active",
+  "category": "nat",
+  "tags": ["ocean-life", "crustaceans", "invertebrates", "shells"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Barnacles are crustaceans. Their larvae swim freely, then glue themselves head-first to a surface and spend their lives kicking food into their mouths with feathery legs.",
+  "learnMore": "Barnacle",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Barnacles are crustaceans, like crabs and shrimps."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Barnacles are not molluscs like clams, mussels, snails and limpets, nor cnidarians like corals and anemones."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Barnacle larvae swim freely before cementing themselves to a surface head first."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Adult barnacles sweep food into their mouths with feathery legs called cirri."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed; high: c1 (checker_doubt, standing in for counterintuitive, which the tooling's riskReason enum lacks; C26 makes the key of a counterintuitive item high); standard: c2, c3 and c4. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on barnacles being crustaceans should cover c1, c3 and c4. rivalTest: Argued for 'Clams and mussels' and 'Snails and limpets', the obvious picks for a hard-shelled animal stuck to a rock, which is why counterintuitive is set. Argued against the key: barnacles sit in their own crustacean group, Cirripedia, but crustaceans include crabs and shrimps, so 'the same group' holds at that level. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: barnacles cover rocks on every coast. style: Oxford spelling, plain hyphens only, explanation of 26 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "40ca5d14e741f60e065066a4b6cef2c574bbd30110d1796f6c71e5cc489397fc",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "Crabs and shrimps",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Barnacles are crustaceans, in the same subphylum as crabs and shrimps.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Barnacles are not molluscs (clams, mussels, snails, limpets) or cnidarians (corals, anemones).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Barnacle larvae swim freely, then the cyprid larva cements itself to a surface head first.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Adult barnacles sweep food into their mouths with feathery legs called cirri.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "143c20d4200cfde180bb7a0e15d3750ddff23fd8c0cd40f9f70c4aba37c0c06f",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "Crabs and shrimps",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Barnacles are crustaceans, like crabs and shrimps.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Barnacles are not molluscs and not cnidarians.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Barnacle larvae swim freely, then cement themselves down head first.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Adult barnacles sweep food into the mouth with feathery legs called cirri.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c1 (key, checker_doubt) rests on knowledge alone in both checks: no pinned dataset covers animal biology and checker A's one search was refused at the session limit, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0144",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Barnacles, which cling to rocks and ships' hulls, belong to the same group as which animals?",
+  "answer": "Crabs and shrimps",
+  "wrong": ["Clams and mussels", "Snails and limpets", "Corals and anemones"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.213,
+    "estimator": "v0"
+  }
+}

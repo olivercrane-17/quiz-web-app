@@ -1,0 +1,247 @@
+{
+  "id": "p.sci.0137",
+  "status": "active",
+  "category": "sci",
+  "tags": ["earth-science", "oceans", "moon"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The Sun's gravity adds to the effect. When Sun and Moon line up, at new and full moon, their pulls combine into extra-high spring tides, named for springing up, not for the season.",
+  "learnMore": "Tide",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The ocean tides are caused mainly by the Moon's gravity."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Earth's rotation on its own, the wind and the Sun's heat do not cause the tides."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Sun's gravity also contributes to the tides."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Spring tides, with the largest tidal range, occur around new and full moon, when the Sun and Moon line up."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name spring tide comes from the idea of the water springing up, not from the season."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers this, so checker A needs web evidence for c4 and c5. rivalTest: 'Earth's spin alone' is the strongest rival, since rotation sets the timing of the two tides a day, but without the Moon's and Sun's gravity there would be no tidal bulges; winds raise waves and surges, and the Sun's heat drives currents, not tides. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 33 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6fd14043cc58726729167bb0e19e51f0a6e809798665bb908d0b74ae32eef96b",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "The Moon's gravity",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Moon's gravity, through its tidal effect, is the main cause of ocean tides.",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Wind, the Sun's heat and Earth's rotation by itself do not cause tides; rotation only sets their timing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Sun's tidal effect is a little under half the Moon's.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Spring tides, with the greatest tidal range, come near new and full moon, when Sun, Earth and Moon line up.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 'spring' in spring tide refers to the water springing up, not to the season.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e74b760814f1246700e17e0576b113f34a02b4f7ab128f306f4b70209eb7693c",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "The Moon's gravity",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ocean tides are caused mainly by the Moon's gravity. Its tidal force is about 2.2 times the Sun's.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Earth's spin alone, wind and the Sun's heat do not raise tides. Wind makes waves and surges, not the tidal cycle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Sun's gravity also raises tides.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Spring tides, with the largest tidal range, occur at new and full moon when the Sun and Moon line up.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Spring in spring tide comes from the old sense of springing or rising up, not from the season.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c4 (explanation, superlative) and c5 (explanation, etymology) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "What mainly causes the ocean tides on Earth?",
+  "answer": "The Moon's gravity",
+  "wrong": ["Earth's spin alone", "Winds over the sea", "The Sun's heat"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.24,
+    "estimator": "v0"
+  }
+}

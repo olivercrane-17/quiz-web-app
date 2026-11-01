@@ -1,0 +1,256 @@
+{
+  "id": "p.nat.0230",
+  "status": "cut",
+  "category": "nat",
+  "tags": ["amphibians", "frogs", "tadpoles", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "This South American frog is named for its paradox: the tadpole grows several times longer than the adult it becomes, then shrinks as it turns into a frog.",
+  "learnMore": "Paradoxical frog",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Paradoxical frog tadpoles can grow to about 22 cm long."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Adult paradoxical frogs grow to about 7.5 cm long at most."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The paradoxical frog is named for the contrast between its giant tadpole and its much smaller adult."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Paradoxical frogs live in South America."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The paradoxical frog's tadpole shrinks as it changes into a frog."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed; high: c1 (number, a comparison label), c2 (number, a comparison label) and c3 (etymology); standard: c4 and c5. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on paradoxical frog tadpole and adult size should cover c1 to c3. rivalTest: Argued for the adult, the obvious pick (adults are bigger than their young), which is why counterintuitive is set. The name itself is the foothold for a reasoning player. The values compare the largest of each, nearly three times apart, so the 1.1 times guard holds even if a source gives a larger adult or a smaller tadpole. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: a South American frog, but the item needs only the reasoning the name offers. style: Oxford spelling, plain hyphens only, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a comparison item. doubts: sources give tadpoles as large as 22 to 27 cm and adults of 3.4 to 7.5 cm, so both values sit at the conservative end, with 'about' and 'up to' in the display.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "44ed03fbf6506328a90e4426ed5938468b8f0f441c9267373c0ce7301ff17cf7",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "A paradoxical frog tadpole",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Paradoxical frog tadpoles grow very large, over 20 cm. The maximum lengths I know being quoted range from about 22 cm to about 27 cm, so I cannot confirm 'about 22 cm' as the figure.",
+              "confidence": "likely"
+            },
+            "note": "Uncertain at the stated precision; see the wording issue. The comparison itself is safe (the tadpole is longer either way). High-risk (number): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Adult paradoxical frogs (Pseudis paradoxa) reach only about 7.5 cm at most.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The frog takes its name from the paradox that its tadpole is far bigger than the adult it turns into.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The paradoxical frog lives in tropical South America (and Trinidad).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The tadpole shrinks a great deal during metamorphosis into the small adult frog.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c1 and the reveal's 'up to about 22 cm' are uncertain: maximum tadpole lengths quoted for this species run from about 22 cm to about 27 cm in what I know, so the exact figure is not settled. A bounded form such as 'more than 20 cm' holds under all of them, or confirm the figure with evidence. The key is safe either way."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8bae1a4e0f2f8910c7cd7cb7bab39d4d796720b0c83fad05d056ed0e10f51b5c",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "A paradoxical frog tadpole",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Published maximum tadpole lengths for the paradoxical frog differ by source; I recall figures from about 22 cm up to roughly 25 cm, so 'about 22 cm' may clash with other references.",
+              "confidence": "unsure"
+            },
+            "note": "The key is safe either way, since every figure is at least three times the adult's length. Not retrieved here: no search budget was available."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Adults are commonly given as roughly 6 to 7.5 cm, but I cannot rule out references that give a slightly larger maximum, so 'at most about 7.5 cm' is not certain.",
+              "confidence": "likely"
+            },
+            "note": "Not retrieved here: no search budget was available."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The frog's common and Latin names refer to the paradox of a tadpole much larger than the frog it becomes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The paradoxical frog lives in tropical South America.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "During metamorphosis the huge tadpole shrinks into the much smaller frog.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Both lengths are high-risk numbers I could not confirm and sources differ (tadpole about 22 cm or 25 cm and more, adult up to 7.5 cm or a little over). Restate as bounds every source agrees on (tadpole 'over 20 cm', adult 'under 8 cm') or confirm exact figures externally. The answer is unaffected."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "cut",
+      "reason": "A and B both revise: neither could confirm the high-risk tadpole length c1 (about 22 cm), B could not confirm the adult length c2 (at most about 7.5 cm), and both report figures that differ between sources. With no passing check a tiebreak cannot settle it (§9.7), and the fix both ask for (bounds such as 'over 20 cm' against 'under 8 cm') changes the claims and values, so it needs two fresh checks: cut. Redraft under a new id with bounded figures and evidence.",
+      "decidedAt": "2026-11-01T04:21:42Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which is longer?",
+  "a": "A paradoxical frog tadpole",
+  "b": "An adult paradoxical frog",
+  "answer": "a",
+  "relation": "longer",
+  "measure": "length at its largest",
+  "unit": "cm",
+  "values": {
+    "a": 22,
+    "b": 7.5
+  },
+  "valueDisplay": {
+    "a": "up to about 22 cm",
+    "b": "up to about 7.5 cm"
+  },
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.229,
+    "estimator": "v0"
+  }
+}

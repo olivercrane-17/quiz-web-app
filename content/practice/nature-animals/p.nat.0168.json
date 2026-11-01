@@ -1,0 +1,408 @@
+{
+  "id": "p.nat.0168",
+  "status": "active",
+  "category": "nat",
+  "tags": ["mammals", "genetics", "evolution", "apes"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Humans have a pair fewer than chimpanzees, gorillas and orangutans, because 2 ancestral ape chromosomes fused end to end to form human chromosome 2.",
+  "learnMore": "Chromosome 2",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Chimpanzees have 48 chromosomes in each body cell, in 24 pairs."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Humans have 46 chromosomes in each body cell, in 23 pairs."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Gorillas and orangutans also have 48 chromosomes."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Human chromosome 2 formed from the end-to-end fusion of 2 ancestral chromosomes that remain separate in other great apes."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed, all high because each holds a number. One search on great ape chromosome numbers and the chromosome 2 fusion should cover them. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: 'humans must have more' is the planted trap. Exact counts, so the guard allows a gap of 2. Argued against the key: 48 for chimpanzees and 46 for humans are standard figures, and body cells excludes eggs and sperm. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: a global fact. style: Oxford spelling, plain hyphens only, explanation of 24 words. myths: screened against content/reference/myths.json; no entry matches; the explanation speaks of shared ancestral chromosomes, never of humans descending from chimpanzees, so it stays clear of the humans-from-chimpanzees entry. mystery and encore: nothing of either kind in a comparison item. doubts: none. Classed as Nature because it is about apes and evolution, though genetics borders on Science & Tech.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5068a5fc4f14ccbada4f9a35a68c076f6e6ffee1b99964e98cb51c296740ed26",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "A chimpanzee",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many chromosomes do chimpanzees, gorillas and orangutans have compared with humans, and how did human chromosome 2 form",
+              "results": [
+                {
+                  "title": "Karyotype",
+                  "url": "https://en.wikipedia.org/wiki/Karyotype"
+                },
+                {
+                  "title": "Revised time estimation of the ancestral human chromosome 2 fusion",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9413910/"
+                },
+                {
+                  "title": "Revised time estimation of the ancestral human chromosome 2 fusion - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/36008753/"
+                },
+                {
+                  "title": "Comparative Genomic Analysis Identifies Great–Ape–Specific Structural Variants and Their Evolutionary Relevance - PMC",
+                  "url": "https://ncbi.nlm.nih.gov/pmc/articles/PMC10461412"
+                },
+                {
+                  "title": "One pedigree we all may have come from – did Adam and Eve have the chromosome 2 fusion?",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5037601/"
+                },
+                {
+                  "title": "Chimpanzee genome project",
+                  "url": "https://en.wikipedia.org/wiki/Chimpanzee_Genome_Project"
+                },
+                {
+                  "title": "Genomic Structure and Evolution of the Ancestral Chromosome Fusion Site in 2q13–2q14.1 and Paralogous Regions on Other Human Chromosomes - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC187548/"
+                },
+                {
+                  "title": "PhaseDancer: a novel targeted assembler of segmental duplications unravels the complexity of the human chromosome 2 fusion going from 48 to 46 chromosomes in hominin evolution",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10496407/"
+                },
+                {
+                  "title": "Incomplete lineage sorting of segmental duplications defines the human chromosome 2 fusion site early during African great ape speciation",
+                  "url": "https://www.biorxiv.org/content/10.1101/2024.12.12.628057.full.pdf"
+                },
+                {
+                  "title": "Comparative FISH mapping of the ancestral fusion point of human chromosome 2 - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/11196135/"
+                }
+              ],
+              "summaryExcerpt": "Chimpanzees, gorillas, and orangutans each have 48 chromosomes (24 pairs), while humans have 46 (23 pairs). Humans have 46 chromosomes, whereas chimpanzee, gorilla, and orangutan have 48.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Peer-reviewed PMC and PubMed papers (one titled 'going from 48 to 46 chromosomes in hominin evolution') and Wikipedia 'Karyotype'. The one bioRxiv preprint in the list is not referenced by the summary."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many chromosomes do chimpanzees, gorillas and orangutans have compared with humans, and how did human chromosome 2 form",
+              "results": [
+                {
+                  "title": "Karyotype",
+                  "url": "https://en.wikipedia.org/wiki/Karyotype"
+                },
+                {
+                  "title": "Revised time estimation of the ancestral human chromosome 2 fusion",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9413910/"
+                },
+                {
+                  "title": "Revised time estimation of the ancestral human chromosome 2 fusion - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/36008753/"
+                },
+                {
+                  "title": "Comparative Genomic Analysis Identifies Great–Ape–Specific Structural Variants and Their Evolutionary Relevance - PMC",
+                  "url": "https://ncbi.nlm.nih.gov/pmc/articles/PMC10461412"
+                },
+                {
+                  "title": "One pedigree we all may have come from – did Adam and Eve have the chromosome 2 fusion?",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5037601/"
+                },
+                {
+                  "title": "Chimpanzee genome project",
+                  "url": "https://en.wikipedia.org/wiki/Chimpanzee_Genome_Project"
+                },
+                {
+                  "title": "Genomic Structure and Evolution of the Ancestral Chromosome Fusion Site in 2q13–2q14.1 and Paralogous Regions on Other Human Chromosomes - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC187548/"
+                },
+                {
+                  "title": "PhaseDancer: a novel targeted assembler of segmental duplications unravels the complexity of the human chromosome 2 fusion going from 48 to 46 chromosomes in hominin evolution",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10496407/"
+                },
+                {
+                  "title": "Incomplete lineage sorting of segmental duplications defines the human chromosome 2 fusion site early during African great ape speciation",
+                  "url": "https://www.biorxiv.org/content/10.1101/2024.12.12.628057.full.pdf"
+                },
+                {
+                  "title": "Comparative FISH mapping of the ancestral fusion point of human chromosome 2 - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/11196135/"
+                }
+              ],
+              "summaryExcerpt": "Chimpanzees, gorillas, and orangutans each have 48 chromosomes (24 pairs), while humans have 46 (23 pairs).",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many chromosomes do chimpanzees, gorillas and orangutans have compared with humans, and how did human chromosome 2 form",
+              "results": [
+                {
+                  "title": "Karyotype",
+                  "url": "https://en.wikipedia.org/wiki/Karyotype"
+                },
+                {
+                  "title": "Revised time estimation of the ancestral human chromosome 2 fusion",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9413910/"
+                },
+                {
+                  "title": "Revised time estimation of the ancestral human chromosome 2 fusion - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/36008753/"
+                },
+                {
+                  "title": "Comparative Genomic Analysis Identifies Great–Ape–Specific Structural Variants and Their Evolutionary Relevance - PMC",
+                  "url": "https://ncbi.nlm.nih.gov/pmc/articles/PMC10461412"
+                },
+                {
+                  "title": "One pedigree we all may have come from – did Adam and Eve have the chromosome 2 fusion?",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5037601/"
+                },
+                {
+                  "title": "Chimpanzee genome project",
+                  "url": "https://en.wikipedia.org/wiki/Chimpanzee_Genome_Project"
+                },
+                {
+                  "title": "Genomic Structure and Evolution of the Ancestral Chromosome Fusion Site in 2q13–2q14.1 and Paralogous Regions on Other Human Chromosomes - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC187548/"
+                },
+                {
+                  "title": "PhaseDancer: a novel targeted assembler of segmental duplications unravels the complexity of the human chromosome 2 fusion going from 48 to 46 chromosomes in hominin evolution",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10496407/"
+                },
+                {
+                  "title": "Incomplete lineage sorting of segmental duplications defines the human chromosome 2 fusion site early during African great ape speciation",
+                  "url": "https://www.biorxiv.org/content/10.1101/2024.12.12.628057.full.pdf"
+                },
+                {
+                  "title": "Comparative FISH mapping of the ancestral fusion point of human chromosome 2 - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/11196135/"
+                }
+              ],
+              "summaryExcerpt": "Humans have 46 chromosomes, whereas chimpanzee, gorilla, and orangutan have 48.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "how many chromosomes do chimpanzees, gorillas and orangutans have compared with humans, and how did human chromosome 2 form",
+              "results": [
+                {
+                  "title": "Karyotype",
+                  "url": "https://en.wikipedia.org/wiki/Karyotype"
+                },
+                {
+                  "title": "Revised time estimation of the ancestral human chromosome 2 fusion",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9413910/"
+                },
+                {
+                  "title": "Revised time estimation of the ancestral human chromosome 2 fusion - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/36008753/"
+                },
+                {
+                  "title": "Comparative Genomic Analysis Identifies Great–Ape–Specific Structural Variants and Their Evolutionary Relevance - PMC",
+                  "url": "https://ncbi.nlm.nih.gov/pmc/articles/PMC10461412"
+                },
+                {
+                  "title": "One pedigree we all may have come from – did Adam and Eve have the chromosome 2 fusion?",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5037601/"
+                },
+                {
+                  "title": "Chimpanzee genome project",
+                  "url": "https://en.wikipedia.org/wiki/Chimpanzee_Genome_Project"
+                },
+                {
+                  "title": "Genomic Structure and Evolution of the Ancestral Chromosome Fusion Site in 2q13–2q14.1 and Paralogous Regions on Other Human Chromosomes - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC187548/"
+                },
+                {
+                  "title": "PhaseDancer: a novel targeted assembler of segmental duplications unravels the complexity of the human chromosome 2 fusion going from 48 to 46 chromosomes in hominin evolution",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10496407/"
+                },
+                {
+                  "title": "Incomplete lineage sorting of segmental duplications defines the human chromosome 2 fusion site early during African great ape speciation",
+                  "url": "https://www.biorxiv.org/content/10.1101/2024.12.12.628057.full.pdf"
+                },
+                {
+                  "title": "Comparative FISH mapping of the ancestral fusion point of human chromosome 2 - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/11196135/"
+                }
+              ],
+              "summaryExcerpt": "Human chromosome 2 is the product of two ancestral ape chromosomes joining. Researchers believe the two original chromosomes fused end to end, and human chromosome 2 was derived from two smaller chromosomes that are found in other great apes (now called 2A and 2B). Fluorescence in-situ hybridization (FISH) work confirmed that two ancestral Great Ape chromosomes fused at their telomeric repeats to form the HSA2.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The FISH sentence rests on the PubMed FISH mapping study (Tier A)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "75fb4b0b9a68987cd628ae9bc893e31abb59f7e6ce5cfc5ea5081c2b38c5660a",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "A chimpanzee",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Chimpanzees have 48 chromosomes in each body cell, in 24 pairs.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Humans have 46 chromosomes in each body cell, in 23 pairs.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gorillas and orangutans also have 48 chromosomes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Human chromosome 2 formed from the end-to-end fusion of two ancestral chromosomes that stay separate in the other great apes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; high-risk c1 (web in A), c2 (web in A), c3 (web in A), c4 (web in A). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which has more chromosomes in each body cell?",
+  "a": "A chimpanzee",
+  "b": "A human",
+  "answer": "a",
+  "relation": "more",
+  "measure": "chromosomes in each body cell",
+  "unit": "chromosomes",
+  "values": {
+    "a": 48,
+    "b": 46
+  },
+  "valueDisplay": {
+    "a": "48 chromosomes",
+    "b": "46 chromosomes"
+  },
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.183,
+    "estimator": "v0"
+  }
+}

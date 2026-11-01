@@ -1,0 +1,288 @@
+{
+  "id": "p.food.0130",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-science", "snacks"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The hull holds the steam until the pressure bursts it and the starch puffs into foam. Sweetcorn kernels have more porous hulls that let steam leak out, so they rarely pop.",
+  "learnMore": "Popcorn",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "A popcorn kernel bursts when water inside it turns to steam and the pressure ruptures its hull."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Popcorn does not pop because of expanding trapped air, oil soaking in or sugar caramelizing."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "When popcorn pops, the starch inside softens and puffs into a foam that sets as it cools."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sweetcorn kernels have more porous hulls that let steam escape, so they rarely pop."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: 'trapped air expanding' is the real confusion; air-popped corn shows that oil is not needed, and the kernels hold little sugar. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: popcorn is eaten worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 31 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: many players know water is involved; expanding air pulls the rest. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1fe713bd24e3cf8e48621a059d76296079bf5382d037bc5d4e0a6fe023b1a632",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Steam from water inside",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Water inside the kernel turns to steam, and the pressure bursts the hull.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Popping is not caused by trapped air, soaked-in oil or caramelizing sugar.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The softened starch puffs into a foam that sets as it cools.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Other corn types, sweetcorn among them, have more permeable hulls that let steam escape, so they rarely pop.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f6589d7c4dc84c84d58a4b1f2d0475d8afb04e943b6fce316369120c30b2e829",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Steam from water inside",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Water inside the kernel turns to steam and the pressure bursts the hull.",
+              "confidence": "certain"
+            },
+            "note": "Tested 'trapped air' and 'oil': they are not the cause."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Expanding air, oil soaking in and caramelising sugar do not make popcorn pop.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The starch inside gelatinises, puffs into a foam and sets as it cools.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "why sweet corn does not pop like popcorn pericarp hull permeable steam escapes Hoseney mechanism of popcorn popping",
+              "results": [
+                {
+                  "title": "VanCleave's Science Fun",
+                  "url": "https://scienceprojectideasforkids.com/why-popcorn-pops/"
+                },
+                {
+                  "title": "Written by James Schnable",
+                  "url": "https://biofortified.org/2010/04/why-popcorn-pops"
+                },
+                {
+                  "title": "Written by James Schnable",
+                  "url": "https://biofortified.org/2010/04/05/why-popcorn-pops/"
+                },
+                {
+                  "title": "Is Popcorn a Physical or Chemical Change?",
+                  "url": "https://www.chefsresource.com/?p=1618428"
+                },
+                {
+                  "title": "Popcorn vs. Sweet Corn: Key Differences, Similarities, and Uses",
+                  "url": "https://gna.it.com/popcorn-sweet-corn-differences"
+                },
+                {
+                  "title": "How Does Corn Turn Into Popcorn?",
+                  "url": "https://biologyinsights.com/how-does-corn-turn-into-popcorn/"
+                },
+                {
+                  "title": "where do kernels come from for popcorn",
+                  "url": "https://myshare-cms.siemens.com/where-do-kernels-come-from-for-popcorn"
+                },
+                {
+                  "title": "Are Corn Seeds Popcorn? Understanding Varieties, Structure, and Popping",
+                  "url": "https://gna.it.com/are-corn-seeds-popcorn-explained"
+                },
+                {
+                  "title": "Secret Of Popcorn Popping Answers",
+                  "url": "https://live.ncuscr.org/Download_PDFS/G-3oOk/449360/Secret%20Of%20Popcorn%20Popping%20Answers.pdf"
+                },
+                {
+                  "title": "What Makes Popcorn Pop: Heat, Moisture & Starch",
+                  "url": "https://scienceinsights.org/what-makes-popcorn-pop-heat-moisture-starch/"
+                }
+              ],
+              "summaryExcerpt": "The search didn't turn up anything from Hoseney or other cereal-chemistry sources. ... One source says sweet corn has a thinner, more permeable pericarp and a soft, sugary endosperm.",
+              "tiers": ["C"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "I believe the popcorn hull is unusually strong and steam-tight, but I found no Tier A or B source for the claim about sweetcorn hulls specifically; the pages returned are all Tier C. Left uncertain, not refuted."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c4: no Tier A or B source found for sweetcorn hulls being more porous (the search returned only Tier C pages). Drop the sentence, or soften it, or support it with a cereal chemistry source."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "revise"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-pfood01t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "0b6ac25c0d2bcd9759d85dbd6c66991ad614d7c96ba69a639a87c4bf7c534516",
+      "startedAt": "2026-11-01T04:51:06Z",
+      "finishedAt": "2026-11-01T04:59:00Z",
+      "coldSolve": {
+        "answerGiven": "Steam from water inside",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c4",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Popcorn pops because its hull is unusually strong and nearly moisture-tight, so steam builds until it bursts. Other kinds of corn lose more moisture through the hull and pop poorly. For sweetcorn in particular, the sugary, low-starch kernel (shrivelled when dry) is also part of the story, so I cannot say with certainty that a more porous hull is why it rarely pops.",
+            "confidence": "likely"
+          },
+          "note": "The disputed claim (checker B left it uncertain). Rated likely, not certain, in my own assessment before reading either record. No external evidence was gathered: no dataset covers it, and the one search this run tried was refused before it ran (the session's web search limit was reached), so it returned nothing and is not counted. A tiebreak needs external evidence here, so the claim stays uncertain."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "c4: a third check cannot confirm that sweetcorn hulls are more porous (knowledge gives likely, not certain, and no Tier A or B source was found by checker B or could be searched here). The tiebreak does not support keeping the sweetcorn sentence as written. Drop it, or replace it with a fact both checks can confirm, such as the hull being strong and nearly moisture-tight so the steam cannot leak out. Any new claim needs its own checks."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "Second pass. A pass, B revise, T revise: the tiebreak leaves explanation claim c4 (sweetcorn hulls are more porous) uncertain, rated likely with no external evidence, and B's one search found only Tier C pages. A revise tiebreak cannot stand in for B (§9.9 rule 2), and a wordingOnly fix leaves the revise standing. Dropping or replacing the sweetcorn sentence changes a claim, which needs two fresh checks (§9.7), so cut. The key and distractors are sound: redraft under a new id with an explanation built on a verified fact.",
+      "decidedAt": "2026-11-01T05:21:47Z"
+    }
+  },
+  "format": "mc",
+  "stem": "What makes a popcorn kernel burst open when it is heated?",
+  "answer": "Steam from water inside",
+  "wrong": [
+    "Trapped air expanding",
+    "Oil soaking into it",
+    "Sugar caramelizing"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.307,
+    "estimator": "v0"
+  }
+}

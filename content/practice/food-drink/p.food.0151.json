@@ -1,0 +1,185 @@
+{
+  "id": "p.food.0151",
+  "status": "active",
+  "category": "food",
+  "tags": ["nutrition", "vitamins", "food-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Scurvy comes from a lack of vitamin C. Dogs and cats make their own, but humans, apes, monkeys and guinea pigs must get it from food.",
+  "learnMore": "Scurvy",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Eating citrus fruit prevents scurvy, which is caused by a lack of vitamin C."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Rickets, beriberi and pellagra are caused by a lack of vitamin D, thiamine and niacin respectively, not vitamin C."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Dogs and cats can make their own vitamin C, while humans, other apes, monkeys and guinea pigs cannot and must get it from their diet."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: all four are deficiency diseases, which makes the distractors real confusions; only scurvy answers to citrus. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the sailors' story is taught widely. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 26 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: well known. Doubts: none. The disease is stated as history and biology, with no health advice.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "944a40f7c459a32a8c05ad34026aa47cb30a917469a865dcd077d6749bfbc406",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Scurvy",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Scurvy is caused by lack of vitamin C, which citrus fruit supplies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Rickets comes from lack of vitamin D, beriberi from lack of thiamine and pellagra from lack of niacin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dogs and cats make their own vitamin C; humans, other apes, monkeys and guinea pigs lack the enzyme and need it in food.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "147814b9cf24818f79087c2e2eaa4ef5e58baa66498b2490eadc7c447e4ed233",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Scurvy",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Scurvy is caused by a lack of vitamin C, and citrus fruit prevents it.",
+              "confidence": "certain"
+            },
+            "note": "The other three are also vitamin deficiencies, which makes them fair distractors; only scurvy is a vitamin C disease."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Rickets comes from a lack of vitamin D (and calcium), beriberi from thiamine and pellagra from niacin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dogs and cats make their own vitamin C; humans, other apes, monkeys and guinea pigs cannot.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.food.0137",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Sailors on long voyages ate citrus fruit to prevent which disease?",
+  "answer": "Scurvy",
+  "wrong": ["Rickets", "Beriberi", "Pellagra"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.9,
+    "spread": 0.277,
+    "estimator": "v0"
+  }
+}

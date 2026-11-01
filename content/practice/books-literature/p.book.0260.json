@@ -1,0 +1,231 @@
+{
+  "id": "p.book.0260",
+  "status": "active",
+  "category": "book",
+  "tags": ["classic-novels", "gothic-novels"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Victor Hugo set his novel in 1482 but published it in 1831, 13 years after Mary Shelley's Frankenstein. Its French title is simply Notre-Dame de Paris.",
+  "learnMore": "The Hunchback of Notre-Dame",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Victor Hugo's The Hunchback of Notre-Dame (Notre-Dame de Paris) was first published in 1831."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Mary Shelley's Frankenstein was first published in 1818."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Hunchback of Notre-Dame is set in 1482."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The novel's original French title is Notre-Dame de Paris."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: classic novels. lint: content:check reports no errors on this item and no warnings. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. rivalTest: Thirteen years apart, so no quibble over months can flip the key; the Hunchback's medieval setting is what misleads. Counterintuitive: the novel is set in 1482 and feels medieval, so many players assume it is older than Frankenstein. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: the work is known well beyond any one country and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has about the same chance as one in London or Chicago. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 26 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: nothing of either kind to check in a practice item. doubts: none. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a2348db171c0284743fcf6f636abb65d7071562798a7fa4294ef4c40c20859e6",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "Frankenstein",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Victor Hugo's Notre-Dame de Paris was first published in March 1831.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Frankenstein; or, The Modern Prometheus was first published, anonymously, on 1 January 1818.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hugo set the novel in Paris in 1482.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The original French title is Notre-Dame de Paris.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "fb0f0670e83206a0aa77e5cc7a48e55f57d63557b558b4bca7655716fd7409cc",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "Frankenstein",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Victor Hugo's Notre-Dame de Paris (The Hunchback of Notre-Dame) was first published in 1831.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mary Shelley's Frankenstein was first published in 1818.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: a revised Frankenstein edition also appeared in 1831, but the stem and label ask for first publication. High-risk (first): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Hunchback of Notre-Dame is set in 1482.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The novel's original French title is Notre-Dame de Paris.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (label, first), c2 (label, first) and c3 (explanation, date) rest on knowledge alone in both: neither checker could search (both report the shared web budget spent) and no pinned dataset covers them. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, never a relabel. The labels themselves need that evidence, so redraft under a new id once a dataset or a Tier A or B search can carry them.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.hist.0169",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which novel was published first?",
+  "a": "The Hunchback of Notre-Dame",
+  "b": "Frankenstein",
+  "answer": "b",
+  "relation": "earlier",
+  "measure": "year first published",
+  "unit": "year",
+  "values": {
+    "a": 1831,
+    "b": 1818
+  },
+  "valueDisplay": {
+    "a": "1831",
+    "b": "1818"
+  },
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.199,
+    "estimator": "v0"
+  }
+}

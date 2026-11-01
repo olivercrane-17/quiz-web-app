@@ -1,0 +1,191 @@
+{
+  "id": "p.geo.0217",
+  "status": "active",
+  "category": "geo",
+  "tags": ["continents", "peninsulas", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Its Sinai Peninsula lies east of the narrow isthmus where Africa meets Asia, so it is usually counted as part of Asia.",
+  "learnMore": "Sinai Peninsula",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Egypt has land in Asia, the Sinai Peninsula."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Morocco, Sudan and Libya have no land in Asia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Sinai Peninsula lies east of the Isthmus of Suez, where Africa meets Asia, and is usually counted as part of Asia."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: mledoze-countries and iso-3166-regions place Egypt in Africa (EGY region Africa, sub-region Northern Africa), which fixes the stem's premise; neither splits a country between continents, so c1 and c3 are standard knowledge. Rival test: Morocco is the African country closest to Europe, and Sudan and Libya are Egypt's neighbours; none reaches into Asia. Against the key: the Africa-Asia line is a convention, but every convention puts it at the Isthmus of Suez, so Sinai counts as Asia. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: The Sinai is well known through history and religion, and the reasoning needs only a map. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 22 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; every claim is standard. Seed: 2 (easy): most players get there by thinking of Sinai. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "465d630c4f63056eaf062c5ebb9411b8cd1d22e42e096c10a79896db7dac6e05",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Egypt",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Egypt's Sinai Peninsula lies in Asia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Morocco, Sudan and Libya lie wholly in Africa.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Sinai lies east of the Suez isthmus and the canal, the conventional Africa-Asia boundary, so it is counted as Asia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5fabc5196d488c2b28ccd6ef0ee545303baf9f5c694187b5916bfd7d1f023471",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Egypt",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=EGY",
+              "excerpt": "\"borders\": [\"ISR\",\"LBY\",\"PSE\",\"SDN\"], \"region\": \"Africa\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Egypt borders Israel and Palestine, both in Asia; the Sinai Peninsula east of the Suez Canal is that Asian land. The Natural Earth 110m Egypt polygon also has 14 vertices east of the canal (lon 32.7 to 34.9 E, lat 27.7 to 31.2 N), which is Sinai."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MAR, LBY, SDN",
+              "excerpt": "MAR \"borders\": [\"DZA\",\"ESH\",\"ESP\"]; LBY \"borders\": [\"DZA\",\"TCD\",\"EGY\",\"NER\",\"SDN\",\"TUN\"]; SDN \"borders\": [\"CAF\",\"TCD\",\"EGY\",\"ERI\",\"ETH\",\"LBY\",\"SSD\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "No neighbour of the three is in Asia, and none has territory east of the Isthmus of Suez."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Sinai Peninsula lies east of the Isthmus of Suez and is usually counted as part of Asia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which African country also has land in Asia?",
+  "answer": "Egypt",
+  "wrong": ["Morocco", "Sudan", "Libya"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.24,
+    "estimator": "v0"
+  }
+}

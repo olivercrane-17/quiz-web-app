@@ -1,0 +1,176 @@
+{
+  "id": "p.film.0218",
+  "status": "cut",
+  "category": "film",
+  "tags": ["animation", "disney", "awards"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Cogsworth is the clock, Mrs Potts the teapot and the wardrobe is a former opera singer. The film was the first animated feature nominated for the Oscar for Best Picture.",
+  "learnMore": "Beauty and the Beast (1991 film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In Beauty and the Beast (1991), Lumière is an enchanted candelabra."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Cogsworth is a clock, Mrs Potts is a teapot and the Wardrobe is a former opera singer; Lumière is none of these."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Beauty and the Beast (1991) was the first animated feature nominated for the Academy Award for Best Picture."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Every distractor is another enchanted object from the same castle, so a player must match the name to the object; Lumière's French name (light) is the foothold. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a worldwide release; the objects are everyday ones. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 30 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "277a68ab15f29d47c6ff7cad99b8be984a54310300939eeca8a21c7dea154fe2",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "A candelabra",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Lumière, the castle's maître d', is a candelabrum in the 1991 film.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cogsworth is a mantel clock and Mrs Potts a teapot, and Lumière is neither. I know the wardrobe as a former opera singer from the stage musical (Madame de la Grande Bouche) and the 2017 remake, but I cannot say for certain that the 1991 film makes her one.",
+              "confidence": "likely"
+            },
+            "note": "Uncertain on one part only: the clock, the teapot and the point that Lumière is none of these are certain. The opera-singer detail may belong to the adaptations rather than the 1991 film, and it is repeated as fact in the explanation. Without a search I cannot settle it, so it needs external evidence in a follow-up, or the clause should go."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Beauty and the Beast was nominated for Best Picture at the 1992 ceremony, the first animated feature to be.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c2 and the explanation call the wardrobe 'a former opera singer'. She is one in the stage musical and the 2017 remake; I could not confirm it for the 1991 film without a search. Evidence it in a follow-up, or drop that clause from the explanation and c2."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b24dae089eed481161358118dc0af30c853698ed6f50c80f8c09def7983ddb90",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "A candelabra",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "In Beauty and the Beast (1991), Lumière is a candelabra.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cogsworth is a clock, Mrs Potts a teapot and the wardrobe is a former opera singer.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: clock, teapot and wardrobe are each another named character, so none can be argued for Lumière."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Beauty and the Beast (1991) was the first animated feature nominated for the Best Picture Oscar.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "cut",
+      "reason": "Checker A revises, and the doubt looks right: c2 and the explanation call the wardrobe a former opera singer, a backstory that comes from the stage musical and the 2017 remake rather than the 1991 film. Fixing it means removing that clause from c2, which changes a claim and needs two fresh checks, and a tiebreak could pass only by confirming the doubted clause, so it is cut (§9.7). High-risk c1 and c3 also rest on knowledge only. Worth redrafting under a new id without the opera-singer clause.",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In Disney's Beauty and the Beast (1991), what kind of household object is the enchanted servant Lumière?",
+  "answer": "A candelabra",
+  "wrong": ["A clock", "A teapot", "A wardrobe"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.294,
+    "estimator": "v0"
+  }
+}

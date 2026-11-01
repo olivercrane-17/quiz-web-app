@@ -1,0 +1,206 @@
+{
+  "id": "p.sport.0129",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["video-games", "nintendo", "zelda"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Zelda is the princess of the kingdom of Hyrule. Shigeru Miyamoto has said he named her after Zelda Fitzgerald, wife of the American novelist F. Scott Fitzgerald.",
+  "learnMore": "The Legend of Zelda",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "In The Legend of Zelda games, the player controls a hero named Link."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "In the series Zelda is a princess and Ganon the main villain, and Kirby is the hero of a different Nintendo series."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Zelda is the princess of the kingdom of Hyrule."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Shigeru Miyamoto has said Princess Zelda was named after Zelda Fitzgerald, the wife of F. Scott Fitzgerald."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; c1, c4 are high and c2, c3 are standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item; the standard claims carry none of those triggers and state rules or well-known facts. datasets: no pinned dataset covers video games, so c4 needs web evidence from checker A. rivalTest: Zelda is the planted trap, because the title names her; Ganon is the series villain; Kirby is a Nintendo hero from another series. In every main game the playable hero is Link, so the key holds. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 27 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: C26 makes the key of a counterintuitive item high and the schema has no 'counterintuitive' riskReason, so c1 uses checker_doubt. Some spin-offs let players control Zelda; the stem says 'the hero', which in the series is Link.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8a72a743b6b0d9a10d5843109bc57b0dc8a2a20c16c515268a053eda1f9d3371",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Link",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The hero the player controls in The Legend of Zelda is Link.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Zelda is the princess, Ganon the main villain, and Kirby the hero of a separate Nintendo series.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Zelda is the princess of Hyrule.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Shigeru Miyamoto has said he took Zelda's name from Zelda Fitzgerald, wife of F. Scott Fitzgerald.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ae8373595ef18d2a555d3c3c756e00b07a8a2b542e2a36dd90f1ffb58528bd57",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Link",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Link is the player character in the main Zelda games, but not in all of them. Zelda is the playable hero of The Legend of Zelda: Echoes of Wisdom (2024) and of a few earlier CD-i and spin-off titles, so 'the player controls a hero named Link' is not true of every game.",
+              "confidence": "certain"
+            },
+            "note": "The writer flagged this claim for doubt, and the doubt is justified. True as the series convention, not as a flat statement about all the games."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Zelda is the princess of Hyrule, Ganon is the series' main villain, and Kirby stars in a separate Nintendo series.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Zelda is the princess of the kingdom of Hyrule.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Shigeru Miyamoto has said he named the princess after Zelda Fitzgerald because he liked the sound of the name.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "second_answer",
+            "severity": "fix",
+            "note": "'Zelda' is a defensible answer for some games: she is the playable hero of Echoes of Wisdom (2024), the newest mainline Zelda title, and of a few earlier titles. Pin the stem to the usual case (for example 'In most Zelda games' or 'In the original 1986 game') so a fan has no grounds to report it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "A pass, B revise. B's second_answer issue stands: Princess Zelda is the playable hero of The Legend of Zelda: Echoes of Wisdom (2024) and of earlier spin-offs, so 'Zelda' is defensible for 'The Legend of Zelda video games', and B left key claim c1 uncertain. A real problem, so no tiebreak (§9.7). Pinning the stem changes the key claim, and c4 rests on knowledge alone. Cut. Redraft pinned to the original 1986 game.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In The Legend of Zelda video games, what is the name of the hero the player controls?",
+  "answer": "Link",
+  "wrong": ["Zelda", "Ganon", "Kirby"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.78,
+    "spread": 0.475,
+    "estimator": "v0"
+  }
+}

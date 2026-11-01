@@ -1,0 +1,231 @@
+{
+  "id": "p.film.0266",
+  "status": "active",
+  "category": "film",
+  "tags": ["animation", "germany", "silhouettes"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Reiniger animated The Adventures of Prince Achmed with cut-out silhouettes, moved frame by frame. It came out in 1926, 11 years before Snow White and the Seven Dwarfs.",
+  "learnMore": "The Adventures of Prince Achmed",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Lotte Reiniger's animated feature The Adventures of Prince Achmed premiered in 1926."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Disney's first animated feature, Snow White and the Seven Dwarfs, premiered in December 1937."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Reiniger animated Prince Achmed with cut-out silhouette figures, moved a little for each frame."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Adventures of Prince Achmed was released 11 years before Snow White and the Seven Dwarfs."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Disney is the side most players pick, because Snow White is often thought of as the first animated feature; the gap is 11 years, so the answer holds whatever premiere date is used for either film. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a German production set against a US one; no local knowledge is needed. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 28 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: the item deliberately makes no 'oldest surviving animated feature' claim for Prince Achmed, a superlative that would need its own evidence; seeded Hard and counterintuitive, as §8.2 requires.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "21bf490a31cd26db9f416a35dcbeb2232caea6d79eda66d624e361f42d804048",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "Lotte Reiniger's Prince Achmed",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lotte Reiniger's silhouette feature The Adventures of Prince Achmed premiered in 1926.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Snow White and the Seven Dwarfs, Disney's first animated feature, premiered on 21 December 1937.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Reiniger animated jointed cut-out silhouette figures under the camera, moving them a little for each frame.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "From 1926 to 1937 is 11 years, using c1 and c2.",
+              "confidence": "certain"
+            },
+            "note": "Arithmetic on c1 and c2; the record schema has no calculation evidence, so it is recorded as knowledge. High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "12cf20db1a20e1d03c59c00d3bcc535eb59b0611f1cf96e64a29d8e5319de051",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "Lotte Reiniger's Prince Achmed",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lotte Reiniger's The Adventures of Prince Achmed premiered in 1926.",
+              "confidence": "certain"
+            },
+            "note": "1926 is the film's standard date. The order against 1937 is safe whichever early showing is counted. High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Disney's first animated feature, Snow White and the Seven Dwarfs, premiered in December 1937.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: no earlier Disney feature exists; Snow White is the first. High-risk (first): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Reiniger made Prince Achmed with cut-out silhouette figures, moved slightly for each frame.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Prince Achmed (1926) came 11 years before Snow White (1937).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1, c2 and c4 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0119",
+      "score": 0.343,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Lotte Reiniger's Prince Achmed",
+  "b": "Disney's first animated feature",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of release",
+  "unit": "year",
+  "values": {
+    "a": 1926,
+    "b": 1937
+  },
+  "valueDisplay": {
+    "a": "1926",
+    "b": "1937"
+  },
+  "predicted": {
+    "p": 0.33,
+    "spread": 0.147,
+    "estimator": "v0"
+  }
+}

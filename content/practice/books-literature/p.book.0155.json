@@ -1,0 +1,486 @@
+{
+  "id": "p.book.0155",
+  "status": "active",
+  "category": "book",
+  "tags": ["world-literature", "arabian-nights"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Antoine Galland, who heard the tale from the Syrian storyteller Hanna Diyab, set it in a city in China. The wicked sorcerer, by contrast, comes from the Maghreb, in north-west Africa.",
+  "learnMore": "Aladdin",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "In the oldest known version of the story, Antoine Galland's French text published in the 1710s, Aladdin lives in a city in China."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "In Galland's version Aladdin does not live in Morocco, Persia or Egypt."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Galland heard the story of Aladdin from Hanna Diyab, a Syrian storyteller from Aleppo."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In Galland's version the sorcerer who tricks Aladdin is from the Maghreb, in north-west Africa."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: world literature in translation. Lint: content:check reports no errors; C22 may warn because other categories share the answer China (when I checked: p.food.0156 on ramen at 0.61). It tests a different fact, so the pair is related, not a duplicate. Any later C22 flag on this item that shares only the country answer is the same case. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item). Datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. Rival test: Morocco is the planted trap, because the sorcerer comes from the Maghreb; Persia and Egypt are settings of other Nights tales. Later Arabic manuscripts of Aladdin post-date Galland and are thought to derive from him, so his text is the oldest known version, and it names China. Counterintuitive: films and retellings set Aladdin in an Arabian city, so almost nobody picks China. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 31 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: The tale's customs are Islamic and the Disney film's Agrabah is Arabian, so a player may object, but Galland's text states a city of China; c1 dates the volumes to the 1710s rather than one year (1710 to 1712 in the sources I recall). WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7cd68035d0e64c8333a7f9493ff517a797d3876497a87369540f5fcf2209182b",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "China",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Aladdin story setting in Galland's text: Aladdin is a poor boy in a city of China, and the magician who tricks him comes from Africa (the Maghreb)",
+              "results": [
+                {
+                  "title": "Aladdin",
+                  "url": "https://en.wikipedia.org/wiki/Aladdin"
+                },
+                {
+                  "title": "Aladdin",
+                  "url": "https://www.britannica.com/topic/Aladdin-fictional-hero"
+                },
+                {
+                  "title": "Aladdin - Students",
+                  "url": "https://kids.britannica.com/students/article/Aladdin/623242"
+                },
+                {
+                  "title": "The Thousand and One Nights",
+                  "url": "https://www.britannica.com/topic/The-Thousand-and-One-Nights"
+                },
+                {
+                  "title": "Abanazar (pantomime)",
+                  "url": "https://en.wikipedia.org/wiki/Abanazar_(pantomime)"
+                },
+                {
+                  "title": "Arabian Nights (miniseries)",
+                  "url": "https://en.wikipedia.org/wiki/Arabian_Nights_(miniseries)"
+                },
+                {
+                  "title": "Les Mille et Une Nuits",
+                  "url": "https://en.wikipedia.org/wiki/Les_mille_et_une_nuits"
+                },
+                {
+                  "title": "Aladdin and His Magic Lamp (1970 film)",
+                  "url": "https://en.wikipedia.org/wiki/Aladin_et_la_lampe_merveilleuse"
+                },
+                {
+                  "title": "Hanna Diyab",
+                  "url": "https://en.wikipedia.org/wiki/Hanna_Diyab"
+                },
+                {
+                  "title": "Aladdin (1992 Golden Films film)",
+                  "url": "https://en.wikipedia.org/wiki/Aladdin_(1993_film)"
+                }
+              ],
+              "summaryExcerpt": "Wikipedia says the opening sentences of both Galland's and Burton's versions place the story in a city of China, but nearly everything else reads as Middle Eastern. The opening sentences of the story, in both the Galland and the Burton versions, set it in \"one of the cities of China\".",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 17: the opening sentences of Galland's version set the story in 'one of the cities of China'. Search 16 (also counted on this item) confirms that Galland's French version is the earliest known text, and that the Chavis Arabic text is a back-translation of it. Counts at Tier B. 'Published in the 1710s' rests on knowledge (the Aladdin volumes appeared in 1712)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Aladdin story setting in Galland's text: Aladdin is a poor boy in a city of China, and the magician who tricks him comes from Africa (the Maghreb)",
+              "results": [
+                {
+                  "title": "Aladdin",
+                  "url": "https://en.wikipedia.org/wiki/Aladdin"
+                },
+                {
+                  "title": "Aladdin",
+                  "url": "https://www.britannica.com/topic/Aladdin-fictional-hero"
+                },
+                {
+                  "title": "Aladdin - Students",
+                  "url": "https://kids.britannica.com/students/article/Aladdin/623242"
+                },
+                {
+                  "title": "The Thousand and One Nights",
+                  "url": "https://www.britannica.com/topic/The-Thousand-and-One-Nights"
+                },
+                {
+                  "title": "Abanazar (pantomime)",
+                  "url": "https://en.wikipedia.org/wiki/Abanazar_(pantomime)"
+                },
+                {
+                  "title": "Arabian Nights (miniseries)",
+                  "url": "https://en.wikipedia.org/wiki/Arabian_Nights_(miniseries)"
+                },
+                {
+                  "title": "Les Mille et Une Nuits",
+                  "url": "https://en.wikipedia.org/wiki/Les_mille_et_une_nuits"
+                },
+                {
+                  "title": "Aladdin and His Magic Lamp (1970 film)",
+                  "url": "https://en.wikipedia.org/wiki/Aladin_et_la_lampe_merveilleuse"
+                },
+                {
+                  "title": "Hanna Diyab",
+                  "url": "https://en.wikipedia.org/wiki/Hanna_Diyab"
+                },
+                {
+                  "title": "Aladdin (1992 Golden Films film)",
+                  "url": "https://en.wikipedia.org/wiki/Aladdin_(1993_film)"
+                }
+              ],
+              "summaryExcerpt": "Wikipedia says the opening sentences of both Galland's and Burton's versions place the story in a city of China, but nearly everything else reads as Middle Eastern. The opening sentences of the story, in both the Galland and the Burton versions, set it in \"one of the cities of China\".",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 17."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Aladdin oldest known version Antoine Galland's French Mille et une nuits, story told to him by Hanna Diyab of Aleppo, Aladdin lives in a city in China, sorcerer from the Maghreb",
+              "results": [
+                {
+                  "title": "Hanna Diyab",
+                  "url": "https://en.wikipedia.org/wiki/Hanna_Diyab"
+                },
+                {
+                  "title": "Les Mille et Une Nuits",
+                  "url": "https://en.wikipedia.org/wiki/Les_Mille_et_Une_Nuits"
+                },
+                {
+                  "title": "Aladdin",
+                  "url": "https://en.wikipedia.org/wiki/Aladdin"
+                },
+                {
+                  "title": "One Thousand and One Nights",
+                  "url": "https://en.wikipedia.org/wiki/One_Thousand_and_One_Nights"
+                },
+                {
+                  "title": "Antoine Galland",
+                  "url": "https://en.wikipedia.org/wiki/Antoine_Galland"
+                },
+                {
+                  "title": "Aladdin and His Wonder Lamp",
+                  "url": "https://en.wikipedia.org/wiki/Aladdin_and_His_Wonder_Lamp"
+                },
+                {
+                  "title": "Translations of One Thousand and One Nights",
+                  "url": "https://en.wikipedia.org/wiki/Translations_of_One_Thousand_and_One_Nights"
+                },
+                {
+                  "title": "Ali Baba and the Forty Thieves",
+                  "url": "https://en.wikipedia.org/wiki/Ali_Baba_and_the_Forty_Thieves"
+                },
+                {
+                  "title": "Denis Chavis",
+                  "url": "https://en.wikipedia.org/wiki/Denis_Chavis"
+                },
+                {
+                  "title": "Ahmed and Paribanou",
+                  "url": "https://en.wikipedia.org/wiki/Ahmed_and_Paribanou"
+                }
+              ],
+              "summaryExcerpt": "Galland heard the tale from Hanna Diyab, a Maronite storyteller from Aleppo, in Paris in 1709.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 16: Hanna Diyab, a Maronite storyteller from Aleppo, told Galland the tale in Paris in 1709."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Aladdin story setting in Galland's text: Aladdin is a poor boy in a city of China, and the magician who tricks him comes from Africa (the Maghreb)",
+              "results": [
+                {
+                  "title": "Aladdin",
+                  "url": "https://en.wikipedia.org/wiki/Aladdin"
+                },
+                {
+                  "title": "Aladdin",
+                  "url": "https://www.britannica.com/topic/Aladdin-fictional-hero"
+                },
+                {
+                  "title": "Aladdin - Students",
+                  "url": "https://kids.britannica.com/students/article/Aladdin/623242"
+                },
+                {
+                  "title": "The Thousand and One Nights",
+                  "url": "https://www.britannica.com/topic/The-Thousand-and-One-Nights"
+                },
+                {
+                  "title": "Abanazar (pantomime)",
+                  "url": "https://en.wikipedia.org/wiki/Abanazar_(pantomime)"
+                },
+                {
+                  "title": "Arabian Nights (miniseries)",
+                  "url": "https://en.wikipedia.org/wiki/Arabian_Nights_(miniseries)"
+                },
+                {
+                  "title": "Les Mille et Une Nuits",
+                  "url": "https://en.wikipedia.org/wiki/Les_mille_et_une_nuits"
+                },
+                {
+                  "title": "Aladdin and His Magic Lamp (1970 film)",
+                  "url": "https://en.wikipedia.org/wiki/Aladin_et_la_lampe_merveilleuse"
+                },
+                {
+                  "title": "Hanna Diyab",
+                  "url": "https://en.wikipedia.org/wiki/Hanna_Diyab"
+                },
+                {
+                  "title": "Aladdin (1992 Golden Films film)",
+                  "url": "https://en.wikipedia.org/wiki/Aladdin_(1993_film)"
+                }
+              ],
+              "summaryExcerpt": "Wikipedia's plot summary says he is recruited by a sorcerer from the Maghreb, who passes himself off as the brother of Aladdin's late father, Mustapha the tailor. Britannica instead calls him an African magician claiming to be his uncle.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 17: Wikipedia says a sorcerer from the Maghreb; Britannica says an African magician."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 2,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d3790ae4d2226ff70f4f3b67b50310c580ed0d1f266a36c7c45343da34b69840",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "China",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Aladdin Galland Hanna Diyab earliest known text no earlier Arabic manuscript story set in China African magician",
+              "results": [
+                {
+                  "title": "One Thousand and One Nights",
+                  "url": "https://en.wikipedia.org/wiki/One_Thousand_and_One_Nights"
+                },
+                {
+                  "title": "Denis Chavis",
+                  "url": "https://en.wikipedia.org/wiki/Denis_Chavis"
+                },
+                {
+                  "title": "Aladdin",
+                  "url": "https://en.wikipedia.org/wiki/Aladdin"
+                },
+                {
+                  "title": "Antoine Galland",
+                  "url": "https://en.wikipedia.org/wiki/Antoine_Galland"
+                },
+                {
+                  "title": "Les Mille et Une Nuits",
+                  "url": "https://en.wikipedia.org/wiki/Les_Mille_et_Une_Nuits"
+                },
+                {
+                  "title": "Translations of One Thousand and One Nights",
+                  "url": "https://en.wikipedia.org/wiki/Translations_of_One_Thousand_and_One_Nights"
+                },
+                {
+                  "title": "Arabic literature",
+                  "url": "https://en.wikipedia.org/wiki/Arabic_literature"
+                },
+                {
+                  "title": "List of stories within One Thousand and One Nights",
+                  "url": "https://en.wikipedia.org/wiki/List_of_stories_within_One_Thousand_and_One_Nights"
+                },
+                {
+                  "title": "The Ebony Horse",
+                  "url": "https://en.wikipedia.org/?redirect=no&title=The_Ebony_Horse"
+                },
+                {
+                  "title": "File:Arabian nights manuscript.jpg",
+                  "url": "https://en.wikipedia.org/wiki/File:Arabian_nights_manuscript.jpg"
+                }
+              ],
+              "summaryExcerpt": "Aladdin is not in the original *Nights* manuscripts, and no authentic Arabic textual source has been found. It was incorporated into the book Les mille et une nuits by its French translator, Antoine Galland, based on a folk tale that he heard from the Syrian storyteller Hanna Diyab.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The call covers the 'oldest known version' half: no authentic Arabic source has been found and Galland's translation is where the tale enters the Nights. The 'city in China' half is my own knowledge (certain): Galland places it in the capital of one of the richest kingdoms of China. Two other calls agree: a Britannica-only call describes Aladdin as the son of a Chinese tailor, and a mixed-tier call says Galland's and Burton's texts both open in 'one of the cities of China'. No source reported a conflict."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Galland's text Aladdin is a poor tailor's son in a Chinese city, so Morocco, Persia and Egypt are all wrong.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Aladdin Galland Hanna Diyab earliest known text no earlier Arabic manuscript story set in China African magician",
+              "results": [
+                {
+                  "title": "One Thousand and One Nights",
+                  "url": "https://en.wikipedia.org/wiki/One_Thousand_and_One_Nights"
+                },
+                {
+                  "title": "Denis Chavis",
+                  "url": "https://en.wikipedia.org/wiki/Denis_Chavis"
+                },
+                {
+                  "title": "Aladdin",
+                  "url": "https://en.wikipedia.org/wiki/Aladdin"
+                },
+                {
+                  "title": "Antoine Galland",
+                  "url": "https://en.wikipedia.org/wiki/Antoine_Galland"
+                },
+                {
+                  "title": "Les Mille et Une Nuits",
+                  "url": "https://en.wikipedia.org/wiki/Les_Mille_et_Une_Nuits"
+                },
+                {
+                  "title": "Translations of One Thousand and One Nights",
+                  "url": "https://en.wikipedia.org/wiki/Translations_of_One_Thousand_and_One_Nights"
+                },
+                {
+                  "title": "Arabic literature",
+                  "url": "https://en.wikipedia.org/wiki/Arabic_literature"
+                },
+                {
+                  "title": "List of stories within One Thousand and One Nights",
+                  "url": "https://en.wikipedia.org/wiki/List_of_stories_within_One_Thousand_and_One_Nights"
+                },
+                {
+                  "title": "The Ebony Horse",
+                  "url": "https://en.wikipedia.org/?redirect=no&title=The_Ebony_Horse"
+                },
+                {
+                  "title": "File:Arabian nights manuscript.jpg",
+                  "url": "https://en.wikipedia.org/wiki/File:Arabian_nights_manuscript.jpg"
+                }
+              ],
+              "summaryExcerpt": "Aladdin is not in the original *Nights* manuscripts, and no authentic Arabic textual source has been found. It was incorporated into the book Les mille et une nuits by its French translator, Antoine Galland, based on a folk tale that he heard from the Syrian storyteller Hanna Diyab.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "'From Aleppo' is not in this call's summary; it comes from my own knowledge (certain) and a mixed-tier call that called Diyab a Maronite storyteller from Aleppo."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Galland calls the sorcerer a magician from Africa, which means the Maghreb in the usage of his day and of later translators who write 'Maghribi'.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Safe as written: 'oldest known version' is Galland's text (no earlier Arabic source exists and Diyab's own manuscript is lost). Some scholars read 'China' here as a stand-in for a faraway land, but the question asks only what that version says."
+          }
+        ],
+        "searchesUsed": 3,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Both checks pass with web evidence in both; B's note (China as a stand-in for a far land) does not change what the oldest text says. Dedupe: Shares the answer China with p.sport.0166 and p.sci.0169; different facts.",
+      "decidedAt": "2026-11-01T04:03:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "nearestId": "p.sport.0166",
+      "score": 0.614,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In the oldest known version of the story, Aladdin lives in which country?",
+  "answer": "China",
+  "wrong": ["Morocco", "Persia", "Egypt"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.26,
+    "spread": 0.212,
+    "estimator": "v0"
+  }
+}

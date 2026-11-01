@@ -1,0 +1,215 @@
+{
+  "id": "p.nat.0138",
+  "status": "active",
+  "category": "nat",
+  "tags": ["birds", "new-zealand", "senses"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Kiwi hunt at night, probing the soil with their beaks and finding food largely by smell, unusual for a bird. Sensitive pits near the tip may also feel prey moving.",
+  "learnMore": "Kiwi (bird)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Kiwi have nostrils at the tip of the beak and use smell to find food such as worms."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The kākāpō, takahē and weka do not have nostrils at the tip of the beak."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kiwi are mostly nocturnal and probe the soil with their beaks for food."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kiwi have a cluster of sensory pits at the tip of the bill that may detect the movement of prey."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed, all standard. I kept 'the only bird with nostrils at the tip' out of the item, which would be a superlative claim. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: all four options are flightless New Zealand birds, so the region in the stem does not give it away; the other three have nostrils at the base of the bill. Argued against the key: tip nostrils are the kiwi's best-known trait. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: New Zealand birds, but the kiwi is world-famous; Māori names keep their macrons as most English sources print them. style: Oxford spelling, plain hyphens only, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d2739f047b31ba973c3315c37f730e85047ab53c6b560814e7a556c0c3f19016",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Kiwi",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kiwi are the only birds with nostrils at the tip of the bill, and they find worms and other prey by smell.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The kākāpō, takahē and weka have their nostrils at the base of the bill, like other birds.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kiwi are mostly nocturnal and probe the soil with their bills for food.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A cluster of sensory pits at the bill tip may let kiwi feel prey moving (Cunningham and colleagues, 2007).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cbee14310beebe41e6f3b8a0986d3a927f41c7de8fea35d1947d7b386b3a72ba",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Kiwi",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kiwi have nostrils at the tip of the bill and find food such as worms largely by smell.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The kākāpō, takahē and weka do not have their nostrils at the tip of the bill.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kiwi are mostly nocturnal and probe the soil with the bill.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The kiwi's bill tip has sensory pits that may detect the movement of prey.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; no high-risk claims; every knowledge confirmation at certain. Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.geo.0111",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which flightless New Zealand bird has nostrils at the tip of its long beak, for sniffing out worms?",
+  "answer": "Kiwi",
+  "wrong": ["Kākāpō", "Takahē", "Weka"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.305,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "id": "p.lang.0257",
+  "status": "checking",
+  "category": "lang",
+  "tags": ["borrowed-words", "japanese", "word-origins"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Lafcadio Hearn used tsunami, Japanese for harbour wave, in an 1897 book about Japan. Teenager, at first spelled teen-ager, turns up only in the 1920s.",
+  "learnMore": "Tsunami",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "'Tsunami' was in English use by 1897, when Lafcadio Hearn used it in Gleanings in Buddha-Fields."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "'Teenager' is first recorded in the 1920s, in the hyphenated form 'teen-ager'."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Japanese tsunami means 'harbour wave', from tsu, 'harbour', and nami, 'wave'."
+    }
+  ],
+  "writerNotes": "Counterintuitive: tsunami became familiar to most people only after 2004, so they assume it is the newer word; it is older by about 25 years. Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed, 3 high (date, etymology) and 0 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers word histories. rivalTest: Value b is stored as 1922, the earliest date I know for teen-ager; a later first use of either spelling only widens the gap. An earlier English use of tsunami (some cite 1896) only widens it too. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: both words are used in every variety of English. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 25 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b9b2d826ee2047523a2ac7725718ad0cd4ca34de1b7a2852cd369838c5fd02b6",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Tsunami",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lafcadio Hearn used tsunami in Gleanings in Buddha-Fields (1897), so the word was in English by 1897.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Teenager first appears in the 1920s, spelled teen-ager.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Japanese tsunami joins tsu, harbour, and nami, wave.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "fd96e22bc8f12092cef8008d686c01c02c8f8f176d0b22f37716707e9d9543a4",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Tsunami",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tsunami was in English print by 1897 (Lafcadio Hearn, Gleanings in Buddha-Fields).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "I recall teen-ager dated to about 1921 or 1922 by the Oxford English Dictionary and Etymonline, but Merriam-Webster gives 1941 for teenager, so I cannot confirm the 1920s offline.",
+              "confidence": "likely"
+            },
+            "note": "Two dictionaries I know disagree on the first-record year. The order of the two words is safe either way, but the explanation states the 1920s."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tsunami is Japanese for harbour wave (tsu, harbour; nami, wave).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c2 depends on which dictionary supplies the first-record year (the 1920s in the OED and Etymonline as I recall, 1941 in Merriam-Webster). If sources disagree, state only what all of them agree on: teenager entered English long after tsunami."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-plang02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "a94949ebab42535dd64165e8da977721fe3566af6ca5a192185c00e85c72ce67",
+      "startedAt": "2026-11-01T05:04:45Z",
+      "finishedAt": "2026-11-01T05:10:48Z",
+      "coldSolve": {
+        "answerGiven": "Tsunami",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Lafcadio Hearn's Gleanings in Buddha-Fields, published in 1897, uses the Japanese word tsunami, so the word was in English use by 1897.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it on knowledge. It is high-risk and no check carries dataset or web evidence for it, so rule 3 still needs external evidence. This run's only WebSearch call was refused (the turn's shared search limit was used up) and no pinned dataset covers first-record dates. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Teenager, first written teen-ager, is a twentieth-century word recorded decades after tsunami. I recall first-record years from the early 1920s to about 1940 depending on the dictionary, so I cannot confirm 'the 1920s' from memory.",
+            "confidence": "likely"
+          },
+          "note": "Disputed: B left c2 uncertain for the same reason. It needs Tier A or B evidence on the earliest record (the OED's dating and Merriam-Webster's first known use). If the sources disagree, the claim, the 'the 1920s' display and the explanation's 'only in the 1920s' step down to what every source supports (§9.2, §9.5.2). The key is safe under every date I know of, each far more than 10 years after 1897 (C17)."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "Japanese tsunami joins tsu, 'harbour', and nami, 'wave'.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it on knowledge. High-risk (etymology) with no external evidence in any check, so rule 3 still needs it. No search was possible in this run (see c1)."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "checker_doubt c2: the 1920s first record of teenager rests on knowledge in all three checks, and the dictionaries may date it differently. Settle it with web evidence in a re-run tiebreak, or bound the display and explanation to what every source supports."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which word entered English first?",
+  "a": "Tsunami",
+  "b": "Teenager",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year first recorded in English",
+  "unit": "year",
+  "values": {
+    "a": 1897,
+    "b": 1922
+  },
+  "valueDisplay": {
+    "a": "by 1897",
+    "b": "the 1920s"
+  },
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.177,
+    "estimator": "v0"
+  }
+}

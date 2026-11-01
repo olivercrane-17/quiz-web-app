@@ -1,0 +1,217 @@
+{
+  "id": "p.book.0214",
+  "status": "active",
+  "category": "book",
+  "tags": ["poetry", "nonsense-verse"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The owl and the cat dine on mince and slices of quince, eaten with a 'runcible spoon'. Lear made up the word runcible, and nobody knows exactly what he meant by it.",
+  "learnMore": "The Owl and the Pussy-cat",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Edward Lear wrote The Owl and the Pussy-cat, in which the owl and the cat go to sea in a pea-green boat."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Lewis Carroll, Hilaire Belloc and A. A. Milne did not write The Owl and the Pussy-cat."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "In the poem, the owl and the cat dine on mince and slices of quince, which they eat with a 'runcible spoon'."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Edward Lear coined the word runcible, and what he meant by it is unknown."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: poetry and poets. lint: content:check reports no errors on this item and no warnings. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. rivalTest: Lewis Carroll is the strongest pull as the other great Victorian nonsense writer, and Belloc and Milne wrote comic verse for children too; the poem is Lear's in every edition. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: the work is known well beyond any one country and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has about the same chance as one in London or Chicago. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 32 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: nothing of either kind to check in a practice item. doubts: c4: later dictionaries attached 'runcible spoon' to a kind of pickle fork, but only after Lear; the claim says only that his own meaning is unknown. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "fca6e0e78ed9d6907cc928f5902db779b94b2ab610a78b3358f65af40eb4b938",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "Edward Lear",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Edward Lear wrote The Owl and the Pussy-cat (1871), whose couple sail away in a pea-green boat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Carroll, Belloc and Milne did not write it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The last stanza reads 'They dined on mince, and slices of quince, Which they ate with a runcible spoon'.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "'Runcible' is one of Lear's nonsense coinages (he also wrote of a runcible cat, hat and goose), and he never said what it meant.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6980858171f16c999878117ae5d11cc267c6a03938a862f2f834800a4e2c6a31",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "Edward Lear",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Edward Lear wrote The Owl and the Pussy-cat, in which the pair sail away in a pea-green boat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Lewis Carroll, Hilaire Belloc and A. A. Milne did not write The Owl and the Pussy-cat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the poem the owl and the cat dine on mince and slices of quince, which they eat with a runcible spoon.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Runcible is a word Lear invented (he also used it of a hat and a cat), and he never defined it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, quotation) and c4 (explanation, first) rest on knowledge alone in both: neither checker could search (both report the shared web budget spent) and no pinned dataset covers them. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, never a relabel. The key and distractors are sound, so redraft under a new id with explanation facts that are standard risk or dataset-backed.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.nat.0107",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which poet wrote 'The Owl and the Pussy-cat', in which the pair go to sea in a pea-green boat?",
+  "answer": "Edward Lear",
+  "wrong": ["Lewis Carroll", "Hilaire Belloc", "A. A. Milne"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.249,
+    "estimator": "v0"
+  }
+}

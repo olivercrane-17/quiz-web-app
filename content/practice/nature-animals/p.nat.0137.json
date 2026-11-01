@@ -1,0 +1,225 @@
+{
+  "id": "p.nat.0137",
+  "status": "active",
+  "category": "nat",
+  "tags": ["ocean-life", "whales", "dolphins"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Orcas belong to the oceanic dolphin family, and so do pilot whales. Dolphins are toothed whales anyway, so the name killer whale is not wrong either.",
+  "learnMore": "Orca",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The killer whale (orca) is a member of the oceanic dolphin family, Delphinidae."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Pilot whales also belong to the oceanic dolphin family."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Dolphins are toothed whales."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: three listed. c1 is high because it is the key of a counterintuitive item, so C26 sets it high; the tooling's riskReason enum has no counterintuitive value yet (guide v1.1 adds one), so checker_doubt stands in for it. c2 and c3 are standard. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: argued for false: the name says whale, and orcas are whales too, being toothed whales; but 'a kind of dolphin' is also true, because they sit in the dolphin family. No reading makes the statement false. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: orcas live in every ocean and are known worldwide. style: Oxford spelling, plain hyphens only, explanation of 26 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a true/false item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5130feb0224bcf3222f94c451c340b11d8265e4c4377c149856a35c740776ba9",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "hippopotamus closest living relatives are cetaceans (whales and dolphins); killer whale orca largest member of oceanic dolphin family Delphinidae",
+              "results": [
+                {
+                  "title": "Wikipedia:WikiProject WikiFundi Content/Hippopotamus",
+                  "url": "https://en.wikipedia.org/wiki/Wikipedia:WikiProject_WikiFundi_Content/Hippopotamus"
+                },
+                {
+                  "title": "Hippopotamus",
+                  "url": "https://en.wikipedia.org/wiki/Hippopotamus"
+                },
+                {
+                  "title": "Artiodactyla",
+                  "url": "https://en.wikipedia.org/wiki/Artiodactyla"
+                },
+                {
+                  "title": "Hippopotamus, facts and photos",
+                  "url": "https://www.nationalgeographic.com/animals/mammals/facts/hippopotamus"
+                },
+                {
+                  "title": "Portal:Cetaceans",
+                  "url": "https://en.wikipedia.org/wiki/Portal:Cetacea"
+                },
+                {
+                  "title": "Evolution of cetaceans",
+                  "url": "https://en.wikipedia.org/wiki/Evolution_of_cetaceans"
+                },
+                {
+                  "title": "Dolphin",
+                  "url": "https://en.wikipedia.org/wiki/Dolphin"
+                },
+                {
+                  "title": "Hippopotamidae",
+                  "url": "https://en.wikipedia.org/wiki/Hippopotamid"
+                },
+                {
+                  "title": "Whale",
+                  "url": "https://en.wikipedia.org/wiki/Whale"
+                }
+              ],
+              "summaryExcerpt": "Orca: The orca is the largest member of the dolphin family Delphinidae.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Wikipedia pages in the list (Tier B). This call's summary flagged a National Geographic outlier on the hippo question of p.nat.0101, not on the orca, so no conflict for this claim. Counted under p.nat.0101."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pilot whales are oceanic dolphins, family Delphinidae.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dolphins belong to the toothed whales (Odontoceti).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "fd6e61d5cc396ce3d5e0b071f7afd2040e4d27bb993ca2d7d554abc05bb64d46",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The killer whale (orca) belongs to the oceanic dolphin family, Delphinidae.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pilot whales are also members of the oceanic dolphin family.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dolphins are toothed whales.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 3 claims confirmed in both checks; high-risk c1 (web in A). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.nat.0101",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The killer whale is a kind of dolphin.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.234,
+    "estimator": "v0"
+  }
+}

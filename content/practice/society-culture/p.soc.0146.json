@@ -1,0 +1,219 @@
+{
+  "id": "p.soc.0146",
+  "status": "active",
+  "category": "soc",
+  "tags": ["customs", "numbers", "east-asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "In all three languages one word for four sounds like death, so some buildings skip a fourth floor. In Mandarin and Cantonese, eight sounds like 'prosper', making it a lucky number.",
+  "learnMore": "Tetraphobia",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In Chinese, Japanese and Korean, a word for the number 4 sounds like the word for death, so 4 is often avoided."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Neither 8 nor 13 is avoided in China, Japan and Korea because it sounds like death."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Some buildings in East Asia leave out floor numbers containing 4."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In Mandarin and Cantonese, the word for 8 sounds like the word for prosper, so 8 is considered lucky."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers customs; c1 and c4 need web evidence. rivalTest: 13 is the Western unlucky number and the planted pull for players outside East Asia; 8 is the famous lucky number. I left out 9 (in Japanese one reading sounds like suffering) and 7 (whose Japanese reading shichi contains shi) so no distractor has a case. Three options, because a fourth would be filler. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: the custom is known across East Asia and widely reported elsewhere. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 31 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 3. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0b02df855642de67f6e67d762ed4f029e419fcb288c4dd87a7fec43da83cc2a1",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "4",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Four is si in Mandarin, shi in Japanese and sa in Korean (Sino-Korean), each the same as or close to the word for death, so 4 is widely avoided.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Eight is a lucky number in China and 13 is a Western superstition; neither is avoided for sounding like death.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Some East Asian buildings leave out fourth floors or floor numbers containing 4.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mandarin ba and Cantonese baat sound like fa and faat, to prosper, which makes 8 lucky.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "abbec882fcc8a8fc9d46fa6ac93848afddfbca9d60a7ddc46a3de627bd6cc7ea",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "4",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Chinese, Japanese and Korean, a word for four sounds like the word for death, so four is often avoided.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Neither 8 nor 13 is avoided there for sounding like death: eight is lucky in Chinese and thirteen is a Western superstition.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Some buildings in East Asia omit floor numbers containing 4.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Mandarin and Cantonese the word for eight sounds like the word for 'prosper', making eight lucky.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, number), c2 (distractor, number), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.lang.0110",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In China, Japan and Korea, which number is often avoided because it sounds like the word for death?",
+  "answer": "4",
+  "wrong": ["8", "13"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.68,
+    "spread": 0.232,
+    "estimator": "v0"
+  }
+}

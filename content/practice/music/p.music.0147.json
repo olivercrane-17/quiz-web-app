@@ -1,0 +1,217 @@
+{
+  "id": "p.music.0147",
+  "status": "active",
+  "category": "music",
+  "tags": ["songs-albums", "myths", "mozart"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "The melody is an older French song, 'Ah vous dirai-je, maman', already in print when Mozart was a small child. He later wrote twelve piano variations on it.",
+  "learnMore": "Twinkle, Twinkle, Little Star",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Mozart did not compose the melody of Twinkle, Twinkle, Little Star."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The melody of Twinkle, Twinkle, Little Star is that of the French song Ah vous dirai-je, maman."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Ah vous dirai-je, maman was in print by 1761, when Mozart was a small child."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Mozart wrote twelve variations for piano on Ah vous dirai-je, maman."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge; c1 is high because the item is counterintuitive (the C26 floor), and since the schema's riskReason list has no counterintuitive value it carries checker_doubt. Datasets: no pinned dataset covers these music facts (the manifest holds geographic, scientific, Nobel, Olympic and art-collection data), so each high-risk claim needs web evidence from the checkers. I used no WebSearch. Rival test: argued for 'true': Mozart's variations on the tune are famous and often played to children, which is how the myth spreads; the tune was printed by 1761, when he was five, so he did not compose it. The answer is false (tfKind myth). Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the tune is sung worldwide (it is also the alphabet song), and the myth is common in many countries. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit; this myth is not in the list yet, so I suggest the editor adds it. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None of substance; the French tune's earlier printing is well documented.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0ee01ca6f08e087ecdd14f6f71727cbbe8286aa97b817f9897c7acd9901a6902",
+        "startedAt": "2026-11-01T02:00:29Z",
+        "finishedAt": "2026-11-01T02:19:40Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mozart did not write the Twinkle, Twinkle tune; it is an older French melody.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3). The writer marked this checker_doubt; I hold it as certain."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The tune is that of the French song Ah! vous dirai-je, maman.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The melody was first printed in 1761, when Mozart was about five.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mozart wrote twelve piano variations on it (K. 265).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "79c5e4c2e0715b5d1329308dd4a6257ab6070ee64c9d4c47fbb4187bb924bb30",
+        "startedAt": "2026-11-01T02:05:28Z",
+        "finishedAt": "2026-11-01T02:26:16Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Twinkle tune is the French folk song Ah! vous dirai-je, maman, not a Mozart original.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Twinkle, Twinkle uses the tune of that French song.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The tune was in print in 1761, when Mozart was five.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mozart's K. 265 is a set of twelve piano variations on it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (checker_doubt), c3 (date) and c4 (number) rest on knowledge only: neither check ran a search (A's records say WebSearch was refused) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with evidence or without the risky detail.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pmusic01e",
+        "at": "2026-11-01T02:04:12Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.music.0002",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Mozart composed the tune of 'Twinkle, Twinkle, Little Star'.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.172,
+    "estimator": "v0"
+  }
+}

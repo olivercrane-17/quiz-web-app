@@ -1,0 +1,200 @@
+{
+  "id": "p.book.0267",
+  "status": "active",
+  "category": "book",
+  "tags": ["characters", "detective-fiction", "gothic-novels"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Holmes first appeared in A Study in Scarlet in 1887, nearly a decade before Dracula. Conan Doyle, who knew Stoker, wrote to praise the vampire novel.",
+  "learnMore": "A Study in Scarlet",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Sherlock Holmes first appeared in A Study in Scarlet, published in 1887."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Bram Stoker's Dracula was first published in 1897."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Arthur Conan Doyle, who knew Bram Stoker, wrote to him praising Dracula."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: characters and opening lines. lint: content:check reports no errors on this item and no warnings. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. rivalTest: Ten years apart by publication year (November 1887 against May 1897), which meets the separation guard; Dracula's Gothic air is what misleads. Counterintuitive: Dracula's Gothic castle and old-world villain feel older than the modern detective, so many players pick Dracula. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: the work is known well beyond any one country and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has about the same chance as one in London or Chicago. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 26 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: nothing of either kind to check in a practice item. doubts: none. Related: p.book.0148 (b01) compares Holmes with Dupin, and p.book.0135 (b01) is about Dracula in daylight; the facts asked differ. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "601dfe60a6f8ca32e74442a6463a67939c475332f236a726dfc7934208804100",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "Sherlock Holmes's first story",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Holmes first appears in A Study in Scarlet, in Beeton's Christmas Annual for 1887.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dracula was first published in May 1897.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Conan Doyle, an acquaintance of Stoker's, wrote to him in 1897 praising Dracula.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b197052c4e6651f6e87db17397310cbf6e0b8a2c65e29f1362acf0db64db0360",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "Sherlock Holmes's first story",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sherlock Holmes first appeared in A Study in Scarlet, published in 1887 (Beeton's Christmas Annual).",
+              "confidence": "certain"
+            },
+            "note": "Rival test: read as the first short story instead (A Scandal in Bohemia, 1891), Holmes still precedes Dracula, so the key is stable. High-risk (first): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bram Stoker's Dracula was first published in 1897.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Arthur Conan Doyle knew Bram Stoker and wrote to him in 1897 praising Dracula.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (label, first) and c2 (label, first) rest on knowledge alone in both: neither checker could search (both report the shared web budget spent) and no pinned dataset covers them. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, never a relabel. The labels themselves need that evidence, so redraft under a new id once a dataset or a Tier A or B search can carry them.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.book.0135",
+      "score": 0.343,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Sherlock Holmes's first story",
+  "b": "Bram Stoker's Dracula",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year first published",
+  "unit": "year",
+  "values": {
+    "a": 1887,
+    "b": 1897
+  },
+  "valueDisplay": {
+    "a": "1887",
+    "b": "1897"
+  },
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.154,
+    "estimator": "v0"
+  }
+}

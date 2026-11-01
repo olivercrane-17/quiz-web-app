@@ -1,0 +1,210 @@
+{
+  "id": "p.geo.0257",
+  "status": "cut",
+  "category": "geo",
+  "tags": ["time-zones", "maps", "china"],
+  "region": "global",
+  "volatility": "slow",
+  "reviewBy": "2028-10-01",
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "All of China keeps Beijing time, although the country is wide enough to span five time zones. In the far west, winter sunrises come very late in the morning.",
+  "learnMore": "Time in China",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "China officially uses a single time zone, Beijing time."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "China does not officially use two, four or five time zones."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "China's land stretches across five nominal one-hour time zones."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In far western China, winter sunrise comes very late in the morning by Beijing time."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; c1 (number), c2 (number) and c3 (number) are high under the C26 floor, and c4 is standard. Datasets: natural-earth ne_110m_admin_0_countries ADM0_A3=CHN: the polygon runs from about 73.7 E to 135.0 E, which touches the five 15-degree zones centred on 75, 90, 105, 120 and 135 E (c3). No dataset states the official time zone. Rival test: Five is the planted trap, the number China's width suggests; two and four are plausible middle answers. Against the key: some people in the far west keep an unofficial local time two hours behind Beijing, which is why the stem says 'officially'. Volatility: slow, because a time-zone rule is government policy that could change, although China's single zone dates from 1949. The schema requires a reviewBy date for slow items, so I entered 1 October 2028 as a suggestion; the editor sets the final date at acceptance. Regional: Nobody's local knowledge outside China; the surprise works everywhere. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 29 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c1 and c2 need a Tier A or B web result (one search covers both). Seed: 5 (hard): most players guess several zones; the counterintuitive truth is a single one. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "672371f0584468b8a5b047bf5993f0a9459a05859edccc416c14c3318ba2b9f2",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "1",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "All of China officially keeps one time zone, Beijing Time (UTC+8).",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Since 1949 China has officially used only Beijing Time, not two, four or five zones.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "ADM0_A3=CHN, westernmost and easternmost vertices",
+              "excerpt": "west [73.675379,39.431237]; east [135.026311,48.47823]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Nominal zones are 15° wide, centred on multiples of 15°: 73.7° E falls in UTC+5 (67.5 to 82.5° E) and 135.0° E in UTC+9 (127.5 to 142.5° E), so China spans five (UTC+5 to UTC+9). The 1:110m outline is generalized, but both ends sit far inside their zones."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kashgar, near 76° E, is about three hours of solar time behind Beijing's meridian, so its midwinter sunrise comes around 10 am Beijing time.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5e4ba91c5180abaa7d3067786ca3ce4fa0dae4c73c59db863f6425c92b1396d9",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "1",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "China officially uses one standard time, UTC+8 (Beijing Time), nationwide.",
+              "confidence": "certain"
+            },
+            "note": "High-risk number. Knowledge only (no web search was available to me); counts only with external evidence from pass A (guide 9.5.3). The word 'officially' in the stem covers Xinjiang's unofficial local time."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "China does not officially use two, four or five time zones.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "China's longitudinal span, about 73 E to 135 E, covers five 15-degree zones.",
+              "confidence": "certain"
+            },
+            "note": "High-risk number. Knowledge only (no web search was available to me); needs pass A's external evidence."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In far western China, such as Kashgar, winter sunrise by Beijing time comes at about ten in the morning.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says 'All of China keeps Beijing time', but in Xinjiang many residents also use an unofficial local time two hours behind. The stem is safe because it says 'officially'; the explanation would be safer as 'Officially, all of China keeps Beijing time'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key) and c2 (distractors) rest on knowledge alone in both checks: no pinned dataset covers them and neither checker could search (the shared WebSearch budget was spent before pass A ran). §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, which a wording-only edit cannot reach because the claims stay. Redraft under a new id with web evidence, or with the figure stepped down or dropped. A c3 dataset check alone does not carry the key.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    }
+  },
+  "format": "mc",
+  "stem": "How many time zones does China officially use?",
+  "answer": "1",
+  "wrong": ["2", "4", "5"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.342,
+    "estimator": "v0"
+  }
+}

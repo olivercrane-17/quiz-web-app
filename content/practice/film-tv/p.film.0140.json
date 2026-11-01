@@ -1,0 +1,216 @@
+{
+  "id": "p.film.0140",
+  "status": "active",
+  "category": "film",
+  "tags": ["awards", "oscars", "2010s"],
+  "region": "global",
+  "volatility": "dated",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Warren Beatty and Faye Dunaway had been handed the wrong envelope: the Best Actress card, which Emma Stone had just won for La La Land.",
+  "learnMore": "89th Academy Awards",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "At the 2017 Academy Awards, La La Land was announced as Best Picture by mistake, and Moonlight was the actual winner."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Hidden Figures, Arrival and Manchester by the Sea were nominated but were not the film wrongly announced."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Presenters Warren Beatty and Faye Dunaway were handed the envelope for Best Actress instead of Best Picture."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Emma Stone had just won Best Actress for La La Land that night."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: All three distractors were fellow Best Picture nominees that year; only La La Land's team took the stage before the correction. Volatility: dated; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 25 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "472c29cf3f0e3cb0497f62fd3802d87e9036cc9f7ab0b328b54148cd4da16ba6",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "La La Land",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "At the Oscars in February 2017, La La Land was read out as Best Picture in error; Moonlight was the real winner.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hidden Figures, Arrival and Manchester by the Sea were nominees, not the film read out by mistake.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Beatty and Dunaway had been handed the spare Best Actress envelope.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Emma Stone had won Best Actress for La La Land earlier that night.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f064b4b6f4ed4eaac86acd1af20bcf7469635d6957e6b64591bfeb8121302850",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "La La Land",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "At the February 2017 ceremony La La Land was announced as Best Picture in error and Moonlight was the real winner.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hidden Figures, Arrival and Manchester by the Sea were nominees but not the film announced.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Beatty and Dunaway were handed the Best Actress envelope by mistake.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Emma Stone had just won Best Actress for La La Land.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c1 rests on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0123",
+      "score": 0.24,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which film was wrongly announced as Best Picture in 2017, before Moonlight was named the true winner?",
+  "answer": "La La Land",
+  "wrong": ["Hidden Figures", "Arrival", "Manchester by the Sea"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.267,
+    "estimator": "v0"
+  }
+}

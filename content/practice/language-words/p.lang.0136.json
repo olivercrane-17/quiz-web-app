@@ -1,0 +1,213 @@
+{
+  "id": "p.lang.0136",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["names-of-things", "eponyms", "music"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Sax was born in Dinant, Belgium, in 1814, the son of an instrument maker. He moved to Paris, where he patented the saxophone in 1846.",
+  "learnMore": "Adolphe Sax",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Adolphe Sax, after whom the saxophone is named, was Belgian, born in Dinant."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Adolphe Sax was not French, German or Dutch by birth."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Adolphe Sax was born in 1814, the son of an instrument maker."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Sax patented the saxophone in Paris in 1846."
+    }
+  ],
+  "writerNotes": "His Paris career and the French-sounding first name make France the obvious pick, so counterintuitive is true. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers it; rival test: France is where he worked and patented the instrument, but he was born and raised in Belgium; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: the saxophone is known worldwide; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1cff088184d4097adb7449d6cd2e78787987fad7a7acdc7fec356566514b266f",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Belgium",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Adolphe Sax was born in Dinant, in what is now Belgium, and is described as Belgian.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sax was born in Dinant, which is not in France, Germany or the Netherlands.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sax was born in 1814. His father, Charles-Joseph Sax, was an instrument maker.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sax took out his patent on the saxophone in Paris in 1846.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Rival test on 'Netherlands': Dinant belonged to the United Kingdom of the Netherlands from 1815 to 1830, so Sax grew up a Dutch subject before Belgium became independent. 'Came from which country?' reads naturally as Belgium and references call him Belgian, so this is a note, not a second answer."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "eda1c37629240aa3982d3cce0112e195c6f84bc707fa4410f0a6fc7f350ad3f4",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Belgium",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Adolphe Sax was born in Dinant, now in Belgium, and is called Belgian by most sources; some describe him as a Belgian-born French instrument maker.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He was born in Dinant, not in France, Germany or the Netherlands.",
+              "confidence": "certain"
+            },
+            "note": "Born in 1814, before Belgium existed as a state; 'Belgian by birth' is the universal modern usage."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sax was born in 1814, the son of the instrument maker Charles-Joseph Sax.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sax patented the saxophone in Paris in 1846.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "second_answer",
+            "severity": "note",
+            "note": "'Came from' could be read as the country of his career: Sax worked in Paris and some sources say Belgian-born French, so France is the near-miss guess. Dinant is in Belgium and 'came from' naturally means origin, so I keep it a note. 'Was born in what is now' would close it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, etymology), c3 (explanation, date) and c4 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: both checkers flagged near-miss rivals (Dinant was in the United Kingdom of the Netherlands from 1815 to 1830, and Sax worked in Paris); 'was born in what is now' would close both.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Adolphe Sax, who gave his name to the saxophone, came from which country?",
+  "answer": "Belgium",
+  "wrong": ["France", "Germany", "Netherlands"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.215,
+    "estimator": "v0"
+  }
+}

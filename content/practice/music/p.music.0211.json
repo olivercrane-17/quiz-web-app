@@ -1,0 +1,200 @@
+{
+  "id": "p.music.0211",
+  "status": "cut",
+  "category": "music",
+  "tags": ["pop-rock", "hard-rock", "australia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Brothers Malcolm and Angus Young were born in Glasgow, but their family emigrated to Sydney in 1963. The brothers formed AC/DC there ten years later.",
+  "learnMore": "AC/DC",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "AC/DC was formed in Sydney, Australia, in 1973."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "AC/DC was not formed in Scotland, England or the United States."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Malcolm and Angus Young were born in Glasgow, Scotland, and emigrated with their family to Sydney in 1963."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Malcolm and Angus Young founded AC/DC."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: no errors under content:check for writer w-pmusic02w; one C22 warning, because the answer (Australia) is shared with p.geo.0128, which asks where Uluru is. The facts differ, so I leave the related_ok call to the editor. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: geonames-cities lists Glasgow (GB, admin1 SCT) and Sydney (AU, admin1 02), which confirm the places; the band's formation and the family's move need web evidence. I used no WebSearch. Rival test: argued for each distractor: Scotland is the planted trap (the Youngs' birthplace), and England and the United States are where many players think hard rock bands come from; but the band formed in Sydney. Argued against the key: undisputed. Counterintuitive is true because the obvious picks are British or American, which makes c1 high under C26. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: AC/DC is known worldwide; the trap works the same everywhere. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e08a6077ccca4b29103a48f6159169e673de72eadff5a7f726833b9d8f6ca3c7",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "Australia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Malcolm and Angus Young started AC/DC in Sydney in late 1973.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). Rival test: the brothers were born in Scotland, but the band formed in Australia."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "AC/DC was founded in Australia, not Scotland, England or the United States.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Young brothers were born in Glasgow, and the family emigrated to Sydney in 1963.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The brothers Malcolm and Angus Young founded AC/DC.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3ce8d0291059c22f8a25f3359e6b75d45816449d9e3fb76aaf6f8d842e8d92a7",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "Australia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "AC/DC was formed in Sydney, Australia, in November 1973 by Malcolm and Angus Young.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Scotland is the brothers' birthplace, which makes it a good distractor, but the band formed in Sydney."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "AC/DC was not formed in Scotland, England or the United States.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Malcolm and Angus Young were born in Glasgow and their family emigrated to Sydney in 1963.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Malcolm and Angus Young founded AC/DC.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (date) and c3 (date) rest on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail. Dedupe flags p.geo.0128 (same answer), so a redraft needs a related_ok call.",
+      "decidedAt": "2026-11-01T04:32:21Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The hard rock band AC/DC was formed in 1973 in which country?",
+  "answer": "Australia",
+  "wrong": ["Scotland", "England", "United States"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.68,
+    "spread": 0.321,
+    "estimator": "v0"
+  }
+}

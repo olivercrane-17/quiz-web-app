@@ -1,0 +1,261 @@
+{
+  "id": "p.book.0165",
+  "status": "active",
+  "category": "book",
+  "tags": ["comics", "superheroes"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Batman first appeared in Detective Comics in 1939. That title gave the publisher its name: the DC in DC Comics stands for Detective Comics.",
+  "learnMore": "Batman",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Bruce Wayne is Batman's secret identity."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Superman, Iron Man and Green Lantern have other secret identities, such as Clark Kent and Tony Stark."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Batman first appeared in Detective Comics issue 27, in 1939."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The DC in DC Comics comes from the title Detective Comics."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: comics and graphic novels. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means). Datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. Rival test: Superman and Green Lantern are DC heroes and Iron Man the famous rich inventor, so each tempts a casual player; none is Bruce Wayne. Batman is certain. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 24 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "fc54d23aa7fd4bea3f4fadd93d5dbdbed8ba99f9e4b2c1a745b42eedcd59a531",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "Batman",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Bruce Wayne is Batman.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Superman is Clark Kent, Iron Man is Tony Stark and Green Lantern has other identities.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "first appearances: Superman in Action Comics #1 (1938), Batman in Detective Comics #27 (1939), Wonder Woman in All Star Comics #8 (1941), Spider-Man in Amazing Fantasy #15 (1962)",
+              "results": [
+                {
+                  "title": "First appearance",
+                  "url": "https://en.wikipedia.org/wiki/First_appearance"
+                },
+                {
+                  "title": "DC Comics",
+                  "url": "https://en.wikipedia.org/wiki/DC_Comics"
+                },
+                {
+                  "title": "Super Heroes",
+                  "url": "https://www.loc.gov/exhibitions/comic-art/about-this-exhibition/comic-books-and-beyond-1940s-to-2000s/super-heroes/"
+                },
+                {
+                  "title": "Millennium Edition (DC Comics)",
+                  "url": "https://en.wikipedia.org/wiki/Millennium_Edition_(DC_Comics)"
+                },
+                {
+                  "title": "Previous Page",
+                  "url": "https://kids.britannica.com/kids/article/Aquaman/443752/related/main?page=1"
+                },
+                {
+                  "title": "Action Comics 1",
+                  "url": "https://en.wikipedia.org/wiki/Superman_(comic_story)"
+                },
+                {
+                  "title": "Detective Comics",
+                  "url": "https://en.wikipedia.org/wiki/Detective_Comics"
+                },
+                {
+                  "title": "Amazing Fantasy",
+                  "url": "https://en.wikipedia.org/wiki/Amazing_Fantasy"
+                },
+                {
+                  "title": "Publication history of Wonder Woman",
+                  "url": "https://en.wikipedia.org/wiki/Publication_history_of_Wonder_Woman"
+                },
+                {
+                  "title": "Superman",
+                  "url": "https://en.wikipedia.org/wiki/Superman"
+                }
+              ],
+              "summaryExcerpt": "Batman, Detective Comics #27: Cover-dated May 1939, though one source gives March 1939 as the release date (DC Comics Wikipedia page).",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 10 (counted on p.book.0125): Detective Comics 27, cover-dated May 1939. Counts at Tier B."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "DC took its name from Detective Comics, its flagship title.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No dataset covers it and it fell outside the batch search cap, so it counts only with dataset or web evidence from check B or a follow-up (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0904fa861b5bc1af1caeef8f725ee1674c92e56dd90dc36506a51053e98ec538",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "Batman",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Bruce Wayne is Batman's secret identity.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Superman is Clark Kent, Iron Man is Tony Stark and Green Lantern is Hal Jordan or another Lantern.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Batman debuted in Detective Comics no. 27 (cover date May 1939).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "DC stands for Detective Comics, the title that gave the company its name.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c4 (explanation, etymology) rest on knowledge alone in both checks, and the batch's search cap is spent (29 of 26). Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which superhero's secret identity is Bruce Wayne?",
+  "answer": "Batman",
+  "wrong": ["Superman", "Iron Man", "Green Lantern"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.97,
+    "spread": 0.528,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "id": "p.film.0234",
+  "status": "active",
+  "category": "film",
+  "tags": ["awards", "oscars", "classic-cinema"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "She won Best Supporting Actress at the 1940 ceremony, held in a hotel where she was seated at a separate table from her co-stars. Butterfly McQueen played Prissy.",
+  "learnMore": "Hattie McDaniel",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Hattie McDaniel was the first Black performer to win an Academy Award, for her role as Mammy in Gone with the Wind (1939)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Butterfly McQueen, Ethel Waters and Dorothy Dandridge did not win an Oscar for Gone with the Wind."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Hattie McDaniel won the Academy Award for Best Supporting Actress at the ceremony held in February 1940."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "At the ceremony, at the Ambassador Hotel in Los Angeles, McDaniel was seated at a separate table from her Gone with the Wind co-stars."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Butterfly McQueen played Prissy in Gone with the Wind."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Butterfly McQueen is the trap, as a cast member of the same film. Ethel Waters and Dorothy Dandridge were later Oscar nominees who did not win, so neither can be the first winner. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a landmark of film history taught worldwide; the segregated seating is stated as history, factually (§3.7). Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 28 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4740e5bfc5a012e56bc25fd32ca70502627051b02599ffce8584fcaa6cfeb3e5",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "Hattie McDaniel",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hattie McDaniel, Mammy in Gone with the Wind, was the first Black performer to win an Oscar.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Butterfly McQueen won nothing for the film, and Ethel Waters and Dorothy Dandridge were not in it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "She won Best Supporting Actress at the ceremony of 29 February 1940.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "At the Ambassador Hotel's Cocoanut Grove she sat at a segregated table at the side, apart from the rest of the film's party.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Butterfly McQueen played the maid Prissy.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2782e1e02f65d28d701cdb770f87f36e03f305a4408e9ac019b18b1ca5dc1b6f",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "Hattie McDaniel",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hattie McDaniel was the first Black performer to win an Oscar, for playing Mammy in Gone with the Wind.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Butterfly McQueen, Ethel Waters and Dorothy Dandridge did not win an Oscar for Gone with the Wind.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: McQueen was in the film but was not nominated; Waters and Dandridge were nominated for other films and did not win."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "McDaniel won Best Supporting Actress at the ceremony held on 29 February 1940.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "At the Ambassador Hotel ceremony in Los Angeles, McDaniel sat at a separate table from her Gone with the Wind co-stars.",
+              "confidence": "certain"
+            },
+            "note": "Factual and respectful in the explanation; no sensitivity problem."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Butterfly McQueen played Prissy.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 and c3 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0267",
+      "score": 0.3,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Who became the first Black performer to win an Oscar, for her role in Gone with the Wind (1939)?",
+  "answer": "Hattie McDaniel",
+  "wrong": ["Butterfly McQueen", "Ethel Waters", "Dorothy Dandridge"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.262,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "id": "p.sport.0224",
+  "status": "active",
+  "category": "sport",
+  "tags": ["golf", "scoring", "word-origins"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Two under is an eagle and three under an albatross. 'Birdie' grew from 'bird', American slang of about 1900 for anything excellent.",
+  "learnMore": "Birdie (golf)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In golf, a score of one under par on a hole is a birdie."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "An eagle is two under par, an albatross three under par and a bogey one over par."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The golf term 'birdie' comes from 'bird', American slang from around 1900 for something excellent."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed, 3 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: No pinned dataset covers golf terms; c3 is an etymology and needs web evidence (a dictionary, the USGA or the R&A). c1 and c2 are standard scoring terms. rivalTest: All four are real scoring terms, so the player has to know the ladder. A bogey is the common slip (it is over par, not under). Each option carries its own article, so the grammar gives nothing away. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 22 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: c3 is hedged to 'around 1900', because accounts of the first use differ by a few years.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a94ff248c5d7030721fbbe57b03b4316cb4858bb74fef1096af1903341291462",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "A birdie",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "One under par on a hole is a birdie.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "An eagle is two under par, an albatross three under and a bogey one over.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Birdie comes from 'bird', American slang of that time for something excellent, after 'a bird of a shot' at Atlantic City around 1899 to 1903.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). The slang 'bird' for anything excellent may be older than 1900; the claim reads naturally as 'slang in use around 1900', which holds."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1581ce59b22d6a2d4e5b294f7588288491eb8b614eb39abc08b5be3273f82afa",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "A birdie",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In golf, one under par on a hole is a birdie.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "An eagle is two under par, an albatross (a double eagle in the US) is three under and a bogey is one over.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Birdie comes from bird, American slang around 1900 for something excellent, tied to a shot at the Atlantic City Country Club.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, number), c2 (distractor, number) and c3 (explanation, etymology) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In golf, what is a score of one under par on a hole called?",
+  "answer": "A birdie",
+  "wrong": ["An eagle", "A bogey", "An albatross"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.316,
+    "estimator": "v0"
+  }
+}

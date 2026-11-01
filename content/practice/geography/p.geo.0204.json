@@ -1,0 +1,215 @@
+{
+  "id": "p.geo.0204",
+  "status": "active",
+  "category": "geo",
+  "tags": ["rivers", "canyons", "north-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "As the land slowly rose, the river kept cutting down through layer upon layer of rock, so the deeper the layer, the older the rock.",
+  "learnMore": "Grand Canyon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Colorado River carved the Grand Canyon."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Rio Grande, the Columbia River and the Mississippi River do not flow through the Grand Canyon."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Colorado River cut the Grand Canyon as the surrounding land was slowly uplifted."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In the Grand Canyon, deeper rock layers are older than the layers above them."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: natural-earth ne_50m_rivers_lake_centerlines holds a Colorado line, but no dataset covers the canyon itself, so every claim rests on knowledge; all are standard. Rival test: The Rio Grande is the other big river of the American south-west, the Columbia has its own famous gorge, and the Mississippi is the best-known American river. None reaches the canyon. Against the key: geologists still argue about when parts of the canyon began and whether older rivers cut some stretches first, but nobody disputes that the Colorado carved the canyon we see. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: The Grand Canyon is one of the most photographed places on Earth; the river's name is the knowledge needed, and the canyon's state is never asked. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; every claim is standard. Seed: 2 (easy): most players know the Colorado from the canyon, though some reach for the Mississippi. Counterintuitive: false. Doubts: c3 simplifies a long geological story (uplift and river cutting over millions of years); it states only what every account agrees on.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c595a76f224bd3dfee7612eb6f24f9e5e52480bdcb6d2dd153119a09c06abdcb",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Colorado River",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Grand Canyon in Arizona was cut by the Colorado River.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Rio Grande, the Columbia and the Mississippi flow far from the Grand Canyon; only the Colorado runs through it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Colorado River cut down into the canyon as the Colorado Plateau was slowly uplifted.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The canyon's rocks follow superposition: the deepest layers exposed are the oldest.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e721583474cff8e8408726f2728ae07d5a41cdf25475eca49fb17bb3c49222c1",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Colorado River",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Colorado River carved the Grand Canyon in Arizona.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Rio Grande (Texas-Mexico border), the Columbia (Pacific Northwest) and the Mississippi (central US) do not flow through the Grand Canyon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Colorado Plateau was slowly uplifted while the Colorado River cut down through the rock, forming the canyon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sedimentary strata are deposited in sequence, so deeper layers in the canyon walls are older.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which river carved the Grand Canyon?",
+  "answer": "Colorado River",
+  "wrong": ["Rio Grande", "Columbia River", "Mississippi River"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.46,
+    "estimator": "v0"
+  }
+}

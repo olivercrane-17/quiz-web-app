@@ -1,0 +1,217 @@
+{
+  "id": "p.soc.0143",
+  "status": "active",
+  "category": "soc",
+  "tags": ["money", "banknotes", "materials"],
+  "region": "global",
+  "volatility": "slow",
+  "reviewBy": "2028-10-31",
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The blend is 75% cotton and 25% linen, which makes the notes far tougher than ordinary paper. Australia began switching to plastic polymer notes in 1988.",
+  "learnMore": "United States one-dollar bill",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "US dollar banknotes are printed on paper made of 75% cotton and 25% linen."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "US banknote paper is not made mainly of wood pulp, plastic polymer or hemp."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Cotton and linen banknote paper is much more durable than ordinary wood-pulp paper."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Australia began issuing polymer banknotes in 1988."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers banknote materials; c1 and c4 need web evidence. rivalTest: wood pulp is the planted trap (it is what 'paper' means to most people), so counterintuitive is true; plastic polymer is used by Australia, Canada and others; hemp is a plausible old paper fibre. Argued against the key: the US Bureau of Engraving and Printing gives the 75/25 cotton and linen blend. Linen is left out of the options because it is a quarter of the mix. volatility: slow, because a currency's material could change; the schema requires a reviewBy date for slow items, so I entered 31 October 2028 as a suggestion and the editor sets the final date at acceptance. regional: the dollar is the world's most widely held currency; the foothold is how a banknote feels. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 26 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 4: most players guess wood pulp. doubts: I avoided calling Australia's note the first plastic banknote, because Tyvek notes of the early 1980s complicate that claim. riskReason: counterintuitive is true, so the key claim is high under C26; the CNT-1 claim schema has no 'counterintuitive' riskReason, so it carries number, the trigger the claim also holds.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "35e95b9e67f58d9bbd53a2e0f6ce738d557f801f937e236b898e5821ec3b423b",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Cotton",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "US currency paper is 75% cotton and 25% linen.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It is not made mainly of wood pulp, polymer or hemp.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cotton and linen banknote paper is much stronger and more durable than ordinary wood-pulp paper.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Australia issued the first polymer banknote, a commemorative 10-dollar note, in 1988.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ca530dea76326224fb3847a6b4580645d9400609ba594dff04a15c53f97793c8",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Cotton",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "US banknote paper is 75% cotton and 25% linen.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It is not mainly wood pulp, plastic polymer or hemp.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cotton-linen paper is far more durable than ordinary wood-pulp paper.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Australia's first polymer banknote came out in 1988.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, number) and c4 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "US dollar banknotes are printed on paper made mostly from which material?",
+  "answer": "Cotton",
+  "wrong": ["Wood pulp", "Plastic polymer", "Hemp"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.209,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "id": "p.film.0149",
+  "status": "active",
+  "category": "film",
+  "tags": ["tv-series", "comedy", "britain"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Atkinson took Mr. Bean to the London 2012 Olympic opening ceremony, playing one note again and again in Chariots of Fire with the London Symphony Orchestra.",
+  "learnMore": "Mr. Bean",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Rowan Atkinson created Mr. Bean, with Richard Curtis, and played him."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Hugh Laurie, John Cleese and Stephen Fry did not play Mr. Bean."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Rowan Atkinson appeared as Mr. Bean at the opening ceremony of the London 2012 Olympic Games."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In that sketch Atkinson played one repeated note in Chariots of Fire with the London Symphony Orchestra."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: olympic-editions (edition 54, 2012 Summer, London, opening ceremony 27 July 2012) confirms the Games but not the sketch. Rival test: Laurie, Cleese and Fry are British comic actors of similar fame, and Laurie and Fry worked with Atkinson on Blackadder. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a British character known worldwide precisely because he barely speaks. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 26 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f439816e8bfe75e84d4c0166617a8c16f0067b58f84d0dfb7a2bc539f465c664",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Rowan Atkinson",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Atkinson co-created Mr. Bean with Richard Curtis and played him.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Laurie, Cleese and Fry did not play Mr. Bean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Atkinson appeared as Mr. Bean in the opening ceremony of the London 2012 Olympics.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In that sketch he played one repeated keyboard note in Chariots of Fire with the London Symphony Orchestra under Simon Rattle.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ec1c9ef6ad2d9ebc4b83efb4b56d26b0c3bf5b672bc2f1a3d895dc611269436a",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Rowan Atkinson",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Rowan Atkinson created Mr. Bean with Richard Curtis and played him.",
+              "confidence": "certain"
+            },
+            "note": "Laurie and Fry worked with Atkinson in Blackadder, which makes them tempting, but neither played Bean."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Laurie, Cleese and Fry did not play Mr. Bean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Atkinson appeared as Mr. Bean at the London 2012 opening ceremony.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In that sketch he played one repeated note in Chariots of Fire with the London Symphony Orchestra.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c3 and c4 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which comic actor created and played the almost silent Mr. Bean?",
+  "answer": "Rowan Atkinson",
+  "wrong": ["Hugh Laurie", "John Cleese", "Stephen Fry"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.431,
+    "estimator": "v0"
+  }
+}

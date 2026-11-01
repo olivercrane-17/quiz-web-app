@@ -1,0 +1,200 @@
+{
+  "id": "p.soc.0170",
+  "status": "active",
+  "category": "soc",
+  "tags": ["money", "currencies", "history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Under Peter the Great, Russia set one rouble equal to 100 kopecks in 1704. Revolutionary France introduced the decimal franc in 1795, alongside the metric system.",
+  "learnMore": "Decimalisation",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Russia made its currency decimal in 1704, under Peter the Great, with one rouble equal to 100 kopecks."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "France adopted a decimal currency, the franc of 100 centimes, in 1795."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "France's decimal franc was introduced alongside the metric system."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers currency history (currency-codes holds only modern ISO codes); c1 and c2 need web evidence. rivalTest: France, home of the metric system, is the planted pull, so counterintuitive is true; the gap of 91 years is wide. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: fair everywhere. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 26 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 5. doubts: none; the learnMore keeps the Wikipedia title's own spelling, and no player-facing text uses it. riskReason: counterintuitive is true, so the key label claims are high under C26; the CNT-1 claim schema has no 'counterintuitive' riskReason, so they carry date, the trigger the claim also holds.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1544f186e3ae42526f7393b23013a6590f97326ceaa7b918ef3dc54e3ffd4618",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Russia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Peter the Great's reform made the rouble equal to 100 kopecks by 1704, the first decimal currency.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "France's decimal franc of 10 décimes and 100 centimes was created in 1795, by the law of 18 Germinal Year III.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The same 1795 law set up the metric system.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "df181ee69d24f5bbef6608d59e7130f1467ee142bd0b5b9aee2d01bdff75f85a",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Russia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Peter the Great's reform of 1704 set one rouble equal to 100 kopecks, the first decimal coinage.",
+              "confidence": "certain"
+            },
+            "note": "The order is certain whatever the exact reform year: Russia in the early 1700s, France in the 1790s. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "France adopted the decimal franc of 100 centimes in 1795.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The decimal franc came in alongside the metric system.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (label, date) and c2 (label, date) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which country made its currency decimal first?",
+  "a": "Russia",
+  "b": "France",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year its currency went decimal",
+  "unit": "year",
+  "values": {
+    "a": 1704,
+    "b": 1795
+  },
+  "valueDisplay": {
+    "a": "1704",
+    "b": "1795"
+  },
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.188,
+    "estimator": "v0"
+  }
+}

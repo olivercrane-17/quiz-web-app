@@ -1,0 +1,215 @@
+{
+  "id": "p.nat.0271",
+  "status": "active",
+  "category": "nat",
+  "tags": ["birds", "myths", "food", "digestion"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Wild birds eat raw rice and other grains in fields without harm. The story spread with advice against throwing rice at weddings, but no evidence ever supported it.",
+  "learnMore": "Rice",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Uncooked rice does not swell in birds' stomachs enough to harm them or make them burst."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Many wild birds eat uncooked rice and other grains in fields without harm."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The rice myth spread along with advice against throwing rice at weddings."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "No scientific evidence supports the claim that uncooked rice makes birds burst."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed; high: c1 (checker_doubt, standing in for counterintuitive, which the tooling's riskReason enum lacks; C26 makes the key of a counterintuitive item high); standard: c2, c3 and c4. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on whether uncooked rice harms birds should cover c1 to c4. rivalTest: Argued for true: dry rice does swell when cooked, so the story sounds like science, which is why it is a myth worth correcting. Birds' crops and gizzards grind grain long before it could swell, and rice-field birds eat it daily. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: rice is grown and eaten worldwide, and birds feed in rice fields across Asia, Africa and the Americas; the wedding custom appears only in the explanation. style: Oxford spelling, plain hyphens only, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a true/false item. doubts: none on the key. The myth is not on content/reference/myths.json, so no C25 hit; the editor may want to add it.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f431e291da9f67698f562955344e1ee0ecd9b9269982825b0d1406362dfa4404",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Uncooked rice does not swell in a bird's crop or stomach enough to harm it, so the statement is false.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Many wild birds eat raw rice and other grains in fields without harm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The myth spread together with advice against throwing rice at weddings.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "No scientific evidence supports the idea that raw rice makes birds burst.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b9c0cf538d41178a8633b67e5a53a576b499942b0214ea61e7fdbdbdf7324647",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Uncooked rice does not swell inside birds' stomachs enough to harm them or make them burst.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Many wild birds eat uncooked rice and other grains in fields without harm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The rice story spread along with advice against throwing rice at weddings.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "No scientific evidence supports the claim that raw rice makes birds burst.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c1 (key, checker_doubt) rests on knowledge alone in both checks: no pinned dataset covers animal biology and checker A's one search was refused at the session limit, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.nat.0102",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Uncooked rice swells inside birds' stomachs and can make them burst.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.25,
+    "estimator": "v0"
+  }
+}

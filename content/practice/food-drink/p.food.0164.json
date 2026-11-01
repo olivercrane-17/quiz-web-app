@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0164",
+  "status": "active",
+  "category": "food",
+  "tags": ["vegetables", "fermentation", "germany"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Salt draws water from the shredded cabbage, and microbes already on the leaves sour it naturally, with no vinegar needed. Captain Cook's crews ate it on long voyages.",
+  "learnMore": "Sauerkraut",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Sauerkraut, a German side dish, is made by salting shredded white cabbage and leaving it to ferment."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Coleslaw is raw shredded cabbage in a dressing, kimchi is a Korean dish usually spiced with chilli, and piccalilli is a mustard pickle; none is the fermented German cabbage dish."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In sauerkraut making, salt draws water from the cabbage and the lactic acid bacteria naturally present ferment it, so no vinegar is needed."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Captain James Cook carried sauerkraut on his long voyages, and his crews ate it."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: kimchi is also fermented cabbage, which makes it the tempting distractor, but it is Korean and usually spiced with chilli; coleslaw uses raw cabbage. I framed the stem around the dish because the plain 'which vegetable' version read too close to the guide's kimchi example (C22). Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: sauerkraut is known worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 1: very widely known. Doubts: the explanation says 'microbes' rather than bacteria so it gives nothing away to p.food.0162.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "26dd5f51025f6917d3165493a4549e1ea67d95d1b85350a39638865f637a6533",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Sauerkraut",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Sauerkraut is shredded white cabbage, salted and fermented.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Coleslaw is raw cabbage in a dressing, kimchi a Korean chilli-spiced ferment and piccalilli a mustard pickle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Salt draws water from the cabbage and the lactic acid bacteria already on it ferment it, so no vinegar is needed.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Captain Cook carried sauerkraut on his voyages and had his crews eat it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "de9c1c631ceaeed9a8b42f460192d3f040cbf9f5ead5bf49c056e07ca5c2af2b",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Sauerkraut",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Sauerkraut is shredded white cabbage salted and fermented, a German dish.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Coleslaw is raw cabbage in dressing, kimchi is a Korean spiced ferment, piccalilli is a mustard pickle.",
+              "confidence": "certain"
+            },
+            "note": "Kimchi is also fermented cabbage but is not German; the stem fixes the dish."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Salt draws water from the cabbage and lactic acid bacteria already on the leaves ferment it, so no vinegar is needed.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Captain James Cook carried sauerkraut on his long voyages and his crews ate it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.sci.0247",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Shredded white cabbage, salted and left to ferment, becomes which German side dish?",
+  "answer": "Sauerkraut",
+  "wrong": ["Coleslaw", "Kimchi", "Piccalilli"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.92,
+    "spread": 0.334,
+    "estimator": "v0"
+  }
+}

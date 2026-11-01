@@ -1,0 +1,246 @@
+{
+  "id": "p.food.0201",
+  "status": "active",
+  "category": "food",
+  "tags": ["national-dishes", "vietnam", "soups", "noodles"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Its clear broth simmers for hours with charred onion and ginger, star anise and cinnamon. The dish took shape in northern Vietnam in the early 20th century.",
+  "learnMore": "Pho",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Pho is a Vietnamese noodle soup."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Pho is not a Thai, Cambodian or Malaysian dish."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Pho broth is simmered for hours and flavoured with charred onion and ginger, star anise and cinnamon."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Pho developed in northern Vietnam in the early 20th century."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In Vietnam pho is commonly eaten for breakfast."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. C22 flags a shared answer with p.lang.0143, which asks which language uses the Latin alphabet; the facts are unrelated (a dish against a writing system), so the key stays Vietnamese. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c4). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Cambodia and Laos have related noodle soups, which is why Laos is left out of the options; pho itself is Vietnamese and no reference gives it another home. Against the key: none survives. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: pho is sold in cities on every continent, and the country is reachable from the name and from Vietnamese restaurants abroad. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: most players have met pho or can reason from Vietnamese restaurants. Doubts: c4 dates the dish only to the early 20th century, the span every account I know gives; the exact town of origin is debated, so the explanation names only the region.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "fd0abf7562bf50d8dc4f2c9cab1158d0cfdd770602a4c402c1c6f5dc5353ddcf",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Vietnamese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pho is Vietnam's noodle soup: rice noodles in a beef or chicken broth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Thai, Cambodian and Malaysian cooking have their own noodle soups (kuy teav in Cambodia, for one), but pho itself is Vietnamese.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pho stock simmers for hours from bones with charred onion and ginger and spices such as star anise and cinnamon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most accounts place pho's origin in northern Vietnam, around Hanoi and Nam Dinh, in the first decades of the 20th century.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Pho is a common breakfast in Vietnam, sold from early morning.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3f57c653393c0569a60fb8cc5b3d79f1cc3e7d437bf8edb3fd1c2dd59a680772",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Vietnamese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pho is Vietnam's own noodle soup: a clear broth with rice noodles and sliced meat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Thai, Cambodian and Malaysian cooking have their own noodle soups, but none of them is pho.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Cambodian kuy teav and Thai guay teow resemble it but are different dishes."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pho stock is simmered for hours with charred onion and ginger and spiced with star anise and cinnamon among others.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pho took shape in northern Vietnam, around the Nam Dinh and Hanoi area, in the first decades of the 1900s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Pho is a standard breakfast in Vietnam, sold from early morning at street stalls and shops.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c4 (explanation, date) rests on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7).",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Pho, a noodle soup often eaten for breakfast, comes from which cuisine?",
+  "answer": "Vietnamese",
+  "wrong": ["Thai", "Cambodian", "Malaysian"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.89,
+    "spread": 0.375,
+    "estimator": "v0"
+  }
+}

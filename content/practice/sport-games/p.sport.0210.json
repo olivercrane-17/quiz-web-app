@@ -1,0 +1,243 @@
+{
+  "id": "p.sport.0210",
+  "status": "active",
+  "category": "sport",
+  "tags": ["world-cup", "football", "brazil"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Germany led 5-0 after 29 minutes in Belo Horizonte, scoring four goals in six minutes. Five days later they beat Argentina 1-0 after extra time in the final.",
+  "learnMore": "Brazil v Germany (2014 FIFA World Cup)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Germany beat Brazil 7-1 in the semi-final of the 2014 men's World Cup."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The 2014 semi-final between Brazil and Germany did not end 3-0, 4-2 or 5-1."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Germany led Brazil 5-0 after 29 minutes, with goals in the 11th, 23rd, 24th, 26th and 29th minutes, at the Estádio Mineirão in Belo Horizonte."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Germany beat Argentina 1-0 after extra time in the 2014 final on 13 July, five days after the semi-final on 8 July."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 4 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup, 2014/worldcup.json: Semi-finals, Brazil v Germany on 8 July 2014 at the Estádio Mineirão, Belo Horizonte, full time 1-7, half-time 0-5, German goals by Müller 11, Klose 23, Kroos 24 and 26, Khedira 29, Schürrle 69 and 79; Final, Germany v Argentina on 13 July 2014, extra time 1-0, Götze 113. These confirm c1 to c4. rivalTest: The distractors are other heavy scores of the same shape; 5-1 is the closest trap. The dataset gives 1-7 from Brazil's side, so the key is certain. The four goals in six minutes run from the 23rd to the 29th minute. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. The result is a dated historical fact.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "57e5d6a62044200cd6347d3e7cb944950af10aa9021cf090bee69ad417b2e3f1",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "7-1",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2014/worldcup.json",
+              "locator": "matches[round=Semi-finals, date=2014-07-08]",
+              "excerpt": "\"date\": \"2014-07-08\" ... \"team1\": \"Brazil\" ... \"team2\": \"Germany\" ... \"score\": {\"ft\": [1, 7], \"ht\": [0, 5]} ... {\"name\": \"Thomas Müller\", \"minute\": \"11\"}, {\"name\": \"Miroslav Klose\", \"minute\": \"23\"}, {\"name\": \"Toni Kroos\", \"minute\": \"24\"}, {\"name\": \"Toni Kroos\", \"minute\": \"26\"}, {\"name\": \"Sami Khedira\", \"minute\": \"29\"} ... \"ground\": \"Estádio Mineirão, Belo Horizonte\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Semi-final, 8 July 2014: Brazil 1, Germany 7 at full time."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2014/worldcup.json",
+              "locator": "matches[round=Semi-finals, date=2014-07-08]",
+              "excerpt": "\"date\": \"2014-07-08\" ... \"team1\": \"Brazil\" ... \"team2\": \"Germany\" ... \"score\": {\"ft\": [1, 7], \"ht\": [0, 5]} ... {\"name\": \"Thomas Müller\", \"minute\": \"11\"}, {\"name\": \"Miroslav Klose\", \"minute\": \"23\"}, {\"name\": \"Toni Kroos\", \"minute\": \"24\"}, {\"name\": \"Toni Kroos\", \"minute\": \"26\"}, {\"name\": \"Sami Khedira\", \"minute\": \"29\"} ... \"ground\": \"Estádio Mineirão, Belo Horizonte\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The same record gives the full-time score as 1-7, so not 3-0, 4-2 or 5-1."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2014/worldcup.json",
+              "locator": "matches[round=Semi-finals, date=2014-07-08]",
+              "excerpt": "\"date\": \"2014-07-08\" ... \"team1\": \"Brazil\" ... \"team2\": \"Germany\" ... \"score\": {\"ft\": [1, 7], \"ht\": [0, 5]} ... {\"name\": \"Thomas Müller\", \"minute\": \"11\"}, {\"name\": \"Miroslav Klose\", \"minute\": \"23\"}, {\"name\": \"Toni Kroos\", \"minute\": \"24\"}, {\"name\": \"Toni Kroos\", \"minute\": \"26\"}, {\"name\": \"Sami Khedira\", \"minute\": \"29\"} ... \"ground\": \"Estádio Mineirão, Belo Horizonte\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Goals2 lists Müller 11, Klose 23, Kroos 24 and 26 and Khedira 29; half-time 0-5; ground Estádio Mineirão, Belo Horizonte. These minutes also carry the explanation's 'four goals in six minutes' (23rd to 29th minute)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2014/worldcup.json",
+              "locator": "matches[round=Final, date=2014-07-13]; the semi-final record is dated 2014-07-08",
+              "excerpt": "{\"round\": \"Final\", ... \"date\": \"2014-07-13\" ... \"team1\": \"Germany\" ... \"team2\": \"Argentina\" ... \"score\": {\"et\": [1, 0], \"ft\": [0, 0], \"ht\": [0, 0]} ... \"goals1\": [{\"name\": \"Mario Götze\", \"minute\": \"113\"}]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Final, 13 July 2014: Germany 1-0 Argentina after extra time (Götze 113); the semi-final record is dated 8 July, five days earlier."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "968f758553fb1e120166ffd0cb302f97232fe06e264da84eecf8aaaa91cb5992",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "7-1",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2014/worldcup.json",
+              "locator": "round=Semi-finals, Brazil v Germany",
+              "excerpt": "Semi-finals, 2014-07-08: Brazil {\"ft\":[1,7],\"ht\":[0,5]} Germany, Estádio Mineirão, Belo Horizonte",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2014/worldcup.json",
+              "locator": "round=Semi-finals, Brazil v Germany",
+              "excerpt": "Semi-finals, 2014-07-08: Brazil {\"ft\":[1,7],\"ht\":[0,5]} Germany, Estádio Mineirão, Belo Horizonte",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The full-time score is 1-7, which is none of 3-0, 4-2 or 5-1."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2014/worldcup.json",
+              "locator": "round=Semi-finals, Brazil v Germany",
+              "excerpt": "Semi-finals, 2014-07-08: Brazil {\"ft\":[1,7],\"ht\":[0,5]} Germany, Estádio Mineirão, Belo Horizonte; goals Brazil: Oscar 90; goals Germany: Thomas Müller 11, Miroslav Klose 23, Toni Kroos 24, Toni Kroos 26, Sami Khedira 29, Andre Schürrle 69, Andre Schürrle 79",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Goals at 11, 23, 24, 26 and 29 minutes with half-time 0-5, so Germany led 5-0 after 29 minutes."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2014/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "Final, 2014-07-13: Germany {\"et\":[1,0],\"ft\":[0,0],\"ht\":[0,0]} Argentina, Estádio do Maracanã, Rio de Janeiro; goals Germany: Mario Götze 113; goals Argentina: none",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Final dated 13 July 2014, semi-final 8 July 2014, so five days apart; the final was decided in extra time."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Both checks pass; high-risk c1 to c4 have worldcup dataset evidence in both checks (full-time and half-time score, goal minutes, ground, and the final five days later). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:37:40Z",
+      "nearestId": "p.sport.0132",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:37:40Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In the 2014 men's World Cup semi-final, hosts Brazil lost to Germany by what score?",
+  "answer": "7-1",
+  "wrong": ["3-0", "4-2", "5-1"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.428,
+    "estimator": "v0"
+  }
+}

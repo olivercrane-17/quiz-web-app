@@ -1,0 +1,185 @@
+{
+  "id": "p.nat.0234",
+  "status": "active",
+  "category": "nat",
+  "tags": ["fossils", "insects", "trees"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Buried for ages, the resin slowly hardened into amber, preserving trapped insects, spiders and even small feathers in fine detail.",
+  "learnMore": "Amber",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Amber is fossilized tree resin, and insects preserved in it were trapped in the resin."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Amber is not made from honey, beeswax or spider silk."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Amber can preserve insects, spiders and feathers in fine detail."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: three listed; all standard: no digit, number word, superlative or other C26 trigger, and each is textbook knowledge. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies; every claim is standard-risk knowledge a checker can confirm at certain confidence, so the item needs no search. rivalTest: 'Tree sap' was kept out of the options because people often call resin sap, which would make a second defensible answer. Honey and beeswax tempt because they are sticky and golden like amber. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: amber is found and sold worldwide, from the Baltic to the Dominican Republic. style: Oxford spelling, plain hyphens only, explanation of 20 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f65af19249e5664024c5f98509e819427238f3db9b53b27b348ea17632c0cb53",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "Tree resin",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Amber is fossilized tree resin, and insects in amber were trapped in the sticky resin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Amber does not form from honey, beeswax or spider silk.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Amber preserves insects, spiders and even feathers in fine detail.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "05be16086a8f7b079e113ef45e6ab223879a843c911c1323afc59ac0356adfce",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "Tree resin",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Amber is fossilized tree resin, and the insects in it were trapped while the resin was sticky.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Amber is not made from honey, beeswax or spider silk.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Amber can preserve insects, spiders and feathers in fine detail.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "accept",
+      "reason": "A and B pass; all 3 claims confirmed in both checks; no high-risk claims; every knowledge confirmation at certain. Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:21:42Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:21:42Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:21:42Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Insects trapped in amber were caught, long ago, in which sticky substance?",
+  "answer": "Tree resin",
+  "wrong": ["Honey", "Beeswax", "Spider silk"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.92,
+    "spread": 0.246,
+    "estimator": "v0"
+  }
+}

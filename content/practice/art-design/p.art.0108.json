@@ -1,0 +1,288 @@
+{
+  "id": "p.art.0108",
+  "status": "active",
+  "category": "art",
+  "tags": ["paintings", "cubism", "spain"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Picasso wanted it to go to Spain only once democracy returned, so it stayed at New York's Museum of Modern Art until 1981, eight years after his death.",
+  "learnMore": "Guernica (Picasso)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Pablo Picasso painted Guernica in 1937 in response to the bombing of the Basque town of Guernica."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Dalí, Miró and Goya did not paint Guernica."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Picasso asked that Guernica not go to Spain until democracy was restored there."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Guernica was kept at the Museum of Modern Art in New York until it was moved to Spain in 1981."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Pablo Picasso died in 1973."
+    },
+    {
+      "id": "c6",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Guernica moved to Spain eight years after Picasso's death."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: c5 checked in moma-artists (ConstituentID 4609, Spanish, 1881 to 1973) and tate-artists (id 1767, died 1973 in Mougins); c6 is arithmetic on c4 and c5; c1 and c4 need a source. Rival test: argued for Dalí and Miró (Spanish contemporaries who also reacted to the Civil War) and Goya (his war scenes are Guernica's ancestors), but none painted it; against the key, nothing. Volatility: evergreen; the museum fact is history and ends in 1981; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a world-famous anti-war painting; the bombing is named factually, not used as a hook. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: none; the tragedy is described only as the painting's subject, in a factual tone (§3.7).",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d64ba09919e04dbfa35f811f901d82467fb2c794ecf8b7b42e8b23109f4b9bcc",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "Pablo Picasso",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Picasso painted Guernica in 1937, after the April 1937 bombing of the Basque town.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dalí, Miró and Goya did not paint Guernica; Goya died in 1828.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Picasso asked that the painting not go to Spain until democracy and public liberties were restored there.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Guernica was in MoMA's care from 1939 and was moved to Madrid in 1981.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=4609 (DisplayName=Pablo Picasso)",
+              "excerpt": "\"DisplayName\": \"Pablo Picasso\", \"ArtistBio\": \"Spanish, 1881–1973\", \"EndDate\": 1973",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Tate's artist_data.csv agrees (id 1767, yearOfDeath 1973)."
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=4609 (DisplayName=Pablo Picasso)",
+              "excerpt": "\"DisplayName\": \"Pablo Picasso\", \"EndDate\": 1973",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The dataset carries the 1973 death; 'eight years' is 1981 minus 1973 and leans on c4's 1981, which is knowledge only, so c4's follow-up evidence also completes this claim."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "64c473c53c3163a103d8697ce887a58b8739b8af3cabccf5fee51f5f55fba031",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "Pablo Picasso",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Picasso painted Guernica in 1937 in response to the bombing of the Basque town of Gernika (Guernica).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Dalí, Miró and Goya did not paint Guernica.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Picasso asked that the painting go to Spain only once democratic liberties were restored there.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Guernica was at New York's Museum of Modern Art from 1939 until it was sent to Spain in 1981.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=4609",
+              "excerpt": "{\"DisplayName\":\"Pablo Picasso\",\"ArtistBio\":\"Spanish, 1881–1973\",\"Nationality\":\"Spanish\",\"BeginDate\":1881,\"EndDate\":1973}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The record gives 1881 to 1973."
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "1981 minus 1973 is eight years.",
+              "confidence": "certain"
+            },
+            "note": "Pure arithmetic on c4 and c5. High-risk: counts only with external evidence in the other check (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, date), c4 (explanation, date) rest on knowledge alone in both checks: checker A's searches ran out and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Redraft under a new id with these facts evidenced (a dataset record or a Tier A or B search) or bounded.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.art.0001",
+      "score": 0.178,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which artist painted Guernica (1937), a protest against the bombing of a Basque town?",
+  "answer": "Pablo Picasso",
+  "wrong": ["Salvador Dalí", "Joan Miró", "Francisco Goya"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.298,
+    "estimator": "v0"
+  }
+}

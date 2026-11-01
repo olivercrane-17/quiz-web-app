@@ -1,0 +1,254 @@
+{
+  "id": "p.geo.0132",
+  "status": "active",
+  "category": "geo",
+  "tags": ["islands", "borders", "caribbean"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "The French north is Saint-Martin and the Dutch south is Sint Maarten, a country within the Kingdom of the Netherlands. Visitors cross between them freely.",
+  "learnMore": "Saint Martin (island)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The island of Saint Martin is divided between France and the Kingdom of the Netherlands."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The United Kingdom, Spain and Denmark hold no part of Saint Martin."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The northern, French part of the island is called Saint-Martin and the southern, Dutch part is called Sint Maarten."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sint Maarten is a constituent country of the Kingdom of the Netherlands."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "People can cross between the French and Dutch parts of Saint Martin without border checks."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; all standard. Datasets: mledoze-countries cca3=MAF (Saint Martin) borders SXM and SXM (Sint Maarten) borders MAF; country-codes MAF is_independent 'Part of FR', SXM 'Part of NL' (c1). Rival test: the United Kingdom is the strongest pull, with many Caribbean territories; Spain and Denmark were Caribbean powers too, but neither holds any of the island. Against the key: the option says 'Netherlands' while the claim says 'Kingdom of the Netherlands', which is how the island is usually described, so no pedant can turn it into a wrong answer. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a well-known holiday island; Dutch Caribbean islands such as Aruba and Curaçao give players a foothold. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: Seeded 5: many will guess the United Kingdom.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2cefd12866513ead688194dd6d0c59f87293ba8760274035553d93636a6ffeb4",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Netherlands",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Saint Martin is split between France in the north and the Kingdom of the Netherlands in the south.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Neither the UK, Spain nor Denmark holds any part of Saint Martin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The French north is Saint-Martin and the Dutch south is Sint Maarten.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Since 2010 Sint Maarten has been a constituent country of the Kingdom of the Netherlands.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The border between the two halves is open, with no checks.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7abd0a7add07aebfb3472067971b8ad78bf97206538c0f4b110238c4af8d3740",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Netherlands",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MAF, cca3=SXM",
+              "excerpt": "MAF (Saint Martin): borders [\"SXM\"]; independent false | SXM (Sint Maarten): borders [\"MAF\"]; independent false",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The two parts border only each other. The Dutch half's status as a country within the Kingdom is knowledge, certain."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Only France and the Netherlands (via Sint Maarten) hold parts of Saint Martin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The north is the French collectivity of Saint-Martin and the south is Sint Maarten.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sint Maarten has been a constituent country of the Kingdom of the Netherlands since 2010.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "There are no border controls between the French and Dutch parts of the island.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The key is 'Netherlands'. Strictly the southern half is Sint Maarten, a constituent country of the Kingdom of the Netherlands, not part of the European Netherlands. The usual phrasing is 'France and the Netherlands' and no option is closer, so there is no second answer, and the explanation spells it out. No change needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed at certain; every claim is standard risk, so knowledge suffices (§9.5.3). Lint clean, no myth hits. B's note on Sint Maarten's status is answered by the explanation, which spells it out; no option is closer than Netherlands. Dedupe flags a near item across the seal; checked locally with --reveal, it states a different fact, so related_ok.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The Caribbean island of Saint Martin is divided between France and which other country?",
+  "answer": "Netherlands",
+  "wrong": ["United Kingdom", "Spain", "Denmark"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.275,
+    "estimator": "v0"
+  }
+}

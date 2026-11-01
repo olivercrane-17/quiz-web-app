@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0148",
+  "status": "active",
+  "category": "food",
+  "tags": ["national-dishes", "east-africa", "grains"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Teff grains are about the size of poppy seeds. Diners tear off pieces of injera to scoop up stews, so the bread serves as plate and cutlery at once.",
+  "learnMore": "Injera",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Injera is traditionally made from teff flour, fermented into a sourdough batter."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Traditional injera is not made from quinoa, amaranth or buckwheat."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Teff grains are very small, about the size of poppy seeds."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Injera is used both as a base for stews and, torn into pieces, to scoop up food."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: the distractors are other small grains or seeds from the Americas and Eurasia; some cooks blend other flours into injera, which is why the stem says traditionally. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Ethiopian and Eritrean players have the home edge; for others, the Horn of Africa and the tiny grain point away from the Andean quinoa. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 29 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: teff is unknown to most players, though diners of Ethiopian food know it. Doubts: none. The stem avoids naming Ethiopia so it gives nothing away to p.food.0116.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e8ad8cb0d5fe75b914d99b6600c236632feb57a5be5330d141fb4d17e6a4eed9",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Teff",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Injera is made from teff flour fermented into a sourdough batter.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Traditional injera is not made from quinoa, amaranth or buckwheat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Teff grains are about 1 mm across, roughly poppy-seed size.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Injera is both the base under stews and, torn into pieces, the scoop for eating them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2882c7e22d81eee90c5878e9e1c6f48784e067bd3806a1a30783b34b2f987f17",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Teff",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Injera is a spongy flatbread made from fermented teff batter.",
+              "confidence": "certain"
+            },
+            "note": "Injera is sometimes cut with sorghum or wheat, but teff is the traditional grain."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Quinoa, amaranth and buckwheat are not injera grains.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A teff grain is about a millimetre across, roughly the size of a poppy seed.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Injera is the base for stews and is torn to scoop up food.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.food.0250",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Injera, a spongy sourdough flatbread from the Horn of Africa, is traditionally made from which tiny grain?",
+  "answer": "Teff",
+  "wrong": ["Quinoa", "Amaranth", "Buckwheat"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.334,
+    "estimator": "v0"
+  }
+}

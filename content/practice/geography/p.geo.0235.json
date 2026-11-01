@@ -1,0 +1,277 @@
+{
+  "id": "p.geo.0235",
+  "status": "active",
+  "category": "geo",
+  "tags": ["mountains", "borders", "western-asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "It is a national symbol of Armenia and towers over the Armenian city of Yerevan, but the mountain itself rises in eastern Türkiye, close to the borders with Armenia and Iran.",
+  "learnMore": "Mount Ararat",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Mount Ararat is in Türkiye."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Mount Ararat is not in Armenia, Iran or Georgia."
+    },
+    {
+      "id": "c3",
+      "role": "key",
+      "ref": "stem",
+      "risk": "standard",
+      "text": "Tradition links Mount Ararat with the resting place of Noah's Ark."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mount Ararat is a national symbol of Armenia."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mount Ararat can be seen towering over Yerevan, in Armenia."
+    },
+    {
+      "id": "c6",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mount Ararat rises in eastern Türkiye, close to the borders with Armenia and Iran."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; c1 (checker_doubt) is high under the C26 floor, and c2, c3, c4, c5 and c6 are standard; c1 is high because the item is counterintuitive, and the schema's riskReason list has no 'counterintuitive', so checker_doubt stands in. Datasets: none covers mountains (the natural-earth region points pinned here hold capes, islands and waterfalls), so c1 needs a web result. mledoze-countries: TUR borders ARM and IRN, which fits c6. Rival test: Armenia is the planted trap: the mountain is its national emblem and dominates the view from Yerevan. Iran is the other near neighbour, and Georgia the Caucasus country players may half-remember. Against the key: the mountain is not subject to any territorial claim between states, so the key is settled. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Known through the Noah story and Armenian culture worldwide; the trap catches players everywhere equally. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 31 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c1 needs a Tier A or B web result (one search should also cover c6). Seed: 4 (medium): many pick Armenia; those who know the borders get it. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: the item is counterintuitive and touches a sensitive history, so the explanation states only geography and symbolism, respectfully, with no politics.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "476e28545d2f5ca9253598ea362940f6c49c4ed8575a9d8e0cae2804571fbb04",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Türkiye",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mount Ararat stands in eastern Türkiye, in Ağrı and Iğdır provinces.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mount Ararat is not in Armenia, Iran or Georgia, though it is near the Armenian and Iranian borders.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tradition identifies Mount Ararat with the mountains of Ararat where the Bible says Noah's Ark came to rest.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mount Ararat is a national symbol of Armenia and appears on its coat of arms.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mount Ararat dominates the skyline of Yerevan across the border.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mount Ararat rises in the far east of Türkiye, close to its borders with Armenia and Iran.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d67dbbad4bf1adfc4dbd9ad83cc74b3e0ce3f265863ae392f08105bccc53bc82",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Türkiye",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mount Ararat (Agri Dagi) is a volcanic peak in eastern Turkiye, close to the borders with Armenia and Iran.",
+              "confidence": "certain"
+            },
+            "note": "Flagged high by the writer as a place often confused. I am certain of the location. Knowledge only (no web search available to me); needs pass A's external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mount Ararat is not in Armenia, Iran or Georgia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Book of Genesis says the ark came to rest on 'the mountains of Ararat', and tradition identifies the peak Mount Ararat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mount Ararat is a national symbol of Armenia and appears on its coat of arms.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mount Ararat is visible from Yerevan on clear days.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mount Ararat rises in eastern Turkiye, close to the borders with Armenia and Iran.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key of a counterintuitive item) rests on knowledge alone in both checks: no pinned dataset covers it and neither checker could search (the shared WebSearch budget was spent before pass A ran). §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, which a wording-only edit cannot reach because the claims stay. Redraft under a new id with web evidence, or with the figure stepped down or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Mount Ararat, linked in tradition with Noah's Ark, stands in which country?",
+  "answer": "Türkiye",
+  "wrong": ["Armenia", "Iran", "Georgia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.218,
+    "estimator": "v0"
+  }
+}

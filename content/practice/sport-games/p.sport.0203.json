@@ -1,0 +1,213 @@
+{
+  "id": "p.sport.0203",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["olympics", "rio-de-janeiro", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The Maracanã stadium staged the opening ceremony. Brazil's men also won their first Olympic football (soccer) gold there, beating Germany on penalties.",
+  "learnMore": "2016 Summer Olympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The 2016 Summer Olympics in Rio de Janeiro were the first Olympic Games held in South America."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 2008, 2012 and 2020 Summer Olympics were held in Beijing, London and Tokyo, none of them in South America."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The opening ceremony of the Rio Olympics was held at the Maracanã stadium."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "At the 2016 Olympics Brazil won its first Olympic gold medal in men's football (soccer), beating Germany on penalties in the final at the Maracanã."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 3 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: olympic-editions, edition_metadata.csv: edition_id 59 (2016 Summer, Rio de Janeiro, Brazil) is the only edition in the file held in a South American country, which confirms c1; edition_ids 53, 54 and 61 give Beijing 2008, London 2012 and Tokyo 2020 for c2. c3 and c4 need web evidence. rivalTest: Every distractor is a neighbouring Summer Olympics year, so a player who half-remembers the four-year cycle has to place Rio. None of 2008, 2012 or 2020 was in South America. Buenos Aires hosted only the 2018 Youth Olympics, which are not the Olympic Games the stem means. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 22 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: c4 combines the Maracanã venue and the shoot-out; both are well documented, but checker A should find a source for the penalty result.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "532dc45c58712a83fc1a28bfaba81ffe36071f6128d9b02cfc342d31e214205f",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "2016",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=59; country column of all 63 rows scanned (1896 to 2026)",
+              "excerpt": "59,2016 Summer,2016,Summer,Rio de Janeiro,Brazil,2016-08-05,2016-08-21",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "No host country before 2016 is in South America: the hosts are in Europe, Northern America, Asia, Oceania and Mexico. Cross-check in iso-3166-regions (145f1ad, all.json): Brazil is the only Olympic host with intermediate-region 'South America'; Mexico, the only other Latin American host, is 'Central America'."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=53, 54 and 61",
+              "excerpt": "53,2008 Summer,2008,Summer,Beijing,People's Republic of China | 54,2012 Summer,2012,Summer,London,Great Britain | 61,2020 Summer,2020,Summer,Tokyo,Japan",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The 2008, 2012 and 2020 Summer rows name Beijing, London and Tokyo, none in South America."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Rio 2016 opening ceremony took place at the Maracanã on 5 August 2016.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Brazil's men won their first Olympic football gold at Rio 2016, beating Germany 5-4 on penalties after a 1-1 draw in the final at the Maracanã; before that they had silver in 1984, 1988 and 2012 and bronze in 1996 and 2008.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c59cda3c01f1a9acfb59608fddbae409e2333eaac819fc5dfe8acd2d7763fa98",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "2016",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=59; all hosts in South America",
+              "excerpt": "59,2016 Summer,2016,Summer,Rio de Janeiro,Brazil,2016-08-05,2016-08-21; no other edition in the file has a South American host",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Scanned every host country in the file: Brazil (2016) is the only South American one, so no earlier Games took place there."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=53, 54, 61",
+              "excerpt": "53,2008 Summer,2008,Summer,Beijing,People's Republic of China,2008-08-08,2008-08-24 | 54,2012 Summer,2012,Summer,London,Great Britain,2012-07-27,2012-08-12 | 61,2020 Summer,2020,Summer,Tokyo,Japan,2021-07-23,2021-08-08",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The opening ceremony of Rio 2016 took place at the Maracanã stadium on 5 August 2016.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Brazil's men beat Germany on penalties after a 1-1 draw in the 2016 Olympic football final at the Maracanã, their first Olympic gold in men's football.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c4 (explanation, first) rests on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Only c4 is missing: c1 and c2 carry olympic-editions evidence in both checks. Redraft under a new id with this fact evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Rio de Janeiro hosted the first Olympic Games held in South America. In which year?",
+  "answer": "2016",
+  "wrong": ["2008", "2012", "2020"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.444,
+    "estimator": "v0"
+  }
+}

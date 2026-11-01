@@ -1,0 +1,189 @@
+{
+  "id": "p.nat.0240",
+  "status": "cut",
+  "category": "nat",
+  "tags": ["ocean-life", "squid", "octopuses", "anatomy"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "A squid's two extra limbs are long feeding tentacles that shoot out to snatch prey, gripping with suckers and, in some species, hooks. Octopuses have only their eight arms.",
+  "learnMore": "Squid",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A squid has ten limbs: eight arms and two longer feeding tentacles."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "An octopus has eight arms and no tentacles."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Squid feeding tentacles shoot out to catch prey and grip it with suckers, which in some species carry hooks."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: three listed; high: c1 (number, a comparison label) and c2 (number, a comparison label); standard: c3. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on squid arms and tentacles compared with octopus arms should cover c1 to c3. rivalTest: Argued for the octopus, whose name means eight and which is the animal people picture with many arms. Exact counts, so a difference of two is allowed by the separation guard. Argued against the key: a few deep-sea squid lose their tentacles as adults, so the label says 'A squid' in the ordinary sense and c1 describes the standard body plan. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: both animals are eaten and known worldwide. style: Oxford spelling, plain hyphens only, explanation of 29 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a comparison item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "68bc023fe1f5db2714eae3834e65d0b6ba3d8b5c844168f99f28505df712c9c2",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "A squid",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A squid has eight arms plus two longer feeding tentacles, ten limbs in all.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "An octopus has eight arms and no tentacles.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A squid shoots out its two feeding tentacles to seize prey, gripping with suckers that in some species carry hooks.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5847c357fb7c57a085e3f3f0afe74eead4f58eae5ae99b99f6c84b7205963cc8",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "A squid",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A squid has eight arms and two longer feeding tentacles, ten limbs in all.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "An octopus has eight arms and no tentacles.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A squid's feeding tentacles shoot out to seize prey, and their suckers carry hooks in some species.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'Limbs' stands for arms plus tentacles, as the measure line says, but the stem alone does not. A player who counts only arms sees a tie at eight each. Naming 'arms and tentacles' (or 'appendages') in the stem would remove the trick reading."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (label, number) and c2 (label, number) rest on knowledge alone in both checks: no pinned dataset covers animal biology and checker A's one search was refused at the session limit, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered. For the redraft: B notes that 'limbs' can be read as arms only, a tie at eight, so the stem should name arms and tentacles.",
+      "decidedAt": "2026-11-01T04:21:42Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which has more limbs?",
+  "a": "A squid",
+  "b": "An octopus",
+  "answer": "a",
+  "relation": "more",
+  "measure": "arms and tentacles",
+  "unit": "limbs",
+  "values": {
+    "a": 10,
+    "b": 8
+  },
+  "valueDisplay": {
+    "a": "8 arms and 2 tentacles",
+    "b": "8 arms"
+  },
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.187,
+    "estimator": "v0"
+  }
+}

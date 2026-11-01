@@ -1,0 +1,231 @@
+{
+  "id": "p.book.0216",
+  "status": "cut",
+  "category": "book",
+  "tags": ["poetry", "persian-literature"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Persian was a language of poetry and learning across much of the region. His name means 'from Rum', the old name for Anatolia, once ruled by the Eastern Roman Empire.",
+  "learnMore": "Rumi",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Rumi wrote mainly in Persian."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Rumi's major works, the Masnavi and the Divan-e Shams, are mainly in Persian, not Turkish, Arabic or Greek, though a few of his verses use those languages."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Rumi was a 13th-century poet who spent most of his life in Konya, in Anatolia."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Persian was a major language of poetry and learning across much of the region in Rumi's time."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name Rumi means 'from Rum', the name Persian and Arabic writers used for Anatolia, land once ruled by the Eastern Roman Empire."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: poetry and poets. lint: content:check reports no errors on this item and no warnings. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. The tooling's riskReason list has no counterintuitive value, so the key of this counterintuitive item carries checker_doubt. datasets: Konya checked in geonames-cities (name Konya, country TR, latitude 37.87135), which supports the Anatolia location in c3; the language and name claims need web evidence. rivalTest: Argued for Turkish: Konya is in modern Türkiye and a handful of Rumi's lines are Turkish. Argued for Arabic: he was a religious scholar and wrote some Arabic verse. 'Mainly' in the stem settles it, because the Masnavi and the Divan are Persian. Counterintuitive: Konya and Anatolia point players toward Turkish, the obvious wrong answer; the explanation defuses it. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: Iranian, Afghan, Tajik and many South Asian players know Rumi's language, and his translated poems are popular worldwide, so the item rewards reasoning everywhere rather than one country's schooling. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 30 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: nothing of either kind to check in a practice item. doubts: none beyond confirming c5's etymology. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1583c9efdaf8438c34f512cf55d6724b390f68ed0d6dba0f296624a6ce49e423",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "Persian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Rumi's poetry, the Masnavi and the Divan-e Shams, is written almost entirely in Persian.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Both major works are in Persian, with scattered lines in Arabic and a few in Turkish and Greek.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rumi (1207 to 1273) settled in Konya as a young man, around 1228, and lived there until his death, about 45 of his 66 years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Persian was the main language of poetry and learning in Seljuk Anatolia and much of the eastern Islamic world.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rumi means 'of Rum', the Persian and Arabic name for Anatolia, formerly Byzantine (Eastern Roman) land.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d1fb06f7abb960544bd56326750277f14ca9bc8d26f6525fccb630ab97c14dd9",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "Persian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rumi's two great works, the Masnavi and the Divan-e Shams-e Tabrizi, are written mainly in Persian.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Konya was in Seljuk Rum, but the court and literary language was Persian; the stem sets the Turkish trap on purpose and the explanation defuses it. High-risk (checker_doubt): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Both works are mainly Persian, with a small number of Arabic, Turkish and Greek verses.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rumi lived from 1207 to 1273, settled in Konya around 1228 and stayed there for the rest of his life, which was most of it.",
+              "confidence": "certain"
+            },
+            "note": "About 45 of his 66 years. High-risk (date): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Persian was a major language of poetry, court culture and learning across Anatolia and the wider region in the 13th century.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rumi means 'from Rum', the Persian and Arabic name for Anatolia, land that had been part of the Eastern Roman Empire.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, checker_doubt), c3 (explanation, date) and c5 (explanation, etymology) rest on knowledge alone in both: neither checker could search (both report the shared web budget spent) and no pinned dataset covers them. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, never a relabel. The key itself needs that evidence, so redraft under a new id once a dataset or a Tier A or B search can carry them. Its C22 flag (a shared answer with p.film.0242, a different fact) would be related_ok.",
+      "decidedAt": "2026-11-01T04:44:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The 13th-century poet Rumi spent most of his life in Konya, Anatolia. In which language did he mainly write?",
+  "answer": "Persian",
+  "wrong": ["Turkish", "Arabic", "Greek"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.309,
+    "estimator": "v0"
+  }
+}

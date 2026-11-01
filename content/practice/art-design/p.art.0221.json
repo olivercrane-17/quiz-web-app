@@ -1,0 +1,217 @@
+{
+  "id": "p.art.0221",
+  "status": "active",
+  "category": "art",
+  "tags": ["crafts", "glass", "venice"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "In 1291 Venice ordered its glass furnaces onto Murano, partly to keep fire away from the city's wooden buildings. Lace is the speciality of neighbouring Burano.",
+  "learnMore": "Murano glass",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Murano, an island in the Venetian Lagoon, has been famous for glassmaking since the late 13th century."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Murano is not chiefly known for lace-making, mask-making or boatbuilding."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In 1291 the Republic of Venice ordered glassmakers to move their furnaces to Murano, partly because of the fire risk to the city."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The neighbouring lagoon island of Burano is famous for lace."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no dataset covers crafts; c1 and c3 need a source. Rival test: lace-making is the planted confusion with Burano, masks belong to Venice's carnival and boatbuilding to its Arsenal and gondola yards; against the key, Murano glass is a household name. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Murano glass is sold and known worldwide. Style: Oxford spelling, straight quotes, no en or em dashes, explanation of 26 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: the 1291 move had more than one motive (trade secrets too), so c3 says partly; asked about the craft rather than the city so the key does not repeat p.geo.0147's answer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "49ae0bfa35357ed2c667f7812c9bb93f7169cd83a51ef121e4644081e2734c4c",
+        "startedAt": "2026-11-01T02:15:00Z",
+        "finishedAt": "2026-11-01T02:51:14Z",
+        "coldSolve": {
+          "answerGiven": "Glassmaking",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Venetian glassmaking has been concentrated on Murano since the end of the 13th century.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Murano is known for glass; lace belongs to Burano and masks to Venice itself.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A 1291 decree of the Venetian Republic moved the glass furnaces to Murano because of the danger of fire in the city.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Burano is the lagoon island famous for lace.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "25c874c483cf56827d8756e1719af8d711afbf6c4ce3828958ff69f79f8548bc",
+        "startedAt": "2026-11-01T02:25:00Z",
+        "finishedAt": "2026-11-01T02:51:43Z",
+        "coldSolve": {
+          "answerGiven": "Glassmaking",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Murano has been the centre of Venetian glassmaking since the late 1200s.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lace is Burano's craft; masks and boats belong to Venice itself.",
+              "confidence": "certain"
+            },
+            "note": "Rival test done: no distractor fits."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In 1291 the Venetian Republic ordered the glass furnaces moved to Murano, partly over fire risk.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Burano, a neighbouring island, is famous for lace.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, date) and c3 (explanation, date) rest on knowledge alone in both checks: neither checker could run a web search (the shared search limit was spent before this batch's checks) and neither check records dataset evidence for them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Redraft under a new id with these facts evidenced (a dataset record or a Tier A or B search) or bounded.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part02e",
+        "at": "2026-11-01T02:27:51Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The Venetian island of Murano has been famous since the late 1200s for which craft?",
+  "answer": "Glassmaking",
+  "wrong": ["Lace-making", "Mask-making", "Boatbuilding"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.68,
+    "spread": 0.392,
+    "estimator": "v0"
+  }
+}

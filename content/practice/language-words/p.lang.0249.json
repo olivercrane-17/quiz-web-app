@@ -1,0 +1,186 @@
+{
+  "id": "p.lang.0249",
+  "status": "active",
+  "category": "lang",
+  "tags": ["word-origins", "latin", "folk-etymology", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The story says honest sculptors sold statues without wax-filled cracks. Dictionaries trace sincere instead to Latin sincerus, clean or pure, and find no evidence for the wax tale.",
+  "learnMore": "Sincerity",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "There is no evidence that 'sincere' comes from Latin sine cera, 'without wax'."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "'Sincere' comes from Latin sincerus, 'clean, pure, whole'."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A popular story claims that honest sculptors sold statues with no wax hiding their cracks."
+    }
+  ],
+  "writerNotes": "Counterintuitive: the wax story is widely repeated, so most players answer true; it is a myth. Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed, 2 high (etymology) and 1 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers etymology. rivalTest: Argued for true: the story is tidy and the words look alike, but the major dictionaries reject it and derive sincere from sincerus. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: a fact about an English word, the same for every player. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 28 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "99eefcb286defd881383e07ad104ec41bc596a268ddbabb8b7da0348111b87a0",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Deriving sincere from sine cera, without wax, is a folk etymology with no evidence behind it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sincere comes from Latin sincerus, clean, pure, sound or whole.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The folk story says honest sculptors sold statues with no wax hiding their cracks.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6b3939c03902313c80107641378800be6961c249871fb8684e3141b9ce50f401",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "There is no evidence for sine cera; dictionaries derive sincere from Latin sincerus.",
+              "confidence": "certain"
+            },
+            "note": "A folk etymology. The claim is negative, but every standard dictionary gives sincerus."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sincere comes from Latin sincerus, clean, pure, whole.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The legend is of honest sculptors who hid no cracks with wax.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, etymology) and c2 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.lang.0215",
+      "score": 0.457,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The word 'sincere' comes from the Latin 'sine cera', meaning 'without wax'.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.175,
+    "estimator": "v0"
+  }
+}

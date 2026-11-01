@@ -1,0 +1,217 @@
+{
+  "id": "p.book.0172",
+  "status": "active",
+  "category": "book",
+  "tags": ["world-literature", "french-literature"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Dumas based him on a real officer, Charles de Batz de Castelmore d'Artagnan, who served Louis XIV. The three of the title are Athos, Porthos and Aramis.",
+  "learnMore": "D'Artagnan",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In The Three Musketeers, the young Gascon who joins the musketeers is d'Artagnan."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Rochefort is the Cardinal's agent, Athos is one of the three musketeers and Planchet is d'Artagnan's servant."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Dumas based d'Artagnan on Charles de Batz de Castelmore d'Artagnan, a real musketeer officer who served Louis XIV."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The three musketeers of the title are Athos, Porthos and Aramis."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: world literature in translation. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means). Datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. Rival test: Athos is a musketeer, not the newcomer; Rochefort is the villain he meets on the road and Planchet his servant. Only one musketeer is offered, so the item is not solved by spotting the trio. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 27 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5aa6283abfeadfced4a830e44eaa9fc0a58047e906cd77537f3dd088d110c5d8",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "d'Artagnan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The young Gascon who joins the musketeers is d'Artagnan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Rochefort is Richelieu's agent, Athos one of the three and Planchet d'Artagnan's servant.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No dataset covers it and it fell outside the batch search cap, so it counts only with dataset or web evidence from check B or a follow-up (§9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dumas drew on Courtilz de Sandras's memoirs of Charles de Batz de Castelmore d'Artagnan, a captain of Louis XIV's musketeers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The three musketeers are Athos, Porthos and Aramis.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No dataset covers it and it fell outside the batch search cap, so it counts only with dataset or web evidence from check B or a follow-up (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "323c49194a22e76b6f1af29f361657921668e202998348e1459f2796b60842c0",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "d'Artagnan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "D'Artagnan is the young Gascon who comes to Paris and joins the musketeers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Rochefort serves Cardinal Richelieu, Athos is one of the three musketeers and Planchet is d'Artagnan's servant.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dumas drew on the memoirs of the real d'Artagnan (Charles de Batz de Castelmore), an officer of the King's Musketeers under Louis XIV.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The three musketeers are Athos, Porthos and Aramis.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c2 (distractor, number), c4 (explanation, number) rest on knowledge alone in both checks, and the batch's search cap is spent (29 of 26). Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.nat.0002",
+      "score": 0.16,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In Alexandre Dumas's The Three Musketeers, what is the name of the young Gascon who joins them?",
+  "answer": "d'Artagnan",
+  "wrong": ["Rochefort", "Athos", "Planchet"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.291,
+    "estimator": "v0"
+  }
+}

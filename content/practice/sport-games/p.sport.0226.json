@@ -1,0 +1,216 @@
+{
+  "id": "p.sport.0226",
+  "status": "active",
+  "category": "sport",
+  "tags": ["cycling", "tour-de-france", "colours"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "The colour copied the yellow pages of L'Auto, the newspaper that founded the race in 1903. Italy's Giro leader wears pink, after the pink paper of its founding newspaper.",
+  "learnMore": "Yellow jersey",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The overall leader of the Tour de France wears the yellow jersey."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "In the Tour de France the green jersey marks the points classification; pink is the Giro d'Italia leader's colour and red the Vuelta a España leader's."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The yellow jersey's colour came from the yellow paper of L'Auto, the newspaper that founded the Tour de France in 1903."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Giro d'Italia leader's pink jersey takes its colour from the pink paper of La Gazzetta dello Sport, the newspaper that founded that race."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 1 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: No pinned dataset covers cycling; c3 and c4 need web evidence (the race organizers or quality press). rivalTest: Green (the Tour's points jersey), pink (the Giro leader) and red (the Vuelta leader) are the real confusions from the same sport. The Tour leader's jersey has been yellow since 1919, so the key cannot be argued against. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 29 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6802e1f8b95194d292117e33056d04c581424a52aff570b803ab432f9572af50",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Yellow",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Tour de France leader wears the yellow jersey (maillot jaune).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Green is the Tour's points jersey; pink belongs to the Giro leader and red to the Vuelta leader.",
+              "confidence": "certain"
+            },
+            "note": "The Vuelta leader's colour has been red since 2010 and has changed before; only the red option's wrongness for the Tour matters to the item."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "L'Auto, printed on yellow paper, founded the Tour in 1903, and the leader's jersey (from 1919) took the paper's colour.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Giro's pink jersey follows the pink paper of La Gazzetta dello Sport, which founded the race.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cc2804ff7cf77a9be2e7743f0eee3c95cd9f7437b12d58ebb0076d05c4381237",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Yellow",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The overall leader of the Tour de France wears the yellow jersey.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Tour's green jersey is for the points classification, the Giro d'Italia leader wears pink and the Vuelta leader wears red.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Tour began in 1903 under the newspaper L'Auto, which was printed on yellow paper, and the yellow jersey took that colour.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "La Gazzetta dello Sport, which founded the Giro, is printed on pink paper, and the Giro leader's jersey is pink for that reason.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, date) rests on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Redraft under a new id with this fact evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "What colour jersey does the overall leader of the Tour de France wear?",
+  "answer": "Yellow",
+  "wrong": ["Green", "Pink", "Red"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.555,
+    "estimator": "v0"
+  }
+}

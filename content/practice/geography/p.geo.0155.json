@@ -1,0 +1,255 @@
+{
+  "id": "p.geo.0155",
+  "status": "active",
+  "category": "geo",
+  "tags": ["countries", "area", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Suriname covers about 164,000 km², a little under Uruguay's 181,000 km². It is also the only South American country with Dutch as its official language.",
+  "learnMore": "Suriname",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Suriname is the smallest independent country in South America by area."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Uruguay, about 181,000 km², Guyana, about 215,000 km², and Ecuador, about 277,000 km², are each larger than Suriname."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Suriname covers about 164,000 km²."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Suriname is the only independent South American country whose official language is Dutch."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 and c4 are superlatives and c2 and c3 carry numbers, all high. Datasets: mledoze-countries, subregion South America, independent entries sorted by area: ... ECU 276,841; GUY 214,969; URY 181,034; SUR 163,820 km² (c1 to c3). Languages: SUR nld; no other independent South American entry lists Dutch (c4). 'Independent' in the stem excludes French Guiana (part of France) and the Falkland Islands. Rival test: Uruguay is the confident wrong answer, the small country everyone pictures between giants, which makes the item counterintuitive; Guyana and Ecuador look small on maps too. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a South American map question with no local knowledge needed. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: the Uruguay margin is about 10 per cent, comfortable against any published area.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "39fde4ea8f8ca51117ee541a05ab0d3b0c57559645edf8586bba80fd09cf6e7c",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Suriname",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SUR; cca3=URY; cca3=GUY; cca3=ECU",
+              "excerpt": "SUR: \"independent\": true, \"subregion\": \"South America\", \"area\": 163820 | URY: \"independent\": true, \"subregion\": \"South America\", \"area\": 181034 | GUY: \"independent\": true, \"subregion\": \"South America\", \"area\": 214969 | ECU: \"independent\": true, \"subregion\": \"South America\", \"area\": 276841",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Smallest area among independent: true, subregion South America."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=URY; cca3=GUY; cca3=ECU; cca3=SUR",
+              "excerpt": "URY: \"area\": 181034 | GUY: \"area\": 214969 | ECU: \"area\": 276841 | SUR: \"area\": 163820",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The stated figures match the pinned file."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SUR",
+              "excerpt": "SUR: \"area\": 163820",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SUR; cca3=URY; cca3=GUY; cca3=ECU; cca3=PRY; cca3=CHL; cca3=VEN; cca3=BOL; cca3=COL; cca3=PER; cca3=ARG; cca3=BRA",
+              "excerpt": "SUR: \"languages\": {\"nld\":\"Dutch\"} | URY: \"languages\": {\"spa\":\"Spanish\"} | GUY: \"languages\": {\"eng\":\"English\"} | ECU: \"languages\": {\"spa\":\"Spanish\"} | PRY: \"languages\": {\"grn\":\"Guaraní\",\"spa\":\"Spanish\"} | CHL: \"languages\": {\"spa\":\"Spanish\"} | VEN: \"languages\": {\"spa\":\"Spanish\"} | BOL: \"languages\": {\"aym\":\"Aymara\",\"grn\":\"Guaraní\",\"que\":\"Quechua\",\"spa\":\"Spanish\"} | COL: \"languages\": {\"spa\":\"Spanish\"} | PER: \"languages\": {\"aym\":\"Aymara\",\"que\":\"Quechua\",\"spa\":\"Spanish\"} | ARG: \"languages\": {\"grn\":\"Guaraní\",\"spa\":\"Spanish\"} | BRA: \"languages\": {\"por\":\"Portuguese\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Only SUR lists Dutch among the independent South American countries."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Area figures vary by definition. Uruguay is also widely given as 176,215 km², and Ecuador as about 283,600 km² with its islands and waters (the 277,000 here is its land figure). The comparison holds either way; 'about 180,000' and 'about 280,000', or no figures, would spare a pedant's report."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b3819834ae1d0ceb9b405ef710956c5aa57c000b0d90fd3b65a1ecd4672f3120",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Suriname",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SUR, cca3=URY, cca3=GUY, cca3=ECU",
+              "excerpt": "Independent South American records by area: SUR 163820, URY 181034, GUY 214969, ECU 276841, PRY 406752",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=URY, cca3=GUY, cca3=ECU",
+              "excerpt": "URY (Uruguay): area 181034 | GUY (Guyana): area 214969 | ECU (Ecuador): area 276841",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The figures match this dataset. Other common sources give Uruguay 176,215 and Ecuador 283,561 km2 (including the Galapagos); the ordering is the same."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SUR",
+              "excerpt": "SUR (Suriname): area 163820",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SUR",
+              "excerpt": "Among the independent South American records only SUR lists Dutch: SUR (Suriname): languages {\"nld\":\"Dutch\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Area figures differ by source: Uruguay 181,034 (this dataset and the UN) against 176,215 (another common figure), Ecuador 276,841 against 283,561 with the Galapagos. The ranking never changes. The explanation's 'a little under Uruguay's 181,000' reads fine with either, but 'about 180,000' would suit both. No change needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 to c4 carry mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. Both checks note other published areas for Uruguay and Ecuador; the stated figures match the pinned file and the ranking holds under every figure.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0103",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which is the smallest independent country in South America by area?",
+  "answer": "Suriname",
+  "wrong": ["Uruguay", "Guyana", "Ecuador"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.26,
+    "spread": 0.203,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "id": "p.nat.0108",
+  "status": "active",
+  "category": "nat",
+  "tags": ["reptiles", "snakes", "senses"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The tongue gathers scent particles and delivers them to a sensing organ in the roof of the mouth. The fork lets a snake compare left and right to follow a trail.",
+  "learnMore": "Jacobson's organ",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "A snake flicks its tongue to collect scent chemicals from the air and the ground."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Snakes do not use their tongues to sense heat, cool down or feel vibrations; pit vipers sense heat with facial pits."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The tongue carries scent particles to the vomeronasal (Jacobson's) organ in the roof of the mouth."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The forked tongue lets a snake compare scents on its left and right, which helps it follow scent trails."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed, all standard herpetology with no number or trigger words. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: heat sensing is the tempting wrong answer because pit vipers do sense heat, but with pits, not the tongue. Cooling and vibration sensing are real snake topics with nothing to do with the tongue. Argued against the key: snakes also smell through their nostrils, but that does not change why the tongue flicks. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: snakes live on every continent but Antarctica; no local knowledge needed. style: Oxford spelling, plain hyphens only, explanation of 31 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: c4 is the accepted explanation for the fork (trail following); I hold it at standard because it is in standard references.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1237d22d78d8a55e67e5fd5ad3e0d020b9d7d74ccabff4fc7c090c2135ca3d0c",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "To pick up scents",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tongue-flicking samples odour molecules from the air and the ground.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The tongue is a chemical sampler. Snakes sense heat with pit organs (pit vipers, some boas and pythons) and vibrations through the jaw and inner ear, and they do not use the tongue to cool down.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The tongue tips deliver the particles to the paired vomeronasal (Jacobson's) organ in the roof of the mouth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The fork samples two points at once, so the snake can compare left and right and follow a scent trail.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "eecac2a0424346b5d17f67d881e822a0a31d65a8cce2c34edd97b7ac6ede43c4",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "To pick up scents",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Snakes flick the tongue to collect scent chemicals from the air and the ground.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Snakes do not use the tongue to sense heat, cool down or feel vibrations; pit vipers sense heat with facial pits.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The tongue tips deliver scent particles to the vomeronasal (Jacobson's) organ in the roof of the mouth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The fork lets a snake compare scent on its left and right and follow a trail.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; no high-risk claims; every knowledge confirmation at certain. Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.nat.0215",
+      "score": 0.16,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Why does a snake keep flicking its forked tongue in and out?",
+  "answer": "To pick up scents",
+  "wrong": ["To sense heat", "To cool down", "To feel vibrations"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.246,
+    "estimator": "v0"
+  }
+}

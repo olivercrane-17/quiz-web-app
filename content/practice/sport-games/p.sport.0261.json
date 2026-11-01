@@ -1,0 +1,139 @@
+{
+  "id": "p.sport.0261",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["golf", "space", "apollo"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "On Apollo 14 in 1971, Alan Shepard fixed a six-iron head to a tool for collecting samples and hit two balls one-handed, hampered by his stiff spacesuit.",
+  "learnMore": "Apollo 14",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "During the Apollo 14 mission in February 1971, astronaut Alan Shepard hit golf balls on the Moon."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Shepard attached a six-iron club head to a sample-collecting tool and hit two golf balls, swinging one-handed because of his spacesuit."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 2 listed, 2 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item. datasets: No pinned dataset covers spaceflight; c1 and c2 need web evidence (NASA is the Tier A source, and the Apollo 14 transcripts record the shots). rivalTest: The case for 'false' is that it sounds like a hoax or a joke, which is why it works as a surprising truth. NASA's own records and the mission film show Shepard's shots, so the statement is true. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 27 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice true/false item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "476034c6f1b0e1d3a965c225d6bc96506403a5863b9cc62874e0cdfc79bb0c90",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "On Apollo 14 in February 1971 Alan Shepard hit golf balls on the Moon.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He fixed a six-iron head to the handle of a sample-collecting tool and hit two balls one-handed, because the suit limited his swing.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "003ac7ade63d8458b64fb178b6b213a915f07f51ba01ba7d18299ce5cc1f67d6",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Alan Shepard hit golf balls on the Moon during Apollo 14 in February 1971.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Shepard attached a six-iron head to the handle of a sample-collection tool and hit two golf balls one-handed because of his stiff suit.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, date) and c2 (explanation, number) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    }
+  },
+  "format": "tf",
+  "stem": "An astronaut once hit golf balls on the surface of the Moon.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.415,
+    "estimator": "v0"
+  }
+}

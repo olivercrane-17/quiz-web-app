@@ -1,0 +1,187 @@
+{
+  "id": "p.film.0139",
+  "status": "active",
+  "category": "film",
+  "tags": ["awards", "oscars", "design"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "He grips a crusader's sword and stands on a film reel with five spokes, one for each of the Academy's original branches.",
+  "learnMore": "Academy Awards",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Oscar statuette shows a knight holding a crusader's sword, standing on a film reel with five spokes."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The knight holds no film reel, torch or laurel wreath; the reel is under his feet."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The reel's five spokes stand for the Academy's five original branches: actors, directors, producers, technicians and writers."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: The film reel is the planted trap, because it is part of the statuette, but he stands on it rather than holding it. A torch and a wreath are classic trophy motifs. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 22 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1a58a19897231efea652a4ba675e83068aa5cddff136c0c8687346ca68a14903",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "A sword",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The statuette is a knight gripping a crusader's sword and standing on a film reel with five spokes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "His hands hold only the sword; the reel is the base he stands on.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The five spokes stand for the Academy's original branches: actors, directors, producers, technicians and writers.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d9100f54d02448afe97162f6573bc0a551223b48663ba4970b0a1d56a7f86362",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "A sword",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Oscar statuette shows a knight gripping a crusader's sword and standing on a five-spoke film reel.",
+              "confidence": "certain"
+            },
+            "note": "Trick-reading test: the reel is a tempting wrong answer because he stands on it. That is a plausible belief, not a misread word, and the explanation defuses it."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He holds no reel, torch or laurel wreath; the reel is under his feet.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The five spokes stand for actors, directors, producers, technicians and writers.",
+              "confidence": "certain"
+            },
+            "note": "Number; needs check A's external evidence."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 and c3 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The Oscar statuette is a stylized knight. What is he holding?",
+  "answer": "A sword",
+  "wrong": ["A film reel", "A torch", "A laurel wreath"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.229,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0221",
+  "status": "active",
+  "category": "food",
+  "tags": ["spice", "middle-east", "herbs"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Sumac is the dried, ground berry of a shrub that grows wild around the Mediterranean and the Middle East. It adds a lemony sourness to salads such as fattoush.",
+  "learnMore": "Za'atar",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Za'atar blends usually combine dried herbs such as thyme with sesame seeds and sumac."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Paprika, saffron and cayenne are not standard ingredients of za'atar."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sumac is made from the dried, ground berries of Rhus coriaria, a shrub of the Mediterranean and the Middle East."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sumac tastes tart and lemony and is sprinkled on salads such as fattoush."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: All four options are red seasonings; 'tart' rules out paprika, saffron and cayenne, which are sweet, floral or hot. Against the key: za'atar recipes vary by family, but sumac is standard in the blend, and the stem says 'mixes dried herbs and sesame with', which matches every common recipe. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: za'atar is sold worldwide; the foothold is 'tart', which suits only one option. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 29 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: many players have not met sumac. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1c8fadfa490aff61367e26166edd5de2db5c45e4049f0233d711f6f92edaf661",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Sumac",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Za'atar blends combine dried thyme or oregano-type herbs with toasted sesame and sumac.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Paprika, saffron and cayenne are not standard za'atar ingredients.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sumac is the dried, ground fruit of Rhus coriaria, a shrub of the Mediterranean and the Middle East.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sumac tastes tart and lemony and is sprinkled on salads such as fattoush.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "a7f4653645217b76ffd8f09b4fb53984ae0cb8b3f466f7254ee1f322e236a056",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Sumac",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Za'atar blends are typically dried thyme or similar herbs with sesame seeds and sumac.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Paprika, saffron and cayenne are not standard ingredients of za'atar.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sumac is the dried, ground fruit (drupes, called berries) of Rhus coriaria, a shrub of the Mediterranean and Middle East.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Sumac tastes tart and lemony and is sprinkled on salads such as fattoush.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "nearestId": "p.food.0001",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Za'atar, a Middle Eastern seasoning, mixes dried herbs and sesame with which tart, deep-red spice?",
+  "answer": "Sumac",
+  "wrong": ["Paprika", "Saffron", "Cayenne"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.375,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "id": "p.nat.0123",
+  "status": "active",
+  "category": "nat",
+  "tags": ["insects", "butterflies", "migration", "north-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "No single monarch makes the round trip. The return north takes several generations, yet each year a new generation finds its way to the same mountain forests.",
+  "learnMore": "Monarch butterfly migration",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Monarch butterflies of eastern North America migrate to spend the winter in mountain forests of central Mexico."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Blue morphos, peacock butterflies and cabbage whites do not migrate from eastern North America to winter in Mexico."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "No individual monarch completes the full round trip; the northward return takes several generations."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Each year a new generation of monarchs reaches the same wintering forests without ever having been there."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed, all standard; 'several generations' carries no number word. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: the painted lady and the red admiral also migrate in North America, so neither is an option; the blue morpho lives in Central and South American forests, the peacock butterfly in Europe and Asia, and the cabbage white spends the winter as a pupa. The stem says eastern North America because western monarchs winter on the California coast. Argued against the key: the Mexican wintering forests are the textbook monarch story. An earlier draft asked for the country, but Mexico is a common answer across the bank, so dedupe kept pairing it with unrelated items. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: a North American migration, but the monarch is famous worldwide; I wrote 'each year' rather than a season name, so it reads the same in both hemispheres. style: Oxford spelling, plain hyphens only, explanation of 26 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b5cfc9943706bf8e7de0014a1e28222c68ec5c2e54993c63abab87b51a9b8d2a",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Monarch",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Eastern North American monarchs fly to oyamel fir forests in the mountains of central Mexico for the winter.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Blue morphos are tropical American, peacock butterflies Eurasian, and cabbage whites make no such migration.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The trip back north takes several generations; no single butterfly completes the round trip.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The generation that reaches the Mexican forests has never been there before.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f8f7a1506b05f0e3a6cdac8234338ab17bf71cd0a8f1ddb4551b72f716d81728",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Monarch",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Eastern North American monarchs overwinter in the mountain forests of central Mexico.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Blue morphos (tropical Americas), peacock butterflies (Eurasia) and cabbage whites do not make that migration.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "No single monarch completes the whole round trip; the way back north takes several generations.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Each year's southbound generation reaches the same wintering forests although it has never been there.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation opens with \"No butterfly makes the round trip\", a universal statement. Claim c3 only supports \"No individual monarch completes the full round trip\". In context it reads fine, but \"No monarch\" would match the claim."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; no high-risk claims; every knowledge confirmation at certain. Style, distractors and balance reviewed. Accepted after the wording-only fix in decisions1. (earlier, rewrite by ed-pnat01d: Wording only (§9.7): 'No butterfly makes the round trip' becomes 'No single monarch makes the round trip', which is what claim c3 states (B's note). No claim changes. [wording-only rewrite by ed-pnat01d at 2026-11-01T04:05:52Z of explanation; checks kept, packetSha256 re-stamped: pass A 8ee83589fbe0a947a484e17be9d706a95d1845967bd973903cb0f41b30a94d10 -> b5cfc9943706bf8e7de0014a1e28222c68ec5c2e54993c63abab87b51a9b8d2a; pass B 6db180c1230aa8d561650646688c85bf8408a419b1cbe8c0f80c2948029d7e5f -> f8f7a1506b05f0e3a6cdac8234338ab17bf71cd0a8f1ddb4551b72f716d81728])",
+      "decidedAt": "2026-11-01T04:06:01Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:06:01Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:06:01Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which butterfly migrates from eastern North America to spend the winter in Mexico's mountain forests?",
+  "answer": "Monarch",
+  "wrong": ["Blue morpho", "Peacock butterfly", "Cabbage white"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.355,
+    "estimator": "v0"
+  }
+}

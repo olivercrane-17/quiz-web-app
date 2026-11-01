@@ -1,0 +1,162 @@
+{
+  "id": "p.sport.0259",
+  "status": "active",
+  "category": "sport",
+  "tags": ["world-cup", "football", "uruguay"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Uruguay and Argentina could not agree, so Argentina's ball was used before half-time and Uruguay's after. Argentina led 2-1 at the break; Uruguay won 4-2.",
+  "learnMore": "1930 FIFA World Cup final",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In the 1930 World Cup final the teams could not agree on a ball, so Argentina's ball was used in the first half and Uruguay's in the second."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Argentina led the 1930 final 2-1 at half-time, and Uruguay won 4-2."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 2 listed, 2 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item. datasets: worldcup, 1930/worldcup.json: Final, Uruguay v Argentina on 30 July 1930 at the Estadio Centenario, Montevideo, full time 4-2, half-time 1-2, which confirms c2. The two-ball story in c1 is not in the dataset and needs web evidence (FIFA or a Tier B history). rivalTest: The case for 'false' is that one ball per match is the rule everyone knows. But the 1930 final is documented as a two-ball match, with each side's ball used for one half, so the statement is true. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 25 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice true/false item. doubts: Accounts agree on the arrangement; a few add that the swap explains the turnaround, which the item does not claim.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9daaa7c97ec75cbff8d977bd60fdf9483b569d6706444fa7d7c0d79fa89f7f86",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The two finalists in 1930 could not agree on a ball, so Argentina's was used in the first half and Uruguay's in the second.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "matches[round=Final]",
+              "excerpt": "{\"round\": \"Final\", ... \"date\": \"1930-07-30\" ... \"team1\": \"Uruguay\" ... \"team2\": \"Argentina\" ... \"score\": {\"ft\": [4, 2], \"ht\": [1, 2]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Final, 30 July 1930: Uruguay 4-2 Argentina, half-time 1-2, so Argentina led 2-1 at the break."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1c9482e6e4edf2298656b46964d9d58d738544c15174c7154ff4b8ae5f1fe378",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The teams could not agree on a ball for the 1930 final, so Argentina's ball was used in the first half and Uruguay's in the second.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the statement is a surprising truth, not a myth; the two-ball compromise is well documented."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "Final, 1930-07-30: Uruguay {\"ft\":[4,2],\"ht\":[1,2]} Argentina, Estadio Centenario, Montevideo",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Half-time [1,2] for Uruguay and Argentina means Argentina led 2-1 at the break; full time 4-2 to Uruguay."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, date) rests on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. c2 carries worldcup evidence in both checks; key c1 (the two balls) rests on knowledge. Redraft under a new id with this fact evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The first men's World Cup final, in 1930, used a different ball in each half.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.14,
+    "estimator": "v0"
+  }
+}

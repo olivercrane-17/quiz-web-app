@@ -1,0 +1,274 @@
+{
+  "id": "p.lang.0229",
+  "status": "checking",
+  "category": "lang",
+  "tags": ["punctuation", "symbols", "word-origins"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Children recited the alphabet ending 'X, Y, Z, and per se and', meaning that the sign & by itself is and. The sign began as a joined form of Latin et.",
+  "learnMore": "Ampersand",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name 'ampersand' comes from 'and per se and', recited after Z at the end of the alphabet."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The names asterisk, at sign and hash sign do not come from 'and per se and'."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Schoolchildren once ended the alphabet with '& per se and', meaning that the sign & by itself is the word 'and'; the word ampersand is recorded from 1837."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "The & sign began as a ligature of the Latin word et, 'and'."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 4 high (etymology, date, quotation) and 0 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers symbols. rivalTest: Said quickly, 'and per se and' runs into ampersand, which is the foothold. None of the other symbols has a name built from and. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: the symbol is on every keyboard. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 31 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "174424f086f216768cc29f3add7512e6eff7f11c657eea50d2902ff34a0c0159",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "The ampersand",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ampersand is a run-together form of and per se and, recited after Z at the end of the alphabet.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Asterisk, at sign and hash sign have unrelated origins.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Schoolchildren ended the alphabet with & per se and, meaning that & by itself is the word and, and the run-together word ampersand is first recorded in 1837.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The & sign began as a ligature of the letters e and t, Latin et, and.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "02f8690a2facc7af044e8487018ce8ee77a736bfad75ecb92741bc6d1fa3c14a",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "The ampersand",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ampersand comes from and per se and, said at the end of the alphabet recited by schoolchildren.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Asterisk, at sign and hash sign have different origins.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "I recall dictionaries dating ampersand to the 1830s, around 1837, but I cannot confirm the exact year offline.",
+              "confidence": "likely"
+            },
+            "note": "The date is not stated anywhere in the shipped text, so nothing the player reads depends on it. Unconfirmed for lack of search budget."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The ampersand sign developed as a ligature of Latin et.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c3 (ampersand recorded from 1837) is not used in the player-facing text. Verify it with external evidence, or treat it as unused when merging claims."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-plang02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "3ef8f9fa79d1c8090687190b76ec18a15ba4e0ef397bf9d308b1c6713cfcef2c",
+      "startedAt": "2026-11-01T05:04:45Z",
+      "finishedAt": "2026-11-01T05:10:48Z",
+      "coldSolve": {
+        "answerGiven": "The ampersand",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The name of the & sign is a slurred form of 'and per se and', said when the sign was recited as the last item after Z.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it on knowledge. It is high-risk and no check carries dataset or web evidence for it, so rule 3 still needs external evidence. This run's only WebSearch call was refused (the turn's shared search limit was used up) and no pinned dataset covers etymology. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Only the & sign's name comes from 'and per se and'. Asterisk is from the Greek for 'little star', the at sign is named for the word 'at' it stands for, and the hash sign's name has nothing to do with the alphabet recitation.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it on knowledge. High-risk (etymology) with no external evidence in any check, so rule 3 still needs it. No search was possible in this run (see c1)."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The recitation part holds: & came after Z and was read 'and per se and', meaning & by itself is 'and'. For the date I recall 1837 as the year the word is said to have been in common use, but I cannot say from memory that no earlier record exists, so 'recorded from 1837' is not settled.",
+            "confidence": "likely"
+          },
+          "note": "Disputed: B left c3 uncertain. It needs a Tier A or B source on the word's earliest record, because an earlier citation would make 'recorded from 1837' wrong. No external evidence could be gathered in this run (WebSearch refused, no dataset covers it). The year appears only in the claim, not in the stem or the explanation, so the fallback is to drop it from the claim (precision ladder, §9.2); a changed claim needs two fresh checks on it (§9.7)."
+        },
+        {
+          "claimId": "c4",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "The & sign began as a ligature of the letters e and t, the Latin word et, 'and', in Roman cursive writing.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it on knowledge. High-risk with no external evidence in any check, so rule 3 still needs it. No search was possible in this run (see c1)."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "checker_doubt c3: the year 1837 rests on knowledge in all three checks. Settle it with web evidence in a re-run tiebreak, or drop the year from the claim. Nothing a player sees raised a doubt here: the cold solve matched the key, and the distractors and explanation agree with what I know."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    }
+  },
+  "format": "mc",
+  "stem": "Which symbol's name grew from 'and per se and', once chanted at the end of the alphabet?",
+  "answer": "The ampersand",
+  "wrong": ["The asterisk", "The at sign", "The hash sign"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.84,
+    "spread": 0.357,
+    "estimator": "v0"
+  }
+}

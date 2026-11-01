@@ -1,0 +1,215 @@
+{
+  "id": "p.soc.0203",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["festivals", "spain", "tomatoes"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "It is held in Buñol, near Valencia, in late August. Local tradition traces it to a street food fight among young people in 1945.",
+  "learnMore": "La Tomatina",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "La Tomatina, the tomato-throwing festival, takes place in Spain, in the town of Buñol."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "La Tomatina does not take place in Italy, Mexico or Portugal."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "La Tomatina is held in late August, traditionally on the last Wednesday of the month."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Local tradition traces La Tomatina to a food fight among young people in Buñol in 1945."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: festivals and calendars. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. datasets: geonames-cities: Buñol, ES, admin1 60 (Valencia), lat 39.41667, lng -0.78333, which places the town near Valencia; c3 and c4 need web evidence. rivalTest: Italy is the trap for players who link tomatoes with Italian food; Mexico and Portugal are other tomato-growing, festival-rich countries. Nothing survives against Spain. volatility: evergreen: the country of a long-established festival; the late-August timing in the explanation has held for decades; no time words, and nothing rests on knowledge newer than mid-2026. regional: the festival is famous worldwide, including in India through the film Zindagi Na Milegi Dobara, and the Spanish name gives a foothold everywhere. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 24 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 2 (easy): the Spanish name points most players to Spain. doubts: the 1945 origin is local tradition, which the explanation says. dedupe: C22 flags a near-duplicate of p.geo.0163 (the Canary Islands belong to Spain); the pair shares only the answer word, not the fact, so related_ok is suggested to the editor.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "120fcbe7900de6752d039aeff464f5dc3ee3b50debf4dad53cff1d1b29ec26bc",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "Spain",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "La Tomatina is held in the town of Buñol, in the Valencian Community of Spain.",
+              "confidence": "certain"
+            },
+            "note": "geonames-cities lists Buñol in ES admin1 60 (Valencia); the festival itself rests on knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "La Tomatina is Buñol's festival; it is not held in Italy, Mexico or Portugal, where any tomato fights are later imitations.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "La Tomatina takes place on the last Wednesday of August.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Buñol's own account dates the first tomato fight to August 1945, when young people pelted each other during a town parade.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Buñol, country=ES; name=Valencia, country=ES; admin1.json code ES.60",
+              "excerpt": "{\"name\":\"Buñol\",\"lat\":\"39.41667\",\"lng\":\"-0.78333\",\"country\":\"ES\",\"admin1\":\"60\"} | {\"name\":\"Valencia\",\"lat\":\"39.47391\",\"lng\":\"-0.37966\",\"country\":\"ES\",\"admin1\":\"60\"} | {\"code\":\"ES.60\",\"name\":\"Valencia\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Checker addition (role explanation, standard): 'Buñol lies near the city of Valencia, in the Valencian Community', from the explanation's 'held in Buñol, near Valencia'. Both towns sit in admin1 ES.60 (Valencia), about 35 km apart by great-circle distance computed from these coordinates."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9d11bd2f49b102eb36961d039ebdd1d8f78c634c63d726c6a12422b99ccc07ac",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "Spain",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "La Tomatina is held in Bunol, in Valencia province, Spain.",
+              "confidence": "certain"
+            },
+            "note": "GeoNames also lists Bunol in ES, admin1 60 (Valencia). The festival itself rests on knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The original La Tomatina is the Bunol festival. Italy's famous food fight is the orange battle of Ivrea, and Mexico and Portugal host no festival of that name.",
+              "confidence": "certain"
+            },
+            "note": "Copycat tomato fights exist in several countries (Colombia, India, the US), but none of the three options hosts the festival itself."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "La Tomatina falls on the last Wednesday of August.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Local tradition dates it to a 1945 scuffle among young people in Bunol.",
+              "confidence": "certain"
+            },
+            "note": "Origin stories vary a little, but the claim says local tradition, which holds."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c3 (explanation, date) and c4 (explanation, date) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. Only explanation claims lack evidence, so the redraft can keep the question and write the explanation from standard-risk or dataset-backed facts. Redraft under a new id.",
+      "decidedAt": "2026-11-01T04:47:17Z"
+    }
+  },
+  "format": "mc",
+  "stem": "La Tomatina, a festival where crowds pelt each other with ripe tomatoes, takes place in which country?",
+  "answer": "Spain",
+  "wrong": ["Italy", "Mexico", "Portugal"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.76,
+    "spread": 0.385,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "id": "p.sci.0217",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["chemistry", "earth-science", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Most diamonds crystallized from carbon in the mantle, over 150 km down, far below any coal. Many are over a billion years old, older than the land plants that coal comes from.",
+  "learnMore": "Diamond",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Natural diamonds do not form from compressed coal."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Most natural diamonds formed in Earth's mantle at depths of more than 150 km."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Many natural diamonds are more than a billion years old."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Coal formed from the remains of land plants, which appeared less than 500 million years ago."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Coal seams lie in Earth's crust, far shallower than the depths at which diamonds form."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors; its two warnings are C25 on c1 and c5, which match the listed myth diamonds-from-coal because they debunk it. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key claim, because the item is counterintuitive (the C26 floor). datasets: no pinned dataset covers geology, so checker A needs web evidence for c1 to c4. rivalTest: The coal story is the classic belief, because both are carbon. Against the key: a few diamonds form in other ways (meteorite impacts, subduction zones, laboratories), but none of them is coal squeezed underground, so the statement stays false. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 32 words. myths: c1 and c5 match diamonds-from-coal by design, because the item debunks that myth, so the checkers need web evidence to clear it; no other claim resembles a listed myth. mystery and encore: not applicable to a practice true/false item. doubts: Diamond ages range from about 1 to 3.5 billion years for most mined stones, and land plants appeared roughly 470 million years ago, so c3 and c4 are bounded rather than exact. c1 is the key of a counterintuitive item, so it is high (checker_doubt stands in for the counterintuitive floor, which the schema's riskReason list lacks). searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e6c8c6e6aa17b644429ce81cf0855ee7b609c330fba83af0f08ce478d1ab3f39",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Natural diamonds crystallize from carbon deep in the mantle, not from squeezed coal; coal is very rarely, if ever, their carbon source.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). Myth-screen hit: it also needs dataset or web evidence in one check to clear the screen (§9.9 rule 5)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most gem diamonds formed about 150 to 200 km down, in the mantle beneath old continental cratons.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dated diamonds commonly range from about 1 to 3.5 billion years old.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Coal comes from buried land-plant matter; the oldest land-plant fossils (spores) date from about 470 million years ago, and the great coal-forming forests came much later.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). Molecular-clock studies put the origin of land plants nearer 500 to 515 million years ago; the fossil record supports 'less than 500 million years', and the explanation's own wording holds either way."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Coal seams sit in the upper crust, at most a few kilometres deep, far above the 150 km and more where diamonds grow.",
+              "confidence": "certain"
+            },
+            "note": "Standard risk, but a myth-screen hit: it needs dataset or web evidence in one check to clear the screen (§9.9 rule 5)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c4: if a follow-up finds sources dating land plants to 500 million years or more, restate the claim as 'about 470 million years ago' (the fossil record) or 'less than 600 million years ago'. The player-facing text needs no change."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1b1e016e4bff89c43aef9d066df9a7a1b4caa5b1c808576e3b6a3f6345d1f3e1",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Natural diamonds are not made from coal: they crystallize from mantle carbon, mostly over a billion years before coal-forming plants existed.",
+              "confidence": "certain"
+            },
+            "note": "Myth hit (diamonds-from-coal). Needs web or dataset evidence in A or a tiebreak to clear. High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most natural diamonds crystallized in the mantle at roughly 150 to 200 km depth; the stability field begins near 140 to 150 km.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Many natural diamonds are 1 to 3.5 billion years old.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Land plants date from about 470 million years ago, and coal comes from their remains, so under 500 million years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Coal seams lie within a few km of the surface in the crust, far above diamond-forming depths.",
+              "confidence": "certain"
+            },
+            "note": "Second myth hit on this item; needs the same clearing evidence as c1."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "c1 is worded as an absolute. Rare impact diamonds form from graphite or other carbon in the target rock and some diamonds carry recycled surface carbon, but none is documented as coming from coal seams, so the key False stands. Sources usually say 'most'; the explanation already does."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, checker_doubt), c2 (explanation, number), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Claims c1 and c5 also match the known myth diamonds-from-coal, which only dataset or web evidence in a confirming check clears (rule 5). A adds that if sources date land plants to 500 million years or more, c4 needs restating (about 470 million years ago in the fossil record, or under 600 million). Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T04:50:16Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Diamonds form when coal is squeezed deep underground.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.347,
+    "estimator": "v0"
+  }
+}

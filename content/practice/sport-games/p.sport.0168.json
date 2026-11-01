@@ -1,0 +1,237 @@
+{
+  "id": "p.sport.0168",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["cycling", "velodrome", "word-origins"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Olympic velodromes are usually 250 metres a lap, with bends banked at more than 40 degrees. Track bikes have one fixed gear and no brakes.",
+  "learnMore": "Velodrome",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "A velodrome is the banked oval track used for track cycling."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "A hippodrome is for horse racing, an aerodrome for aircraft and an autodrome for motor racing."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Velodromes used for the Olympics have a lap of 250 metres."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The bends of an Olympic velodrome are banked at more than 40 degrees."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Track racing bikes have one fixed gear and no brakes."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed; c3, c4, c5 are high and c1, c2 are standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor); the standard claims carry none of those triggers and state rules or well-known facts. datasets: no pinned dataset covers cycling venues, so c3 to c5 need web evidence from checker A (the UCI is Tier A). rivalTest: All four options share the -drome ending, so the word roots are the foothold: velo- for bicycle, hippo- for horse, aero- for air, auto- for motor. Only velodrome is a cycling track. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 25 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Banking varies by venue (roughly 42 to 45 degrees at recent Games), which is why c4 is bounded ('more than 40 degrees').",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e64162e18967eea530789774fe6951ce3122e05e936e1614ea182c9b9843b179",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Velodrome",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A velodrome is the banked oval track used for track cycling.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A hippodrome is for horse racing, an aerodrome for aircraft and an autodrome for motor racing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Every Olympic track since Barcelona 1992 has been 250 m, the length cycling's governing body requires for the Games.",
+              "confidence": "certain"
+            },
+            "note": "Earlier Games used longer tracks, which the explanation's 'usually' covers; the claim drops that hedge. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 250 m tracks used at the Olympics are banked at roughly 42 to 45 degrees on the bends.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Track racing bikes have a single fixed gear and no brakes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c3 and c4 state as fact what the explanation hedges with 'usually'; they hold for Olympic tracks since 1992, not for earlier Games. Keep the hedge in the claims."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b488424e1b747cc8bb6635f2061d6fbad03faed58073b48087919b7fcfaa2544",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Velodrome",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A velodrome is the banked oval used for track cycling.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A hippodrome is for horse racing, an aerodrome for aircraft and an autodrome for motor racing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The current Olympic standard is a 250 m track.",
+              "confidence": "certain"
+            },
+            "note": "True of the modern Games. Some earlier Olympic velodromes were 333 m or longer, so the explanation's 'usually' is the right hedge and the claim lacks it."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bends on 250 m tracks of Olympic standard are banked at roughly 42 to 45 degrees.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Track bikes have a single fixed gear and no brakes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c3 (explanation, number), c4 (explanation, number) and c5 (explanation, number) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers note that c3 and c4 drop the explanation's 'usually' hedge. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "What is the name of the steeply banked oval track used for track cycling?",
+  "answer": "Velodrome",
+  "wrong": ["Hippodrome", "Aerodrome", "Autodrome"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.269,
+    "estimator": "v0"
+  }
+}

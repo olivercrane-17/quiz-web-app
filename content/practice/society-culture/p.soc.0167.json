@@ -1,0 +1,220 @@
+{
+  "id": "p.soc.0167",
+  "status": "checking",
+  "category": "soc",
+  "tags": ["religion", "sacred-texts", "judaism"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "They contain the same texts, divided differently. The Hebrew Bible counts the twelve minor prophets as one book, and Samuel, Kings, Chronicles and Ezra-Nehemiah as one book each.",
+  "learnMore": "Development of the Hebrew Bible canon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Hebrew Bible (Tanakh) is traditionally counted as 24 books."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Protestant Old Testament has 39 books."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Hebrew Bible and the Protestant Old Testament contain the same texts, divided and ordered differently."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Hebrew Bible counts the twelve minor prophets as one book, and Samuel, Kings, Chronicles and Ezra-Nehemiah as one book each."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers scripture; c1, c2 and c4 need web evidence. The counts reconcile by calculation: 24 + 11 (the Twelve split) + 3 (Samuel, Kings, Chronicles split) + 1 (Ezra and Nehemiah split) = 39. rivalTest: players expect the same texts to give the same count, or the older collection to be bigger, so counterintuitive is true. Argued against the key: Josephus counted 22, but 24 is the standard Jewish count, and the Catholic Old Testament (46) is kept out by naming the Protestant one. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: fair everywhere; respectful and factual, with no ranking of traditions. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 5. doubts: none. riskReason: counterintuitive is true, so the key label claims are high under C26; the CNT-1 claim schema has no 'counterintuitive' riskReason, so they carry number, the trigger the claim also holds.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0029432d7a972547881b0913e044f73671ec831b81eb56422a035a0706116586",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "The Protestant Old Testament",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Hebrew Bible is traditionally counted as 24 books.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Protestant Old Testament has 39 books.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "They hold the same texts, divided and ordered differently.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Tanakh counts the twelve Minor Prophets as one book, and Samuel, Kings, Chronicles and Ezra-Nehemiah as one book each.",
+              "confidence": "certain"
+            },
+            "note": "Arithmetic checked: 39 - 11 (Twelve) - 1 (Samuel) - 1 (Kings) - 1 (Chronicles) - 1 (Ezra-Nehemiah) = 24, consistent with c1 and c2. High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3f841041d62301d54cdf8bea10fd8cefd492c7ffbb94c9b84c6d2d00891049c7",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "The Protestant Old Testament",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Tanakh is traditionally counted as 24 books.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Protestant Old Testament has 39 books.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The two contain the same texts, divided and ordered differently.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Tanakh counts the twelve minor prophets as one book, and Samuel, Kings, Chronicles and Ezra-Nehemiah as one each.",
+              "confidence": "certain"
+            },
+            "note": "Arithmetic checks out: 39 minus 15 is 24 (four double books lose one each, the minor prophets lose eleven). High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "fix",
+            "note": "The comparison's measure ('books in the standard count') is stripped from what players see (ARCHITECTURE section 5.1.1 ships only the stem, the labels and valueDisplay), so the player reads 'Which has more books?' about two canons that contain the same texts. That is a counting-convention trap (guide section 3.2). Put the convention in the stem, for example 'Counted the usual way, which has more books?'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "rewrite",
+      "reason": "Wording only (§9.7), for B's fix: players never see the measure (ARCHITECTURE §5.1.1 strips it), so the stem 'Which has more books?' left the counting convention unstated (§2.6, §3.2). It becomes 'As each tradition counts them, which has more books?', which states the item's measure and matches c1 and c2; no claim changes. B's revise verdict stands and high-risk c1, c2 and c4 rest on knowledge alone, so the item awaits a tiebreak T with web evidence on those three claims (§9.7; §9.9 rules 2 and 3). [wording-only rewrite by ed-psoc01d at 2026-11-01T04:34:42Z of stem; checks kept, packetSha256 re-stamped: pass A e5a9654ab9506648511b1f14cfe9b7e4f616e1f03c1fa52d948ae6639ae31be0 -> 0029432d7a972547881b0913e044f73671ec831b81eb56422a035a0706116586; pass B 2a075b4dc0a99cd470aa952bc4f8bfd1b8bc0741cc68e1abe5d8e52a23ec857d -> 3f841041d62301d54cdf8bea10fd8cefd492c7ffbb94c9b84c6d2d00891049c7]",
+      "decidedAt": "2026-11-01T04:34:42Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "As each tradition counts them, which has more books?",
+  "a": "The Hebrew Bible (Tanakh)",
+  "b": "The Protestant Old Testament",
+  "answer": "b",
+  "relation": "more",
+  "measure": "books in the standard count",
+  "unit": "books",
+  "values": {
+    "a": 24,
+    "b": 39
+  },
+  "valueDisplay": {
+    "a": "24 books",
+    "b": "39 books"
+  },
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.144,
+    "estimator": "v0"
+  }
+}

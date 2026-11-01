@@ -1,0 +1,230 @@
+{
+  "id": "p.music.0146",
+  "status": "cut",
+  "category": "music",
+  "tags": ["songs-albums", "national-anthems", "india"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Bangladesh's anthem, Amar Shonar Bangla, 'My Golden Bengal', dates from 1905, when Tagore protested the partition of Bengal. In all he wrote more than 2,000 songs, known as Rabindra Sangeet.",
+  "learnMore": "Rabindranath Tagore",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Rabindranath Tagore wrote the national anthems of India (Jana Gana Mana) and Bangladesh (Amar Shonar Bangla)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Kazi Nazrul Islam, Muhammad Iqbal and Sarojini Naidu did not write the national anthem of India or of Bangladesh."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Amar Shonar Bangla, meaning My Golden Bengal, was written in 1905, when Tagore protested the partition of Bengal."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Tagore wrote more than 2,000 songs."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Tagore's songs are known in Bengali as Rabindra Sangeet."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers these music facts (the manifest holds geographic, scientific, Nobel, Olympic and art-collection data), so each high-risk claim needs web evidence from the checkers. I used no WebSearch. Rival test: argued for Kazi Nazrul Islam, Bangladesh's national poet, whose song is its national march rather than its anthem, and Muhammad Iqbal, author of the patriotic song Saare Jahan Se Achha; neither wrote either anthem, so the key stands. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: players in South Asia have a head start, but Tagore is the best-known Indian poet worldwide, which gives everyone a foothold. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: Sri Lanka's anthem is sometimes linked to Tagore, but that is disputed, so the stem names only India and Bangladesh. c4 uses the bounded 'more than 2,000'. C22 pairs this item with p.book.0128, which shares the answer but asks about Tagore's 1913 Nobel Prize; I left the Nobel out of this explanation so the two state different facts, and suggest related_ok.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a7a3ec0ebeb69b9058ffd9d0dd352c26e2578a4c04004a7c9543a23bed214f8e",
+        "startedAt": "2026-11-01T02:00:29Z",
+        "finishedAt": "2026-11-01T02:19:40Z",
+        "coldSolve": {
+          "answerGiven": "Rabindranath Tagore",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tagore wrote Jana Gana Mana, India's anthem, and Amar Shonar Bangla, Bangladesh's.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kazi Nazrul Islam, Muhammad Iqbal and Sarojini Naidu wrote neither anthem.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Amar Shonar Bangla dates from 1905, from Tagore's protest against the partition of Bengal.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tagore wrote over 2,000 songs.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "His songs are known as Rabindra Sangeet.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d5330d1e1439227d520ba7de409d0816ef62068b17c13a2ea2b42c303c9ea03e",
+        "startedAt": "2026-11-01T02:05:28Z",
+        "finishedAt": "2026-11-01T02:26:16Z",
+        "coldSolve": {
+          "answerGiven": "Rabindranath Tagore",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tagore wrote Jana Gana Mana (India) and Amar Shonar Bangla (Bangladesh).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nazrul Islam, Iqbal and Naidu wrote neither anthem.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Amar Shonar Bangla dates from 1905, the year of the partition of Bengal.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tagore wrote well over two thousand songs.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "His songs are called Rabindra Sangeet.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic01e",
+        "at": "2026-11-01T02:04:12Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c3 (date) and c4 (number) rest on knowledge only: neither check ran a search (A's records say WebSearch was refused) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with evidence or without the risky detail.",
+      "decidedAt": "2026-11-01T04:20:00Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which poet wrote the national anthems of both India and Bangladesh?",
+  "answer": "Rabindranath Tagore",
+  "wrong": ["Kazi Nazrul Islam", "Muhammad Iqbal", "Sarojini Naidu"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.56,
+    "spread": 0.357,
+    "estimator": "v0"
+  }
+}

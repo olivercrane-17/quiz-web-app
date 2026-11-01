@@ -1,0 +1,236 @@
+{
+  "id": "p.nat.0245",
+  "status": "cut",
+  "category": "nat",
+  "tags": ["mammals", "marsupials", "australia", "babies"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "It is born after only about a month of pregnancy, blind and hairless, then climbs through its mother's fur into the pouch and fastens onto a teat.",
+  "learnMore": "Kangaroo",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A newborn kangaroo is about the size of a bean."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "A newborn kangaroo is much smaller than an adult mouse, a rabbit or a house cat."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Kangaroos are born after a pregnancy of about a month."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Newborn kangaroos are blind and hairless and climb through the mother's fur into the pouch on their own."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In the pouch, a newborn kangaroo attaches to a teat."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed; high: c1 (number) and c3 (number); standard: c2, c4 and c5. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on newborn kangaroo size and gestation should cover c1, c3 and c4. rivalTest: Argued for 'A mouse', the size most people guess for a joey. The options are adult animals, so a newborn mouse, which is also tiny, is not on offer. c1 is high because it is a measurement beyond everyday knowledge (references give about 2 cm and under a gram, 'the size of a jelly bean'). volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: kangaroos are known worldwide. style: Oxford spelling, plain hyphens only, explanation of 27 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none; red and grey kangaroo newborns are both about 2 cm long, so the key holds for the large kangaroos people picture.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "3f70eed53fa41139faa66d02cc391fc833bd13fd90bf85407cdc5068826a94c8",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "A bean",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A newborn kangaroo is about 2 cm long and weighs under a gram, about the size of a bean (often compared to a jelly bean).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "That is far smaller than an adult mouse, a rabbit or a house cat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kangaroo pregnancies last about a month (around 33 days in the red kangaroo).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The newborn is blind and hairless and climbs through its mother's fur to the pouch unaided.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In the pouch it fastens onto a teat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "74a07a2d0886242821bef8c7fff595801810d8a4dc6d2767a22616561f3324af",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "A bean",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A newborn kangaroo is about 2 cm long and weighs under a gram, roughly the size of a jellybean or bean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A newborn kangaroo is far smaller than an adult mouse, a rabbit or a cat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kangaroo pregnancy lasts roughly a month (about 30 to 36 days).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A newborn kangaroo is blind and hairless and climbs through the mother's fur into the pouch unaided.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the pouch the newborn fastens onto a teat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "A newborn mouse (a pup) is about as small as a newborn kangaroo, so 'A mouse' could be argued by a pedant. The natural reading is an adult mouse, so this is a note only; 'an adult mouse' in the option would close it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, number) and c3 (explanation, number) rest on knowledge alone in both checks: no pinned dataset covers animal biology and checker A's one search was refused at the session limit, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered. For the redraft: B notes that 'A mouse' could be read as a newborn mouse; write 'An adult mouse'.",
+      "decidedAt": "2026-11-01T04:21:42Z"
+    }
+  },
+  "format": "mc",
+  "stem": "A newborn kangaroo, just before it crawls into its mother's pouch, is about the size of what?",
+  "answer": "A bean",
+  "wrong": ["A mouse", "A rabbit", "A house cat"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.249,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "id": "p.music.0266",
+  "status": "cut",
+  "category": "music",
+  "tags": ["theory", "tuning", "pitch"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "ISO 16 fixed it as the international standard in 1975. Before agreed standards, the pitch of A varied from city to city and organ to organ.",
+  "learnMore": "A440 (pitch standard)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Standard concert pitch sets the A above middle C at 440 Hz."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Standard concert pitch for that A is not 256, 400 or 512 Hz."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The ISO 16 standard of 1975 specifies 440 Hz for the A above middle C."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Before international standards, the pitch of A varied between places and instruments."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers tuning standards, so the high claims need web evidence from the checkers. I used no WebSearch. Rival test: argued for each distractor: 256 and 512 are the so-called scientific pitches of C, and 400 is the round-number guess; none is the standard A. Argued against the key: some orchestras tune slightly higher (442 or 443) by choice, but the standard is 440, which the stem asks for. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the standard is international. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e207c9f833f179f935cb00acc15ccc3007cd0973b57e4a37defb5fc72a893637",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "440",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Concert pitch sets the A above middle C at 440 Hz.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The standard is 440 Hz, not 256, 400 or 512 Hz.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "ISO 16:1975 specifies 440 Hz for the A above middle C.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). See the wording note: the 440 Hz agreement dates from 1939 and ISO first adopted it in 1955."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Before standardization the pitch of A varied by place and instrument.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says 'ISO 16 fixed it as the international standard in 1975'. 1975 is the date of the International Standard ISO 16, but an international conference agreed 440 Hz in 1939 and ISO first adopted it as a recommendation in 1955, so a reader may take 1975 as the first agreement. Defensible as written; 'ISO 16 (1975) fixes it worldwide' would be cleaner."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "750e5ee3daba9e004f34d11b9a7d39bb1121f39774ce6843498e35cf3ad25526",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "440",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Standard concert pitch sets the A above middle C at 440 Hz.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: many European orchestras tune to 442 or 443, but 'standard' pitch is 440; 256 and 512 are C-based scientific pitch values."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The standard A is not 256, 400 or 512 Hz.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ISO 16 standard of 1975 specifies 440 Hz for the A above middle C.",
+              "confidence": "certain"
+            },
+            "note": "True as written. The explanation's 'ISO 16 fixed it in 1975' slightly overstates: ISO's first recommendation (R 16) dates from the mid-1950s and the 1975 edition confirmed it. Date risk: needs check A's external evidence."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Before international standards, the pitch of A varied between cities and instruments.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'ISO 16 fixed it as the international standard in 1975' reads as the first adoption. As I recall, the ISO recommendation dates from the mid-1950s (after a 1939 conference) and the 1975 edition confirmed it. 'ISO 16 confirmed it in 1975' or 'an ISO standard of 1975 sets it' avoids the problem."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (number), c2 (number) and c3 (date) rest on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail. Both checks note that 'ISO 16 fixed it as the international standard in 1975' reads as the first adoption (a 1939 conference agreed 440 Hz and ISO first recommended it in the mid-1950s); reword in the redraft.",
+      "decidedAt": "2026-11-01T04:32:21Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Standard concert pitch tunes the A above middle C to vibrate how many times a second?",
+  "answer": "440",
+  "wrong": ["256", "400", "512"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.56,
+    "spread": 0.195,
+    "estimator": "v0"
+  }
+}

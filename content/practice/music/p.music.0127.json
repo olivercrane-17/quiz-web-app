@@ -1,0 +1,212 @@
+{
+  "id": "p.music.0127",
+  "status": "cut",
+  "category": "music",
+  "tags": ["instruments", "woodwind", "saxophone"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "A single reed on its mouthpiece vibrates, as on a clarinet, so the saxophone counts as a woodwind. The Belgian Adolphe Sax patented it in 1846.",
+  "learnMore": "Saxophone",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "A saxophone produces its sound with a vibrating reed on its mouthpiece."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "A saxophone does not sound through the player's buzzing lips, as brass instruments do, or through air blown across a hole, as a flute does."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The saxophone uses a single reed, like the clarinet, and is classed as a woodwind instrument."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Adolphe Sax, a Belgian instrument maker, patented the saxophone in 1846."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge; c1 is high because the item is counterintuitive (the C26 floor), and since the schema's riskReason list has no counterintuitive value it carries checker_doubt. Datasets: no pinned dataset covers these music facts (the manifest holds geographic, scientific, Nobel, Olympic and art-collection data), so each high-risk claim needs web evidence from the checkers. I used no WebSearch. Rival test: argued for buzzing lips, which is how other brass-bodied instruments work and is the trap; the saxophone uses a single reed, so it is a woodwind. Three options on purpose: a reed, the lips and an air jet are the three ways a wind instrument sounds, so a fourth would be filler. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the saxophone is familiar worldwide from jazz and pop. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: c4 gives the standard patent year; Sax built the instrument a few years earlier, which is why c4 says patented, not invented.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0c4fdb39c1d895427860286a19034c575681cd7745ead7a2249d8523b9dd63e9",
+        "startedAt": "2026-11-01T02:00:29Z",
+        "finishedAt": "2026-11-01T02:19:40Z",
+        "coldSolve": {
+          "answerGiven": "A vibrating reed",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A saxophone sounds through a single reed vibrating against its mouthpiece.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3). The writer marked this checker_doubt; I hold it as certain."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It does not use buzzing lips, as brass instruments do, or air blown across a hole, as a flute does.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Its single reed, like a clarinet's, makes it a woodwind.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Adolphe Sax, a Belgian instrument maker, patented the saxophone in 1846.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most saxophones have a brass body.",
+              "confidence": "certain"
+            },
+            "note": "Checker addition x1: role key, ref stem, risk standard. Claim: Saxophones are usually made of brass. The stem's premise, which no writer claim states."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "feb68a500170afcafb285af953d31cb9f9279d22bb50c3c22c9e5717bbb81843",
+        "startedAt": "2026-11-01T02:05:28Z",
+        "finishedAt": "2026-11-01T02:26:16Z",
+        "coldSolve": {
+          "answerGiven": "A vibrating reed",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A saxophone has a single reed on its mouthpiece that vibrates to make the sound.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A saxophone is not sounded by buzzing lips or by blowing across a hole.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It uses a single reed like the clarinet and is classed as a woodwind.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Adolphe Sax, a Belgian, took out his saxophone patent in 1846.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic01e",
+        "at": "2026-11-01T02:04:12Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (checker_doubt) and c4 (date) rest on knowledge only: neither check ran a search (A's records say WebSearch was refused) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with evidence or without the risky detail.",
+      "decidedAt": "2026-11-01T04:20:00Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The saxophone is usually made of brass, but how does it make its sound?",
+  "answer": "A vibrating reed",
+  "wrong": ["Buzzing lips", "Air across a hole"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.267,
+    "estimator": "v0"
+  }
+}

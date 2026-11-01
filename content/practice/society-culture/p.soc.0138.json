@@ -1,0 +1,257 @@
+{
+  "id": "p.soc.0138",
+  "status": "active",
+  "category": "soc",
+  "tags": ["money", "currencies", "greece"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The name goes back to an ancient Greek silver coin. A drachma was worth six obols, and its name meant a 'handful', perhaps from a fistful of six iron spits once used as money.",
+  "learnMore": "Greek drachma",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Greece used the drachma until euro notes and coins replaced it in 2002."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The lira, the peseta and the escudo were the currencies of Italy, Spain and Portugal, not Greece."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The modern drachma was named after an ancient Greek silver coin."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In ancient Greece, one drachma was worth six obols."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word drachma meant 'a handful', possibly from a handful of six iron spits (obols) used as early money."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: c1 checked in currency-codes (codes-all.csv, row GREECE, Drachma, GRD, 300, withdrawal date 2002-03 in the file's own format). c4 and c5 need web evidence. rivalTest: lira, peseta and escudo were the other southern European currencies replaced by the euro in 2002; argued against the key: the dataset row confirms the drachma was withdrawn in 2002. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: the drachma is widely known from ancient history as well as from modern Greece. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 34 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 2. doubts: c5's etymology is the standard account but carries 'possibly' for the spits.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "3846db9a2a21585a9c619f0c5b671320755f7d228908aea6e9daebd84e79edc7",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Drachma",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "currency-codes",
+              "version": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+              "file": "codes-all.csv",
+              "locator": "Entity=GREECE, AlphabeticCode=GRD (line 340) and AlphabeticCode=EUR (line 95)",
+              "excerpt": "GREECE,Drachma,GRD,300,,2002-03 | GREECE,Euro,EUR,978,2,",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "ISO 4217 records the drachma's withdrawal in 2002 (2002-03) and the euro as Greece's currency, matching the replacement of the drachma by euro notes and coins in 2002."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "currency-codes",
+              "version": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+              "file": "codes-all.csv",
+              "locator": "AlphabeticCode=ITL (line 351), ESP (line 408), PTE (line 386)",
+              "excerpt": "ITALY,Italian Lira,ITL,380,,2002-03 | SPAIN,Spanish Peseta,ESP,724,,2002-03 | PORTUGAL,Portuguese Escudo,PTE,620,,2002-03",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The lira, peseta and escudo were the currencies of Italy, Spain and Portugal, so none is Greece's."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The modern Greek drachma took its name from the ancient silver drachma.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In ancient Greece one drachma was worth six obols.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Drachma comes from the Greek verb for grasping, so it meant a handful, traditionally a handful of six iron spits (obeloi) used as early money.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "83a5e8512c63779bdb62f19dd0a53f95ca0175c6902efbe2b2f3162418fc3a15",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Drachma",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "currency-codes",
+              "version": "31cfa1380316ecc8a213fd6e17ec46cea49a3991",
+              "file": "codes-all.csv",
+              "locator": "Entity=GREECE, AlphabeticCode=GRD",
+              "excerpt": "GREECE,Drachma,GRD,300,,2002-03",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The ISO 4217 list gives the drachma a withdrawal date of March 2002, matching euro notes and coins arriving in January 2002 with a short overlap."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The lira (Italy), peseta (Spain) and escudo (Portugal) were not Greek currencies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The modern drachma took its name from an ancient Greek silver coin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "One ancient Greek drachma was worth six obols.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Drachma is traditionally derived from a 'handful' of six iron spits (obols) used as early money.",
+              "confidence": "certain"
+            },
+            "note": "Hedged 'possibly' in the claim; ancient writers such as Plutarch tell the spit story. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c4 (explanation, number) and c5 (explanation, etymology) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them (the dataset evidence recorded covers other claims), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence, or with an explanation fact that is standard risk or dataset-backed.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sci.0136",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Before euro notes and coins arrived in 2002, which currency did Greece use?",
+  "answer": "Drachma",
+  "wrong": ["Lira", "Peseta", "Escudo"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.234,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "id": "p.soc.0114",
+  "status": "active",
+  "category": "soc",
+  "tags": ["religion", "sikhism", "india"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Its langar, a free community kitchen run largely by volunteers, serves meals to tens of thousands of visitors a day, whatever their faith, seated together on the floor.",
+  "learnMore": "Golden Temple",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The Golden Temple (Harmandir Sahib) in Amritsar is the holiest site of Sikhism."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Golden Temple is not a Hindu, Jain or Buddhist shrine."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Golden Temple's langar serves free meals to tens of thousands of people a day, regardless of faith."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Golden Temple's langar is run largely by volunteers, and diners sit together on the floor."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: geonames-cities confirms Amritsar, IN (lat 31.62234). No dataset covers the shrine; c1 and c3 need web evidence. rivalTest: Hinduism tempts because the temple is in India, and Jainism and Buddhism are other Indian faiths. Argued against the key: Harmandir Sahib is the pre-eminent gurdwara of Sikhism by every reference. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: one of the most visited religious sites in the world; the name is known well beyond India. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 2: most adults link the Golden Temple with Sikhs. doubts: c3 is bounded ('tens of thousands') because published daily figures vary.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c58890fe888458f92aa4d8d4fef0787dabf23747e0ed1cdf4d30c7e4f993026b",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Sikhism",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Harmandir Sahib, the Golden Temple in Amritsar, is the most sacred gurdwara and chief pilgrimage site of Sikhism.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (superlative): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It is a Sikh gurdwara, not a Hindu, Jain or Buddhist shrine.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Its langar serves free meals to tens of thousands of people every day, open to all whatever their faith.",
+              "confidence": "certain"
+            },
+            "note": "Commonly reported daily figures run from about 50,000 to 100,000, so 'tens of thousands' is a safe precision. High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The langar is run largely by volunteers (sewa), and diners sit together in rows on the floor (pangat).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5c4edbd0018098e9bc718c4f5b2856a91749859434c702cea2072b4afd2b22d6",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Sikhism",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Harmandir Sahib, the Golden Temple at Amritsar, is the holiest gurdwara of Sikhism.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "It is a Sikh shrine, not a Hindu, Jain or Buddhist one.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Its langar serves free meals to tens of thousands of visitors a day, whatever their faith.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Volunteers run the langar kitchen and diners sit together in rows on the floor.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, superlative) and c3 (explanation, number) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The Golden Temple in Amritsar, India, is the holiest site of which religion?",
+  "answer": "Sikhism",
+  "wrong": ["Hinduism", "Jainism", "Buddhism"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.18,
+    "estimator": "v0"
+  }
+}

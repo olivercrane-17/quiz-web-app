@@ -72,7 +72,8 @@ function resultFor(
   return check?.claimResults.find((result) => result.claimId === claimId);
 }
 
-function confirmedIn(
+/** True when this one record confirmed the claim itself (no tiebreak). */
+export function confirmedIn(
   check: CheckRecord | null | undefined,
   claimId: string,
 ): boolean {

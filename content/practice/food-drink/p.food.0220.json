@@ -1,0 +1,206 @@
+{
+  "id": "p.food.0220",
+  "status": "cut",
+  "category": "food",
+  "tags": ["ingredients", "food-science", "desserts"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Agar comes from red algae. Its jellies set as they cool through about 40 °C and stay firm on a hot day, when gelatin would melt.",
+  "learnMore": "Agar",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Agar is extracted from seaweed, specifically red algae."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Agar is not made from apple peel, cassava root or tree sap."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Agar gels set as they cool to roughly 32 to 40 °C."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Agar gels stay solid until heated to about 85 °C, while gelatin gels melt at around body temperature."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c3, c4). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Apple peel gives pectin and tree sap gives gum arabic, both real setting agents, and cassava gives tapioca starch; none is agar. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: agar is used in Asian sweets and in vegetarian cooking everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 26 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: many cooks know agar comes from the sea. Doubts: c3 and c4 give rounded temperatures that the published ranges cover.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ee33c3aa55eb1ee321e895e78524d6ba02962dcc64b60cb4ea1f2336082eb02a",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Seaweed",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Agar is a gelling agent extracted from red algae (seaweeds such as Gelidium and Gracilaria).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Agar is not made from apple peel, cassava or tree sap (pectin, from apples, is a different setting agent).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Agar solutions gel on cooling to roughly 32 to 40 °C.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Set agar does not melt until about 85 °C, while gelatin gels melt around body temperature.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1330538f7e9b6dd11fb6a53b58087f54dac0117a215105d6ed070fbb33a780b3",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Seaweed",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Agar is extracted from red algae, a seaweed such as Gelidium or Gracilaria.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Agar is not made from apple peel (that is pectin), cassava root or tree sap.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Agar gels set when cooled to roughly 32 to 40 degrees Celsius.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Agar gels stay solid until about 85 degrees Celsius, while gelatin gels melt near body temperature.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The stem calls agar 'plant-based', but red algae are not plants in the strict sense. The culinary meaning (vegan) is fine, and Cassava root, Apple peel and Tree sap are the real plant options, so a pedant could grumble. 'Vegan' would be tidier."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c3 (explanation, number) and c4 (explanation, number) rest on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7). For a redraft: red algae are not plants in the strict sense, so 'vegan' is tidier than 'plant-based' (B).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Agar, a plant-based setting agent used in place of gelatin, is made from what?",
+  "answer": "Seaweed",
+  "wrong": ["Apple peel", "Cassava root", "Tree sap"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.28,
+    "estimator": "v0"
+  }
+}

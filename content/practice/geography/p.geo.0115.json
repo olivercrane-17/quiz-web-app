@@ -1,0 +1,269 @@
+{
+  "id": "p.geo.0115",
+  "status": "active",
+  "category": "geo",
+  "tags": ["rivers", "equator", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "It rises south of the Equator, arcs north across it past Kisangani, then crosses back south near Mbandaka on its way to the Atlantic.",
+  "learnMore": "Congo River",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Congo River, including its upper course the Lualaba, crosses the Equator twice."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Congo River's headwaters lie south of the Equator."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kisangani, on the Congo River, lies north of the Equator."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Congo River crosses back to the south of the Equator near Mbandaka."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Congo River flows into the Atlantic Ocean."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 counts crossings, so I marked it high (number); c2 to c5 are standard positions. Datasets: natural-earth ne_50m_rivers_lake_centerlines, features with name_en Congo (the Lualaba segment and the Congo segment): the Lualaba line crosses 0° near 25.5° E heading north, and the Congo line crosses back south near 18.1° E, so the course crosses the Equator twice (c1). geonames-cities: Kisangani CD lat 0.51528 (c3); Mbandaka CD lat 0.04865, lng 18.26034, beside the second crossing (c4). Rival test: argued for false: one might count only the main stream below Kisangani, which crosses once, but the river's course including the Lualaba is the Congo as every atlas draws it, and the twice-crossing is its best-known quirk. Against the key: none left. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a great African river; the claim is pure map geography. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 24 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "26d1e02d2c025b497c5001b677242053eb46e03003910779a9792c80d62de776",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_rivers_lake_centerlines.geojson",
+              "locator": "name=Lualaba (name_en Congo) and name=Congo, featurecla River",
+              "excerpt": "Congo (Congo) crosses 0° at 18.159° E southward; Lualaba (Congo) crosses 0° at 25.548° E northward",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Chaining Lualaba, Congo and Lualaba/Congo segments from the head to the mouth gives exactly two sign changes of latitude."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_rivers_lake_centerlines.geojson",
+              "locator": "name=Lualaba, name_en=Lualaba, featurecla River",
+              "excerpt": "upstream end [26.249282,-11.7429]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The headwater segment starts at about 11.7° S."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Kisangani, country=CD, admin1=30",
+              "excerpt": "{\"name\":\"Kisangani\",\"lat\":\"0.51528\",\"lng\":\"25.19099\",\"country\":\"CD\",\"admin1\":\"30\",\"admin2\":\"01\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "0.51528 is north of the Equator."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_rivers_lake_centerlines.geojson",
+              "locator": "name=Congo, name_en=Congo, featurecla River, part 1",
+              "excerpt": "crosses 0° southward at 18.159° E",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "GeoNames puts Mbandaka at {\"name\":\"Mbandaka\",\"lat\":\"0.04865\",\"lng\":\"18.26034\",\"country\":\"CD\",\"admin1\":\"02\",\"admin2\":\"01\"}, about 12 km from that crossing."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Congo reaches the Atlantic at its estuary between Angola and the Democratic Republic of the Congo.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "15a151440f97c053f1ee53e53a59b2d1fceb2ee36d7910ed3891031c6c9269f4",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_rivers_lake_centerlines.geojson",
+              "locator": "name=Lualaba (name_en Congo) and name=Congo",
+              "excerpt": "Upper course crosses latitude 0 northward near 25.55 E; lower course crosses it southward near 18.16 E: two crossings",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_rivers_lake_centerlines.geojson",
+              "locator": "name=Lualaba and name=Congo, first vertices",
+              "excerpt": "Lualaba first vertex -11.74 lat; Congo first vertex -8.27 lat (both south of the Equator)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Kisangani,country=CD,admin1=30",
+              "excerpt": "Kisangani CD/30: lat 0.51528, lng 25.19099",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Mbandaka,country=CD,admin1=02",
+              "excerpt": "Mbandaka CD/02: lat 0.04865, lng 18.26034",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Natural Earth's Congo line crosses the Equator southward near 18.16 E, Mbandaka is at 18.26 E."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Congo River empties into the Atlantic Ocean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 carry natural-earth evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. A strong surprising truth with a clear explanation.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The Congo River crosses the Equator twice.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.54,
+    "spread": 0.155,
+    "estimator": "v0"
+  }
+}

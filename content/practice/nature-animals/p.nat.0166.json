@@ -1,0 +1,353 @@
+{
+  "id": "p.nat.0166",
+  "status": "active",
+  "category": "nat",
+  "tags": ["plants", "senses", "birds", "seed-dispersal"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Birds' pain receptors do not respond to capsaicin, the chemical that makes chillies hot. That suits the plant: birds swallow the seeds whole and spread them far, while mammals' teeth would crush them.",
+  "learnMore": "Capsaicin",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Birds, parrots included, do not feel the burning sensation of capsaicin in chillies."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Monkeys, mice and deer, like other mammals, feel the burn of capsaicin."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The bird version of the receptor that senses capsaicin does not respond to it."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Birds swallow chilli seeds whole and disperse them, while mammals tend to crush seeds with their teeth."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed, all standard. The key is written as 'a parrot' rather than 'birds' so its answer text differs from p.nat.0135, whose answer is Birds. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: every distractor is a mammal, and all mammals feel capsaicin, although tree shrews are less sensitive, which is why no tree shrew is an option. Argued against the key: bird insensitivity to capsaicin is well established, and parrots eat hot chillies readily. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: chillies are eaten and grown worldwide; Oxford spelling 'chilli'. style: Oxford spelling, plain hyphens only, explanation of 33 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: c4 states the leading explanation for why chillies are hot (deterring seed-crushing mammals); I hold it at standard because it is in standard references.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "fc6b8584f5aa13853de4a93d93ee3a31baa512911fca71093edc84c9d7a1a613",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "A parrot",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Birds, parrots included, do not feel chilli burn, because their capsaicin receptor does not respond to it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mice, monkeys and deer feel the burn of capsaicin.",
+              "confidence": "certain"
+            },
+            "note": "Confirmed for the three named animals. 'Like other mammals' in the claim text slightly overreaches (tree shrews tolerate capsaicin through a receptor variant), but the player-facing text does not say it."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The bird form of the TRPV1 receptor does not respond to capsaicin (Jordt and Julius, 2002).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Birds swallow chilli seeds whole and spread them intact, while mammals tend to chew and destroy them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6a4e475f6371f2319597b7dd4167668d10c2d752ca84d9a1a4000fb412a9d2a5",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "A parrot",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "birds insensitive to capsaicin TRPV1 chilli peppers parrots eat chillies without burning",
+              "results": [
+                {
+                  "title": "Wikipedia:Reference desk/Archives/Science/2015 April 28",
+                  "url": "https://en.wikipedia.org/wiki/Wikipedia:Reference_desk/Archives/Science/2015_April_28"
+                },
+                {
+                  "title": "A single TRPV1 amino acid controls species sensitivity to capsaicin",
+                  "url": "https://www.biorxiv.org/content/10.1101/732701.full.pdf"
+                },
+                {
+                  "title": "A single TRPV1 amino acid controls species sensitivity to capsaicin",
+                  "url": "https://www.nature.com/articles/s41598-020-64584-2"
+                },
+                {
+                  "title": "Molecular mechanism of the tree shrew’s insensitivity to spiciness - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6042686/"
+                },
+                {
+                  "title": "Responses to transient receptor potential (TRP) channel agonists in Chlamydomonas reinhardtii - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7358129/"
+                },
+                {
+                  "title": "A single TRPV1 amino acid controls species sensitivity to capsaicin",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7229161/"
+                },
+                {
+                  "title": "Capsaicin",
+                  "url": "https://en.wikipedia.org/wiki/Capsaicin"
+                },
+                {
+                  "title": "Capsaicin responses in Drosophila: Exploring the possibility of establishing a new Non-TRPV1 model - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12937017/"
+                },
+                {
+                  "title": "Molecular Basis for Species-Specific Sensitivity to “Hot” Chili Peppers: Cell",
+                  "url": "https://www.cell.com/fulltext/S0092-8674(02)00637-2"
+                },
+                {
+                  "title": "Harnessing the Therapeutic Potential of Capsaicin and Its Analogues in Pain and Other Diseases - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6272969/"
+                }
+              ],
+              "summaryExcerpt": "Birds have a TRPV1 channel, the same heat and pain receptor mammals use, but it doesn't respond to capsaicin. The avian channel fails to be activated by capsaicin, which offers a molecular explanation for birds' insensitivity to hot chili peppers.",
+              "tiers": ["A", "B", "C"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The evidence concerns birds as a class (the chicken receptor is the classic case); parrots are not singled out in the results, so \"parrots included\" rests on that generalisation plus my knowledge that parrots eat chillies readily."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Monkeys, mice and deer have capsaicin-sensitive pain receptors and feel the burn.",
+              "confidence": "certain"
+            },
+            "note": "The named animals do feel it. \"Like other mammals\" is slightly too broad: the results include a paper on the tree shrew's insensitivity to spiciness."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "birds insensitive to capsaicin TRPV1 chilli peppers parrots eat chillies without burning",
+              "results": [
+                {
+                  "title": "Wikipedia:Reference desk/Archives/Science/2015 April 28",
+                  "url": "https://en.wikipedia.org/wiki/Wikipedia:Reference_desk/Archives/Science/2015_April_28"
+                },
+                {
+                  "title": "A single TRPV1 amino acid controls species sensitivity to capsaicin",
+                  "url": "https://www.biorxiv.org/content/10.1101/732701.full.pdf"
+                },
+                {
+                  "title": "A single TRPV1 amino acid controls species sensitivity to capsaicin",
+                  "url": "https://www.nature.com/articles/s41598-020-64584-2"
+                },
+                {
+                  "title": "Molecular mechanism of the tree shrew’s insensitivity to spiciness - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6042686/"
+                },
+                {
+                  "title": "Responses to transient receptor potential (TRP) channel agonists in Chlamydomonas reinhardtii - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7358129/"
+                },
+                {
+                  "title": "A single TRPV1 amino acid controls species sensitivity to capsaicin",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7229161/"
+                },
+                {
+                  "title": "Capsaicin",
+                  "url": "https://en.wikipedia.org/wiki/Capsaicin"
+                },
+                {
+                  "title": "Capsaicin responses in Drosophila: Exploring the possibility of establishing a new Non-TRPV1 model - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12937017/"
+                },
+                {
+                  "title": "Molecular Basis for Species-Specific Sensitivity to “Hot” Chili Peppers: Cell",
+                  "url": "https://www.cell.com/fulltext/S0092-8674(02)00637-2"
+                },
+                {
+                  "title": "Harnessing the Therapeutic Potential of Capsaicin and Its Analogues in Pain and Other Diseases - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6272969/"
+                }
+              ],
+              "summaryExcerpt": "Birds have a TRPV1 channel, the same heat and pain receptor mammals use, but it doesn't respond to capsaicin. The avian channel fails to be activated by capsaicin, which offers a molecular explanation for birds' insensitivity to hot chili peppers.",
+              "tiers": ["A", "B", "C"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Same summary as c1."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "birds insensitive to capsaicin TRPV1 chilli peppers parrots eat chillies without burning",
+              "results": [
+                {
+                  "title": "Wikipedia:Reference desk/Archives/Science/2015 April 28",
+                  "url": "https://en.wikipedia.org/wiki/Wikipedia:Reference_desk/Archives/Science/2015_April_28"
+                },
+                {
+                  "title": "A single TRPV1 amino acid controls species sensitivity to capsaicin",
+                  "url": "https://www.biorxiv.org/content/10.1101/732701.full.pdf"
+                },
+                {
+                  "title": "A single TRPV1 amino acid controls species sensitivity to capsaicin",
+                  "url": "https://www.nature.com/articles/s41598-020-64584-2"
+                },
+                {
+                  "title": "Molecular mechanism of the tree shrew’s insensitivity to spiciness - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6042686/"
+                },
+                {
+                  "title": "Responses to transient receptor potential (TRP) channel agonists in Chlamydomonas reinhardtii - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7358129/"
+                },
+                {
+                  "title": "A single TRPV1 amino acid controls species sensitivity to capsaicin",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7229161/"
+                },
+                {
+                  "title": "Capsaicin",
+                  "url": "https://en.wikipedia.org/wiki/Capsaicin"
+                },
+                {
+                  "title": "Capsaicin responses in Drosophila: Exploring the possibility of establishing a new Non-TRPV1 model - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12937017/"
+                },
+                {
+                  "title": "Molecular Basis for Species-Specific Sensitivity to “Hot” Chili Peppers: Cell",
+                  "url": "https://www.cell.com/fulltext/S0092-8674(02)00637-2"
+                },
+                {
+                  "title": "Harnessing the Therapeutic Potential of Capsaicin and Its Analogues in Pain and Other Diseases - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6272969/"
+                }
+              ],
+              "summaryExcerpt": "Birds can eat chilies without harm and spread the seeds. Mammals' molar teeth destroy seeds, so the plant benefits from birds as dispersers.",
+              "tiers": ["A", "B", "C"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The summary states the dispersal point; \"tend to\" in the claim keeps it hedged."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Claim c2 says monkeys, mice and deer \"like other mammals\" feel the burn of capsaicin. A search result (a paper on the tree shrew's insensitivity to spiciness) shows at least one mammal that does not, so \"other mammals\" is too broad. Not player-facing, and the named animals do feel it, so the item is unaffected."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; no high-risk claims; knowledge confirmations at certain, plus c1 web in B, c3 web in B, c4 web in B. Style, distractors and balance reviewed. B's note that c2's 'like other mammals' is too broad (tree shrews) is not player-facing, and the three named mammals do feel capsaicin.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which of these animals can eat hot chillies without feeling any burn?",
+  "answer": "A parrot",
+  "wrong": ["A monkey", "A mouse", "A deer"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.336,
+    "estimator": "v0"
+  }
+}

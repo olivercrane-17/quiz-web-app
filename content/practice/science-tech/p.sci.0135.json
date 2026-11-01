@@ -1,0 +1,262 @@
+{
+  "id": "p.sci.0135",
+  "status": "active",
+  "category": "sci",
+  "tags": ["human-body", "digestion"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "The large intestine is named for its width, not its length. The small intestine, coiled up in the belly, is at least twice as long, giving it a vast surface for absorbing food.",
+  "learnMore": "Small intestine",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "An adult's small intestine is several metres long, roughly 3 to 7 m depending on how it is measured."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "An adult's large intestine is about 1.5 m long."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The large intestine is called large because of its greater width, not its length."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The small intestine is at least twice as long as the large intestine."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The small intestine's length and folded lining give it a large surface for absorbing nutrients."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers anatomy, so checker A needs web evidence for c1, c2 and c3; c4 follows from c1 and c2. rivalTest: The large intestine is the side most players pick, misled by its name; the small intestine is at least twice as long under every measurement method. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 33 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: Reported lengths of the small intestine run from about 3 m in living people to 6 or 7 m after death, so c1 gives a range, the value is set at 5 for the relation only, and the reveal shows the range. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "48b65771baa66c28de40abb98811ebe8f2bb046a831dd0112e5d7db5b2631bc0",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "The small intestine",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The small intestine measures about 3 to 5 m in living adults and about 6 to 7 m at autopsy, when muscle tone is lost.",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8). High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The large intestine is about 1.5 m long.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It is called large for its greater diameter, about 6 to 7 cm against about 2.5 cm, not for its length.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Even the low living figure of about 3 m is twice the large intestine's 1.5 m, and typical figures give 3 to 4 times.",
+              "confidence": "certain"
+            },
+            "note": "True for typical values; at the very bottom of the small intestine's range the ratio only just reaches two, so the bounded wording is right. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Its length together with folds, villi and microvilli gives the small intestine a large absorbing surface.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8135b73a838686f65b5d112a3685076bf5f3ea579d97a9ca25ab635d24e58c00",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "The small intestine",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The small intestine is about 6 to 7 m after death and about 3 to 5 m in life.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The large intestine is about 1.5 m long.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The large intestine is named for its wider diameter (about 6 cm against 2.5 to 3 cm), not its length.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The small intestine, 3 to 7 m, is at least twice the large intestine's 1.5 m.",
+              "confidence": "certain"
+            },
+            "note": "The extremes overlap slightly (3 m against 1.8 m), but typical values give 2 to 4 times. High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Folds, villi and microvilli give the small intestine a very large absorptive surface.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (label, number), c2 (label, number), c3 (explanation, etymology) and c4 (explanation, number) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which is longer in an adult human?",
+  "a": "The small intestine",
+  "b": "The large intestine",
+  "answer": "a",
+  "relation": "longer",
+  "measure": "typical length",
+  "unit": "m",
+  "values": {
+    "a": 5,
+    "b": 1.5
+  },
+  "valueDisplay": {
+    "a": "roughly 3 to 7 m",
+    "b": "about 1.5 m"
+  },
+  "predicted": {
+    "p": 0.56,
+    "spread": 0.327,
+    "estimator": "v0"
+  }
+}

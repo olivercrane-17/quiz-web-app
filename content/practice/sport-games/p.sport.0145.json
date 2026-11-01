@@ -1,0 +1,214 @@
+{
+  "id": "p.sport.0145",
+  "status": "checking",
+  "category": "sport",
+  "tags": ["athletics", "running-track", "maths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Outer lanes are longer, which is why runners in the 200 m and 400 m start at staggered positions. Over a full lap, lane eight is more than 50 metres longer than lane one.",
+  "learnMore": "Running track",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "One lap of the inside lane of a standard outdoor running track measures 400 metres."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A standard outdoor track lap is not 200, 500 or 800 metres."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In the 200 m and 400 m, runners start at staggered positions because outer lanes are longer."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "With lanes about 1.22 m wide, a lap of lane eight is more than 50 metres longer than a lap of lane one."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: no pinned dataset covers track specifications; World Athletics rules are the Tier A source for c1 and the 1.22 m lane width. c4 is arithmetic on that width: the two bends add 2 x pi x 7 x 1.22 m, about 53.7 m, minus about 0.6 m for the different measurement lines, so more than 50 m. rivalTest: 200 metres is the indoor track length, which makes it the only tempting distractor; 500 and 800 metres are guesses. The 400 m standard is undisputed for outdoor tracks. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 34 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f386101f5aa3d68c5797f521035da0c48fdf3f764d1fe8d76b88c58816ba4be3",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "400 metres",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "One lap of lane 1 of a standard outdoor track is 400 m.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It is not 200, 500 or 800 m.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Races run in lanes round a bend start from a stagger, because outer lanes are longer.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lanes are 1.22 m wide; lane 8's running line is about 8.44 m further from the centre than lane 1's, so its lap is about 2 x pi x 8.44, or 53 m, longer.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'Without the stagger, the athlete in lane eight would run more than 50 metres further' is true for a full lap (the 400 m) but follows a sentence about the 200 m and 400 m; in the 200 m the gap is about 26 m. 'In the 400 m' would remove the doubt."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bc583f2188d957f7a12c20237ac1bd873f35fe65aa3b4e35c64cae9591c923b6",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "400 metres",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A standard outdoor track measures 400 m along the inside lane (measured 30 cm out from the kerb).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The lap is not 200, 500 or 800 m.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 200 m and 400 m use staggered starts because outer lanes have longer bends.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "With 1.22 m lanes, lane eight's lap is about 2 x pi x 7 x 1.22 = 53.7 m longer than lane one's, or about 53 m allowing for the measuring lines (arithmetic re-run).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Explanation: 'Without the stagger, the athlete in lane eight would run more than 50 metres further' follows 'the 200 m and 400 m' but is true only for the 400 m (two bends). In the 200 m (one bend) the gap is about 26 to 27 m. Say 'In the 400 m, a lap of lane eight is more than 50 metres longer than lane one'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "rewrite",
+      "reason": "Second pass, and still no tiebreak on file: pass T left only an unrecorded knowledge-only draft, so this cannot be an accept yet. A pass, B revise. B's one issue (fix), which A also raised as a note, is scope: the old second sentence, 'Without the stagger, the athlete in lane eight would run more than 50 metres further', follows a sentence naming the 200 m and the 400 m but holds only for a full lap. Applied B's fix as a wording-only rewrite, so the tiebreak checks the text that will ship: the sentence now states claim c4 as both checks confirmed it, over a full lap. No claim changes. Both checks confirm every claim directly at certain, so under the current rule 3 the item needs only a passing tiebreak (rule 2). [wording-only rewrite by ed-psport01d at 2026-11-01T05:24:05Z of explanation; checks kept, packetSha256 re-stamped: pass A 2dbd3e21a25a6874318f73e9233da01c5d3a5149b5c901ea8c4efaf7f55bf4f0 -> f386101f5aa3d68c5797f521035da0c48fdf3f764d1fe8d76b88c58816ba4be3; pass B 53929f829a24252abbb027dd0215e5e2bca6ecd68130a800a74bb08f572f5867 -> bc583f2188d957f7a12c20237ac1bd873f35fe65aa3b4e35c64cae9591c923b6]",
+      "decidedAt": "2026-11-01T05:24:05Z"
+    }
+  },
+  "format": "mc",
+  "stem": "How long is one lap of the inside lane of a standard outdoor running track?",
+  "answer": "400 metres",
+  "wrong": ["200 metres", "500 metres", "800 metres"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.255,
+    "estimator": "v0"
+  }
+}

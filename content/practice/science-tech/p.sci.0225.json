@@ -1,0 +1,174 @@
+{
+  "id": "p.sci.0225",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["physics", "gravity", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "A light, tumbling coin soon stops speeding up, because air resistance balances its weight. It lands at a speed that might sting but cannot kill.",
+  "learnMore": "Terminal velocity",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "A coin dropped from the top of a skyscraper does not fall fast enough to kill a person below."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Air resistance stops a falling coin from speeding up once it reaches a low terminal speed, because the drag balances its weight."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A falling coin at its terminal speed may sting but carries far too little energy to kill a person."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors; its one warning is C25 on c1, which matches the listed myth penny-from-skyscraper because it debunks it. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key claim, because the item is counterintuitive (the C26 floor). datasets: no pinned dataset covers this, so checker A needs web evidence for c1; c2 is textbook physics. rivalTest: The belief is popular because a skyscraper is so tall that people imagine the coin keeps accelerating. Against the key: a coin of a few grams flutters and reaches a terminal speed of tens of kilometres an hour well before it lands, far too slow to kill. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 25 words. myths: c1 matches penny-from-skyscraper by design, because the item is that myth, so the checkers need web evidence to clear it; no other claim resembles a listed myth. mystery and encore: not applicable to a practice true/false item. doubts: Measured terminal speeds for small coins vary with tumbling (roughly 40 to 80 km/h), so the item gives no number. The word 'kill' is the myth's own and the tone stays factual; no real incident is involved. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d0549990455c221b09724d32715e9b5536a1db548c48c7973be8b1ccf4124dbc",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A falling coin tumbles and soon reaches a low terminal speed of a few tens of km/h, which can sting but carries far too little energy to kill.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). Myth-screen hit: it also needs dataset or web evidence in one check to clear the screen (§9.9 rule 5)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Drag grows with speed until it equals the coin's weight, after which the coin stops speeding up.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A coin of a few grams at that speed carries well under a joule, enough to sting and nowhere near enough to kill.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "87f308da2c58b69ed407e05504f36c51aacaad6c46aa865fd30cc3802120fd21",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A tumbling coin reaches a terminal speed of only some 10 to 25 m/s and carries under about 1 J, far too little to kill; no such death is documented.",
+              "confidence": "certain"
+            },
+            "note": "Myth hit (penny-from-skyscraper). Needs web evidence in A or a tiebreak to clear. High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A light, flat coin soon stops accelerating because drag balances its weight.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "At terminal speed a coin's kinetic energy is a fraction of a joule: a sting, not a fatal injury.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "sensitivity",
+            "severity": "note",
+            "note": "Mild: a hypothetical death is the puzzle hook (§3.7 discourages deaths as hooks). It is a standard physics myth with no real victim, so acceptable; 'hurt' could replace 'kill' only with a re-check."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, checker_doubt) rests on knowledge alone in both checks, with no dataset or web evidence for it in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Claim c1 also matches the known myth penny-from-skyscraper, which only dataset or web evidence in a confirming check clears (rule 5). B also flags a mild sensitivity point: a hypothetical death is the hook (§3.7). Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T04:50:16Z"
+    }
+  },
+  "format": "tf",
+  "stem": "A coin dropped from the top of a skyscraper falls fast enough to kill a person on the ground below.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.201,
+    "estimator": "v0"
+  }
+}

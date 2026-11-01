@@ -1,0 +1,220 @@
+{
+  "id": "p.soc.0169",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["institutions", "education", "morocco"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Fatima al-Fihri, a merchant's daughter, founded al-Qarawiyyin in Morocco as a mosque and place of learning in 859. Bologna, often called Europe's oldest university, dates its founding to 1088.",
+  "learnMore": "University of al-Qarawiyyin",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Al-Qarawiyyin in Fez was founded in 859 as a mosque with a centre of learning."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The University of Bologna dates its founding to 1088."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Al-Qarawiyyin was founded by Fatima al-Fihri, the daughter of a wealthy merchant."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The University of Bologna is often described as the oldest university in Europe."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: geonames-cities confirms Bologna, IT; no dataset covers foundings, so c1, c2 and c4 need web evidence. rivalTest: Bologna's fame as the oldest university pulls players to it, so counterintuitive is true; the gap of 229 years makes the answer robust to either founding date. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: fair everywhere; moves the history of learning beyond Europe. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 29 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 4. doubts: al-Qarawiyyin was a mosque school before it was a university in the modern sense, so the label names the institution, not 'the university', and c1 says mosque with a centre of learning. riskReason: counterintuitive is true, so the key label claims are high under C26; the CNT-1 claim schema has no 'counterintuitive' riskReason, so they carry date, the trigger the claim also holds.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c911d59e97874696abe43429d1daa7a02958837c3f36b2d25c1aa92f36eab3fb",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Al-Qarawiyyin in Fez",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fatima al-Fihri founded the Qarawiyyin mosque in Fez in 859 (some accounts say 857), and it grew into a famous centre of learning.",
+              "confidence": "certain"
+            },
+            "note": "859 is the traditional date. Some historians date the teaching institution later, but every proposed founding date is centuries before 1088, so the comparison holds. High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The University of Bologna takes 1088 as its founding year.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fatima al-Fihri was the daughter of a wealthy merchant from Kairouan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bologna is commonly called the oldest university in Europe, or the oldest in continuous operation.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (superlative): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bee02f97336582458f0db9ca53de4ee41d71b7606bb85846359b14c03ce1b016",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Al-Qarawiyyin in Fez",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fatima al-Fihri founded the al-Qarawiyyin mosque in Fez in 859, and it grew into a major centre of learning.",
+              "confidence": "certain"
+            },
+            "note": "859 is the founding date of the mosque; the teaching role developed later and the formal university title is 20th century. The comparison is of founding years only, and the gap to Bologna is over two centuries, so the key is safe. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The University of Bologna dates its founding to 1088, a traditional date.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Al-Qarawiyyin was founded by Fatima al-Fihri, a wealthy merchant's daughter.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bologna is often described as the oldest university in Europe.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Whether al-Qarawiyyin counts as a 'university' is disputed, and its 859 date is the mosque's. The item sidesteps this by comparing founding years of the two institutions and by not calling al-Qarawiyyin a university; keep it that way and avoid 'oldest university' wording in the stem."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (label, date), c2 (label, date) and c4 (explanation, superlative) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims. Keep 'oldest university' out of any redraft's stem (B).",
+      "decidedAt": "2026-11-01T04:34:42Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which was founded first?",
+  "a": "Al-Qarawiyyin in Fez",
+  "b": "The University of Bologna",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year founded",
+  "unit": "year",
+  "values": {
+    "a": 859,
+    "b": 1088
+  },
+  "valueDisplay": {
+    "a": "859",
+    "b": "1088"
+  },
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.283,
+    "estimator": "v0"
+  }
+}

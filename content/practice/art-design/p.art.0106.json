@@ -1,0 +1,186 @@
+{
+  "id": "p.art.0106",
+  "status": "active",
+  "category": "art",
+  "tags": ["paintings", "post-impressionism", "flowers"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Van Gogh painted several in Arles in 1888 to decorate the room of his friend Paul Gauguin, who was coming to stay with him.",
+  "learnMore": "Sunflowers (Van Gogh series)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Vincent van Gogh painted the Sunflowers series of still lifes."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Degas, Cézanne and Seurat did not paint the Sunflowers series."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Van Gogh painted several of his Sunflowers in Arles in 1888 to decorate a room for Paul Gauguin's stay."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: moma-artists has Van Gogh (ConstituentID 2206, Dutch, 1853 to 1890) and tate-artists (id 1182); neither covers the series, so c3 needs a source. Rival test: I left out Monet and Gauguin on purpose: Monet painted a single bouquet of sunflowers and Gauguin painted sunflower still lifes in 1901, so either could be argued; Degas, Cézanne and Seurat never made sunflower series; against the key, nothing. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: among the most reproduced paintings in the world. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0235ab8a3c81b5110cab1ba385540f48dbee648c2a7a5351720372bb3bd3ee80",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "Vincent van Gogh",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Van Gogh painted the Sunflowers still lifes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Degas, Cézanne and Seurat did not paint them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In August 1888 in Arles van Gogh painted four Sunflowers canvases to decorate the room meant for Gauguin in the Yellow House.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4dabc45ce638ae5148c6a3e2d5ed852154ae0c7f882a744609707ab1c86cd5b6",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "Vincent van Gogh",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Vincent van Gogh painted the Sunflowers still lifes (Paris 1887, Arles 1888-89).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Degas, Cézanne and Seurat are not known for a Sunflowers series.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In August 1888 Van Gogh painted sunflowers in Arles to decorate the guest room of the Yellow House for Gauguin's stay, and repeated them in January 1889.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, date) rests on knowledge alone in both checks: checker A's searches ran out and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Only explanation facts lack evidence: redraft under a new id with them evidenced, bounded or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which painter made the famous Sunflowers series of still lifes?",
+  "answer": "Vincent van Gogh",
+  "wrong": ["Edgar Degas", "Paul Cézanne", "Georges Seurat"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.93,
+    "spread": 0.286,
+    "estimator": "v0"
+  }
+}

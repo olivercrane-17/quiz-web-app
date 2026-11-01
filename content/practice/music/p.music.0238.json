@@ -1,0 +1,185 @@
+{
+  "id": "p.music.0238",
+  "status": "active",
+  "category": "music",
+  "tags": ["instruments", "kazoo", "acoustics"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Humming or singing makes a thin membrane inside vibrate and buzz, while plain blowing makes almost no sound. Musicologists class the kazoo with drums, as a membranophone.",
+  "learnMore": "Kazoo",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "A kazoo sounds when the player hums or sings into it, and plain blowing makes little or no sound."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A kazoo's buzz is made by a thin membrane that vibrates with the player's voice."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In the Hornbostel-Sachs classification the kazoo is a membranophone, the class that also contains drums."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the statement and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers instrument acoustics, so c1 needs web evidence from the checkers. I used no WebSearch. Rival test: argued for 'false': it looks like a wind instrument you blow, which is the trap. Argued against the key: the membrane only buzzes in response to the voice; blowing without voicing gives little more than a breathy hiss. c1 is high because it is the key claim of a counterintuitive item (C26 floor); the schema's riskReason list has no counterintuitive value, so it carries checker_doubt. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the kazoo is a cheap toy instrument known in many countries. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: c1 says 'little or no sound' to allow for the faint hiss of plain blowing.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0e5291127f62da822ca74049b40cddb0f1c4d62a6847c537526a173bb138d706",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A kazoo only buzzes when the player hums or sings into it; blowing alone gives almost no sound.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The buzz comes from a thin membrane that vibrates with the player's voice.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Hornbostel-Sachs classes the kazoo as a membranophone (a mirliton), the class that also holds drums.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f87f60be568fd5b60eadf3f9c952fb488a35836d6c7ecb892dcf00af028ef0d2",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A kazoo sounds when the player hums or sings into it, and plain blowing makes little or no sound.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: a pedant can say the player exhales through it, but the standard description is that you vocalize, not blow as into a whistle."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The kazoo's buzz is made by a thin membrane vibrating with the player's voice.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the Hornbostel-Sachs system the kazoo is a membranophone (a mirliton), the class that also holds drums.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c1 (checker_doubt) rests on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sci.0127",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "A kazoo makes its buzzing sound when the player hums into it, rather than blows.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.74,
+    "spread": 0.251,
+    "estimator": "v0"
+  }
+}

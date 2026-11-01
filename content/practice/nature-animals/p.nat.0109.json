@@ -1,0 +1,294 @@
+{
+  "id": "p.nat.0109",
+  "status": "active",
+  "category": "nat",
+  "tags": ["plants", "carnivorous-plants", "north-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "It grows in boggy coastal plains where regular wildfires stop taller plants shading it out. Its trap shuts when trigger hairs are touched more than once in quick succession, so raindrops rarely fool it.",
+  "learnMore": "Venus flytrap",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The Venus flytrap grows wild in wetlands of North and South Carolina in the United States."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Venus flytrap does not grow wild in the Amazon rainforest, on Borneo or in Madagascar."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Venus flytrap habitat depends on regular fires that keep taller plants from shading the flytraps."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A Venus flytrap's trap closes when its trigger hairs are touched more than once within a short time."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Needing repeated touches helps the trap avoid closing on raindrops and debris."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed. c1 is high because it is the key of a counterintuitive item, so C26 sets it high; the tooling's riskReason enum has no counterintuitive value yet (guide v1.1 adds one), so checker_doubt stands in for it. I kept 'only' out of c1: the plant's whole native range lies in the Carolinas, but the claim does not need the word. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: tropical rainforests are the planted trap: the Amazon has sundews, and Borneo and eastern Madagascar have pitcher plants, so all three tempt anyone who links carnivorous plants with jungles. Introduced populations elsewhere in the United States do not make any distractor right. The answer names the two Carolinas rather than the country, which is the real surprise and keeps it from sharing a bare 'United States' answer with unrelated items (dedupe). volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: the plant is sold and known worldwide; the key names two US states, but players reach it by rejecting the tropics, not through local knowledge. style: Oxford spelling, plain hyphens only, explanation of 34 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none on the key. c3 is the usual account of why fire suppression harms flytraps; c4 and c5 state the two-touch rule without a number word.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "92371e02db831b420757d9ee217f179ae1e8005588762e4476dfcb2df9c16ab3",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "The Carolinas, USA",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "where is the Venus flytrap native in the wild, and do mature sunflower heads keep tracking the sun or stay facing east",
+              "results": [
+                {
+                  "title": "Venus flytrap",
+                  "url": "https://en.wikipedia.org/wiki/Venus_flytrap"
+                },
+                {
+                  "title": "Venus flytrap",
+                  "url": "https://www.britannica.com/plant/Venus-flytrap"
+                },
+                {
+                  "title": "Venus flytrap - Dionaea muscipula",
+                  "url": "https://www.kew.org/plants/venus-flytrap"
+                },
+                {
+                  "title": "Dionaea muscipula J.Ellis",
+                  "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:275898-2/general-information"
+                },
+                {
+                  "title": "Venus flytrap surveys",
+                  "url": "https://www.fws.gov/story/2020-11/venus-flytrap-surveys"
+                },
+                {
+                  "title": "How does the Venus flytrap work?",
+                  "url": "https://www.kew.org/read-and-watch/venus-flytrap-creepy-carnivorous-plant"
+                },
+                {
+                  "title": "Species Status Assessment For Venus Flytrap (Dionaea muscipula) Version 1.1",
+                  "url": "https://iris.fws.gov/APPS/ServCat/DownloadFile/228182"
+                },
+                {
+                  "title": "Venus flytrap - Scholars",
+                  "url": "https://kids.britannica.com/scholars/article/Venus-flytrap/75059"
+                },
+                {
+                  "title": "Venus's-flytrap - Students",
+                  "url": "https://kids.britannica.com/students/article/Venuss-flytrap/277567"
+                },
+                {
+                  "title": "Venus's-flytrap - Kids",
+                  "url": "https://kids.britannica.com/kids/article/Venuss-flytrap/353896"
+                }
+              ],
+              "summaryExcerpt": "Venus flytrap (Dionaea muscipula): It grows wild only on the East Coast of the U.S., in the Carolinas. Outside cultivation, it is native only to the coastal bogs of North and South Carolina, specifically within a 100-kilometer (62-mile) radius of Wilmington, North Carolina. Its habitat is nutrient-poor wetlands. It is found in bogs, wet savannahs, and canebrakes. Populations outside that area in Florida and Washington state are naturalized or introduced, not native.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Kew (Plants of the World Online), the US Fish and Wildlife Service, Britannica and Wikipedia are in the list. The naturalized Florida and Washington populations are not among the options, so no second answer. The sunflower half of this query returned nothing; p.nat.0150 has its own search."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dionaea is endemic to the coastal plain of the Carolinas and does not grow wild in the Amazon, on Borneo or in Madagascar.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Its wet pine savannas need frequent fires to clear taller competitors; fire suppression is one of its main threats.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The trap shuts when trigger hairs are touched twice within roughly 20 to 30 seconds.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The two-touch rule keeps single touches such as raindrops or debris from springing the trap.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5d1d6dff6ae43e761b91d81c3a2fce7a8660bee6a6981215ac92923755a71c6d",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "The Carolinas, USA",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Venus flytrap is native only to a small coastal area of North and South Carolina.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It does not grow wild in the Amazon, on Borneo or in Madagascar; the pitcher plants there are different plants.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Its bog and savanna habitat depends on regular fire that keeps taller plants from shading it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The trap closes when a trigger hair is touched twice within about twenty seconds.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The two-touch rule stops the trap closing on raindrops and debris.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 5 claims confirmed in both checks; high-risk c1 (web in A). Style, distractors and balance reviewed. The key's form ('The Carolinas, USA') differs from the three tropical options, but the tropical guess is the trap and the estimate is 0.30.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.nat.0233",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Where does the Venus flytrap grow wild?",
+  "answer": "The Carolinas, USA",
+  "wrong": [
+    "The Amazon rainforest",
+    "Borneo's rainforests",
+    "Eastern Madagascar"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.198,
+    "estimator": "v0"
+  }
+}

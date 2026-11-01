@@ -1,0 +1,318 @@
+{
+  "id": "p.soc.0252",
+  "status": "checking",
+  "category": "soc",
+  "tags": ["customs", "mourning", "china", "colours"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Mourners traditionally wore plain white clothing, while red, the colour of luck and joy, was kept for weddings and festivals. White is also the mourning colour in Hindu tradition.",
+  "learnMore": "Chinese funeral rituals",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "White is the traditional colour of mourning in Chinese culture."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Black, red and purple are not the traditional Chinese colours of mourning."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Traditional Chinese mourning clothes are plain white."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Red, associated with luck and joy, is the traditional colour of Chinese weddings and festivals."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "White is the traditional colour of mourning in Hindu tradition."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: customs and etiquette. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. Counterintuitive is true, so the key claim is high under C26; the claim schema has no 'counterintuitive' riskReason, so checker_doubt stands in. datasets: no pinned dataset covers this; all claims are standard reference knowledge, c1 high because the item is counterintuitive. rivalTest: black is the planted trap from Western custom; red is the wedding colour. Argued against the key: black armbands and dark clothes also appear at modern Chinese funerals under Western influence, which is why the stem says 'traditional'. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: fair everywhere; players from East and South Asia will often know it. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 29 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 4 (medium): Western players reach for black. doubts: none. dedupe: C22 flags a near-duplicate of p.sci.0104 (the Sun's colour seen from space); the pair shares only the answer word, not the fact, so related_ok is suggested to the editor.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "572896f99d900c9ee8d0fbff019f663952bc1f5cdeb958c6f8bd91107048e04d",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "White",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "White is the traditional colour of mourning in China.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Black, red and purple are not the traditional Chinese mourning colours.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Traditional Chinese mourning dress is plain white or undyed cloth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Red, the colour of luck and joy, is the traditional colour of Chinese weddings and festivals.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "White is the traditional mourning colour in Hindu tradition.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e401827057c50d07dd63e992fc3e93fe171e3eda48e0e42ce65816aaf1222576",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "White",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "White (undyed hemp or cloth) is the traditional Chinese mourning colour; funerals are called 'white affairs' (baishi).",
+              "confidence": "certain"
+            },
+            "note": "Rival test: black is now also worn at Chinese funerals, but the stem asks for the traditional colour."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Red and purple are not mourning colours, and black is a more recent addition rather than the old ritual colour, but I cannot rule out regional or period uses of black or dark blue in later stages of mourning.",
+              "confidence": "likely"
+            },
+            "note": "Uncertain: the claim says black is not a traditional Chinese mourning colour. Black clothes and armbands are now common at Chinese funerals, and some regions and periods used dark colours in later mourning stages. It needs a source, or a softer claim and a different distractor."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Traditional Chinese mourning dress was plain, undyed hemp or white cloth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Red is the colour of luck, joy, weddings and festivals in Chinese culture.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hindu mourners traditionally wear white.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "fix",
+            "note": "Black is a defensible second answer for a modern reader, because black clothing is now standard at Chinese funerals. The stem's 'traditional' carries the key. Swap Black for a colour with no mourning use (Yellow or Green) or soften claim c2 and source it. A changed option needs a fresh refute check."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-psoc02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "529b75e6c26ddc540f4b6492434729626680704bb3c29a3e13621242046ff9b3",
+      "startedAt": "2026-11-01T05:09:22Z",
+      "finishedAt": "2026-11-01T05:16:35Z",
+      "coldSolve": {
+        "answerGiven": "White",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "In classical Chinese funeral custom the mourning dress is undyed white hemp or sackcloth, and funerals are spoken of as white affairs, weddings as red ones.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it on knowledge. It is high-risk (checker_doubt) with no external evidence in any check, so rule 3 still needs dataset or web evidence. None could be gathered: the WebSearch call was refused (the turn's shared limit of 200 calls was used up) and no pinned dataset covers it. This knowledge result counts neither as a tiebreak result nor for the high-risk rule (§9.5.3, §9.7)."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The classical mourning dress is white or undyed hemp, and black armbands and black clothes spread with Western custom in the 20th century. I also recall, without being able to confirm it, customs in parts of southern China and Southeast Asia where the deceased's children wear black and later generations of descendants wear other colours, red included for great-great-grandchildren.",
+            "confidence": "likely"
+          },
+          "note": "The disputed claim: B left it uncertain. I side with B. As a blanket negative about black (and, less so, red) it goes beyond what I can certify from knowledge, and a tiebreak needs dataset or web evidence on it. None could be gathered: the WebSearch call was refused (the turn's shared limit of 200 calls was used up) and no pinned dataset covers it. It stays unconfirmed."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Traditional Chinese mourning clothes are white: strictly coarse undyed hemp or sackcloth, white to off-white, so plain white is a fair simplification.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it. Standard risk, so a certain knowledge check confirms it. It states the main tradition, which the regional exceptions in my c2 note do not overturn."
+        },
+        {
+          "claimId": "c4",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "everyday",
+            "restatement": "Red stands for luck and joy in Chinese culture and is the colour of weddings and of festivals such as the Lunar New Year.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed. Standard risk."
+        },
+        {
+          "claimId": "c5",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Hindu mourners wear white at funerals, and widows traditionally wore white.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed. Standard risk."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "Checker doubt on c2 (the record schema has no checker_doubt type, so it is filed as wording). This tiebreak could not settle c2: the WebSearch call was refused because the turn's shared limit of 200 calls was used up, and no pinned dataset covers mourning colours. Re-run the tiebreak (content:record with --replace) with a Tier A or B source for c2, and one for c1, which is high-risk with knowledge only in every check. Or soften c2 to the classical white mourning dress and replace the Black option with a colour that has no mourning use in any Chinese custom. That changes an option, so it needs a fresh refute check (§9.7)."
+        },
+        {
+          "type": "ambiguity",
+          "severity": "note",
+          "note": "On B's ambiguity fix: the stem's 'traditional' anchors White, so Black answers the modern custom rather than the question asked, and I would rate it a note once c2 is sourced. Swapping Black removes the doubt either way. Screen any replacement against the generation-colour customs I recall (unconfirmed here), in which later descendants may wear blue, green, yellow or red, so Yellow and Green, the colours B suggested, may not be clean."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    }
+  },
+  "format": "mc",
+  "stem": "In traditional Chinese culture, which colour is worn for mourning?",
+  "answer": "White",
+  "wrong": ["Black", "Red", "Purple"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.312,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "id": "p.film.0239",
+  "status": "active",
+  "category": "film",
+  "tags": ["performers", "awards", "malaysia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "She was the first Asian woman to win Best Actress. Decades earlier she starred in the Bond film Tomorrow Never Dies (1997) and in Crouching Tiger, Hidden Dragon (2000).",
+  "learnMore": "Michelle Yeoh",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Michelle Yeoh won the Academy Award for Best Actress for Everything Everywhere All at Once (2022)."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "risk": "standard",
+      "text": "Michelle Yeoh was born in Malaysia."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Gong Li, Zhang Ziyi and Maggie Cheung did not win an Oscar for Everything Everywhere All at Once."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Michelle Yeoh was the first Asian woman to win the Academy Award for Best Actress."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Michelle Yeoh starred in Tomorrow Never Dies (1997) and in Crouching Tiger, Hidden Dragon (2000)."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Zhang Ziyi is the strongest pull, as Yeoh's co-star in Crouching Tiger, Hidden Dragon; Gong Li and Maggie Cheung are other leading stars of Chinese-language cinema, none born in Malaysia. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a US film with a Malaysian-born star; the career facts are public achievements only. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 29 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1d565d81414be1ffce6d4ed8d459af725744371af93b9663eeab56b41af0cdd4",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "Michelle Yeoh",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Michelle Yeoh won Best Actress at the 2023 ceremony for Everything Everywhere All at Once (2022).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yeoh was born in Ipoh, Malaysia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gong Li, Zhang Ziyi and Maggie Cheung are not in that film and won nothing for it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Her win was the first Best Actress Oscar for an Asian woman.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "She played Wai Lin in Tomorrow Never Dies (1997) and Yu Shu Lien in Crouching Tiger, Hidden Dragon (2000).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "12bbec9f8b97a726ff6c61e304d53bbdb8cd87357b3900933b1f9b06798fdc1e",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "Michelle Yeoh",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Michelle Yeoh won the Best Actress Oscar for Everything Everywhere All at Once.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Michelle Yeoh was born in Malaysia (Ipoh).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Gong Li, Zhang Ziyi and Maggie Cheung did not win an Oscar for that film.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the distractors are Chinese and Hong Kong stars, so \"Malaysian-born\" is what decides, and it fits only Yeoh."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yeoh was the first Asian woman to win the Best Actress Oscar.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Yeoh starred in Tomorrow Never Dies (1997) and Crouching Tiger, Hidden Dragon (2000).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1, c4 and c5 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0237",
+      "score": 0.24,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Malaysian-born actress won the Oscar for Best Actress for Everything Everywhere All at Once (2022)?",
+  "answer": "Michelle Yeoh",
+  "wrong": ["Gong Li", "Zhang Ziyi", "Maggie Cheung"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.498,
+    "estimator": "v0"
+  }
+}

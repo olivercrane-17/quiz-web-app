@@ -1,0 +1,206 @@
+{
+  "id": "p.music.0262",
+  "status": "cut",
+  "category": "music",
+  "tags": ["theory", "tempo", "metronomes"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "A metronome set to 60 BPM ticks once a second. Beethoven was among the first composers to add metronome marks to his scores, from 1817.",
+  "learnMore": "Tempo",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "BPM stands for beats per minute."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "BPM does not stand for bars per minute or beats per measure."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A metronome set to 60 beats per minute ticks once per second."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Beethoven was among the first composers to give metronome markings for his works, publishing marks for his symphonies in 1817."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers this; c3 is arithmetic (60 beats in 60 seconds) that a calculation confirms, and c4 needs web evidence. I used no WebSearch. Rival test: argued for each distractor: bars per minute and beats per measure are the two plausible confusions; a fourth option would be filler, so the item has three. Argued against the key: undisputed. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: BPM is used the same way in every country. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8ff78a4168a5cb8ad2d461e1ed765d4d3edc42bbdd4621c57878c4229dbc4515",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "Beats per minute",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "BPM means beats per minute.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "BPM does not mean bars per minute or beats per measure.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Sixty beats spread over sixty seconds is one tick a second.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Beethoven was an early adopter of Maelzel's metronome and published metronome marks for his first eight symphonies in 1817.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "48ebf18e767f441b6113b12fda7a9eebe46772a9d1d15f4654b5eafbddddae22",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "Beats per minute",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "BPM stands for beats per minute.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: ballroom dance tempo is sometimes given in 'bars per minute', but the stem scopes it to a metronome or music software."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "BPM does not stand for bars per minute or beats per measure in this sense.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A metronome set to 60 beats per minute ticks once a second.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Beethoven was among the first composers to give metronome marks, publishing them for his symphonies in 1817.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Ballroom dance tempo is often quoted in bars per minute and abbreviated BPM, so 'Bars per minute' is not a silly distractor. The stem's scope ('on a metronome or in music software') settles it, so no change is needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c3 (number) and c4 (first) rest on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The question itself rests on standard claims confirmed at certain, so a redraft under a new id can keep it with an explanation built from standard or evidenced facts.",
+      "decidedAt": "2026-11-01T04:32:21Z"
+    }
+  },
+  "format": "mc",
+  "stem": "On a metronome or in music software, what does BPM stand for?",
+  "answer": "Beats per minute",
+  "wrong": ["Bars per minute", "Beats per measure"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.92,
+    "spread": 0.336,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,245 @@
+{
+  "id": "p.food.0214",
+  "status": "active",
+  "category": "food",
+  "tags": ["cheese", "cyprus", "dairy"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Its curds are heated in hot whey, which tightens their proteins and gives the cheese its high melting point. It is traditionally made from sheep's and goat's milk.",
+  "learnMore": "Halloumi",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Halloumi is a cheese from Cyprus."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Halloumi does not come from Crete, Sicily or Malta."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In making halloumi, the curds are heated in hot whey."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Heating the curds tightens their protein network, which lets halloumi soften without melting when grilled or fried."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Halloumi is traditionally made from sheep's and goat's milk."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. C22 flags a shared answer with p.geo.0121, a flag question about Cyprus; the facts are unrelated (a cheese against a flag), so I left the key as the island's name. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Crete and Sicily have their own famous cheeses, and Malta is a nearby island; none is halloumi's home. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: halloumi is sold widely in Europe, the Middle East, Australia and beyond; others can reason from Mediterranean islands. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: many shoppers know it is Cypriot. Doubts: modern halloumi often includes cow's milk, so c5 says 'traditionally'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5302c7d73bdc17809ec157b2bfbdf727f641d9536d909f600cad67873038ec72",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Cyprus",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Halloumi is a Cypriot cheese.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Halloumi is not from Crete, Sicily or Malta.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Halloumi curds are cooked in hot whey.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cooking the curds tightens the protein network, so halloumi softens but does not melt when grilled or fried.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Traditional halloumi is made from sheep's and goat's milk (cow's milk is common now too).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "94cbb6d29d393ff3b63717bad15116935dc7fed159c13e16d3caec202dcd1e5e",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Cyprus",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Halloumi is a Cypriot cheese.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Halloumi does not come from Crete, Sicily or Malta.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Halloumi curds are cooked in hot whey.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cooking the curd in hot whey gives a dense, heat-stable protein structure, so halloumi softens instead of melting.",
+              "confidence": "certain"
+            },
+            "note": "A simplification: low moisture and a fairly high pH also matter, but the statement is not contradicted."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Halloumi is traditionally made from sheep's and goat's milk.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. 'Come from' in c2 is a place of origin, not an etymology, so standard risk is honest. Dedupe flag p.geo.0121 shares the answer Cyprus but tests the flag, a different fact, so related_ok (§9.9 rule 5). B's note that c4 simplifies the chemistry contradicts nothing.",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "nearestId": "p.geo.0121",
+      "score": 0.544,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Halloumi, a cheese firm enough to grill or fry without melting, comes from which island?",
+  "answer": "Cyprus",
+  "wrong": ["Crete", "Sicily", "Malta"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.426,
+    "estimator": "v0"
+  }
+}

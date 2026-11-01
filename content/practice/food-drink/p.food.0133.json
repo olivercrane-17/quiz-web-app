@@ -1,0 +1,280 @@
+{
+  "id": "p.food.0133",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-words", "myths", "salads"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "It takes its name from Caesar Cardini, an Italian-born restaurateur usually credited with creating it at his restaurant in Tijuana, Mexico, in the 1920s.",
+  "learnMore": "Caesar salad",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The Caesar salad is not named after Julius Caesar; it is named after the restaurateur Caesar Cardini."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Caesar Cardini, an Italian-born restaurateur, is usually credited with creating the Caesar salad at his restaurant in Tijuana, Mexico, in the 1920s."
+    },
+    {
+      "id": "c3",
+      "role": "key",
+      "risk": "standard",
+      "text": "A classic Caesar salad is made with romaine lettuce and Parmesan cheese."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c2). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: nothing supports a Roman link; the only dispute is whether Caesar Cardini or his brother Alex created the salad, and the name is Caesar's either way, so c2 says 'usually credited'. The true description of the salad (c3) only sets the scene, so the false naming is the whole statement's key. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the salad is on menus worldwide, and the myth is common everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 24 words. Myths: screened against content/reference/myths.json; c1 matches caesar-salad-julius by design, because it debunks that myth; the screen needs web evidence in one check. Mystery and encore checks: not applicable to a practice item. Seed: 3: many players suspect the Roman link is too neat. Doubts: none on the key.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4fd11c6161e73d2b9753fe5f60c6685bbc91259acbbfa98945caee5befdc8708",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Caesar salad origin named after restaurateur Caesar Cardini Tijuana 1920s",
+              "results": [
+                {
+                  "title": "Caesar salad",
+                  "url": "https://en.wikipedia.org/wiki/Caesar_salad"
+                },
+                {
+                  "title": "Caesar salad",
+                  "url": "https://www.britannica.com/topic/Caesar-salad"
+                },
+                {
+                  "title": "Caesar's",
+                  "url": "https://en.wikipedia.org/wiki/Caesar's"
+                },
+                {
+                  "title": "Caesar Cardini",
+                  "url": "https://en.wikipedia.org/wiki/Caesar_Cardini"
+                },
+                {
+                  "title": "History of Caesar Salad",
+                  "url": "https://www.britannica.com/video/caesar-salad-Caesar-Cardini/-286650"
+                },
+                {
+                  "title": "Who invented the Caesar salad? - Students",
+                  "url": "https://kids.britannica.com/students/assembly/view/286650"
+                },
+                {
+                  "title": "Julius Caesar",
+                  "url": "https://www.britannica.com/biography/Julius-Caesar-Roman-ruler"
+                },
+                {
+                  "title": "How Is Authentic Mustard Made?",
+                  "url": "https://www.britannica.com/video/Overview-mustard/-191676"
+                },
+                {
+                  "title": "Guéridon service",
+                  "url": "https://en.wikipedia.org/wiki/Gu%C3%A9ridon_service"
+                },
+                {
+                  "title": "Chapon",
+                  "url": "https://www.britannica.com/topic/chapon"
+                }
+              ],
+              "summaryExcerpt": "The Caesar salad is named after Cesare \"Caesar\" Cardini, an Italian-born restaurateur, not the Roman emperor.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Myth hit caesar-salad-julius: this claim is the debunking. The summary lists its sources as Britannica and Wikipedia; every result is Tier B."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Caesar salad origin named after restaurateur Caesar Cardini Tijuana 1920s",
+              "results": [
+                {
+                  "title": "Caesar salad",
+                  "url": "https://en.wikipedia.org/wiki/Caesar_salad"
+                },
+                {
+                  "title": "Caesar salad",
+                  "url": "https://www.britannica.com/topic/Caesar-salad"
+                },
+                {
+                  "title": "Caesar's",
+                  "url": "https://en.wikipedia.org/wiki/Caesar's"
+                },
+                {
+                  "title": "Caesar Cardini",
+                  "url": "https://en.wikipedia.org/wiki/Caesar_Cardini"
+                },
+                {
+                  "title": "History of Caesar Salad",
+                  "url": "https://www.britannica.com/video/caesar-salad-Caesar-Cardini/-286650"
+                },
+                {
+                  "title": "Who invented the Caesar salad? - Students",
+                  "url": "https://kids.britannica.com/students/assembly/view/286650"
+                },
+                {
+                  "title": "Julius Caesar",
+                  "url": "https://www.britannica.com/biography/Julius-Caesar-Roman-ruler"
+                },
+                {
+                  "title": "How Is Authentic Mustard Made?",
+                  "url": "https://www.britannica.com/video/Overview-mustard/-191676"
+                },
+                {
+                  "title": "Guéridon service",
+                  "url": "https://en.wikipedia.org/wiki/Gu%C3%A9ridon_service"
+                },
+                {
+                  "title": "Chapon",
+                  "url": "https://www.britannica.com/topic/chapon"
+                }
+              ],
+              "summaryExcerpt": "The Caesar salad is named after Cesare \"Caesar\" Cardini, an Italian-born restaurateur, not the Roman emperor. Sources agree he created it in Tijuana in 1924, though some details are disputed.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The disputed details are rival credits (his brother Alex, a cook named Livio Santini) for inventing it, which the claim's 'usually credited' already allows; no conflict with the claim as written."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A classic Caesar salad is made with romaine (cos) lettuce and Parmesan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "05d76094d9d877a5d5b5c0eea107921a722ed77b07b73a1ee3b45df64d10b6e2",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The salad is named for the restaurateur Caesar Cardini, not for Julius Caesar.",
+              "confidence": "certain"
+            },
+            "note": "Myth hit. The authorship of the salad is itself disputed (Cardini's brother and a staff member also claimed it), but nobody claims it is named for Julius Caesar, so the false verdict is safe. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Caesar Cardini, an Italian-born restaurateur, is usually credited with creating the salad in Tijuana in the 1920s.",
+              "confidence": "certain"
+            },
+            "note": "Hedged with 'usually credited'; keep the hedge. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The classic Caesar salad uses romaine lettuce and Parmesan, with croutons, egg, lemon and Worcestershire sauce in the dressing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. Myth hit caesar-salad-julius is cleared: both checks confirm the debunking c1, with Tier B web evidence in pass A; c2 keeps its usually credited hedge (§9.9 rule 5).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": [
+        {
+          "claimId": "c1",
+          "mythId": "caesar-salad-julius",
+          "cleared": true
+        }
+      ]
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The Caesar salad, made with romaine lettuce and Parmesan, is named after Julius Caesar.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.355,
+    "estimator": "v0"
+  }
+}

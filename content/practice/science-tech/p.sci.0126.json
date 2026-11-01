@@ -1,0 +1,208 @@
+{
+  "id": "p.sci.0126",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["physics", "light"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Light covers about 300,000 km each second, and the Equator is about 40,000 km long, so a beam could circle it about seven and a half times.",
+  "learnMore": "Speed of light",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Light in a vacuum could travel around Earth's Equator about 7.5 times in one second."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In one second light could circle the Equator about 7.5 times, not 1, 25 or 100 times."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Light travels at about 300,000 km per second in a vacuum."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Earth's Equator is about 40,000 km long."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers this; c1 and c2 are calculations from c3 and c4 (299,792 km/s / 40,075 km is about 7.48), and c3 and c4 need web evidence. rivalTest: 1 tempts players who think of light as fast but not that fast; 25 and 100 overshoot; the precise answer, about 7.48, rounds to 7.5. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 27 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. The stem says 'could', because light does not follow a curved path on its own. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "281c8a7647c26bacf6fe66f04eb83511fa32866c6fc18d64f99b52cedb77067e",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "7.5",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "299,792 km/s divided by the Equator's 40,075 km is about 7.48, about 7.5 laps a second.",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8). Pure arithmetic; content:record has no calculation method (§9.5.4), so it is recorded as knowledge. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The ratio is about 7.5, nowhere near 1, 25 or 100.",
+              "confidence": "certain"
+            },
+            "note": "Pure arithmetic; content:record has no calculation method (§9.5.4), so it is recorded as knowledge. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The speed of light in a vacuum is defined as exactly 299,792,458 m/s, about 300,000 km/s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Equator is about 40,075 km long.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4003e69fc08ae0adf4ef271a4013c9b5bf34f9a37fd83b653b25917069375ff1",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "7.5",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "299,792.458 km/s divided by an Equator of 40,075 km gives 7.48 laps a second (computed).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The same figure, 7.48, rules out 1, 25 and 100.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The speed of light in a vacuum is 299,792.458 km/s, about 300,000 km/s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Earth's equatorial circumference is about 40,075 km, so about 40,000 km.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The key 7.5 is the only non-integer among 1, 7.5, 25 and 100, a format cue that singles it out. Giving another option a decimal (for example 2.5 in place of 1) would remove it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, number), c2 (distractor, number), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced. For a redraft, checker B's note stands: 7.5 is the only option that is not a whole number, a format cue (§4), so give another option a decimal.",
+      "decidedAt": "2026-11-01T04:27:18Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In one second, light could travel around Earth's Equator about how many times?",
+  "answer": "7.5",
+  "wrong": ["1", "25", "100"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.159,
+    "estimator": "v0"
+  }
+}

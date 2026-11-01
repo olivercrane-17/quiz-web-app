@@ -1,0 +1,213 @@
+{
+  "id": "p.sport.0116",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["puzzles", "rubiks-cube", "hungary"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Rubik, who taught design in Budapest, built it to help students think about moving shapes in three dimensions. It took him about a month to solve his own puzzle.",
+  "learnMore": "Rubik's Cube",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Ernő Rubik invented the Rubik's Cube in Hungary in 1974."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The Rubik's Cube was not invented in Japan, Poland or Austria."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Rubik taught design in Budapest and made the cube to help students think about movement in three dimensions."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "It took Rubik about a month to solve his cube for the first time."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: no pinned dataset covers puzzles or inventors, so c1, c3 and c4 need web evidence from checker A. rivalTest: Japan is the guess for 'clever toy of the 1970s and 1980s'; Poland and Austria are Central European neighbours of similar names for players who half-remember. The cube's Hungarian origin is undisputed. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 29 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: c4 is reported in Rubik's own accounts as 'about a month'; it stays approximate on purpose. Players may know the cube was first sold as the Magic Cube; not used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0fe47304c58b5507c52f4c60a21cfe209d79dbbdd66c1864fb55d69a30d06d17",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Hungary",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ernő Rubik built the first cube in Budapest, Hungary, in 1974.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The cube was invented in Hungary, not in Japan, Poland or Austria.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rubik taught interior design at the Academy of Applied Arts and Crafts in Budapest. That he made the cube as a teaching aid for thinking about three-dimensional movement is widely repeated, but other accounts say his aim was the structural problem of a block whose parts turn without the whole falling apart.",
+              "confidence": "likely"
+            },
+            "note": "Checker doubt: accounts of his purpose disagree, and no search was possible in this run to settle it."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rubik is often said to have needed about a month to solve his own cube the first time, but accounts vary, and I cannot pin the figure.",
+              "confidence": "likely"
+            },
+            "note": "Checker doubt on the figure; needs a source or a bounded wording."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Checker doubt on c3: that Rubik built the cube to help students think about movement in three dimensions is widely repeated but contested; other accounts give the structural problem of a cube whose parts move independently. Rewrite to what all sources agree on (he taught design in Budapest) or source the purpose."
+          },
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Checker doubt on c4: 'about a month' to solve it for the first time could not be checked, and accounts vary. Source it or drop it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0772079334175ca6b7ed692b55e3632763462b1442b0b253136d665fe0bfd793",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Hungary",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ernő Rubik created the Magic Cube (Rubik's Cube) in Budapest in 1974.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rubik invented the cube in Hungary; there is no claim that it began in Japan, Poland or Austria.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rubik taught at the Budapest College of Applied Arts and built the cube as a classroom aid for three-dimensional movement.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rubik has said it took him about a month to solve his first cube.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "A revise, B pass. A left c3 (that Rubik built the cube to help students think about movement in three dimensions) and c4 ('about a month' to solve it) uncertain. The doubt is sound: accounts of his purpose disagree, and conflicting sources fail a claim as written (§9.5.2), so a tiebreak cannot confirm c3. The fix keeps only what all sources agree on, which changes claims, and high-risk c1 and c2 rest on knowledge alone. Cut. Redraft with the agreed facts (he taught design in Budapest) and evidence.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In which country did Ernő Rubik invent his famous cube in 1974?",
+  "answer": "Hungary",
+  "wrong": ["Japan", "Poland", "Austria"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.247,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "id": "p.lang.0147",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["world-languages", "persian", "middle-east"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Farsi comes from Parsi, after the region of Pars. Arabic has no p sound, so after the Arab conquest Parsi became Farsi. Persian is also spoken in Afghanistan and Tajikistan.",
+  "learnMore": "Persian language",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Persian (Farsi) is the official and main language of Iran."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The main languages of Iraq, Pakistan and Saudi Arabia are not Persian."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Farsi is the Arabicized form of Parsi, named after the region of Pars (Fars)."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Arabic has no p sound in its standard consonants."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Varieties of Persian are spoken in Afghanistan (Dari) and Tajikistan (Tajik)."
+    }
+  ],
+  "writerNotes": "Afghanistan and Tajikistan are kept out of the options because varieties of Persian are spoken there. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: mledoze-countries cca3=IRN languages {fas: 'Persian (Farsi)'}; IRQ lists Arabic, Aramaic and Sorani, PAK English and Urdu, SAU Arabic, none of them Persian; rival test: Iraq is the nearest pull through its name and neighbourhood; its main language is Arabic; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: Iran and Persian are known worldwide; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none; content:check pairs it with p.book.0141 (Persepolis) only through the shared answer Iran, a different fact, so I suggest related_ok",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "df3660dbfa8e6d642887ac0b44317fde60fa1998a79ce4af0f4097c67eb2f3de",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Iran",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=IRN, languages",
+              "excerpt": "IRN languages {\"fas\":\"Persian (Farsi)\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=IRQ, PAK and SAU, languages",
+              "excerpt": "IRQ languages {\"ara\":\"Arabic\",\"arc\":\"Aramaic\",\"ckb\":\"Sorani\"} | PAK languages {\"eng\":\"English\",\"urd\":\"Urdu\"} | SAU languages {\"ara\":\"Arabic\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Farsi is the Arabic-influenced form of Parsi, from Pars (Fars), the homeland of the Persians, because Arabic lacks a p.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Standard Arabic has no p sound among its consonants.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dari in Afghanistan and Tajik in Tajikistan are varieties of Persian.",
+              "confidence": "certain"
+            },
+            "note": "The pinned countries file lists Dari for AFG and Tajik for TJK; that both are Persian rests on knowledge."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ec3121c3f3faeacce7d4140ae318daa4a87363f724c8f503954e51ef5dac2bd2",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Iran",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=IRN languages",
+              "excerpt": "IRN: {\"fas\":\"Persian (Farsi)\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset lists Persian (Farsi) as Iran's only language."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=IRQ languages; cca3=PAK languages; cca3=SAU languages",
+              "excerpt": "IRQ: {\"ara\":\"Arabic\",\"arc\":\"Aramaic\",\"ckb\":\"Sorani\"}; PAK: {\"eng\":\"English\",\"urd\":\"Urdu\"}; SAU: {\"ara\":\"Arabic\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "None of the three lists Persian."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Farsi is the Arabic form of Parsi, named after the province of Pars (Fars).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Standard Arabic has no p sound, so p became f.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Dari in Afghanistan and Tajik in Tajikistan are varieties of Persian.",
+              "confidence": "certain"
+            },
+            "note": "Persian is also the main language of two other countries, but neither is among the options, so there is no second answer."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, etymology) rests on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. It missed by one claim, so the redraft is cheap.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Persian, also called Farsi, is the main language of which country?",
+  "answer": "Iran",
+  "wrong": ["Iraq", "Pakistan", "Saudi Arabia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.336,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "id": "p.film.0148",
+  "status": "cut",
+  "category": "film",
+  "tags": ["tv-series", "muppets", "britain"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "American networks turned the show down, so British producer Lew Grade backed it. It was taped at Elstree Studios, north of London.",
+  "learnMore": "The Muppet Show",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Muppet Show (1976 to 1981) was made in the United Kingdom, at Elstree Studios near London."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Muppet Show was not made in the United States, Canada or Australia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "US television networks declined to pick up The Muppet Show as a series."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "British producer Lew Grade's company backed The Muppet Show."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: The United States is the planted trap: Henson and the Muppets were American, and Sesame Street was made in New York. Canada and Australia are other English-speaking TV makers. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: made in the UK and shown worldwide; the trap is a plausible belief, not local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 22 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: Elstree Studios here means ATV's studios at Borehamwood, north of London; the explanation says only north of London.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "69121a561e61e56df644d112c9dd62b7e69835d8e70496f232eff4ede8c2e6b3",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "United Kingdom",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Muppet Show (1976 to 1981) was taped in England, at ATV's Elstree studios in Borehamwood, north of London.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was not made in the United States, Canada or Australia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The US networks passed on the show as a series.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lew Grade's ITC and ATV financed and produced it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'Elstree Studios' today usually means the film studios on Shenley Road, Borehamwood; The Muppet Show was taped at ATV's own Elstree studios on Clarendon Road (now BBC Elstree). 'ATV's studios at Elstree' would avoid the mix-up. The key is unaffected."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "16f2a78db1c7b4beba3c87381c0c3984a1cfbc37b413c8f1f76155491f6c5849",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "United Kingdom",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Muppet Show (1976 to 1981) was made in the United Kingdom at Elstree Studios.",
+              "confidence": "certain"
+            },
+            "note": "Counterintuitive because Henson was American; that is a plausible belief, not a misread word. 'Made' means taped in England with British backing."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It was not made in the United States, Canada or Australia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "US networks declined to take the show as a series.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lew Grade's company backed the show.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 rests on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). Redraft it under a new id once evidence can be gathered. Checker A also noted that 'Elstree Studios' is ambiguous: the show was taped at ATV's Elstree studios.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In which country was Jim Henson's The Muppet Show (1976 to 1981) made?",
+  "answer": "United Kingdom",
+  "wrong": ["United States", "Canada", "Australia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.22,
+    "spread": 0.164,
+    "estimator": "v0"
+  }
+}

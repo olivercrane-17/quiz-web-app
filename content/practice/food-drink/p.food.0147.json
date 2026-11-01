@@ -1,0 +1,358 @@
+{
+  "id": "p.food.0147",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-science", "food-history", "preserving"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Appert sealed food in glass bottles and boiled them, winning a French government prize, decades before Pasteur showed that microbes cause spoilage. Nobody yet knew why it worked.",
+  "learnMore": "Nicolas Appert",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Nicolas Appert published his method of preserving food by sealing it in bottles and heating them in 1810."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Louis Pasteur patented his process of heating wine to prevent spoilage, later called pasteurization, in 1865."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Appert received a prize from the French government for his food-preserving method."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Pasteur's work showing that microbes cause spoilage came decades after Appert's method."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c2). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Appert worked from the 1790s and Pasteur's experiments ran from the late 1850s, so any choice of dates (first trials, book, patent) keeps Appert first by decades. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Pasteur is a world-famous name; Appert is unknown almost everywhere, which is the trap. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: players assume the science came before the method. Doubts: c1 and c2 need dated evidence; the related guide example on tin cans (p.food.0003) is about Durand's 1810 patent, a different fact.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "61192273739ce5e76d29ea57277b7791956ae25ee758572190935bf2d28487f8",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Appert's method of bottling food",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "first electric refrigerators sold for home use in the 1910s; Nicolas Appert's book on preserving food in bottles published in 1810",
+              "results": [
+                {
+                  "title": "Nicolas Appert",
+                  "url": "https://www.britannica.com/biography/Nicolas-Appert"
+                },
+                {
+                  "title": "Canning",
+                  "url": "https://www.britannica.com/topic/canning-food-processing"
+                },
+                {
+                  "title": "Food preservation - Freezing, Storage, Technology",
+                  "url": "https://www.britannica.com/topic/food-preservation/Industrial-freezers"
+                },
+                {
+                  "title": "The Art of Preserving All Kinds of Animal and Vegetable Substances For Several Years",
+                  "url": "https://www.britannica.com/topic/The-Art-of-Preserving-All-Kinds-of-Animal-and-Vegetable-Substances-For-Several-Years"
+                },
+                {
+                  "title": "Of Krispo, Campbell’s, and Quaker Oats: When Brand Names Went International",
+                  "url": "http://blogs.britannica.com/2009/01/of-krispo-campbells-and-quaker-oats-the-first-brand-names/"
+                },
+                {
+                  "title": "Britannica",
+                  "url": "https://kids.britannica.com/kids/article/Paul-Bocuse/80352/related/main?page=2"
+                },
+                {
+                  "title": "canning summary",
+                  "url": "https://www.britannica.com/summary/canning-food-processing"
+                },
+                {
+                  "title": "food processing - Students",
+                  "url": "https://kids.britannica.com/students/article/food-processing/274375"
+                },
+                {
+                  "title": "Food Browse - Page 1",
+                  "url": "https://www.britannica.com/browse/Food/1"
+                },
+                {
+                  "title": "Alphabetical Browse",
+                  "url": "https://www.britannica.com/sitemap/c/28"
+                }
+              ],
+              "summaryExcerpt": "Britannica says the 12,000-franc prize awarded in 1810 required him to publish his findings, and they appeared that year as L'Art de conserver (The Art of Preserving All Kinds of Animal and Vegetable Substances for Several Years).",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Attributed to Britannica (Tier B; every result is a Britannica page). The summary adds that some sources date the invention to 1809; the measure is the year published or patented, so no conflict. An earlier call (counted here, query 'Nicolas Appert published his method of preserving food in sealed heated bottles in 1810 and won a French government prize; Louis Pasteur patented heating wine to prevent spoilage (pasteurization) in 1865') gave the January 1810 prize and its condition to publish but not the year of publication, so it is used for c2 only."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Nicolas Appert published his method of preserving food in sealed heated bottles in 1810 and won a French government prize; Louis Pasteur patented heating wine to prevent spoilage (pasteurization) in 1865",
+              "results": [
+                {
+                  "title": "Pasteurization",
+                  "url": "https://en.wikipedia.org/wiki/Pasteurization"
+                },
+                {
+                  "title": "Canning",
+                  "url": "https://en.wikipedia.org/wiki/Cannery"
+                },
+                {
+                  "title": "Timeline of historic inventions",
+                  "url": "https://en.wikipedia.org/wiki/Timeline_of_historic_inventions"
+                },
+                {
+                  "title": "Canned fish",
+                  "url": "https://en.wikipedia.org/wiki/Canned_fish"
+                },
+                {
+                  "title": "The Art of Preserving All Kinds of Animal and Vegetable Substances For Several Years",
+                  "url": "https://www.britannica.com/topic/The-Art-of-Preserving-All-Kinds-of-Animal-and-Vegetable-Substances-For-Several-Years"
+                },
+                {
+                  "title": "Nicolas Appert",
+                  "url": "https://en.wikipedia.org/wiki/Nicolas_Appert"
+                },
+                {
+                  "title": "Louis Pasteur",
+                  "url": "https://en.wikipedia.org/wiki/Louis_Pasteur"
+                },
+                {
+                  "title": "Nicolas Appert",
+                  "url": "https://www.britannica.com/biography/Nicolas-Appert"
+                },
+                {
+                  "title": "Pasteurization monitoring process",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/4841457"
+                }
+              ],
+              "summaryExcerpt": "Sources agree on the patent year but differ on the invention date. Wikipedia states that Pasteur patented the process, to fight the \"diseases\" of wine, in 1865.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Attributed to Wikipedia (Tier B). The 1864 date some sources give is for the invention, not the patent, and the measure is the year published or patented."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In 1810 the French government awarded Appert 12,000 francs on condition that he publish his method.",
+              "confidence": "certain"
+            },
+            "note": "Both calls' summaries describe the 12,000-franc award of 1810."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pasteur's work showing microbes cause spoilage dates from the late 1850s and 1860s, decades after Appert.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 2,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6829c8c2c62658318009a888957a7501f3452c5e3a2ed75669fd77ebe465b915",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Appert's method of bottling food",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nicolas Appert published his method of preserving food in sealed, heated bottles in 1810 (L'Art de conserver).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Louis Pasteur French patent 1865 process for preserving wine by heating \"pasteurization\" patented year",
+              "results": [
+                {
+                  "title": "Études Sur La Vin",
+                  "url": "https://ca.biblio.com/book/etudes-vin-pasteur-louis/d/1546702622"
+                },
+                {
+                  "title": "www.wiki.sanitarc.si",
+                  "url": "https://www.wiki.sanitarc.si/?p=340"
+                },
+                {
+                  "title": "# What is it Almond Steam Pasteurization?",
+                  "url": "https://www.marketscale.com/industries/food-beverage/almond-steam-pasteurization.md"
+                },
+                {
+                  "title": "Please ensure Javascript is enabled for purposes of website accessibility",
+                  "url": "https://rrauction.com/auctions/lot-detail/li/339629005363016/cat/0"
+                },
+                {
+                  "title": "Dear President [Jacques-Seraphin Lanquetin][Letter 6]",
+                  "url": "https://utmb-ir.tdl.org/items/451ad23e-4c0a-4704-a26a-ba998ccb5d81/full"
+                },
+                {
+                  "title": "lieu de naissance de pasteur",
+                  "url": "https://alcuinfonds.be/blog/lieu-de-naissance-de-pasteur/"
+                },
+                {
+                  "title": "www.wiki.sanitarc.si",
+                  "url": "https://www.wiki.sanitarc.si/1863/"
+                },
+                {
+                  "title": "034cfb66 0a37 41ff 8ccd f40889f386c1",
+                  "url": "https://bibliotheques-numeriques.defense.gouv.fr/impression/document/034cfb66-0a37-41ff-8ccd-f40889f386c1"
+                },
+                {
+                  "title": "a major step in insuring the health of wine pasteur 1863 1864",
+                  "url": "https://thesciencebookstore.com/books/2018/01/a-major-step-in-insuring-the-health-of-wine-pasteur-1863-1864.html"
+                },
+                {
+                  "title": "By: Carol White",
+                  "url": "https://sites.google.com/gse.cusd80.com/theindustrialrevolutionawebque/germ-theory"
+                }
+              ],
+              "summaryExcerpt": "Pasteur's wine-heating process was patented in 1865. The sources agree on the year, and one gives a specific date. ... A French national library record says on 11 April 1865, Louis Pasteur patented a method of heating wines so they keep their qualities during storage and can travel.",
+              "tiers": ["A", "B", "C"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "High-risk date claim. The search says the sources agree on 1865 and that a French national library record gives 11 April 1865; the summary does not name which result that is, so under section 9.5.2 the call counts at the lowest tier among the results it could have relied on. It also matches my own recollection. A year either side would not change the answer."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Appert received a prize from the French government (12,000 francs, in 1810) for his method.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Pasteur's work showing microbes cause spoilage began in the late 1850s and 1860s, about half a century after Appert's method.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. Label dates c1 and c2 carry Tier B web evidence (pass A, and pass B for c2), and the measure is the year published or patented (§9.9 rule 3).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.sci.0172",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Appert's method of bottling food",
+  "b": "Pasteur's method of pasteurizing",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year it was published or patented",
+  "unit": "year",
+  "values": {
+    "a": 1810,
+    "b": 1865
+  },
+  "valueDisplay": {
+    "a": "published 1810",
+    "b": "patented 1865"
+  },
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.19,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "id": "p.book.0202",
+  "status": "active",
+  "category": "book",
+  "tags": ["myths-and-legends", "greek-myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Ariadne, daughter of King Minos, gave Theseus a ball of thread to find his way out. The Minotaur, half man and half bull, was her half-brother.",
+  "learnMore": "Theseus",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In Greek myth, Theseus killed the Minotaur in the Labyrinth on Crete."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Perseus, Heracles and Jason did not kill the Minotaur."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Ariadne, daughter of King Minos of Crete, gave Theseus a ball of thread so he could find his way out of the Labyrinth."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Minotaur, half man and half bull, was born to Minos's wife Pasiphaë, Ariadne's mother, which made it Ariadne's half-brother."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: myths and legends. lint: content:check reports no errors on this item and no warnings. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. rivalTest: Perseus (Medusa), Heracles (the labours) and Jason (the Golden Fleece) are the heroes most often confused with Theseus, and none of them fights the Minotaur in any standard version. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: the work is known well beyond any one country and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has about the same chance as one in London or Chicago. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 26 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: nothing of either kind to check in a practice item. doubts: none; c4's family detail follows the usual account (Apollodorus). WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "92468edaef9deebfdee97e63a6efc2d6dfb9cd67e924d358ed39f92d6fac1941",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "Theseus",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Theseus of Athens killed the Minotaur inside Minos's Labyrinth on Crete.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Perseus killed Medusa, Heracles is known for his Labours and Jason for the Golden Fleece; none of them killed the Minotaur.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ariadne, daughter of Minos, gave Theseus a ball of thread so he could retrace his path out of the Labyrinth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Minotaur was Pasiphaë's son by the Cretan bull and Ariadne was Pasiphaë's daughter by Minos, so they were half-siblings.",
+              "confidence": "certain"
+            },
+            "note": "The only number word is 'half'. High-risk (number), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d96754ad3b3cbf82959fbf54ed50c1206772328cd889691679da2a918b4575e1",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "Theseus",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Theseus killed the Minotaur in the Labyrinth at Knossos on Crete.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the three distractors are heroes with other famous feats (Heracles, Perseus, Jason), none a Minotaur slayer."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Perseus beheaded Medusa, Jason led the Argonauts, and Heracles captured the Cretan Bull (the Minotaur's father in some tellings); none of them killed the Minotaur.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ariadne, a daughter of King Minos, gave Theseus the ball of thread that let him find his way out of the Labyrinth.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Minotaur was born to Minos's wife Pasiphaë after her union with a bull, and in the usual tradition Pasiphaë was also Ariadne's mother, so the two were half-siblings.",
+              "confidence": "certain"
+            },
+            "note": "The word half in the claim is a number word under the risk floor; the fact is standard mythography. High-risk (number): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c4 (explanation, number) rests on knowledge alone in both: neither checker could search (both report the shared web budget spent) and no pinned dataset covers it. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, never a relabel. The key and distractors are sound, so redraft under a new id with explanation facts that are standard risk or dataset-backed.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.book.0118",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which hero of Greek myth killed the Minotaur in the Labyrinth on Crete?",
+  "answer": "Theseus",
+  "wrong": ["Perseus", "Heracles", "Jason"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.303,
+    "estimator": "v0"
+  }
+}

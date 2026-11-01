@@ -1,0 +1,233 @@
+{
+  "id": "p.sci.0169",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["inventions", "navigation", "china"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Chinese writers described sailors steering by magnetized needles in the early 1100s, decades before the first European record. Shen Kuo had already described the needle compass in 1088.",
+  "learnMore": "Compass",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Magnetic compasses were first used for navigation at sea in China."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Records of compass navigation in Europe, Portugal and Scandinavia included, are later than the Chinese records, and the ancient Greeks had no magnetic compass."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Chinese texts of the early 12th century describe sailors navigating with magnetized needles."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The earliest European record of a magnetic compass, by Alexander Neckam, dates from about 1190."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Shen Kuo described a magnetic needle compass in 1088."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors; its one warning is C22, a shared answer (China) with p.book.0155, an unrelated item about the Aladdin story, so I suggest the editor records related_ok. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers this, so checker A needs web evidence for c1 to c5. rivalTest: Scandinavia is the planted trap for players who credit Viking navigators, who have no documented magnetic compass; Greece knew that lodestone attracts iron but had no compass; Portuguese navigators used compasses centuries after China. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 28 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: c4 depends on the earliest surviving European record (Alexander Neckam, about 1190); an earlier European find would only narrow the gap, not change the key. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6421863940cd00e16df6bf502a155d4fa2d89546389e7f80c1a9ff3181b9695e",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "China",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The earliest records of magnetic compasses used at sea are Chinese, from the early 12th century.",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8). High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "European compass records begin about 1190, and the ancient Greeks knew lodestone but not the compass.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Zhu Yu's Pingzhou Table Talks, written about 1111 to 1117, describes sailors navigating by a magnetized needle.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Alexander Neckam's writings of about 1190 hold the earliest European description of a magnetic compass.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Shen Kuo's Dream Pool Essays of 1088 describes a magnetized needle compass.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f5b17370c5063932d82d3a2d0755f2858816ad5819afa08b9c86480bc64ca6ec",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "China",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The earliest records of compass use for navigating ships at sea are Chinese, from the Song dynasty around 1100.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "European records (earliest about 1190), and Portuguese and Scandinavian ones, are later than the Chinese records. The ancient Greeks knew the lodestone but had no compass.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Chinese texts of the early 12th century describe sailors steering by a magnetised needle.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Alexander Neckam wrote of a sailors' needle about 1190, the earliest European record.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Shen Kuo described a magnetised needle compass in his Dream Pool Essays of 1088.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, first), c2 (distractor, date), c3 (explanation, date), c4 (explanation, first) and c5 (explanation, date) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced. It also shares its answer with p.book.0155 and p.sport.0166 (dedupe 0.57).",
+      "decidedAt": "2026-11-01T04:27:18Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Where were magnetic compasses first used to guide ships at sea?",
+  "answer": "China",
+  "wrong": ["Greece", "Scandinavia", "Portugal"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.64,
+    "spread": 0.39,
+    "estimator": "v0"
+  }
+}

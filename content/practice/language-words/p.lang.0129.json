@@ -1,0 +1,211 @@
+{
+  "id": "p.lang.0129",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["place-names", "french", "clothing"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "French gants de Suède, gloves from Sweden, were soft kid gloves with a napped finish. English shortened the name to suede. Switzerland, Suisse in French, is the usual wrong guess.",
+  "learnMore": "Suede",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "'Suede' comes from French 'gants de Suède', 'gloves of Sweden'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Switzerland, Spain and Scotland are Suisse, Espagne and Écosse in French."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Gants de Suède were soft kid-leather gloves with a napped surface."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sweden is Suède in French."
+    }
+  ],
+  "writerNotes": "Suisse is the planted trap, which makes counterintuitive true; the explanation names it. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: mledoze-countries cca3=SWE translations.fra 'Suède'; cca3=CHE translations.fra 'Suisse'; cca3=ESP translations.fra 'Espagne'; Écosse is from knowledge; rival test: argued Switzerland hardest: Suisse and suede share letters but not the word; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: players with any French have the foothold; others can reason from the sound; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "378d6ae678544fe1672d021b9a67b2ac546cb6e14dc036ce68dec382a1cb9c37",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Sweden",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Suede is from French gants de Suède, gloves of Sweden.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "In French, Switzerland is Suisse, Spain is Espagne and Scotland is Écosse.",
+              "confidence": "certain"
+            },
+            "note": "The pinned countries file gives Suisse and Espagne (CHE and ESP translations.fra); Écosse rests on knowledge."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gants de Suède were soft gloves of kid leather with a napped, unglazed surface.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SWE, translations.fra",
+              "excerpt": "SWE translations.fra {\"official\":\"Royaume de Suède\",\"common\":\"Suède\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Explanation: 'Switzerland, Suisse in French, is the usual wrong guess' states player behaviour that no data supports yet. 'is an easy mix-up' would say the same thing safely."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "dd6b73eb59ae970b307daabfa1539a573e1ec154a7fb465bf3cda5aec18eacc8",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Sweden",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Suede is from French gants de Suede, gloves of Sweden.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Switzerland is Suisse, Spain is Espagne and Scotland is Ecosse in French.",
+              "confidence": "certain"
+            },
+            "note": "Switzerland (Suisse) is the near-miss guess; Spain and Scotland are plain fillers."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Swedish gloves were soft kid leather with the flesh side brushed to a nap.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SWE translations.fra.common",
+              "excerpt": "SWE: \"Suède\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "French name for Sweden."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, etymology) rests on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. It missed by one claim, so the redraft is cheap. For the redraft: A noted 'the usual wrong guess' asserts player behaviour no data supports.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The word 'suede' comes from the French name for which country?",
+  "answer": "Sweden",
+  "wrong": ["Switzerland", "Spain", "Scotland"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.195,
+    "estimator": "v0"
+  }
+}

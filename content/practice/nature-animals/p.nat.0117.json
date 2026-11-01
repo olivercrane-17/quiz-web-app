@@ -1,0 +1,437 @@
+{
+  "id": "p.nat.0117",
+  "status": "active",
+  "category": "nat",
+  "tags": ["plants", "fruit", "botany"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "To a botanist, a berry is a fleshy fruit from a single ovary with the seeds inside. Strawberries swell from the flower's base, raspberries are clusters of tiny fruits, and cherries have a stone.",
+  "learnMore": "Berry (botany)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "In botanical terms, a banana is a berry."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "In botanical terms, strawberries, raspberries and cherries are not berries."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A botanical berry is a fleshy fruit that develops from a single ovary and has its seeds inside the flesh."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The fleshy part of a strawberry develops from the receptacle at the base of the flower."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A raspberry is an aggregate fruit, a cluster of small drupelets."
+    },
+    {
+      "id": "c6",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A cherry is a drupe, with a stone around its seed."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: six listed. c1 is high because it is the key of a counterintuitive item, so C26 sets it high; the tooling's riskReason enum has no counterintuitive value yet (guide v1.1 adds one), so checker_doubt stands in for it; c2 states the other half of the same surprise, so I raised it to high too. One search on botanical berries should cover both. c3 to c6 are standard botany. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: the two '-berry' names are the planted trap. Argued against the key: cultivated bananas are seedless, but the fruit still forms as a berry from a single ovary, which is how botany classes it. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: all four fruits are sold worldwide; classified as Nature because it needs botany, not cooking. style: Oxford spelling, plain hyphens only, explanation of 34 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none on the botany. Food and Drink writers may use the same surprise, so the editor may see a cross-category near-duplicate.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "62be67675595ea5f1b2387ea082a3d73a8200a6520d46c13acfa909c0e750b01",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Banana",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "botanically a banana is a berry while strawberries and raspberries are not berries and a cherry is a drupe; figs are pollinated by fig wasps that enter the syconium",
+              "results": [
+                {
+                  "title": "Fig",
+                  "url": "https://en.wikipedia.org/wiki/Fig"
+                },
+                {
+                  "title": "Syconium",
+                  "url": "https://www.britannica.com/science/syconium"
+                },
+                {
+                  "title": "Fruit",
+                  "url": "https://en.wikipedia.org/wiki/Fruit"
+                },
+                {
+                  "title": "Fig wasp",
+                  "url": "https://www.britannica.com/animal/fig-wasp"
+                },
+                {
+                  "title": "Fig tree named ‘S-64’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP27983"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawFortyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP26800"
+                },
+                {
+                  "title": "Ficus",
+                  "url": "https://www.britannica.com/plant/Ficus"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawThirtyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP24533"
+                },
+                {
+                  "title": "Fig Tree Named ‘Sequoia’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP20038"
+                }
+              ],
+              "summaryExcerpt": "Bananas and berries: Botanically, the true-berry category includes bananas, and it leaves out fruits like strawberries and raspberries, which only carry the \"-berry\" name by culinary custom. ... (The botanical term true berry includes grapes, currants, cucumbers, eggplants, tomatoes, chili peppers, and bananas, but excludes certain fruits that are called \"-berry\" by culinary custom ...)",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The quoted text matches the Wikipedia 'Fruit' article (Tier B). The USPTO plant-patent PDFs in the list are variety descriptions and are not what these sentences rest on. This call also serves p.nat.0134 and is counted here."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "botanically a banana is a berry while strawberries and raspberries are not berries and a cherry is a drupe; figs are pollinated by fig wasps that enter the syconium",
+              "results": [
+                {
+                  "title": "Fig",
+                  "url": "https://en.wikipedia.org/wiki/Fig"
+                },
+                {
+                  "title": "Syconium",
+                  "url": "https://www.britannica.com/science/syconium"
+                },
+                {
+                  "title": "Fruit",
+                  "url": "https://en.wikipedia.org/wiki/Fruit"
+                },
+                {
+                  "title": "Fig wasp",
+                  "url": "https://www.britannica.com/animal/fig-wasp"
+                },
+                {
+                  "title": "Fig tree named ‘S-64’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP27983"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawFortyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP26800"
+                },
+                {
+                  "title": "Ficus",
+                  "url": "https://www.britannica.com/plant/Ficus"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawThirtyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP24533"
+                },
+                {
+                  "title": "Fig Tree Named ‘Sequoia’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP20038"
+                }
+              ],
+              "summaryExcerpt": "Botanically, the true-berry category includes bananas, and it leaves out fruits like strawberries and raspberries, which only carry the \"-berry\" name by culinary custom. ... Cherry as a drupe: A drupe is defined by its hard, lignified stone, and cherries are listed among the examples.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A botanical berry is a fleshy fruit from a single ovary, with the seeds in the flesh and no stone.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A strawberry's flesh is the swollen receptacle; the true fruits are the achenes on its surface.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "botanically a banana is a berry while strawberries and raspberries are not berries and a cherry is a drupe; figs are pollinated by fig wasps that enter the syconium",
+              "results": [
+                {
+                  "title": "Fig",
+                  "url": "https://en.wikipedia.org/wiki/Fig"
+                },
+                {
+                  "title": "Syconium",
+                  "url": "https://www.britannica.com/science/syconium"
+                },
+                {
+                  "title": "Fruit",
+                  "url": "https://en.wikipedia.org/wiki/Fruit"
+                },
+                {
+                  "title": "Fig wasp",
+                  "url": "https://www.britannica.com/animal/fig-wasp"
+                },
+                {
+                  "title": "Fig tree named ‘S-64’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP27983"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawFortyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP26800"
+                },
+                {
+                  "title": "Ficus",
+                  "url": "https://www.britannica.com/plant/Ficus"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawThirtyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP24533"
+                },
+                {
+                  "title": "Fig Tree Named ‘Sequoia’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP20038"
+                }
+              ],
+              "summaryExcerpt": "The raspberry is an aggregate of tiny drupelets, and the strawberry is an aggregate-accessory fruit whose seeds sit in achenes.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "botanically a banana is a berry while strawberries and raspberries are not berries and a cherry is a drupe; figs are pollinated by fig wasps that enter the syconium",
+              "results": [
+                {
+                  "title": "Fig",
+                  "url": "https://en.wikipedia.org/wiki/Fig"
+                },
+                {
+                  "title": "Syconium",
+                  "url": "https://www.britannica.com/science/syconium"
+                },
+                {
+                  "title": "Fruit",
+                  "url": "https://en.wikipedia.org/wiki/Fruit"
+                },
+                {
+                  "title": "Fig wasp",
+                  "url": "https://www.britannica.com/animal/fig-wasp"
+                },
+                {
+                  "title": "Fig tree named ‘S-64’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP27983"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawFortyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP26800"
+                },
+                {
+                  "title": "Ficus",
+                  "url": "https://www.britannica.com/plant/Ficus"
+                },
+                {
+                  "title": "Strawberry plant named ‘DrisStrawThirtyThree’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP24533"
+                },
+                {
+                  "title": "Fig Tree Named ‘Sequoia’",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/PP20038"
+                }
+              ],
+              "summaryExcerpt": "Cherry as a drupe: A drupe is defined by its hard, lignified stone, and cherries are listed among the examples (the definitive characteristic of a drupe is the hard, lignified stone, and examples include apricot, cherry, olive, peach, plum, and mango).",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4085966a05ad30c1333cf7648a654fddca8dcf809c11fcce6e89799e8010c4e6",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Banana",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A banana is a botanical berry: a fleshy fruit from one ovary with the seeds in the flesh.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Strawberries, raspberries and cherries are not botanical berries (an accessory fruit, an aggregate of drupelets and a drupe).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A botanical berry is a fleshy fruit from a single ovary with its seeds embedded in the flesh.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The fleshy part of a strawberry grows from the receptacle at the base of the flower.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A raspberry is an aggregate fruit made of small drupelets.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A cherry is a drupe with a stone around the seed.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 6 claims confirmed in both checks; high-risk c1 (web in A), c2 (web in A). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which of these fruits counts as a berry in botany?",
+  "answer": "Banana",
+  "wrong": ["Strawberry", "Raspberry", "Cherry"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.276,
+    "estimator": "v0"
+  }
+}

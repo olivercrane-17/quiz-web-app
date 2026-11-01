@@ -1,0 +1,201 @@
+{
+  "id": "p.music.0239",
+  "status": "active",
+  "category": "music",
+  "tags": ["instruments", "harp", "piano"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Each of the harp's seven pedals sets every string of one note name, such as all the Cs, to flat, natural or sharp. Most modern pianos have three pedals.",
+  "learnMore": "Pedal harp",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A modern concert (pedal) harp has seven pedals."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A modern piano, grand or upright, usually has three pedals."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Each harp pedal sets all the strings of one note name to flat, natural or sharp."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the labels, values and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers instruments, so both counts need web evidence from the checkers. I used no WebSearch. Rival test: argued for 'b': most players picture a harp with no pedals at all, which is the trap. Argued against the key: a pedal harp has seven pedals, one per note name; a modern piano has three (some uprights and older grands two), so the answer holds either way. Counterintuitive is true, so both label claims are high under C26. Exact counts, so the 1.1 times guard does not apply. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both instruments are the same everywhere. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None. b01's piano and harp item compares strings, and the guide's e.0007 example counts a harp's strings; this item counts pedals.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ec07604ebcb4754efd6409be0c0bb8746f157193073129830090537e0dda78d3",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "A concert harp",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A modern concert pedal harp has seven pedals, one per note name.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most modern grand pianos and many uprights have three pedals; some uprights have two, still fewer than seven.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Each harp pedal sets every string of one pitch name to flat, natural or sharp.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3b36401f73ec494f1c039038f5bb8b19dd0e370c541330d661b7c58d182a3d27",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "A concert harp",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A modern concert pedal harp has seven pedals.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: lever harps have none, but the label says concert harp."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A modern piano, grand or upright, usually has three pedals (some uprights have two).",
+              "confidence": "certain"
+            },
+            "note": "Any count from 2 to 4 still loses to seven, so the key is robust."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Each harp pedal changes every string of one note name to flat, natural or sharp.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (number), c2 (number) and c3 (number) rest on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which has more pedals?",
+  "a": "A concert harp",
+  "b": "A modern piano",
+  "answer": "a",
+  "relation": "more",
+  "measure": "pedals on a standard instrument",
+  "unit": "pedals",
+  "values": {
+    "a": 7,
+    "b": 3
+  },
+  "valueDisplay": {
+    "a": "7 pedals",
+    "b": "3 pedals"
+  },
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.162,
+    "estimator": "v0"
+  }
+}

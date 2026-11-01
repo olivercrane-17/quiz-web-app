@@ -1,0 +1,216 @@
+{
+  "id": "p.geo.0265",
+  "status": "active",
+  "category": "geo",
+  "tags": ["climate", "deserts", "north-africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Aïn Séfra, a town in Algeria on the desert's northern edge, has seen snow several times, including in 1979 and 2018, and it has even settled on the dunes.",
+  "learnMore": "Aïn Séfra",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Snow has fallen in parts of the Sahara Desert."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Snow fell at Aïn Séfra, in Algeria, in 1979 and in 2018."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Aïn Séfra lies on the northern edge of the Sahara."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Snow has settled on sand dunes near Aïn Séfra."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (checker_doubt) and c2 (date) are high under the C26 floor, and c3 and c4 are standard. Datasets: geonames-cities: Aïn Sefra, DZ, 32.75, -0.58333, at the desert's northern edge below the Saharan Atlas (c3). No dataset holds snowfall. Rival test: Argued for false: the Sahara means heat and sand to almost everyone. But the desert's northern edge is high and its nights cold, and snow there is well documented, so the statement is true. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Equally surprising everywhere. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 29 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c1 and c2 need a Tier A or B web result (one search should cover both); c4 can come from the same result. Seed: 4 (medium): many will answer false. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: c1 is high under the C26 floor because the item is counterintuitive; the schema's riskReason list has no 'counterintuitive', so checker_doubt stands in.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "58dad85a18ef03666c243bdbb15a2cf971f1450a7543561c386035e6b7727b79",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Snow has fallen on the northern edge of the Sahara, notably around Aïn Séfra in Algeria.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Snow fell at Aïn Séfra in February 1979 and again in January 2018, with other falls in 2016 and 2017.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, and this check holds knowledge only: the shared WebSearch budget for this turn was used up by other agents before pass A could search (the one call made returned 'not performed', so searchesUsed stays 0), and no pinned dataset covers this fact. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Aïn Séfra lies in the Saharan Atlas, on the northern edge of the Sahara.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Photographs from the 2016 and 2018 falls show snow lying on dunes near Aïn Séfra.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e6d233774241dadf89c3b7d79fb53794ced3c85c251f37fad6378278462b4338",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Snow has fallen in the Sahara, for example at Ain Sefra in Algeria.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (writer flagged checker_doubt). Knowledge only (no web search was available to me); needs pass A's external evidence. Snowfalls at Ain Sefra are widely reported, so I am certain."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Snow fell at Ain Sefra in February 1979 and in January 2018, among other occasions.",
+              "confidence": "certain"
+            },
+            "note": "High-risk dates. Knowledge only (no web search was available to me); needs pass A's external evidence. Both years are certain to me."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ain Sefra is a town in north-western Algeria on the northern edge of the Sahara, in the Saharan Atlas.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Snow has settled on the sand dunes near Ain Sefra, as photographed in 2016 and 2018.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key of a counterintuitive item) and c2 (dates) rest on knowledge alone in both checks: no pinned dataset covers them and neither checker could search (the shared WebSearch budget was spent before pass A ran). §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, which a wording-only edit cannot reach because the claims stay. Redraft under a new id with web evidence, or with the figure stepped down or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0151",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Snow has fallen in the Sahara Desert.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.305,
+    "estimator": "v0"
+  }
+}

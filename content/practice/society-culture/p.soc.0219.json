@@ -1,0 +1,231 @@
+{
+  "id": "p.soc.0219",
+  "status": "active",
+  "category": "soc",
+  "tags": ["religion", "christianity", "islam", "fasting"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Lent's 40 days, not counting Sundays, recall Jesus' 40 days of fasting in the desert. Ramadan lasts one lunar month: 29 or 30 days, depending on the moon.",
+  "learnMore": "Lent",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Lent lasts 40 days, not counting Sundays; from Ash Wednesday to Holy Saturday is 46 days."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Ramadan, a month of the lunar Islamic calendar, lasts 29 or 30 days."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Lent's 40 days recall the 40 days Jesus spent fasting in the desert, according to the Gospels."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The length of Ramadan depends on the new moon, by sighting or calculation."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: world religions and their practices. lint: content:check shows no errors for this item. claims: every checkable statement in the labels, values and explanation is listed, one label claim per side, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers this; c1 to c3 need web evidence as number claims. rivalTest: the values compare Lent's minimum with Ramadan's maximum, and Eastern Orthodox Great Lent also runs 40 days before Holy Week, so every tradition's Lent is longer. b01 asks which season Ash Wednesday starts and which festival ends Ramadan; this compares their lengths, a different fact. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: both seasons are known worldwide. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 28 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 2 (easy): most players know Lent's 40 days. doubts: none; the item compares durations and ranks nothing.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a914f7299b6c207cef67321c0318092cd48ec0d7ba1e5bf1892f2d213d1764a8",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "Lent",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Western Lent runs from Ash Wednesday to Holy Saturday, 46 days, of which 40 are counted because Sundays are left out.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ramadan is a lunar month of 29 or 30 days.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lent's 40 days mirror the 40 days Jesus fasted in the wilderness in the Gospels of Matthew, Mark and Luke.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ramadan begins and ends with the new crescent moon, set by sighting or by calculation.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "aba71c6a443dc357c715a0e9f93feb86bca90dd296d4cf05bedfef93c9ac9d43",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "Lent",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Western Lent is 40 fasting days not counting Sundays, which is 46 calendar days from Ash Wednesday to Holy Saturday.",
+              "confidence": "certain"
+            },
+            "note": "Arithmetic: Ash Wednesday is 46 days before Easter and six Sundays fall inside, leaving 40. Eastern and Oriental Lents run longer (40 to 55 days), so Lent beats Ramadan under every count."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ramadan is a lunar month of 29 or 30 days.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lent's 40 days recall Jesus' 40 days of fasting in the desert (Matthew, Mark, Luke).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ramadan begins and ends by new-moon sighting or calculation.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (label, number), c2 (label, number) and c3 (explanation, number) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. The gap includes the key, a label or a distractor, so the redraft needs evidence for the question itself. Redraft under a new id.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which lasts longer?",
+  "a": "Lent",
+  "b": "Ramadan",
+  "answer": "a",
+  "relation": "longer",
+  "measure": "length of the season in days",
+  "unit": "days",
+  "values": {
+    "a": 40,
+    "b": 30
+  },
+  "valueDisplay": {
+    "a": "40 days, not counting Sundays",
+    "b": "29 or 30 days"
+  },
+  "predicted": {
+    "p": 0.78,
+    "spread": 0.219,
+    "estimator": "v0"
+  }
+}

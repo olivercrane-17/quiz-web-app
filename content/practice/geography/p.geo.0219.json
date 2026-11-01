@@ -1,0 +1,235 @@
+{
+  "id": "p.geo.0219",
+  "status": "active",
+  "category": "geo",
+  "tags": ["islands", "caribbean", "north-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Cuba is bigger than Hispaniola, Jamaica and Puerto Rico put together. When Christopher Columbus reached its coast, he believed it was part of mainland Asia.",
+  "learnMore": "Cuba",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Cuba is the largest island in the Caribbean."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Hispaniola, Jamaica and Puerto Rico are each smaller than Cuba."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Cuba is larger than Hispaniola, Jamaica and Puerto Rico combined."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "When Christopher Columbus reached Cuba, he believed it was part of the Asian mainland."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; c1 (superlative) and c3 (number) are high under the C26 floor, and c2 and c4 are standard. Datasets: mledoze-countries areas: CUB 109,884; HTI 27,750 and DOM 48,671, the two countries of Hispaniola, together 76,421; JAM 10,991; PRI 8,870 (c1, c2). The last three islands together come to 96,282, less than Cuba (c3). These are country totals that include small offshore islands on both sides; the main islands compare the same way, because Cuba's main island alone is far larger than Hispaniola. Rival test: Hispaniola is the strong rival, a big island shared by two countries, then Jamaica and Puerto Rico. Against the key: nothing; Cuba leads by a wide margin. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: The Caribbean's islands are known worldwide; no local knowledge is needed. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c4 is standard history. Seed: 2 (easy): most players pick Cuba; a few go for Hispaniola. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ab21856d349eecca24ce915b687fc85b298d0cec121a481689c0feb8687e8537",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Cuba",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "subregion=Caribbean, by area",
+              "excerpt": "CUB \"area\": 109884; DOM \"area\": 48671; HTI \"area\": 27750; BHS \"area\": 13943; JAM \"area\": 10991; PRI \"area\": 8870",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Country areas: Cuba's 109,884 km² is the largest in the Caribbean subregion. Hispaniola is shared by DOM and HTI, so it is at most 76,421 km². Cuba's offshore islands (Isla de la Juventud the largest) are small, so the main island alone still far exceeds Hispaniola, and every other Caribbean island sits in a smaller country or territory."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=CUB, DOM, HTI, JAM, PRI",
+              "excerpt": "CUB 109884; DOM 48671; HTI 27750; JAM 10991; PRI 8870",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=CUB, DOM, HTI, JAM, PRI",
+              "excerpt": "CUB \"area\": 109884; DOM 48671 + HTI 27750 + JAM 10991 + PRI 8870 = 96282",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Cuba's country area beats the sum of the other three by 14%. Compared island to island the margin narrows but holds (the main island of Cuba is usually given as about 104,500 km², knowledge), so the claim stands."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Columbus believed Cuba was part of the Asian mainland, and on his second voyage in 1494 he had his crew swear it was a continent.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2a55f896ccb1835a3b6a0e22fc263bb1bdb0912e83f4ff647bfae8fd76623d1c",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Cuba",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=CUB, HTI, DOM, JAM, PRI; subregion=Caribbean",
+              "excerpt": "CUB area 109884; Hispaniola = HTI 27750 + DOM 48671 = 76421; JAM 10991; PRI 8870; no other Caribbean entry above 13943 (Bahamas).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Country areas include small offshore islands, but the ordering is the same on island areas (Cuba about 105,800 km2 against about 76,200 for Hispaniola). The only multi-country island, Hispaniola, is far smaller than Cuba."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=HTI, DOM, JAM, PRI",
+              "excerpt": "Haiti plus the Dominican Republic 76421 km2; Jamaica 10991; Puerto Rico 8870; Cuba 109884.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=CUB vs HTI+DOM+JAM+PRI",
+              "excerpt": "27750 + 48671 + 10991 + 8870 = 96282, below Cuba's 109884 (about 14% margin on country areas).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Number claim checked with the dataset. By my own recollection the margin is roughly 10% on island-only areas, so the claim survives the change of measure."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Columbus reached Cuba on his first voyage and believed it was part of the Asian mainland.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c3 (mledoze-countries) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits. Dedupe: every flagged neighbour, p.music.0244 (Buena Vista Social Club) included, tests a different fact, so related_ok.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which is the largest island in the Caribbean?",
+  "answer": "Cuba",
+  "wrong": ["Hispaniola", "Jamaica", "Puerto Rico"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.68,
+    "spread": 0.3,
+    "estimator": "v0"
+  }
+}

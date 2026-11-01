@@ -1,0 +1,304 @@
+{
+  "id": "p.food.0131",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-words", "cheese", "england"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Cheesemakers once matured it in the caves of Cheddar Gorge. The name travelled with the recipe, and cheddar is made around the world, from Australia to Canada.",
+  "learnMore": "Cheddar cheese",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Cheddar cheese is named after the village of Cheddar in Somerset, England."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Stilton, Wensleydale and Red Leicester are not Somerset cheeses: Stilton is made in the English Midlands, Wensleydale in Yorkshire, and Red Leicester originated in Leicestershire."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Cheddar was traditionally matured in the caves of Cheddar Gorge."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Cheddar is made in many countries, including Australia and Canada."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). Datasets: geonames-cities lists Cheddar (country GB, admin1 ENG); the dataset holds no county name, so Somerset rests on knowledge. Rival test: Stilton is also named after a village, which makes it the best distractor, but that village is in Cambridgeshire, not Somerset; the others are named after a dale and a county. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: cheddar is sold and made worldwide; the stem names the county so nobody needs local knowledge, and the answer is the world-famous option. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: most players will pick the famous cheese. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "34b68098bfe9111629824fb3a886950245e6b17a69ca1c2530503dbebcd976cf",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Cheddar",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "foods named after people and places: pavlova named after ballerina Anna Pavlova and her 1920s tours of Australia and New Zealand; Cheddar cheese named after Cheddar village in Somerset; tarte Tatin named after the Tatin sisters' hotel in Lamotte-Beuvron",
+              "results": [
+                {
+                  "title": "Cheddar cheese",
+                  "url": "https://en.wikipedia.org/wiki/Cheddar_cheese"
+                },
+                {
+                  "title": "Cheddar, Somerset",
+                  "url": "https://en.wikipedia.org/wiki/Cheddar,_Somerset"
+                },
+                {
+                  "title": "Cheddar",
+                  "url": "https://www.britannica.com/topic/cheddar-cheese"
+                },
+                {
+                  "title": "Manufacture of cheddar cheese",
+                  "url": "https://en.wikipedia.org/wiki/Cheddaring"
+                },
+                {
+                  "title": "Cheddar",
+                  "url": "https://en.wikipedia.org/wiki/Cheddar"
+                },
+                {
+                  "title": "List of British cheeses",
+                  "url": "https://en.wikipedia.org/wiki/British_cheese"
+                },
+                {
+                  "title": "Previous Page",
+                  "url": "https://kids.britannica.com/kids/article/Edam/31958/related/main?page=1"
+                },
+                {
+                  "title": "Somerset",
+                  "url": "https://www.britannica.com/place/Somerset-county-England"
+                },
+                {
+                  "title": "List of Protected Designation of Origin products by country",
+                  "url": "https://en.wikipedia.org/wiki/List_of_Protected_Designation_of_Origin_products_by_country"
+                },
+                {
+                  "title": "List of foods named after places",
+                  "url": "https://en.wikipedia.org/wiki/List_of_foods_named_after_places"
+                }
+              ],
+              "summaryExcerpt": "The cheese takes its name from the village in Somerset. It originates from the village of Cheddar in Somerset, South West England.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "One call (counted in p.food.0157's record) that the tool split into three sub-searches, each with its own result list. These sentences come from the Cheddar sub-search, whose list (given here exactly as returned) holds only Wikipedia and Britannica pages (Tier B)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Stilton is made in Derbyshire, Leicestershire and Nottinghamshire, Wensleydale in Yorkshire, and Red Leicester comes from Leicestershire.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "foods named after people and places: pavlova named after ballerina Anna Pavlova and her 1920s tours of Australia and New Zealand; Cheddar cheese named after Cheddar village in Somerset; tarte Tatin named after the Tatin sisters' hotel in Lamotte-Beuvron",
+              "results": [
+                {
+                  "title": "Cheddar cheese",
+                  "url": "https://en.wikipedia.org/wiki/Cheddar_cheese"
+                },
+                {
+                  "title": "Cheddar, Somerset",
+                  "url": "https://en.wikipedia.org/wiki/Cheddar,_Somerset"
+                },
+                {
+                  "title": "Cheddar",
+                  "url": "https://www.britannica.com/topic/cheddar-cheese"
+                },
+                {
+                  "title": "Manufacture of cheddar cheese",
+                  "url": "https://en.wikipedia.org/wiki/Cheddaring"
+                },
+                {
+                  "title": "Cheddar",
+                  "url": "https://en.wikipedia.org/wiki/Cheddar"
+                },
+                {
+                  "title": "List of British cheeses",
+                  "url": "https://en.wikipedia.org/wiki/British_cheese"
+                },
+                {
+                  "title": "Previous Page",
+                  "url": "https://kids.britannica.com/kids/article/Edam/31958/related/main?page=1"
+                },
+                {
+                  "title": "Somerset",
+                  "url": "https://www.britannica.com/place/Somerset-county-England"
+                },
+                {
+                  "title": "List of Protected Designation of Origin products by country",
+                  "url": "https://en.wikipedia.org/wiki/List_of_Protected_Designation_of_Origin_products_by_country"
+                },
+                {
+                  "title": "List of foods named after places",
+                  "url": "https://en.wikipedia.org/wiki/List_of_foods_named_after_places"
+                }
+              ],
+              "summaryExcerpt": "Cheddar Gorge's caves helped with maturing: the caves provided the ideal humidity and steady temperature for maturing the cheese.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Same Cheddar sub-search."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cheddar is made in many countries, Australia and Canada among them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6a9fb5bbcef27d15105c8f8817cf694dc3da42f84682974957fe78c1d538ac20",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Cheddar",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cheddar cheese is named after the village of Cheddar in Somerset.",
+              "confidence": "certain"
+            },
+            "note": "Tested the rivals: Wensleydale is a Yorkshire dale, Stilton is named for a Cambridgeshire village but made in the Midlands, Red Leicester is a county name. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Stilton is made in the East Midlands, Wensleydale in North Yorkshire, and Red Leicester originated in Leicestershire.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cheddar was traditionally matured in the caves of Cheddar Gorge.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cheddar-style cheese is made in many countries, including Australia and Canada.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. The key etymology c1 and c3 carry Tier B web evidence in pass A (§9.9 rule 3).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which cheese is named after a village in Somerset, south-west England?",
+  "answer": "Cheddar",
+  "wrong": ["Stilton", "Wensleydale", "Red Leicester"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.64,
+    "spread": 0.317,
+    "estimator": "v0"
+  }
+}

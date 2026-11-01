@@ -1,0 +1,219 @@
+{
+  "id": "p.music.0251",
+  "status": "active",
+  "category": "music",
+  "tags": ["songs-albums", "national-anthems", "france"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Claude Joseph Rouget de Lisle wrote it as a war song for the Army of the Rhine. It took its name from volunteers from Marseille, who sang it as they marched into Paris.",
+  "learnMore": "La Marseillaise",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "'La Marseillaise' was written in Strasbourg in April 1792 by Claude Joseph Rouget de Lisle."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "'La Marseillaise' was not written in Marseille, Paris or Lyon."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "Rouget de Lisle wrote the song for the French Army of the Rhine, under the title 'Chant de guerre pour l'Armée du Rhin'."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The song was named after volunteers from Marseille who sang it as they marched into Paris in 1792."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: geonames-cities lists Strasbourg (FR, 48.58392, 7.74553), which only confirms the city; the anthem's history needs web evidence. I used no WebSearch. Rival test: argued for each distractor: Marseille is the planted trap (the name), Paris is where the song became famous and Lyon is France's other great city; but it was written in Strasbourg. Argued against the key: undisputed. Counterintuitive is true, so c1 is high under C26. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the anthem is known worldwide, and the trap works the same everywhere. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "dc99ea4582e5becc61847cde92f3c9d2cf705b3dd3de42ad5e1ed0d1b1a05c79",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "Strasbourg",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rouget de Lisle wrote La Marseillaise in Strasbourg on the night of 25 to 26 April 1792.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). Rival test: the name points to Marseille, but the song was written in Strasbourg."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "La Marseillaise was written in Strasbourg, not Marseille, Paris or Lyon.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Its original title was 'Chant de guerre pour l'Armée du Rhin', a war song for the Army of the Rhine.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It takes its name from volunteers from Marseille who sang it as they entered Paris in the summer of 1792.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cd04dcec260b456b7b86b8d0e795224e38290d95150636c2dc8e615fd24ebde8",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "Strasbourg",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Claude Joseph Rouget de Lisle wrote La Marseillaise in Strasbourg in April 1792.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the song is named for Marseille and was sung in Paris, which are the traps; it was written in Strasbourg. In 1792 it was not yet the national anthem (that came in 1795), but the stem reads naturally as 'the future anthem was written'."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "La Marseillaise was not written in Marseille, Paris or Lyon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Its original title was 'Chant de guerre pour l'Armee du Rhin'.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It was named after volunteers from Marseille who sang it as they marched into Paris in 1792.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (date), c2 (quotation), c3 (quotation) and c4 (etymology) rest on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail. For the redraft, B notes that in 1792 the song was not yet the national anthem (adopted in 1795), so 'the future anthem' reads cleaner.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In 1792 the French national anthem, 'La Marseillaise', was written in which city?",
+  "answer": "Strasbourg",
+  "wrong": ["Marseille", "Paris", "Lyon"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.24,
+    "spread": 0.273,
+    "estimator": "v0"
+  }
+}

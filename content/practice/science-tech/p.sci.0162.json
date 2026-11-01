@@ -1,0 +1,218 @@
+{
+  "id": "p.sci.0162",
+  "status": "active",
+  "category": "sci",
+  "tags": ["computing", "colour"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Multiply, don't add: 256 levels of red times 256 of green times 256 of blue gives about 16.8 million colours. Mixing red and green light at full strength makes yellow.",
+  "learnMore": "Colour depth",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "With 256 levels each for red, green and blue, a pixel can show 256 x 256 x 256 = 16,777,216 colours."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "768 is 256 + 256 + 256, 65,536 is 256 x 256 and 4,294,967,296 is 256 to the power 4, so none counts the combinations of three channels."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "16,777,216 is about 16.8 million."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mixing red and green light at full strength gives yellow."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no dataset needed: c1 to c3 are calculations, and c4 is textbook colour mixing. rivalTest: 768 is the planted trap for players who add instead of multiply; 65,536 counts two channels and 4,294,967,296 four. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 30 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. The stem fixes 256 levels, the standard 24-bit setting; screens with more levels per channel exist, but the question does not ask about them. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f0968236af426d706afed1abcecde9651c1c07bf733d4d55967e4afd2fc15a53",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "16,777,216",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "256 × 256 × 256 = 16,777,216.",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8). Pure arithmetic; content:record has no calculation method (§9.5.4), so it is recorded as knowledge. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "768 = 3 × 256, 65,536 = 256² and 4,294,967,296 = 256^4.",
+              "confidence": "certain"
+            },
+            "note": "Pure arithmetic; content:record has no calculation method (§9.5.4), so it is recorded as knowledge. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "16,777,216 is about 16.8 million.",
+              "confidence": "certain"
+            },
+            "note": "Pure arithmetic; content:record has no calculation method (§9.5.4), so it is recorded as knowledge. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Adding red and green light at full strength gives yellow.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "924f2e85cdebc3b5bcb9f7ac15e37a8c8e1a6b2c3173b306381346ac757e59a0",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "16,777,216",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "256 x 256 x 256 = 16,777,216 (computed).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "768 = 3 x 256, 65,536 = 256 squared and 4,294,967,296 = 256 to the power 4 (computed).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "16,777,216 is about 16.8 million.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Red and green light at full strength add up to yellow.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, number), c2 (distractor, number) and c3 (explanation, number) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced. These are arithmetic facts, but check records have no calculation method and rule 3 counts only dataset or web evidence, so a redraft needs a web source for each figure.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.soc.0134",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "A screen pixel mixes red, green and blue light, each set to one of 256 levels. How many colours can it show?",
+  "answer": "16,777,216",
+  "wrong": ["768", "65,536", "4,294,967,296"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.278,
+    "estimator": "v0"
+  }
+}

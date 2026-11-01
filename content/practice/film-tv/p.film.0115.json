@@ -1,0 +1,207 @@
+{
+  "id": "p.film.0115",
+  "status": "cut",
+  "category": "film",
+  "tags": ["animation", "pixar", "1990s"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Pixar made it, and Disney released it. Buzz Lightyear took his first name from Apollo 11 astronaut Buzz Aldrin.",
+  "learnMore": "Toy Story",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Toy Story (1995) was the first feature film made entirely with computer animation."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "A Bug's Life (1998), Antz (1998) and Shrek (2001) all came out after 1995."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Toy Story was made by Pixar and released by Disney."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Buzz Lightyear's first name was taken from Apollo 11 astronaut Buzz Aldrin."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: All three distractors are early computer-animated features, the natural confusions, but each came out after 1995. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 19 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "201b4471669d598d1a62cc0d4612bc48984b0284877fd1ef2b9d8fecec7c09eb",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Toy Story",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Toy Story (1995) was the first feature film animated entirely by computer.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Antz and A Bug's Life both came out in 1998 and Shrek in 2001, all after 1995.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pixar produced Toy Story and Disney distributed it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Buzz Lightyear's first name honours the Apollo 11 astronaut Buzz Aldrin.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f2ae26963c62ea91db38343fc800012b745ac970fa6a80512baa7fe36f11a50b",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Toy Story",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Toy Story (1995) is generally recognised as the first feature film made entirely with computer animation.",
+              "confidence": "certain"
+            },
+            "note": "High-risk first. I know of no earlier all-CGI feature. Needs check A's external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A Bug's Life (1998), Antz (1998) and Shrek (2001) all came after 1995.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Pixar made Toy Story and Disney released it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Buzz Lightyear was named after astronaut Buzz Aldrin.",
+              "confidence": "certain"
+            },
+            "note": "Etymology, high-risk; the makers have said the name honours Aldrin. Needs check A's external evidence."
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The year 1995 in the stem already separates Toy Story from the 1998 and 2001 options, so the 'first' claim is not needed to answer. Consider a 1990s distractor or dropping the year."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1, c2 and c4 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). Redraft it under a new id once evidence can be gathered. Checker B also noted that the stem's 1995 gives the key away against three later films.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which 1995 film was the first feature made entirely with computer animation?",
+  "answer": "Toy Story",
+  "wrong": ["A Bug's Life", "Antz", "Shrek"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.85,
+    "spread": 0.312,
+    "estimator": "v0"
+  }
+}

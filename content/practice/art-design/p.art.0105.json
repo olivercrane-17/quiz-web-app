@@ -1,0 +1,297 @@
+{
+  "id": "p.art.0105",
+  "status": "active",
+  "category": "art",
+  "tags": ["paintings", "surrealism", "belgium"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Magritte painted it in 1964 as a self-portrait. In Man in a Bowler Hat, from the same year, a white dove hides the face instead.",
+  "learnMore": "The Son of Man",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In Magritte's The Son of Man, a green apple hides most of the man's face."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "In The Son of Man the face is not hidden by a dove, a pipe or a candle."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Magritte painted The Son of Man in 1964 as a self-portrait."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In Magritte's Man in a Bowler Hat, also painted in 1964, a white dove hides the man's face."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: moma-artists has Magritte (ConstituentID 3692, Belgian, 1898 to 1967) but not the works; c3 and c4 need a source. Rival test: the dove is the strongest pull because Magritte really did hide a face behind a dove in Man in a Bowler Hat, and the pipe recalls The Treachery of Images; the explanation defuses both; against the key, the apple is the defining image. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a globally familiar image, much parodied. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: c4 was the claim I was least sure of, so I spent one writer search on it (query: Magritte Man in a Bowler Hat dove painting year); the summary gave 1964, drawing on an Artchive listing and Christie's lot essays, which are not Tier A, so the checkers still need their own evidence; if 1964 cannot be confirmed, drop 'from the same year' rather than the item.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "17abdd138c4f36633a54bd9fd9117ff58af884aae7bf4e731ca7de8d5de9c316",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "A green apple",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In The Son of Man a floating green apple covers most of the man's face.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The face is hidden by an apple, not a dove, a pipe or a candle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Magritte painted The Son of Man in 1964 as a self-portrait.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Magritte's Man in a Bowler Hat, also of 1964, shows a white dove in front of the man's face.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c5b97ee790a77ede419b1d17cd73fefd358f71882fcc42b93c1c4c2cda809129",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "A green apple",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A floating green apple hides most of the bowler-hatted man's face in The Son of Man.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "In The Son of Man the face is not covered by a dove, a pipe or a candle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Magritte painted The Son of Man in 1964 and called it a self-portrait.",
+              "confidence": "certain"
+            },
+            "note": "The search for c4 also surfaced Christie's grouping of the 1964 bowler-hat paintings. High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Magritte \"Man in a Bowler Hat\" 1964 white dove covers face same year as The Son of Man",
+              "results": [
+                {
+                  "title": "The Son of Man",
+                  "url": "https://en.wikipedia.org/wiki/The_Son_of_Man"
+                },
+                {
+                  "title": "magritte statue surrealism dove",
+                  "url": "https://www.museumize.com/products/magritte-statue-surrealism-dove"
+                },
+                {
+                  "title": "# Man with Bowler Hat and Dove – Surrealist Magritte Statue (MAG04)",
+                  "url": "https://www.museumize.com/apps/aeo/ai/md/default/products/11596937036.md"
+                },
+                {
+                  "title": "# Man with Bowler Hat and Dove – Surrealist Magritte Statue (MAG04)",
+                  "url": "https://www.museumize.com/apps/aeo/ai/md/default/products/magritte-statue-surrealism-dove.md"
+                },
+                {
+                  "title": "“The Son of Man” Magritte – An Analysis of the Famous Apple Painting",
+                  "url": "https://artincontext.org/?p=16421"
+                },
+                {
+                  "title": "lot 6190948",
+                  "url": "https://www.christies.com.cn/en/lot/lot-6190948"
+                },
+                {
+                  "title": "10 Surprising Facts About René Magritte’s ‘The Son of Man’",
+                  "url": "https://www.mentalfloss.com/art/10-things-you-might-not-know-about-son-man"
+                },
+                {
+                  "title": "Art History  •  Artworks under the lens  •  Featured",
+                  "url": "https://www.singulart.com/blog/en/?p=24155"
+                },
+                {
+                  "title": "magritte man with hat and dove lhomme au chapeau melon statue 6h",
+                  "url": "https://museumize.com/products/magritte-man-with-hat-and-dove-lhomme-au-chapeau-melon-statue-6h"
+                },
+                {
+                  "title": "Please ensure Javascript is enabled for purposes of website accessibility",
+                  "url": "https://musart.com/en/magritte-statue-man-with-hat-and-dove-1964-ds-mw-mag04"
+                },
+                {
+                  "title": "Benutzer:Pow-lina/The Son of Man",
+                  "url": "https://de.wikipedia.org/wiki/Benutzer:Pow-lina/The_Son_of_Man"
+                },
+                {
+                  "title": "Masterpiece in the spotlight: The Son of Man, Magritte",
+                  "url": "https://www.riseart.com/article/2699/masterpiece-in-the-spotlight-the-son-of-man-magritte"
+                },
+                {
+                  "title": "Artists  •  Artworks under the lens",
+                  "url": "https://www.singulart.com/blog/en/?p=157417"
+                },
+                {
+                  "title": "Man in a Bowler Hat (1964; Belgium) by Rene Magritte",
+                  "url": "https://www.artchive.com/?p=125221"
+                },
+                {
+                  "title": "volume 10",
+                  "url": "https://giselledaydreams.substack.com/p/volume-10"
+                },
+                {
+                  "title": "# Son of Man Bowler Hat Figure – René Magritte Statue (Assorted Sizes)",
+                  "url": "https://www.museumize.com/apps/aeo/ai/md/default/products/rene-magritte-statue-bowler-hat.md"
+                },
+                {
+                  "title": "Son of Man Bowler Hat Figure – René Magritte Statue (Assorted Sizes)",
+                  "url": "https://www.museumize.com/products/rene-magritte-statue-bowler-hat"
+                },
+                {
+                  "title": "magritte statue the son of man 1964 ds mw mag01",
+                  "url": "https://musart.com/en/artworks/magritte-statue-the-son-of-man-1964-ds-mw-mag01"
+                },
+                {
+                  "title": "magritte statue the son of man 1964 ds mw mag01",
+                  "url": "https://musart.com/en-us/magritte-statue-the-son-of-man-1964-ds-mw-mag01"
+                }
+              ],
+              "summaryExcerpt": "Christie's notes that in each of these works the face of the man has been obscured by an object: either an apple or a white dove. ... Yes, the dove painting is from the same year as The Son of Man.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The summary names Christie's as its strongest source; Artchive also lists Man in a Bowler Hat as 1964. The summary treats the dove as the more precise description."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, date) rests on knowledge alone in both checks: checker A's searches ran out and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Only explanation facts lack evidence: redraft under a new id with them evidenced, bounded or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In René Magritte's painting The Son of Man, what hides most of the man's face?",
+  "answer": "A green apple",
+  "wrong": ["A white dove", "A tobacco pipe", "A lit candle"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.362,
+    "estimator": "v0"
+  }
+}

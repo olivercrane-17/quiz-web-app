@@ -1,0 +1,255 @@
+{
+  "id": "p.sci.0117",
+  "status": "active",
+  "category": "sci",
+  "tags": ["elements", "earth-science"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Oxygen makes up nearly half the crust's mass, locked into rocks as oxides and silicates. Quartz, for example, is silicon dioxide, and silicon comes second at about 28%.",
+  "learnMore": "Abundance of elements in Earth's crust",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Oxygen is the most abundant element in Earth's crust by mass."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Silicon, iron and aluminium each make up less of Earth's crust by mass than oxygen does."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Oxygen makes up nearly half of the mass of Earth's crust, mostly bound in oxides and silicates."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Quartz is silicon dioxide."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Silicon is the second most abundant element in Earth's crust by mass, at about 28%."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers crustal abundance, so checker A needs web evidence for c1, c2, c3 and c5. rivalTest: Silicon is the strongest rival at about 28%; aluminium is about 8% and iron about 5 to 6%; oxygen at about 46% wins by a wide margin in every standard estimate. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 28 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None on the key. Figures differ slightly between sources, so c3 says 'nearly half' and c5 'about 28%'. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "69788ee4b949d1aa29acb49bad8270b6a97585490bfa6d84d77d2d0d450cc757",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "Oxygen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[number=13].summary",
+              "excerpt": "Aluminium is the third most abundant element (after oxygen and silicon), and the most abundant metal, in the Earth's crust.",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8). The ranking puts oxygen first. The sentence does not say 'by mass', but crustal abundance tables are by mass, and oxygen also leads by atom count."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "ptable",
+              "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+              "file": "PeriodicTableJSON.json",
+              "locator": "elements[number=13].summary",
+              "excerpt": "Aluminium is the third most abundant element (after oxygen and silicon), and the most abundant metal, in the Earth's crust.",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Oxygen first, silicon second, aluminium third, so iron, below aluminium, is also less abundant than oxygen."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Oxygen is about 46% of the crust by mass, nearly all bound in silicate and oxide minerals.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Quartz is silicon dioxide, SiO2.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Silicon, about 27 to 28% of the crust by mass, is second only to oxygen.",
+              "confidence": "certain"
+            },
+            "note": "ptable's aluminium summary ('after oxygen and silicon') supports the rank but not the 28% figure, so the claim is recorded on knowledge; dropping the figure would let the dataset carry it. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "95862da6739a4c43feaf69dc8354cd8e11ac48ee567ace86cbeef68bb19941f1",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "Oxygen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "By mass the crust is about 46% oxygen, 28% silicon, 8% aluminium and 5 to 6% iron.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "By mass silicon (28%), aluminium (8%) and iron (5 to 6%) are each below oxygen's 46%.",
+              "confidence": "certain"
+            },
+            "note": "The ptable aluminium entry says aluminium is third after oxygen and silicon and its calcium entry says fifth, which agrees but does not order oxygen above silicon, so I leave this on knowledge. High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Oxygen is about 46% of the crust by mass, bound mainly in silicates and oxides.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Quartz is silicon dioxide, SiO2.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Silicon is the second most abundant crustal element by mass, about 28%.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, number) and c5 (explanation, superlative) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced. Checker A has ptable evidence for c1 and c2; the 'nearly half' and 28% figures have none.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "By mass, which element is the most abundant in Earth's crust?",
+  "answer": "Oxygen",
+  "wrong": ["Silicon", "Iron", "Aluminium"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.183,
+    "estimator": "v0"
+  }
+}

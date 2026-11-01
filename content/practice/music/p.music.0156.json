@@ -1,0 +1,211 @@
+{
+  "id": "p.music.0156",
+  "status": "cut",
+  "category": "music",
+  "tags": ["musicals", "poetry", "andrew-lloyd-webber"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The words come from Old Possum's Book of Practical Cats, published in 1939. The famous song 'Memory' borrows lines from Eliot's poem 'Rhapsody on a Windy Night'.",
+  "learnMore": "Cats (musical)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The musical Cats sets poems by T. S. Eliot to music."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Cats is not based on poems by Lewis Carroll, Edward Lear or Rudyard Kipling."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Cats is based on T. S. Eliot's Old Possum's Book of Practical Cats, published in 1939."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The lyrics of the song Memory draw on Eliot's poem Rhapsody on a Windy Night."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers these music facts (the manifest holds geographic, scientific, Nobel, Olympic and art-collection data), so each high-risk claim needs web evidence from the checkers. I used no WebSearch. Rival test: argued for Edward Lear (The Owl and the Pussy-cat) and Kipling (The Cat That Walked by Himself), who both wrote famous cat pieces, which is the trap; Cats sets Eliot's Old Possum poems, so the key stands. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the musical has toured worldwide; Eliot is a world-famous poet, though his cat poems surprise many. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: Memory's lyrics are by Trevor Nunn, drawing on Eliot's poem, so the explanation says 'borrows lines', the standard description.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7d993657eb93951e209a7ec86ce58e478480637b933adcba38d6f32d143e1a66",
+        "startedAt": "2026-11-01T02:00:29Z",
+        "finishedAt": "2026-11-01T02:19:40Z",
+        "coldSolve": {
+          "answerGiven": "T. S. Eliot",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cats sets poems by T. S. Eliot to music.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It does not set poems by Carroll, Lear or Kipling.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cats is based on Eliot's Old Possum's Book of Practical Cats, published in 1939.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The lyric of Memory draws on Eliot's Rhapsody on a Windy Night.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Andrew Lloyd Webber composed the musical Cats.",
+              "confidence": "certain"
+            },
+            "note": "Checker addition x1: role key, ref stem, risk standard. Claim: Cats is a musical by Andrew Lloyd Webber. The stem's premise, which no writer claim states."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1261a419f99b526b565b2ce7093b656cdb3e9d399861ff68f406c0cc85d91651",
+        "startedAt": "2026-11-01T02:05:28Z",
+        "finishedAt": "2026-11-01T02:26:16Z",
+        "coldSolve": {
+          "answerGiven": "T. S. Eliot",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cats sets T. S. Eliot's poems to music.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "It is not based on Carroll, Lear or Kipling.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Eliot's Old Possum's Book of Practical Cats was published in 1939.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Memory draws on Eliot's Rhapsody on a Windy Night.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic01e",
+        "at": "2026-11-01T02:04:12Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c3 (date) rests on knowledge only: neither check ran a search (A's records say WebSearch was refused) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with evidence or without the risky detail.",
+      "decidedAt": "2026-11-01T04:20:00Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Andrew Lloyd Webber's musical Cats sets to music the poems of which writer?",
+  "answer": "T. S. Eliot",
+  "wrong": ["Lewis Carroll", "Edward Lear", "Rudyard Kipling"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.217,
+    "estimator": "v0"
+  }
+}

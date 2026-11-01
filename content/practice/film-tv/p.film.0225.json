@@ -1,0 +1,278 @@
+{
+  "id": "p.film.0225",
+  "status": "active",
+  "category": "film",
+  "tags": ["world-cinema", "australia", "animals"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Babe was played by dozens of real piglets, swapped as they grew, and by animatronic doubles from Jim Henson's Creature Shop. The film won the Oscar for Best Visual Effects.",
+  "learnMore": "Babe (film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In Babe (1995), the title character, a pig, learns to herd sheep."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "risk": "standard",
+      "text": "Babe was filmed in Australia."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Babe is not a dog, a duck or a goat; a sheepdog and a duck are other characters on the farm."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Babe was played by dozens of real piglets, replaced as they grew, along with animatronic doubles."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The animatronic animals in Babe were made by Jim Henson's Creature Shop."
+    },
+    {
+      "id": "c6",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Babe won the Academy Award for Best Visual Effects, at the ceremony held in 1996."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: A dog is the trap, because sheepdogs herd sheep and the farm's sheepdog raises Babe; the duck is another character. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: made in Australia and shown worldwide; a non-US production subject. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 30 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0f62fe3212bd078a3adcbdc48fb1ad6654d991d4d05774aadb36c7876f7bb514",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "A pig",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Babe (1995) is about a piglet who learns to herd sheep.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Babe was shot in Australia, around Robertson in New South Wales.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Babe is a pig; the sheepdogs and Ferdinand the duck are other animals on the farm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Because piglets grow fast, the production used several dozen real piglets (48 is the figure usually given) as well as animatronic doubles.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jim Henson's Creature Shop built the animatronic animals.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Babe won Best Visual Effects at the Academy Awards ceremony of March 1996.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "84e204d9d1cc2ef4743df14545787a486d3fe762a3f32bad70a86e6cca3ec19c",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "A pig",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Babe, the title character, is a pig who learns to herd sheep.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Babe was filmed in Australia, in New South Wales.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Babe is not a dog, a duck or a goat; Fly the sheepdog and Ferdinand the duck are other farm characters.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the dog and the duck are real characters on the farm and so lure, but neither is Babe."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Babe was played by dozens of real piglets (roughly four dozen), replaced as they grew, plus animatronic doubles.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jim Henson's Creature Shop made the animatronic animals.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Babe won the Best Visual Effects Oscar at the ceremony held in March 1996.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1, c4 and c6 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.nat.0122",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In Babe (1995), filmed in Australia, the title character learns to herd sheep. What kind of animal is Babe?",
+  "answer": "A pig",
+  "wrong": ["A dog", "A duck", "A goat"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.481,
+    "estimator": "v0"
+  }
+}

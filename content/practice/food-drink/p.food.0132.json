@@ -1,0 +1,186 @@
+{
+  "id": "p.food.0132",
+  "status": "active",
+  "category": "food",
+  "tags": ["national-dishes", "cheese", "switzerland"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Its fame owes much to the Swiss Cheese Union, a cheese-marketing body that promoted fondue as the national dish to sell more cheese.",
+  "learnMore": "Fondue",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Cheese fondue is a Swiss dish eaten by dipping bread on long forks into a shared pot of melted cheese."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Raclette (melted cheese scraped onto potatoes), rosti (fried grated potato) and croque monsieur (a toasted ham and cheese sandwich) are not eaten by dipping bread into a shared pot of melted cheese."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The Swiss Cheese Union, a cheese-marketing body, promoted fondue as Switzerland's national dish in order to increase cheese sales."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c3). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: raclette is the close call, as the other famous Swiss melted-cheese dish, but it is scraped onto potatoes, not eaten by dipping bread; I asked for the dish rather than the country because a country key would duplicate the answer of p.book.0130. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: fondue is known worldwide as Swiss. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 23 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 1: the description is the famous image of fondue. Doubts: c3 is the surprise and is less widely known, so I rated it high. I spent one writer search on it (query: Swiss Cheese Union promoted fondue as national dish history 1930s); the results included Wikipedia's Fondue and Swiss Cheese Union articles, and the summary says the Union promoted fondue as a national dish in the 1930s to raise demand for its surplus cheese, so the claim stands. The checkers still need their own evidence for it.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "87dfc8f6a819ebea8602b69378758ea98a35216aac04e432c54fc023fb5ec9fa",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Fondue",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cheese fondue is eaten by dipping bread on long forks into a shared pot of melted cheese.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Raclette is scraped onto potatoes, rösti is fried grated potato and croque monsieur is a toasted ham and cheese sandwich.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "From the 1930s the Swiss Cheese Union (Schweizerische Käseunion) promoted fondue as the national dish to sell more cheese.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. No pinned dataset covers it and this check's share of the batch search cap went to claims with numbers and dates, so it still needs dataset or web evidence (a follow-up) before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5f65827a1342c1244bb8092f8fd0ac9e483d2f60e382019cd3c93a854a894a93",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Fondue",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cheese fondue is a Swiss dish eaten by dipping bread on long forks into a shared pot of melted cheese.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Raclette is melted cheese scraped over potatoes, rosti is fried grated potato, croque monsieur is a French grilled ham and cheese sandwich.",
+              "confidence": "certain"
+            },
+            "note": "Raclette is the only plausible rival and is eaten differently."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Swiss Cheese Union (Schweizerische Käseunion) promoted fondue as a national dish in the 1930s to raise cheese sales.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk explanation c3 (writer's doubt) rests on knowledge alone in both checks; no pinned dataset covers it and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Swiss dish is eaten by dipping bread on long forks into a shared pot of melted cheese?",
+  "answer": "Fondue",
+  "wrong": ["Raclette", "Rösti", "Croque monsieur"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.9,
+    "spread": 0.363,
+    "estimator": "v0"
+  }
+}

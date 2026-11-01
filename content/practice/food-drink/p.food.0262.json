@@ -1,0 +1,223 @@
+{
+  "id": "p.food.0262",
+  "status": "cut",
+  "category": "food",
+  "tags": ["tea", "money", "food-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Tea bricks served as currency in Tibet, Mongolia and Siberia into the 20th century. They were light and durable, and could be broken up to make change, or brewed.",
+  "learnMore": "Tea brick",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Compressed bricks of tea were used as a form of currency in parts of Asia."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Tea bricks were used as money in Tibet, Mongolia and Siberia into the 20th century."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Pieces could be broken off a tea brick to pay smaller sums, and the tea could also be brewed and drunk."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed; risk is at or above the C26 floor (high: c1, c2). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Someone could argue tea bricks were barter goods rather than money; sources describe them as a standard medium of exchange, so the statement holds. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the history is Central Asian, and the idea of edible money works for players anywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 29 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: it sounds made up, so many players say false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "cbe6e726a25618474f116f337304f18fbc6362d0c0e079d62404c38c050c2b4c",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Compressed tea bricks served as currency in parts of Asia, Tibet, Mongolia and Central Asia among them.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt, set by the writer): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tea bricks were used as money in Mongolia and Tibet into the early 20th century; I am not sure how late they served as money in Siberia.",
+              "confidence": "likely"
+            },
+            "note": "High-risk (date), left uncertain. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pieces could be broken off for smaller payments, and the tea could also be brewed.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c2: 'in Tibet, Mongolia and Siberia into the 20th century' needs external evidence for each place. Without it, naming only Tibet and Mongolia, or a bounded 'for centuries', is safer (§9.2)."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "141da0c05089f5eba52f20cdfd867f193734925d6723cdf09b2a451be35b6c8f",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Compressed tea bricks served as currency in parts of Asia.",
+              "confidence": "certain"
+            },
+            "note": "The writer marked this checker_doubt. Knowledge is certain. High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tea bricks circulated as money in Tibet, Mongolia and Siberia into the early 20th century.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pieces were broken off for small payments, and the tea could be brewed.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-pfood02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "1f301a14994609f84b0080de16bc91661ad0809aa472dd232cfcf8332d9a3690",
+      "startedAt": "2026-11-01T04:51:56Z",
+      "finishedAt": "2026-11-01T05:00:50Z",
+      "coldSolve": {
+        "answerGiven": "True",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Compressed bricks of tea served as a medium of exchange in parts of Asia, Mongolia and Tibet among them.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed (A and B both confirmed it on knowledge), but high-risk with no external evidence in any check, so rule 3 still needs dataset or web evidence. No external evidence could be gathered: this run's one WebSearch call was refused because the turn's shared search limit (200 calls across all agents) was already used up, and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "As I recall it, tea bricks served as money in Mongolia and Siberia into the 20th century (in Siberia until about the Second World War), and they also circulated in Tibet, though I cannot place when that use ended.",
+            "confidence": "likely"
+          },
+          "note": "Disputed claim: pass A left it uncertain and asked for evidence for each place. I side with A: the three places and the 20th-century date need dataset or web evidence, and the one search this run tried (tea bricks as money in Tibet, Mongolia and Siberia) was refused. No external evidence could be gathered: this run's one WebSearch call was refused because the turn's shared search limit (200 calls across all agents) was already used up, and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "checker_doubt c2: the explanation's 'in Tibet, Mongolia and Siberia into the 20th century' rests on knowledge in every check. I agree with pass A's fix: either a re-run tiebreak finds a Tier A or B source for each place and the date, or the explanation is bounded to what the evidence supports (§9.2, the precision ladder). The key (c1) is not in doubt, but it is high-risk and also lacks external evidence."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Pass T revised, so rule 2 cannot pass: A revised (c2 uncertain), B passed, and an accept on a split needs a passing tiebreak (§9.7, §9.9). T sided with A on c2 (the three places and the 20th-century end date) and gathered no external evidence, because its one search was refused when the shared WebSearch limit ran out; high-risk c1 and c2 rest on knowledge in every check. The fix A and T ask for, bounding the explanation, changes claim c2 and needs two fresh checks. No check doubts the key: redraft under a new id with a bounded explanation and web evidence.",
+      "decidedAt": "2026-11-01T05:26:46Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Pressed bricks of tea were once used as money in parts of Asia.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.68,
+    "spread": 0.306,
+    "estimator": "v0"
+  }
+}

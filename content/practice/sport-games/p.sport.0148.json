@@ -1,0 +1,231 @@
+{
+  "id": "p.sport.0148",
+  "status": "active",
+  "category": "sport",
+  "tags": ["marathon", "open-water-swimming", "distances"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "The narrowest crossing, from near Dover to Cap Gris-Nez, is about 33 km (about 21 miles). Channel swimmers often swim much further, as the tides sweep them along an S-shaped route.",
+  "learnMore": "Strait of Dover",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A marathon is 42.195 km long."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Strait of Dover is about 33 km wide at its narrowest point, between near Dover in England and Cap Gris-Nez in France."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "About 33 km is about 21 miles."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Tides push Channel swimmers along an S-shaped course, so they swim further than the straight-line distance."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; c1, c2, c3 are high and c4 is standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so are both label claims of this counterintuitive comparison; the standard claim carries none of those triggers and states a rule or a well-known fact. datasets: no pinned dataset gives the strait's width (natural-earth has coastlines but no crossing measurement), so c1 and c2 need web evidence from checker A; c3 is a conversion (33 / 1.609344 = 20.5 miles), which a calculation can confirm. rivalTest: The English Channel feels vast, so most players pick it, which is the trap. Published widths at the narrowest point range from about 32 to 34 km, and the marathon beats every one of them by more than 8 km, so the order holds; the value uses the precision ladder ('about 33 km'). volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 31 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: None on the order.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "915f11b6b8026a7d92ca5280667edccd31f924323ad684652592ebe869b8e611",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "A marathon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The marathon is 42.195 km.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Strait of Dover is about 33 km wide at its narrowest, between South Foreland near Dover and Cap Gris-Nez.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "33 km divided by 1.609344 is 20.5 miles, about 21 miles.",
+              "confidence": "certain"
+            },
+            "note": "A pure conversion, recorded as knowledge because the schema has no calculation entry. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tides carry Channel swimmers along an S-shaped track, so they swim further than the straight line.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6c27d50aeec463516a2648e3ac87f59e58834df13351e3c91d0fff795058af7c",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "A marathon",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A marathon is 42.195 km.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Strait of Dover is about 33 km wide at its narrowest, between the Dover side and Cap Gris-Nez (reference works give 33.3 km, 20.7 miles).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "33 km is 20.5 miles, and the reference figure of 33.3 km is 20.7 miles, so 'about 21 miles' is fair (arithmetic re-run).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tides push Channel swimmers along an S-shaped course, so they swim further than the straight line.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (label, number), c2 (label, number) and c3 (explanation, number) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. c3 is a unit conversion; keep conversions inside an evidenced claim. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which is longer?",
+  "a": "A marathon",
+  "b": "The Strait of Dover at its narrowest",
+  "answer": "a",
+  "relation": "longer",
+  "measure": "distance in kilometres",
+  "unit": "km",
+  "values": {
+    "a": 42.195,
+    "b": 33
+  },
+  "valueDisplay": {
+    "a": "42.195 km",
+    "b": "about 33 km"
+  },
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.122,
+    "estimator": "v0"
+  }
+}

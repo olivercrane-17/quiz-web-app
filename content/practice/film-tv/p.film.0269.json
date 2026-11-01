@@ -1,0 +1,200 @@
+{
+  "id": "p.film.0269",
+  "status": "active",
+  "category": "film",
+  "tags": ["awards", "oscars", "musicals"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "West Side Story won 10 of its 11 nominations. The Godfather won three, for best picture, actor and adapted screenplay, and Marlon Brando declined his.",
+  "learnMore": "West Side Story (1961 film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "West Side Story (1961) won 10 competitive Academy Awards, from 11 nominations."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Godfather (1972) won 3 Academy Awards: Best Picture, Best Actor and Best Adapted Screenplay."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Marlon Brando declined the Oscar he won for playing Vito Corleone in The Godfather."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: The Godfather's reputation as one of the greatest films pulls players toward it; whether Brando's declined award is counted (3 or 2), West Side Story wins easily. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: two world-famous films; no local knowledge is needed. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 25 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: the 1961 film is named with its year to rule out the 2021 remake.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9638c8dabcfeccf899e3baaf437d9da6a5131eb4cda29d7d18eec23662de63c6",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "West Side Story (1961)",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "West Side Story (1961) won 10 of its 11 competitive Oscar nominations, losing only Adapted Screenplay.",
+              "confidence": "certain"
+            },
+            "note": "Jerome Robbins also received a separate honorary award, which the measure 'competitive' rightly leaves out. High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Godfather won three Oscars: Best Picture, Best Actor and Best Adapted Screenplay.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Brando refused his Oscar for Vito Corleone and sent Sacheen Littlefeather to decline it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7c6d537630a7acd8701b478a172576e61b7175bc32b451562db165a64397c654",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "West Side Story (1961)",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "West Side Story (1961) won 10 competitive Oscars from 11 nominations.",
+              "confidence": "certain"
+            },
+            "note": "It also received an honorary award (for Jerome Robbins), 11 statuettes in all; either count beats three. High-risk (number): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Godfather (1972) won 3 Oscars: Best Picture, Best Actor and Best Adapted Screenplay.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Marlon Brando declined the Oscar he won for The Godfather.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 and c2 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0167",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which film won more Academy Awards?",
+  "a": "West Side Story (1961)",
+  "b": "The Godfather (1972)",
+  "answer": "a",
+  "relation": "more",
+  "measure": "competitive Academy Awards won",
+  "unit": "awards",
+  "values": {
+    "a": 10,
+    "b": 3
+  },
+  "valueDisplay": {
+    "a": "10 Oscars",
+    "b": "3 Oscars"
+  },
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.198,
+    "estimator": "v0"
+  }
+}

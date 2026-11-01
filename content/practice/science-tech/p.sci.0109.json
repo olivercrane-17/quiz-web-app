@@ -1,0 +1,221 @@
+{
+  "id": "p.sci.0109",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["space", "speed", "orbits"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "A satellite in low orbit laps Earth about every 90 minutes, yet Earth carries it, and us, around the Sun nearly four times faster, covering about 2.6 million km a day.",
+  "learnMore": "Earth's orbit",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A satellite in low Earth orbit travels at about 28,000 km/h."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Earth orbits the Sun at an average speed of about 107,000 km/h."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A satellite in low Earth orbit circles Earth about once every 90 minutes."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "At about 107,000 km/h, Earth travels about 2.6 million km in a day, nearly four times a low-orbit satellite's speed."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers orbital speeds, so checker A needs web evidence for c1, c2 and c3; c4 is a calculation (107,000 x 24 is about 2.57 million, and 107,000 / 28,000 is about 3.8). rivalTest: The satellite is the side most players pick, because 28,000 km/h is famously fast; Earth's mean orbital speed of about 29.8 km/s is nearly four times a low orbit's 7.7 to 7.8 km/s. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 31 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: The label names a generic low-orbit satellite rather than the International Space Station, so the item stays true after that station is retired. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "ea3442c0b98bd2178d1a9e3db6e7746d8ce5d069ef8c2f13c8f54c30d41d739b",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "Earth in its orbit round the Sun",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Satellites in typical low Earth orbit move at about 7.7 to 7.8 km/s, roughly 28,000 km/h; the ISS does about 27,600 km/h.",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8). Low Earth orbit formally reaches 2,000 km, where speeds are lower; the claim holds for the typical low orbits the item means. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Earth's mean orbital speed is about 29.8 km/s, about 107,000 km/h.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Typical low-orbit periods are about 88 to 95 minutes; the ISS takes about 92.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "107,000 km/h × 24 h is about 2.57 million km a day, and 107,000 / 28,000 is about 3.8.",
+              "confidence": "certain"
+            },
+            "note": "Pure arithmetic; content:record has no calculation method (§9.5.4), so it is recorded as knowledge. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7cb389da3b3a91821569749ec76d43586022ce3b61e24ae708e5115071ecdce1",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "Earth in its orbit round the Sun",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Low Earth orbit speed is about 7.7 to 7.8 km/s, roughly 28,000 km/h. The International Space Station moves at about 27,600 km/h.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Earth's mean orbital speed is 29.78 km/s, about 107,200 km/h.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Low Earth orbits take about 88 to 93 minutes a lap.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "29.78 km/s x 86,400 s = 2.57 million km a day, and 107,000 / 28,000 = 3.8 (computed).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Without a named measure, faster is frame-dependent: relative to the Sun a low-orbit satellite moves at Earth's 29.8 km/s plus or minus its own 7.7 km/s, so it is sometimes faster than Earth. The labels (in low Earth orbit, in its orbit round the Sun) point to orbital speeds and the measure field says orbital speed, but the measure is not shipped to players (ARCHITECTURE 5.1.1). A stem such as Which has the higher orbital speed? would close the reading."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (label, number), c2 (label, number), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced. For a redraft, checker B's note stands: 'faster' depends on the frame of reference, so ask which has the higher orbital speed.",
+      "decidedAt": "2026-11-01T04:27:18Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which is faster?",
+  "a": "A satellite in low Earth orbit",
+  "b": "Earth in its orbit round the Sun",
+  "answer": "b",
+  "relation": "faster",
+  "measure": "orbital speed",
+  "unit": "km/h",
+  "values": {
+    "a": 28000,
+    "b": 107000
+  },
+  "valueDisplay": {
+    "a": "about 28,000 km/h",
+    "b": "about 107,000 km/h"
+  },
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.204,
+    "estimator": "v0"
+  }
+}

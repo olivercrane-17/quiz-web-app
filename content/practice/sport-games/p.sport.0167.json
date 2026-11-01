@@ -1,0 +1,233 @@
+{
+  "id": "p.sport.0167",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["olympics", "world-cup", "southern-hemisphere", "timelines"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Uruguay hosted the first men's World Cup in 1930, with every match in Montevideo. The Olympics first went south 26 years later, to Melbourne in 1956.",
+  "learnMore": "1956 Summer Olympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The first Olympic Games held south of the Equator were the 1956 Melbourne Summer Olympics."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The first FIFA World Cup, held in Uruguay in 1930, was south of the Equator."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Every match of the 1930 World Cup was played in Montevideo."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "1956 was 26 years after 1930."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so are both label claims of this counterintuitive comparison. datasets: olympic-editions, edition_metadata.csv: every Summer and Winter edition before 1956 is in Europe or North America, and 1956 Summer Melbourne (edition_id 14) is the first in the Southern Hemisphere (c1); worldcup, file 1930/worldcup.json: all three grounds are in Montevideo (c2, c3); geonames-cities: Montevideo UY at latitude -34.90328 and Melbourne AU at -37.814, both south of the Equator. c4 is arithmetic. rivalTest: The Olympics feel older and more global, so most players pick them, which is the trap. The gap is 26 years and both dates are dataset records, so the order cannot flip. Both labels name the organization (Olympic Games, FIFA World Cup) so a rugby or cricket world cup cannot be argued. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 26 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: The 1956 equestrian events were in Stockholm, which does not change the first southern Games.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "498c584868d74e7f465eb0c0bd05145ba71fa0ec1c6202ffdad2b51a5f422630",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "A FIFA World Cup south of the Equator",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "every held edition before edition_id=14 (Melbourne 1956); edition_id=14",
+              "excerpt": "hosts before 1956: 1896 Athina, 1900 Paris, 1904 St. Louis, 1908 London, 1912 Stockholm, 1920 Antwerpen, 1924 Paris, 1924 Chamonix, 1928 Amsterdam, 1928 Sankt Moritz, 1932 Los Angeles, 1932 Lake Placid, 1936 Berlin, 1936 Garmisch-Partenkirchen, 1948 London, 1948 Sankt Moritz, 1952 Helsinki, 1952 Oslo, 1956 Cortina d'Ampezzo; 14,1956 Summer,1956,Summer,Melbourne,Australia,1956-11-22,1956-12-08,3190,67,145,19",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Every earlier host is in the northern hemisphere (geonames-cities 1.1.65 latitudes, e.g. 37.98376 Athens, 34.05223 Los Angeles, 46.5369 Cortina d'Ampezzo), while Melbourne is at -37.814. The Stockholm equestrian edition of June 1956 (row 48) is northern too."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Montevideo, country=UY",
+              "excerpt": "{\"name\":\"Montevideo\",\"lat\":\"-34.90328\",\"lng\":\"-56.18816\",\"country\":\"UY\",\"admin1\":\"10\",\"admin2\":\"02\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Negative latitude: south of the Equator. worldcup 1930 puts every match in Montevideo."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "distinct grounds",
+              "excerpt": "Estadio Pocitos, Montevideo | Estadio Parque Central, Montevideo | Estadio Centenario, Montevideo",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "1956 minus 1930 is 26.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b5c9c7a690da5b8ce8ed456264d1c1e5f628e6dbbd78155f02b91bbb484c5b13",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "A FIFA World Cup south of the Equator",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Melbourne, country=AU; host cities of editions before 1956",
+              "excerpt": "Melbourne AU \"lat\":\"-37.814\". Every earlier host city matched in the file has positive latitude: Athens 37.98, Paris 48.85, St. Louis 38.63, London 51.51, Stockholm 59.33, Antwerp 51.22, Amsterdam 52.37, St. Moritz 46.50, Los Angeles 34.05, Berlin 52.52, Garmisch-Partenkirchen 47.49, Helsinki 60.17, Oslo 59.91.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Chamonix did not match by name in the file, and Lake Placid matched a Florida namesake; both are plainly north of the Equator. Host cities come from the olympic-editions file, whose 1956 Melbourne row is the first Summer edition outside the north."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Montevideo, country=UY",
+              "excerpt": "{\"name\":\"Montevideo\",\"lat\":\"-34.90328\",\"lng\":\"-56.18816\",\"country\":\"UY\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "All 1930 matches were in Montevideo (worldcup 1930 file)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "ground field of every match",
+              "excerpt": "Estadio Pocitos, Montevideo; Estadio Parque Central, Montevideo; Estadio Centenario, Montevideo. No other ground appears.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "1956 minus 1930 is 26.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c4 (explanation, number) rests on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. c4 is arithmetic (1956 minus 1930), the only claim without external evidence; the record schema has no calculation method, so leave such sums out or fold them into the dated claims. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "An Olympic Games south of the Equator",
+  "b": "A FIFA World Cup south of the Equator",
+  "answer": "b",
+  "relation": "earlier",
+  "measure": "year first held south of the Equator",
+  "unit": "year",
+  "values": {
+    "a": 1956,
+    "b": 1930
+  },
+  "valueDisplay": {
+    "a": "Melbourne 1956",
+    "b": "Uruguay 1930"
+  },
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.253,
+    "estimator": "v0"
+  }
+}

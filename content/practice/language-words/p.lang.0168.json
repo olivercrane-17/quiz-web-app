@@ -1,0 +1,190 @@
+{
+  "id": "p.lang.0168",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["word-origins", "technology", "coined-words"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Constantin Perskyi used television in a paper at the 1900 Paris World's Fair, decades before working sets. Robot comes from Karel Čapek's 1920 play R.U.R.",
+  "learnMore": "Television",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The word 'television' was first used by Constantin Perskyi in a paper presented at the International Congress of Electricity, part of the 1900 Paris World's Fair."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The word 'robot' comes from Karel Čapek's play R.U.R., written in 1920."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Working television systems were first demonstrated in the 1920s, more than two decades after the word was coined."
+    }
+  ],
+  "writerNotes": "Television feels newer than robot, so most players pick robot; counterintuitive is true. Twenty years apart, so no exact days are needed. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers it; rival test: argued for robot, an old Czech word robota; but robot as a word for an artificial worker began with the 1920 play; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: both words are used in English everywhere; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: c1 is a first-use claim and needs a reference check; any earlier use found would only widen the margin",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "62e8fc5106e560ced8ac08e581f90d92c1862062ae05d1ebfe1ed1786496babd",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Television",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Constantin Perskyi used the word television in a paper at the International Congress of Electricity in Paris, held during the 1900 Exposition Universelle.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Robot comes from Karel Čapek's play R.U.R., written and published in 1920 and first staged in 1921.",
+              "confidence": "certain"
+            },
+            "note": "Whether robot's year is taken as 1920 or 1921, television's 1900 is earlier by at least 20 years. High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Working television was first demonstrated in the mid-1920s, by John Logie Baird among others.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "dd4d55bfd70c6cbfaf76cae4960b35202c249d005e5faaf6e38d30ae7f6eb478",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Television",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Constantin Perskyi is credited with the first documented use of television (French television) in a paper at the Paris International Electricity Congress of August 1900.",
+              "confidence": "certain"
+            },
+            "note": "Standard credit, but 'first used' really means first documented. Any plausible dating of the first use stays before 1920."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Robot comes from Karel Capek's play R.U.R., written and published in 1920 (staged in 1921), the word credited to his brother Josef.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Working television systems (Baird, Jenkins) were first demonstrated in the mid 1920s, more than two decades after 1900.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Label claim c1 says 'first used', but the evidence is the first documented use. Reword to 'first recorded' if the editor wants the claim to be strictly checkable; the comparison is robust either way."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (label, first), c2 (label, date) and c3 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: B noted c1 says 'first used' where the evidence is the first recorded use.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which word was coined first?",
+  "a": "Television",
+  "b": "Robot",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year the word was first used",
+  "unit": "year",
+  "values": {
+    "a": 1900,
+    "b": 1920
+  },
+  "valueDisplay": {
+    "a": "1900",
+    "b": "1920"
+  },
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.151,
+    "estimator": "v0"
+  }
+}

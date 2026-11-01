@@ -1,0 +1,217 @@
+{
+  "id": "p.sport.0115",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["swimming", "rules", "medley"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "The order is butterfly, backstroke, breaststroke, freestyle. Medley relays begin with backstroke instead, because backstrokers start in the water rather than diving from the blocks.",
+  "learnMore": "Individual medley",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "In an individual medley, butterfly is swum first, followed by backstroke, breaststroke and freestyle."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Backstroke, breaststroke and freestyle are the second, third and fourth legs of an individual medley."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A medley relay is swum in the order backstroke, breaststroke, butterfly, freestyle."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Backstroke swimmers start in the water rather than diving from the starting blocks."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; c1 is high and c2, c3, c4 are standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item; the standard claims carry none of those triggers and state rules or well-known facts. datasets: no pinned dataset covers swimming rules; the order is set by World Aquatics rules, and checker A needs web evidence for c1, which holds 'first'. rivalTest: Backstroke is the planted trap, since it opens every medley relay; freestyle is a guess for 'the default stroke'. Under the rules each is a later leg of the individual medley, so only butterfly fits. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 25 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9acde454ee06eca8433728083cfedc7a93e16e60cc43830d6d801241c4c3dbf9",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Butterfly",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Swimming rules set the individual medley order as butterfly, backstroke, breaststroke, freestyle.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Backstroke, breaststroke and freestyle are the second, third and fourth legs of an individual medley.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A medley relay is swum backstroke, breaststroke, butterfly, freestyle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Backstroke races start in the water, with the swimmer holding the block, not with a dive.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Backstroke leads off a medley relay because it is the only stroke started in the water, which a relay changeover from the blocks cannot allow.",
+              "confidence": "certain"
+            },
+            "note": "Added by checker A. Role explanation, risk standard. Claim: Medley relays begin with backstroke because backstrokers start in the water rather than diving from the blocks."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "60bf58dc72b184b19c42227b03150580ee5f5b338110308bf42f10fe65a14d77",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Butterfly",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Individual medley order is butterfly, backstroke, breaststroke, freestyle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Backstroke, breaststroke and freestyle are the second, third and fourth legs of an individual medley.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Medley relay order is backstroke, breaststroke, butterfly, freestyle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Backstroke starts in the water, holding the wall; the other strokes start with a dive.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says relays start with backstroke 'because' backstrokers start in the water. That is the usual rationale, but it is a causal clause with no claim of its own and I could not source it (no searches were available). Consider 'partly because' or dropping the clause."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 (key, first) rests on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. B: the explanation's 'because' clause has no claim of its own (A listed it as x1). The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In an individual medley swimming race, which stroke is swum first?",
+  "answer": "Butterfly",
+  "wrong": ["Backstroke", "Breaststroke", "Freestyle"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.192,
+    "estimator": "v0"
+  }
+}

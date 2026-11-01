@@ -1,0 +1,329 @@
+{
+  "id": "p.sport.0238",
+  "status": "checking",
+  "category": "sport",
+  "tags": ["backgammon", "board-games", "dice"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "They race around 24 narrow triangles called points. Rolling a double lets a player move four times instead of two. English draughts players get 12 pieces each, chess players 16.",
+  "learnMore": "Backgammon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In backgammon each player starts with 15 checkers."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Backgammon players do not start with 12, 16 or 20 checkers each."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A backgammon board has 24 points, the narrow triangles the checkers move along."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In backgammon, rolling a double lets a player move the number shown four times."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In English draughts each player has 12 pieces, and in chess each player has 16."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed, 5 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: No dataset covers game rules; c1 to c5 are standard rules found in any rule book, and every one is high only because it holds a number. rivalTest: 12 (draughts) and 16 (chess) are the planted confusions from other board games; 20 is the round guess. A player who has set up a backgammon board can count 2 + 5 + 3 + 5 = 15. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 29 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "13be5186f4ac9aca8c3dc19c84b67e499f54a31ea98acbfc3c87a8daa0478c0f",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "15",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Each backgammon player starts with 15 checkers.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "So not 12, 16 or 20 each.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A backgammon board has 24 points, the narrow triangles.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A double is played four times.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "In English draughts (checkers) each player has 12 pieces; in chess each has 16.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "regional",
+            "severity": "note",
+            "note": "The explanation says 'Draughts players get 12 pieces each'. True of English draughts (checkers) and the other 8 by 8 forms, but international draughts (10 by 10), the main form in much of West and Central Africa and in the Netherlands, gives each player 20. c5 already says 'English draughts'; adding 'English' or '(checkers)' to the explanation would make it exact everywhere."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c5657a30381e1bca74aecceefdb56c2bb414004f2120d96645f6e6471734c917",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "15",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Each backgammon player starts with 15 checkers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Backgammon players start with 15 checkers, not 12, 16 or 20.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "A backgammon board has 24 points, the narrow triangles.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Rolling doubles in backgammon lets a player move the number shown four times.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "English draughts starts with 12 pieces a side and chess with 16.",
+              "confidence": "certain"
+            },
+            "note": "True as written (English draughts). The displayed explanation says only Draughts, which is not true of international draughts (20 pieces) or Canadian draughts."
+          }
+        ],
+        "issues": [
+          {
+            "type": "regional",
+            "severity": "fix",
+            "note": "The explanation says Draughts players get 12 pieces each. That is English draughts only: international draughts, the common game in much of Europe and West Africa, uses 20 (the same number as a distractor), and Canadian draughts uses 30. Change it to English draughts players get 12 pieces each, or drop the draughts clause."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "rewrite",
+      "reason": "Wording only (§9.7), before a tiebreak: checker B's revise (regional, fix), with A's matching note, is right that 'Draughts players get 12 pieces each' is false for international draughts (20 a side) and Canadian draughts (30). Claim c5 already says English draughts, which both checks confirmed, so the explanation now reads 'English draughts players get 12 pieces each' and no claim changes. B's revise verdict still stands and high-risk c1 to c5 rest on knowledge alone, so acceptance needs a passing tiebreak T with web evidence on c1 to c5. [wording-only rewrite by ed-psport02d at 2026-11-01T04:37:40Z of explanation; checks kept, packetSha256 re-stamped: pass A ea5f123f89baf67cacc72c98678692dd44af56a4ca144218e38342163315b272 -> 13be5186f4ac9aca8c3dc19c84b67e499f54a31ea98acbfc3c87a8daa0478c0f; pass B d0a7c1ffeb0d933a33d3c6fc043a08a5db066f433ecc6cfa6a4d8c13ab63134e -> c5657a30381e1bca74aecceefdb56c2bb414004f2120d96645f6e6471734c917]",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-psport02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "4410116ec66a4f6cbc4d82ffa237bafbe08899b238622011cba150a04c06ed8a",
+      "startedAt": "2026-11-01T04:59:04Z",
+      "finishedAt": "2026-11-01T05:07:00Z",
+      "coldSolve": {
+        "answerGiven": "15",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "Each backgammon player starts with 15 checkers: two on the 24-point, five on the 13-point, three on the 8-point and five on the 6-point.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it. High-risk (a number), so knowledge does not count (§9.5.3); it still needs dataset or web evidence before acceptance. None could be gathered: the shared WebSearch budget for this turn was spent, so 0 searches ran, and no pinned dataset covers board games."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "Since each side has exactly 15 checkers, 12, 16 and 20 are all wrong.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed. Follows from c1; needs the same external evidence."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "The backgammon board has 24 long, narrow triangles called points, six in each quarter.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed. High-risk and knowledge only, so it still needs dataset or web evidence; none could be gathered."
+        },
+        {
+          "claimId": "c4",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "A double is played twice, so the player moves the number shown four times instead of two.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed. High-risk and knowledge only, so it still needs dataset or web evidence; none could be gathered."
+        },
+        {
+          "claimId": "c5",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "textbook",
+            "restatement": "In English draughts (checkers) each player has 12 pieces, and in chess each player has 16.",
+            "confidence": "certain"
+          },
+          "note": "The claim behind B's regional issue. Confirmed as worded, since it names English draughts. High-risk and knowledge only, so it still needs dataset or web evidence; none could be gathered."
+        }
+      ],
+      "issues": [
+        {
+          "type": "regional",
+          "severity": "note",
+          "note": "B's regional fix is resolved in the item as it stands: the explanation now reads 'English draughts players get 12 pieces each, chess players 16', which matches c5, so international draughts (20 a side) and Canadian draughts (30) no longer contradict it. This tiebreak settles that dispute only. Every claim (c1 to c5) is high-risk and every check so far rests on knowledge, so the item still needs dataset or web evidence on c1 to c5 (§9.9 rule 3) from a re-run with search budget."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "pass"
+    }
+  },
+  "format": "mc",
+  "stem": "How many checkers (playing pieces) does each player start with in backgammon?",
+  "answer": "15",
+  "wrong": ["12", "16", "20"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.358,
+    "estimator": "v0"
+  }
+}

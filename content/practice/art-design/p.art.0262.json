@@ -1,0 +1,186 @@
+{
+  "id": "p.art.0262",
+  "status": "active",
+  "category": "art",
+  "tags": ["sculpture", "modern-art", "law"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "In 1926 customs officers taxed his polished bronze Bird in Space as a manufactured metal object. In 1928 a court ruled it was art, so no duty was owed.",
+  "learnMore": "Bird in Space",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In Brancusi v. United States, decided in 1928, a US court ruled that Constantin Brâncuși's Bird in Space was a work of art."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In 1926 US customs officials refused to treat Bird in Space as art and charged duty on it as a manufactured object of metal."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The court's ruling meant the sculpture could enter the United States free of duty."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge; the item is counterintuitive, so the key claim is high-risk. Datasets: artist record checked in moma-artists (ConstituentID 738, Constantin Brancusi, French, born Romania, 1876 to 1957) and tate-artists (id 800); c1 and c2 need a source. Rival test: argued for false: it sounds like a joke about modern art; but Brancusi v. United States is a documented customs case, so the key holds. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a famous case in art history, needing no American knowledge to reason about. Style: Oxford spelling, straight quotes, no en or em dashes, explanation of 29 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: popular accounts say customs filed it under kitchen utensils and hospital supplies; the item keeps to the safer 'manufactured metal object'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9445ba493611f13161658fc7e4f012b4935e487042328729723d6c3e92b32a3f",
+        "startedAt": "2026-11-01T02:15:00Z",
+        "finishedAt": "2026-11-01T02:51:14Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Brancusi v. United States, decided by the US Customs Court in 1928, Bird in Space was ruled a work of art.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In 1926 US customs refused it entry as art and assessed duty on it as a manufactured metal article.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ruling let the sculpture in free of duty.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "a123382bb54b984a6fc278f2844e9a6158071637f590341825ebe0803a52f5f9",
+        "startedAt": "2026-11-01T02:25:00Z",
+        "finishedAt": "2026-11-01T02:51:43Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Brancusi v. United States (1928) a US customs court ruled that Bird in Space was a work of art.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In 1926 customs officials classed the sculpture as a manufactured metal object and charged duty.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ruling let the sculpture enter free of duty.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, date) and c2 (explanation, date) rest on knowledge alone in both checks: neither checker could run a web search (the shared search limit was spent before this batch's checks) and neither check records dataset evidence for them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Redraft under a new id with these facts evidenced (a dataset record or a Tier A or B search) or bounded.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part02e",
+        "at": "2026-11-01T02:27:51Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.art.0129",
+      "score": 0.16,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "A US court once had to decide whether a sculpture by Constantin Brâncuși counted as art.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.172,
+    "estimator": "v0"
+  }
+}

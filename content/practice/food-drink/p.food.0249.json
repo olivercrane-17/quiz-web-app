@@ -1,0 +1,175 @@
+{
+  "id": "p.food.0249",
+  "status": "cut",
+  "category": "food",
+  "tags": ["chocolate", "switzerland", "food-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Daniel Peter of Vevey worked on it for years, because the water in fresh milk made the chocolate spoil, before he found a recipe that kept.",
+  "learnMore": "Milk chocolate",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Solid milk chocolate was first developed in Switzerland in the 1870s, by Daniel Peter in Vevey."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Solid milk chocolate was not first developed in Belgium, the Netherlands or France."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The water in fresh milk made early milk chocolate spoil, which delayed its development."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. C22 flags a shared answer with p.lang.0148, which asks where Romansh is a national language; the facts are unrelated (chocolate history against a language), so the key stays Switzerland. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). Datasets: geonames-cities confirms Vevey as a town in Switzerland (country CH), the only structured part; the history itself is in no dataset. Rival test: Belgium is the trap for players who rank chocolate makers by fame; the Netherlands gave the world cocoa powder (Van Houten). Against the key: drinks mixing milk and chocolate are much older, which is why the stem says 'solid milk chocolate'. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: chocolate is eaten everywhere, and Swiss milk chocolate is famous worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 26 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: many know Swiss milk chocolate, while Belgium pulls others. Doubts: one writer WebSearch (query: Daniel Peter Vevey milk chocolate 1875 first sold; results included the Wikipedia pages Milk chocolate, Daniel Peter and Swiss chocolate) summarized: 'The search points to 1875 as the year Daniel Peter developed milk chocolate, with 1887 as the date it first went on sale as a commercial bar.' Because the sale year is contested, the explanation gives no sale date and c1 says only the 1870s, which both 1875 and 1876 fit.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8584bd348b6ce89a04aa35c4e4bfa191bf42d8c09cac383f01132c45fe8919a8",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Switzerland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Daniel Peter of Vevey made milk chocolate with condensed milk from 1875 and is usually credited with it, but accounts differ on when he had a lasting solid bar (some date it to 1887), and a Dresden firm, Jordan & Timaeus, is said to have sold a milk chocolate made with donkey's milk in 1839.",
+              "confidence": "likely"
+            },
+            "note": "A contested first (§3.2, §3.5) that I cannot settle without external evidence. If the Dresden product or the later bar date holds up, 'the first solid milk chocolate' in the 1870s is not safe as written. High-risk (first), left uncertain. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Milk chocolate was not first developed in Belgium, the Netherlands or France.",
+              "confidence": "certain"
+            },
+            "note": "This holds whichever early claim is preferred: the rival claim is German, and Germany is not an option."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The water in fresh milk made early milk chocolate go mouldy until Peter worked with condensed milk.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "fix",
+            "note": "c1 is a contested first. Turn it into a documented event (§3.5), such as Daniel Peter's 1875 milk chocolate made with condensed milk in Vevey, or drop 'first', and get external evidence for the date before it is accepted."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c1e230cb9908e33b5f1af48adddb94267d3bdf032258e033b87f198099295942",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Switzerland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Daniel Peter of Vevey, Switzerland, developed solid milk chocolate in the 1870s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Belgium, the Netherlands and France were not where it was first developed.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The water in fresh milk made early milk chocolate spoil, which held up its development.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "A revises: key c1 is a contested first. A cites a Dresden milk chocolate said to date from 1839 and later dates for Peter's lasting bar, and the writer's own search found 1875 for the recipe against 1887 for the first bar sold. §3.5 asks for a documented event instead, which changes the stem and the key claim, so it needs two fresh checks; a tiebreak cannot fix a contested first, and c1 also rests on knowledge only. Cut; redraft under a new id as a documented event (A's suggestion: Peter's condensed-milk recipe in Vevey).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In the 1870s, chocolatiers in which country developed the first solid milk chocolate?",
+  "answer": "Switzerland",
+  "wrong": ["Belgium", "The Netherlands", "France"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.403,
+    "estimator": "v0"
+  }
+}

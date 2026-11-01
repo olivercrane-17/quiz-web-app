@@ -1,0 +1,185 @@
+{
+  "id": "p.food.0114",
+  "status": "active",
+  "category": "food",
+  "tags": ["baking", "eggs", "food-science"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Traces of copper bind to a protein in the whites, making the foam more stable. Cooks without copper add a pinch of cream of tartar, an acid, for a similar effect.",
+  "learnMore": "Egg white",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Whisking egg whites in a copper bowl makes the foam more stable, because copper ions bind to the egg-white protein conalbumin (ovotransferrin)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Aluminium, stainless steel and cast iron bowls do not stabilize egg-white foam in the way copper does."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Cream of tartar, an acid, is added to egg whites to stabilize the foam, with an effect similar to a copper bowl's."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: aluminium is the closest call, but it greys the whites rather than steadying them; stainless steel is neutral and cast iron is never used for this. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: whisking egg whites is a home-baking skill everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 31 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: copper bowls are a chef's secret most people have never heard of; good reasoners may pick the 'special' metal. Doubts: none; the copper effect is a standard point in food-science texts.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "21acff71967af35245aebef055454ee638d35bdf636ffebfa781d96594b53b66",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Copper",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Copper ions from a copper bowl bind to conalbumin (ovotransferrin) in egg white, making the foam more stable.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Stainless steel, aluminium and cast-iron bowls do not stabilize egg-white foam the way copper does.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cream of tartar, an acid, is added to egg whites to stabilize the foam, much as a copper bowl does.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e32fcd5b9e07157ee028603d0194b6107a141bc80681bf674eea5136635ab637",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Copper",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Harold McGee: copper ions from the bowl bind the egg-white protein conalbumin (ovotransferrin) and make the foam more stable.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Aluminium, stainless steel and cast iron release no ions that bind conalbumin; stainless steel is neutral and aluminium can grey the foam.",
+              "confidence": "certain"
+            },
+            "note": "Tested stainless steel as a second answer: it is a fine bowl but gives no stabilising effect."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "An acid such as cream of tartar stabilises egg-white foam, an alternative to copper.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Whisking egg whites in a bowl made of which metal helps the foam hold its shape?",
+  "answer": "Copper",
+  "wrong": ["Aluminium", "Stainless steel", "Cast iron"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.239,
+    "estimator": "v0"
+  }
+}

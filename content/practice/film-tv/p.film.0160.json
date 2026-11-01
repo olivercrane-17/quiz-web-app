@@ -1,0 +1,144 @@
+{
+  "id": "p.film.0160",
+  "status": "cut",
+  "category": "film",
+  "tags": ["awards", "oscars", "second-world-war"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Metal was scarce, so for three years winners received plaster figures. After the war, the Academy swapped them for metal ones.",
+  "learnMore": "Academy Awards",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Because of metal shortages, Oscar statuettes were made of painted plaster for three years during the Second World War."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "After the war, winners could exchange their plaster statuettes for metal ones."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Arguing against the key: it sounds like a legend, but the Academy's own history records the plaster statuettes. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 21 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: accounts differ on the exact first year, so no year appears in player text.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9a19de237dd3ebc4b1b1c2e71790368d7799d254a0b51b6641b0b6a119cf94d1",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Because of wartime metal shortages, painted plaster Oscars were handed out for three years during the Second World War.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "After the war, winners could trade their plaster statuettes for metal ones.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e80cd780a80dd1cff74c6626bc5657f8b513fbb6bd9623e20092a2816f506a52",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Because of metal shortages Oscar statuettes were painted plaster for three years during the war.",
+              "confidence": "certain"
+            },
+            "note": "Metal Oscars were still given early in the war, so the plaster years were the last three, not the whole war."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "After the war winners could swap plaster statuettes for metal ones.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'During the Second World War' is true of the plaster years, but the early war years used metal. The explanation's 'for three years' covers it; 'in the last years of the Second World War' would be airtight. No change needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 rests on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). Redraft it under a new id once evidence can be gathered. Checker B also noted that the plaster years were the war's last three, not all of it.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "tf",
+  "stem": "During the Second World War, Oscar statuettes were made of painted plaster.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.108,
+    "estimator": "v0"
+  }
+}

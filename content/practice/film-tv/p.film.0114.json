@@ -1,0 +1,207 @@
+{
+  "id": "p.film.0114",
+  "status": "cut",
+  "category": "film",
+  "tags": ["blockbusters", "spies", "james-bond"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Ian Fleming took the name from an American ornithologist, James Bond, whose guide to Caribbean birds he kept at his Jamaican home.",
+  "learnMore": "James Bond",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "James Bond's code number is 007."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "George Smiley, Harry Palmer and Jason Bourne do not have the code number 007."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Ian Fleming named James Bond after an American ornithologist called James Bond."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Fleming owned the ornithologist's guide Birds of the West Indies and kept it at his home in Jamaica."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Smiley and Palmer are other famous British spies of page and screen, and Bourne is an American one; none is 007. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: Bond films are seen worldwide; the item asks for recognition, not local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 22 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: c4's detail that the book was at his Jamaican home is widely reported but should be confirmed; it can be dropped from the explanation if not.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1d374799d59bfa41fbfe7830d778be15bb1856ecaca7c55819d582f0bfe9c6a8",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "James Bond",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Bond's code number is 007.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Smiley (le Carré), Palmer (Deighton) and Bourne (Ludlum) carry no 007 number.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fleming took the name of the American ornithologist James Bond.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fleming kept the ornithologist's Birds of the West Indies at Goldeneye, his house in Jamaica.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e51f285ea698628f45a1c52577b2e7de5afb114551ac7ff6113cdb611379e273",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "James Bond",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "James Bond's code number is 007.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "George Smiley, Harry Palmer and Jason Bourne are not 007.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fleming took the name from the American ornithologist James Bond, author of Birds of the West Indies, and said so himself.",
+              "confidence": "certain"
+            },
+            "note": "Etymology, high-risk; needs check A's external evidence."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fleming owned a copy of Birds of the West Indies at his Jamaican home.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "Jason Bourne is American, so the stem's word 'British' already rules him out. A British fictional spy would tempt more (4, rule 2). No change needed."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1, c2 and c3 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). Redraft it under a new id once evidence can be gathered. Checker B also noted that 'British' in the stem already rules out Jason Bourne.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which fictional British spy has the code number 007?",
+  "answer": "James Bond",
+  "wrong": ["George Smiley", "Harry Palmer", "Jason Bourne"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.96,
+    "spread": 0.219,
+    "estimator": "v0"
+  }
+}

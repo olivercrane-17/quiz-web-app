@@ -1,0 +1,219 @@
+{
+  "id": "p.sport.0170",
+  "status": "active",
+  "category": "sport",
+  "tags": ["world-cup", "football", "brazil"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "Pelé was 17 when he scored twice in the 1958 final against the hosts, Sweden. Garrincha, his Brazil teammate, won in 1958 and 1962 but missed the 1970 tournament.",
+  "learnMore": "Pelé",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Pelé won the men's World Cup with Brazil in 1958, 1962 and 1970."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Garrincha won the World Cup in 1958 and 1962 only, Diego Maradona in 1986 only, and Franz Beckenbauer as a player in 1974 only."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Pelé was 17 when he scored twice in the 1958 final, which Brazil won 5-2 against the hosts, Sweden."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Garrincha was not in Brazil's squad at the 1970 World Cup."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup: the finals of 1958 (Sweden 2-5 Brazil, 'Råsunda Stadium, Solna'), 1962 (Brazil 3-1 Czechoslovakia) and 1970 (Brazil 4-1 Italy) show Brazil's three titles (c1, c3 score); 1974 West Germany and 1986 Argentina are the other relevant winners (c2). The files hold no squads or scorers for these years, so Pelé's age, goals and the squads need web evidence. rivalTest: Garrincha is the trap, a Brazil star who won twice; Maradona and Beckenbauer won once each as players. Pelé is the only player with three winner's medals, so the key holds. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 29 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Pelé played only two matches in 1962 because of injury, but he is credited with that title, as the claims say.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "26842c667d90ab5488fe89555cdea35b183ec88014465c81b8ab89399bcfbe73",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Pelé",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pelé was in Brazil's World Cup-winning squads of 1958, 1962 and 1970.",
+              "confidence": "certain"
+            },
+            "note": "worldcup confirms Brazil won the 1958, 1962 and 1970 finals, but those files list no squads or scorers, so Pelé's part rests on knowledge. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Garrincha won in 1958 and 1962, Maradona in 1986 (he was left out in 1978), and Beckenbauer as a player in 1974 (in 1990 he was coach).",
+              "confidence": "certain"
+            },
+            "note": "worldcup confirms each title; squads rest on knowledge. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pelé, aged 17, scored twice in the 1958 final, which Brazil won 5-2 against the hosts, Sweden.",
+              "confidence": "certain"
+            },
+            "note": "worldcup 1958 confirms Sweden 2-5 Brazil at Råsunda, Solna, with every ground in Sweden; the scorers and Pelé's age rest on knowledge. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Garrincha's last World Cup was 1966; he was not in the 1970 squad.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b7f725f6d22ce5c9adb83e9ff010b14b72768278517d50819b89c65777901297",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Pelé",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pelé won the World Cup with Brazil in 1958, 1962 and 1970; injured early in 1962, he is still counted a winner.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Garrincha won in 1958 and 1962; Maradona in 1986; Beckenbauer as a player in 1974 (and later as a coach, in 1990).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pelé, aged 17, scored twice as Brazil beat the hosts Sweden 5-2 in the 1958 final.",
+              "confidence": "certain"
+            },
+            "note": "The worldcup file confirms the 1958 final (Sweden 2-5 Brazil, Solna) but lists no scorers for it."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Garrincha was not in Brazil's 1970 squad.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, number), c2 (distractor, date), c3 (explanation, number) and c4 (explanation, date) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which player won the men's World Cup three times, in 1958, 1962 and 1970?",
+  "answer": "Pelé",
+  "wrong": ["Garrincha", "Diego Maradona", "Franz Beckenbauer"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.527,
+    "estimator": "v0"
+  }
+}

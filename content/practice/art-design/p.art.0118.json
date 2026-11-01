@@ -1,0 +1,263 @@
+{
+  "id": "p.art.0118",
+  "status": "cut",
+  "category": "art",
+  "tags": ["architecture", "gaudi", "spain"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Gaudí took over the project in 1883 and devoted his last years to it. He is buried in its crypt, and work went on for decades after his death in 1926.",
+  "learnMore": "Sagrada Família",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Sagrada Família is in Barcelona."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Sagrada Família is not in Madrid, Seville or Valencia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Gaudí took over the Sagrada Família project in 1883."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Gaudí devoted his last years to the Sagrada Família."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Gaudí is buried in the crypt of the Sagrada Família."
+    },
+    {
+      "id": "c6",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Gaudí died in 1926, and construction of the Sagrada Família continued for decades afterwards."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: the year of death in c6 checked in moma-artists (ConstituentID 2096, Spanish, 1852 to 1926); c3 needs a source. Rival test: Madrid, Seville and Valencia are Spain's other great cities with famous churches; the basilica is in Barcelona; against the key, nothing. Volatility: evergreen; I avoided any claim about when the basilica will be finished, which may change in 2026; no time words, and nothing depends on knowledge newer than mid-2026. Regional: one of the most visited buildings in Europe. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1cdc27c623bee5526ea8f3e413d3591715c6e1fe17d74ac9bc4e14b9ea8ccbfa",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "Barcelona",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Sagrada Família is in Barcelona.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It is not in Madrid, Seville or Valencia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gaudí took over the project from Francisco de Paula del Villar in 1883.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "From about 1914 he worked on little else, and in his last months he lived on the site.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gaudí is buried in the basilica's crypt.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=2096 (DisplayName=Antoni Gaudí)",
+              "excerpt": "\"DisplayName\": \"Antoni Gaudí\", \"ArtistBio\": \"Spanish, 1852–1926\", \"EndDate\": 1926",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The dataset carries the 1926 death, the claim's high-risk part. That work continued for decades afterwards is common knowledge: it is still going on."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1cdcacda82fc77bd8445a8947a53465b96d1b01fdc5cb483b5682a686efb8167",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "Barcelona",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Sagrada Família is in Barcelona.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "It is not in Madrid, Seville or Valencia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gaudí became the Sagrada Família's architect in 1883, after the first architect resigned.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In his last years Gaudí worked almost solely on the Sagrada Família.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Gaudí is buried in the crypt of the Sagrada Família.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Gaudí died in 1926 and construction carried on for many decades afterwards.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, date) rests on knowledge alone in both checks: checker A's searches ran out and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Only explanation facts lack evidence: redraft under a new id with them evidenced, bounded or dropped.",
+      "decidedAt": "2026-11-01T04:15:28Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Antoni Gaudí's great basilica, the Sagrada Família, is in which city?",
+  "answer": "Barcelona",
+  "wrong": ["Madrid", "Seville", "Valencia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.31,
+    "estimator": "v0"
+  }
+}

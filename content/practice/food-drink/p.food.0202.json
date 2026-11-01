@@ -1,0 +1,246 @@
+{
+  "id": "p.food.0202",
+  "status": "active",
+  "category": "food",
+  "tags": ["national-dishes", "brazil", "beans"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "It is served with rice, orange slices, sautéed greens and farofa, toasted cassava flour. Its name comes from feijão, the Portuguese word for bean.",
+  "learnMore": "Feijoada",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Black bean and pork feijoada is often called the national dish of Brazil."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Feijoada is not the dish usually called national in Argentine, Mexican or Peruvian cooking."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Brazilian feijoada is traditionally served with rice, orange slices, sautéed greens such as collards, and farofa."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Farofa is toasted cassava flour."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name feijoada comes from feijão, the Portuguese word for bean."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c5). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Portugal, Angola and Macau also cook feijoadas, usually with other beans, so Portugal is deliberately not an option; among the four options only Brazil calls it a national dish. Mexico has black beans, which makes it tempting, but its national dishes are others. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the dish is famous across Latin America and Lusophone Africa, and the Portuguese name gives a foothold to everyone. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 24 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: many players know feijoada is Brazilian, and the Portuguese-sounding name helps the rest. Doubts: 'national dish' is an informal title, so the stem says 'often called', which every source I know supports.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "659e0c48d1cec4662c0780a87d558364373222ac96f04579f8c46e270619ec51",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Brazilian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Feijoada, black beans stewed with pork, is widely called Brazil's national dish.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The dishes usually called national in Argentina, Mexico and Peru are others (asado, mole, ceviche), not feijoada.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A full feijoada comes with white rice, orange slices, sauteed collard greens (couve) and farofa.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Farofa is manioc (cassava) flour toasted, often in butter or fat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Feijao is Portuguese for bean, and feijoada is named from it.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e8f36f5f2f7a5efb56a26b56aaadec0e99444100c9a72736f90c98085ed26691",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Brazilian",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Black bean and pork feijoada is the dish most often called Brazil's national dish.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Argentina, Mexico and Peru are each usually represented by other dishes (asado, mole, ceviche), not feijoada.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: feijoadas exist in Portugal and Angola, but neither is offered."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A Brazilian feijoada comes with rice, orange slices, sauteed collard greens (couve) and farofa.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Farofa is cassava (manioc) flour toasted in fat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Feijoada is built on feijao, the Portuguese word for bean.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claim c5 (explanation, etymology) rests on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7).",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Feijoada, a slow-cooked stew of black beans and pork, is often called the national dish of which cuisine?",
+  "answer": "Brazilian",
+  "wrong": ["Argentine", "Mexican", "Peruvian"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.267,
+    "estimator": "v0"
+  }
+}

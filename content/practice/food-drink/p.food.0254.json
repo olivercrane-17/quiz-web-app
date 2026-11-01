@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0254",
+  "status": "cut",
+  "category": "food",
+  "tags": ["coffee", "yemen", "food-words"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "From the 15th to the 18th century, Mocha was the main market for coffee from Yemen's highlands. Its beans were prized for a chocolatey note, which later lent the name to coffee with chocolate.",
+  "learnMore": "Mocha, Yemen",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Mocha coffee is named after the port of Mocha (al-Mukha) on Yemen's Red Sea coast."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Mocha is not a port in Ethiopia, Eritrea or Saudi Arabia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "From the 15th to the 18th century Mocha was the chief market for coffee from Yemen's highlands."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mocha beans were known for a chocolate-like flavour, and the name later passed to coffee drinks made with chocolate."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c3). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: geonames-cities lists Mocha in Yemen (name Mocha, country YE, lat 13.31814), which confirms the port's country in c1. Rival test: Ethiopia is the planted trap, because coffee comes from there; Eritrea and Saudi Arabia also face the Red Sea. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: the name is on coffee menus worldwide, and the Red Sea limits the options to reason over. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 34 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: most players pick Ethiopia. Doubts: the link between the beans' flavour and the chocolate drink is the usual account; c4 is standard but checker B may ask for a source.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c90aa4d379dfc8385d28015b6df9c8858c035a8af81ad5e096323c8316c7c82f",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Yemen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mocha coffee takes its name from the Yemeni Red Sea port of Mocha (al-Mukha), through which Yemen's coffee was shipped.",
+              "confidence": "certain"
+            },
+            "note": "geonames-cities (1.1.65) places Mocha at 13.31814, 43.24991 in country YE, which fixes the port's country (recorded under c2); the naming of the coffee rests on knowledge. High-risk (etymology): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Mocha, country=YE",
+              "excerpt": "{\"name\":\"Mocha\",\"lat\":\"13.31814\",\"lng\":\"43.24991\",\"country\":\"YE\",\"admin1\":\"25\",\"admin2\":\"1506\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The Red Sea port of Mocha is in Yemen in the pinned file. The only other Mocha in it is in Ecuador, and there is none in Ethiopia, Eritrea or Saudi Arabia."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mocha was Yemen's main coffee port from around the 16th century and through the 17th; I cannot recall whether references start its dominance in the 15th century or carry it into the 18th.",
+              "confidence": "likely"
+            },
+            "note": "High-risk (date), left uncertain. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mocha beans were known for a chocolatey note, and 'mocha' later named coffee drinks made with chocolate.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c3: the span 'from the 15th to the 18th century' needs a source. Without one, a bounded form such as 'For centuries, Mocha was the main market for coffee from Yemen's highlands' is safer (§9.2, the precision ladder)."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "02bf531585902a8e6315f9280afd523dfd4b788f2516f45948a68276acad36d9",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Yemen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mocha coffee is named after the port of Mocha (al-Mukha) on Yemen's Red Sea coast.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mocha is not a port in Ethiopia, Eritrea or Saudi Arabia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mocha was the leading market and port for Yemeni coffee for centuries from about the 15th century, but I recall different end dates (the 17th or the 18th century).",
+              "confidence": "likely"
+            },
+            "note": "The 15th-to-18th-century span is soft and I cannot tie it to a single source."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mocha beans were known for a chocolate-like flavour, and the name later passed to chocolate coffee drinks.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "checker_doubt c3: the exact span 'from the 15th to the 18th century' is not something I can confirm; accounts I recall give the heyday as the 15th to 17th century or as the 17th and 18th. Loosen it (for example 'for centuries') or confirm with a Tier A or B source."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks revise: neither could confirm c3 (Mocha as the chief coffee market from the 15th to the 18th century), and both ask to loosen the span. That changes a claim, so it needs two fresh checks, and a revise/revise pair cannot pass rule 2 (§9.7). The key etymology c1 also rests on knowledge only (§9.9 rule 3). Cut; redraft under a new id with a bounded span and web evidence for c1.",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Mocha coffee is named after a Red Sea port in which country?",
+  "answer": "Yemen",
+  "wrong": ["Ethiopia", "Eritrea", "Saudi Arabia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.26,
+    "spread": 0.271,
+    "estimator": "v0"
+  }
+}

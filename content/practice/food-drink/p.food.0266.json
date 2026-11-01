@@ -1,0 +1,200 @@
+{
+  "id": "p.food.0266",
+  "status": "active",
+  "category": "food",
+  "tags": ["bread", "inventions", "food-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Electric toasters were on sale by 1909, so early toast was cut by hand. Machine-sliced bread arrived in 1928 in Chillicothe, Missouri, cut by Otto Rohwedder's slicer.",
+  "learnMore": "Sliced bread",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Electric toasters were on sale by 1909."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Bread sliced by machine was first sold in 1928, in Chillicothe, Missouri, using Otto Rohwedder's slicing machine."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Before machine-sliced bread, people toasted bread they had sliced by hand."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed; risk is at or above the C26 floor (high: c1, c2). The item is counterintuitive, so its key claim (both label claims, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: The values take the latest defensible date for toasters (several electric models were sold in Britain and the United States by 1909, some earlier) and the first sale of sliced bread, so the answer holds under every date on offer; the gap is 19 years. The obvious guess is sliced bread, because toast seems to need slices, which is why counterintuitive is true. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both inventions are used worldwide, and the reasoning needs no local knowledge. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: most players pick sliced bread. Doubts: none on the order. c1 is written as 'by 1909' rather than naming the first model, because firsts among early toasters are disputed.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9d28f62f81025638915c921cd5f5b8a1340f7970ae1dd8a16b8b396adabb785b",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Electric toasters go on sale",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Electric toasters were on the market by 1909, when General Electric sold its D-12; British models appeared earlier, in the 1890s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Machine-sliced bread was first sold on 7 July 1928 by the Chillicothe Baking Company in Chillicothe, Missouri, cut on Otto Rohwedder's machine.",
+              "confidence": "certain"
+            },
+            "note": "geonames-cities lists a Chillicothe in US admin1 MO (39.79529, -93.55244), which supports only the place, so it is not recorded as the evidence. High-risk (first): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Before sliced loaves, people cut bread by hand to toast it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ee0da11fcbd100d68a3d5efa30e57c75861392b393d32a352e4918b0a51448da",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Electric toasters go on sale",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Electric toasters were on sale by 1909 (General Electric's D-12; earlier British models date from the 1890s).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Machine-sliced bread was first sold in 1928 in Chillicothe, Missouri, using Otto Rohwedder's slicer.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Before sliced loaves, toast was cut by hand from the whole loaf.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (label, date) and c2 (label, first) rest on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7).",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.food.0261",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Electric toasters go on sale",
+  "b": "Sliced bread goes on sale",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year first sold",
+  "unit": "year",
+  "values": {
+    "a": 1909,
+    "b": 1928
+  },
+  "valueDisplay": {
+    "a": "by 1909",
+    "b": "1928"
+  },
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.251,
+    "estimator": "v0"
+  }
+}

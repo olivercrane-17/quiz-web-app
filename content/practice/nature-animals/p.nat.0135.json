@@ -1,0 +1,297 @@
+{
+  "id": "p.nat.0135",
+  "status": "active",
+  "category": "nat",
+  "tags": ["dinosaurs", "birds", "evolution"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Birds descend from small feathered theropods, the group that includes Tyrannosaurus. Crocodiles are the birds' closest living relatives but sit outside the dinosaurs.",
+  "learnMore": "Origin of birds",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Birds are living dinosaurs: they descend from theropod dinosaurs and are classified within Dinosauria."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Crocodiles, lizards and tortoises are reptiles but not dinosaurs."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Birds evolved from small, feathered theropod dinosaurs, the group that also includes Tyrannosaurus."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Crocodilians are the closest living relatives of birds."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed. c1 is high because it is the key of a counterintuitive item, so C26 sets it high; the tooling's riskReason enum has no counterintuitive value yet (guide v1.1 adds one), so checker_doubt stands in for it. c4 holds a superlative, so it is high. One search should cover both. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: crocodiles are the planted trap because they look prehistoric and are the birds' closest relatives; lizards and tortoises are reptiles outside the dinosaurs. Argued against the key: modern classification puts birds inside Dinosauria, and this is settled. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: all four groups are known everywhere. style: Oxford spelling, plain hyphens only, explanation of 23 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "29476e591d3c61af027975d0b4b9d92b785fb0632a50c148fad106bf6fcd3dfa",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Birds",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "pterosaurs were not dinosaurs; birds are living theropod dinosaurs; crocodilians are the closest living relatives of birds",
+              "results": [
+                {
+                  "title": "Pterosaur",
+                  "url": "https://en.wikipedia.org/wiki/Pterosaur"
+                },
+                {
+                  "title": "Crocodylia",
+                  "url": "https://en.wikipedia.org/wiki/Crocodilian"
+                },
+                {
+                  "title": "Bird",
+                  "url": "https://en.wikipedia.org/wiki/Bird"
+                },
+                {
+                  "title": "Why Are Pterodactyls Not Dinosaurs?",
+                  "url": "https://www.britannica.com/story/why-are-pterodactyls-not-dinosaurs"
+                },
+                {
+                  "title": "The dinosauria",
+                  "url": "https://ucmp.berkeley.edu/taxa/verts/dinosauria/index.php"
+                },
+                {
+                  "title": "Archosaur",
+                  "url": "https://www.britannica.com/animal/archosaur"
+                },
+                {
+                  "title": "Powered flight potential approached by wide range of close avian relatives but achieved selectively",
+                  "url": "https://www.biorxiv.org/content/10.1101/2020.04.17.046169.full.pdf"
+                },
+                {
+                  "title": "Why a Pterosaur is Not a Dinosaur",
+                  "url": "https://www.smithsonianmag.com/science-nature/why-a-pterosaur-is-not-a-dinosaur-87082921/"
+                },
+                {
+                  "title": "Not a Bird, Not a Dinosaur: What Is a Pterosaur?",
+                  "url": "https://www.amnh.org/explore/news-blogs/on-exhibit-posts/not-a-bird-not-a-dinosaur-what-is-a-pterosaur"
+                }
+              ],
+              "summaryExcerpt": "Birds are living theropod dinosaurs. Most paleontologists place birds within Theropoda as a specialized subgroup, specifically within Maniraptora (index 3-9). Because of this, birds are the only surviving dinosaurs (index 3-1).",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Attributed by the summary to the Wikipedia 'Bird' article (Tier B). Same call as p.nat.0103, counted there."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Crocodiles, lizards and tortoises are reptiles that sit outside the dinosaurs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Birds evolved from small feathered theropods, the group that also includes Tyrannosaurus.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "pterosaurs were not dinosaurs; birds are living theropod dinosaurs; crocodilians are the closest living relatives of birds",
+              "results": [
+                {
+                  "title": "Pterosaur",
+                  "url": "https://en.wikipedia.org/wiki/Pterosaur"
+                },
+                {
+                  "title": "Crocodylia",
+                  "url": "https://en.wikipedia.org/wiki/Crocodilian"
+                },
+                {
+                  "title": "Bird",
+                  "url": "https://en.wikipedia.org/wiki/Bird"
+                },
+                {
+                  "title": "Why Are Pterodactyls Not Dinosaurs?",
+                  "url": "https://www.britannica.com/story/why-are-pterodactyls-not-dinosaurs"
+                },
+                {
+                  "title": "The dinosauria",
+                  "url": "https://ucmp.berkeley.edu/taxa/verts/dinosauria/index.php"
+                },
+                {
+                  "title": "Archosaur",
+                  "url": "https://www.britannica.com/animal/archosaur"
+                },
+                {
+                  "title": "Powered flight potential approached by wide range of close avian relatives but achieved selectively",
+                  "url": "https://www.biorxiv.org/content/10.1101/2020.04.17.046169.full.pdf"
+                },
+                {
+                  "title": "Why a Pterosaur is Not a Dinosaur",
+                  "url": "https://www.smithsonianmag.com/science-nature/why-a-pterosaur-is-not-a-dinosaur-87082921/"
+                },
+                {
+                  "title": "Not a Bird, Not a Dinosaur: What Is a Pterosaur?",
+                  "url": "https://www.amnh.org/explore/news-blogs/on-exhibit-posts/not-a-bird-not-a-dinosaur-what-is-a-pterosaur"
+                }
+              ],
+              "summaryExcerpt": "Crocodilians are birds' closest living relatives. Crocodylia and Aves are sister groups and are the only surviving members of Archosauria (index 3-5).",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Wikipedia 'Bird' and Britannica 'Archosaur'."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "22d40a2c7615cf823e30cfe2c5867ccc21290147badac7f2ba36bec0c0644bc8",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Birds",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Birds are living dinosaurs, nested within the theropods of Dinosauria.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Crocodiles, lizards and tortoises are reptiles outside Dinosauria.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Birds evolved from small feathered theropods, the group that includes Tyrannosaurus.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Crocodilians are the closest living relatives of birds.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (superlative): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; high-risk c1 (web in A), c4 (web in A). Style, distractors and balance reviewed. The explanation states that crocodilians are the birds' closest living relatives, the key of p.nat.0238 (b02): keep the two apart when runs and packs are built.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.nat.0122",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which living animals do scientists class as dinosaurs?",
+  "answer": "Birds",
+  "wrong": ["Crocodiles", "Lizards", "Tortoises"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.292,
+    "estimator": "v0"
+  }
+}

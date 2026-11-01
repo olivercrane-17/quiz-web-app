@@ -1,0 +1,190 @@
+{
+  "id": "p.film.0171",
+  "status": "cut",
+  "category": "film",
+  "tags": ["world-cinema", "india", "animation"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Phalke's silent film, released in Bombay in 1913, is usually counted as India's first full-length feature. Steamboat Willie arrived 15 years later, in 1928.",
+  "learnMore": "Raja Harishchandra",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Raja Harishchandra, by Dadasaheb Phalke, was released in Bombay in 1913."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Steamboat Willie, starring Mickey Mouse, was released in 1928."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Raja Harishchandra is usually regarded as India's first full-length feature film."
+    }
+  ],
+  "writerNotes": "Mickey feels like the dawn of cinema to many players, which is the trap. Fifteen years apart. Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Arguing for Steamboat Willie: Mickey feels ancient, but Indian feature films began fifteen years earlier. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: pairs an Indian landmark with a US one, so neither side needs local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 24 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: Shree Pundalik (1912) is sometimes called India's first feature, so the label names Phalke's film itself and the explanation says usually counted.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "172030e86acb4c19a6c59b34c4e1f1167c3b6ef3ac3b528735b835df6d47fa5a",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Dadasaheb Phalke's Raja Harishchandra",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Phalke's Raja Harishchandra was released in Bombay in 1913.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Steamboat Willie was released in November 1928.",
+              "confidence": "certain"
+            },
+            "note": "'15 years later' in the explanation follows from c1 and c2. High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Raja Harishchandra is generally considered India's first full-length feature film.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "de299cfaabc14603f4e76a2f1cf3d17ee6d35b393c780486ae553965a68b89fb",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Dadasaheb Phalke's Raja Harishchandra",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Raja Harishchandra was released in Bombay in 1913.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Steamboat Willie, starring Mickey Mouse, was released in 1928.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Raja Harishchandra is usually regarded as India's first full-length feature.",
+              "confidence": "certain"
+            },
+            "note": "Hedged with 'usually regarded' (a rival 1912 claim exists), which is the safe form; the answer does not depend on it."
+          }
+        ],
+        "issues": [
+          {
+            "type": "style",
+            "severity": "note",
+            "note": "The labels are not parallel: 'Steamboat Willie, starring Mickey Mouse' carries a descriptor the other label lacks (2.6 asks for the same form). Minor."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1, c2 and c3 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). Redraft it under a new id once evidence can be gathered. Checker B also noted that the two labels are not parallel.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Dadasaheb Phalke's Raja Harishchandra",
+  "b": "Steamboat Willie, starring Mickey Mouse",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of release",
+  "unit": "year",
+  "values": {
+    "a": 1913,
+    "b": 1928
+  },
+  "valueDisplay": {
+    "a": "1913",
+    "b": "1928"
+  },
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.264,
+    "estimator": "v0"
+  }
+}

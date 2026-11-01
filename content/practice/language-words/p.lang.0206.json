@@ -1,0 +1,236 @@
+{
+  "id": "p.lang.0206",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["scripts", "russian", "alphabets"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "It is named after Saint Cyril, a 9th-century missionary, though his followers in the First Bulgarian Empire probably created it. Bulgarian, Serbian and Ukrainian are written in Cyrillic too.",
+  "learnMore": "Cyrillic script",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Russian alphabet is a form of the Cyrillic script."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Russian alphabet is not the Glagolitic, Greek or Latin script."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The Cyrillic script is named after Saint Cyril, a 9th-century Byzantine missionary."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Cyrillic was probably created by followers of Cyril and Methodius in the First Bulgarian Empire."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Bulgarian, Serbian and Ukrainian are written in Cyrillic."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed, 2 high (etymology, first) and 3 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers scripts. rivalTest: Argued for Glagolitic, the expert's trap: Cyril himself probably devised it, but Russian has always used Cyrillic. Argued for Greek: Cyrillic borrowed many Greek letter shapes yet is a separate script. Serbian also uses Latin letters, which does not affect c5. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: the script is seen worldwide on Russian names and brands. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 29 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0c28ec30b0ec60e69d0f025c8ee9b96bc155eb5d9bb05c23cf2bedf0008942f2",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Cyrillic",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Russian is written in a form of the Cyrillic alphabet.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Russian is not written in Glagolitic, Greek or Latin letters.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cyrillic takes its name from Saint Cyril, the 9th-century Byzantine missionary to the Slavs.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The usual scholarly view is that Cyril devised Glagolitic and that Cyrillic was developed by the disciples of Cyril and Methodius in the First Bulgarian Empire around the end of the 9th century.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Bulgarian, Serbian and Ukrainian are all written in Cyrillic alphabets (Serbian also in Latin letters).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "729d364a0239e0db8cc1ad799edf0883922e21cd30b74ae21e132ef5aaecdb32",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Cyrillic",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Russian is written in the Cyrillic alphabet.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Glagolitic is an older Slavic script; Greek and Latin are separate scripts. Cyrillic borrows from Greek uncial but is its own script."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Russian is not written in Glagolitic, Greek or Latin script.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cyrillic is named after Saint Cyril (Constantine), a 9th-century Byzantine missionary to the Slavs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most scholars hold that Cyrillic was devised in the First Bulgarian Empire, around the late 9th or early 10th century, by disciples of Cyril and Methodius.",
+              "confidence": "certain"
+            },
+            "note": "The claim says probably, which matches the scholarly position."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Bulgarian, Serbian and Ukrainian are all written in Cyrillic (Serbian is also written in Latin).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Serbian is written in both Cyrillic and Latin, so 'written in Cyrillic too' is true but not exclusive."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, etymology) and c4 (explanation, first) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: B noted Serbian is also written in Latin letters, so 'written in Cyrillic too' is true but not exclusive.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The Russian alphabet is a form of which script?",
+  "answer": "Cyrillic",
+  "wrong": ["Glagolitic", "Greek", "Latin"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.396,
+    "estimator": "v0"
+  }
+}

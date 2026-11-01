@@ -1,0 +1,256 @@
+{
+  "id": "p.geo.0168",
+  "status": "active",
+  "category": "geo",
+  "tags": ["area", "islands", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Madagascar covers about 587,000 km², roughly 16% more than Spain with its islands, and it even outsizes France's European territory.",
+  "learnMore": "Madagascar",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Madagascar covers about 587,000 km²."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Spain, including its islands, covers about 506,000 km²."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Madagascar's area is roughly 16% larger than Spain's."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Madagascar is larger than France's European territory, which covers about 552,000 km²."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; every claim carries an area, so all are high. Datasets: mledoze-countries: MDG 587,041; ESP 505,992; FRA 551,695 km², which the manifest's knownIssues says is metropolitan France only (c4). c3: 587,041 / 505,992 = 1.16. The ratio clears the 1.1 guard. Rival test: Spain feels bigger to many players, partly because maps centred on Europe show it large; the measured areas settle it, with a margin that no published figure for either country closes. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: an African island against a European country, so neither side has a home advantage. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 20 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: not marked counterintuitive; seeded 4 as a coin flip with a foothold for players who know Madagascar is one of the world's biggest islands.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "36a96c0e9f3b03a5a5d56124c2a6a7ca92a14344e39fa33604f3cae88c0f28a6",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Madagascar",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MDG",
+              "excerpt": "MDG: \"area\": 587041",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=ESP",
+              "excerpt": "ESP: \"area\": 505992",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Spain's figure includes the Balearic and Canary Islands."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MDG; cca3=ESP",
+              "excerpt": "MDG: \"area\": 587041 | ESP: \"area\": 505992",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "587041 / 505992 = 1.160, about 16% larger."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=FRA; cca3=MDG",
+              "excerpt": "FRA: \"area\": 551695 | MDG: \"area\": 587041",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The file's FRA area is metropolitan France only (a manifest known issue), which is the European territory this claim means."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "feb2d85a760b72335f7bd1f650455784ad6ead0f093083ad95ad3e743e23d902",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Madagascar",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MDG",
+              "excerpt": "MDG (Madagascar): area 587041",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=ESP",
+              "excerpt": "ESP (Spain): area 505992",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Whole-country area including the Balearic and Canary Islands, Ceuta and Melilla."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MDG, cca3=ESP",
+              "excerpt": "MDG 587041 / ESP 505992 = 1.1602",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=FRA, cca3=MDG",
+              "excerpt": "FRA (France): area 551695 | MDG (Madagascar): area 587041",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset's France figure is metropolitan France only, which is what the claim says."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 to c4 carry mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0137",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which is bigger by area?",
+  "a": "Madagascar",
+  "b": "Spain",
+  "answer": "a",
+  "relation": "larger",
+  "measure": "total area",
+  "unit": "km²",
+  "values": {
+    "a": 587041,
+    "b": 505992
+  },
+  "valueDisplay": {
+    "a": "about 587,000 km²",
+    "b": "about 506,000 km²"
+  },
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.184,
+    "estimator": "v0"
+  }
+}

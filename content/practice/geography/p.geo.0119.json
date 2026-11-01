@@ -1,0 +1,222 @@
+{
+  "id": "p.geo.0119",
+  "status": "active",
+  "category": "geo",
+  "tags": ["countries", "names", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Lesotho was once Basutoland, Botswana was Bechuanaland and Malawi was Nyasaland, names from the era of British rule.",
+  "learnMore": "Eswatini",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "recent_change",
+      "text": "Eswatini was formerly known in English as Swaziland."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Lesotho, Botswana and Malawi were never known as Swaziland."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Lesotho was formerly Basutoland, Botswana was formerly Bechuanaland and Malawi was formerly Nyasaland."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Basutoland, Bechuanaland and Nyasaland were names used under British rule."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is a name that changed in recent years, so high (recent_change); the rest are standard. Datasets: cldr-territories en territories.json: SZ 'Eswatini', SZ-alt-variant 'Swaziland' (c1); mledoze-countries cca3=SWZ name Eswatini. Rival test: Lesotho is the twin in size and setting (another small southern African kingdom), which makes it the main pull; Botswana and Malawi are other former British territories. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a renaming that was world news; the old name is still widely remembered. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 18 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none. I left out the 2018 date so the key rests on the dataset alone.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1b7c9a44c2db77e67e28318de304c02afacc38e70851383c04eb8e5a5cd0e531",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Eswatini",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "cldr-territories",
+              "version": "7d2b9cb11cec08f4d333ad73209deb3df0711c3b",
+              "file": "territories.json",
+              "locator": "main.en.localeDisplayNames.territories: SZ, SZ-alt-variant",
+              "excerpt": "\"SZ\": \"Eswatini\", \"SZ-alt-variant\": \"Swaziland\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "CLDR gives Eswatini as the English name with Swaziland as its variant; mledoze-countries cca3=SWZ also lists Swaziland in altSpellings. The 2018 renaming itself is from knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lesotho, Botswana and Malawi each had their own colonial names, none of them Swaziland.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Basutoland became Lesotho, Bechuanaland became Botswana and Nyasaland became Malawi.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Basutoland, Bechuanaland and Nyasaland were British protectorates.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f174cd93cfe4173c771a8bd2ebdd101e5322035770b999ef259449b9f10df108",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Eswatini",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "cldr-territories",
+              "version": "7d2b9cb11cec08f4d333ad73209deb3df0711c3b",
+              "file": "territories.json",
+              "locator": "main.en.localeDisplayNames.territories SZ and SZ-alt-variant",
+              "excerpt": "SZ: Eswatini; SZ-alt-variant: Swaziland",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The rename (announced by the king in April 2018) is knowledge, certain."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Lesotho, Botswana and Malawi were never called Swaziland.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lesotho was Basutoland, Botswana was Bechuanaland and Malawi was Nyasaland.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Basutoland, Bechuanaland and Nyasaland were British protectorates or colonies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 carry cldr-territories evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which country was formerly known in English as Swaziland?",
+  "answer": "Eswatini",
+  "wrong": ["Lesotho", "Botswana", "Malawi"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.369,
+    "estimator": "v0"
+  }
+}

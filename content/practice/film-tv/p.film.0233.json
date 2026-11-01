@@ -1,0 +1,224 @@
+{
+  "id": "p.film.0233",
+  "status": "active",
+  "category": "film",
+  "tags": ["animation", "anime", "japan"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The film's 2019 Neo-Tokyo is building a stadium for the 2020 Games. In 2013 the International Olympic Committee chose Tokyo to host the 2020 Olympics, later held in 2021.",
+  "learnMore": "Akira (1988 film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In Akira (1988), the Neo-Tokyo of 2019 is preparing to host the 2020 Olympic Games, with a stadium under construction."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In 2013 the International Olympic Committee chose Tokyo to host the 2020 Summer Olympics."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Akira's Neo-Tokyo is not shown preparing for a World Expo, the Asian Games or a Formula One race."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Tokyo 2020 Olympics were postponed and held in 2021."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: olympic-editions (moderndive/olympicAthletes at a8de42e), edition_metadata.csv, edition_id 61: games 2020 Summer, city Tokyo, opening ceremony 23 July 2021 and closing 8 August 2021, which supports c4; c2 (the 2013 choice) and c1 (the film's details) need web evidence. Rival test: A World Expo and the Asian Games are big international events of the same kind; Tokyo hosted the Asian Games only in 1958, before the film, and has not hosted a World Expo since. Formula One's Japanese race is held outside Tokyo. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a Japanese production; the Olympics are a worldwide event. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 29 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e5975b30d6f9274e6bfee2c363507342185df19ec70ae5619d28baeb9cca5e22",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "The Olympic Games",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Akira's Neo-Tokyo of 2019 is building the stadium for the 2020 Olympics.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IOC chose Tokyo for the 2020 Summer Games at its session in September 2013.",
+              "confidence": "certain"
+            },
+            "note": "olympic-editions (edition_id=61) confirms that the 2020 Summer Games were Tokyo's, but not the year of the vote, so the record keeps this as knowledge rather than overstate the dataset. High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The event Neo-Tokyo prepares for is the Olympics, not an Expo, the Asian Games or a Formula One race.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=61",
+              "excerpt": "61,2020 Summer,2020,Summer,Tokyo,Japan,2021-07-23,2021-08-08,11318,206,339,49,Postponed one year due to COVID-19 pandemic",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The pinned record dates the Tokyo 2020 Games to 23 July to 8 August 2021 and notes the one-year postponement."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0e9c08e69f0c2234ab18477de6537c716b43966db30f94c94795768743a2726a",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "The Olympic Games",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Akira, the 2019 Neo-Tokyo is preparing to host the 2020 Olympics, with a stadium under construction.",
+              "confidence": "certain"
+            },
+            "note": "Matches the film as widely described (the finale is at the Olympic stadium site). High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In September 2013 the IOC chose Tokyo as host of the 2020 Summer Olympics.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Akira's Neo-Tokyo is not shown preparing for a World Expo, the Asian Games or a Formula One race.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Tokyo has hosted the Olympics (1964) and the Asian Games (1958) before 1988; only the 2020 Olympics is both in the film and \"later won\". \"Won\" here means won the IOC vote."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=61 (games \"2020 Summer\", city Tokyo)",
+              "excerpt": "61,2020 Summer,2020,Summer,Tokyo,Japan,2021-07-23,2021-08-08,11318,206,339,49",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Dataset gives the dates; the notes column is free text and is not relied on. The Games kept the name Tokyo 2020 but were held in 2021."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 and c2 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered. Claim c4 does carry olympic-editions dataset evidence in both checks; c1 and c2 do not.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sport.0202",
+      "score": 0.343,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In the anime Akira (1988), Neo-Tokyo is preparing to host which event, one the real Tokyo later won?",
+  "answer": "The Olympic Games",
+  "wrong": ["A World Expo", "The Asian Games", "A Formula One race"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.82,
+    "spread": 0.304,
+    "estimator": "v0"
+  }
+}

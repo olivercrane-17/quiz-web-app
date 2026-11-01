@@ -1,0 +1,206 @@
+{
+  "id": "p.music.0141",
+  "status": "checking",
+  "category": "music",
+  "tags": ["world-music", "latin-music", "new-york"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "In the 1960s and 1970s, Cuban and Puerto Rican musicians in New York blended son with jazz and other Latin styles. The New York label Fania Records carried salsa around the world.",
+  "learnMore": "Salsa music",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Salsa took shape as a style mainly in New York City, among Cuban and Puerto Rican musicians."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Salsa as a style did not take shape mainly in Havana, Miami or Mexico City."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In the 1960s and 1970s, Cuban and Puerto Rican musicians in New York blended Cuban son with jazz and other Latin styles."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Fania Records, a New York label, spread salsa internationally."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge; c1 is high because the item is counterintuitive (the C26 floor), and since the schema's riskReason list has no counterintuitive value it carries checker_doubt. Datasets: no pinned dataset covers these music facts (the manifest holds geographic, scientific, Nobel, Olympic and art-collection data), so each high-risk claim needs web evidence from the checkers. I used no WebSearch. Rival test: argued for Havana, the home of son and the obvious guess, which is the trap; reference works place salsa's development as a named style in New York. I left out San Juan and Caracas, which have strong salsa scenes and partial claims, so that no distractor can be argued for; Miami's Cuban community grew only after 1959. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: salsa is danced worldwide, and the trap works the same everywhere. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: The word salsa was used for music earlier in Cuba and Venezuela, so c1 says 'took shape as a style', not 'was named'. C22 pairs this item with p.film.0144 (Friends), which shares only the answer New York City; the facts differ, so I suggest related_ok.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "dce7db5a7f7ed705158fd575ce7ab0182adb51b978f66887aa3aa44e52a74166",
+        "startedAt": "2026-11-01T02:00:29Z",
+        "finishedAt": "2026-11-01T02:19:40Z",
+        "coldSolve": {
+          "answerGiven": "New York City",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Salsa coalesced as a named style in New York City among Cuban and Puerto Rican musicians.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3). The writer marked this checker_doubt. I hold the standard reference account as certain; see the ambiguity note on the Havana view."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Its main shaping as a style happened in New York, not Havana, Miami or Mexico City, although its roots are Cuban.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the 1960s and 1970s Cuban and Puerto Rican musicians in New York mixed Cuban son with jazz and other Latin styles.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The New York label Fania Records carried salsa around the world.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Some Cuban musicians and writers call salsa Cuban son under a new name, so Havana is the rival a purist would argue for. The stem's 'rooted in Cuban son' and 'mainly' leave New York City the defensible key, as standard references give it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "8b934ff720da90765f5555a9424bfe6e0452335d26fa7d34358c668033070fb2",
+        "startedAt": "2026-11-01T02:05:28Z",
+        "finishedAt": "2026-11-01T02:26:16Z",
+        "coldSolve": {
+          "answerGiven": "New York City",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The usual account places salsa's formation as a named style in New York in the 1960s and 1970s, but Cuban and other scholars dispute it and give Havana, Puerto Rico or other scenes a bigger role.",
+              "confidence": "likely"
+            },
+            "note": "Contested origin, see the ambiguity issue. Not certain enough to confirm; needs a Tier A or B source from a tiebreak, or a reword. High-risk claim."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The claim about Havana rests on the same dispute as c1; Miami and Mexico City are not credited.",
+              "confidence": "likely"
+            },
+            "note": "Depends on c1."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cuban and Puerto Rican musicians in 1960s and 1970s New York mixed son with jazz and other Latin styles.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: counts only with check A's external evidence (9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fania Records was the New York label that carried salsa abroad.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "fix",
+            "note": "Salsa's birthplace is disputed. The usual account says New York, but Cuban sources hold that salsa is son and rooted in Havana, and Puerto Rican, Colombian and Venezuelan scenes claim a share. A pedant can defend Havana despite 'mainly' and 'as a style'. Reword to something settled, or confirm c1 with a Tier A or B source in a tiebreak."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pmusic01e",
+        "at": "2026-11-01T02:04:12Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "Salsa music, rooted in Cuban son, took shape as a style mainly in which city?",
+  "answer": "New York City",
+  "wrong": ["Havana", "Miami", "Mexico City"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.181,
+    "estimator": "v0"
+  }
+}

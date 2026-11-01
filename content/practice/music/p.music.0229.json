@@ -1,0 +1,201 @@
+{
+  "id": "p.music.0229",
+  "status": "active",
+  "category": "music",
+  "tags": ["classical", "opera", "shakespeare"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Jacopo Peri's Dafne was staged in Florence around 1598, and his Euridice of 1600 is among the earliest operas whose music survives. Shakespeare died in 1616.",
+  "learnMore": "Dafne (Peri)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Jacopo Peri's Dafne, generally regarded as the first opera, was staged in Florence around 1598."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "William Shakespeare died in 1616."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Peri's Euridice, first performed in Florence in 1600, is among the earliest operas whose music survives."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the labels, values and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: geonames-cities lists Florence (IT, admin1 16), which only confirms the city; the dates need web evidence. I used no WebSearch. Rival test: argued for 'b': opera feels like a later art than Shakespeare's theatre, which is the trap. Argued against the key: Dafne dates from 1597 or 1598 and Euridice from 1600; even 1600 is 16 years before 1616, past the 10-year guard. Counterintuitive is true, so both label claims are high under C26. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Shakespeare and opera are known worldwide. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: Dafne's music is mostly lost and its exact year is given as 1597 or 1598, so the label claim and display say 'around 1598'. p.lang.0273 (a dictionary, b02 of Language & Words) also uses Shakespeare's death as its anchor, for a different fact; the labels here are worded apart from it.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "de17ef7e3949f64d4a47e01e5123192d4f989d9b5623a80eb0e9caf11ff7ed85",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "The first opera's premiere",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Peri's Dafne, staged in Florence around 1597 to 1598, is usually counted as the first opera.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). The key holds under any reading: Euridice (1600) and Monteverdi's L'Orfeo (1607) also predate 1616."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Shakespeare died in April 1616.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Peri's Euridice was first performed in Florence in October 1600 and is the earliest opera whose music survives.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "622a14e81b50d7273f9ee62b240248ed9afd2d8983f19d92a0acef5b0d586581",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "The first opera's premiere",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jacopo Peri's Dafne, generally regarded as the first opera, was staged in Florence in 1597 or 1598, so 'around 1598' is right.",
+              "confidence": "certain"
+            },
+            "note": "Contested-first check: every candidate for 'first opera' (Dafne about 1598, Euridice 1600, even Monteverdi's Orfeo 1607) predates 1616, so the key survives any definition. Needs check A's external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "William Shakespeare died in 1616.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Peri's Euridice was first performed in Florence in October 1600 and its music survives.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (first), c2 (date) and c3 (date) rest on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail. Both checks note the key survives any definition of the first opera, but the label's 'first' still needs evidence.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "The first opera's premiere",
+  "b": "Shakespeare's death",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of the event",
+  "unit": "year",
+  "values": {
+    "a": 1598,
+    "b": 1616
+  },
+  "valueDisplay": {
+    "a": "around 1598",
+    "b": "1616"
+  },
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.138,
+    "estimator": "v0"
+  }
+}

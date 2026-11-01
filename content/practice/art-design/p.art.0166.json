@@ -1,0 +1,250 @@
+{
+  "id": "p.art.0166",
+  "status": "active",
+  "category": "art",
+  "tags": ["paintings", "impressionism", "artists"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Van Gogh died in 1890, but Monet lived until 1926 and was still painting his huge Water Lilies panels in his eighties.",
+  "learnMore": "Claude Monet",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Claude Monet was born in 1840."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Vincent van Gogh was born in 1853."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Vincent van Gogh died in 1890 and Claude Monet died in 1926."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Monet was still painting large Water Lilies panels in his eighties."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: c1 checked in moma-artists (ConstituentID 4058, BeginDate 1840, EndDate 1926) and tate-artists (id 1652, born 1840, Paris; died 1926, Giverny); c2 in moma-artists (ConstituentID 2206, 1853 to 1890) and tate-artists (id 1182, born 1853, Zundert; died 1890, Auvers-sur-Oise); c3 uses the same records. I state no age gap, since the datasets give years, not birthdays. Rival test: argued for Van Gogh: he died in 1890 and feels like the older master, while Monet's Water Lilies run into the 1920s; the datasets put Monet 13 years earlier, beyond the 10-year guard. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both painters are world-famous. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: c4 needs a source.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f435e89ffce0f2ea978bb3efe8140e01b68c4f7c76b7044e27ea0c660795d9d2",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "Claude Monet",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=4058 (DisplayName=Claude Monet)",
+              "excerpt": "\"DisplayName\": \"Claude Monet\", \"ArtistBio\": \"French, 1840–1926\", \"BeginDate\": 1840",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Tate agrees (id 1652, yearOfBirth 1840)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=2206 (DisplayName=Vincent van Gogh)",
+              "excerpt": "\"DisplayName\": \"Vincent van Gogh\", \"ArtistBio\": \"Dutch, 1853–1890\", \"BeginDate\": 1853",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Tate agrees (id 1182, yearOfBirth 1853)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "tate-artists",
+              "version": "a51d8afc988ed083557e2950f4d0b644e7719f4a",
+              "file": "artist_data.csv",
+              "locator": "id=1182 (name=Gogh, Vincent van); id=1652 (name=Monet, Claude)",
+              "excerpt": "1182,\"Gogh, Vincent van\",Male,1853–1890,1853,1890,\"Zundert, Nederland\",\"Auvers-sur-Oise, France\" | 1652,\"Monet, Claude\",Male,1840–1926,1840,1926,\"Paris, France\",\"Giverny, France\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Two records of the same file: van Gogh died 1890, Monet 1926."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Monet worked on the large Water Lilies panels for the Orangerie until his death in 1926, aged 86.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2b0da4ddab9285ec3ee4148d877278509a0c9bbe3a6a5eea8576eb89d49d1b10",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "Claude Monet",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=4058",
+              "excerpt": "{\"DisplayName\":\"Claude Monet\",\"ArtistBio\":\"French, 1840–1926\",\"Nationality\":\"French\",\"BeginDate\":1840,\"EndDate\":1926}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "BeginDate 1840."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=2206",
+              "excerpt": "{\"DisplayName\":\"Vincent van Gogh\",\"ArtistBio\":\"Dutch, 1853–1890\",\"Nationality\":\"Dutch\",\"BeginDate\":1853,\"EndDate\":1890}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "BeginDate 1853."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=2206; ConstituentID=4058",
+              "excerpt": "{\"DisplayName\":\"Vincent van Gogh\",\"ArtistBio\":\"Dutch, 1853–1890\",\"Nationality\":\"Dutch\",\"BeginDate\":1853,\"EndDate\":1890} | {\"DisplayName\":\"Claude Monet\",\"ArtistBio\":\"French, 1840–1926\",\"Nationality\":\"French\",\"BeginDate\":1840,\"EndDate\":1926}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "EndDate 1890 for Van Gogh and 1926 for Monet."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Monet worked on the large Water Lilies panels for the Orangerie until his death in 1926, when he was in his eighties.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c4 (explanation, number) rests on knowledge alone in both checks: checker A's searches ran out and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Only explanation facts lack evidence: redraft under a new id with them evidenced, bounded or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.art.0106",
+      "score": 0.343,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which painter was born first?",
+  "a": "Claude Monet",
+  "b": "Vincent van Gogh",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of birth",
+  "unit": "year",
+  "values": {
+    "a": 1840,
+    "b": 1853
+  },
+  "valueDisplay": {
+    "a": "born 1840",
+    "b": "born 1853"
+  },
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.124,
+    "estimator": "v0"
+  }
+}

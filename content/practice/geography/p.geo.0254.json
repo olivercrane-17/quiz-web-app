@@ -1,0 +1,188 @@
+{
+  "id": "p.geo.0254",
+  "status": "active",
+  "category": "geo",
+  "tags": ["borders", "mountains", "central-asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "The strip was drawn as a buffer, so that the Russian Empire and British India would not share a border.",
+  "learnMore": "Wakhan Corridor",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Wakhan Corridor is part of Afghanistan and gives it a border with China."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Wakhan Corridor is not part of Pakistan, Tajikistan or Kyrgyzstan."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Wakhan Corridor was created as a buffer to keep the Russian Empire and British India from sharing a border."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: mledoze-countries: AFG borders IRN, PAK, TKM, UZB, TJK, CHN, so Afghanistan does border China (c1); the corridor itself is in no pinned dataset. Rival test: Tajikistan lies along the corridor's northern side and Pakistan along its southern side, and Kyrgyzstan is nearby; all three border China in their own right, which makes them tempting. Against the key: nothing; the corridor is Afghan territory. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Equally obscure everywhere; the Great Game history gives a foothold to reasoners. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 20 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; c1 to c3 are standard. Seed: 5 (hard): most players do not know Afghanistan touches China. Counterintuitive: false. Doubts: none; the item stays clear of the disputed Kashmir region south of the corridor.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8c0713239150cfe6ad0f6fccef858d68575e214efeb67050a945ae789870d612",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Afghanistan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Wakhan Corridor in north-east Afghanistan reaches east to a short border with China.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Wakhan belongs to Afghanistan, with Tajikistan to its north and Pakistan to its south.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Britain and Russia set the Wakhan as a buffer in the late 19th century so that British India and the Russian Empire would not touch.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "491f88c5166a60cbf8fc598500b8e056c229e494fcf2915b6a1214d7d43464ac",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Afghanistan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=AFG",
+              "excerpt": "\"borders\": [\"IRN\",\"PAK\",\"TKM\",\"UZB\",\"TJK\",\"CHN\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Afghanistan reaches China only through the Wakhan Corridor, which is Afghan territory (knowledge, certain). The other three options also border China elsewhere, which is what makes them good lures."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Wakhan Corridor is Afghan territory, not part of Pakistan, Tajikistan or Kyrgyzstan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Wakhan Corridor was drawn as a buffer so that the Russian Empire and British India would not share a border.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.book.0155",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The Wakhan Corridor, a thin strip of high mountain valleys, gives which country a border with China?",
+  "answer": "Afghanistan",
+  "wrong": ["Pakistan", "Tajikistan", "Kyrgyzstan"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.299,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,287 @@
+{
+  "id": "p.book.0114",
+  "status": "active",
+  "category": "book",
+  "tags": ["world-literature", "german-literature"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Kafka grew up in a German-speaking Jewish family in Prague, then part of Austria-Hungary. He also spoke Czech fluently, but wrote The Trial and The Metamorphosis in German.",
+  "learnMore": "Franz Kafka",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Franz Kafka wrote his works in German."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Kafka did not write his works in Czech, Yiddish or Hungarian."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Kafka lived most of his life in Prague, which belonged to Austria-Hungary until 1918."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kafka grew up in a German-speaking Jewish family and also spoke Czech fluently."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kafka wrote The Trial and The Metamorphosis in German."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: world literature in translation. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item). The tooling's riskReason list has no 'counterintuitive' value, so c1 (the key of a counterintuitive item, high under C26) carries 'checker_doubt' instead. Datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. Rival test: Czech is the trap (he lived in Prague and knew Czech well); he admired Yiddish theatre but never wrote in Yiddish; Hungarian fits the empire but not Kafka. German is certain. Counterintuitive: Prague points players to Czech. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 28 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8a59d288975ba878bda49f7208eac96c3c4e5a16342f8f1b25e9e3da9ea6e5be",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "German",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Franz Kafka wrote in German though he lived in Prague; Samuel Beckett wrote Waiting for Godot first in French as En attendant Godot; Joseph Conrad's first language was Polish and he learned English in his twenties",
+              "results": [
+                {
+                  "title": "Waiting for Godot",
+                  "url": "https://en.wikipedia.org/wiki/Waiting_for_Godot"
+                },
+                {
+                  "title": "Le Monde's 100 Books of the Century",
+                  "url": "https://en.wikipedia.org/wiki/Le_Monde%27s_100_Books_of_the_Century"
+                },
+                {
+                  "title": "Waiting for Godot",
+                  "url": "https://www.britannica.com/topic/Waiting-for-Godot"
+                },
+                {
+                  "title": "Absurdist fiction",
+                  "url": "https://en.wikipedia.org/wiki/Absurdist_fiction"
+                },
+                {
+                  "title": "Talk:Waiting for Godot/Archive 1",
+                  "url": "https://en.wikipedia.org/wiki/Talk:Waiting_for_Godot/Archive_1"
+                },
+                {
+                  "title": "Britannica",
+                  "url": "https://kids.britannica.com/students/article/Samuel-Beckett/14042/related/main?page=1"
+                },
+                {
+                  "title": "Franz Kafka",
+                  "url": "https://en.wikipedia.org/wiki/Franz_Kafka"
+                },
+                {
+                  "title": "Roman Polanski filmography",
+                  "url": "https://en.wikipedia.org/wiki/Roman_Polanski_filmography"
+                },
+                {
+                  "title": "Franz Kafka bibliography",
+                  "url": "https://en.wikipedia.org/wiki/Franz_Kafka_bibliography"
+                }
+              ],
+              "summaryExcerpt": "Kafka is described as a German-language Jewish writer from Prague. His family was German-speaking, but Kafka also spoke and wrote in Czech. One source notes that Kafka did not write in standard High German, but rather in a Praguean German heavily influenced by the Yiddish and Czech languages.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 13: Kafka is described as a German-language Jewish writer from Prague. The summary adds that he also spoke and wrote Czech; his literary works are in German, so the key stands. Counts at Tier B."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kafka's literary works are all in German; he knew Czech well but wrote none of his fiction in Czech, Yiddish or Hungarian.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kafka was born in Prague in 1883 and lived there almost all his life until 1923; Bohemia belonged to Austria-Hungary until October 1918.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No dataset covers it and it fell outside the batch search cap, so it counts only with dataset or web evidence from check B or a follow-up (§9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kafka's family spoke German, and he was fluent in Czech.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Der Process (The Trial) and Die Verwandlung (The Metamorphosis) were written in German.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "389aa999210604470d512d47b0853b8720b4abe568b590401ba117af03ccccd1",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "German",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kafka wrote his novels and stories in German.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "His fiction is not in Czech, Yiddish or Hungarian.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kafka lived in Prague nearly all his life, and Prague was part of Austria-Hungary until the empire ended in 1918.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He grew up in a German-speaking Jewish household in Prague and spoke good Czech.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Trial and The Metamorphosis were written in German.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c3 (explanation, superlative) rest on knowledge alone in both checks, and the batch's search cap is spent (29 of 26). Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Franz Kafka spent most of his life in Prague. In which language did he write?",
+  "answer": "German",
+  "wrong": ["Czech", "Yiddish", "Hungarian"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.234,
+    "estimator": "v0"
+  }
+}

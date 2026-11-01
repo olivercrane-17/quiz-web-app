@@ -1,0 +1,249 @@
+{
+  "id": "p.geo.0266",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "cities", "maps"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Venice sits at about 45.4° N and Vladivostok at about 43.1° N. Russia's big Pacific port lies at roughly the same latitude as Marseille.",
+  "learnMore": "Vladivostok",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Venice lies at about 45.4° N."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Vladivostok lies at about 43.1° N."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Marseille lies at about 43.3° N, close to Vladivostok's latitude."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Vladivostok is a major Russian port on the Pacific."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (number), c2 (number) and c3 (number) are high under the C26 floor, and c4 is standard. Datasets: geonames-cities: Venice, IT, 45.43713, 12.33265; Vladivostok, RU, 43.10562, 131.87353; Marseille, FR, 43.29695, 5.38107 (c1 to c3). The gap is 2.3 degrees, well above the 0.5 degree guard. Rival test: Vladivostok sounds like Siberia and has harsh winters, which is the trap; Venice feels Mediterranean. The city centres settle it, and no choice of point inside either city closes a gap of more than 2 degrees. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Both cities are famous; the reasoning is pure map knowledge. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 24 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c4 is standard. Seed: 5 (hard): most players pick Vladivostok. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0b7a20f36dae5830c53d8c3f269ff9ab202d2dcfea4c139e6c323817ef160ea1",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Venice",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Venice, country=IT",
+              "excerpt": "{\"name\":\"Venice\",\"lat\":\"45.43713\",\"lng\":\"12.33265\",\"country\":\"IT\",\"admin1\":\"20\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "45.437 rounds to 45.4."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Vladivostok, country=RU",
+              "excerpt": "{\"name\":\"Vladivostok\",\"lat\":\"43.10562\",\"lng\":\"131.87353\",\"country\":\"RU\",\"admin1\":\"59\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "43.106 rounds to 43.1."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Marseille, country=FR",
+              "excerpt": "{\"name\":\"Marseille\",\"lat\":\"43.29695\",\"lng\":\"5.38107\",\"country\":\"FR\",\"admin1\":\"93\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "43.297 rounds to 43.3, close to Vladivostok's 43.1."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vladivostok is Russia's main Pacific port, on the Sea of Japan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bb509c8676ac5ff1e5cf0f2f59590501993f48dc2d617387b280c16009fc282d",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Venice",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Venice, country=IT",
+              "excerpt": "Venice IT (Veneto) lat 45.43713",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 45.4 N."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Vladivostok, country=RU",
+              "excerpt": "Vladivostok RU (Primorye) lat 43.10562",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 43.1 N; Venice is 2.33 degrees further north, well over the 0.5 degree guard."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Marseille, country=FR",
+              "excerpt": "Marseille FR lat 43.29695",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 43.3 N, within 0.2 degrees of Vladivostok."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vladivostok is Russia's main Pacific port city.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1, c2 and c3 (geonames-cities) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which city is further north?",
+  "a": "Venice",
+  "b": "Vladivostok",
+  "answer": "a",
+  "relation": "further_north",
+  "measure": "latitude of the city centre",
+  "unit": "° N",
+  "values": {
+    "a": 45.44,
+    "b": 43.11
+  },
+  "valueDisplay": {
+    "a": "45.4° N",
+    "b": "43.1° N"
+  },
+  "predicted": {
+    "p": 0.36,
+    "spread": 0.249,
+    "estimator": "v0"
+  }
+}

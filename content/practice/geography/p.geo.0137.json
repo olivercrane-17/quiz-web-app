@@ -1,0 +1,249 @@
+{
+  "id": "p.geo.0137",
+  "status": "active",
+  "category": "geo",
+  "tags": ["area", "maps", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Africa is about 1.8 times the size of Russia. Mercator world maps stretch areas near the poles, so Russia and Greenland look far bigger than they are.",
+  "learnMore": "Mercator projection",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Africa covers about 30.3 million km²."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Russia covers about 17.1 million km²."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Africa's area is about 1.8 times Russia's."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Mercator projection enlarges areas near the poles, making Russia and Greenland look bigger than they are."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 to c3 carry numbers, so high; c4 is standard. Datasets: mledoze-countries: RUS area 17,098,242 km² (c2); the 59 entries with region Africa sum to 30,318,417 km² (c1), close to the usual textbook figure for the continent. c3: 30.3 / 17.1 = 1.77. Rival test: on the Mercator maps many players grew up with, Russia looks larger than Africa, which makes the item counterintuitive; the real gap is so wide that no definition of Africa's area closes it. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a global map illusion that works the same everywhere. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 27 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1dfe3f5443a0f8d80a3affcd709c27825baf011bf549c6b92cba5674597486ea",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Africa",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "region=Africa (all 59 entries)",
+              "excerpt": "sum of \"area\" over region=Africa = 30318417 (DZA 2381741, COD 2344858, SDN 1886068, ... incl. ESH 266000, REU 2511, SHN 394, MYT 374, IOT 60)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "About 30.3 million km² including Western Sahara and the African island territories."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=RUS",
+              "excerpt": "RUS: \"area\": 17098242",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=RUS",
+              "excerpt": "RUS: \"area\": 17098242",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "30318417 / 17098242 = 1.773, about 1.8."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mercator's projection inflates areas towards the poles, so Russia and Greenland look far larger than they are.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c4e0d6a1029a023964be44cba447bd7b1040eeb3939c0177c0bf10fd143befe2",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Africa",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "region=Africa (59 records)",
+              "excerpt": "Sum of area over the 59 records with region Africa = 30318417 km2",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 30.3 million km2 including islands and dependencies."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=RUS",
+              "excerpt": "RUS (Russia): area 17098242",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "region=Africa (sum) and cca3=RUS",
+              "excerpt": "Africa 30318417 / Russia 17098242 = 1.773",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Mercator projection stretches areas towards the poles, so Russia and Greenland look larger than they are.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 to c3 carry mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which is bigger by area?",
+  "a": "Africa",
+  "b": "Russia",
+  "answer": "a",
+  "relation": "larger",
+  "measure": "total area",
+  "unit": "km²",
+  "values": {
+    "a": 30300000,
+    "b": 17100000
+  },
+  "valueDisplay": {
+    "a": "about 30.3 million km²",
+    "b": "about 17.1 million km²"
+  },
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.307,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "id": "p.art.0141",
+  "status": "active",
+  "category": "art",
+  "tags": ["art-movements", "impressionism", "france"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "In 1874 the critic Louis Leroy seized on Monet's Impression, Sunrise to mock the whole exhibition. The painters soon adopted the insult as their name.",
+  "learnMore": "Impression, Sunrise",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The term Impressionism comes from Claude Monet's painting Impression, Sunrise, through a critic's mocking review."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The term Impressionism does not come from a painting by Manet, Degas or Renoir."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In 1874 the critic Louis Leroy used the title of Monet's Impression, Sunrise to mock the exhibition in a satirical review."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The painters later adopted the name Impressionists themselves."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: moma-artists has Monet (ConstituentID 4058) and Degas (1465), dates only; c1 and c3 need a source. Rival test: Manet is the classic confusion (similar name, and he influenced the group though he never showed with it); Degas and Renoir exhibited in 1874; against the key, nothing. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a standard story of art history worldwide. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "21ff0c090e46765b24aa046a57f174785a99cd50df75671b524d30370472aec3",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "Claude Monet",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The term came from Monet's Impression, Sunrise, through a critic's mocking review.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It came from Monet's painting, not one by Manet, Degas or Renoir.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Louis Leroy's satirical review in Le Charivari in April 1874 used the painting's title to mock the exhibition.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The painters took up the name, using it for their third exhibition in 1877.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "20297d04c3a099f497a45b48d062d2c79eae114db5bc7ddc028fcbfc06434083",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "Claude Monet",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The word Impressionism comes from Monet's Impression, Sunrise, via a mocking review.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "It does not come from a painting by Manet, Degas or Renoir.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Louis Leroy used the title of Monet's Impression, Sunrise to mock the 1874 exhibition in a satirical review.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The painters later adopted the name Impressionists themselves.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, etymology), c2 (distractor, etymology), c3 (explanation, date) rest on knowledge alone in both checks: checker A's searches ran out and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Redraft under a new id with these facts evidenced (a dataset record or a Tier A or B search) or bounded.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.art.0134",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The name Impressionism came from a mocking review of a painting by which artist?",
+  "answer": "Claude Monet",
+  "wrong": ["Édouard Manet", "Edgar Degas", "Pierre-Auguste Renoir"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.286,
+    "estimator": "v0"
+  }
+}

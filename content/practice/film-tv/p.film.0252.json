@@ -1,0 +1,217 @@
+{
+  "id": "p.film.0252",
+  "status": "active",
+  "category": "film",
+  "tags": ["world-cinema", "japan", "directors"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Ozu often set his camera low, near the eye level of someone seated on a tatami mat. In 2012, Sight and Sound's poll of film directors voted Tokyo Story the best film ever made.",
+  "learnMore": "Tokyo Story",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Yasujirō Ozu directed Tokyo Story (1953), about an elderly couple who visit their grown-up children, who are too busy for them."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Akira Kurosawa, Kenji Mizoguchi and Masaki Kobayashi did not direct Tokyo Story."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Ozu often filmed from a low camera position, roughly the eye level of a person seated on a tatami mat."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "record",
+      "text": "In the 2012 Sight and Sound poll of film directors, Tokyo Story was voted the greatest film of all time."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Kurosawa is the planted trap: the Japanese director most players know, active in the same years. Mizoguchi and Kobayashi are other masters of the period. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a Japanese production; the trap works through fame, not through any local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 34 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: c4 is a dated poll result, so it cannot change. c1 is high because it carries a date and the item is counterintuitive.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e8991301b642adc6d1e711037e34ea272e20a4c5d25f91403d5a2677a70471c3",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "Yasujirō Ozu",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ozu's Tokyo Story (1953) is about an elderly couple whose busy grown-up children have little time for them.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kurosawa, Mizoguchi and Kobayashi did not direct Tokyo Story.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ozu's trademark camera position was low, near the eye level of someone kneeling on a tatami mat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tokyo Story topped Sight and Sound's 2012 directors' poll, while Vertigo topped the critics' poll.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (record), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f2b0b17487988f54452b296a358b07a1a84712cba38af0203dad3b7dc89d9654",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "Yasujirō Ozu",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Yasujirō Ozu directed Tokyo Story (1953), about an elderly couple visiting their grown-up children, who have little time for them.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Kurosawa, Mizoguchi and Kobayashi did not direct Tokyo Story.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ozu often shot from a low camera position near the eye level of someone seated on a tatami mat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the 2012 Sight and Sound poll of film directors, Tokyo Story was voted the greatest film of all time.",
+              "confidence": "certain"
+            },
+            "note": "Dated to 2012 in the text, so later polls do not change it (the 2022 polls had other winners). High-risk (record): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 and c4 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0267",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Japanese director made Tokyo Story (1953), about elderly parents visiting their busy grown-up children?",
+  "answer": "Yasujirō Ozu",
+  "wrong": ["Akira Kurosawa", "Kenji Mizoguchi", "Masaki Kobayashi"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.24,
+    "spread": 0.264,
+    "estimator": "v0"
+  }
+}

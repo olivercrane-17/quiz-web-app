@@ -1,0 +1,225 @@
+{
+  "id": "p.sport.0155",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["athletics", "word-origins", "olympics"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The ancient Olympic pentathlon combined running, long jump, discus, javelin and wrestling. The modern pentathlon, devised by Pierre de Coubertin, was first held at the 1912 Games in Stockholm.",
+  "learnMore": "Pentathlon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word pentathlon comes from the Greek pente, five, and athlon, contest."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Heptathlon, decathlon and biathlon come from the Greek for seven, ten and two contests."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The ancient Olympic pentathlon consisted of running, long jump, discus, javelin and wrestling."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The modern pentathlon, devised by Pierre de Coubertin, was first held at the 1912 Stockholm Olympics."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; c1, c2, c4 are high and c3 is standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor); the standard claim carries none of those triggers and states a rule or a well-known fact. datasets: olympic-editions confirms the 1912 Summer Games in Stockholm (edition_id 6) but not their events, so c1, c2 and c4 need web evidence from checker A. rivalTest: Heptathlon and decathlon are the obvious confusions for players who half-remember the prefixes; biathlon is a winter sport with a Greek-Latin prefix. Only penta- means five. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 29 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Biathlon mixes the Latin bi- with Greek athlon; c2 says 'come from the Greek for' loosely, and a checker may prefer 'refer to'. I can reword if asked.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "316474242db5b64cd6f8bb78ea21be5241a245b2c02c5af95de6ce1946fee0fa",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Pentathlon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pentathlon comes from Greek pente, five, and athlon, contest.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "refuted",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Heptathlon (hepta, seven) and decathlon (deka, ten) are Greek, but biathlon joins the Latin prefix bi-, two, to Greek athlon; the Greek for two is di-.",
+              "confidence": "certain"
+            },
+            "note": "False as written for biathlon. The distractor itself is still definitely wrong, since biathlon means two contests, not five; only the claim's etymology needs rewording (x1 gives a form that holds)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ancient Olympic pentathlon was the stadion race, long jump, discus, javelin and wrestling.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Coubertin devised the modern pentathlon, first held at Stockholm 1912.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Heptathlon, decathlon and biathlon mean seven, ten and two contests, so none of them means five contests.",
+              "confidence": "certain"
+            },
+            "note": "Added by checker A. Role distractor, risk high (etymology). Claim: Heptathlon, decathlon and biathlon mean seven, ten and two contests, not five. Offered as the corrected form of c2. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Claim c2 says biathlon comes from 'the Greek for' two contests, but its bi- is Latin. Reword the claim (x1 holds). The item text players see is unaffected."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "fail"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "442e803b0531a69dbc23ab16e1e8c47d330dc2036fd73de5a3e258af6c1c907b",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Pentathlon",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pentathlon joins the Greek pente, five, and athlon, contest.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Heptathlon (hepta, seven), decathlon (deka, ten) and biathlon (bi, two) each name a number of events, so none means 'five'. But bi- is a Latin prefix (a Greek form would be di-); only athlon is Greek, so 'come from the Greek for ... two contests' is wrong for biathlon as written.",
+              "confidence": "certain"
+            },
+            "note": "Not confirmable as written. The substance (none of the three means five) is right; the language attribution is wrong for biathlon. The item text is unaffected."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ancient Olympic pentathlon was running, long jump, discus, javelin and wrestling.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pierre de Coubertin devised the modern pentathlon, first held at Stockholm in 1912.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Claim c2 attributes biathlon to 'the Greek for two contests', but the prefix bi- is Latin. Reword the claim (for example 'name seven, ten and two events, not five'). Nothing a player sees is wrong, so this is a claim-text fix only."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "A fail, B revise: both found that claim c2 calls biathlon 'the Greek for' two contests, but bi- is Latin (A refuted c2, B left it uncertain). With no passing check a tiebreak cannot apply (§9.9 rule 2), and the fix rewords a claim, which needs fresh checks; high-risk c1 and c4 also rest on knowledge alone. Cut. The player-facing text is sound: redraft under a new id with A's x1 wording for the distractor claim and evidence for the etymologies.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which multi-event contest takes its name from the Greek for 'five contests'?",
+  "answer": "Pentathlon",
+  "wrong": ["Heptathlon", "Decathlon", "Biathlon"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.9,
+    "spread": 0.277,
+    "estimator": "v0"
+  }
+}

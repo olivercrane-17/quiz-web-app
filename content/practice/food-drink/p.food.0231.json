@@ -1,0 +1,199 @@
+{
+  "id": "p.food.0231",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-science", "kitchens", "cooking"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Microwaves reach only a few centimetres into food, so the centre warms by conduction from the outside. That is why recipes say to stir dishes and let them stand.",
+  "learnMore": "Microwave oven",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Microwave ovens heat food mainly by making water molecules rotate back and forth."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Microwave ovens do not heat food mainly through salt, sugar or protein molecules."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Microwaves penetrate only a few centimetres into food, and deeper parts heat by conduction."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Stirring and standing time let heat spread through microwaved food."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. C22 flags a shared answer with p.sci.0112, which asks for the formula of water; the facts are unrelated (microwave heating against a chemical formula), so the key stays water. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c3). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Fats and sugars absorb some microwave energy too, which is why the stem says 'mainly'; water dominates in almost every food. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: microwave ovens are in kitchens worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 29 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: many players have heard that microwaves heat water. Doubts: c3's 'a few centimetres' is the bounded form of a depth that varies with the food.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "931ce8879a08a3da55ce39648fafef3244b061038e8dd4d37b1dc6bdf2260b61",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Water",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Microwaves heat food mainly by making polar water molecules rotate in the oscillating field.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Salt, sugar and protein molecules are not the main absorbers.",
+              "confidence": "certain"
+            },
+            "note": "Fats and sugars absorb some energy, which 'mainly' allows."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "At 2.45 GHz microwaves penetrate roughly one to a few centimetres into food; deeper parts heat by conduction.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Stirring and standing time let heat even out through microwaved food.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5bfcd15546ab479a9dd23536ff79f07cdf2020bf44e301b45a24305d249b82f8",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Water",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Microwave ovens heat mainly by making water molecules rotate in the oscillating field.",
+              "confidence": "certain"
+            },
+            "note": "Fats, sugars and dissolved salts also absorb, but water is the main absorber in food."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Salt, sugar and protein are not the main heated molecules.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Microwaves penetrate only a few centimetres into moist food, so deeper parts warm by conduction.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Stirring and standing time even out microwaved food.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c3 (explanation, number) rests on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "A microwave oven heats food mainly by making which molecules move?",
+  "answer": "Water",
+  "wrong": ["Salt", "Sugar", "Protein"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.68,
+    "spread": 0.181,
+    "estimator": "v0"
+  }
+}

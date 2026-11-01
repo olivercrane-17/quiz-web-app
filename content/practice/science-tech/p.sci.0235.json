@@ -1,0 +1,168 @@
+{
+  "id": "p.sci.0235",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["human-body", "blood", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Human blood is always red: bright red when rich in oxygen and darker red when it carries less. Veins look blue because of the way skin scatters and absorbs light.",
+  "learnMore": "Vein",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The blood inside human veins is not blue: human blood is always red."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Oxygen-rich blood is bright red and oxygen-poor blood is a darker red."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Veins look blue because of how skin and tissue scatter and absorb different colours of light."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors; its one warning is C25 on c1, which matches the listed myth blue-blood-in-veins because it debunks it. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key claim, because the item is counterintuitive (the C26 floor). datasets: no pinned dataset covers this; c1 is the key of a counterintuitive item, so checker A needs web evidence for it. rivalTest: The myth is widely taught at home and shown in diagrams that colour veins blue. Against the key: blood drawn from a vein is visibly dark red, so the statement is false under any reading. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 30 words. myths: c1 matches blue-blood-in-veins by design, because the item is that myth, so the checkers need web evidence to clear it; no other claim resembles a listed myth. mystery and encore: not applicable to a practice true/false item. doubts: checker_doubt stands in for the counterintuitive floor on c1, which the schema's riskReason list lacks. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f6efd31e0da20b2a0460dee0c62740b1b526bcc91e234219807fb46d8374463a",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Human blood is always red: haemoglobin is bright red with oxygen and dark red without it, never blue.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3). Myth-screen hit: it also needs dataset or web evidence in one check to clear the screen (§9.9 rule 5)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Oxygenated blood is bright red and deoxygenated blood dark red.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Veins look bluish because skin scatters and absorbs red and blue light differently at the depth of the vein.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5f2631de6f7972205ad5e303073c4d1c7544181d1bcd1ca861d28d45d5ab33fe",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Human blood is always red; deoxygenated blood is darker red, never blue.",
+              "confidence": "certain"
+            },
+            "note": "Myth hit (blue-blood-in-veins). Needs web evidence in A or a tiebreak to clear. High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Oxygen-rich blood is bright red and oxygen-poor blood darker red.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Veins look blue through skin because of how light is scattered and absorbed in skin and tissue.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, checker_doubt) rests on knowledge alone in both checks, with no dataset or web evidence for it in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was unavailable because the session's search limit was reached), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Claim c1 also matches the known myth blue-blood-in-veins, which only dataset or web evidence in a confirming check clears (rule 5). Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T04:50:16Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Veins look blue because the blood inside them is blue.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.21,
+    "estimator": "v0"
+  }
+}

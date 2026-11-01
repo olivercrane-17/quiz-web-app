@@ -1,0 +1,265 @@
+{
+  "id": "p.geo.0201",
+  "status": "active",
+  "category": "geo",
+  "tags": ["enclaves", "microstates", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "It covers less than half a square kilometre, which makes it the smallest independent state in the world. Its head of state is the Pope.",
+  "learnMore": "Vatican City",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Vatican City is an independent state that lies entirely within the city of Rome."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "San Marino is surrounded by Italy but lies far from Rome, Monaco borders France, and Andorra lies between France and Spain."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Vatican City covers less than half a square kilometre."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Vatican City is the smallest independent state in the world by area."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Pope is the head of state of Vatican City."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; c3 (number) and c4 (superlative) are high under the C26 floor, and c1, c2 and c5 are standard. Datasets: mledoze-countries cca3=VAT: area 0.44, borders ITA, independent true (c1, c3). Sorting the file's independent entries by area puts Vatican City first at 0.44 and Monaco second at 2.02 (c4). SMR borders ITA, MCO borders FRA, AND borders FRA and ESP (c2). Known issue: the file marks Vatican City unMember true; no claim here depends on UN membership. Rival test: San Marino pulls hardest, because it is also an enclave inside Italy, but it sits near Rimini, far from Rome. Monaco and Andorra are the other famous microstates and lie nowhere near Rome. Against the key: strictly the sovereign is the Holy See, which governs Vatican City State, but the state the stem asks for is Vatican City, so the key stands. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Rome and the Vatican are known everywhere, through the news as much as through school. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c5 is standard. Seed: 1 (easy): nearly everyone links the Vatican with Rome; the size and the head of state are what make it worth telling. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6ebc233643222215caf86a2f458d9a8d15332fbee6559f5d73e9fc7193d0e3c3",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Vatican City",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vatican City is a sovereign city-state enclaved in Rome, which surrounds it on every side.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SMR, MCO, AND",
+              "excerpt": "SMR \"borders\": [\"ITA\"]; MCO \"borders\": [\"FRA\"]; AND \"borders\": [\"FRA\",\"ESP\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "San Marino is enclosed by Italy alone, Monaco borders only France and Andorra lies between France and Spain. That San Marino is far from Rome (it sits near Rimini in north-east Italy) is knowledge."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=VAT",
+              "excerpt": "\"area\": 0.44",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "0.44 km² is less than half a square kilometre."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "independent=true, sorted by area",
+              "excerpt": "VAT \"area\": 0.44; next MCO \"area\": 2.02; then NRU 21",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Vatican City has the smallest area of every entry marked independent. The file wrongly marks it a UN member (manifest known issue), which does not touch this claim."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Pope, as Bishop of Rome, is the sovereign and head of state of Vatican City.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9aa9ed802fcf1cc1a59fb28da0c748db7bd0641a2f78ccab68b583088ef611b2",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Vatican City",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Vatican City is an independent state entirely enclosed by the city of Rome; its only land neighbour is Italy.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SMR, MCO, AND",
+              "excerpt": "SMR \"borders\": [\"ITA\"], latlng 43.77 N, 12.42 E (about 200 km north of Rome at 41.9 N); MCO \"borders\": [\"FRA\"]; AND \"borders\": [\"FRA\",\"ESP\"].",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "None of the three lies inside Rome. Rival test: the Sovereign Military Order of Malta has extraterritorial buildings in Rome but no territory of its own and is not an option."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=VAT",
+              "excerpt": "\"area\": 0.44 (km2), \"independent\": true",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "0.44 km2 is under half a square kilometre."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "independent=true, sorted by area",
+              "excerpt": "Smallest independent entries: Vatican City 0.44, Monaco 2.02, Nauru 21, Tuvalu 26, San Marino 61 (km2).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Superlative checked against the pinned countries file; the knownIssues list only the Vatican UN-member flag, which does not affect area."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Pope is the head of state of Vatican City State.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c3 and c4 (mledoze-countries) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which independent state lies entirely within the city of Rome?",
+  "answer": "Vatican City",
+  "wrong": ["San Marino", "Monaco", "Andorra"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.93,
+    "spread": 0.367,
+    "estimator": "v0"
+  }
+}

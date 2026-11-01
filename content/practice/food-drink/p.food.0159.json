@@ -1,0 +1,283 @@
+{
+  "id": "p.food.0159",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-history", "inventions", "kitchens"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Denis Papin showed his steam digester, a sealed pot that cooked bones soft, to London's Royal Society in 1679. Electric fridges reached homes in the 1910s.",
+  "learnMore": "Pressure cooking",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Denis Papin demonstrated his steam digester, an early pressure cooker, to the Royal Society in London in 1679."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Electric refrigerators for home use first went on sale in the 1910s."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Papin's steam digester was a sealed pot that could cook bones until they were soft."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1, c2). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: whatever counts as the first refrigerator (Perkins's vapour-compression machine of 1834, ice boxes, early electric models), all come long after 1679, so the answer is safe; the label says electric to pin the date. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both appliances are found worldwide; the dates are equally unfamiliar everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 26 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: the pressure cooker feels modern, so most players pick the fridge. Doubts: c1 and c2 need dated evidence; c2 is written at decade precision because 'first electric home fridge' has rival claimants.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9ff7cce4ea6a5982677a9eac3546a979b22d1463d9f14dc52a872e7f4516bd9e",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "The pressure cooker",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Denis Papin presented his steam digester, an early pressure cooker, to the Royal Society in London in 1679; first electric refrigerators for home use went on sale in the 1910s",
+              "results": [
+                {
+                  "title": "Denis Papin",
+                  "url": "https://en.wikipedia.org/wiki/Denis_Papin"
+                },
+                {
+                  "title": "Steam engine",
+                  "url": "https://en.wikipedia.org/wiki/Steam_engine"
+                },
+                {
+                  "title": "History of the steam engine",
+                  "url": "https://en.wikipedia.org/wiki/History_of_the_steam_engine"
+                },
+                {
+                  "title": "Automatic high energy saving cooker",
+                  "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/6565903"
+                },
+                {
+                  "title": "Denis Papin - Students",
+                  "url": "https://kids.britannica.com/students/article/Denis-Papin/332480"
+                },
+                {
+                  "title": "Pressure cooker",
+                  "url": "https://www.britannica.com/technology/pressure-cooker"
+                },
+                {
+                  "title": "List of French inventions and discoveries",
+                  "url": "https://en.wikipedia.org/wiki/List_of_French_inventions_and_discoveries"
+                },
+                {
+                  "title": "Denis Papin",
+                  "url": "https://www.britannica.com/biography/Denis-Papin"
+                },
+                {
+                  "title": "History of physics",
+                  "url": "https://en.wikipedia.org/wiki/History_of_physics"
+                }
+              ],
+              "summaryExcerpt": "Wikipedia says Papin first addressed the Royal Society in 1679 on the subject of his digester, and remained mostly in London. Britannica dates the invention itself to 1679 and calls the digester the pressure cooker's first appearance, named for its inventor, French-born physicist Denis Papin.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Attributed to Wikipedia and Britannica (Tier B)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Household electric refrigerators went on sale in the 1910s, among them General Electric's Audiffren machine (1911), the DOMELRE (1913) and the Kelvinator (1918).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed on certain knowledge only. This record's call and a later Britannica-only call (counted in p.food.0147's record) both returned nothing on refrigerators. Still needs evidence. The comparison holds on any refrigerator date, since all come long after 1679."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Papin's digester was a sealed vessel with a safety valve that could cook bones until soft.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c4aa4b87df84f9e82435d6f785429ccd0453f93fb105604e53bf97ab58604b92",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "The pressure cooker",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Denis Papin steam digester demonstrated Royal Society London year 1679 or 1680 pressure cooker history",
+              "results": [
+                {
+                  "title": "Denis Papin",
+                  "url": "https://en.wikipedia.org/wiki/Denis_Papin"
+                },
+                {
+                  "title": "Papin, Denis",
+                  "url": "https://www.encyclopedia.com/topic/Denis_Papin.aspx"
+                },
+                {
+                  "title": "Grace's Guide To British Industrial History",
+                  "url": "https://gracesguide.co.uk/Denis_Papin"
+                },
+                {
+                  "title": "Papin, Denis",
+                  "url": "https://www.encyclopedia.com/doc/1G2-2830903282.html"
+                },
+                {
+                  "title": "Denis Papin",
+                  "url": "https://ethw.org/Denis_Papin"
+                },
+                {
+                  "title": "who invented the instant pot",
+                  "url": "https://atlasobscura.com/articles/who-invented-the-instant-pot"
+                },
+                {
+                  "title": "Credit: ©The Royal Society",
+                  "url": "https://pictures.royalsociety.org/image-rs-15059"
+                },
+                {
+                  "title": "Credit: ©The Royal Society",
+                  "url": "https://pictures.royalsociety.org/image-rs-14867"
+                },
+                {
+                  "title": "Denis Papin",
+                  "url": "https://wehd.com/bios/Denis_Papin.html"
+                },
+                {
+                  "title": "Papin, Denys",
+                  "url": "https://words.fromoldbooks.org/Chalmers-Biography/p/papin-denys.html"
+                }
+              ],
+              "summaryExcerpt": "Grace's Guide and Wikipedia agree he first addressed the Society in 1679 on the subject of the digester. ... Another source says the Royal Society's archive records the digester being presented on 2 March 1681, after Papin left it with Hooke while he was in Antwerp.",
+              "tiers": ["B", "C"],
+              "conflictReported": true,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Wikipedia and Grace's Guide give 1679 for Papin's first address to the Royal Society, but the search also reports a Royal Society archive record of a presentation on 2 March 1681, and Papin became a Fellow in December 1680. A conflict between 1679 and 1681 means the date as written is not safe. The answer is not at risk: any of these dates is centuries before the 1910s."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Electric refrigerators for homes were first sold in the 1910s (the Domelre in 1913, the Kelvinator from 1918).",
+              "confidence": "certain"
+            },
+            "note": "values.b is 1911, which no claim states; the claim says only 'the 1910s'. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Papin's steam digester was a sealed iron pot with a safety valve that softened bones; he published it in 1681.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "c1 and the explanation date the Royal Society demonstration to 1679, but a Royal Society archive record is reported to date a presentation to 2 March 1681. State it as the digester invented in 1679 and published in 1681, or as 'around 1680', and make the display consistent."
+          },
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "'The pressure cooker' can be read as the household appliance, which dates from the early 20th century and would fall after the 1910s refrigerator. The measure (first demonstrated or sold) and the explanation point to Papin, but the labels could say 'The first pressure cooker' and 'The first electric refrigerator'."
+          },
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "values.b is 1911 but c2 says only 'the 1910s', so no claim states 1911. Store a year a claim supports, such as 1913."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "B revise: B's search reports a Royal Society record of a 1681 presentation against the label's 1679 demonstration (c1), a conflict that fails the claim as written (§9.5.2). B also notes the label can be read as the household appliance, which would flip the answer, and c2 rests on knowledge only. The fixes change labels and claims, so cut.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which was invented first?",
+  "a": "The pressure cooker",
+  "b": "The electric refrigerator",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year it was first demonstrated or sold",
+  "unit": "year",
+  "values": {
+    "a": 1679,
+    "b": 1911
+  },
+  "valueDisplay": {
+    "a": "demonstrated 1679",
+    "b": "sold from the 1910s"
+  },
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.187,
+    "estimator": "v0"
+  }
+}

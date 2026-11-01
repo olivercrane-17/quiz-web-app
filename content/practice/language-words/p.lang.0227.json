@@ -1,0 +1,230 @@
+{
+  "id": "p.lang.0227",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["scripts", "japanese", "writing-systems"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Kanji are characters borrowed from Chinese. Hiragana mainly writes grammatical endings and native words, while katakana writes loanwords, such as terebi, television.",
+  "learnMore": "Japanese writing system",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Japanese is written with a mix of three scripts: kanji, hiragana and katakana."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Chinese, Korean and Thai are not written with hiragana and katakana."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kanji are characters adopted from Chinese writing."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hiragana is used mainly for grammatical endings and native words, and katakana mainly for foreign loanwords."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "The Japanese loanword terebi, from 'television', is written in katakana."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors for this item and one warning, C22, for the editor: p.music.0134 shares the answer Japanese but asks where the word karaoke comes from, a different fact; related, not a duplicate. claims: 5 listed, 2 high (number, quotation) and 3 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers scripts. rivalTest: Chinese is the trap, because kanji are Chinese characters, but Chinese has no hiragana or katakana. Korean once mixed Chinese characters with Hangul, never with kana. Latin letters (romaji) also appear in Japanese text, which does not change the three native scripts. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: Japanese writing is familiar worldwide from anime, games and food packaging. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 22 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8153a4b1f2d15625c5ed8cc0b512e46dac35c135d287fe3bb9e8449e3ad2543a",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Japanese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Japanese writing combines three scripts: kanji, hiragana and katakana.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hiragana and katakana are Japanese kana; Chinese, Korean and Thai do not use them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kanji are Chinese characters adopted into Japanese writing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hiragana mainly writes grammatical endings, particles and native words; katakana mainly writes foreign loanwords.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Terebi, the Japanese loanword from television, is written in katakana.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e3d7325339d2cab18ebfa34cfd73d202cfb5fbf5987b2ccac8ce53281b64dfc0",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Japanese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Japanese is written with kanji, hiragana and katakana together.",
+              "confidence": "certain"
+            },
+            "note": "Rōmaji (Latin letters) also appears in Japanese, but it is not one of the three scripts the stem names, and no other option uses hiragana or katakana."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Chinese, Korean and Thai are not written with hiragana or katakana.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kanji are Chinese characters adopted into Japanese.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hiragana mainly writes grammatical endings and native words; katakana mainly writes foreign loanwords.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Terebi, from television, is written in katakana.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, number) and c5 (explanation, quotation) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: it shares the answer Japanese with p.lang.0240 (honcho), a different fact, so related_ok; B asked the run planner to keep 0227, 0240 and 0237 apart.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which language is written with a mix of three scripts: hiragana, katakana and kanji?",
+  "answer": "Japanese",
+  "wrong": ["Chinese", "Korean", "Thai"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.95,
+    "spread": 0.376,
+    "estimator": "v0"
+  }
+}

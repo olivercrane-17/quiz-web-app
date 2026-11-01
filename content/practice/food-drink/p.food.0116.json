@@ -1,0 +1,205 @@
+{
+  "id": "p.food.0116",
+  "status": "cut",
+  "category": "food",
+  "tags": ["coffee", "drinks", "east-africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Coffee crossed the Red Sea to Yemen, where Sufi communities drank it to stay awake through night-time prayers, and from there it spread around the world.",
+  "learnMore": "Coffea arabica",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The arabica coffee plant, Coffea arabica, is native to the highlands of south-western Ethiopia."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Coffee is not native to Brazil, Colombia or Vietnam; it was introduced there as a crop."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Coffee drinking spread from Ethiopia across the Red Sea to Yemen, where Sufi communities drank it to stay awake during night-time devotions."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Coffee drinking and growing spread from Yemen to the rest of the world."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Brazil and Colombia are the trap, because they are famous growers; I left Yemen out of the options, because wild arabica is sometimes reported there and the name arabica points to Arabia. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: coffee is drunk everywhere; Ethiopian players have an edge, as anyone does on their own country's famous crop. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 26 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: many players know Ethiopia as coffee's homeland, and the big growers pull the rest. Doubts: arabica's wild range also reaches the Boma Plateau of South Sudan and Mount Marsabit in Kenya; neither is an option, and the key says Ethiopia's highlands, which is the standard statement.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "39e1b8d88dcdc77eed0e437d9379ac9fa1e0df20615ab5699832ee06d405b6bc",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Ethiopia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Coffea arabica originated in the highland forests of south-western Ethiopia, with outlying wild stands on the Boma Plateau (South Sudan) and Mount Marsabit (Kenya), neither of them an option.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. No pinned dataset covers it and this check's share of the batch search cap went to claims with numbers and dates, so it still needs dataset or web evidence (a follow-up) before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Coffee was brought to Brazil, Colombia and Vietnam as a crop; it is not native to any of them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Coffee drinking is first recorded in 15th-century Yemen among Sufis, who used it to stay awake for night devotions; the plant came from Ethiopia across the Red Sea.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "From Yemen, coffee spread through the Ottoman world and then to Europe and beyond.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "99e66d1f168c4aa6291815650d072b08fbd4ad9bc5e03a317b017d16c9276573",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Ethiopia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Coffea arabica is native to the south-western highlands of Ethiopia, with outliers in the borderlands of South Sudan.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the other options are not native anywhere in coffee's wild range, so Ethiopia is the only defensible option. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Brazil, Colombia and Vietnam grow coffee as an introduced plantation crop.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Coffee plants reached Yemen from Ethiopia, and Yemeni Sufi circles are the first documented drinkers, in the 15th century, using it to stay alert at night prayers.",
+              "confidence": "certain"
+            },
+            "note": "Strictly the earliest documented coffee drinking is Yemeni, so 'coffee drinking spread from Ethiopia' compresses the story; see the wording note."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "From Yemen coffee spread to Mecca, Cairo, Istanbul and then Europe and the colonies.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c3 says coffee drinking spread from Ethiopia. The plant came from Ethiopia and the earliest documented drinking is in 15th-century Yemen. The explanation sentence ('Coffee crossed the Red Sea') is accurate; only the claim wording needs care."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk key c1 (counterintuitive key claim) rests on knowledge alone in both checks; no pinned dataset covers it and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The arabica coffee plant is native to the highlands of which country?",
+  "answer": "Ethiopia",
+  "wrong": ["Brazil", "Colombia", "Vietnam"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.267,
+    "estimator": "v0"
+  }
+}

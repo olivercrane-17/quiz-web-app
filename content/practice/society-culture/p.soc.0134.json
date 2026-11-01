@@ -1,0 +1,222 @@
+{
+  "id": "p.soc.0134",
+  "status": "active",
+  "category": "soc",
+  "tags": ["institutions", "united-nations", "peacekeeping"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The colour, close to that of the UN flag, makes peacekeepers easy to tell apart from the forces they stand between. UN peacekeeping forces won the Nobel Peace Prize in 1988.",
+  "learnMore": "United Nations peacekeeping",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "UN peacekeepers wear blue helmets or berets."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "UN peacekeepers are not identified by green, white or red helmets."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The peacekeepers' blue headgear, close to the colour of the UN flag, makes them easy to distinguish from other forces."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The United Nations Peacekeeping Forces received the Nobel Peace Prize in 1988."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: c4 checked in nobel-prizes (prize.json, year 1988, category peace: laureate id 550, 'United Nations Peacekeeping Forces'). rivalTest: green, white and red are other colours of military and humanitarian headgear; argued against the key: 'blue helmets' is the peacekeepers' own nickname. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: known worldwide. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 31 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 2. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7c69bb11b6ca6ffe6cc5f921e44f78b77829859856e7089e26f27b40328d4034",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "Blue",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "UN peacekeepers wear blue helmets or berets, which is why they are called blue helmets.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Their headgear is blue, not green, white or red.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The light blue of their headgear matches the UN flag and marks them out from the forces around them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=1988, category=peace].laureates[id=550]",
+              "excerpt": "{\"year\": \"1988\", \"category\": \"peace\", \"laureates\": [{\"id\": \"550\", \"motivation\": \"\\\"for preventing armed clashes and creating conditions for negotiations\\\"\", \"share\": \"1\", \"firstname\": \"United Nations Peacekeeping Forces\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The 1988 Peace Prize went to the United Nations Peacekeeping Forces, as the claim says."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e24d3120780bc2d2b814875e7f1e5dd39d8ecd2d063302644007b4982152cd68",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "Blue",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "UN peacekeepers wear blue helmets or berets.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "They are not identified by green, white or red headgear.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The light blue echoes the UN flag and sets peacekeepers apart from other forces.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "year=1988, category=peace",
+              "excerpt": "\"firstname\": \"United Nations Peacekeeping Forces\", \"motivation\": \"for preventing armed clashes and creating conditions for negotiations\", \"share\": \"1\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The 1988 Peace Prize went to the United Nations Peacekeeping Forces."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Both checks pass. High-risk c4 (the 1988 Peace Prize) has nobel-prizes dataset evidence in A and B; the other claims are standard and confirmed at certain by both. The dedupe flag was reviewed locally: the two items state different facts, so related_ok. Lint clean, no myth hit.",
+      "decidedAt": "2026-11-01T04:34:42Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:34:42Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:34:42Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "UN peacekeepers are known for helmets or berets of which colour?",
+  "answer": "Blue",
+  "wrong": ["Green", "White", "Red"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.91,
+    "spread": 0.322,
+    "estimator": "v0"
+  }
+}

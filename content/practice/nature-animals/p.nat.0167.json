@@ -1,0 +1,227 @@
+{
+  "id": "p.nat.0167",
+  "status": "active",
+  "category": "nat",
+  "tags": ["fossils", "fish", "living-fossils", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "A museum curator, Marjorie Courtenay-Latimer, spotted the strange blue fish in a fisherman's catch. Its fleshy, lobed fins mark it as a lobe-finned fish, the group that gave rise to land vertebrates.",
+  "learnMore": "Coelacanth",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Before a living coelacanth was found off South Africa, the species was known from fossils and believed to have died out around the end of the age of dinosaurs."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Lungfish, sturgeon and hagfish were never thought to be extinct."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Museum curator Marjorie Courtenay-Latimer spotted the coelacanth in a fishing trawler's catch."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Coelacanths are lobe-finned fish, the group from which land vertebrates evolved."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed, all standard; I left the year out of the item, which would add a date claim. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: the distractors are other famously ancient fish that were never thought extinct; the lungfish is the strongest trap as a lobe-finned relative. Argued against the key: the coelacanth is the classic living fossil. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: found off South Africa and in the Indian Ocean; known worldwide as a living fossil. style: Oxford spelling, plain hyphens only, explanation of 32 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1f8283a8f4e2e659de56f428bba8da4f8c6a7fcf9762ea645c0fbfd31670ea29",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Coelacanth",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Coelacanths were known only from fossils and thought to have died out at the end of the Cretaceous until a living one was caught off South Africa in 1938.",
+              "confidence": "certain"
+            },
+            "note": "Strictly, the group was known from fossils; the living species, Latimeria chalumnae, has no fossil record. The stem's 'Which fish' reads at group level, so the stem is accurate."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lungfish, sturgeon and hagfish have always been known as living fish.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Marjorie Courtenay-Latimer of the East London museum spotted the fish in a trawler's catch in December 1938.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Coelacanths are lobe-finned fish (Sarcopterygii), the group from which land vertebrates evolved.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation's 'the group that gave rise to land animals' is broader than c4: lobe-finned fish gave rise to land vertebrates, not to insects or snails. 'land vertebrates' would be exact."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "88c55a36d596db7b66726771d098c0d4cdcae96a2b55e446a36ccee626005182",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Coelacanth",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Coelacanths were known from fossils and believed extinct since the end of the age of dinosaurs until a living one was found off South Africa in 1938.",
+              "confidence": "certain"
+            },
+            "note": "Claim text says \"the species\"; strictly the coelacanth group was known from fossils, not the living species. Read as the group."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lungfish, sturgeon and hagfish were never thought to be extinct.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Museum curator Marjorie Courtenay-Latimer spotted the coelacanth in a trawler's catch.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Coelacanths are lobe-finned fish, the group from which land vertebrates evolved.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Claim c1 says \"the species\" was known from fossils. Strictly, coelacanths as a group were known from fossils and the living species was unknown until 1938. The stem says \"Which fish\", so the player-facing text is fine; reword the claim if it is ever touched."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; no high-risk claims; every knowledge confirmation at certain. Style, distractors and balance reviewed. Accepted after the wording-only fix in decisions1. (earlier, rewrite by ed-pnat01d: Wording only (§9.7): 'land animals' becomes 'land vertebrates', which is what claim c4 states (A's note). No claim changes. [wording-only rewrite by ed-pnat01d at 2026-11-01T04:05:52Z of explanation; checks kept, packetSha256 re-stamped: pass A ceb168aee7d92134ba9b67d3219dab2dfb98779f9eee89b2a7e94cafac896eda -> 1f8283a8f4e2e659de56f428bba8da4f8c6a7fcf9762ea645c0fbfd31670ea29; pass B c0172de8d51bbabb58eb394841fab0ef116a568194cbc2db429fb08baf640ebd -> 88c55a36d596db7b66726771d098c0d4cdcae96a2b55e446a36ccee626005182])",
+      "decidedAt": "2026-11-01T04:06:01Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:06:01Z",
+      "nearestId": "p.nat.0246",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:06:01Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which fish, known from fossils and thought to have died out with the dinosaurs, turned up alive off South Africa?",
+  "answer": "Coelacanth",
+  "wrong": ["Lungfish", "Sturgeon", "Hagfish"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.193,
+    "estimator": "v0"
+  }
+}

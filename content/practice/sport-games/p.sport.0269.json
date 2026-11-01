@@ -1,0 +1,204 @@
+{
+  "id": "p.sport.0269",
+  "status": "active",
+  "category": "sport",
+  "tags": ["olympics", "fifa", "sport-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Both were founded in Paris: the IOC at the Sorbonne in June 1894, two years before the first modern Olympics, and FIFA a decade later, in May 1904.",
+  "learnMore": "International Olympic Committee",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The International Olympic Committee was founded in Paris on 23 June 1894, at a congress held at the Sorbonne."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "FIFA was founded in Paris on 21 May 1904."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The first modern Olympic Games were held in Athens in 1896."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 3 listed, 3 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so are both label claims of this counterintuitive comparison. datasets: olympic-editions, edition_metadata.csv: edition_id 1 (1896 Summer, Athina) confirms c3. The founding dates in c1 and c2 are not in any pinned dataset and need web evidence (the IOC and FIFA are the Tier A sources). The gap is exactly 10 years, which meets the separation guard. rivalTest: FIFA is the trap, because football (soccer) is older than the modern Olympic movement and players assume its world body is too. The IOC came first by a decade, so the order cannot flip. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: None; both founding dates are the bodies' own official dates.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "30f5a5c7558cfd20055e9ec8c488975ff0f3bf188c03c5ff89585b2ac1c38eef",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "The IOC",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IOC was founded on 23 June 1894 at Pierre de Coubertin's congress at the Sorbonne in Paris.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "FIFA was founded in Paris on 21 May 1904.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=1, the earliest row",
+              "excerpt": "1,1896 Summer,1896,Summer,Athina,Greece,1896-04-06,1896-04-15",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The earliest edition row is 1896 Summer at Athina (Athens), Greece, 6 to 15 April 1896."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3105983a77dbe993b7264ebf705d76dbf61ff1b2dcaea67aefc30a5b0974908a",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "The IOC",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The International Olympic Committee was founded in Paris on 23 June 1894 at a congress at the Sorbonne.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "FIFA was founded in Paris on 21 May 1904.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The first modern Olympic Games were held in Athens in 1896.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (label, date) and c2 (label, date) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. c3 carries olympic-editions evidence in A; the founding dates c1 and c2 do not. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which was founded first?",
+  "a": "The IOC",
+  "b": "FIFA",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year founded",
+  "unit": "year",
+  "values": {
+    "a": 1894,
+    "b": 1904
+  },
+  "valueDisplay": {
+    "a": "23 June 1894",
+    "b": "21 May 1904"
+  },
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.162,
+    "estimator": "v0"
+  }
+}

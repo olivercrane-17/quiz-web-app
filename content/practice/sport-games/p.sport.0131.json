@@ -1,0 +1,236 @@
+{
+  "id": "p.sport.0131",
+  "status": "active",
+  "category": "sport",
+  "tags": ["olympics", "equestrian", "host-cities"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Australia's strict quarantine rules for imported horses forced the move, so riders competed in Sweden in June, five months before the rest of the Games opened in Melbourne.",
+  "learnMore": "Equestrian at the 1956 Summer Olympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The equestrian events of the 1956 Olympics were held in Stockholm, Sweden, rather than in Melbourne."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 1956 equestrian events were not held in Sydney, Auckland or Helsinki."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Australian quarantine rules for imported horses were the reason the equestrian events were moved."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Stockholm equestrian events ran from 10 to 17 June 1956, and the Melbourne Games opened on 22 November 1956, about five months later."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; c1, c2, c4 are high and c3 is standard. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item; the standard claim carries none of those triggers and states a rule or a well-known fact. datasets: olympic-editions, edition_metadata.csv: edition_id 48 is 1956 Summer, Stockholm, Sweden, 10 to 17 June 1956, 6 medal events in 3 disciplines (c1, c2, c4); edition_id 14 is 1956 Summer, Melbourne, Australia, 22 November to 8 December 1956 (c4). The row's notes column gives the quarantine reason (c3) but is free text, not evidence, so c3 needs web or knowledge confirmation. rivalTest: Sydney is the planted trap, as the other big Australian city; Auckland tempts as a nearby non-Australian city; Helsinki, host in 1952, as a Nordic near miss. The dataset gives Stockholm alone, so none can be argued. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4c09f9f5b1b6e479b37fde1bbe57f86673fcd7fa0d97b844d01c65f86f754ea7",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Stockholm",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=48",
+              "excerpt": "48,1956 Summer,1956,Summer,Stockholm,Sweden,1956-06-10,1956-06-17,158,29,6,3",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "A separate 1956 Summer edition in Stockholm, Sweden, 10 to 17 June 1956, with 6 medal events in 3 disciplines. That these were the equestrian events rests on knowledge (the file's notes column is never evidence)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "1956 Summer rows",
+              "excerpt": "14,1956 Summer,1956,Summer,Melbourne,Australia,1956-11-22,1956-12-08,3190,67,145,19 | 48,1956 Summer,1956,Summer,Stockholm,Sweden,1956-06-10,1956-06-17,158,29,6,3",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The only 1956 Summer rows are Melbourne and Stockholm."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Australia's quarantine rules for imported horses ruled out holding the equestrian events in Melbourne.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=48; edition_id=14",
+              "excerpt": "48,1956 Summer,1956,Summer,Stockholm,Sweden,1956-06-10,1956-06-17,158,29,6,3 | 14,1956 Summer,1956,Summer,Melbourne,Australia,1956-11-22,1956-12-08,3190,67,145,19",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "10 to 17 June against a Melbourne opening on 22 November: just over five months."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d3f8939dd23bfec3f5e72bab8d6d54610e30ffd502145d0c5a01e483d3472981",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Stockholm",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "games=1956 Summer, city=Stockholm",
+              "excerpt": "48,1956 Summer,1956,Summer,Stockholm,Sweden,1956-06-10,1956-06-17,158,29,6,3,... ; 14,1956 Summer,1956,Summer,Melbourne,Australia,1956-11-22,1956-12-08",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Stockholm 1956 is a separate Olympedia edition of six equestrian events (the 'notes' column is free text and not used as evidence)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "year=1956 and year=1952, Summer",
+              "excerpt": "1956 Summer rows are Melbourne and Stockholm only. There is no Sydney or Auckland row. Helsinki's Summer row is 1952 (13,1952 Summer,...,Helsinki,Finland,1952-07-19,1952-08-03).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Australia's strict quarantine rules for imported horses were the reason the 1956 equestrian events were held in Stockholm.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "year=1956",
+              "excerpt": "Stockholm: 1956-06-10 to 1956-06-17. Melbourne opening ceremony 1956-11-22.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "From the end of the Stockholm events to the Melbourne opening is 158 days, about five months."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Both checks pass; high-risk c1, c2 and c4 have olympic-editions dataset evidence in both checks, and standard c3 is confirmed at certain. The dedupe flag was answered related_ok after a local check: the near item states a different fact.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The 1956 Olympics were held in Melbourne, apart from the horse-riding events. Which city hosted those?",
+  "answer": "Stockholm",
+  "wrong": ["Sydney", "Auckland", "Helsinki"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.26,
+    "spread": 0.163,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "id": "p.sci.0141",
+  "status": "active",
+  "category": "sci",
+  "tags": ["weather", "light"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "In the fainter secondary rainbow sometimes seen outside the main one, the order flips and red is on the inside. The darker band of sky between them is called Alexander's band.",
+  "learnMore": "Rainbow",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In a primary rainbow, red is on the outer edge of the arc."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Violet is on the inner edge of a primary rainbow, with blue and green between it and the red."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In a secondary rainbow, which appears outside the primary bow, the colour order is reversed, with red on the inside."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The darker band of sky between a primary and a secondary rainbow is called Alexander's band."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers optics; every claim is standard-risk textbook optics that a checker's knowledge can confirm. rivalTest: Violet is the likeliest wrong pick, because it sits at the other edge; blue and green lie between. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 31 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. The stem names the main arc, because the secondary bow reverses the order. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "804fb3bbf44fb334b06ecbc45025fb767d9865a47e023cebee95dc37832a48b2",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "Red",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A primary rainbow is red on the outside and violet on the inside.",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Violet is innermost in a primary bow, with blue and green between it and the outer red.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A secondary bow, made by two internal reflections, lies outside the primary with its colours reversed, red on the inside.",
+              "confidence": "certain"
+            },
+            "note": "The explanation's 'fainter' is also right: the second reflection loses more light."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The darker sky between the two bows is called Alexander's band, after Alexander of Aphrodisias.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "72c44e90b03c88519b031c9eece6d76864bf192a1c707501892b3778e403e1ca",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "Red",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In a primary rainbow red is on the outer edge and violet on the inner edge.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Violet is innermost in the primary bow, with blue and green between it and the red.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The secondary rainbow, outside the primary, has its colour order reversed, with red on the inside.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The dark band of sky between the primary and secondary bows is called Alexander's band.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims are standard risk and confirmed in both checks from textbook or reference knowledge at certain. The stem names the main arc, which shuts out the reversed secondary bow, and the explanation adds that bow and Alexander's band. Lint clean, nearest neighbour 0.23, no myth hit. A medium multiple choice (p 0.72).",
+      "decidedAt": "2026-11-01T04:27:18Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:27:18Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:27:18Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In the main arc of a rainbow, which colour is on the outer edge?",
+  "answer": "Red",
+  "wrong": ["Violet", "Blue", "Green"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.254,
+    "estimator": "v0"
+  }
+}

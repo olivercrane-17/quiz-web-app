@@ -1,0 +1,235 @@
+{
+  "id": "p.food.0145",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-words", "fruit", "new-zealand"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The plant is native to China. New Zealand growers, who built its export trade, renamed it after their national bird, and they renamed the tree tomato the tamarillo too.",
+  "learnMore": "Kiwifruit",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Kiwifruit was commonly sold in English as Chinese gooseberry before New Zealand exporters renamed it kiwifruit."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Cape gooseberry is another fruit (physalis), and tree tomato was the old name of the tamarillo, so neither was the old name of kiwifruit."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The kiwifruit plant is native to China."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "New Zealand growers renamed the fruit kiwifruit, after the kiwi, New Zealand's national bird."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "New Zealand growers also renamed the tree tomato, calling it the tamarillo."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c4). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: three options on purpose: Cape gooseberry and tree tomato are the real confusions, and a fourth (a literal translation of the Chinese name, macaque peach) could be argued as an English name, so it stays out. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: kiwifruit is sold worldwide; older players everywhere may remember the old name. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 29 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: many have heard Chinese gooseberry, and Cape gooseberry pulls others. Doubts: none. The renaming dates (1959 and 1967) are left out to keep the key standard.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1fd3f7c6492f8d655dd4fd60b70821f2be39cb5f8f028fcfd10e37ebab428a48",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Chinese gooseberry",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kiwifruit was sold in English as Chinese gooseberry until New Zealand exporters renamed it kiwifruit (1959).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Cape gooseberry is physalis, and tree tomato was the old name of the tamarillo.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The kiwifruit vine, Actinidia deliciosa, is native to China.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The new name came from the kiwi, the flightless bird that is New Zealand's national symbol.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. No pinned dataset covers it and this check's share of the batch search cap went to claims with numbers and dates, so it still needs dataset or web evidence (a follow-up) before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "New Zealand growers renamed the tree tomato the tamarillo (1967).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "150c75d9e7e67102c0f27bdf5bd0ff1d6cae3d61eae6856424e86fb42023fbf1",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Chinese gooseberry",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kiwifruit was sold in English as Chinese gooseberry until New Zealand exporters renamed it kiwifruit in the 1950s.",
+              "confidence": "certain"
+            },
+            "note": "Tested the distractors: tree tomato is the tamarillo and Cape gooseberry is physalis, both different fruits."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cape gooseberry is Physalis, and tree tomato was the old name of the tamarillo; neither was a name for kiwifruit.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The kiwifruit genus Actinidia is native to China.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "New Zealand exporters renamed the fruit kiwifruit after the kiwi bird, a national symbol.",
+              "confidence": "certain"
+            },
+            "note": "'National bird' is the common description of the kiwi, though unofficial. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "New Zealand growers renamed the tree tomato the tamarillo in the 1960s.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "Only three options, and the key shares the word gooseberry with a distractor, so a test-wise player who looks for the pair lands on it. A fourth option would be filler, so three is right; swapping Cape gooseberry for a fruit that does not share a word would remove the cue."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk explanation c4 (etymology) rests on knowledge alone in both checks; no pinned dataset covers it and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Before New Zealand exporters gave it its modern name, the kiwifruit was usually sold in English as what?",
+  "answer": "Chinese gooseberry",
+  "wrong": ["Cape gooseberry", "Tree tomato"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.269,
+    "estimator": "v0"
+  }
+}

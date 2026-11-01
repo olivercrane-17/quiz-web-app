@@ -1,0 +1,248 @@
+{
+  "id": "p.nat.0225",
+  "status": "active",
+  "category": "nat",
+  "tags": ["dinosaurs", "fossils", "eggs", "asia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "In the 1990s an oviraptorid embryo turned up inside an identical egg, and relatives were found fossilized sitting on their nests, arms spread over the eggs like brooding birds.",
+  "learnMore": "Oviraptor",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The eggs found with the first Oviraptor fossil were laid by oviraptorid dinosaurs, its own kind, not by Protoceratops."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The eggs did not belong to Protoceratops, Velociraptor or a crocodile."
+    },
+    {
+      "id": "c3",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The name Oviraptor means 'egg thief'."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In the 1990s, an oviraptorid embryo was found inside an egg of the same type as those found with the first Oviraptor fossil."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Fossils of oviraptorid relatives such as Citipati have been found sitting on nests with their arms spread over the eggs."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed; high: c1 (checker_doubt, standing in for counterintuitive, which the tooling's riskReason enum lacks; C26 makes the key of a counterintuitive item high), c3 (etymology) and c4 (date); standard: c2 and c5. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on the Oviraptor egg thief misunderstanding should cover c1, c3, c4 and c5. rivalTest: Argued for Protoceratops, the 1920s interpretation that gave the dinosaur its name, which is why counterintuitive is set. Argued against the key: the nest belonged to an oviraptorid, but nobody can show it was that individual's own clutch, which is why the key says 'its own kind's' rather than 'its own'. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: the fossils come from Mongolia; the story needs no local knowledge. style: Oxford spelling, plain hyphens only, explanation of 29 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none on the eggs. c3 is the etymology the describer gave; Latin ovum plus raptor is often glossed 'egg seizer', and 'egg thief' is the standard English rendering.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "3ff4d51eae18a0d06ef2f4b2f471cc992b31926fb8cb093f604177663a9e30dd",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "Its own kind's",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The eggs under the first Oviraptor fossil, at first taken for Protoceratops eggs, are now known to be oviraptorid eggs, so it was most likely brooding a nest of its own kind.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The eggs were not Protoceratops, Velociraptor or crocodile eggs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Oviraptor comes from Latin ovum (egg) and raptor (seizer or thief), so it means egg thief or egg seizer.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the early 1990s an oviraptorid embryo was found inside an elongated egg of the same type as the eggs found with the first Oviraptor.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Oviraptorid relatives such as Citipati have been found fossilized on their nests with their arms spread over the eggs, like brooding birds.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7258140ffa16b0f7a60112cabac59edfdc8732b7aaa8b00ce86221a8f3ea3ffe",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "Its own kind's",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The nest found under the first Oviraptor in the 1920s was first assumed to be Protoceratops eggs but belonged to an oviraptorid, the animal's own kind.",
+              "confidence": "certain"
+            },
+            "note": "Settled by the embryo found in a matching egg."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The eggs were not Protoceratops, Velociraptor or crocodile eggs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Oviraptor joins Latin ovum, 'egg', with raptor, 'robber' or 'thief', so 'egg thief'.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "An oviraptorid embryo inside an egg of the matching type was found in the early 1990s.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Citipati and other oviraptorids have been found fossilized on nests with their arms around the eggs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, checker_doubt), c3 (key, etymology) and c4 (explanation, date) rest on knowledge alone in both checks: no pinned dataset covers animal biology and checker A's one search was refused at the session limit, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.nat.0137",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Oviraptor, whose name means 'egg thief', was found lying on a nest of eggs. Whose eggs were they?",
+  "answer": "Its own kind's",
+  "wrong": ["Protoceratops's", "Velociraptor's", "A crocodile's"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.254,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "id": "p.book.0161",
+  "status": "active",
+  "category": "book",
+  "tags": ["drama", "shakespeare"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Mark Antony speaks it at Caesar's funeral. He claims he has come to bury Caesar, not to praise him, then turns the crowd against Brutus and the other conspirators.",
+  "learnMore": "Friends, Romans, countrymen, lend me your ears",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "In Julius Caesar, Mark Antony says 'Friends, Romans, countrymen, lend me your ears'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The line does not come from Antony and Cleopatra, Coriolanus or Hamlet."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Antony speaks the line in his funeral speech for Caesar, saying he has come to bury Caesar, not to praise him."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Antony's speech turns the Roman crowd against Brutus and the other conspirators."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: drama and Shakespeare. Lint: content:check reports no errors; C22 warns because p.lang.0109 (the month of July) shares the answer Julius Caesar at 0.70, but its answer is the man and mine is the play. Different facts in different categories, so the pair is related, not a duplicate. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means). Datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. Rival test: Antony and Cleopatra is the planted trap (same speaker, later play) and Coriolanus is another Roman play; Hamlet is the famous outsider. The line is Act 3, Scene 2 of Julius Caesar. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 29 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c241bddb7e31389b239725bac5dd178d49ec2d63c76e3bb977d21c0b6cdb3ca9",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "Julius Caesar",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Shakespeare: Antonio is the merchant of the title in The Merchant of Venice, Shylock the moneylender; Mark Antony's funeral speech \"Friends, Romans, countrymen\" in Julius Caesar; Iago's \"green-eyed monster\" in Othello",
+              "results": [
+                {
+                  "title": "Famous Quotes",
+                  "url": "https://www.rsc.org.uk/shakespeare/themes/famous-quotes"
+                },
+                {
+                  "title": "Shakespeare's Phrases",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-phrases/"
+                },
+                {
+                  "title": "List of idioms attributed to Shakespeare",
+                  "url": "https://en.wikipedia.org/wiki/List_of_idioms_attributed_to_Shakespeare"
+                },
+                {
+                  "title": "Summary of Othello",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-plays/othello-moor-venice/"
+                },
+                {
+                  "title": "Shylock",
+                  "url": "https://www.britannica.com/topic/Shylock"
+                },
+                {
+                  "title": "William Shakespeare",
+                  "url": "https://www.britannica.com/summary/William-Shakespeares-Important-Works"
+                },
+                {
+                  "title": "Famous Quotes",
+                  "url": "https://www.rsc.org.uk/othello/about-the-play/famous-quotes"
+                },
+                {
+                  "title": "Othello",
+                  "url": "https://www.shakespeare.org.uk/explore-shakespeare/shakespedia/shakespeares-characters/othello/"
+                },
+                {
+                  "title": "Shylock",
+                  "url": "https://en.wikipedia.org/wiki/Shylock"
+                },
+                {
+                  "title": "Othello - Act 3, scene 3",
+                  "url": "https://www.folger.edu/explore/shakespeares-works/othello/read/3/3/"
+                }
+              ],
+              "summaryExcerpt": "the British Library-style summary on Britannica notes that the play is famous for the Roman general Mark Antony's speech that begins \"Friends, Romans, countrymen, lend me your ears.\"",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 12 (counted on p.book.0104): Britannica names Mark Antony's speech beginning 'Friends, Romans, countrymen, lend me your ears.' Counts at Tier B."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The line is from Julius Caesar, not Antony and Cleopatra, Coriolanus or Hamlet.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Antony says 'I come to bury Caesar, not to praise him' at Caesar's funeral (Act 3 Scene 2).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The speech turns the crowd against Brutus and the conspirators.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2054c33480a09615e1125fb5fd5cbfb46b339ce637a3387430d62fff8d297f62",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "Julius Caesar",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mark Antony speaks the line in Julius Caesar, Act 3 scene 2.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Antony and Cleopatra, Coriolanus and Hamlet do not contain the line.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In his funeral speech Antony says he has come to bury Caesar, not to praise him.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The speech turns the Roman crowd against Brutus and the other conspirators.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Both checks pass; the quotation key has web evidence (Tier B) in check A. Dedupe: Shares the answer with p.lang.0109 (the month of July, named for the Roman); this asks about the play. Different facts.",
+      "decidedAt": "2026-11-01T04:03:00Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "nearestId": "p.lang.0109",
+      "score": 0.7,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:03:00Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Shakespeare play contains the line 'Friends, Romans, countrymen, lend me your ears'?",
+  "answer": "Julius Caesar",
+  "wrong": ["Antony and Cleopatra", "Coriolanus", "Hamlet"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.464,
+    "estimator": "v0"
+  }
+}

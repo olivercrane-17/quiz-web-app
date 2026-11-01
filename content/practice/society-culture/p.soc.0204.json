@@ -1,0 +1,243 @@
+{
+  "id": "p.soc.0204",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["festivals", "christmas", "saints", "anatolia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "He was bishop of Myra, near the south coast of Türkiye (Turkey), in the 4th century. In 1087 sailors from Bari carried his relics off to southern Italy.",
+  "learnMore": "Saint Nicholas",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Saint Nicholas was bishop of Myra, in Lycia, which lies in modern Türkiye."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Saint Nicholas did not live in the Netherlands, Finland or Germany."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Nicholas of Myra lived in the 4th century AD."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In 1087 sailors from Bari took most of his relics from Myra to Bari, in southern Italy."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Myra lies near the south coast of Türkiye, at modern Demre."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: festivals and calendars. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. Counterintuitive is true, so the key claim is high under C26; the claim schema has no 'counterintuitive' riskReason, so checker_doubt stands in. datasets: geonames-cities: Demre, TR, admin1 07 (Antalya), lat 36.24444, lng 29.985, the modern town at ancient Myra; country-codes and CLDR give the English short name Türkiye. c1, c3 and c4 need web evidence. rivalTest: the Netherlands (Sinterklaas) and Finland (Lapland's Santa) are the planted traps, and Germany is the home of many Christmas customs. Argued against the key: his relics are in Bari, Italy, but the stem asks where he lived, and Italy is left out of the options for that reason. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: Santa Claus is known everywhere, and the trap works the same way for every player; Türkiye is written in its CLDR English form with Turkey in the explanation. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 28 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 5 (hard): most players reach for the Netherlands or Finland. doubts: Türkiye may look unfamiliar to players who know only 'Turkey'; the explanation gives both. dedupe: C22 flags a near-duplicate of p.geo.0235 (Mount Ararat is in Türkiye); the pair shares only the answer word, not the fact, so related_ok is suggested to the editor.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "30f5a7171077611283bffd36b95d6cca1fb4f908064836200e962fd736985542",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "Türkiye",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nicholas was bishop of Myra in Lycia, in what is now southern Türkiye.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nicholas lived and served in Asia Minor; the Netherlands, Finland and Germany are tied only to later Santa Claus customs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nicholas of Myra lived from about 270 to about 343, so his time as bishop falls in the 4th century.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In 1087 sailors from Bari carried most of his bones from Myra to Bari, where the Basilica of San Nicola was built to house them.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ancient Myra lies at modern Demre in Antalya province, near Türkiye's south coast.",
+              "confidence": "certain"
+            },
+            "note": "geonames-cities lists Demre (TR, admin1 07 Antalya, lat 36.24); that Myra is Demre rests on knowledge."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The legend of Saint Nicholas, carried through the Dutch Sinterklaas, inspired the figure of Santa Claus.",
+              "confidence": "certain"
+            },
+            "note": "Checker addition (role explanation, standard), from the stem: 'the bishop whose legend inspired Santa Claus'."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e52773e3b94a5b7c3f390313bdcab921600e746593a2bc43ce6d933b86ee76a4",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "Türkiye",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nicholas was bishop of Myra in Lycia, which is in modern Türkiye (Demre, Antalya province).",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Sinterklaas (Netherlands), Santa's Finnish home and German Nikolaus customs are later folklore. His relics lie in Bari, Italy, but he lived in Lycia."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Nicholas never lived in the Netherlands, Finland or Germany.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nicholas of Myra lived roughly AD 270 to 343, the 4th century.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sailors from Bari removed most of his relics from Myra in 1087.",
+              "confidence": "certain"
+            },
+            "note": "Venetians later took some remaining fragments, so 'most' is right."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Myra is the ancient city beside Demre, on Türkiye's Mediterranean coast.",
+              "confidence": "certain"
+            },
+            "note": "GeoNames lists Demre in TR, admin1 07 (Antalya), at 36.24 N. That Myra is Demre rests on knowledge."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (key, checker_doubt), c3 (explanation, date) and c4 (explanation, date) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. The gap includes the key, a label or a distractor, so the redraft needs evidence for the question itself. The key claim's riskReason should be counterintuitive, not checker_doubt. Redraft under a new id.",
+      "decidedAt": "2026-11-01T04:47:17Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Saint Nicholas, the bishop whose legend inspired Santa Claus, lived in which modern country?",
+  "answer": "Türkiye",
+  "wrong": ["Netherlands", "Finland", "Germany"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.175,
+    "estimator": "v0"
+  }
+}

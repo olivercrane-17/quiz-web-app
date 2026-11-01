@@ -1,0 +1,216 @@
+{
+  "id": "p.food.0136",
+  "status": "active",
+  "category": "food",
+  "tags": ["drinks", "spain", "tubers"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Tiger nuts are small tubers of a sedge, Cyperus esculentus, not nuts at all. Mexican horchata, the version many people know, is usually made with rice.",
+  "learnMore": "Horchata",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Traditional Spanish horchata (horchata de chufa) is made from tiger nuts."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Spanish horchata de chufa is not made from rice, oats or cashews."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Tiger nuts are not nuts but the small tubers of a sedge, Cyperus esculentus."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mexican horchata is usually made with rice."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: rice is the planted trap, because Mexican horchata is the best-known version; the stem says Spain's, and Spanish horchata de chufa is defined by tiger nuts. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: players in the Americas know the rice version, which is exactly the trap; Spanish players have the home edge. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 26 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: most players will pick rice or will not know tiger nuts. Doubts: none on the key. The stem avoids naming Valencia so it gives nothing away to p.food.0101.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "fa3996ba2f0830077edd230e0ae2543e9fbd976f58e32fbbd5be0f630a830dec",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Tiger nuts",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Horchata de chufa, the traditional Valencian drink, is made from soaked, ground tiger nuts (chufas).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: confirmed on certain knowledge only. No pinned dataset covers it and this check's share of the batch search cap went to claims with numbers and dates, so it still needs dataset or web evidence (a follow-up) before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Spanish horchata de chufa is not made from rice, oats or cashews.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Tiger nuts are the tubers of a sedge, Cyperus esculentus, not nuts.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Mexican horchata is usually made with rice.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9f5707afc62ac831750de22cf9fcce3119ef1a61eb6ae84b2357b2373695742a",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Tiger nuts",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Horchata de chufa, the traditional drink of Valencia, is made from tiger nuts, water and sugar.",
+              "confidence": "certain"
+            },
+            "note": "Latin American rice horchata is the trap, and the stem names Spain, so it misleads through a plausible belief and not a misread word. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Spanish horchata de chufa is not made from rice, oats or cashews.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The tiger nut is the small tuber of the sedge Cyperus esculentus, not a nut.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Mexican horchata is usually made from rice, often with cinnamon.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk key c1 (counterintuitive key claim) rests on knowledge alone in both checks; no pinned dataset covers it and the batch's search cap is spent (25 of 26), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and §9.2 leaves the precision ladder (a claim change) or a cut. A redraft under a new id can reuse the idea.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Spain's traditional horchata, a sweet milky drink, is made from which ingredient?",
+  "answer": "Tiger nuts",
+  "wrong": ["Rice", "Oats", "Cashews"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.34,
+    "estimator": "v0"
+  }
+}

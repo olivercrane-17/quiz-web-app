@@ -1,0 +1,221 @@
+{
+  "id": "p.geo.0139",
+  "status": "active",
+  "category": "geo",
+  "tags": ["lakes", "andes", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "On the Peruvian side, the Uros people live on floating islands built from totora reeds, adding fresh reeds on top as the lower layers rot.",
+  "learnMore": "Lake Titicaca",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Lake Titicaca is shared by Peru and Bolivia."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Chile, Ecuador and Argentina have no shore on Lake Titicaca."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "On the Peruvian side of Lake Titicaca, the Uros people live on floating islands made of totora reeds."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Uros keep their islands afloat by adding fresh reeds on top as the lower layers rot."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors; its one warning is C22, a shared key with p.hist.0115 (see Doubts). Claims: every checkable statement is listed; all standard; I avoided the lake's altitude and the contested 'highest navigable lake' line. Datasets: natural-earth ne_50m_lakes has Lago Titicaca but records no countries, so c1 is knowledge. Rival test: Chile is the likeliest slip, being close to the lake's south-west; Ecuador and Argentina are Andean too. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a famous South American lake. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 25 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: C22 pairs this item with p.hist.0115, whose key is also Bolivia, but that item asks which country is named after Simón Bolívar, a different fact, so I suggest related_ok.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "06cf7418f1e80e7d8c6d94107b8f65f28f4258f1a096d0d8de4cfd9f7d1d8a60",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Bolivia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lake Titicaca straddles the Peru-Bolivia border.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Chile, Ecuador and Argentina have no shore on Lake Titicaca.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Uros live on floating islands of totora reeds near Puno, on the Peruvian side.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Uros keep adding fresh reeds on top as the lower layers rot away.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f5a3b89f123fd774ebb2a145faf20844eb3f135fefd2a01c47a84e18b1ca750e",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Bolivia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_lakes.geojson",
+              "locator": "name=Lago Titicaca vs ne_110m_admin_0_countries polygons",
+              "excerpt": "Of 132 shoreline vertices, 74 fall inside Peru and 58 inside Bolivia",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_lakes.geojson",
+              "locator": "name=Lago Titicaca vs ne_110m_admin_0_countries polygons",
+              "excerpt": "No shoreline vertex inside Chile, Ecuador or Argentina (Peru 74, Bolivia 58)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Uros live on floating islands of totora reeds on the Peruvian side of Lake Titicaca, near Puno.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Uros keep adding fresh totora reeds on top as the lower layers rot away.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed at certain; every claim is standard risk, so knowledge suffices (§9.5.3). Lint clean, no myth hits. Dedupe pairs it with p.hist.0115 (same answer): that item asks which country is named after Bolívar, a different fact.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Lake Titicaca, high in the Andes, is shared by Peru and which other country?",
+  "answer": "Bolivia",
+  "wrong": ["Chile", "Ecuador", "Argentina"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.56,
+    "spread": 0.146,
+    "estimator": "v0"
+  }
+}

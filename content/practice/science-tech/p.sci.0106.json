@@ -1,0 +1,242 @@
+{
+  "id": "p.sci.0106",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["space", "earth-rotation", "time"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Earth moves about 1 degree along its orbit each day, so it must turn about 1 degree further to bring the Sun back to the same spot in the sky. That takes about 4 minutes.",
+  "learnMore": "Sidereal time",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "A solar day is longer than a full rotation relative to the stars because Earth also moves along its orbit around the Sun."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Earth rotates once relative to the distant stars in about 23 hours 56 minutes."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Moon's tidal braking, the tilt of Earth's axis and leap seconds do not explain the difference of about 4 minutes between a solar day and a sidereal day."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Earth moves about 1 degree along its orbit each day."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Turning about 1 extra degree takes Earth about 4 minutes."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers this; c4 and c5 are calculations (360 degrees over 365.25 days is about 0.986 degrees a day, and 0.986 / 360 x 1,436 minutes is about 3.9 minutes), and c2 needs web evidence. rivalTest: Earth's tilt is the likeliest wrong pick, but tilt changes the length of daylight and the seasons, not the average solar day; the Moon's tidal braking lengthens both kinds of day alike, by about 2 milliseconds a century; leap seconds are occasional one-second adjustments, not 4 minutes a day. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 35 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. The figures are textbook astronomy: a sidereal day of 23 h 56 min 4 s against a mean solar day of 24 h. Hard because few players know the sidereal day, but a good reasoner can get there from Earth's orbit. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6934e71a5f47ae2d824eb89629629fdddeb7a6462ab6951683a3f6d184e947e7",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "Earth orbits the Sun",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Because Earth advances along its orbit while it spins, it must turn a little more than once relative to the stars to bring the Sun back to the same place, so the solar day is longer than the sidereal day.",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Earth's rotation period relative to the stars is about 23 hours 56 minutes 4 seconds.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The roughly 4-minute gap comes from orbital motion. Tidal braking lengthens the day by about 2 milliseconds per century, leap seconds are 1-second clock adjustments, and axial tilt only shifts individual solar days through the equation of time.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Earth covers 360 degrees in about 365.25 days, about 0.99 degrees a day.",
+              "confidence": "certain"
+            },
+            "note": "Pure arithmetic; content:record has no calculation method (§9.5.4), so it is recorded as knowledge. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "At one turn (360 degrees) in 24 hours, one degree takes 24 × 60 / 360 = 4 minutes.",
+              "confidence": "certain"
+            },
+            "note": "Pure arithmetic; content:record has no calculation method (§9.5.4), so it is recorded as knowledge. High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cc07e477212f30939e03567a90371014d1cec75d6e64ade764de3a6ef07da00f",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "Earth orbits the Sun",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A solar day is about 4 minutes longer than a sidereal day because Earth moves about 1 degree along its orbit each day and must turn that much further to face the Sun again.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Earth's sidereal rotation period is 23 h 56 min 4 s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Lunar tidal braking lengthens the day by about 2 ms per century, axial tilt and orbital eccentricity only vary the apparent solar day by seconds through the year, and leap seconds are timekeeping steps. None produces a mean gap of 4 minutes.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "360 degrees / 365.24 days = 0.986 degrees a day (computed).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Earth turns 1 degree in 4 minutes, so 0.986 degrees takes 3.94 minutes (computed).",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "A pedant can say axial tilt does change the length of the apparent solar day through the year (the equation of time). c3 is worded to the 4-minute mean gap, where tilt plays no part, so the key holds."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c2 (key, number), c3 (distractor, number), c4 (explanation, number) and c5 (explanation, number) rest on knowledge alone in both checks, with no dataset or web evidence for them in either. Neither checker searched (the batch used 0 of its 26 searches, and checker A reports WebSearch was refused because the shared budget was spent), so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7), so it is cut. Redraft under a new id with these facts evidenced.",
+      "decidedAt": "2026-11-01T04:27:18Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Earth spins once relative to the stars in about 23 hours 56 minutes. Why is a day measured by the Sun longer?",
+  "answer": "Earth orbits the Sun",
+  "wrong": [
+    "The Moon slows Earth",
+    "Earth's axis is tilted",
+    "Leap seconds are added"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.132,
+    "estimator": "v0"
+  }
+}

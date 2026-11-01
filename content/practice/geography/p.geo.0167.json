@@ -1,0 +1,221 @@
+{
+  "id": "p.geo.0167",
+  "status": "active",
+  "category": "geo",
+  "tags": ["latitude", "seasons", "polar"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "At the June solstice the Northern Hemisphere tilts towards the Sun, giving places inside the Arctic Circle the midnight sun. Around the December solstice they get polar night instead.",
+  "learnMore": "Midnight sun",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "North of the Arctic Circle, around the June solstice, the Sun stays above the horizon through the whole day and night."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Places just north of the Tropic of Cancer, the Equator or the Antarctic Circle still see the Sun set each day around the June solstice."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "At the June solstice the Northern Hemisphere is tilted towards the Sun."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Around the December solstice, places inside the Arctic Circle have polar night, with the Sun below the horizon all day."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; all standard textbook astronomy; c1 gives no count of days, which vary with latitude. Datasets: none needed. Rival test: the Antarctic Circle is the natural confusion, but its midnight sun comes at the December solstice, and the stem says north of the line; the tropics and the Equator have sunsets every day. Against the key: atmospheric refraction lets the midnight sun appear a little south of the circle, which does not make any distractor right. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a global fact. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 29 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e8a2863ff01cf1b3d7a6ae1ceff585e49f9a76c31a208b6b2254dff8a663aff7",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Arctic Circle",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "North of the Arctic Circle the Sun stays up for at least one full day around the June solstice.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Near the Tropic of Cancer, the Equator and just north of the Antarctic Circle the Sun still sets daily in late June.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "At the June solstice the Northern Hemisphere tilts towards the Sun.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Around the December solstice the Arctic has polar night, with the Sun below the horizon all day.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c4 and the explanation's 'places inside the Arctic Circle get polar night': strictly, refraction lets places just inside the circle glimpse the Sun at noon on the December solstice. Textbook simplification, so a note only."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "329fe57eeb288af8a45ddc1ae6a1f0e30a1db73c7260da06a18780f77c62ec28",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Arctic Circle",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "North of the Arctic Circle the Sun stays above the horizon all day and night around the June solstice.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Just north of the Tropic of Cancer, the Equator or the Antarctic Circle the Sun still rises and sets daily at the June solstice.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "At the June solstice the Northern Hemisphere is tilted towards the Sun.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Around the December solstice places inside the Arctic Circle have polar night.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed at certain; every claim is standard risk, so knowledge suffices (§9.5.3). Lint clean, no myth hits. A's refraction note is a textbook simplification, recorded as a note only.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0206",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "North of which line of latitude does the Sun stay up all day around the June solstice?",
+  "answer": "Arctic Circle",
+  "wrong": ["Tropic of Cancer", "Equator", "Antarctic Circle"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.68,
+    "spread": 0.275,
+    "estimator": "v0"
+  }
+}

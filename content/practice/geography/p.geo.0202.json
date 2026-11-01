@@ -1,0 +1,245 @@
+{
+  "id": "p.geo.0202",
+  "status": "active",
+  "category": "geo",
+  "tags": ["rivers", "cities", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "It also passes Bratislava. The Danube rises in Germany's Black Forest and ends in a wide delta on the Black Sea, shared by Romania and Ukraine.",
+  "learnMore": "Danube",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Danube flows through Vienna, Budapest and Belgrade."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Rhine, the Elbe and the Vistula do not flow through Vienna, Budapest or Belgrade."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Danube also flows through Bratislava."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Danube rises in the Black Forest, in Germany."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Danube ends in a delta on the Black Sea that Romania and Ukraine share."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: natural-earth ne_50m_rivers_lake_centerlines: the Danube line (named Danube and Donau in parts) passes within about 12 km of the geonames-cities points for Vienna, Bratislava, Budapest and Belgrade at that coarse scale (c1, c3), and its delta arms Bratul Chilia, Bratul Sulina and Bratul Sfintu Gheorghe reach the Black Sea (c5). No dataset names the source (c4), which is standard knowledge. Rival test: The Rhine is the famous rival but runs through Basel, Cologne and Rotterdam; the Elbe passes Dresden and Hamburg; the Vistula passes Kraków and Warsaw. None touches any of the three cities. Against the key: nothing; all three cities stand on the Danube. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: The three cities are well known and the Danube is one of the most famous rivers anywhere; a player can also reason from the Blue Danube waltz to Vienna. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 26 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; every claim is standard and datasets support the cities. Seed: 2 (easy): most players recognize the Danube with Vienna and Budapest. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "f7d57e897c65ba64d136b8f31e829fc4c8e574034e35ce64b3494ce9e7385a4e",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Danube",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Danube runs through Vienna, Budapest and Belgrade on its way to the Black Sea.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Rhine flows through Switzerland, Germany and the Netherlands, the Elbe through Czechia and Germany and the Vistula through Poland; none reaches Vienna, Budapest or Belgrade.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Bratislava, Slovakia's capital, stands on the Danube between Vienna and Budapest.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Danube begins in the Black Forest of south-west Germany, where its headstreams meet at Donaueschingen.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Danube Delta on the Black Sea lies mostly in Romania, with its northern edge in Ukraine.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "be52ad6547e0b350cc30c2bf2c7378e984ab8e87b9f4a0a6eafe70fa0c904073",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Danube",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Danube flows through Vienna, Budapest and Belgrade (and Bratislava).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Rhine runs through Switzerland, Germany and the Netherlands, the Elbe through Czechia and Germany, the Vistula through Poland; none passes Vienna, Budapest or Belgrade.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Danube also flows through Bratislava.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Danube is formed where the Brigach and Breg meet at Donaueschingen, on the edge of the Black Forest in Germany.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Danube delta on the Black Sea is divided between Romania and Ukraine.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which river flows through Vienna, Budapest and Belgrade?",
+  "answer": "Danube",
+  "wrong": ["Rhine", "Elbe", "Vistula"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.76,
+    "spread": 0.331,
+    "estimator": "v0"
+  }
+}

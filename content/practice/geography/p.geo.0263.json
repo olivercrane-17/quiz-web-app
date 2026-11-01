@@ -1,0 +1,197 @@
+{
+  "id": "p.geo.0263",
+  "status": "active",
+  "category": "geo",
+  "tags": ["borders", "central-asia", "maps"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Russia and China meet in the narrow gap, so the two countries never touch, though many maps make them look like neighbours.",
+  "learnMore": "Altai Mountains",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "At their closest, Mongolia and Kazakhstan are less than 50 km apart, separated by Russian and Chinese territory."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Mongolia and Kazakhstan share no border; Russia and China meet in the gap between them."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "On many world maps, Mongolia and Kazakhstan look as if they touch."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (number) is high under the C26 floor, and c2 and c3 are standard. Datasets: mledoze-countries: MNG borders CHN and RUS only; KAZ borders CHN, KGZ, RUS, TKM, UZB, with no MNG; RUS and CHN border each other (c2). The width is in no pinned dataset. Rival test: Argued for false: on small maps the two countries seem to touch, and many players assume they are neighbours. The usual figure for the gap is under 40 km, so the bound of 50 km holds with room to spare. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Equally surprising everywhere. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 22 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: c1 needs a Tier A or B web result for the width. Seed: 4 (medium): many will answer false, assuming the countries touch. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: the exact width depends on where the lines are measured, which is why the statement uses a bound (precision ladder, §9.2).",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0fa116771dc35cd3cb63b8cabdf7131ca70ffe260e31124111cf4e59493391a1",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "ADM0_A3=MNG and KAZ, closest pair of vertices",
+              "excerpt": "MNG [87.751264,49.297198]; KAZ [87.35997,49.214981]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Great-circle distance 29.8 km between the two outlines. Caveat: these are 1:110m generalized boundaries, so take this as corroboration of a gap of a few tens of km; the figure usually given is about 37 km (knowledge). Both are under 50 km, and Russia's Altai and China's Xinjiang fill the gap."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MNG, KAZ",
+              "excerpt": "MNG \"borders\": [\"CHN\",\"RUS\"]; KAZ \"borders\": [\"CHN\",\"KGZ\",\"RUS\",\"TKM\",\"UZB\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Neither lists the other, so they share no border; both border Russia and China."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "On small-scale world maps Mongolia and Kazakhstan often appear to touch.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3ed28473aa6a09e438f41e05dd79702ae64bdbcac09c58d07918d57585057c9b",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "shortest distance between the Mongolia and Kazakhstan polygons",
+              "excerpt": "Closest points 87.759 E, 49.277 N (Mongolia) and 87.360 E, 49.215 N (Kazakhstan): 29.8 km. Between them the Russia and China polygons share the vertices 87.360, 49.215 and 87.751, 49.297.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Number claim: the 1:110m data is generalised, so 29.8 km is approximate, but any plausible error leaves it far under 50 km. The strip between the two tripoints is Russian and Chinese territory, as the claim says."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=MNG, KAZ",
+              "excerpt": "MNG \"borders\": [\"CHN\",\"RUS\"]; KAZ \"borders\": [\"CHN\",\"KGZ\",\"RUS\",\"TKM\",\"UZB\"]; neither lists the other. In Natural Earth 110m, Russia and China share the segment between the two tripoints.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "On small-scale world maps the gap of a few tens of kilometres is thinner than a border line, so Mongolia and Kazakhstan look as if they touch.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 (natural-earth) carries dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits. Natural Earth 1:110m gives a gap of about 30 km in both checks, well under the 50 km in the statement.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.geo.0002",
+      "score": 0.16,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Mongolia and Kazakhstan are kept apart by a strip of land less than 50 km wide.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.186,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "id": "p.film.0237",
+  "status": "active",
+  "category": "film",
+  "tags": ["awards", "india", "world-cinema"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Composer M. M. Keeravani accepted the award in 2023. An earlier Oscar-winning song by an Indian composer, A. R. Rahman's 'Jai Ho', came from the British film Slumdog Millionaire (2008).",
+  "learnMore": "RRR (film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "The song 'Naatu Naatu' from the Telugu-language film RRR (2022) won the Academy Award for Best Original Song."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Baahubali: The Beginning, Pushpa: The Rise and Eega did not win an Oscar."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "M. M. Keeravani, the composer of 'Naatu Naatu', accepted the Oscar at the ceremony in March 2023."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "A. R. Rahman's 'Jai Ho', from Slumdog Millionaire (2008), won the Academy Award for Best Original Song."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Slumdog Millionaire is a British film."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Baahubali and Eega are the traps: both are Telugu films by RRR's own director, S. S. Rajamouli. Pushpa: The Rise is another Telugu hit of the same years. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: an Indian production; the song title is enough, and no lyrics appear (§3.7). Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 30 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: the award is a dated fact from 2023, well inside the knowledge horizon; nothing in the item can change.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "8e81920725eb2304e16d3a6d071bc3dc1daaa9ee12727ace75023f2c35201886",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "RRR",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "'Naatu Naatu' from S. S. Rajamouli's Telugu film RRR (2022) won Best Original Song at the 2023 Oscars.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "None of Baahubali: The Beginning, Pushpa: The Rise or Eega won an Academy Award.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Keeravani accepted the award with the lyricist Chandrabose at the ceremony of 12 March 2023.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A. R. Rahman's 'Jai Ho' won Best Original Song for Slumdog Millionaire at the 2009 ceremony.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Slumdog Millionaire was a British production directed by Danny Boyle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b941af6546d7e593f9516fc76a8410876601799dc675c10c41c67f3afc0550bf",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "RRR",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The song 'Naatu Naatu' from the Telugu-language film RRR won the Oscar for Best Original Song.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Baahubali: The Beginning, Pushpa: The Rise and Eega did not win an Oscar.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: all three are Telugu-language films, which makes them fair lures; none won an Oscar."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Composer M. M. Keeravani accepted the Oscar at the ceremony in March 2023.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A. R. Rahman's 'Jai Ho' from Slumdog Millionaire won Best Original Song.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Slumdog Millionaire is a British film (a British production set in India).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1, c3 and c4 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.film.0210",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Telugu-language film's song 'Naatu Naatu' won the Oscar for Best Original Song?",
+  "answer": "RRR",
+  "wrong": ["Baahubali: The Beginning", "Pushpa: The Rise", "Eega"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.756,
+    "estimator": "v0"
+  }
+}

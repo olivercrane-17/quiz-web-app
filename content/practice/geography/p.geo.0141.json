@@ -1,0 +1,198 @@
+{
+  "id": "p.geo.0141",
+  "status": "active",
+  "category": "geo",
+  "tags": ["islands", "atlantic", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Bermuda sits in the open North Atlantic, about 1,050 km (650 miles) east-south-east of North Carolina's Cape Hatteras, far north of the Caribbean Sea.",
+  "learnMore": "Bermuda",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Bermuda lies in the North Atlantic Ocean, outside the Caribbean Sea."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Bermuda lies about 1,050 km (650 miles) east-south-east of Cape Hatteras, North Carolina."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Bermuda lies far north of the Caribbean Sea."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is high under the C26 floor (counterintuitive; schema has no 'counterintuitive' riskReason, so checker_doubt) and c2 for its distance; c3 is standard. Datasets: natural-earth ne_50m_geography_regions_points: 'Bermuda Islands' lat 32.317339, lng -64.742895, region 'Seven seas (open ocean)', subregion 'North Atlantic Ocean' (c1); country-codes BMU is in Northern America, not the Caribbean sub-region (c1). Great-circle distance to the same file's Cape Hatteras point (35.437762, -75.450543) is about 1,047 km, 651 miles, on a bearing of about 106 degrees, east-south-east (c2); to Saint Croix, the file's nearest point in the Caribbean Sea, about 1,620 km (c3). Rival test: argued for true: Bermuda is often marketed and grouped with the Caribbean, which is exactly why the myth exists; but the Caribbean Sea is a defined body of water far to the south. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Bermuda is known worldwide as a holiday island. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 24 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "dfe43b7b3d1deecfb34fef7d1d3b7b622d6f72ac6507708384a9daa43a6c52f1",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Bermuda Islands",
+              "excerpt": "\"region\": \"Seven seas (open ocean)\", \"subregion\": \"North Atlantic Ocean\", coordinates [-64.742909,32.317267]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Natural Earth files Bermuda under the North Atlantic Ocean; iso-3166-regions also places BMU in Northern America, not in the Caribbean."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Cape Hatteras; name=Bermuda Islands",
+              "excerpt": "Cape Hatteras [-75.54033,35.244753]; Bermuda Islands [-64.742909,32.317267]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Great-circle distance 1049 km (652 miles), initial bearing 105°, east-south-east."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Bermuda, near 32° N, lies far north of the Caribbean, which ends at the Greater Antilles around 18° to 23° N.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "aee61f55cfeaac3ebb9b6612e8f0b98bb84ddcf5b4f5970911336fdb601154ba",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Bermuda Islands",
+              "excerpt": "lat 32.32, lon -64.74, region \"Seven seas (open ocean)\"; mledoze BMU region Americas/North America, latlng [32.33333333,-64.75]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Cape Hatteras; name=Bermuda Islands",
+              "excerpt": "Great-circle distance 1049 km (652 miles), bearing 105 degrees (between east and east-south-east)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Matches 'about 1,050 km (650 miles)'. Bearing 105 is within 8 degrees of east-south-east."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Caribbean Sea lies south of about 23 degrees N (Cuba's north coast); Bermuda is at about 32 degrees N.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c2 carry natural-earth evidence in both checks (§9.9 rule 3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0219",
+      "score": 0.25,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Bermuda is an island in the Caribbean Sea.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.179,
+    "estimator": "v0"
+  }
+}

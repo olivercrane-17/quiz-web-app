@@ -1,0 +1,267 @@
+{
+  "id": "p.food.0268",
+  "status": "cut",
+  "category": "food",
+  "tags": ["food-words", "fruit", "colour"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Old English speakers called the colour geoluread, 'yellow-red'.",
+  "learnMore": "Orange (colour)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "'Orange' was used in English for the fruit by about 1400."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The earliest recorded uses of 'orange' as a colour name in English date from the early 1500s."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "Old English used geoluread, meaning 'yellow-red', for the colour now called orange."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed; risk is at or above the C26 floor (high: c1, c2, c3). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Dictionaries date the fruit sense to the 14th century and the colour sense to the early or middle 1500s; the values use a late date for the fruit and the earliest for the colour, so the answer holds under any of them. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a question about English words that needs no local knowledge. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 20 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 3: a well-travelled fun fact, and players can reason that colour words often come from things. Doubts: none on the order.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d25cab410938e3dfa6f8b3ce15f8f2ba02c87a88bc44c280703bbb4cf22dd62d",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "'Orange' as the name of a fruit",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Orange, from Old French orenge, names the fruit in English from the late 14th century.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The colour sense is first recorded in the early 1500s (1502 is the usual first citation).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Old English described the colour with compounds such as geoluread, yellow-red.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "English had no basic colour word for orange before it took the fruit's name, but it did have words such as saffron (and Old English geolucrog) for orange-yellow shades.",
+              "confidence": "likely"
+            },
+            "note": "Checker addition (role explanation, risk high, reason etymology): 'Before the orange fruit reached England, English had no separate word for the colour orange.' Saffron as a colour word makes the universal 'no separate word' arguable. Knowledge only; no pinned dataset covers it and no web search could run."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "x1: the explanation's 'English had no separate word for the colour' is arguable, since saffron named orange-yellow shades. 'Before the fruit arrived, English speakers called the colour geoluread, yellow-red' keeps the point without the universal claim."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cc5e65945a2dffb543e6bbc08aa9729f5a3f2cffe553794dca9ddd7972b72406",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "'Orange' as the name of a fruit",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The fruit name 'orange' is recorded in English by about 1400 (Middle English orenge, late 14th century).",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The colour name 'orange' is recorded in English from the early 1500s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Old English used geoluread, yellow-red, for what we now call orange.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-pfood02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "0a011eaa37a3b62cbbc3c9583e5ebcdb479459c754e6e63f32fed5d64ccaac64",
+      "startedAt": "2026-11-01T04:51:56Z",
+      "finishedAt": "2026-11-01T05:00:50Z",
+      "coldSolve": {
+        "answerGiven": "'Orange' as the name of a fruit",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "English took 'orange' for the fruit from Old French in the 14th century, so the fruit sense was in use by about 1400.",
+            "confidence": "certain"
+          },
+          "note": "High-risk (etymology) with knowledge only in A and B, and the editor asked the tiebreak for web evidence on it. No external evidence could be gathered: this run's one WebSearch call was refused because the turn's shared search limit (200 calls across all agents) was already used up, and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "'Orange' as a colour word is first recorded in English in the early 16th century, with 1502 the year usually given.",
+            "confidence": "certain"
+          },
+          "note": "High-risk (etymology) with knowledge only in A and B, and the editor asked the tiebreak for web evidence on it. No external evidence could be gathered: this run's one WebSearch call was refused because the turn's shared search limit (200 calls across all agents) was already used up, and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Old English described orange shades with compounds of geolu (yellow) and read (red), and geoluread is the form usually quoted; I cannot confirm how it is attested, or that it named this colour in particular.",
+            "confidence": "likely"
+          },
+          "note": "The explanation now states c3 alone, so it carries the item's teaching point. Etymology claims of this kind circulate widely in trivia, which is why this one needs a Tier A or B source (an Old English dictionary or a reference work) rather than agreement between checkers. No external evidence could be gathered: this run's one WebSearch call was refused because the turn's shared search limit (200 calls across all agents) was already used up, and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "checker_doubt c3: the explanation's Old English 'geoluread' needs dataset or web evidence before the item can pass, and c1 and c2 (high-risk etymology) also lack it in every check. Re-run the tiebreak with web evidence; if no Tier A or B source supports c3, replace the explanation with a fact that has one (§9.2)."
+        },
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "Pass A's x1 issue is resolved by the editor's wording-only rewrite: the explanation no longer says English had no separate word for the colour, so nothing in the item depends on x1 now. I add no claims."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    },
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Pass T revised, so rule 2 cannot pass: A revised, B passed, and an accept on a split needs a passing tiebreak (§9.7, §9.9). The pass-1 wording fix settled A's x1, but T left c3 uncertain (how geoluread is attested, and whether it named this colour), and c3 is now the only fact the explanation states. High-risk etymology claims c1 to c3 have no dataset or web evidence in any check; T's one search was refused when the shared WebSearch limit ran out. A new explanation fact changes a claim and needs two fresh checks. Redraft under a new id with an explanation a Tier A or B source supports and web evidence for both dates. (earlier, rewrite by ed-pfood02d: Wording only (§9.7), the fix A asks for under its addition x1: the explanation's first sentence, 'Before the fruit reached England, English had no separate word for the colour.', is dropped, because saffron already named orange-yellow shades, so the universal claim is arguable. The old explanation was: Before the fruit reached England, English had no separate word for the colour. Old English speakers called it geoluread, 'yellow-red'. It now states c3 alone, so no claim changes. A's revise still stands and c1 to c3 (etymology) rest on knowledge only in both checks, so the item awaits a tiebreak with web evidence on c1, c2 and c3 and is accepted only if T passes (§9.7, §9.9). [wording-only rewrite by ed-pfood02d at 2026-11-01T04:33:58Z of explanation; checks kept, packetSha256 re-stamped: pass A c285cc622a21dff38e63b01f37d2139c270ea6fd781fa93d35ad0d0a92a30ef9 -> d25cab410938e3dfa6f8b3ce15f8f2ba02c87a88bc44c280703bbb4cf22dd62d; pass B c0b6a06587d139c82b96613bd29aa1e8632b3d6f93fe783e4e8247d2c2de5b0f -> cc5e65945a2dffb543e6bbc08aa9729f5a3f2cffe553794dca9ddd7972b72406])",
+      "decidedAt": "2026-11-01T05:26:46Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ]
+  },
+  "format": "comparison",
+  "stem": "Which came first in English?",
+  "a": "'Orange' as the name of a fruit",
+  "b": "'Orange' as the name of a colour",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "first recorded use in English",
+  "unit": "year",
+  "values": {
+    "a": 1400,
+    "b": 1502
+  },
+  "valueDisplay": {
+    "a": "by about 1400",
+    "b": "the early 1500s"
+  },
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.304,
+    "estimator": "v0"
+  }
+}

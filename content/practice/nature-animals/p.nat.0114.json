@@ -1,0 +1,279 @@
+{
+  "id": "p.nat.0114",
+  "status": "active",
+  "category": "nat",
+  "tags": ["reptiles", "snakes", "myths"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "A snake's lower jaw is split at the chin and joined by stretchy tissue, so each side spreads and moves on its own. Nothing comes out of joint.",
+  "learnMore": "Snake skull",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Snakes do not dislocate their jaws when swallowing large prey."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The left and right sides of a snake's lower jaw are not fused at the chin but are joined by elastic tissue."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Each side of a snake's lower jaw can spread and move independently, which lets the snake swallow large prey."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors; its single warning is the C25 myth match on c1, explained under myths. claims: three listed. c1 is high because it is the key of a counterintuitive item, so C26 sets it high; the tooling's riskReason enum has no counterintuitive value yet (guide v1.1 adds one), so checker_doubt stands in for it. c2 and c3 are standard anatomy; I wrote 'left and right sides' rather than 'halves' to keep number words out. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: argued for true: popular sources say 'unhinge' or 'dislocate', but the joints stay in place while ligaments stretch. The statement is false under any reading of dislocate. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: a myth repeated worldwide. style: Oxford spelling, plain hyphens only, explanation of 28 words. myths: screened against content/reference/myths.json; c1 matches the snakes-dislocate-jaws entry by design, because it debunks that myth; both checks need to confirm it with web evidence in one of them. mystery and encore: nothing of either kind in a true/false item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6847130b4cf8dd24cef307c879075c8a3cedbdf22c30611e34ee5f4b6ebd632c",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "snake skull anatomy mandibles unfused at the chin, mobile quadrate bone, wide gape without jaw dislocation",
+              "results": [
+                {
+                  "title": "The wide gape of snakes: A comparison of the developing mandibular symphysis in sauropsids - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13148632/"
+                },
+                {
+                  "title": "The wide gape of snakes: A comparison of the developing mandibular symphysis in sauropsids - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/41036594/"
+                },
+                {
+                  "title": "Ecological correlates of cranial evolution in the megaradiation of dipsadine snakes - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/37679675/"
+                },
+                {
+                  "title": "Scaling Relationships of Maximal Gape in Two Species of Large Invasive Snakes, Brown Treesnakes and Burmese Pythons, and Implications for Maximal Prey Size",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9409080/"
+                },
+                {
+                  "title": "The cutting-edge morphology of the mole snake’s dental apparatus - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6557247/"
+                },
+                {
+                  "title": "Predation upon Hatchling Dinosaurs by a New Snake from the Late Cretaceous of India - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2830453/"
+                },
+                {
+                  "title": "The bizarre skull of Xenotyphlops sheds light on synapomorphies of Typhlopoidea - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6481419/"
+                },
+                {
+                  "title": "Reptile - Skull, Dentition, Adaptations",
+                  "url": "https://www.britannica.com/animal/reptile/Skull-and-dentition"
+                },
+                {
+                  "title": "Snakes: Super senses, stretchy jaws and deadly venom",
+                  "url": "https://www.nhm.ac.uk/discover/snakes-senses-stretchy-jaws-deadly-venom.html"
+                },
+                {
+                  "title": "In Vivo Measurement of Mesokinesis in Gekko gecko: The Role of Cranial Kinesis during Gape Display, Feeding and Biting",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4521707/"
+                }
+              ],
+              "summaryExcerpt": "Wide gape without dislocation: The Natural History Museum explains that large-prey snakes don't unhinge or dislocate their jaws to eat – their mouths are just really stretchy. The lower jaw's two halves are linked by a ligament, and each half connects to the skull through a mobile joint, which lets the sides spread apart.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The summary names the Natural History Museum page 'Snakes: Super senses, stretchy jaws and deadly venom' (Tier B) for this sentence; peer-reviewed PMC papers in the same list confirm the unfused mandibular symphysis. A first call (W1, counted here, query 'do snakes actually dislocate their jaws to swallow prey, lower jaw halves joined by ligament') also confirmed the claim through the NHM, Scientific American and Smithsonian, but its summary flagged a National Geographic general snake page that still says the lower jaws 'unhinge'. That is the myth itself, yet the summary reported it as a conflicting source, so W1 is not used here. Myth screen: confirmed with web evidence in this check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A snake's two lower-jaw bones are not fused at the chin; a stretchy ligament joins them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "snake skull anatomy mandibles unfused at the chin, mobile quadrate bone, wide gape without jaw dislocation",
+              "results": [
+                {
+                  "title": "The wide gape of snakes: A comparison of the developing mandibular symphysis in sauropsids - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13148632/"
+                },
+                {
+                  "title": "The wide gape of snakes: A comparison of the developing mandibular symphysis in sauropsids - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/41036594/"
+                },
+                {
+                  "title": "Ecological correlates of cranial evolution in the megaradiation of dipsadine snakes - PubMed",
+                  "url": "https://pubmed.ncbi.nlm.nih.gov/37679675/"
+                },
+                {
+                  "title": "Scaling Relationships of Maximal Gape in Two Species of Large Invasive Snakes, Brown Treesnakes and Burmese Pythons, and Implications for Maximal Prey Size",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9409080/"
+                },
+                {
+                  "title": "The cutting-edge morphology of the mole snake’s dental apparatus - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6557247/"
+                },
+                {
+                  "title": "Predation upon Hatchling Dinosaurs by a New Snake from the Late Cretaceous of India - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2830453/"
+                },
+                {
+                  "title": "The bizarre skull of Xenotyphlops sheds light on synapomorphies of Typhlopoidea - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6481419/"
+                },
+                {
+                  "title": "Reptile - Skull, Dentition, Adaptations",
+                  "url": "https://www.britannica.com/animal/reptile/Skull-and-dentition"
+                },
+                {
+                  "title": "Snakes: Super senses, stretchy jaws and deadly venom",
+                  "url": "https://www.nhm.ac.uk/discover/snakes-senses-stretchy-jaws-deadly-venom.html"
+                },
+                {
+                  "title": "In Vivo Measurement of Mesokinesis in Gekko gecko: The Role of Cranial Kinesis during Gape Display, Feeding and Biting",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4521707/"
+                }
+              ],
+              "summaryExcerpt": "The lower jaw's two halves are linked by a ligament, and each half connects to the skull through a mobile joint, which lets the sides spread apart.",
+              "tiers": ["A", "B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 2,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "be9dfe9af718461412348122b4ab583a026456bec54491a15425e7a666355dcd",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Snakes do not dislocate their jaws; the lower jaw halves are joined by stretchy tissue and the joints stay intact.",
+              "confidence": "certain"
+            },
+            "note": "Myth-list hit. Knowledge only in this record, so the myth screen needs dataset or web evidence in check A. High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The two halves of the lower jaw are not fused at the chin and are joined by elastic tissue.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Each half of the lower jaw can spread and move on its own, which lets a snake swallow large prey.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 3 claims confirmed in both checks; high-risk c1 (web in A). Style, distractors and balance reviewed. C25 matches the myth this item debunks (snakes-dislocate-jaws); c1 is confirmed by both checks with web evidence in A, so the myths screen clears.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.nat.0267",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": [
+        {
+          "claimId": "c1",
+          "mythId": "snakes-dislocate-jaws",
+          "cleared": true
+        }
+      ]
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Snakes dislocate their jaws to swallow large prey.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.2,
+    "spread": 0.294,
+    "estimator": "v0"
+  }
+}

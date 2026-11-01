@@ -1,0 +1,233 @@
+{
+  "id": "p.sport.0228",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["gymnastics", "olympics", "montreal-1976"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The scoreboard had room for only three digits, so her 10.00 appeared as 1.00. She was 14, and scored six more perfect 10s at the Montreal Games.",
+  "learnMore": "Nadia Comăneci",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "When Nadia Comăneci scored a perfect 10 at the 1976 Olympics, the scoreboard displayed it as 1.00."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The scoreboard did not show her perfect score as 0.10, 9.99 or 10.00."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Nadia Comăneci's score at the 1976 Montreal Olympics was the first perfect 10 in Olympic gymnastics."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Montreal scoreboard could display only three digits, so a score of 10.00 appeared as 1.00."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Comăneci was 14 at the 1976 Olympics and scored seven perfect 10s there."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed, 5 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so is the key of this counterintuitive item. datasets: olympic-editions, edition_metadata.csv: edition_id 19 (1976 Summer, Montréal, 17 July to 1 August 1976) confirms the Games; the scores and the scoreboard are not in any pinned dataset, so c1 to c5 need web evidence. rivalTest: 10.00 is the planted trap: it is what the score was, not what the board showed. 9.99 is tempting because it was the board's real ceiling, and 0.10 is the other misplaced-point reading. The board showed 1.00, so the key holds. Counterintuitive is true because most players will pick 10.00. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 27 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. The 1.00 display is one of the best documented images in Olympic history.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d1878314d97b0580532ace24ffcf8460d928fba69144e5e15426f159272846a4",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "1.00",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "When Comăneci scored 10 on the uneven bars at Montreal in 1976, the scoreboard showed 1.00.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The board showed 1.00, so not 0.10, 9.99 or 10.00.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Her Montreal 10 was the first perfect 10 in Olympic gymnastics.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The scoreboards had only three digits (a 10 had been thought impossible), so 10.00 appeared as 1.00.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Comăneci, born in November 1961, was 14 at Montreal and scored seven perfect 10s there.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ba9c5cfb125aaa749b2d7d7f870b9170d0571045406de9168c4b88d6be7b6ffc",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "1.00",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "At Montreal in 1976 the scoreboard showed Nadia Comăneci's perfect 10.00 as 1.00.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The board showed 1.00, not 0.10, 9.99 or 10.00.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Comăneci's 10.00 on the uneven bars on 18 July 1976 was the first perfect 10 awarded in Olympic gymnastics.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The scoreboard had room for only three digits, because a 10 had never been awarded, so 10.00 showed as 1.00.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Comăneci was 14 in Montreal and earned seven perfect 10s there.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, number), c2 (distractor, number), c3 (explanation, first), c4 (explanation, number) and c5 (explanation, number) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In 1976 Nadia Comăneci scored the first perfect 10 in Olympic gymnastics. What did the scoreboard show?",
+  "answer": "1.00",
+  "wrong": ["0.10", "9.99", "10.00"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.45,
+    "spread": 0.326,
+    "estimator": "v0"
+  }
+}

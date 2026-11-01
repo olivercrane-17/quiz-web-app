@@ -1,0 +1,206 @@
+{
+  "id": "p.film.0212",
+  "status": "cut",
+  "category": "film",
+  "tags": ["performers", "musicals", "1970s"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Travolta had danced to stardom a year earlier in Saturday Night Fever (1977). Olivia Newton-John was born in Cambridge, England, and grew up in Melbourne, Australia.",
+  "learnMore": "Grease (film)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "John Travolta played Danny Zuko in Grease (1978), opposite Olivia Newton-John as Sandy."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Patrick Swayze, Richard Gere and Kevin Bacon did not play Danny Zuko in the film Grease."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "John Travolta starred in Saturday Night Fever (1977)."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Olivia Newton-John was born in Cambridge, England, and grew up in Melbourne, Australia."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Swayze and Bacon are the traps, as stars of later dance films, Dirty Dancing (1987) and Footloose (1984); Gere is a star of the same era. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: a worldwide hit with an English-born, Australian-raised co-star; no local knowledge is needed. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 26 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "47b814d98eda01249c0816491e0ffa67f25c4fc2839f2c4e715a7bf0e95c66db",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "John Travolta",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Travolta played Danny Zuko and Olivia Newton-John played Sandy in the 1978 film of Grease.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Swayze, Gere and Bacon did not play Danny in the 1978 film.",
+              "confidence": "certain"
+            },
+            "note": "Gere played Danny on the London stage, which is what makes him a tempting distractor; the stem names the film, so he is still wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Travolta starred as Tony Manero in Saturday Night Fever, released in December 1977.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and WebSearch was refused this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Olivia Newton-John was born in Cambridge and moved with her family to Melbourne as a small child.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5a302023bd3af344607edc29fd3440f3b0c32a94f0b5d8c7362e5ac215a5093e",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "John Travolta",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "John Travolta played Danny Zuko opposite Olivia Newton-John's Sandy in Grease.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Swayze, Gere and Bacon did not play Danny Zuko in the film.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Travolta starred in Saturday Night Fever, released in December 1977.",
+              "confidence": "certain"
+            },
+            "note": "The explanation's \"a year earlier\" is loose: Saturday Night Fever opened about six months before Grease (June 1978), a year earlier only by calendar year. High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Olivia Newton-John was born in Cambridge, England and grew up in Melbourne.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Explanation says Saturday Night Fever came \"a year earlier\": it opened in December 1977 and Grease in June 1978, so about six months apart (one calendar year apart). Consider \"the year before\" or \"months earlier\"."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 and c3 rest on knowledge only: neither checker could search (the shared search budget was spent) and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, which needs two fresh checks, so it is cut (§9.2). The content read as sound; redraft it under a new id once web evidence can be gathered. Checker B also noted that 'a year earlier' stretches a gap of about six months (December 1977 to June 1978).",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which actor played Danny Zuko opposite Olivia Newton-John in the musical film Grease (1978)?",
+  "answer": "John Travolta",
+  "wrong": ["Patrick Swayze", "Richard Gere", "Kevin Bacon"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.458,
+    "estimator": "v0"
+  }
+}

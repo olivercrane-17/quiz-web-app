@@ -1,0 +1,204 @@
+{
+  "id": "p.geo.0262",
+  "status": "active",
+  "category": "geo",
+  "tags": ["borders", "latitude", "north-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "The Detroit River bends here, so Windsor lies on its southern bank. Its centre, at about 42.30° N, sits just south of Detroit's, at about 42.33° N.",
+  "learnMore": "Windsor, Ontario",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "The centre of Windsor, Ontario, lies further south than the centre of Detroit, Michigan."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Where Windsor faces Detroit, the Detroit River bends so that Windsor lies on its southern bank."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Central Windsor lies at about 42.30° N and central Detroit at about 42.33° N."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed; c1 (checker_doubt) and c3 (number) are high under the C26 floor, and c2 is standard. Datasets: geonames-cities: Windsor, CA, admin1 08 (Ontario), 42.30008, -83.01654; Detroit, US, MI, 42.33143, -83.04575 (c1, c3). geonames has other Canadian Windsors (Nova Scotia, Quebec); admin1 08 picks the Ontario city that faces Detroit. Rival test: Argued for false: Canada lies north of the United States almost everywhere, so the statement sounds absurd; but here the river bends and Windsor sits on its southern shore. Centre to centre the gap is only about 3.5 km of latitude, which is why the explanation gives both figures; the two downtowns face each other across the river with Windsor on the southern bank, so the statement holds for the cities as the stem names them. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Detroit is world-famous; the surprise is the same for everyone. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 27 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset. Seed: 5 (hard): most players will answer false. Counterintuitive: true; the obvious answer is wrong, as the rival test explains, and the explanation defuses it. Doubts: c1 is high under the C26 floor because the item is counterintuitive; the schema's riskReason list has no 'counterintuitive', so checker_doubt stands in.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "3d7e7c62ecf939f7733bb6efa6f6a4bec7e09f78935257f2c969ef9dc9b209da",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Windsor, country=CA, admin1=08 (Ontario); name=Detroit, country=US, admin1=MI",
+              "excerpt": "{\"name\":\"Windsor\",\"lat\":\"42.30008\",\"lng\":\"-83.01654\",\"country\":\"CA\",\"admin1\":\"08\"}; {\"name\":\"Detroit\",\"lat\":\"42.33143\",\"lng\":\"-83.04575\",\"country\":\"US\",\"admin1\":\"MI\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Windsor's centre (42.300° N) lies south of Detroit's (42.331° N)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Opposite downtown Detroit the Detroit River runs roughly east-west, so Windsor sits on its south bank.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Windsor, country=CA, admin1=08 (Ontario); name=Detroit, country=US, admin1=MI",
+              "excerpt": "{\"name\":\"Windsor\",\"lat\":\"42.30008\",\"lng\":\"-83.01654\",\"country\":\"CA\",\"admin1\":\"08\"}; {\"name\":\"Detroit\",\"lat\":\"42.33143\",\"lng\":\"-83.04575\",\"country\":\"US\",\"admin1\":\"MI\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "42.30008 rounds to 42.30 and 42.33143 to 42.33."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7f9257d252e0d3a93fc1ef2188abed425f28aea28d96105b40a08361417bc528",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Windsor, country=CA, admin1=Ontario; name=Detroit, country=US, admin1=Michigan",
+              "excerpt": "Windsor CA (Ontario) lat 42.30008; Detroit US (Michigan) lat 42.33143; Windsor is 0.031 degrees (about 3.5 km) further south.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Writer flagged this as checker_doubt-high; the dataset settles it for city centres, which is what the claim states."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Across the Detroit River from downtown Detroit, Windsor lies to the south, on the river's southern bank.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Windsor (CA, Ontario) and name=Detroit (US, Michigan)",
+              "excerpt": "Windsor lat 42.30008 (about 42.30 N); Detroit lat 42.33143 (about 42.33 N).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Both rounded figures match the dataset."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Canada has several places called Windsor (the dataset lists one each in Nova Scotia, Quebec and Ontario). Paired with Detroit, Ontario is the obvious reading and the explanation and learn-more term say so. Optional: write 'Windsor, Ontario' in the statement."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c3 (geonames-cities) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits. B's note on other Windsors is answered by the pairing with Detroit and the explanation.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "The Canadian city of Windsor lies further south than Detroit, in the United States.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.34,
+    "spread": 0.322,
+    "estimator": "v0"
+  }
+}

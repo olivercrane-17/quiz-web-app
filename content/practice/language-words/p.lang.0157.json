@@ -1,0 +1,214 @@
+{
+  "id": "p.lang.0157",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["grammar", "letters", "games"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Scrabble's tile values follow letter frequency: E scores 1 point, while rare Q and Z score 10. T usually ranks second among English letters.",
+  "learnMore": "Letter frequency",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "E is the most frequently used letter in written English."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "A, T and S each appear less often than E in typical English text."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In the English-language edition of Scrabble, E is worth 1 point, and Q and Z are worth 10."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "T is usually the second most frequent letter in English text."
+    }
+  ],
+  "writerNotes": "A tempts as the first letter; frequency counts across large bodies of text put E clearly first. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers letter frequency; rival test: T is a strong second, which is why c4 says 'usually'; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: a fact about English itself, the same for every reader; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none on the key; the Scrabble values are for the English-language set, which the explanation says",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "2e1a4f7459c71094592d005c8600bf8d62f836f70c45342ff3ebb7233003a38a",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "E",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In counts of English text, e is the most frequent letter, at about 12 to 13 percent.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "T, A and S all come after E in English letter frequency, which runs roughly e, t, a, o, i, n, s.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the English-language edition of Scrabble, E scores 1 point and Q and Z score 10 each.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "T normally ranks second after E in English letter counts.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Alfred Butts set Scrabble's letter values from his own counts of letter frequency in English text, so common letters score low and rare ones high.",
+              "confidence": "certain"
+            },
+            "note": "Added from the explanation, role explanation, risk standard: 'Scrabble's tile values follow letter frequency.' True as a broad rule, though not letter by letter."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "c0ac412c5b2a09bcf76e29641f34b6d5068fb80c7a387a91e85062019aca6db0",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "E",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "E is the most frequent letter in English text in every standard frequency table I know of.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: no standard table puts T, A or S first."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "T, A and S all rank below E in typical English text.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "English Scrabble scores E as 1 point and both Q and Z as 10.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "T is usually the second most common letter in text (the ETAOIN order).",
+              "confidence": "certain"
+            },
+            "note": "'Usually' is the right hedge: other corpora can swap T and A."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, superlative), c2 (distractor, superlative), c3 (explanation, number) and c4 (explanation, number) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which letter appears most often in written English?",
+  "answer": "E",
+  "wrong": ["A", "T", "S"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.78,
+    "spread": 0.332,
+    "estimator": "v0"
+  }
+}

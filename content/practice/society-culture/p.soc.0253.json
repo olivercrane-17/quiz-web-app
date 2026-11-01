@@ -1,0 +1,217 @@
+{
+  "id": "p.soc.0253",
+  "status": "active",
+  "category": "soc",
+  "tags": ["customs", "flowers", "russia", "numbers"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Gifts to the living have an odd number of stems, such as three, five or seven, while even numbers are laid at graves and memorials.",
+  "learnMore": "Culture of Russia",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "In Russian tradition, bouquets with an even number of flowers are given only for funerals and remembrance of the dead."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Even-numbered bouquets are not traditional gifts for weddings, birthdays or anniversaries in Russia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Bouquets for the living traditionally have an odd number of stems, such as three, five or seven."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Even-numbered bouquets are laid at graves and memorials."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: customs and etiquette. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers customs; c1 and c3 need web evidence. rivalTest: weddings are the trap for players who think of pairs; nothing survives against funerals. Neighbours such as Ukraine share the custom, and many people ignore it for very large bouquets, which 'traditionally' covers. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: a surprise for most players, known to Russians and their neighbours. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 25 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 4 (medium): weddings pull many. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c7aa47be202a0676494906412e99c4b7b009b520fa6dec52025eb03e997466f7",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "Funerals",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Russia, bouquets with an even number of flowers are kept for funerals and remembering the dead.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (superlative), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Weddings, birthdays and anniversaries call for odd numbers of flowers.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Flowers for the living come in odd numbers of stems, such as three, five or seven.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Even-numbered bouquets are laid at graves and memorials.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3106c4d1e332dc0f05f152d2bb56405d74bf7e9cce5b67d6985c1e4984d560b8",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "Funerals",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Russian custom gives odd numbers of flowers to the living, and even-numbered bouquets are reserved for funerals and remembrance of the dead.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: florists and younger Russians relax the rule for large bouquets, but the stem says 'traditionally'. The same custom exists in Ukraine and neighbouring countries, so it is not a Russia-only quirk."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Weddings, birthdays and anniversaries take odd-numbered bouquets in Russia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bouquets for the living traditionally have an odd number of stems, such as three, five or seven.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Even-numbered bouquets are the ones laid at graves and memorials.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, superlative) and c3 (explanation, number) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. The gap includes the key, a label or a distractor, so the redraft needs evidence for the question itself. Redraft under a new id.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sci.0150",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In Russia, bouquets with an even number of flowers are traditionally given only for which occasion?",
+  "answer": "Funerals",
+  "wrong": ["Weddings", "Birthdays", "Anniversaries"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.203,
+    "estimator": "v0"
+  }
+}

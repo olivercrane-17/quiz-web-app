@@ -1,0 +1,227 @@
+{
+  "id": "p.food.0232",
+  "status": "active",
+  "category": "food",
+  "tags": ["food-science", "fruit", "cooking"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Cutting breaks open cells, letting an enzyme called polyphenol oxidase react with oxygen in the air. Lemon juice slows the browning, because its acid holds the enzyme back.",
+  "learnMore": "Enzymatic browning",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Cut apples turn brown when the enzyme polyphenol oxidase reacts with oxygen."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The browning of a freshly cut apple is not caused by bacteria, sunlight or melting sugar."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Cutting an apple ruptures cells, bringing the enzyme into contact with compounds and oxygen."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Lemon juice slows browning, mainly because its acidity inhibits the enzyme."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Bacteria cause rot, which also browns fruit, but far more slowly; the stem says 'freshly cut'. Against the key: none. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: everyone has seen it. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: many players remember the science. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "fccb422c3cf86b44fa22ff850770d47ee5cd74f78982df241d0d0db70390756b",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Enzymes and oxygen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cut apples brown when polyphenol oxidase uses oxygen to oxidize the fruit's phenolic compounds into brown pigments.",
+              "confidence": "certain"
+            },
+            "note": "Strictly, the enzyme catalyses the reaction of phenols with oxygen rather than reacting with oxygen itself; the claim simplifies it."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The browning is not caused by bacteria, sunlight or melting sugar.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cutting ruptures cells and brings the enzyme, its phenolic substrates and oxygen together.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lemon juice's low pH (about 2) slows polyphenol oxidase, which works best near neutral pH; its vitamin C also helps by reducing the coloured products.",
+              "confidence": "certain"
+            },
+            "note": "Citric acid far outweighs vitamin C in lemon juice, so acidity as the main reason is defensible."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Explanation: 'letting an enzyme called polyphenol oxidase react with oxygen' simplifies the chemistry; 'letting an enzyme, polyphenol oxidase, use oxygen in the air to oxidize the fruit's phenols' is exact if the editor wants it."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "a98fd0160a36ce37154978984a039cfcd60818f6c30660c6a27649b1b60865e5",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Enzymes and oxygen",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Polyphenol oxidase acts on phenolic compounds with oxygen to brown cut apple.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Bacteria, sunlight and melting sugar are not the cause.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cutting ruptures cells and lets the enzyme meet its substrates and oxygen.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lemon juice slows browning, partly because its acidity inhibits the enzyme.",
+              "confidence": "certain"
+            },
+            "note": "Vitamin C in the juice also helps by reducing the brown products, so 'mainly because its acidity' is a simplification; the explanation's own wording (its acid holds the enzyme back) is acceptable."
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The key ('Enzymes and oxygen') is the longest option and the only compound one, and 'Melting sugar' is a weak distractor. A test-wise cue only; nothing here is wrong."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. A's note that the explanation simplifies the enzyme chemistry is weighed: both checks confirm c1 and c3 as written and the line says nothing false to a player, so it stands. B's note on the key's length is a test-wise cue only, inside C07.",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "What turns the flesh of a freshly cut apple brown?",
+  "answer": "Enzymes and oxygen",
+  "wrong": ["Bacteria", "Sunlight", "Melting sugar"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.244,
+    "estimator": "v0"
+  }
+}

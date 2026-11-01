@@ -1,0 +1,259 @@
+{
+  "id": "p.art.0149",
+  "status": "active",
+  "category": "art",
+  "tags": ["art-movements", "abstract-expressionism", "latvia"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "He was born Markus Rothkowitz in 1903 in Dvinsk, then in the Russian Empire, a city Latvians call Daugavpils. He moved to the United States in 1913.",
+  "learnMore": "Mark Rothko",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Mark Rothko was born in 1903 in Dvinsk, present-day Daugavpils in Latvia."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Rothko was not born in the United States, Germany or Poland."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Rothko's birth name was Markus Rothkowitz."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "When Rothko was born, Dvinsk was part of the Russian Empire."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Rothko moved to the United States in 1913."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part01w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: c1 checked in tate-artists (id 1875: born 1903, Daugavpils, Latvija; died 1970, New York) and moma-artists (ConstituentID 5047: American, born Russia (now Latvia), 1903 to 1970). Rival test: the United States is the trap for anyone who knows him as an American painter; Germany and Poland fit his Eastern European name; against the key, both datasets agree. Volatility: evergreen; 'present-day' avoids the time word 'now' (C09); no time words, and nothing depends on knowledge newer than mid-2026. Regional: no local knowledge needed; the name gives a foothold. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: c5 needs a source; I gave the year of the move rather than his age, which sources give as nine or ten.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d5f7128fc6682d6e8737c484e9ed8d76272cc563c36c2c31d8e82ee0fe68c85a",
+        "startedAt": "2026-11-01T01:10:00Z",
+        "finishedAt": "2026-11-01T01:46:30Z",
+        "coldSolve": {
+          "answerGiven": "Latvia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "tate-artists",
+              "version": "a51d8afc988ed083557e2950f4d0b644e7719f4a",
+              "file": "artist_data.csv",
+              "locator": "id=1875 (name=Rothko, Mark)",
+              "excerpt": "1875,\"Rothko, Mark\",Male,1903–1970,1903,1970,\"Daugavpils, Latvija\",\"New York, United States\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "MoMA agrees: 'American, born Russia (now Latvia). 1903–1970'. Dvinsk is the former name of Daugavpils."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "tate-artists",
+              "version": "a51d8afc988ed083557e2950f4d0b644e7719f4a",
+              "file": "artist_data.csv",
+              "locator": "id=1875 (name=Rothko, Mark)",
+              "excerpt": "1875,\"Rothko, Mark\",Male,1903–1970,1903,1970,\"Daugavpils, Latvija\",\"New York, United States\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Born in Daugavpils, Latvia, so not in the United States, Germany or Poland."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He was born Markus Rothkowitz.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=5047 (DisplayName=Mark Rothko)",
+              "excerpt": "\"DisplayName\": \"Mark Rothko\", \"ArtistBio\": \"American, born Russia (now Latvia). 1903–1970\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "'Born Russia' means the Russian Empire, which then held Dvinsk."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He emigrated with his mother and sister in 1913 and settled in Portland, Oregon.",
+              "confidence": "certain"
+            },
+            "note": "High-risk and knowledge only: the shared web-search limit was reached before this claim could be searched, so it still needs dataset or web evidence in a follow-up before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7d7c7b049b4c6d62c8d66377262cfe10b5f381d9d37827013fe56fdfcdb3daca",
+        "startedAt": "2026-11-01T01:17:00Z",
+        "finishedAt": "2026-11-01T01:41:16Z",
+        "coldSolve": {
+          "answerGiven": "Latvia",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "tate-artists",
+              "version": "a51d8afc988ed083557e2950f4d0b644e7719f4a",
+              "file": "artist_data.csv",
+              "locator": "id=1875",
+              "excerpt": "name=Rothko, Mark; dates=1903–1970; yearOfBirth=1903; yearOfDeath=1970; placeOfBirth=Daugavpils, Latvija",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Tate gives Daugavpils, Latvija and 1903; MoMA reads 'born Russia (now Latvia)'. Dvinsk as the 1903 name of Daugavpils rests on certain knowledge. moma-artists agrees (ConstituentID=5047: {\"DisplayName\":\"Mark Rothko\",\"ArtistBio\":\"American, born Russia (now Latvia). 1903–1970\",\"Nationality\":\"American\",\"BeginDate\":1903,\"EndDate\":1970})."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Rothko was not born in the United States, Germany or Poland.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rothko's birth name was Markus (Marcus) Rothkowitz.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dvinsk was part of the Russian Empire when Rothko was born.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Rothko's family emigrated to the United States in 1913.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c5 (explanation, date) rests on knowledge alone in both checks: checker A's searches ran out and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Only explanation facts lack evidence: redraft under a new id with them evidenced, bounded or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part01e",
+        "at": "2026-11-01T01:16:39Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0248",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Mark Rothko, a giant of American abstract painting, was born in a city in which present-day country?",
+  "answer": "Latvia",
+  "wrong": ["United States", "Germany", "Poland"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.3,
+    "spread": 0.164,
+    "estimator": "v0"
+  }
+}

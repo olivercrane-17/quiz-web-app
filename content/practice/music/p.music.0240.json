@@ -1,0 +1,200 @@
+{
+  "id": "p.music.0240",
+  "status": "active",
+  "category": "music",
+  "tags": ["instruments", "inventions", "tuning"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "John Shore, an English court trumpeter, invented the tuning fork in 1711. Johann Maelzel patented the clockwork metronome more than a century later, in 1815.",
+  "learnMore": "Tuning fork",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "John Shore invented the tuning fork in 1711."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Johann Nepomuk Maelzel patented the clockwork metronome in 1815."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "John Shore was a trumpeter at the English court."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-pmusic02w. Claims: every checkable statement in the labels, values and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge. Datasets: no pinned dataset covers inventions, so both dates need web evidence from the checkers. I used no WebSearch. Rival test: argued for 'b': the metronome feels like the older classroom device. Argued against the key: Shore's fork of 1711 predates the clockwork metronome by about a century; Dietrich Winkel built the mechanism in 1814, a year before Maelzel's patent, which changes nothing. Loulié's pendulum timekeeper of the 1690s was not clockwork, which is why the label says 'clockwork metronome'. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both devices are used by musicians everywhere. Style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words. Myths: screened against content/reference/myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: The label avoids crediting Maelzel with the invention itself, because Winkel's claim is documented; the measure says 'invented or patented'.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pmusic02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1247bafc7ecf82658df16a0a8f60e510dd4435b45807921f8e94387f08c34c42",
+        "startedAt": "2026-11-01T02:50:00Z",
+        "finishedAt": "2026-11-01T03:16:21Z",
+        "coldSolve": {
+          "answerGiven": "The tuning fork",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "John Shore invented the tuning fork in 1711.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (first): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Johann Maelzel patented the clockwork metronome in 1815, building on Winkel's mechanism of 1814.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only. No pinned dataset covers it and WebSearch was unavailable to this run, so it still needs dataset or web evidence in a confirming check (§9.9 rule 3). Loulié's pendulum chronometer of 1696 was not clockwork, so it does not upset the label."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Shore was a trumpeter at the English court.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pmusic02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "90913a24ecad4b7a3a74b4b87c13e8263c8694785d390769d2ff4dd5d176471b",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:16Z",
+        "coldSolve": {
+          "answerGiven": "The tuning fork",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "John Shore, a trumpeter at the English court, is credited with inventing the tuning fork in 1711.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: no earlier invention is credited; the metronome came a century later."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Johann Maelzel patented the clockwork metronome in 1815, building on Winkel's 1814 design.",
+              "confidence": "certain"
+            },
+            "note": "Either 1814 or 1815 is far after 1711."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "John Shore was sergeant trumpeter at the English court.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (first) and c2 (date) rest on knowledge only: neither check carries dataset or web evidence (A's records say WebSearch was unavailable, B ran no search) and no pinned dataset covers these music facts, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound; redraft under a new id with web evidence or without the risky detail. A notes Loulié's pendulum device of 1696 was not clockwork, and B allows 1814 or 1815 for the metronome; the label's 'invented' first still needs evidence.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pmusic02e",
+        "at": "2026-11-01T02:54:15Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.food.0147",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which was invented first?",
+  "a": "The tuning fork",
+  "b": "The clockwork metronome",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year invented or patented",
+  "unit": "year",
+  "values": {
+    "a": 1711,
+    "b": 1815
+  },
+  "valueDisplay": {
+    "a": "1711",
+    "b": "patented 1815"
+  },
+  "predicted": {
+    "p": 0.56,
+    "spread": 0.092,
+    "estimator": "v0"
+  }
+}

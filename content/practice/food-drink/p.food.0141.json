@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0141",
+  "status": "active",
+  "category": "food",
+  "tags": ["national-dishes", "mexico", "migration"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Lebanese families brought spit-roasted lamb, cooked like shawarma, to cities such as Puebla. Mexican cooks swapped in chilli-marinated pork and often crown the spit with a pineapple.",
+  "learnMore": "Al pastor",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Tacos al pastor developed in Mexico from the spit-roasted shawarma brought by Lebanese immigrants."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Tacos al pastor did not grow out of the cooking of Greek, Italian or Chinese immigrants to Mexico."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Lebanese immigrants brought spit-roasted meat cooked in the shawarma style to Mexican cities such as Puebla, where it became known as tacos árabes."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Tacos al pastor use pork marinated with chillies instead of lamb, and the spit is often topped with a pineapple."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: geonames-cities lists Puebla (country MX, admin1 21); the history rests on knowledge. Rival test: Greek is tempting because of gyros, but the Mexican line runs through Lebanese immigrants; I kept Turkish out of the options, because many Lebanese arrived as Ottoman subjects and were called turcos in Mexico, which a pedant could use. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: tacos al pastor are famous worldwide; shawarma is the foothold, and it is eaten everywhere. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 27 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: most players do not know the story, but shawarma lets a good reasoner get there. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a33eef5cb84c6eac71e60430dc386ed28e25ee2b878b8883c0e091fbb48dabfa",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Lebanese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tacos al pastor developed in Mexico from the shawarma brought by Lebanese immigrants.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "They did not grow out of Greek, Italian or Chinese immigrants' cooking.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lebanese immigrants' spit-roasted meat became tacos árabes in Puebla.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Al pastor uses chilli-marinated pork instead of lamb, often with a pineapple on top of the spit.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e67a801697087f44cddf0c5b43b56257cdd0af86c2232b42dfdc88386389454f",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Lebanese",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Tacos al pastor developed in Mexico from the spit-roasted shawarma brought by Lebanese immigrants.",
+              "confidence": "certain"
+            },
+            "note": "Tested Greek: gyros is a cousin of shawarma, but the Mexican story names Lebanese cooks in Puebla and Mexico City."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Greek, Italian and Chinese communities in Mexico are not credited with the spit-roasted taco.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Lebanese immigrants made shawarma-style spit-roasted lamb in cities such as Puebla, where it was known as tacos árabes.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Al pastor uses chilli-marinated pork instead of lamb and the spit is often topped with a pineapple.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.geo.0204",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Tacos al pastor, carved from a vertical spit, grew out of the cooking of which immigrants to Mexico?",
+  "answer": "Lebanese",
+  "wrong": ["Greek", "Italian", "Chinese"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.35,
+    "spread": 0.243,
+    "estimator": "v0"
+  }
+}

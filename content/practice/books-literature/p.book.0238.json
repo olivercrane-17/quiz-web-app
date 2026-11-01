@@ -1,0 +1,187 @@
+{
+  "id": "p.book.0238",
+  "status": "active",
+  "category": "book",
+  "tags": ["childrens-books", "dr-seuss"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "His publisher, Bennett Cerf, bet him that he could not write a book with only 50 distinct words. Seuss won the bet with the 1960 book.",
+  "learnMore": "Green Eggs and Ham",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Green Eggs and Ham uses exactly 50 different words."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Bennett Cerf, Dr. Seuss's publisher, bet him that he could not write a book using only 50 different words."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Green Eggs and Ham was published in 1960."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: children's and young-adult books. lint: content:check reports no errors on this item and no warnings. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. rivalTest: Argued for false: the book feels longer than a 50-word book because it repeats its words many times; the statement counts different words, and the standard count is exactly 50, so true holds. Counterintuitive: 50 words sounds impossibly few for a whole book, so many players answer false. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: Dr. Seuss is best known in North America, but the statement is a surprise about a word count rather than school knowledge, so players anywhere reason from the same footing. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 26 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: nothing of either kind to check in a practice item. doubts: none. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "11364fa90bc0e655ee46e91bd4781894b1168e2e70f1c7fdc4bae6f5688a80c5",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Green Eggs and Ham uses a vocabulary of exactly 50 different words.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "His publisher Bennett Cerf bet Dr. Seuss that he could not write a book with only 50 different words.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Green Eggs and Ham was published in 1960.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5a53723b71f6f29a8a79ae5be1d882da4514b161e8c7df732339c572a5179c8b",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Green Eggs and Ham uses exactly 50 different words (I counted the standard list: a, am, and, anywhere, are, be, boat, box, car, could, dark, do, eat, eggs, fox, goat, good, green, ham, here, house, I, if, in, let, like, may, me, mouse, not, on, or, rain, Sam, say, see, so, thank, that, the, them, there, they, train, tree, try, will, with, would, you).",
+              "confidence": "certain"
+            },
+            "note": "My recount of the commonly published list gives 50, counting Sam-I-am as Sam, I and am. High-risk (number): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bennett Cerf, Seuss's publisher at Random House, bet him he could not write a book using only 50 different words.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Green Eggs and Ham was published in 1960.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, number), c2 (explanation, number) and c3 (explanation, date) rest on knowledge alone in both: neither checker could search (both report the shared web budget spent) and no pinned dataset covers them. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, never a relabel. The statement itself needs that evidence, so redraft under a new id once a dataset or a Tier A or B search can carry them.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Dr. Seuss wrote Green Eggs and Ham using just 50 different words.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.319,
+    "estimator": "v0"
+  }
+}

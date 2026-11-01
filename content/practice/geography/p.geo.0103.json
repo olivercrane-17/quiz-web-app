@@ -1,0 +1,279 @@
+{
+  "id": "p.geo.0103",
+  "status": "active",
+  "category": "geo",
+  "tags": ["africa", "area", "countries"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Sudan held the title until South Sudan split away. Algeria, mostly Sahara, covers about 2.38 million km², just ahead of DR Congo.",
+  "learnMore": "Algeria",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Algeria is the largest country in Africa by area."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "DR Congo, about 2.34 million km², Sudan, about 1.89 million km², and Libya, about 1.76 million km², are each smaller in area than Algeria."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Algeria covers about 2.38 million km²."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Before South Sudan split from it, Sudan was the largest country in Africa by area."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Most of Algeria lies within the Sahara."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 and c4 are superlatives and c2 and c3 carry numbers, all high; c5 is standard ('most of' is a quantity, not a superlative). Datasets: mledoze-countries, region Africa sorted by area: DZA 2,381,741; COD 2,344,858; SDN 1,886,068; LBY 1,759,540 km² (c1 to c3). For c4: SDN 1,886,068 + SSD 619,745 = 2,505,813 km², more than Algeria. Rival test: DR Congo is within 2 per cent of Algeria, so the key rests on measured areas; every figure I know puts Algeria first, as the pinned file does, but the margin is small enough that checker A should add a second source. Sudan is the trap for anyone who learned the map before South Sudan's independence; Libya is big but clearly smaller. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: African geography that school maps everywhere show. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 22 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: only the narrow DR Congo margin, flagged above. Not marked counterintuitive: the pull towards Sudan or DR Congo is a gap in knowledge more than a confident belief.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "08405895455754367c510d8fb8cf4726bbe62edb09971ae985afa362c26f6409",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Algeria",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=DZA; cca3=COD; cca3=SDN; cca3=LBY",
+              "excerpt": "DZA: \"region\": \"Africa\", \"area\": 2381741 | COD: \"region\": \"Africa\", \"area\": 2344858 | SDN: \"region\": \"Africa\", \"area\": 1886068 | LBY: \"region\": \"Africa\", \"area\": 1759540",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Sorting all region=Africa entries by area puts DZA first, then COD, SDN and LBY."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=COD; cca3=SDN; cca3=LBY; cca3=DZA",
+              "excerpt": "COD: \"area\": 2344858 | SDN: \"area\": 1886068 | LBY: \"area\": 1759540 | DZA: \"area\": 2381741",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "2,344,858, 1,886,068 and 1,759,540 km², each below Algeria's 2,381,741."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=DZA",
+              "excerpt": "DZA: \"area\": 2381741",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SDN; cca3=SSD; cca3=DZA",
+              "excerpt": "SDN: \"area\": 1886068 | SSD: \"area\": 619745 | DZA: \"area\": 2381741",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Pre-2011 Sudan covered today's Sudan plus South Sudan, 2,505,813 km², more than Algeria, today's largest. The 2011 secession itself is from knowledge."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Sahara covers more than four-fifths of Algeria's territory.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "outdated",
+            "severity": "note",
+            "note": "Not wrong today. But the title passed from Sudan to Algeria only in 2011, so a fact like this can move again; volatility slow with a reviewBy may fit better than evergreen."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "3711ab556930d624c152db27a5cd27e2ada3a063fbd9f1ed751c383ed01fcc30",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Algeria",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=DZA, cca3=COD, cca3=SDN, cca3=LBY",
+              "excerpt": "DZA 2381741 | COD 2344858 | SDN 1886068 | LBY 1759540 | TCD 1284000 | largest of the 59 records with region Africa: DZA",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Algeria leads DR Congo by about 1.6 percent in this dataset, the same order as every standard list."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=COD, cca3=SDN, cca3=LBY",
+              "excerpt": "COD (DR Congo): area 2344858 | SDN (Sudan): area 1886068 | LBY (Libya): area 1759540",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Matches 'about 2.34, 1.89 and 1.76 million'."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=DZA",
+              "excerpt": "DZA (Algeria): area 2381741",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=SDN, cca3=SSD, cca3=DZA",
+              "excerpt": "SDN (Sudan): area 1886068 | SSD (South Sudan): area 619745 | SDN + SSD = 2505813 | DZA (Algeria): area 2381741",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Sudan plus South Sudan (2,505,813) exceeds Algeria (2,381,741). The 2011 secession date is knowledge, certain."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Most of Algeria's territory, roughly four fifths, is Saharan desert.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 to c4 carry mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. A's outdated note is answered by the item itself: the ranking moved only with South Sudan's secession, which the explanation defuses, and nothing short of a border change can move it again, so evergreen stands.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0129",
+      "score": 0.48,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which is the largest country in Africa by area?",
+  "answer": "Algeria",
+  "wrong": ["DR Congo", "Sudan", "Libya"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.234,
+    "estimator": "v0"
+  }
+}

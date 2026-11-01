@@ -1,0 +1,162 @@
+{
+  "id": "p.film.0164",
+  "status": "cut",
+  "category": "film",
+  "tags": ["blockbusters", "quotations", "star-wars"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "The real line is 'No. I am your father.' Vader is answering Luke's charge that he killed Luke's father, so he never says Luke's name.",
+  "learnMore": "The Empire Strikes Back",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "Darth Vader's line in The Empire Strikes Back is 'No. I am your father.', not 'Luke, I am your father'."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Vader's line answers Luke's accusation that Vader killed his father."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Arguing for true: the misquote is everywhere, but the film's line begins with No, not with Luke's name. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 25 words. Myths: claims screened against myths.json, no match; this famous misquote is missing from myths.json, so the editor may want to add it. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "67d99e20001cffd810f4b4aa5f1fc8a26529498141d8b7bb276a259a587522f7",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Vader's line is 'No. I am your father.'; he does not say 'Luke, I am your father'.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The line answers Luke's charge that Vader killed his father.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the line 'No. I am your father.' Vader does not use Luke's name.",
+              "confidence": "certain"
+            },
+            "note": "Addition (role explanation, risk standard, ref explanation): 'In the line itself, Vader does not say Luke's name.' The explanation states this more broadly ('he never says Luke's name'), which is wrong for the scene as a whole; see the wording issue."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "The explanation's 'so he never says Luke's name' overreaches. In the same scene Vader calls him 'Luke' more than once ('Luke, you can destroy the Emperor'); only the famous line lacks the name. Reword to something like 'so the line itself never uses Luke's name'. Recorded as addition x1."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "df54d9b8f9509ea00dd156f4677163e1597705b93ec3a5b6be71531642bdcb39",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "False",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Vader's line in The Empire Strikes Back is 'No. I am your father.', not 'Luke, I am your father'.",
+              "confidence": "certain"
+            },
+            "note": "Myth test passes: the quoted false form never appears."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Vader's line answers Luke's accusation that Vader killed his father.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "The explanation ends 'so he never says Luke's name'. As written that is false: in the same scene Vader says 'Luke, you do not yet realize your importance' and, right after the reveal, 'Luke, you can destroy the Emperor'. Limit it to the line itself (the line does not begin with Luke's name) or cut the clause."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks revise: the explanation's 'so he never says Luke's name' is false for the scene, since Vader names Luke elsewhere in it; only the famous line omits the name. A wording-only fix would leave both revise verdicts standing, so rule 2 cannot pass, and the quotation claim c1 has no external evidence. Cut (§9.7). Worth redrafting under a new id with the explanation limited to the line itself.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "tf",
+  "stem": "In The Empire Strikes Back (1980), Darth Vader says 'Luke, I am your father'.",
+  "answer": false,
+  "tfKind": "myth",
+  "predicted": {
+    "p": 0.42,
+    "spread": 0.202,
+    "estimator": "v0"
+  }
+}

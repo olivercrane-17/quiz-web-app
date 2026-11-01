@@ -1,0 +1,315 @@
+{
+  "id": "p.sci.0263",
+  "status": "checking",
+  "category": "sci",
+  "tags": ["computing", "computer-history", "photography"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Joseph Marie Jacquard's loom read its weaving patterns from chains of punched cards, an idea later borrowed for early computing machines. Nicéphore Niépce made the photograph about 22 years later.",
+  "learnMore": "Jacquard machine",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Joseph Marie Jacquard patented his loom, controlled by chains of punched cards, in 1804."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The oldest surviving camera photograph, Nicéphore Niépce's view from a window at Le Gras, was made in about 1826 or 1827."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Jacquard loom read its weaving patterns from chains of punched cards."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Punched cards were later borrowed for early computing machines, such as Charles Babbage's Analytical Engine design and Herman Hollerith's tabulators."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Niépce's photograph was made about 22 years after Jacquard's patent."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors and no warnings for this item. claims: every checkable statement in the stem, options and explanation is listed; each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high (the C26 floor). datasets: no pinned dataset covers this, so checker A needs web evidence for c1 and c2; c5 is a calculation from them. rivalTest: Punched cards feel like part of the computer age, so some players expect photography to be older. Against the key: Jacquard's loom was demonstrated around 1801 and patented in 1804, and Niépce's photograph dates from 1826 or 1827, so the gap is over 20 years whichever date is used. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 30 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: If 1827 is taken for the photograph the gap is 23 years, which still reads as about 22; the values use 1826, the date most references give. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "9d0e19a53b2ec3e8f6f495ecd37528a2a0a0882b607f356741e2ebd0cddece2b",
+        "startedAt": "2026-11-01T03:33:23Z",
+        "finishedAt": "2026-11-01T03:57:26Z",
+        "coldSolve": {
+          "answerGiven": "Jacquard's punched-card loom",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jacquard's punched-card loom mechanism is usually dated to 1804, but some references date the loom to 1801, when Jacquard first showed a loom in Paris, so I am not certain the patent itself dates from 1804.",
+              "confidence": "likely"
+            },
+            "note": "High-risk label value. Knowledge rated likely, so it does not confirm, and WebSearch was unavailable in this run. Needs dataset or web evidence for the patent year (see the issue)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Niépce's View from the Window at Le Gras, made around 1826 or 1827, is the oldest surviving camera photograph.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: WebSearch was unavailable in this run (the session's search limit was already reached), so a follow-up must add dataset or web evidence before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Jacquard loom selected warp threads by reading chains of punched cards.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Punched cards were later used in Babbage's Analytical Engine design and in Hollerith's tabulating machines.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "1826 minus 1804 is 22 years; the figure stands only if the 1804 date in c1 is right.",
+              "confidence": "likely"
+            },
+            "note": "Derived from c1, so it shares c1's doubt."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Checker doubt on c1 and c5 (the record schema has no checker_doubt type). I rate the 1804 patent year 'likely', not certain: references give both 1801 (first shown) and 1804 (the punched-card machine), and I could not search. The comparison holds on either date, since both come before 1826. Get external evidence for the patent year, or step the label display down the precision ladder (for example 'in the early 1800s') and recheck the explanation's 'about 22 years'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-psci02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7cac97c4743589da9bd8664b2df36e189de133fbe55199a4b5aac13e8cdf30a7",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:35Z",
+        "coldSolve": {
+          "answerGiven": "Jacquard's punched-card loom",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jacquard patented his punched-card loom in 1804.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Niépce's View from the Window at Le Gras, about 1826 or 1827, is the oldest surviving camera photograph.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Jacquard loom read weaving patterns from chains of punched cards.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Babbage's Analytical Engine design and Hollerith's tabulators borrowed punched cards.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "1826 minus 1804 is 22 years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check (no web search available), so it needs external evidence in check A."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The option label says 'The oldest surviving photograph' but claim c2 narrows it to 'camera photograph'. Any rival reading (Niépce's heliographic copies of engravings from the mid-1820s, say) is still after 1804, so the order is safe; the label could say 'oldest surviving camera photograph'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-psci02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "b46a2b3e93001ffd2949243aa7d0013d6d6b21f488908a097c12dc6c99eec29b",
+      "startedAt": "2026-11-01T05:11:26.000Z",
+      "finishedAt": "2026-11-01T05:17:30.000Z",
+      "coldSolve": {
+        "answerGiven": "Jacquard's punched-card loom",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Jacquard's card-controlled loom is most often dated to 1804, but some references date his loom to 1801, the year he showed an earlier loom at the Paris industrial exhibition. I cannot say with certainty which of those years a patent belongs to.",
+            "confidence": "likely"
+          },
+          "note": "Disputed claim. No external evidence could be had in this run: the one WebSearch call was refused before it ran, because the per-turn search limit shared by every agent was used up, and no pinned dataset mentions Jacquard or any patent. Knowledge alone cannot settle a high-risk date in a tiebreak, and mine is only likely, so I share A's doubt. The order holds under either year (1801 and 1804 both come well before 1826); the open point is the displayed patent year."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Niépce's heliograph of the view from a window at his estate, Le Gras, is regarded as the oldest surviving photograph taken with a camera, and it is dated 1826 or 1827.",
+            "confidence": "certain"
+          },
+          "note": "Knowledge only. In a tiebreak this is not external evidence, so c2 still has no dataset or web result: the WebSearch call was refused (shared per-turn limit used up) and no pinned dataset covers early photography."
+        },
+        {
+          "claimId": "c5",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "With a patent year of 1804, the photograph (1826 or 1827) came 22 or 23 years later, so 'about 22 years' holds. With 1801 the gap would be 25 or 26 years.",
+            "confidence": "likely"
+          },
+          "note": "Disputed claim, derived from c1 and c2, so it inherits c1's doubt. The record schema has no calculation method and no web search could run, so it stays uncertain. 'More than 20 years later' would hold under every date in play."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "c1 and c5 stay uncertain: references date Jacquard's loom to 1801 or 1804, and this run could get no external evidence (WebSearch refused under the shared per-turn limit; no pinned dataset covers it). Either re-run this tiebreak with web access, or step down the precision ladder: show the loom as made in the early 1800s rather than 'patented in 1804', and say 'more than 20 years later' in the explanation. The order holds under every date in play, so the key would not change."
+        },
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "The option reads 'The oldest surviving photograph' while c2 says camera photograph. Every widely cited candidate I know of, including Niépce's 1825 heliographic copy of an engraving (from memory, not checked in this run), postdates both 1801 and 1804, so the order holds. Adding 'camera' to the label (37 characters, inside C04's limit) would match c2 and close off readings built on cameraless or copied images."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Jacquard's punched-card loom",
+  "b": "The oldest surviving photograph",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year it was patented or made",
+  "unit": "year",
+  "values": {
+    "a": 1804,
+    "b": 1826
+  },
+  "valueDisplay": {
+    "a": "patented in 1804",
+    "b": "about 1826"
+  },
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.154,
+    "estimator": "v0"
+  }
+}

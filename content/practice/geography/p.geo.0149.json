@@ -1,0 +1,228 @@
+{
+  "id": "p.geo.0149",
+  "status": "active",
+  "category": "geo",
+  "tags": ["borders", "south-america", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "French Guiana, on South America's north coast, is a region of France itself rather than a colony, so its border with Brazil is a French border, and an EU one.",
+  "learnMore": "French Guiana",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "France shares a land border with Brazil, through French Guiana."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Portugal, Spain and the Netherlands share no land border with Brazil."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "French Guiana is an overseas region of France, not a colony."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "French Guiana is part of the European Union, so its border with Brazil is an external border of the EU."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is high under the C26 floor (counterintuitive; schema has no 'counterintuitive' riskReason, so checker_doubt); the rest are standard. Datasets: mledoze-countries cca3=BRA borders include GUF (French Guiana); country-codes GUF is_independent 'Part of FR' (c1, c3). PRT borders ESP only, ESP borders AND, FRA, GIB, PRT, MAR and NLD borders BEL, DEU, so none touches Brazil (c2). Rival test: Portugal is the confident wrong answer because Brazil was its colony, which makes the item counterintuitive; the Netherlands is a near miss through its former colony Suriname, which is independent. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a world-map surprise, the same for players everywhere. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 30 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "62dc6b30adb32bfd60993b3d7424131aa40468ae37685411801d2d5d6b85f527",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "France",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=GUF; cca3=BRA",
+              "excerpt": "GUF: \"independent\": false, \"borders\": [\"BRA\",\"SUR\"] | BRA: \"independent\": true, \"borders\": [\"ARG\",\"BOL\",\"COL\",\"GUF\",\"GUY\",\"PRY\",\"PER\",\"SUR\",\"URY\",\"VEN\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "French Guiana borders BRA and is not independent; country-codes (pinned 2d84034) gives GUF \"is_independent\": \"Part of FR\"."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=PRT; cca3=ESP; cca3=NLD",
+              "excerpt": "PRT: \"borders\": [\"ESP\"] | ESP: \"borders\": [\"AND\",\"FRA\",\"GIB\",\"PRT\",\"MAR\"] | NLD: \"borders\": [\"BEL\",\"DEU\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "None lists BRA."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "French Guiana is an overseas region (and department) of France, an integral part of the country.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "As an EU outermost region, French Guiana's border with Brazil is an external EU border.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cb4fadc8e472f2eccd602f2069ee5716d67d4921c2da08da873bf1e86effad34",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "France",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=BRA, cca3=GUF, cca3=FRA",
+              "excerpt": "BRA (Brazil): borders [\"ARG\",\"BOL\",\"COL\",\"GUF\",\"GUY\",\"PRY\",\"PER\",\"SUR\",\"URY\",\"VEN\"] | GUF (French Guiana): independent false; borders [\"BRA\",\"SUR\"]; languages {\"fra\":\"French\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset records the border under French Guiana (GUF), and France's own list omits Brazil. That GUF is an integral part of France is knowledge, certain. Needs a web result for the whole claim from the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=BRA",
+              "excerpt": "BRA (Brazil): borders [\"ARG\",\"BOL\",\"COL\",\"GUF\",\"GUY\",\"PRY\",\"PER\",\"SUR\",\"URY\",\"VEN\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "No PRT, ESP or NLD in Brazil's list."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "French Guiana is an overseas department and region of France, not a colony.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "French Guiana is an outermost region of the European Union, so its border with Brazil is an external EU border.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 carry mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. Pass A adds country-codes for French Guiana being part of France. Dedupe flags a near item across the seal; checked locally with --reveal, it states a different fact, so related_ok.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which European country shares a land border with Brazil?",
+  "answer": "France",
+  "wrong": ["Portugal", "Spain", "Netherlands"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.219,
+    "estimator": "v0"
+  }
+}

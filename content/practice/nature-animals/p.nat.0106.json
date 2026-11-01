@@ -1,0 +1,215 @@
+{
+  "id": "p.nat.0106",
+  "status": "active",
+  "category": "nat",
+  "tags": ["insects", "senses", "hearing"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "A cricket's eardrums sit on its front legs, which helps it find a singing mate. Its cousin the grasshopper hears through eardrums on the sides of its abdomen.",
+  "learnMore": "Cricket (insect)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Crickets have tympanal hearing organs (eardrums) on the tibiae of their front legs, just below the knee joint."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Grasshoppers, mosquitoes and houseflies do not have ears on their front legs."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Female crickets locate singing males by sound."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Grasshoppers' eardrums are on the sides of the abdomen, near where the hind legs join."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed, all standard entomology with no number or trigger words. I wrote c4 without 'first abdominal segment' so it stays under the floor honestly. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: the grasshopper is the planted trap: it also sings, but its ears are on the abdomen. Mosquitoes hear with their antennae and houseflies have no leg ears. I left honeybees out because they sense vibration through organs in their legs, which a pedant could call hearing. Argued against the key: katydids share the trait, but they are not in the options. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: crickets live on every inhabited continent; nothing local. style: Oxford spelling, plain hyphens only, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none on the facts. Seeded hard because few players know it, though the foothold (singing insects need ears) is real.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5b098146836615a2933e112170fbb2a8a4f86670cc8c6558dfe0a35aa723e950",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Cricket",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Crickets have tympanal organs on the tibiae of the front legs, just below the knee joint.",
+              "confidence": "certain"
+            },
+            "note": "Katydids share this, but no katydid is among the options."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Grasshoppers hear through tympana on the first abdominal segment, mosquitoes through Johnston's organ in the antennae, and houseflies have no ears on their legs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Female crickets steer towards a calling male's song (phonotaxis).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Grasshopper tympana lie on the sides of the first abdominal segment, beside the bases of the hind legs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f7bbbaa02ac3d531c205c4dc15fa02546ec15c64a520172a8be59ff96c4036f0",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Cricket",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Crickets (and katydids) have eardrums on the front legs just below the knee joint.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Grasshoppers hear with abdominal eardrums; mosquitoes and houseflies sense sound with their antennae, not with leg ears.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Female crickets find singing males by sound.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A grasshopper's eardrums sit on the sides of the abdomen near the base of the hind legs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; no high-risk claims; every knowledge confirmation at certain. Style, distractors and balance reviewed. Dedupe flags p.sport.0150 (0.57, same answer): that item is the sport of cricket and this one the insect, different facts, so related_ok.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.sport.0150",
+      "score": 0.567,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which insect hears through ears on its front legs, just below the knees?",
+  "answer": "Cricket",
+  "wrong": ["Grasshopper", "Mosquito", "Housefly"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.131,
+    "estimator": "v0"
+  }
+}

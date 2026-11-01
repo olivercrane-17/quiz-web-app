@@ -1,0 +1,185 @@
+{
+  "id": "p.geo.0170",
+  "status": "active",
+  "category": "geo",
+  "tags": ["flags", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The front carries the national coat of arms, while the back shows the Treasury seal, a lion guarding a red liberty cap.",
+  "learnMore": "Flag of Paraguay",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Paraguay's national flag shows different emblems on its front and its back."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The front of Paraguay's flag shows the national coat of arms."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The back of Paraguay's flag shows the seal of the Treasury, a lion with a red liberty cap."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is high under the C26 floor (counterintuitive; schema has no 'counterintuitive' riskReason, so checker_doubt) and needs a web result; c2 and c3 are standard descriptions. Datasets: none covers flag designs. Rival test: argued for false: flags are almost always the same on both sides, so the statement sounds invented, which is what makes it a surprising truth; Paraguay's two-sided design is long-standing and well documented. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a flag fact described in words. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 22 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: I avoided the oft-repeated 'only national flag with different sides' line, because some flags with text are made double so they read correctly from both sides.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c46157e1e7c56af034b765cbe061d0bb9b0384638e4174e655feaa7af4586fed",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Paraguay's flag is two-sided: the national arms on the obverse, the Treasury seal on the reverse.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only. No pinned dataset covers this, and WebSearch was unavailable this session (the turn's shared search quota was exhausted before any search ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The obverse carries the national coat of arms.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The reverse carries the Treasury seal: a lion beneath a red Phrygian cap, with 'Paz y Justicia'.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "60ca0e029572feb6b0350758bcbd0bc34b019157239686f89e29e16881c0f0b1",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Paraguay's national flag has a different emblem on each side.",
+              "confidence": "certain"
+            },
+            "note": "Writer labelled this checker_doubt, but it is textbook-certain. Knowledge only: no dataset covers this. Needs dataset or web evidence in the other check (I could not search: the shared WebSearch budget was spent)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The obverse of Paraguay's flag shows the national coat of arms.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The reverse shows the Treasury seal, a lion beside a red liberty cap on a pole.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key of a counterintuitive item, so high by the C26 floor) rest on knowledge alone in both checks: no pinned dataset covers them and neither checker could search. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with web evidence, or with the claim stepped down or dropped.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Paraguay's flag shows a different emblem on its front and its back.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.54,
+    "spread": 0.264,
+    "estimator": "v0"
+  }
+}

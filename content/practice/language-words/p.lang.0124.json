@@ -1,0 +1,233 @@
+{
+  "id": "p.lang.0124",
+  "status": "active",
+  "category": "lang",
+  "tags": ["place-names", "finnish", "countries"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Suomi is the Finnish name for Finland, and Finnish speakers call their language suomi too. Neighbouring Estonians call Finland Soome, while Finns call Estonia Viro.",
+  "learnMore": "Names of Finland",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Finland's name in Finnish is Suomi."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Estonia, Hungary and Latvia are not called Suomi in their own languages; their own names are Eesti, Magyarország and Latvija."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Finnish speakers call their language suomi."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In Estonian Finland is called Soome, and in Finnish Estonia is called Viro."
+    }
+  ],
+  "writerNotes": "The stem says 'main language' because Finland's second official language, Swedish, calls it Finland. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: mledoze-countries: cca3=FIN name.native.fin.common 'Suomi' and translations.est 'Soome'; cca3=EST name.native.est 'Eesti' and translations.fin 'Viro'; cca3=HUN name.native.hun 'Magyarország'; cca3=LVA name.native.lav 'Latvija'; rival test: Estonian and Hungarian are Finnish's relatives, which is what makes them tempt; their own names are Eesti and Magyarország; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: a name every Finnish product and airline carries, and the foothold works for anyone who knows Estonia and Hungary's own names; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: none",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c7456187918a50a836299f8d57aa3e03f3d58f264fc8938f8927c888e1a34658",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "Finland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=FIN, name.native.fin",
+              "excerpt": "FIN name.native.fin {\"official\":\"Suomen tasavalta\",\"common\":\"Suomi\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=EST, HUN and LVA, name.native",
+              "excerpt": "EST name.native.est {\"official\":\"Eesti Vabariik\",\"common\":\"Eesti\"} | HUN name.native.hun {\"official\":\"Magyarország\",\"common\":\"Magyarország\"} | LVA name.native.lav {\"official\":\"Latvijas Republikas\",\"common\":\"Latvija\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Suomi is also the Finnish name of the Finnish language.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=FIN translations.est; cca3=EST translations.fin",
+              "excerpt": "FIN translations.est {\"official\":\"Soome Vabariik\",\"common\":\"Soome\"} | EST translations.fin {\"official\":\"Viron tasavalta\",\"common\":\"Viro\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ffbb33a09382c030c794920c239a71881261331de03c66d46ffb1f1dc1dd27a5",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "Finland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=FIN name.native.fin.common",
+              "excerpt": "FIN: \"Suomi\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Finnish name for Finland. Finland's two official languages are Finnish and Swedish; Finnish is the main one."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=EST name.native.est.common; cca3=HUN name.native.hun.common; cca3=LVA name.native.lav.common",
+              "excerpt": "EST: \"Eesti\"; HUN: \"Magyarország\"; LVA: \"Latvija\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "None of the three native names is Suomi."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Finnish speakers call their language suomi (suomen kieli).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=FIN translations.est.common; cca3=EST translations.fin.common",
+              "excerpt": "FIN: \"Soome\"; EST: \"Viro\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Estonian name for Finland and Finnish name for Estonia, as the explanation says."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "accept",
+      "reason": "Both checks pass. The key c1 and claims c2 and c4 carry mledoze-countries dataset evidence in both checks, and c3 is standard and certain in both. Finnish's relatives and a neighbour make fair distractors. Dedupe: shares the answer Finland with p.book.0235 (Tove Jansson's country), a different fact.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:43Z",
+      "nearestId": "p.book.0235",
+      "score": 0.66,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which country is called Suomi in its own main language?",
+  "answer": "Finland",
+  "wrong": ["Estonia", "Hungary", "Latvia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.52,
+    "spread": 0.141,
+    "estimator": "v0"
+  }
+}

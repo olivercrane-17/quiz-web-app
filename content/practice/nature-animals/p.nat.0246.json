@@ -1,0 +1,201 @@
+{
+  "id": "p.nat.0246",
+  "status": "active",
+  "category": "nat",
+  "tags": ["fossils", "spiders", "dinosaurs", "timelines"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Spider fossils go back at least 300 million years, long before the earliest dinosaurs. Their relatives the scorpions are older still, with fossils over 400 million years old.",
+  "learnMore": "Spider",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The oldest known fossils of true spiders are at least 300 million years old."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The earliest dinosaurs appeared about 230 to 240 million years ago."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Scorpion fossils more than 400 million years old are known."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: three listed; high: c1 (date), c2 (date) and c3 (date). datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology (it holds countries, languages, currencies, cities, elements, Nobel Prizes, Olympic Games, World Cups, art collections and Natural Earth), so none applies, and the high-risk claims need web evidence from checker A; one search on the oldest spider fossils should cover c1; c2 is widely documented and c3 can share a search with c1. rivalTest: Argued for dinosaurs, the textbook image of 'ancient', against small modern-looking spiders. Both values are conservative: spider fossils of about 310 million years are widely reported, and older spider-like arachnids exist, so the gap of at least 60 million years holds under any dating on offer. counterintuitive is false because many players already think of spiders as ancient. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: both groups are known everywhere. style: Oxford spelling, plain hyphens only, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a comparison item. doubts: c1 says 'true spiders' because older spider-like arachnids such as Attercopus are not true spiders; the item's answer holds either way.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b791999afd3d967169550ae84795e84a2bb853bc7ba2af641dbfa036a330e963",
+        "startedAt": "2026-11-01T02:28:19Z",
+        "finishedAt": "2026-11-01T02:45:04Z",
+        "coldSolve": {
+          "answerGiven": "Spiders",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "True spiders (Araneae) are known from Carboniferous fossils more than 300 million years old.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The earliest dinosaurs appear in the Triassic, roughly 230 to 240 million years ago.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Scorpion fossils from the Silurian are more than 400 million years old.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only in this check. No pinned dataset covers this, and WebSearch was unavailable to this run: the one call attempted was refused because the shared session search limit was already used up, so no search ran. It still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f2c9258be96422f8c49f43c7a52596f74cefebc981c8393a102c2f91a53571d6",
+        "startedAt": "2026-11-01T02:14:00Z",
+        "finishedAt": "2026-11-01T02:49:54Z",
+        "coldSolve": {
+          "answerGiven": "Spiders",
+          "confidence": "medium",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The oldest true spider fossils are from the Carboniferous, roughly 300 to 315 million years old (older spider-like arachnids go back further).",
+              "confidence": "certain"
+            },
+            "note": "Either way spiders predate dinosaurs by tens of millions of years."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The earliest dinosaurs date to the Triassic, commonly given as about 230 to 245 million years ago.",
+              "confidence": "certain"
+            },
+            "note": "'About 230 to 240' is a fair approximation of the usual range."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Scorpion fossils from the Silurian are over 420 million years old, so more than 400 million.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (label, date), c2 (label, date) and c3 (explanation, date) rest on knowledge alone in both checks: no pinned dataset covers animal biology and checker A's one search was refused at the session limit, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pnat02e",
+        "at": "2026-11-01T02:29:19Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.food.0115",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "Spiders",
+  "b": "Dinosaurs",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "date of the earliest fossils",
+  "unit": "year",
+  "values": {
+    "a": -300000000,
+    "b": -235000000
+  },
+  "valueDisplay": {
+    "a": "at least 300 million years ago",
+    "b": "about 230 to 240 million years ago"
+  },
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.162,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "id": "p.geo.0237",
+  "status": "active",
+  "category": "geo",
+  "tags": ["oceans", "pacific", "maps"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "It is so remote that space agencies have steered old spacecraft to fall into the sea nearby, far from shipping lanes and people.",
+  "learnMore": "Point Nemo",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Point Nemo, the oceanic pole of inaccessibility, lies in the South Pacific Ocean."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Point Nemo is not in the North Pacific, the South Atlantic or the Indian Ocean."
+    },
+    {
+      "id": "c3",
+      "role": "key",
+      "ref": "stem",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Point Nemo is the point in the ocean furthest from any land."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Space agencies have steered spacecraft at the end of their missions to fall into the ocean near Point Nemo."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; c1 (superlative) and c3 (superlative) are high under the C26 floor, and c2 and c4 are standard. Datasets: natural-earth ne_50m_geography_regions_points: featurecla pole, name 'Oceanic pole of inaccessibility', ne_id 1159105175, geometry -123.402028, -48.865045, that is about 48.9 S, 123.4 W, between New Zealand and South America (c1, c3). Trap in the file: the two magnetic-pole features repeat these lat_y and long_x values in their properties, but their geometries differ, so read the geometry. Rival test: The Southern Ocean is left out on purpose: the point lies north of 60 S, the usual limit, but some oceanographic definitions put the Southern Ocean's edge near 40 S, so it would not be definitely wrong. The North Pacific and South Atlantic test the hemisphere and the ocean; the Indian Ocean is the other big southern ocean. Against the key: nothing. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Point Nemo is equally new to almost everyone; the reasoning (the biggest ocean, far from land) works anywhere. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c4 is standard. Seed: 3 (medium): many reason their way to the Pacific. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "135efb15580217780bb7af949f41bfc594b070c05f5412f89bfbf4d2d7d65a97",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "South Pacific Ocean",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Oceanic pole of inaccessibility",
+              "excerpt": "{\"name\":\"Oceanic pole of inaccessibility\",\"featurecla\":\"pole\",\"subregion\":\"South Pacific Ocean\",\"coordinates\":[-123.402028,-48.865045]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The point lies at about 48.9° S, 123.4° W, which the file assigns to the South Pacific Ocean."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Oceanic pole of inaccessibility",
+              "excerpt": "{\"name\":\"Oceanic pole of inaccessibility\",\"featurecla\":\"pole\",\"subregion\":\"South Pacific Ocean\",\"coordinates\":[-123.402028,-48.865045]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "48.9° S, 123.4° W is in neither the North Pacific, the South Atlantic nor the Indian Ocean."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_50m_geography_regions_points.geojson",
+              "locator": "name=Oceanic pole of inaccessibility",
+              "excerpt": "{\"name\":\"Oceanic pole of inaccessibility\",\"featurecla\":\"pole\",\"subregion\":\"South Pacific Ocean\",\"coordinates\":[-123.402028,-48.865045]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The record names this point the oceanic pole of inaccessibility, the place in the ocean furthest from land. That Point Nemo is this point's common name is knowledge (certain); the coordinates match it."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Space agencies have deorbited spent spacecraft such as Mir and many cargo ships into the remote South Pacific near Point Nemo.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bace3c2433adc5d9d901f85924fd9b7204bda0f8a825cabb1a38d0b9c4d25674",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "South Pacific Ocean",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Point Nemo, at about 48.9 S, 123.4 W, is the oceanic pole of inaccessibility and lies in the South Pacific Ocean.",
+              "confidence": "certain"
+            },
+            "note": "High-risk superlative. Knowledge only (no web search was available to me); counts only with external evidence from pass A (guide 9.5.3). Rival test: at about 49 S it is well north of the 60 S limit of the Southern Ocean, which is not an option anyway."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Point Nemo is not in the North Pacific, the South Atlantic or the Indian Ocean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Point Nemo is the point in the ocean furthest from any land.",
+              "confidence": "certain"
+            },
+            "note": "High-risk superlative. Knowledge only (no web search was available to me); needs pass A's external evidence."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Space agencies have steered spacecraft at the end of their missions to fall into the South Pacific near Point Nemo (for example Mir in 2001).",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c3 (natural-earth) carry dataset evidence in a confirming check (§9.9 rule 3). Lint clean, no myth hits. A confirms c1 and c3 from the natural-earth pole record.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Point Nemo, the spot in the ocean furthest from any land, lies in which ocean?",
+  "answer": "South Pacific Ocean",
+  "wrong": ["North Pacific Ocean", "South Atlantic Ocean", "Indian Ocean"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.298,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,245 @@
+{
+  "id": "p.sci.0128",
+  "status": "cut",
+  "category": "sci",
+  "tags": ["human-body", "organs"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "An adult's skin covers nearly 2 square metres and is the body's heaviest organ. The liver, at about 1.5 kg, is the heaviest organ inside the body.",
+  "learnMore": "Human skin",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The skin is the largest organ of the human body."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The liver, the lungs and the brain are each smaller than the skin by area and by mass."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "An adult's skin covers nearly 2 square metres."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "The skin is the heaviest organ of the human body."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The liver weighs about 1.5 kg and is the heaviest organ inside the body."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3). lint: content:check reports no errors or warnings for this item. claims: every checkable statement is listed, and each claim with a digit, a number word, a superlative, 'only', 'first', 'invented', an etymology word or a quotation is high, as is the key of a counterintuitive item (the C26 floor). datasets: no pinned dataset covers anatomy, so checker A needs web evidence for c1 to c5. rivalTest: The liver is the strongest rival as the largest internal organ, which the explanation defuses; the lungs and brain are smaller by mass and by area. volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. regional: the facts are taught and reported worldwide, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, no en or em dashes; the explanation has 27 words. myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: Some anatomists debate whether other tissues count as larger organs; the skin is the standard textbook answer, and the item names no rival tissue. c3 says 'nearly 2 square metres', the usual adult range being about 1.5 to 2. searches: none used.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "6f17b426d250a176e80a8fd1dc22178aae298883f996817f532f21ca3e6380ba",
+        "startedAt": "2026-11-01T02:00:00Z",
+        "finishedAt": "2026-11-01T02:23:44Z",
+        "coldSolve": {
+          "answerGiven": "The skin",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The skin is usually described as the body's largest organ, by outer surface (about 1.5 to 2 m²) and by mass (several kilograms).",
+              "confidence": "certain"
+            },
+            "note": "Run model: claude-opus-5-5 (the CheckRecord schema has no model field, §9.8). High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "By mass the skin (roughly 3 to 5 kg) outweighs the liver (about 1.5 kg), the brain (about 1.4 kg) and the two lungs together (about 1.3 kg). By area it depends on the measure: the lungs' internal gas-exchange surface is commonly given as about 50 to 75 m², far more than the skin's.",
+              "confidence": "unsure"
+            },
+            "note": "Uncertain as written because of 'by area': true for the outer surface, false for the lungs' internal surface. See the ambiguity issue."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "An adult's skin covers about 1.5 to 2 m².",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The skin weighs several kilograms (about 3.5 to 4 kg without the fat beneath it), more than any other single organ.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The adult liver weighs about 1.2 to 1.6 kg, usually quoted as 1.5 kg, and is the heaviest internal organ; the brain is about 1.3 to 1.4 kg.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and WebSearch was refused to this run (the shared per-turn search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "fix",
+            "note": "'Largest' names no measure (§3.2). By mass and by outer surface the skin wins, but the lungs' internal gas-exchange surface (commonly 50 to 75 m²) lets a pedant argue for The lungs by area, and claim c2 says 'by area'. Suggested fix: name the measure in the stem (for example 'By weight, which is the largest organ of the human body?') and drop 'by area' from c2."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-psci01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "bb2d265c55627bafc084d0b57a01ffc2ab986af261adfae3369c40d3be7195de",
+        "startedAt": "2026-11-01T02:10:00Z",
+        "finishedAt": "2026-11-01T02:39:22Z",
+        "coldSolve": {
+          "answerGiven": "The skin",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Skin is the body's largest organ: roughly 1.5 to 2 m2 and 3.5 to 4 kg, more than any other organ.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "By mass the liver (about 1.5 kg), lungs (about 1.3 kg) and brain (about 1.4 kg) are all below skin's 3.5 to 4 kg, and skin also wins on outer surface area.",
+              "confidence": "certain"
+            },
+            "note": "Holds for mass and for outer surface area. It would fail if area were read as the lungs' internal gas-exchange surface (roughly 50 to 75 m2). High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Adult skin covers about 1.5 to 2 m2.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Skin outweighs every other organ, at about 3.5 to 4 kg.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The liver weighs about 1.4 to 1.6 kg and is the heaviest internal organ.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only in this check, so it counts only with external evidence in check A."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "The stem names no measure for largest, which the guide asks for (3.2). Skin wins on mass and outer area, so I do not see a second answer in the options. The only rival reading is the lungs' internal surface (roughly 50 to 75 m2), which c2 and the explanation both lean on by saying area. Optional hardening: ask for the heaviest organ, or drop by area from c2."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci01e",
+        "at": "2026-11-01T02:09:46Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "cut",
+      "reason": "A revise, B pass, and A's ambiguity fix is real: 'largest' names no measure (§3.2), and c2 says the lungs are smaller than the skin 'by area', which fails once the lungs' internal surface (about 50 to 75 m2) counts. A left c2 uncertain and B noted the same weak point. Applying the fix changes the stem and c2, which needs two fresh checks (§9.7), and a tiebreak cannot settle a wording defect, so no tiebreak is ordered. High-risk c1, c3, c4 and c5 also rest on knowledge alone in both checks (§9.9 rule 3). Cut; redraft under a new id that asks for the heaviest organ and states c2 by mass only.",
+      "decidedAt": "2026-11-01T04:27:18Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which is the largest organ of the human body?",
+  "answer": "The skin",
+  "wrong": ["The liver", "The lungs", "The brain"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.29,
+    "estimator": "v0"
+  }
+}

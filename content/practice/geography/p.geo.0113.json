@@ -1,0 +1,241 @@
+{
+  "id": "p.geo.0113",
+  "status": "active",
+  "category": "geo",
+  "tags": ["equator", "tropics", "maps", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Brazil runs from about 5° N to about 34° S, the only country both lines cross. The Equator crosses Ecuador and Indonesia, and the Tropic crosses Australia.",
+  "learnMore": "Tropic of Capricorn",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Both the Equator and the Tropic of Capricorn cross Brazil."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Equator crosses Ecuador and Indonesia but the Tropic of Capricorn does not, and the Tropic of Capricorn crosses Australia but the Equator does not."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Brazil's territory runs from about 5° N to about 34° S."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Brazil is the only country crossed by both the Equator and the Tropic of Capricorn."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c3 carries numbers and c4 says 'only', so both are high; c1 and c2 are standard. Datasets: natural-earth ne_110m_admin_0_countries, latitude extents from the geometry: Brazil 5.24° N to 33.77° S (c3). Countries spanning 0°: Indonesia, DR Congo, Somalia, Kenya, Brazil, Colombia, Ecuador, Congo, Gabon, Uganda. Countries spanning 23.44° S: Argentina, Chile, South Africa, Brazil, Botswana, Namibia, Mozambique, Madagascar, Australia, Paraguay. Brazil is the only name on both lists (c4). Australia's extent is 10.67° S to 43.63° S and Indonesia's 5.48° N to 10.36° S (c2). Rival test: Ecuador is the tempting name, since it is named after the Equator; Australia and Indonesia are each crossed by one of the two lines, so all three distractors are half right, which is what makes them tempting. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: uses only world-map knowledge. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 27 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: the 110m file leaves out small island states (Kiribati, São Tomé and Príncipe, Maldives), all far north of the Tropic of Capricorn, so c4 still holds; a bounding box can overstate a crossing, but Brazil's land is continuous across both lines.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "3cbc016f609660fb54b3a1d9d1bba9a62b49fd4f45db0fecc1adf649e9a9a97d",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Brazil",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "ADMIN=Brazil",
+              "excerpt": "northernmost vertex [-60.213683,5.244486], southernmost vertex [-53.373662,-33.768378]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Brazil's polygon has vertices north of 0° and south of 23.4362° S, so both lines cross it."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "all features, polygons spanning latitude 0 and latitude -23.4362",
+              "excerpt": "Equator: Indonesia, Democratic Republic of the Congo, Somalia, Kenya, Brazil, Colombia, Ecuador, Republic of the Congo, Gabon, Uganda. Tropic of Capricorn: Argentina, Chile, South Africa, Brazil, Botswana, Namibia, Mozambique, Madagascar, Australia, Paraguay",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Ecuador and Indonesia appear only on the Equator list and Australia only on the Tropic list."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "ADMIN=Brazil",
+              "excerpt": "northernmost vertex [-60.213683,5.244486], southernmost vertex [-53.373662,-33.768378]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "About 5.2° N to about 33.8° S at this scale."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "all features, polygons spanning latitude 0 and latitude -23.4362",
+              "excerpt": "On both lists: Brazil",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The 110m file leaves out small islands, but the ones the Equator crosses (São Tomé and Príncipe's Ilhéu das Rolas, Kiribati, the Maldives) lie far north of the Tropic of Capricorn."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e6a0e6ff46909924eae46574e777067b061e649b9c016a48309bbbabff8a84f6",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Brazil",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "NAME=Brazil",
+              "excerpt": "Brazil polygon spans latitude -33.77 to 5.24; it crosses 0 and -23.4365 (Tropic of Capricorn)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "countries whose polygons cross latitude 0 and -23.4365",
+              "excerpt": "Equator: Indonesia, Dem. Rep. Congo, Somalia, Kenya, Brazil, Colombia, Ecuador, Congo, Gabon, Uganda. Tropic of Capricorn: Argentina, Chile, South Africa, Brazil, Botswana, Namibia, Mozambique, Madagascar, Australia, Paraguay. Ecuador and Indonesia only in the first list, Australia only in the second.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "NAME=Brazil, bounding box",
+              "excerpt": "min latitude -33.77, max latitude 5.24",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "intersection of the two crossing lists",
+              "excerpt": "Countries crossed by both lines: Brazil",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The 110m file omits a few tiny island states, none of which could straddle Capricorn and the Equator."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c3 and c4 carry natural-earth evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. Dedupe flags a near item across the seal; checked locally with --reveal, it states a different fact, so related_ok.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which country do both the Equator and the Tropic of Capricorn cross?",
+  "answer": "Brazil",
+  "wrong": ["Ecuador", "Australia", "Indonesia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.179,
+    "estimator": "v0"
+  }
+}

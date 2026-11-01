@@ -1,0 +1,253 @@
+{
+  "id": "p.nat.0115",
+  "status": "active",
+  "category": "nat",
+  "tags": ["insects", "bees", "behaviour", "nobel-prize"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The angle of a forager's waggle run on the comb shows the food's direction relative to the Sun, and how long the run lasts shows the distance.",
+  "learnMore": "Waggle dance",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Karl von Frisch decoded the waggle dance that honeybees use to tell nest-mates where food is."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "ref": "stem",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Karl von Frisch shared the 1973 Nobel Prize in Physiology or Medicine with Konrad Lorenz and Nikolaas Tinbergen."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Fireflies, ants and crickets do not tell nest-mates where food is by dancing; von Frisch's dance work was on honeybees."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The angle of the waggle run on the vertical comb shows the direction of the food relative to the Sun."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The duration of the waggle run shows the distance to the food."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: five listed. c2 is the stem's dated fact, so it is high (date) and carries role key with ref stem. The rest are standard. datasets: c2 checked in nobel-prizes, prize.json, the entry with year 1973 and category medicine: laureates Karl von Frisch, Konrad Lorenz and Nikolaas Tinbergen, each with share 3, motivation 'for their discoveries concerning organization and elicitation of individual and social behaviour patterns'. The dance itself is not in any dataset. rivalTest: ants are the strongest distractor because they recruit nest-mates to food, but by scent trails, not dances; fireflies signal with light and crickets with song. Argued against the key: von Frisch's best-known work is on honeybees, and the stem says 'dances'. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: honeybees are kept on every inhabited continent; von Frisch is named in the stem, so no one needs to know him. style: Oxford spelling, plain hyphens only, explanation of 27 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none; the stem says 'helped earn' because the prize citation covers behaviour patterns in general.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "32439d400f7c45799571fd126089c1a873da962ec02df4da28d2e673073eeae3",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Honeybees",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Karl von Frisch worked out the honeybee waggle dance, which signals the direction and distance of food.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=\"1973\", category=\"medicine\"]",
+              "excerpt": "{\"year\":\"1973\",\"category\":\"medicine\",\"laureates\":[{\"id\":\"400\",\"firstname\":\"Karl\",\"surname\":\"von Frisch\",\"share\":\"3\"},{\"id\":\"401\",\"firstname\":\"Konrad\",\"surname\":\"Lorenz\",\"share\":\"3\"},{\"id\":\"402\",\"firstname\":\"Nikolaas\",\"surname\":\"Tinbergen\",\"share\":\"3\"}]} (motivation fields omitted)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The 1973 medicine prize (Physiology or Medicine) went to von Frisch, Lorenz and Tinbergen, a one-third share each."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Fireflies signal with light, ants recruit with pheromone trails and crickets sing; none dances to show nest-mates where food is.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "On the vertical comb, the waggle run's angle from vertical matches the food's direction relative to the Sun.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The longer the waggle run lasts, the farther away the food.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "f27e5bb50997d76d54781e193c9f97cdbf5e20d26654a6e384f67bb07d605d66",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Honeybees",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Karl von Frisch decoded the honeybee waggle dance as a signal of where food is.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[year=1973, category=medicine]",
+              "excerpt": "year 1973, category medicine, laureates Karl von Frisch, Konrad Lorenz, Nikolaas Tinbergen, share 3 each; motivation: for their discoveries concerning organization and elicitation of individual and social behaviour patterns",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset stops at the 2022 prizes and lists the category as \"medicine\" (Physiology or Medicine)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Ants use scent trails, fireflies flash and crickets chirp; none tells nest-mates where food is by dancing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The angle of the waggle run from vertical on the comb gives the food's direction relative to the Sun.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The duration of the waggle run gives the distance to the food.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 5 claims confirmed in both checks; high-risk c2 (dataset in A, dataset in B). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "p.hist.0163",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which insects' dances did Karl von Frisch decode, work that helped earn him a 1973 Nobel Prize?",
+  "answer": "Honeybees",
+  "wrong": ["Fireflies", "Ants", "Crickets"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.334,
+    "estimator": "v0"
+  }
+}

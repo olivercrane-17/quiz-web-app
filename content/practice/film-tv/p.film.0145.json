@@ -1,0 +1,221 @@
+{
+  "id": "p.film.0145",
+  "status": "active",
+  "category": "film",
+  "tags": ["tv-series", "fantasy", "adaptations"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "It adapts George R. R. Martin's novels A Song of Ice and Fire. The walled city of Dubrovnik, in Croatia, stood in for King's Landing.",
+  "learnMore": "Game of Thrones",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Game of Thrones is set mainly on the fictional continents of Westeros and Essos."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Witcher, The Wheel of Time and His Dark Materials are set in other fictional worlds."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Game of Thrones adapts George R. R. Martin's novels A Song of Ice and Fire."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Dubrovnik in Croatia was a filming location for the city of King's Landing."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: geonames-cities lists Dubrovnik (HR), which supports only the place name. Rival test: All three distractors are fantasy series adapted from novels, so the genre alone does not decide it. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 25 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "e54ef1f8a24b1f640e508501b150ad05a95b1ffc00ad943b25ca7368ac85a45f",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Game of Thrones",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Game of Thrones takes place mainly on Westeros and Essos.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Witcher, The Wheel of Time and His Dark Materials have their own worlds.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The series adapts Martin's A Song of Ice and Fire.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dubrovnik stood in for King's Landing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4e274efe97b8f6cc4fa3a0fc879b937a885d8902e416949ed3d67fd5a7577972",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Game of Thrones",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Game of Thrones is set mainly on Westeros and Essos.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Witcher, The Wheel of Time and His Dark Materials are set in other invented worlds.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Game of Thrones adapts George R. R. Martin's A Song of Ice and Fire.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Dubrovnik stood in for King's Landing.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Westeros is also the setting of the prequel House of the Dragon. No option names it, so there is no second answer here, but it limits future distractor choices."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed at certain; all four claims are standard risk, so knowledge evidence suffices (§9.5.3). Lint and dedupe clean, no myth hits. Checker B's House of the Dragon note is not a second answer, since no option names it.",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:03:43Z",
+      "nearestId": "p.film.0143",
+      "score": 0.48,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:03:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which TV series is set on the fictional continents of Westeros and Essos?",
+  "answer": "Game of Thrones",
+  "wrong": ["The Witcher", "The Wheel of Time", "His Dark Materials"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.9,
+    "spread": 0.368,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "id": "p.soc.0214",
+  "status": "active",
+  "category": "soc",
+  "tags": ["religion", "islam", "prayer"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Their times follow the Sun, from dawn to night, so clock times shift through the year. Worshippers face the Kaaba in Mecca, a direction called the qibla.",
+  "learnMore": "Salah",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Islam prescribes five daily prayers (salat) for adult Muslims."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The number of obligatory daily prayers is not two, four or seven."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The times of the daily prayers are set by the position of the Sun, from dawn to night, so their clock times change through the year."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Muslims pray facing the Kaaba in Mecca, a direction called the qibla."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: world religions and their practices. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers religious practice; c1 and c2 need web evidence as number claims. rivalTest: 3 is left out of the options on purpose: many Shia Muslims combine the five prayers into three sessions a day, so '3' could be argued; the five prayers themselves are common to Sunni and Shia practice. 4 is one away, which suits a small exact count. volatility: evergreen: settled history, a long-fixed custom or a defined symbol; no time words, and nothing rests on knowledge newer than mid-2026. regional: the five daily prayers are widely known, and Muslim players everywhere will know them well. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 27 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 2 (easy): most players know the number five. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "23aa81357ec687365d3a598572a3e204cf3e44b66a7fe9562d2859345112107c",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "5",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Islam requires five daily prayers: fajr, dhuhr, asr, maghrib and isha.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The obligatory daily prayers number five, not two, four or seven.",
+              "confidence": "certain"
+            },
+            "note": "Some Shia Muslims combine them into three sessions, but the prayers still number five. High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Prayer times follow the Sun's position, from dawn to night, so their clock times shift through the year.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Muslims pray facing the Kaaba in Mecca, and that direction is the qibla.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0d19111a510197bce41afe22c532cd0bb7434784474e98073c682d86b4804bd5",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "5",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Mainstream Islam (Sunni, Shia, Ibadi) obliges adults to pray five times a day: Fajr, Dhuhr, Asr, Maghrib, Isha.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Shia Muslims often combine them into three sittings and a small Quran-only minority differs, but the five-prayer obligation is the mainstream position. Nothing supports 2, 4 or 7."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The obligation is five, not two, four or seven.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Prayer times follow the Sun's position, so clock times shift through the year.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Muslims pray facing the Kaaba in Mecca, a direction called the qibla.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 (key, number) and c2 (distractor, number) have only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. The gap includes the key, a label or a distractor, so the redraft needs evidence for the question itself. Redraft under a new id.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.geo.0002",
+      "score": 0.16,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "How many daily prayers, called salat, are Muslims required to perform?",
+  "answer": "5",
+  "wrong": ["2", "4", "7"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.422,
+    "estimator": "v0"
+  }
+}

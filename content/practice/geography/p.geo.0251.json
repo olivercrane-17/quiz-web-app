@@ -1,0 +1,191 @@
+{
+  "id": "p.geo.0251",
+  "status": "active",
+  "category": "geo",
+  "tags": ["rivers", "siberia", "arctic"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Several of Siberia's great rivers flow north. In spring their upper reaches thaw while their mouths are still frozen, so meltwater spills over vast floodplains.",
+  "learnMore": "Lena (river)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The Lena flows north across Siberia into the Laptev Sea, part of the Arctic Ocean."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Volga flows into the Caspian Sea, the Amur into the Pacific and the Don into the Sea of Azov."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In spring the upper reaches of Siberia's north-flowing rivers thaw while their lower reaches are still frozen, causing widespread floods."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: natural-earth ne_50m_rivers_lake_centerlines: the Lena line runs from 53.84 N to 72.29 N, at the Laptev Sea coast (c1); the Volga line ends at 45.66 N, at the Caspian; the Amur line reaches no further north than 53.22 N, ending on the Pacific side (c2). Rival test: The Volga is the famous Russian river and flows south; the Amur is the great river of the Russian Far East, flowing east to the Pacific; the Don ends in the Sea of Azov. Against the key: nothing. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Equally obscure to most players; the reasoning (Siberia, cold, north) is open to anyone. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 23 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none beyond the dataset; c3 is standard. Seed: 5 (hard): most know only the Volga; reasoners pick the Siberian river. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "d5070048a983783178aa4b8a9b8651bf448e2c4e80fc354e5c5b1a36dd39f20d",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Lena",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Lena flows north through eastern Siberia into the Laptev Sea of the Arctic Ocean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Volga ends in the Caspian, the Amur in the Pacific through the Strait of Tartary, and the Don in the Sea of Azov.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Siberia's north-flowing rivers thaw upstream first in spring, and ice jams at their still-frozen lower reaches cause wide floods.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "ef251ffccff4d0e78c3f868fc0f5990c08567654dc348f66e2a8ec7798fd601d",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Lena",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Lena flows north through Siberia into the Laptev Sea, part of the Arctic Ocean.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Volga flows into the Caspian Sea, the Amur into the Pacific (Sea of Okhotsk side) and the Don into the Sea of Azov.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In spring the upper reaches of Siberia's north-flowing rivers thaw while their mouths are still frozen, causing floods.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'The polar sea' is an unusual phrase for the Arctic Ocean (Laptev Sea). The explanation's first sentence, 'Siberia's great rivers flow north', also glosses over the Amur, an option here that flows east and is often counted as a Far East river. Suggest 'to the Arctic Ocean' and 'Several of Siberia's great rivers flow north'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits. Accepted after the wording-only fix in decisions1.json. (earlier, rewrite by ed-pgeo02d: Both checks pass. Wording-only fixes from B's note: 'the Arctic Ocean' for the vague 'the polar sea' (c1 already names it), and 'Several of Siberia's great rivers' because the Amur, an option, flows east. No claim changes. [wording-only rewrite by ed-pgeo02d at 2026-11-01T04:36:56Z of stem, explanation; checks kept, packetSha256 re-stamped: pass A e3861c1fa42caa9dec61716715dd16c79749e81bec97069e576d359c4579162f -> d5070048a983783178aa4b8a9b8651bf448e2c4e80fc354e5c5b1a36dd39f20d; pass B 6bbfc12cd6c825a84bd4ecb1771155c217477e99ddc0e24a2d3e09e7a2697f51 -> ef251ffccff4d0e78c3f868fc0f5990c08567654dc348f66e2a8ec7798fd601d])",
+      "decidedAt": "2026-11-01T04:37:04Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:37:04Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:37:04Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which of these Russian rivers flows north across Siberia to the Arctic Ocean?",
+  "answer": "Lena",
+  "wrong": ["Volga", "Amur", "Don"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.32,
+    "spread": 0.163,
+    "estimator": "v0"
+  }
+}

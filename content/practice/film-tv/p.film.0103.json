@@ -1,0 +1,217 @@
+{
+  "id": "p.film.0103",
+  "status": "active",
+  "category": "film",
+  "tags": ["classic-cinema", "orson-welles", "1940s"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Orson Welles was 25 when he co-wrote, directed, produced and starred in it. Gregg Toland's deep-focus photography kept near and distant objects sharp in the same shot.",
+  "learnMore": "Citizen Kane",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "Citizen Kane (1941) follows a reporter trying to learn what Charles Foster Kane meant by his last word, 'Rosebud'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The Maltese Falcon, The Lady from Shanghai and Sunset Boulevard are not built around a search for the meaning of Rosebud."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Orson Welles was 25 when he co-wrote, directed, produced and starred in Citizen Kane."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Gregg Toland's deep-focus cinematography on Citizen Kane kept near and distant objects sharp in the same shot."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: The Maltese Falcon is also from 1941 and The Lady from Shanghai is another Welles film, but neither involves Rosebud. Sunset Boulevard (1950) is narrated by a dead writer, a different hook. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 27 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: Welles was 25 while shooting in 1940 and turned 26 days after the May 1941 release, so c3 says 25 when he made it.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "50258766e53ec2b4c19f903e13f646103c0354fab25d79dea31d9637cb6c2f42",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "Citizen Kane",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Citizen Kane (1941) follows the reporter Thompson as he tries to find out what Kane's dying word, Rosebud, meant.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The other three films have different plots (a hunt for a jewelled statuette, a noir about a sailor and a femme fatale, a faded silent star's mansion); none turns on Rosebud.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Welles, born 6 May 1915, shot Citizen Kane between June and October 1940 and saw it premiere on 1 May 1941, so he was 25 throughout; he co-wrote it with Herman J. Mankiewicz, and directed, produced and starred in it.",
+              "confidence": "certain"
+            },
+            "note": "Partial dataset support only: the pinned MoMA record (moma-artists, ConstituentID=26662) gives his birth year, 1915, which on its own allows an age of 24 to 26, so it is not entered as the evidence for the number. High-risk (number), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gregg Toland photographed Citizen Kane in deep focus, keeping foreground and background sharp in the same frame.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b23339beb8736829e770ebcda3824aa4cbc5315d5de9b2bdd72f0c028f45f808",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "Citizen Kane",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Citizen Kane (1941) is built around a reporter's search for the meaning of Kane's last word, 'Rosebud'.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: The Maltese Falcon is also 1941, but only Kane has the Rosebud mystery."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The Maltese Falcon, The Lady from Shanghai and Sunset Boulevard have no Rosebud mystery.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Welles was 25 while making Citizen Kane, which he co-wrote, directed, produced and starred in.",
+              "confidence": "certain"
+            },
+            "note": "Born May 1915, shot in 1940, so 25 holds."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Gregg Toland's deep-focus cinematography kept foreground and background sharp together.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk claims c1 and c3 rest on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound; redraft it under a new id once evidence can be gathered.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In which 1941 film does a reporter try to uncover the meaning of a tycoon's last word, 'Rosebud'?",
+  "answer": "Citizen Kane",
+  "wrong": ["The Maltese Falcon", "The Lady from Shanghai", "Sunset Boulevard"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.68,
+    "spread": 0.353,
+    "estimator": "v0"
+  }
+}

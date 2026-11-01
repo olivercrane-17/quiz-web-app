@@ -1,0 +1,212 @@
+{
+  "id": "p.book.0243",
+  "status": "cut",
+  "category": "book",
+  "tags": ["world-literature", "german-literature"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Kafka's German calls him a monstrous kind of vermin. Kafka asked his publisher never to draw the creature, so the 1915 cover shows a man hiding his face instead.",
+  "learnMore": "The Metamorphosis",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In The Metamorphosis, Gregor Samsa wakes to find himself transformed into a monstrous insect."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Gregor is not transformed into a wolf, a jackdaw or a statue."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "Kafka's German text calls Gregor 'ungeheueres Ungeziefer', a monstrous kind of vermin."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In 1915 Kafka asked his publisher not to have the insect drawn, and the first edition's cover shows a man covering his face."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: world literature in translation. lint: content:check reports no errors on this item and no warnings. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. rivalTest: Argued against the key: Kafka never names a species and calls him vermin rather than an insect, but the text gives him many legs, a hard back and feelers, and the charwoman calls him a dung beetle, so 'a giant insect' is the defensible key. The jackdaw is a deliberate trap: kavka is Czech for jackdaw. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: the work is known well beyond any one country and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has about the same chance as one in London or Chicago. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 29 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: nothing of either kind to check in a practice item. doubts: none beyond c3 and c4, which checker A should evidence. Related: p.book.0114 (b01) asks Kafka's language; the fact asked differs. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "48429f31fd17e988dccde4a3b083894b58e9b1e1aef02ee8f94734e7460b4f16",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "A giant insect",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Gregor Samsa wakes to find himself changed into a monstrous insect (vermin).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "He does not become a wolf, a jackdaw or a statue.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Kafka's first sentence calls Gregor 'ungeheueres Ungeziefer', monstrous vermin.",
+              "confidence": "certain"
+            },
+            "note": "The sentence itself has the dative 'zu einem ungeheueren Ungeziefer verwandelt'; the claim cites the nominative, the usual way to quote the phrase. The player-facing explanation paraphrases and quotes no German. High-risk (quotation), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In October 1915 Kafka wrote to his publisher, Kurt Wolff, that the insect itself must not be drawn, and Ottomar Starke's cover for the 1915 first edition shows a man covering his face with his hands.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "c3 quotes the German as 'ungeheueres Ungeziefer' (nominative), while the first sentence has 'zu einem ungeheueren Ungeziefer'. Only the claim text is affected; the explanation paraphrases."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "7fd121ed49478aff7c57875f3aa36021d4e0fb5d3ddd98880284935d106baebc",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "A giant insect",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In The Metamorphosis Gregor Samsa wakes to find himself changed into a monstrous insect-like creature (ungeheueres Ungeziefer, vermin).",
+              "confidence": "certain"
+            },
+            "note": "Rival test: wolf, jackdaw (Kafka means jackdaw in Czech) and statue are wrong; no option competes with the insect."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Gregor becomes a vermin or insect, not a wolf, a jackdaw or a marble statue.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The German text calls Gregor's form 'ungeheueres Ungeziefer', a monstrous kind of vermin.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In October 1915 Kafka wrote to his publisher that the insect itself must not be drawn, and the first edition's cover by Ottomar Starke shows a man with his hands over his face.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The German never names an insect (Ungeziefer means vermin), but Kafka's own 1915 letter to his publisher calls the creature an insect, and no option competes with the key. \"A giant insect\" is sound, and the explanation already gives the German."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c3 (explanation, quotation) and c4 (explanation, date) rest on knowledge alone in both: neither checker could search (both report the shared web budget spent) and no pinned dataset covers them. §9.9 rule 3 cannot pass, and §9.2 leaves the precision ladder or a cut, never a relabel. The key and distractors are sound, so redraft under a new id with explanation facts that are standard risk or dataset-backed. For the redraft, quote the German as it stands in the first sentence, or not at all (A's note).",
+      "decidedAt": "2026-11-01T04:44:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In Franz Kafka's The Metamorphosis, Gregor Samsa wakes up one morning transformed into what?",
+  "answer": "A giant insect",
+  "wrong": ["A wolf", "A jackdaw", "A marble statue"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.94,
+    "spread": 0.348,
+    "estimator": "v0"
+  }
+}

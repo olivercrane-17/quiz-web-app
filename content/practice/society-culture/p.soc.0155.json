@@ -1,0 +1,221 @@
+{
+  "id": "p.soc.0155",
+  "status": "active",
+  "category": "soc",
+  "tags": ["inventions", "time", "railways"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Every town once kept its own time by the Sun, so Bristol ran about ten minutes behind London. Bristol's Corn Exchange clock still has two minute hands, one for each.",
+  "learnMore": "Railway time",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In the 19th century, railway companies led the move from local solar time to standard time, in Britain from the 1840s and in North America in 1883."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Shipping lines, postal services and factories did not lead the adoption of standard time."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Local solar time in Bristol is about ten minutes behind London."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The clock on Bristol's Corn Exchange has two minute hands, showing London time and Bristol time."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: c3 checked against geonames-cities: Bristol, GB lng -2.59665 and London, GB lng -0.12574; the difference of 2.47 degrees at 4 minutes per degree is about 9.9 minutes, a calculation anyone can re-run. c1 and c4 need web evidence. rivalTest: shipping lines tempt because navigators used Greenwich time at sea, but they did not set civil time; postal services and factories needed timetables too but did not lead. Argued against the key: 'railway time' is the very name of the change in Britain, and the US and Canadian railroads introduced time zones on 18 November 1883. volatility: evergreen, settled history or a long-fixed custom; no time words, and nothing rests on knowledge newer than mid-2026. regional: the story covers Britain and North America and the stem asks only for the industry, which reasoning about timetables reaches anywhere. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 3. doubts: c3 compares longitudes of the two cities' reference points, so 'about ten minutes' is the honest precision.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "584aeb2928ea8b5bfb00e29c47f47bc27011147804b0a8cc3cc85631d5553be2",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "The railways",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Railways drove standard time: in Britain from 1840 (the Great Western Railway), with most lines on London time by 1847 and 1848, and in the US and Canada on 18 November 1883.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Shipping lines, the postal services and factories did not lead the change.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "geonames-cities",
+              "version": "1.1.65",
+              "file": "cities.json",
+              "locator": "name=Bristol, country=GB, admin1=ENG; name=London, country=GB, admin1=ENG",
+              "excerpt": "{\"name\":\"Bristol\",\"lat\":\"51.45523\",\"lng\":\"-2.59665\",\"country\":\"GB\",\"admin1\":\"ENG\",\"admin2\":\"B7\"} | {\"name\":\"London\",\"lat\":\"51.50853\",\"lng\":\"-0.12574\",\"country\":\"GB\",\"admin1\":\"ENG\",\"admin2\":\"GLA\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Bristol lies 2.47091 degrees of longitude west of London. Local solar time shifts 4 minutes per degree (360 degrees in 24 hours), so Bristol is 9.9 minutes behind London, which is 'about ten minutes'."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The clock on Bristol's Exchange (the Corn Exchange) in Corn Street has two minute hands, one for Bristol time and one for London time.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number): confirmed from knowledge only. No web search could be run in this pass (the session's search limit was reached before the first query), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3, §9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "344f284b92926ae6b4ef3f09e6793460e37d95c986abee105064cf3d903c296b",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "The railways",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Railway companies led the move to standard time: in Britain from 1840 and in North America in November 1883.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Shipping lines, post offices and factories did not lead the change.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Bristol lies about 2.6 degrees west of Greenwich, so its solar time runs about ten minutes behind London.",
+              "confidence": "certain"
+            },
+            "note": "2.59 degrees at 4 minutes a degree is 10.4 minutes. High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The clock on Bristol's Corn Exchange has two minute hands, one for London time and one for Bristol time.",
+              "confidence": "certain"
+            },
+            "note": "High-risk claim: knowledge only from me (no web search was possible); it needs dataset or web evidence in the other check."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, date) and c4 (explanation, number) rest on knowledge alone in both checks. Neither checker could search (the shared budget was exhausted; the batch used 0 of its 26 searches) and no pinned dataset covers them (the dataset evidence recorded covers other claims), so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). The content read as sound: redraft under a new id with web evidence for the high-risk claims.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.sport.0125",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "In the 1800s, which industry led the switch from local times set by the Sun to standard time?",
+  "answer": "The railways",
+  "wrong": ["Shipping lines", "Postal services", "Factories"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.64,
+    "spread": 0.125,
+    "estimator": "v0"
+  }
+}

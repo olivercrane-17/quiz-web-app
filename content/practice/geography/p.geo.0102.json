@@ -1,0 +1,237 @@
+{
+  "id": "p.geo.0102",
+  "status": "active",
+  "category": "geo",
+  "tags": ["islands", "caribbean", "borders"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "The Dominican Republic covers roughly the eastern two-thirds of the island. Haitians speak French and Haitian Creole, while Dominicans speak Spanish.",
+  "learnMore": "Hispaniola",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Haiti and the Dominican Republic share the island of Hispaniola."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Cuba, Jamaica and The Bahamas share no land border with Haiti."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Dominican Republic covers roughly the eastern two-thirds of Hispaniola."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Haiti's official languages are French and Haitian Creole, and the Dominican Republic's official language is Spanish."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c3 is high for its fraction; the rest are standard. Datasets: mledoze-countries cca3=HTI borders DOM and DOM borders HTI; CUB, JAM and BHS have empty border lists; areas DOM 48,671 km² and HTI 27,750 km², so the Dominican share is 48,671 / 76,421 = 63.7 per cent, roughly two-thirds (c3 by calculation); languages HTI fra and hat, DOM spa (c4). Rival test: Cuba is the nearest big island and the likeliest slip, but it is a separate island; Jamaica and The Bahamas likewise. Nothing argues against the key. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Hispaniola is a world-famous island and the options are the Caribbean's best-known nations. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 21 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none; the item is a warm-up and the explanation carries the interest.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "33b0665312fc589f8057f2b71b1458892c6c657e5a9e4e4762078372fb73c5fe",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Dominican Republic",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hispaniola is divided between Haiti in the west and the Dominican Republic in the east.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=CUB; cca3=JAM; cca3=BHS",
+              "excerpt": "CUB: \"borders\": [] | JAM: \"borders\": [] | BHS: \"borders\": []",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "None of the three has any land border at all."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=DOM; cca3=HTI",
+              "excerpt": "DOM: \"area\": 48671, \"latlng\": [19,-70.66666666] | HTI: \"area\": 27750, \"latlng\": [19,-72.41666666]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "DOM has 63.7% of the two countries' combined area and lies east of HTI (longitude -70.7 against -72.4): roughly the eastern two-thirds."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=HTI; cca3=DOM",
+              "excerpt": "HTI: \"languages\": {\"fra\":\"French\",\"hat\":\"Haitian Creole\"} | DOM: \"languages\": {\"spa\":\"Spanish\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The languages field lists French and Haitian Creole for Haiti and Spanish for the Dominican Republic."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "32be3e88c18492fd69261795786604ad2a11f93139097f4800c954ebd1f3ba58",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Dominican Republic",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=HTI, cca3=DOM",
+              "excerpt": "HTI (Haiti): borders [\"DOM\"] | DOM (Dominican Republic): borders [\"HTI\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Each country's only land neighbour is the other, which fits one shared island."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=HTI",
+              "excerpt": "HTI (Haiti): borders [\"DOM\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Haiti's only land border is with DOM, so Cuba, Jamaica and The Bahamas share none."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=DOM, cca3=HTI",
+              "excerpt": "DOM (Dominican Republic): area 48671 | HTI (Haiti): area 27750 | DOM share of the two = 63.7 percent",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "About 64 percent. 'Roughly two-thirds' is the usual phrasing and is within tolerance."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=HTI, cca3=DOM",
+              "excerpt": "HTI (Haiti): languages {\"fra\":\"French\",\"hat\":\"Haitian Creole\"} | DOM (Dominican Republic): languages {\"spa\":\"Spanish\"}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset's languages field lists official languages."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c3 carry mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. Seeded 1 but predicted 0.66, so it counts as medium (§8.5).",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.geo.0152",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Haiti shares the Caribbean island of Hispaniola with which country?",
+  "answer": "Dominican Republic",
+  "wrong": ["Cuba", "Jamaica", "The Bahamas"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.214,
+    "estimator": "v0"
+  }
+}

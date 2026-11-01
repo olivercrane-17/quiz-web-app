@@ -1,0 +1,221 @@
+{
+  "id": "p.nat.0102",
+  "status": "active",
+  "category": "nat",
+  "tags": ["birds", "flight", "americas"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Its wings swivel at the shoulder and push air on both the forward and the back stroke, so it can hover at a flower and reverse away from it.",
+  "learnMore": "Hummingbird",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Hummingbirds can fly backwards."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Swifts, kingfishers and swallows cannot fly backwards."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A hummingbird's wings rotate at the shoulder joint and produce lift on both the downstroke and the upstroke."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "This wing action lets hummingbirds hover at flowers and fly in reverse."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed, all standard: no number, superlative or trigger word, and each is textbook bird biology. I avoided the usual 'only bird that can fly backwards' wording, which would be a fixed-set superlative. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: kingfishers hover, which makes them the strongest distractor, but hovering is not backward flight; swifts and swallows are agile fliers that cannot reverse. Argued against the key: hummingbird backward flight is filmed and measured, so it stands. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: hummingbirds live only in the Americas but are known everywhere from nature films; nothing needs local knowledge. style: Oxford spelling, plain hyphens only, explanation of 29 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0fac9d10aab9a9236c247d34fe2e9e570795d9d9d4f5d346daa3a556be16ebb1",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Hummingbird",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hummingbirds can hover and fly backwards.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Swifts, swallows and kingfishers fly forwards; a hovering kingfisher holds position but does not fly in reverse. Hummingbirds are the only birds known for sustained backward flight.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "A hummingbird's wing rotates at the shoulder, so it makes lift on the upstroke as well as the downstroke.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "That stroke lets hummingbirds hover in front of flowers and back away from them.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "cd44a03772ae0bca2a43850f547d2619b802885feaf9dbd1ba4fa59f7aae7c70",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Hummingbird",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Hummingbirds can fly backwards, and they are the one bird group known for doing it under their own power.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Swifts and swallows fly forwards only; kingfishers can hover but do not reverse under their own power.",
+              "confidence": "certain"
+            },
+            "note": "One search (low-tier pages only) says other birds can shuffle backwards for a few wingbeats, usually with wind help, and that kingfishers and swallows hover by facing the wind. Nothing reports sustained backward flight for these three. I read \"cannot fly backwards\" as \"no sustained backward flight\"."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "A hummingbird's wing rotates at the shoulder joint, so it makes lift on the upstroke as well as the downstroke.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "That wing action allows hovering at a flower and reversing away from it.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The stem has no \"only\" or \"sustained\". One search (low-tier pages only) says other birds can move backwards for a few wingbeats, usually with wind help, so \"can fly backwards\" is loose. The key is still the only defensible pick among these four options. Optional tightening: \"Which bird can fly backwards as easily as forwards?\"."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; no high-risk claims; every knowledge confirmation at certain. Style, distractors and balance reviewed. B's note (some birds manage a few backward wingbeats with wind help) is noted: the stem says no 'only', and the key is the one defensible pick.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which bird can fly backwards?",
+  "answer": "Hummingbird",
+  "wrong": ["Swift", "Kingfisher", "Swallow"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.458,
+    "estimator": "v0"
+  }
+}

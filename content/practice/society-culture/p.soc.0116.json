@@ -1,0 +1,191 @@
+{
+  "id": "p.soc.0116",
+  "status": "active",
+  "category": "soc",
+  "tags": ["religion", "christianity", "institutions"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "The cardinals' ballots are burned in a stove after voting, with chemicals added so the colour shows clearly. Black smoke means no one has yet won enough votes.",
+  "learnMore": "Papal conclave",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "White smoke from the Sistine Chapel chimney signals that a new pope has been elected."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Black smoke means that no pope has yet been elected; red and gold smoke are not part of the signal."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The cardinals' ballots are burned in a stove after voting, with chemicals added to colour the smoke."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes confirmed true; the CNT-1 item schema refuses a selfCheck field, so the codes are recorded here. lint: content:check shows no errors for this item. claims: every checkable statement is listed, distractors included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers papal elections; all claims are standard-risk. rivalTest: black smoke is the real alternative signal and the planted pull; red echoes the cardinals' robes. Argued against the key: white smoke for an election is reported at every conclave. Options name the smoke, not just the colour, so the key does not repeat p.sci.0104's answer. volatility: evergreen: a long-established ritual used at every recent conclave; nothing depends on who is pope, and no time words. regional: conclaves are covered by news worldwide. style: Oxford spelling, plain hyphens, single quotation marks, no time words, explanation of 28 words. myths: screened against content/reference/myths.json; no entry matches any claim. mystery and encore: not applicable to a practice item. seed: 1: the white smoke is one of the most famous signals in the world. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c16f0f39a0c95c45fa28196b7b1315545101bf2e339852ea3b0a62b457247b37",
+        "startedAt": "2026-11-01T02:33:51Z",
+        "finishedAt": "2026-11-01T02:55:05Z",
+        "coldSolve": {
+          "answerGiven": "White smoke",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "White smoke from the Sistine Chapel chimney announces that a pope has been elected.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Black smoke means a ballot without a result; there is no red or gold signal.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ballots are burned in a stove in the Sistine Chapel, and chemical cartridges are added so the smoke is clearly black or white.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "2fdf1f5ace98a8fe0b7878c9da0c7e82899d76bdc38bf369b706202cfedbf07c",
+        "startedAt": "2026-11-01T02:30:00Z",
+        "finishedAt": "2026-11-01T03:04:48Z",
+        "coldSolve": {
+          "answerGiven": "White smoke",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "White smoke from the Sistine Chapel chimney announces that a pope has been elected.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Black smoke means no pope yet; there is no red or gold smoke signal.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The ballots are burned in a stove and chemicals are added to colour the smoke.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Gold smoke and red smoke are filler distractors; only black smoke tempts anyone (guide section 4, rules 5 and 9). Swap one for a real confusion such as grey smoke, the ambiguous smoke seen at some conclaves, or drop to two distractors."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc01e",
+        "at": "2026-11-01T02:39:00Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc01d",
+      "decision": "accept",
+      "reason": "Both checks pass and every claim is standard risk, confirmed at certain by A and B. B's note that red and gold smoke are weak fillers is fair, but a distractor change needs fresh checks and this correct Easy item stands as written; watch their pick rates after launch (§4 rule 10). Lint clean, no myth or dedupe hit.",
+      "decidedAt": "2026-11-01T04:34:42Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:34:42Z",
+      "nearestId": "p.art.0159",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:34:42Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "During a papal election, which signal from the Sistine Chapel chimney means a new pope has been chosen?",
+  "answer": "White smoke",
+  "wrong": ["Black smoke", "Red smoke", "Gold smoke"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.435,
+    "estimator": "v0"
+  }
+}

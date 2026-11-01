@@ -1,0 +1,227 @@
+{
+  "id": "p.geo.0108",
+  "status": "active",
+  "category": "geo",
+  "tags": ["borders", "exclaves", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "The border belongs to Kaliningrad, a piece of Russia on the Baltic coast. Wedged between Poland and Lithuania, it is cut off by land from the rest of Russia.",
+  "learnMore": "Kaliningrad Oblast",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Russia and Poland share a land border, along Russia's Kaliningrad region."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Romania, Hungary and Slovakia share no land border with Russia."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kaliningrad is a part of Russia on the Baltic coast, between Poland and Lithuania."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Kaliningrad has no land connection to the rest of Russia."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; all standard border facts with no number. Datasets: mledoze-countries cca3=RUS borders include POL and LTU, and POL borders include RUS; ROU borders BGR, HUN, MDA, SRB, UKR; HUN and SVK borders exclude RUS. Rival test: Romania, Hungary and Slovakia all border Ukraine, which makes them feel close to Russia, but none touches it; against the key, someone might say the Kaliningrad border 'doesn't count', but it is an internationally recognized Russian land border. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a European map question whose answer is a well-known exclave. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 29 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: none. Not marked counterintuitive: players who don't know Kaliningrad guess rather than confidently pick one wrong option.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5bf319b63668333887042f1121406917ed78d3acc3a438bfa74ebb0ebf5772e4",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Poland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=POL",
+              "excerpt": "POL: \"borders\": [\"BLR\",\"CZE\",\"DEU\",\"LTU\",\"RUS\",\"SVK\",\"UKR\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "POL lists RUS among its neighbours. That this border is Kaliningrad's is from knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=ROU; cca3=HUN; cca3=SVK",
+              "excerpt": "ROU: \"borders\": [\"BGR\",\"HUN\",\"MDA\",\"SRB\",\"UKR\"] | HUN: \"borders\": [\"AUT\",\"HRV\",\"ROU\",\"SRB\",\"SVK\",\"SVN\",\"UKR\"] | SVK: \"borders\": [\"AUT\",\"CZE\",\"HUN\",\"POL\",\"UKR\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "None of the three lists RUS."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kaliningrad Oblast is a Russian territory on the Baltic, wedged between Poland and Lithuania.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kaliningrad is an exclave with no land link to the rest of Russia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "e279b625dee0a767c2fdb80a49715300cc05909e2ac5fab0c77013ae0ea3c2e9",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Poland",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=RUS, cca3=POL",
+              "excerpt": "RUS (Russia): borders [\"AZE\",\"BLR\",\"CHN\",\"EST\",\"FIN\",\"GEO\",\"KAZ\",\"PRK\",\"LVA\",\"LTU\",\"MNG\",\"NOR\",\"POL\",\"UKR\"] | POL (Poland): borders [\"BLR\",\"CZE\",\"DEU\",\"LTU\",\"RUS\",\"SVK\",\"UKR\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Both lists contain the other. That the border is along Kaliningrad is knowledge, certain."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=RUS, cca3=ROU, cca3=HUN, cca3=SVK",
+              "excerpt": "RUS (Russia): borders [\"AZE\",\"BLR\",\"CHN\",\"EST\",\"FIN\",\"GEO\",\"KAZ\",\"PRK\",\"LVA\",\"LTU\",\"MNG\",\"NOR\",\"POL\",\"UKR\"] | ROU (Romania): borders [\"BGR\",\"HUN\",\"MDA\",\"SRB\",\"UKR\"] | HUN (Hungary): borders [\"AUT\",\"HRV\",\"ROU\",\"SRB\",\"SVK\",\"SVN\",\"UKR\"] | SVK (Slovakia): borders [\"AUT\",\"CZE\",\"HUN\",\"POL\",\"UKR\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "None of ROU, HUN, SVK appears in Russia's list and Russia is in none of theirs."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kaliningrad Oblast is a Russian exclave on the Baltic Sea between Poland and Lithuania.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kaliningrad has no land connection to the rest of Russia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; c1 and c2 also carry mledoze-countries evidence in both checks. Lint clean, no myth hits. All three distractors are plausible Central European neighbours.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which of these countries shares a land border with Russia?",
+  "answer": "Poland",
+  "wrong": ["Romania", "Hungary", "Slovakia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.206,
+    "estimator": "v0"
+  }
+}

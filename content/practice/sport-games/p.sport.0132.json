@@ -1,0 +1,243 @@
+{
+  "id": "p.sport.0132",
+  "status": "active",
+  "category": "sport",
+  "tags": ["world-cup", "football", "brazil", "uruguay"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Brazil needed only a draw in the last match at the Maracanã and led 1-0, but Schiaffino and Ghiggia scored to give Uruguay a 2-1 win, often remembered as the final.",
+  "learnMore": "1950 FIFA World Cup",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The 1950 World Cup was decided by a final round-robin group of four teams, with no final match."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 1950 title was not decided by a two-legged final, a penalty shoot-out or drawing lots."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Before the last match of the 1950 final group, Brazil needed only a draw to win the title."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In that match at the Maracanã on 16 July 1950, Friaça put Brazil 1-0 ahead, and Schiaffino and Ghiggia scored to give Uruguay a 2-1 win and the title."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup, file 1950/worldcup.json: the only rounds are 'First round' and 'Final Round'; the Final Round has six matches among Uruguay, Brazil, Spain and Sweden (c1, c2). Before 16 July, Brazil had beaten Sweden 7-1 and Spain 6-1 (4 points under 2 points for a win) and Uruguay had drawn 2-2 with Spain and beaten Sweden 3-2 (3 points), so a draw would have given Brazil the title (c3). The 16 July 1950 match at Estádio do Maracanã is Uruguay 2-1 Brazil, goals Friaça 47 for Brazil, Schiaffino 66 and Ghiggia 79 for Uruguay (c4). rivalTest: A shoot-out did not exist in 1950; a two-legged final was never used for the World Cup; drawing lots was used elsewhere in football history, which makes it tempting. The dataset shows a final group, so the key holds. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 31 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None. 'Often remembered as the final' is a description, not a claim about FIFA's records.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "5dfebb3cefcb412d8b42a55e395e079516babb811ca04c595c6155255a0a8d71",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "A final group of four",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1950/worldcup.json",
+              "locator": "distinct rounds; Final Round teams",
+              "excerpt": "rounds: First round | Final Round; Final Round teams: Uruguay, Spain, Brazil, Sweden (6 matches)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "No match has round Final; the title went to the winner of a four-team final group."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1950/worldcup.json",
+              "locator": "Final Round matches",
+              "excerpt": "{\"round\":\"Final Round\",\"date\":\"1950-07-09\",\"team1\":\"Uruguay\",\"team2\":\"Spain\",\"score\":[2,2],\"goals1\":[{\"name\":\"Ghiggia\",\"minute\":\"29\"},{\"name\":\"Varela\",\"minute\":\"73\"}],\"goals2\":[{\"name\":\"Basora\",\"minute\":\"37\"},{\"name\":\"Basora\",\"minute\":\"39\"}],\"ground\":\"Estádio do Pacaembu, São Paulo\"} | {\"round\":\"Final Round\",\"date\":\"1950-07-13\",\"team1\":\"Uruguay\",\"team2\":\"Sweden\",\"score\":[3,2],\"goals1\":[{\"name\":\"Ghiggia\",\"minute\":\"39\"},{\"name\":\"Míguez\",\"minute\":\"77\"},{\"name\":\"Míguez\",\"minute\":\"85\"}],\"goals2\":[{\"name\":\"Palmér\",\"minute\":\"5\"},{\"name\":\"Sundqvist\",\"minute\":\"40\"}],\"ground\":\"Estádio do Pacaembu, São Paulo\"} | {\"round\":\"Final Round\",\"date\":\"1950-07-16\",\"team1\":\"Uruguay\",\"team2\":\"Brazil\",\"score\":[2,1],\"goals1\":[{\"name\":\"Schiaffino\",\"minute\":\"66\"},{\"name\":\"Ghiggia\",\"minute\":\"79\"}],\"goals2\":[{\"name\":\"Friaça\",\"minute\":\"47\"}],\"ground\":\"Estádio do Maracanã, Rio de Janeiro\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "No final, no penalties field: Uruguay won the group outright with 5 points to Brazil's 4, so neither a two-legged final, a shoot-out nor lots decided it."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1950/worldcup.json",
+              "locator": "Final Round matches of 9 and 13 July",
+              "excerpt": "{\"round\":\"Final Round\",\"date\":\"1950-07-09\",\"team1\":\"Brazil\",\"team2\":\"Sweden\",\"score\":[7,1],\"goals1\":[{\"name\":\"Ademir\",\"minute\":\"17\"},{\"name\":\"Ademir\",\"minute\":\"36\"},{\"name\":\"Chico\",\"minute\":\"39\"},{\"name\":\"Ademir\",\"minute\":\"52\"},{\"name\":\"Ademir\",\"minute\":\"58\"},{\"name\":\"Maneca\",\"minute\":\"85\"},{\"name\":\"Chico\",\"minute\":\"88\"}],\"goals2\":[{\"name\":\"Andersson\",\"minute\":\"67\",\"penalty\":true}],\"ground\":\"Estádio do Maracanã, Rio de Janeiro\"} | {\"round\":\"Final Round\",\"date\":\"1950-07-13\",\"team1\":\"Brazil\",\"team2\":\"Spain\",\"score\":[6,1],\"goals1\":[{\"name\":\"Parra\",\"minute\":\"15\",\"owngoal\":true},{\"name\":\"Jair\",\"minute\":\"21\"},{\"name\":\"Chico\",\"minute\":\"31\"},{\"name\":\"Chico\",\"minute\":\"55\"},{\"name\":\"Ademir\",\"minute\":\"57\"},{\"name\":\"Zizinho\",\"minute\":\"67\"}],\"goals2\":[{\"name\":\"Igoa\",\"minute\":\"71\"}],\"ground\":\"Estádio do Maracanã, Rio de Janeiro\"} | {\"round\":\"Final Round\",\"date\":\"1950-07-09\",\"team1\":\"Uruguay\",\"team2\":\"Spain\",\"score\":[2,2],\"goals1\":[{\"name\":\"Ghiggia\",\"minute\":\"29\"},{\"name\":\"Varela\",\"minute\":\"73\"}],\"goals2\":[{\"name\":\"Basora\",\"minute\":\"37\"},{\"name\":\"Basora\",\"minute\":\"39\"}],\"ground\":\"Estádio do Pacaembu, São Paulo\"} | {\"round\":\"Final Round\",\"date\":\"1950-07-13\",\"team1\":\"Uruguay\",\"team2\":\"Sweden\",\"score\":[3,2],\"goals1\":[{\"name\":\"Ghiggia\",\"minute\":\"39\"},{\"name\":\"Míguez\",\"minute\":\"77\"},{\"name\":\"Míguez\",\"minute\":\"85\"}],\"goals2\":[{\"name\":\"Palmér\",\"minute\":\"5\"},{\"name\":\"Sundqvist\",\"minute\":\"40\"}],\"ground\":\"Estádio do Pacaembu, São Paulo\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Before 16 July Brazil had 4 points and Uruguay 3, with 2 points for a win (knowledge of the 1950 rules), so a draw would have won Brazil the title."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1950/worldcup.json",
+              "locator": "Final Round match of 16 July, Uruguay v Brazil",
+              "excerpt": "{\"round\":\"Final Round\",\"date\":\"1950-07-16\",\"team1\":\"Uruguay\",\"team2\":\"Brazil\",\"score\":[2,1],\"goals1\":[{\"name\":\"Schiaffino\",\"minute\":\"66\"},{\"name\":\"Ghiggia\",\"minute\":\"79\"}],\"goals2\":[{\"name\":\"Friaça\",\"minute\":\"47\"}],\"ground\":\"Estádio do Maracanã, Rio de Janeiro\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6fa1da3a533e555e0a265c647e4383070adb9e5ecaaaa67468e901016b0296c0",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "A final group of four",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1950/worldcup.json",
+              "locator": "rounds present",
+              "excerpt": "Rounds in the file: First round (Groups 1 to 4) and 'Final Round'. No match has the round 'Final'. The Final Round holds six matches among Uruguay, Brazil, Sweden and Spain.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1950/worldcup.json",
+              "locator": "round=Final Round",
+              "excerpt": "All six Final Round matches carry only full-time scores (no \"p\" or \"et\" key); the table was settled on points among the four teams, with Uruguay winning it.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1950/worldcup.json",
+              "locator": "round=Final Round, before 1950-07-16",
+              "excerpt": "Brazil 7-1 Sweden and Brazil 6-1 Spain (4 points); Uruguay 2-2 Spain and Uruguay 3-2 Sweden (3 points). With two points for a win, a draw on 1950-07-16 would have left Brazil on 5 and Uruguay on 4.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1950/worldcup.json",
+              "locator": "date=1950-07-16, Uruguay v Brazil",
+              "excerpt": "\"score\":[2,1],\"goals1\":[{\"name\":\"Schiaffino\",\"minute\":\"66\"},{\"name\":\"Ghiggia\",\"minute\":\"79\"}],\"goals2\":[{\"name\":\"Friaça\",\"minute\":\"47\"}],\"ground\":\"Estádio do Maracanã, Rio de Janeiro\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Both checks pass; high-risk c1 to c4 have worldcup dataset evidence in both checks. Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "nearestId": "p.sport.0142",
+      "score": 0.444,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The 1950 men's World Cup in Brazil had no final match. How was the winner decided?",
+  "answer": "A final group of four",
+  "wrong": ["A two-legged final", "A penalty shoot-out", "Drawing lots"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.258,
+    "estimator": "v0"
+  }
+}

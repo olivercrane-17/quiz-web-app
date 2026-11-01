@@ -1,0 +1,244 @@
+{
+  "id": "p.lang.0244",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["names-of-things", "animals", "word-origins"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "Jumbo was a huge African elephant at London Zoo. P. T. Barnum bought him in 1882 and toured him across North America, and the Boeing 747 became the jumbo jet long after.",
+  "learnMore": "Jumbo (elephant)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word 'jumbo' was popularized by Jumbo, a famous elephant at London Zoo and later in P. T. Barnum's circus."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "'Jumbo' was not popularized by a jet airliner, an ocean liner or a circus giant; the jumbo jet was named after the word."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Jumbo was an African elephant kept at London Zoo."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "P. T. Barnum bought Jumbo in 1882 and toured him in North America."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The Boeing 747 was nicknamed the jumbo jet, long after the elephant."
+    }
+  ],
+  "writerNotes": "Counterintuitive: the jumbo jet is the obvious association and is wrong, because it took its nickname from the word. Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 5 listed, 4 high (etymology, quotation, date, number) and 1 standard, every one at or above the C26 floor and raised where a fact is beyond everyday knowledge. datasets: no pinned dataset covers etymology. rivalTest: Argued for the jet airliner as hard as I could: the 747 flew in 1969, decades after jumbo meant big. The word itself is older than the elephant (a clumsy person, from the 1820s), so the stem says made popular, not coined. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: jumbo is used for large things in shops and airports worldwide. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 32 words. myths: every claim screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a practice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b642243b8eda594862285278b96d7154b42f3fdb73778a6e7e088fca557fe02f",
+        "startedAt": "2026-11-01T03:00:00Z",
+        "finishedAt": "2026-11-01T03:24:03Z",
+        "coldSolve": {
+          "answerGiven": "Elephant",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jumbo, the huge elephant at London Zoo and later in P. T. Barnum's circus, made the word jumbo popular for anything large.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jumbo was popularized by the elephant, not by a jet airliner, an ocean liner or a human circus giant; the jumbo jet took its name from the word.",
+              "confidence": "certain"
+            },
+            "note": "Confirmed on the natural reading of circus giant as a giant human performer; see the ambiguity note. High-risk (quotation). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Jumbo was an African elephant who lived at London Zoo before his sale.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "P. T. Barnum bought Jumbo in 1882 and toured him in North America.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Boeing 747 was nicknamed the jumbo jet, decades after the elephant.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number). Knowledge only: WebSearch was unavailable to this run (the shared per-turn search limit was exhausted before any query ran), so this claim still needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Distractor 'Circus giant' can be read as a description of Jumbo himself, a giant of Barnum's circus, so a pedant could argue for it. 'Elephant' is plainly the better answer, so this is a note; a distractor that cannot describe Jumbo would remove the argument."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9fe023a7d386b03c75d991c8641f8166741ec09ec26e594931eb1688de2fbc61",
+        "startedAt": "2026-11-01T03:04:00Z",
+        "finishedAt": "2026-11-01T03:29:46Z",
+        "coldSolve": {
+          "answerGiven": "Elephant",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The word jumbo was popularised by Jumbo the elephant (London Zoo, then Barnum's circus).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Jumbo was not popularised by a jet airliner, an ocean liner or a circus giant; the jumbo jet was named after the word.",
+              "confidence": "certain"
+            },
+            "note": "The circus giant distractor is discussed in the issues."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Jumbo was an African elephant kept at London Zoo.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "P. T. Barnum bought Jumbo in 1882 and toured him in North America.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Boeing 747 got the nickname jumbo jet long after the elephant.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "The distractor 'Circus giant' overlaps the key in spirit, since Jumbo was a giant attraction of a circus. The usual reading (a very tall performer) makes it wrong, but a circus figure unrelated to Jumbo would remove the doubt."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, etymology), c2 (distractor, quotation), c4 (explanation, date) and c5 (explanation, number) rest on knowledge alone in both checks. Neither checker could search (the shared search limit was exhausted, so the batch used 0 of its 26 searches), and no pinned dataset covers them, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: both checkers noted the distractor 'Circus giant' can describe Jumbo himself; replace it with an option that cannot.",
+      "decidedAt": "2026-11-01T04:43:24Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The word 'jumbo', meaning very large, was made popular by a famous what?",
+  "answer": "Elephant",
+  "wrong": ["Jet airliner", "Ocean liner", "Circus giant"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.54,
+    "spread": 0.33,
+    "estimator": "v0"
+  }
+}

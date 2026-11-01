@@ -1,0 +1,220 @@
+{
+  "id": "p.sport.0152",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["world-cup", "football", "spain", "africa"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "Andrés Iniesta scored the only goal of the final against the Netherlands, in extra time in Johannesburg. It was Spain's first World Cup title.",
+  "learnMore": "2010 FIFA World Cup",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Spain won the 2010 men's World Cup in South Africa, the first World Cup held in Africa."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Netherlands lost the 2010 final, and Germany and Brazil were knocked out before it."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Andrés Iniesta scored the only goal of the 2010 final, in extra time at Soccer City in Johannesburg."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The 2010 World Cup was Spain's first."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors; its one warning is C22 (score 0.70, same answer), because the key, Spain, is also the key of p.geo.0163, a geography question about an unrelated fact; both stems mention Africa, which lifts the score. I ask the editor for dedupe related_ok. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup, file 2010/worldcup.json, Final, 11 July 2010, Netherlands v Spain, ft 0-0, et 0-1, 'Soccer City, Johannesburg' (c1, c3 score and venue); every 2010 ground is in South Africa and no earlier tournament has a ground in Africa (c1); Spain appears in no earlier final and finished behind Uruguay in the 1950 final group (c4); Germany and Brazil are not in the 2010 final (c2). The scorer (c3) is not in the file, which has no goal lists for 2010. rivalTest: The Netherlands is the trap as the losing finalist; Germany reached the semi-final and Brazil the quarter-final. Only Spain won. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 24 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1d4ea4661f6129df1010c16c2582de94b3c89baac8ab4fd0ad922d75b5e5e156",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Spain",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2010/worldcup.json; earlier files for grounds",
+              "locator": "matches[round=Final]; distinct ground cities",
+              "excerpt": "{\"round\":\"Final\",\"date\":\"2010-07-11\",\"team1\":\"Netherlands\",\"team2\":\"Spain\",\"score\":{\"et\":[0,1],\"ft\":[0,0]},\"ground\":\"Soccer City, Johannesburg\"}; 2010 ground cities: Johannesburg, Cape Town, Pretoria, Polokwane, Rustenburg, Bloemfontein, Port Elizabeth, Durban, Nelspruit",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Every 2010 ground is a South African city, and no ground in the 1930 to 2006 files is in Africa."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2010/worldcup.json",
+              "locator": "Final, Semifinals, Quarterfinals",
+              "excerpt": "{\"round\":\"Final\",\"team1\":\"Netherlands\",\"team2\":\"Spain\",\"score\":{\"et\":[0,1],\"ft\":[0,0]}} | {\"round\":\"Semifinals\",\"team1\":\"Germany\",\"team2\":\"Spain\",\"score\":[0,1]} | {\"round\":\"Quarterfinals\",\"team1\":\"Netherlands\",\"team2\":\"Brazil\",\"score\":[2,1]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Andrés Iniesta scored the only goal of the 2010 final, in the 116th minute of extra time, at Soccer City in Johannesburg.",
+              "confidence": "certain"
+            },
+            "note": "worldcup 2010 confirms 0-0 after 90 minutes and 0-1 after extra time at Soccer City, Johannesburg, but names no scorers, so the scorer rests on knowledge. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 2006/worldcup.json",
+              "locator": "winner of each Final (1950: Final Round)",
+              "excerpt": "1930 Uruguay, 1934 Italy, 1938 Italy, 1954 West Germany, 1958 Brazil, 1962 Brazil, 1966 England, 1970 Brazil, 1974 West Germany, 1978 Argentina, 1982 Italy, 1986 Argentina, 1990 West Germany, 1994 Brazil, 1998 France, 2002 Brazil, 2006 Italy; 1950 Uruguay (Final Round)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Spain won none of the tournaments before 2010."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9aad2ec328e0c549d1742d2177cb999f563998e114847f5ef12e7f29c57b5e37",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Spain",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2010/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "{\"round\":\"Final\",\"date\":\"2010-07-11\",\"team1\":\"Netherlands\",\"team2\":\"Spain\",\"score\":{\"et\":[0,1],\"ft\":[0,0]},\"ground\":\"Soccer City, Johannesburg\"}; every 2010 ground is in a South African city (Johannesburg, Cape Town, Pretoria, Polokwane, Rustenburg, Bloemfontein, Port Elizabeth, Durban, Nelspruit)",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The dataset gives the winner and host country. That no earlier World Cup was in Africa follows from the host list (Uruguay, Italy, France, Brazil, Switzerland, Sweden, Chile, England, Mexico, West Germany, Argentina, Spain, USA, Korea/Japan, Germany)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "2010/worldcup.json",
+              "locator": "Quarterfinals, Semifinals, Final",
+              "excerpt": "Quarterfinals: Netherlands 2-1 Brazil. Semifinals: Germany 0-1 Spain. Final: Netherlands 0-1 Spain after extra time.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Andrés Iniesta scored the only goal of the 2010 final, in the 116th minute at Soccer City.",
+              "confidence": "certain"
+            },
+            "note": "The file confirms a 0-1 extra-time result at Soccer City, Johannesburg, but lists no scorers for 2010."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json to 2010/worldcup.json (one file per year)",
+              "locator": "round=Final, winners",
+              "excerpt": "Finals won: 1930 Uruguay, 1934 Italy, 1938 Italy, 1950 Uruguay, 1954 West Germany, 1958 Brazil, 1962 Brazil, 1966 England, 1970 Brazil, 1974 West Germany, 1978 Argentina, 1982 Italy, 1986 Argentina, 1990 West Germany, 1994 Brazil, 1998 France, 2002 Brazil, 2006 Italy, 2010 Spain. Spain wins no earlier final.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c3 (explanation, superlative) rests on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which country won the 2010 men's World Cup, the first held in Africa?",
+  "answer": "Spain",
+  "wrong": ["Netherlands", "Germany", "Brazil"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.501,
+    "estimator": "v0"
+  }
+}

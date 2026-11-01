@@ -1,0 +1,208 @@
+{
+  "id": "p.sport.0212",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["world-cup", "football", "france"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "France beat Brazil 3-0 at the Stade de France to win the World Cup for the first time, as hosts. Emmanuel Petit added the third goal in stoppage time.",
+  "learnMore": "1998 FIFA World Cup final",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Zinedine Zidane scored two headed goals for France in the 1998 World Cup final."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Thierry Henry, Youri Djorkaeff and Emmanuel Petit did not score two headed goals in the 1998 final; Petit scored France's third goal."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "France beat Brazil 3-0 in the 1998 final at the Stade de France, winning the World Cup for the first time, as hosts."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Emmanuel Petit scored France's third goal of the 1998 final in stoppage time."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3): all eleven codes confirmed true; the item schema refuses a selfCheck field as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed, 4 high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: worldcup, 1998/worldcup.json: Final, Brazil v France on 12 July 1998 at the Stade de France, Saint-Denis, 0-3, which confirms the score in c3. The file has no scorers, so c1, c2 and c4 need web evidence; that it was France's first title can be read from the finals of 1930 to 1994 in the same dataset. rivalTest: Petit is the closest rival, because he did score in the final, but once and not with his head. Henry and Djorkaeff were in the squad and did not score in the final. Two headers fit Zidane alone. volatility: evergreen: settled history or long-standing rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no single country's local knowledge is needed and the subject has international reach, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes and plain hyphens only; the explanation has 29 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: None.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "938a62906139eef75136a6ff74c0541cde3eb0e42146f293594a92073765e90d",
+        "startedAt": "2026-11-01T02:47:00Z",
+        "finishedAt": "2026-11-01T03:22:08Z",
+        "coldSolve": {
+          "answerGiven": "Zinedine Zidane",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Zidane headed in from corners in the 27th minute and in first-half stoppage time of the 1998 final.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3). worldcup 1998 gives the final score (Brazil 0-3 France) but no scorers."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Henry and Djorkaeff did not score in the final, and Petit's goal, the third, was not a header.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1998/worldcup.json",
+              "locator": "matches[round=Final]; the ground of every 1998 match; the Final record of every file from 1930 to 1994",
+              "excerpt": "{\"round\": \"Final\", ... \"date\": \"1998-07-12\" ... \"team1\": \"Brazil\" ... \"team2\": \"France\" ... \"score\": [0, 3] ... \"ground\": \"Stade de France, Saint-Denis\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Final 12 July 1998: Brazil 0-3 France at the Stade de France, Saint-Denis. Every 1998 ground in the file is in France (hosts), and France is not the winner of any final from 1930 to 1994, so this was its first title."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Petit scored France's third goal in stoppage time at the end of the match (90+3).",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search could run (the session's shared WebSearch budget was already spent, so 0 searches ran), so it still needs dataset or web evidence in another check (§9.9 rule 3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "97dbf3ae6173a849e6ea56befe31995ddca2ad1fa544684b188f9904c6e5dca6",
+        "startedAt": "2026-11-01T02:56:00Z",
+        "finishedAt": "2026-11-01T03:21:29Z",
+        "coldSolve": {
+          "answerGiven": "Zinedine Zidane",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Zinedine Zidane scored two headers in the 1998 final, the first from a corner in the 27th minute and the second from a corner just before half-time.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Emmanuel Petit scored France's third goal in stoppage time with his foot, and neither Thierry Henry nor Youri Djorkaeff scored in the final.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1998/worldcup.json",
+              "locator": "round=Final",
+              "excerpt": "Final, 1998-07-12: Brazil [0,3] France, Stade de France, Saint-Denis",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "France had not won an earlier final in the file (winners 1930 to 1994 are Uruguay, Italy, West Germany, Brazil, England, Argentina), so 1998 was their first title, as hosts."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Petit's goal came in the third minute of stoppage time at the end of the second half.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, number), c2 (distractor, number) and c4 (explanation, date) rest on knowledge alone in both checks: neither checker ran a search (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. c3 carries worldcup evidence in both checks; the 1998 file lists no scorers, so c1, c2 and c4 need a web source. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:37:40Z"
+    }
+  },
+  "format": "mc",
+  "stem": "Which player headed two goals for France in the 1998 men's World Cup final?",
+  "answer": "Zinedine Zidane",
+  "wrong": ["Thierry Henry", "Youri Djorkaeff", "Emmanuel Petit"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.393,
+    "estimator": "v0"
+  }
+}

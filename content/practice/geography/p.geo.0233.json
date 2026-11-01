@@ -1,0 +1,222 @@
+{
+  "id": "p.geo.0233",
+  "status": "active",
+  "category": "geo",
+  "tags": ["islands", "arctic", "europe"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "A vault dug deep into a frozen mountainside there was built to store back-up seeds of the world's crops, in case disaster strikes elsewhere.",
+  "learnMore": "Svalbard",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Svalbard belongs to Norway."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Svalbard does not belong to Denmark, Iceland or Russia."
+    },
+    {
+      "id": "c3",
+      "role": "key",
+      "ref": "stem",
+      "risk": "standard",
+      "text": "Polar bears live on Svalbard."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Svalbard Global Seed Vault, dug into a frozen mountainside, was built to store back-up samples of crop seeds from around the world."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check run for the batch and writer; no errors or warnings on this item. Claims: every checkable statement is listed, distractors included; every claim is standard: none holds a number, a superlative or another C26 trigger, and the item is not counterintuitive. Datasets: mledoze-countries lists Svalbard and Jan Mayen (SJM) as a non-independent territory with Norwegian as its language, and geonames-cities gives Longyearbyen the code SJ; neither names the sovereign state, so c1 is standard knowledge. Rival test: Russia pulls hardest, because Russian mining towns stand on the islands under the Svalbard Treaty, but sovereignty is Norway's. Denmark is the Arctic power through Greenland, and Iceland is the nearby Nordic island state. Against the key: nothing. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: Svalbard is little known everywhere, so no region has an edge; the seed vault is the 'tell someone' fact. Style: Oxford spelling, plain hyphens only, straight apostrophes, explanation of 24 words. Myths: every claim screened against content/reference/myths.json; no entry matches. Mystery and encore: nothing of either kind to check in a practice item. External evidence: none; every claim is standard. Seed: 3 (medium): many guess Norway from the Nordic name, others pick Russia or Denmark. Counterintuitive: false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "637565d19f02251c1b784ce21b9100b9ecaf30c7f72787d73e0c0a8d689bd2ea",
+        "startedAt": "2026-11-01T02:35:33Z",
+        "finishedAt": "2026-11-01T02:55:44Z",
+        "coldSolve": {
+          "answerGiven": "Norway",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "country-codes",
+              "version": "2d84034a0cae19ea5444b78c2131304a5c7f4bb9",
+              "file": "country-codes.csv",
+              "locator": "ISO3166-1-Alpha-3=SJM",
+              "excerpt": "CLDR display name \"Svalbard & Jan Mayen\", is_independent \"Territory of NO\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Svalbard is Norwegian territory (the 1920 Svalbard Treaty gives other states rights there but sovereignty to Norway)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Svalbard belongs to Norway, not Denmark, Iceland or Russia.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Polar bears live on and around Svalbard.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Svalbard Global Seed Vault near Longyearbyen is cut into a permafrost mountainside and stores duplicate seed samples from gene banks worldwide.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "1d1fa6761499c86cf0dc747f4cc3641c940e20cf152a914bcec9041173fa3637",
+        "startedAt": "2026-11-01T02:37:00Z",
+        "finishedAt": "2026-11-01T03:05:30Z",
+        "coldSolve": {
+          "answerGiven": "Norway",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "natural-earth",
+              "version": "ca96624a56bd078437bca8184e78163e5039ad19",
+              "file": "ne_110m_admin_0_countries.geojson",
+              "locator": "Norway feature, SOVEREIGNT=Norway",
+              "excerpt": "The Norway feature holds three polygons between 76.8 and 80.7 N and 10.4 to 27.4 E, the Svalbard archipelago.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Sovereignty rests on the 1920 Svalbard Treaty, which recognises Norway's sovereignty; it is not contested, only the treaty rights of other states differ."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Svalbard is Norwegian territory, not Danish, Icelandic or Russian.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Polar bears live on Svalbard.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Svalbard Global Seed Vault is dug into a frozen mountainside near Longyearbyen to store back-up samples of crop seeds from around the world.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; every claim is standard risk, so knowledge at certain suffices (§9.5.3). Lint clean, no myth hits.",
+      "decidedAt": "2026-11-01T04:36:56Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "nearestId": "p.geo.0232",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:36:56Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The remote islands of Svalbard, home to polar bears, belong to which country?",
+  "answer": "Norway",
+  "wrong": ["Denmark", "Iceland", "Russia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.239,
+    "estimator": "v0"
+  }
+}

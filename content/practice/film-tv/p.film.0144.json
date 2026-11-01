@@ -1,0 +1,236 @@
+{
+  "id": "p.film.0144",
+  "status": "cut",
+  "category": "film",
+  "tags": ["tv-series", "sitcoms", "1990s"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "It was filmed before a studio audience in Burbank, California. The fountain in the opening titles stands on the Warner Bros. lot there.",
+  "learnMore": "Friends",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The sitcom Friends is set in New York City."
+    },
+    {
+      "id": "c2",
+      "role": "key",
+      "ref": "stem",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Friends ran from 1994 to 2004."
+    },
+    {
+      "id": "c3",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Friends is not set in Chicago, Boston or Los Angeles."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Friends was filmed before a studio audience at Warner Bros. in Burbank, California."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The fountain seen in the Friends opening titles is on the Warner Bros. lot in Burbank."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor; the schema's riskReason list has no only or counterintuitive, so such claims carry the nearest listed reason. Datasets: geonames-cities lists Burbank (US), which supports only the place name. Rival test: Boston and Chicago are homes of other famous sitcoms, and the show was filmed in Los Angeles County, which makes Los Angeles a tempting wrong pick. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is known worldwide and the options need no single country's local knowledge. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 23 words. Myths: claims screened against myths.json, no match. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c6129edeef25bd4445069f3e5c52cc3beb2abdd0c1479fc133d35c2178674702",
+        "startedAt": "2026-11-01T01:36:00Z",
+        "finishedAt": "2026-11-01T01:55:48Z",
+        "coldSolve": {
+          "answerGiven": "New York City",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Friends is set in New York City, in Manhattan.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Friends ran from September 1994 to May 2004.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only: needs dataset or web evidence in a confirming check before acceptance (§9.9 rule 3). No pinned dataset covers it, and no web search could run this session (the session-wide WebSearch limit was already used up)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "It is not set in Chicago, Boston or Los Angeles.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Friends was taped before a live studio audience at Warner Bros. in Burbank.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The fountain in the opening titles stands on Warner Bros. property in Burbank, the Warner Bros. Ranch backlot.",
+              "confidence": "certain"
+            },
+            "note": "See the wording note: 'the Warner Bros. lot' could be read as the main lot."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The opening-titles fountain is on the Warner Bros. Ranch, a separate Warner Bros. backlot in Burbank, rather than the main studio lot where the show was taped. 'A Warner Bros. lot there' would be exact; the key is unaffected."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "d953da12451d296ffbe7963e2bcb2202f72a1082af0481bba39c92d9977048fb",
+        "startedAt": "2026-11-01T01:28:00Z",
+        "finishedAt": "2026-11-01T01:56:32Z",
+        "coldSolve": {
+          "answerGiven": "New York City",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Friends is set in New York City.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Friends ran from September 1994 to May 2004.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Friends is not set in Chicago, Boston or Los Angeles.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Friends was filmed before a studio audience at Warner Bros. in Burbank.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The opening-titles fountain is on Warner Bros. property in Burbank.",
+              "confidence": "certain"
+            },
+            "note": "'Lot' is the usual loose term here."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm01e",
+        "at": "2026-11-01T01:35:03Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c2 rests on knowledge only: neither check could search and no pinned dataset covers film, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims, so it is cut (§9.2). Redraft it under a new id once evidence can be gathered. Checker A also noted that the fountain stands on the Warner Bros. Ranch backlot, and dedupe flagged p.soc.0229 (same answer).",
+      "decidedAt": "2026-11-01T04:03:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In which city is the sitcom Friends (1994 to 2004) set?",
+  "answer": "New York City",
+  "wrong": ["Chicago", "Boston", "Los Angeles"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.95,
+    "spread": 0.351,
+    "estimator": "v0"
+  }
+}

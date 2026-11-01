@@ -1,0 +1,251 @@
+{
+  "id": "p.sport.0109",
+  "status": "cut",
+  "category": "sport",
+  "tags": ["video-games", "nintendo", "world-cup", "timelines"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": true,
+  "explanation": "Nintendo began in Kyoto in 1889, making hanafuda playing cards. It moved into video games in the 1970s, about 40 years after Uruguay hosted the first World Cup.",
+  "learnMore": "Nintendo",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Nintendo was founded in Kyoto in September 1889 as a maker of hanafuda playing cards."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "The first FIFA World Cup was played in Uruguay in July 1930."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Nintendo began making video game products in the 1970s."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Uruguay hosted the first FIFA World Cup."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor), and so are both label claims of this counterintuitive comparison. datasets: worldcup, file 1930/worldcup.json: the earliest match is dated 13 July 1930 and the final 30 July 1930, all at Montevideo grounds (c2, c4). No pinned dataset covers Nintendo, so c1 and c3 need web evidence. rivalTest: Players picture Nintendo as a modern electronics company and the World Cup as old, so most will pick the World Cup; the gap is 41 years, far beyond the 10-year guard, so no date dispute can flip it. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 28 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice comparison item. doubts: None on the order. c3 is bounded to a decade on purpose, because Nintendo's first electronic games and its distribution of other makers' consoles span the 1970s.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1983dd6e10484b2edd72ad8f3e2a6930642f90c694dc6b8251895abc0db645c8",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "The founding of Nintendo",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fusajiro Yamauchi founded Nintendo in Kyoto in September 1889 to make hanafuda cards.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "earliest and latest match dates; grounds",
+              "excerpt": "first match: {\"round\":\"Matchday 1\",\"date\":\"1930-07-13\",\"team1\":\"France\",\"team2\":\"Mexico\",\"ground\":\"Estadio Pocitos, Montevideo\"}; final: {\"round\":\"Final\",\"date\":\"1930-07-30\",\"team1\":\"Uruguay\",\"team2\":\"Argentina\",\"ground\":\"Estadio Centenario, Montevideo\"}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "1930 is the first tournament the dataset holds; every match was played in July 1930 in Montevideo, Uruguay."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nintendo entered video games in the 1970s, distributing the Magnavox Odyssey in Japan from 1974 and selling its own Color TV-Game consoles from 1977.",
+              "confidence": "certain"
+            },
+            "note": "High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "distinct grounds",
+              "excerpt": "Estadio Pocitos, Montevideo | Estadio Parque Central, Montevideo | Estadio Centenario, Montevideo",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Every 1930 ground is in Montevideo, so Uruguay hosted."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nintendo's first video game products came between 1974 and 1977, 44 to 47 years after 1930, so 'about 40 years' holds only at decade precision.",
+              "confidence": "certain"
+            },
+            "note": "Added by checker A. Role explanation, risk high (number). Claim: Nintendo moved into video games about 40 years after the first World Cup, in 1930. High-risk, knowledge only: no pinned dataset covers it and no web search was possible in this run (the shared search budget was already spent), so it needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'About 40 years after' the 1930 World Cup understates a 44 to 47 year gap; 'more than 40 years' would be exact."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "235a6ed8339c5280258b9b0a927967ef4ca6b90ee18fb0fa8d6217ae4f768a49",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "The founding of Nintendo",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nintendo dates its founding to September 1889 in Kyoto, when Fusajiro Yamauchi began making hanafuda playing cards.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "dates and grounds",
+              "excerpt": "First match \"date\":\"1930-07-13\", final \"date\":\"1930-07-30\"; every ground is in Montevideo (Estadio Pocitos, Estadio Parque Central, Estadio Centenario).",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "July 1930 in Uruguay. The 1930 file is the first World Cup in the dataset."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nintendo's first video-game products date from the mid to late 1970s (arcade titles, then the Color TV-Game in 1977).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "worldcup",
+              "version": "516d3825c3bd23fdc298c4014e84bde78f2d4965",
+              "file": "1930/worldcup.json",
+              "locator": "grounds",
+              "excerpt": "All matches played at Estadio Pocitos, Estadio Parque Central and Estadio Centenario, Montevideo.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Uruguay hosted the first men's World Cup."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Explanation: 'about 40 years after' is loose. Nintendo's first video-game products date from about 1975 to 1977, which is 45 to 47 years after 1930. 'More than four decades after' is exact for the whole decade."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claims c1 (label, date) and c3 (explanation, date) rest on knowledge alone in both checks: checker A ran no searches (0 of the batch's 26) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers also note that 'about 40 years' understates a gap of 44 to 47 years: 'more than four decades' is exact. The content read as sound: redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    }
+  },
+  "format": "comparison",
+  "stem": "Which came first?",
+  "a": "The founding of Nintendo",
+  "b": "The first FIFA World Cup",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year it happened",
+  "unit": "year",
+  "values": {
+    "a": 1889,
+    "b": 1930
+  },
+  "valueDisplay": {
+    "a": "September 1889",
+    "b": "July 1930"
+  },
+  "predicted": {
+    "p": 0.4,
+    "spread": 0.22,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,279 @@
+{
+  "id": "p.film.0243",
+  "status": "active",
+  "category": "film",
+  "tags": ["world-cinema", "senegal", "directors"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Sembène was a docker in Marseille and a published novelist before he studied film-making in Moscow. Black Girl follows a young Senegalese woman who goes to work for a family in France.",
+  "learnMore": "Ousmane Sembène",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Ousmane Sembène, who made Black Girl (1966), was Senegalese."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Sembène was not from Nigeria, Ghana or Kenya."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sembène worked as a docker in Marseille."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sembène published novels before he became a film-maker."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Sembène studied film-making in Moscow, at the Gorky Film Studio."
+    },
+    {
+      "id": "c6",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Black Girl (La Noire de...) follows a young Senegalese woman who moves to France to work for a French family."
+    }
+  ],
+  "writerNotes": "Self-check 9.3. Lint: clean. Claims: every claim listed, risk at or above the C26 floor and raised where a detail is easy to get wrong; the schema's riskReason list has no 'only' or 'counterintuitive', so such claims carry the nearest listed reason. Datasets: no pinned dataset covers film or TV facts, so every high-risk claim here needs checker evidence from the web. Rival test: Nigeria is the likeliest trap, as home of Nollywood; the accented, French-style spelling of Sembène points to a French-speaking country, and the other three options are English-speaking. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: African cinema, with a foothold for players anywhere: the French spelling of the name. Style: Oxford spelling, straight single quotes, plain hyphens, explanation of 32 words. Myths: claims screened against myths.json; no claim resembles a listed myth. Mystery and encore: not applicable to a practice item. Doubts: none beyond the high-risk claims flagged for external evidence.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfilm02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "b770e67958320c17ad15a7cd31c4ebba94dace11ebb94bed49fe9dd0cf9163d0",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:46:48Z",
+        "coldSolve": {
+          "answerGiven": "Senegal",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "moma-artists",
+              "version": "51a140dae6e6d9bc91f6d711f662df60c80b4f8a",
+              "file": "Artists.json",
+              "locator": "ConstituentID=41512",
+              "excerpt": "\"DisplayName\":\"Ousmane Sembène\",\"ArtistBio\":\"Senegalese, 1923–2007\",\"Nationality\":\"Senegalese\"",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The dataset confirms the nationality, which is what the key rests on. That he made Black Girl (La Noire de...) in 1966 rests on my knowledge (reference, certain)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sembène was born in Ziguinchor in Senegal; he was not from Nigeria, Ghana or Kenya.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "He worked as a docker in Marseille after the Second World War.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "His first novel, Le Docker noir, appeared in 1956, years before his first film.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the early 1960s he trained in film-making at the Gorky Film Studio in Moscow.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "La Noire de... follows Diouana, a young Senegalese woman who goes to work for a French couple on the Riviera.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfilm02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "866acd63b5eedc3a70c3d08579f158f82f834c6074d54b451aa0b67f10bba0ea",
+        "startedAt": "2026-11-01T03:24:00Z",
+        "finishedAt": "2026-11-01T03:48:16Z",
+        "coldSolve": {
+          "answerGiven": "Senegal",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ousmane Sembène, director of Black Girl (1966), was Senegalese.",
+              "confidence": "certain"
+            },
+            "note": "Foothold for non-experts: Black Girl is a French-language film about a Senegalese woman, which points to a francophone West African country. High-risk (date): knowledge only in this check, no search was possible this turn; external evidence has to come from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Sembène was not from Nigeria, Ghana or Kenya.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sembène worked as a docker in Marseille.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sembène published novels before he became a film-maker.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sembène studied film-making in Moscow, at the Gorky Film Studio.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Black Girl follows a young Senegalese woman who moves to France to work for a French family.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfilm02e",
+        "at": "2026-11-01T03:26:22Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfilm02d",
+      "decision": "accept",
+      "reason": "Both checks pass. High-risk c1 carries moma-artists dataset evidence for Sembène's nationality in pass A (§9.9 rule 3); the 1966 date of Black Girl in the stem is confirmed at certain by both checks. The other five claims are standard and confirmed at certain. Lint clean, no myth hits. Dedupe flags a near item across the seal; checked locally with --reveal, it states a different fact, so related_ok. Hard by its estimate, and world cinema from Africa.",
+      "decidedAt": "2026-11-01T04:35:04Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:35:04Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:35:04Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "The pioneering director Ousmane Sembène, who made Black Girl (1966), came from which country?",
+  "answer": "Senegal",
+  "wrong": ["Nigeria", "Ghana", "Kenya"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.197,
+    "estimator": "v0"
+  }
+}

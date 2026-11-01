@@ -1,0 +1,218 @@
+{
+  "id": "p.book.0259",
+  "status": "cut",
+  "category": "book",
+  "tags": ["classic-novels", "jane-austen"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Sense and Sensibility (1811) was credited only to 'A Lady', and later books to 'the Author of' her earlier ones. Her name was made public after her death in 1817.",
+  "learnMore": "Jane Austen",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "None of the novels Jane Austen published in her lifetime carried her name."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "Sense and Sensibility, published in 1811, was credited to 'A Lady'."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "Austen's later novels were credited to 'the Author of' her earlier books, such as Sense and Sensibility."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "first",
+      "text": "Austen was first publicly named as the author in her brother Henry's biographical notice, published after her death in 1817."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). This schema has no selfCheck field, so all eleven codes are confirmed here in prose. Subtopic: classic novels. lint: content:check reports no errors on this item and no warnings. claims: every statement in the stem, options and explanation is listed, with risk at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means, and the key claim of a counterintuitive item) and raised wherever a fact is beyond everyday knowledge. The tooling's riskReason list has no counterintuitive value, so the key of this counterintuitive item carries checker_doubt. datasets: no pinned dataset covers literary facts of this kind, so checker A needs web evidence for every high-risk claim. rivalTest: Argued for false: her authorship became an open secret in society (the Prince Regent knew of it), but the statement is about what the books carried, and no title page in her lifetime named her, so true holds. Counterintuitive: she is one of the most famous novelists in English, so players assume her name was on her books. volatility: evergreen; no time words; nothing depends on events after mid-2026. regional: the work is known well beyond any one country and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has about the same chance as one in London or Chicago. style: Oxford spelling, straight single quotes, plain hyphens only, explanation of 30 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: nothing of either kind to check in a practice item. doubts: none. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0485dd2278a178c8fd0038e4ed4bf54e3c72d3b19475161741657c06fc033241",
+        "startedAt": "2026-11-01T03:24:57Z",
+        "finishedAt": "2026-11-01T03:47:30Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The four novels Austen published in her lifetime carried no author's name, only 'By a Lady' and then 'By the Author of' her earlier books.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1811 title page of Sense and Sensibility reads 'By a Lady'.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Pride and Prejudice was 'By the Author of Sense and Sensibility', and her later novels named the earlier books the same way.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and no web search could run (the shared web-search budget was used up), so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Henry Austen's Biographical Notice (dated December 1817, printed with Northanger Abbey and Persuasion) is often called the first public identification of his sister as the author, but newspaper death notices of July 1817 are reported to have named her as the authoress of her novels already.",
+              "confidence": "unsure"
+            },
+            "note": "Uncertain: whether Henry's notice was the first public naming depends on those July 1817 notices, and no web search could run to settle it. The explanation's own sentence ('Her name was made public after her death in 1817') holds either way, so restating c4 to match it would clear the doubt."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Checker doubt on c4 (§9.4): it credits Henry Austen's Biographical Notice (December 1817) with first naming her, but July 1817 newspaper death notices are reported to have named her as the authoress of her novels, and no web search could run to settle it. Restate c4 to match the explanation ('her authorship was made public after her death in 1817') or get web evidence before acceptance."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      },
+      {
+        "checker": "fc-pbook02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "5a751e97e9835ed1fdaa843276cbb72c375a7e84fb0282aad946f52a12df20f8",
+        "startedAt": "2026-11-01T03:29:00Z",
+        "finishedAt": "2026-11-01T03:58:22Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "None of the four novels Austen published in her lifetime (1811 to 1815) carried her name; they appeared as 'By a Lady' or as by the author of her earlier books.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Northanger Abbey and Persuasion came out after her death, so they are not counterexamples to the lifetime claim. High-risk (checker_doubt): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Sense and Sensibility (1811) was published as by 'A Lady'.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Her later novels were credited to 'the Author of' her earlier books, such as Sense and Sensibility.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation): knowledge only, so it counts only with external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Her name became public after her death in 1817, and Henry Austen's Biographical Notice is the best-known naming, but I cannot confirm it was the first.",
+              "confidence": "likely"
+            },
+            "note": "checker_doubt c4: no search was possible (budget exhausted). I recall newspaper death notices of July 1817 that may have named her as the author before the Notice (December 1817), so 'first publicly named' in the Notice is unverified."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "checker_doubt c4: \"first publicly named as the author in her brother Henry's biographical notice\" may be pre-empted by newspaper death notices of July 1817 that, as I recall, named her as the author of her novels. I could not confirm it and had no search budget. The player-facing explanation (\"Her name was made public after her death in 1817\") is safe either way, so restate c4 to match it, or evidence the \"first\" with a Tier A or B source."
+          },
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Read literally, \"Jane Austen's novels were published without her name on them during her lifetime\" could be taken to say that all her novels were published in her lifetime, and two (Northanger Abbey and Persuasion) were not. The key (True) holds on every reading; \"The novels Jane Austen published in her lifetime appeared without her name\" would remove the wrinkle."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pbook02e",
+        "at": "2026-11-01T03:29:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook02d",
+      "decision": "cut",
+      "reason": "A revise, B revise. Both checkers doubt c4 (that Henry Austen's 1817 notice first named her; July 1817 death notices may have) and both ask for it to be restated, which changes a claim and needs two fresh checks. A tiebreak cannot settle a revise/revise pair (§9.9 rule 2), and high-risk c1, c2 and c3 rest on knowledge alone in both checks. Redraft under a new id with c4 as 'her authorship was made public after her death in 1817' and B's tighter statement: 'The novels Jane Austen published in her lifetime appeared without her name.'",
+      "decidedAt": "2026-11-01T04:44:58Z"
+    }
+  },
+  "format": "tf",
+  "stem": "Jane Austen's novels were published without her name on them during her lifetime.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.62,
+    "spread": 0.126,
+    "estimator": "v0"
+  }
+}

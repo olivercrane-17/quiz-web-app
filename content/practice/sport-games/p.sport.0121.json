@@ -1,0 +1,240 @@
+{
+  "id": "p.sport.0121",
+  "status": "active",
+  "category": "sport",
+  "tags": ["winter-olympics", "olympic-history", "norway"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Until 1992 the Summer and Winter Games fell in the same year. The IOC then staggered them so that an Olympics would be held every two years.",
+  "learnMore": "1994 Winter Olympics",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The 1994 Winter Olympics in Lillehammer were held two years after the 1992 Winter Olympics in Albertville."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Albertville 1992, Nagano 1998 and Calgary 1988 each came four years after the previous Winter Games."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "From 1924 to 1992 the Winter and Summer Olympics were held in the same years."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The IOC staggered the Summer and Winter Games so that an Olympics would be held every two years."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE §9.3), all eleven codes confirmed true; the selfCheck field is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: 4 listed; all are high. Every claim holding a digit, a number word, quotation marks, a superlative, 'only', 'first', 'invented', 'named after', 'comes from' or 'means' is high (the C26 floor). datasets: olympic-editions, edition_metadata.csv: the Winter editions run 1924, 1928, 1932, 1936, 1948, then every four years to 1992, each in a year that also has a Summer edition (c3); 1994 Lillehammer is the first Winter year without one and comes two years after 1992 Albertville (c1); Calgary 1988, Albertville 1992 and Nagano 1998 each follow the previous Winter edition by four years (c2). The IOC's reason (c4) needs web evidence. rivalTest: Albertville 1992 is the near miss, as the last Winter Games in a Summer year; Nagano 1998 and Calgary 1988 sit on the regular four-year rhythm. Only Lillehammer followed its predecessor by two years. volatility: evergreen: settled history or fixed rules of play; no time words; nothing depends on knowledge newer than mid-2026. regional: no local knowledge is needed; the subject is reported in international sport and games coverage, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. style: Oxford spelling, straight quotes, plain hyphens only; the explanation has 27 words. myths: every claim screened against content/reference/myths.json; none resembles a listed myth. mystery and encore: not applicable to a practice multiple-choice item. doubts: The postponed Tokyo 2020 Games (held in 2021) broke the two-year rhythm once; c4 states the IOC's intention, not that the pattern never slipped.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "697e9659c4541b8766c4ea9cad329d8c1af8caa4fbe8c745cbd1049852c884bf",
+        "startedAt": "2026-11-01T01:49:30Z",
+        "finishedAt": "2026-11-01T02:17:35Z",
+        "coldSolve": {
+          "answerGiven": "Lillehammer 1994",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "edition_id=44; edition_id=45",
+              "excerpt": "44,1992 Winter,1992,Winter,Albertville,France,1992-02-08,1992-02-23,1801,64,57,12 | 45,1994 Winter,1994,Winter,Lillehammer,Norway,1994-02-12,1994-02-27,1738,67,61,12",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "Winter rows 1984 to 1998",
+              "excerpt": "42,1984 Winter,1984,Winter,Sarajevo,Yugoslavia,1984-02-08,1984-02-19,1273,49,39,10 | 43,1988 Winter,1988,Winter,Calgary,Canada,1988-02-13,1988-02-28,1424,57,46,10 | 44,1992 Winter,1992,Winter,Albertville,France,1992-02-08,1992-02-23,1801,64,57,12 | 45,1994 Winter,1994,Winter,Lillehammer,Norway,1994-02-12,1994-02-27,1738,67,61,12 | 46,1998 Winter,1998,Winter,Nagano,Japan,1998-02-07,1998-02-22,2180,72,68,14",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Sarajevo 1984 to Calgary 1988, Calgary to Albertville 1992, and Lillehammer 1994 to Nagano 1998 are each four years."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "Winter rows 1924 to 1992 against Summer rows",
+              "excerpt": "Winter years 1924, 1928, 1932, 1936, 1940, 1944, 1948 to 1992 every four years; Summer rows exist for each of those years (e.g. 29,1924 Winter,1924,Winter,Chamonix,France,1924-01-24,1924-02-05,312,19,17,10 | 8,1924 Summer,1924,Summer,Paris,France,1924-07-05,1924-07-27,3255,45,131,27)",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Every Winter row from 1924 to 1992 shares its year with a Summer row; 1940 and 1944 are cancelled editions in both seasons."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "rows from 1994 on, by year and season",
+              "excerpt": "45,1994 Winter,1994,Winter,Lillehammer,Norway,1994-02-12,1994-02-27,1738,67,61,12 | 24,1996 Summer,1996,Summer,Atlanta,United States,1996-07-19,1996-08-04,10340,197,271,36 | 46,1998 Winter,1998,Winter,Nagano,Japan,1998-02-07,1998-02-22,2180,72,68,14 | 25,2000 Summer,2000,Summer,Sydney,Australia,2000-09-15,2000-10-01,10647,200,300,39",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "From 1994 the Winter and Summer rows alternate every two years (1994 W, 1996 S, 1998 W, 2000 S and so on to 2026 W). That the IOC chose this on purpose rests on knowledge."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "898728640092c4dda082d68e8f00ca31ce3afe0a31241f12d664f056cf81421e",
+        "startedAt": "2026-11-01T01:38:00Z",
+        "finishedAt": "2026-11-01T02:21:45Z",
+        "coldSolve": {
+          "answerGiven": "Lillehammer 1994",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "season=Winter, 1992 and 1994",
+              "excerpt": "44,1992 Winter,1992,Winter,Albertville,France,1992-02-08,1992-02-23 ... 45,1994 Winter,1994,Winter,Lillehammer,Norway,1994-02-12,1994-02-27",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "season=Winter, 1984 to 1998",
+              "excerpt": "42,1984 Winter,Sarajevo; 43,1988 Winter,Calgary; 44,1992 Winter,Albertville; 45,1994 Winter,Lillehammer; 46,1998 Winter,Nagano. Gaps: 1984 to 1988 is 4 years, 1988 to 1992 is 4, 1994 to 1998 is 4.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "olympic-editions",
+              "version": "a8de42ee765a875dce97d4d45309585d38b978b8",
+              "file": "edition_metadata.csv",
+              "locator": "Winter and Summer years, derived",
+              "excerpt": "Every Winter edition from 1924 to 1992 shares its year with a Summer edition (the cancelled 1940 and 1944 pair included). Winter years up to 1992 not matched by a Summer year: none.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "1994 is the first Winter year without Summer Games."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The IOC voted in 1986 to put the Winter Games on their own cycle, two years off the Summer Games, starting with 1994.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport01e",
+        "at": "2026-11-01T01:50:15Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "accept",
+      "reason": "Both checks pass; high-risk c1 to c4 have olympic-editions dataset evidence in a confirming check (c4 in A). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:19:43Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:19:43Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which Winter Olympics came just two years after the previous Winter Games?",
+  "answer": "Lillehammer 1994",
+  "wrong": ["Albertville 1992", "Nagano 1998", "Calgary 1988"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.33,
+    "spread": 0.187,
+    "estimator": "v0"
+  }
+}

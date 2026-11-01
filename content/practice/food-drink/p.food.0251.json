@@ -1,0 +1,211 @@
+{
+  "id": "p.food.0251",
+  "status": "cut",
+  "category": "food",
+  "tags": ["japan", "sauces", "food-words"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Teri refers to the glossy coat that a glaze of soy sauce, mirin and sugar gives grilled fish or chicken. Cooks brush it on several times as the food grills.",
+  "learnMore": "Teriyaki",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "In teriyaki, teri means shine or lustre and yaki means grilling or broiling."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Teri does not mean sweet, salty or smoky."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Teriyaki glaze is made from soy sauce, mirin and sugar and gives the food a glossy surface."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The glaze is brushed on repeatedly while the food grills."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: 'Sweet' is the strongest pull, because the glaze is sweet, but the word refers to its gloss. Against the key: dictionaries give shine, lustre or gloss, all the same sense. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: teriyaki is on menus worldwide, and the glossy glaze is the foothold. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 30 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 5: few players know the Japanese, but the shiny glaze lets reasoners reach it. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "72e9c6a3ac96d299fae4e1cf3c0692d63a780d45d8ac645a3e130217c4a53f53",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Shine",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Teri means shine or lustre, from the glaze, and yaki means grilling or broiling.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (etymology): knowledge only. No pinned dataset covers it and no web search could run (the session's WebSearch limit was used up before my first query), so it still needs external evidence before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Teri does not mean sweet, salty or smoky.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Teriyaki glaze is soy sauce, mirin and sugar (often with sake), and it leaves a glossy surface.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The glaze is brushed on several times during grilling.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "style",
+            "severity": "note",
+            "note": "The key is the only option that is not a taste (Sweet, Smoky, Salty, Shine), an odd one out that some test-wise players pick (compare §4 rule 8)."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "0fd98e549198e2eb330f7e6ee54982995b3a7cd2b01eea63d9df1a090aad526c",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Shine",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "In teriyaki, teri means gloss or shine and yaki means grilling or broiling.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: counts only with external evidence in the other check (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Teri does not mean sweet, salty or smoky.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Teriyaki glaze is soy sauce, mirin and sugar and leaves a glossy coat.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The glaze is brushed on repeatedly during grilling.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "Three options are taste words (Sweet, Salty, Smoky) and the key ('Shine') is the only non-taste word, so it is the odd one out (distractor rule 8). A test-wise player can guess it without knowing the word."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c1 (key, etymology) rests on knowledge only in both checks: checker A could not search (its WebSearch limit was spent before its first query) and no pinned dataset covers it, so §9.9 rule 3 cannot pass. A wording fix adds no evidence, and stepping down the precision ladder changes claims, which needs two fresh checks (§9.2, §9.7). For a redraft: the key is the odd one out among taste words (A, B).",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In the Japanese name teriyaki, 'yaki' means grilled. What does 'teri' mean?",
+  "answer": "Shine",
+  "wrong": ["Sweet", "Salty", "Smoky"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.28,
+    "spread": 0.299,
+    "estimator": "v0"
+  }
+}

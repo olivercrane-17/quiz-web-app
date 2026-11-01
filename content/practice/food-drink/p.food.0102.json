@@ -1,0 +1,215 @@
+{
+  "id": "p.food.0102",
+  "status": "active",
+  "category": "food",
+  "tags": ["spice", "botany"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "In Sri Lanka, growers cut the trees back so they sprout thin shoots, then peel the inner bark from these by hand; it curls into rolls called quills as it dries.",
+  "learnMore": "Cinnamon",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Cinnamon is the dried inner bark of trees of the genus Cinnamomum."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Cinnamon is not made from the seed pods, roots or resin of a tree."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "In Sri Lanka, cinnamon trees are cut back so they sprout shoots, and the inner bark is peeled from those shoots by hand."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Cinnamon bark curls into rolls called quills as it dries."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: seed pods (cardamom, vanilla) and resin (mastic) are real spice sources, so they tempt, but none is cinnamon; nothing argues against the key. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: cinnamon is used in kitchens on every continent. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 31 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: the rolled quills make bark the natural guess for most adults. Doubts: c3 describes Ceylon cinnamon, the kind grown in Sri Lanka, which the explanation names; cassia is harvested differently, so the explanation is limited to Sri Lanka.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "041b08398936b7c8534dd6c4b7cb5b6dc58e7f893d6be02d07c7168829c01da2",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "Inner bark",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cinnamon is the dried inner bark of trees of the genus Cinnamomum.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cinnamon comes from bark, not from seed pods, roots or resin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Ceylon cinnamon trees are coppiced so they send up shoots, and peelers strip the inner bark from the shoots by hand.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The peeled bark curls into rolls called quills as it dries.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "53a036744d5b62c771b69ba376c555db548ee2bcb513edc4979ba7a647353992",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "Inner bark",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Cinnamon is the dried inner bark of Cinnamomum trees; cassia, the common cheap kind, is bark of related species.",
+              "confidence": "certain"
+            },
+            "note": "Rival reading tested: cassia bark is thicker and less often called inner bark, but it is still bark, and no option other than Inner bark is bark."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Cinnamon is not a resin, a root or a seed pod; vanilla and cardamom are the pod spices, ginger and turmeric the root spices.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In Sri Lanka the trees are coppiced into thin stems, the outer bark is scraped off, and the inner bark is peeled by hand.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The peeled inner bark dries into curled rolls called quills.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. Style, distractors and balance reviewed (§9.7); the acceptance rule of §9.9 passes.",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which part of a tree is dried to make cinnamon?",
+  "answer": "Inner bark",
+  "wrong": ["Seed pods", "Roots", "Resin"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.78,
+    "spread": 0.255,
+    "estimator": "v0"
+  }
+}

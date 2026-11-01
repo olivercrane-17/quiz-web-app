@@ -1,0 +1,237 @@
+{
+  "id": "p.book.0168",
+  "status": "active",
+  "category": "book",
+  "tags": ["poetry", "nobel-prize", "songwriters"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The Swedish Academy cited him 'for having created new poetic expressions within the great American song tradition'. He skipped the ceremony and sent his lecture as a recording months later.",
+  "learnMore": "Bob Dylan",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Bob Dylan won the 2016 Nobel Prize in Literature."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Leonard Cohen, Paul Simon and Joni Mitchell did not win the 2016 Nobel Prize in Literature."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "The Nobel citation for Bob Dylan reads 'for having created new poetic expressions within the great American song tradition'."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Dylan did not attend the December 2016 award ceremony and delivered his Nobel lecture as a recording in June 2017."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: poetry and poets. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means). Datasets: c1 to c3 checked in nobel-prizes (iaseth/nobel-prize-data, prize.json): year 2016, category literature, sole laureate id 937, Bob Dylan, motivation exactly as quoted (the file wraps it in typographic quotation marks). c4 needs web evidence. Rival test: Leonard Cohen, also a published poet and novelist, is the strongest trap; Simon and Mitchell are songwriters of the same generation. The distractor claim is dated to 2016 so it never goes stale. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 30 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "45dca983cfec70c989ff2a88b6c7025b26f088b11798382e7f608a8472720914",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "Bob Dylan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[category=literature, year=2016]",
+              "excerpt": "{\"year\":\"2016\",\"category\":\"literature\",\"laureates\":[{\"id\":\"937\",\"firstname\":\"Bob\",\"surname\":\"Dylan\",\"motivation\":\"\\\"for having created new poetic expressions within the great American song tradition\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The pinned Nobel API copy gives Dylan as the 2016 literature laureate."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[category=literature, year=2016]",
+              "excerpt": "{\"year\":\"2016\",\"category\":\"literature\",\"laureates\":[{\"id\":\"937\",\"firstname\":\"Bob\",\"surname\":\"Dylan\",\"motivation\":\"\\\"for having created new poetic expressions within the great American song tradition\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Dylan is the sole 2016 literature laureate (share 1)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "prizes[category=literature, year=2016]",
+              "excerpt": "{\"year\":\"2016\",\"category\":\"literature\",\"laureates\":[{\"id\":\"937\",\"firstname\":\"Bob\",\"surname\":\"Dylan\",\"motivation\":\"\\\"for having created new poetic expressions within the great American song tradition\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "The motivation matches the quoted citation word for word."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dylan missed the ceremony of 10 December 2016, where Patti Smith performed, and delivered his Nobel lecture as a recording released on 5 June 2017.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No dataset covers it and it fell outside the batch search cap, so it counts only with dataset or web evidence from check B or a follow-up (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "735146d8bda4ff6d412ee962726084642f879858cc0b0b6987796f9b1043fbc8",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "Bob Dylan",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "category=literature, year=2016",
+              "excerpt": "{\"year\":\"2016\",\"category\":\"literature\",\"laureates\":[{\"id\":\"937\",\"firstname\":\"Bob\",\"surname\":\"Dylan\",\"motivation\":\"\\\"for having created new poetic expressions within the great American song tradition\\\"\",\"share\":\"1\"}]}",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "category=literature, year=2016",
+              "excerpt": "The 2016 literature prize lists one laureate, Bob Dylan (share 1), so Cohen, Simon and Mitchell did not win it; no Leonard Cohen, Paul Simon or Joni Mitchell appears among literature laureates in prize.json.",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-prizes",
+              "version": "63e8e44bbc64601ead58cc4a5e66d202e97f4916",
+              "file": "prize.json",
+              "locator": "category=literature, year=2016",
+              "excerpt": "Motivation: \"for having created new poetic expressions within the great American song tradition\"",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Dylan stayed away from the 10 December 2016 ceremony and delivered his Nobel lecture as a recording in June 2017.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c4 (explanation, date) rest on knowledge alone in both checks, and the batch's search cap is spent (29 of 26). Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.hist.0163",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which singer-songwriter was awarded the 2016 Nobel Prize in Literature?",
+  "answer": "Bob Dylan",
+  "wrong": ["Leonard Cohen", "Paul Simon", "Joni Mitchell"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.82,
+    "spread": 0.425,
+    "estimator": "v0"
+  }
+}

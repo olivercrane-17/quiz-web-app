@@ -1,0 +1,256 @@
+{
+  "id": "p.hist.0218",
+  "status": "active",
+  "category": "hist",
+  "tags": ["civil-rights", "united-states", "1960s"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "About 250,000 people joined the march. The famous 'dream' passage was largely improvised, and the next year, aged 35, King won the Nobel Peace Prize.",
+  "learnMore": "I Have a Dream",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "Martin Luther King Jr. gave the 'I Have a Dream' speech at the March on Washington on 28 August 1963."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "Malcolm X, Frederick Douglass and John Lewis did not give the 'I Have a Dream' speech; Douglass died in 1895, and Lewis gave a different speech at the same march."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "About 250,000 people attended the March on Washington in 1963."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "quotation",
+      "text": "King improvised much of the 'dream' passage of the speech."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "King won the 1964 Nobel Peace Prize at the age of 35."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: the 20th century (civil rights). Lint: content:check reports no errors on this item and no warnings. Claims: every checkable statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, named after, comes from, means). Datasets: c5 checked in nobel-prizes (year 1964, category peace, laureate id 524, Martin Luther King Jr., share 1) and nobel-laureates-2016 (id 524, born 15 January 1929), which makes him 35 at the award; the other high-risk claims need web evidence. Rival test: John Lewis also spoke at the 1963 march, which makes him a real confusion, but not the 'dream' speech; Malcolm X criticized the march; Douglass lived in the 1800s. Nothing survives against King. Volatility: evergreen; no time words; nothing depends on knowledge newer than mid-2026. Regional: the speech is one of the best-known moments of the 20th century and is taught well beyond the United States, so a player in Lagos, Mumbai, Toronto or Sydney starts level with one in London or Chicago. Style: Oxford spelling, straight quotes, plain hyphens only, explanation of 25 words. Myths: screened every claim against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-phist02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "c00b7aad148a98358240037e0475102fd92658e6290a633384d00b1a3e04dcb6",
+        "startedAt": "2026-11-01T03:08:23Z",
+        "finishedAt": "2026-11-01T03:28:50Z",
+        "coldSolve": {
+          "answerGiven": "Martin Luther King Jr.",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "King delivered the 'I Have a Dream' speech at the Lincoln Memorial during the March on Washington, 28 August 1963.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and WebSearch was unavailable this run (the shared search budget was used up), so it still needs dataset or web evidence from check B or a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Malcolm X did not speak at the march, Frederick Douglass died in 1895, and John Lewis gave his own speech there.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and WebSearch was unavailable this run (the shared search budget was used up), so it still needs dataset or web evidence from check B or a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "About 250,000 people took part in the March on Washington.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only: no pinned dataset covers it and WebSearch was unavailable this run (the shared search budget was used up), so it still needs dataset or web evidence from check B or a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "King left his prepared text for the 'dream' section, which he largely improvised after Mahalia Jackson called on him to tell them about the dream.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (quotation), knowledge only: no pinned dataset covers it and WebSearch was unavailable this run (the shared search budget was used up), so it still needs dataset or web evidence from check B or a follow-up before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-laureates-2016",
+              "version": "de9a728322674c076b3321157c85500f665b4721",
+              "file": "laureate.json",
+              "locator": "laureates[id=524] (Martin Luther King Jr.)",
+              "excerpt": "\"born\": \"1929-01-15\" ... \"prizes\": [{ \"year\": \"1964\", \"category\": \"peace\", \"share\": \"1\" }]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Born 15 January 1929, so he was 35 when the 1964 Peace Prize was announced in October and presented in December. nobel-prizes agrees: year 1964, category peace, laureate id 524."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-phist02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "43cd7553ab99c28c5c9c35af842b3a17ba813dfe738e11b8386cd0f28517e30c",
+        "startedAt": "2026-11-01T03:07:26Z",
+        "finishedAt": "2026-11-01T03:30:41Z",
+        "coldSolve": {
+          "answerGiven": "Martin Luther King Jr.",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Martin Luther King Jr. gave the 'I Have a Dream' speech at the March on Washington on 28 August 1963.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Malcolm X did not speak at the march; Douglass died in 1895; John Lewis spoke but gave a different speech."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Malcolm X and Douglass did not give it (Douglass died in 1895); John Lewis spoke at the march but gave a different speech.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Estimates put the March on Washington crowd at roughly 200,000 to 300,000, with 250,000 the usual figure.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "King departed from his text for the 'dream' passage, prompted by Mahalia Jackson.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "nobel-laureates-2016",
+              "version": "de9a728322674c076b3321157c85500f665b4721",
+              "file": "laureate.json",
+              "locator": "id=524 (Martin Luther King Jr.)",
+              "excerpt": "\"born\":\"1929-01-15\" ... \"prizes\":[{\"year\":\"1964\",\"category\":\"peace\",\"share\":\"1\"}]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The record gives both halves: the 1964 Peace Prize and a 15 January 1929 birth date, so he was 35 when it was announced in October 1964 and awarded in December."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-phist02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (key, quotation), c2 (distractor, quotation), c3 (explanation, number) and c4 (explanation, quotation) rest on knowledge alone in both checks: neither check recorded a search (checker A reports the shared search budget used up), and §9.7 gives a pass/pass item no tiebreak. Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down. Only c5 has dataset evidence (nobel-prizes, in both checks).",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-phist02e",
+        "at": "2026-11-01T03:04:29Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.book.0166",
+      "score": 0.133,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Which civil rights leader gave the 'I Have a Dream' speech in Washington, DC, in 1963?",
+  "answer": "Martin Luther King Jr.",
+  "wrong": ["Malcolm X", "Frederick Douglass", "John Lewis"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.97,
+    "spread": 0.357,
+    "estimator": "v0"
+  }
+}

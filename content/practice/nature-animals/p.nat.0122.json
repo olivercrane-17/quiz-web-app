@@ -1,0 +1,304 @@
+{
+  "id": "p.nat.0122",
+  "status": "active",
+  "category": "nat",
+  "tags": ["ocean-life", "coral-reefs", "invertebrates"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": true,
+  "explanation": "A typical coral is a colony of tiny polyps, cousins of jellyfish and sea anemones. Many reef corals house algae in their tissues, which feed them sugars made from sunlight.",
+  "learnMore": "Coral",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Corals are animals."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Corals are not plants or fungi."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Reef-building corals are colonies of small polyps, which are cnidarians, related to jellyfish and sea anemones."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Many reef corals host symbiotic algae in their tissues that supply them with sugars from photosynthesis."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed. c1 is high because it is the key of a counterintuitive item, so C26 sets it high; the tooling's riskReason enum has no counterintuitive value yet (guide v1.1 adds one), so checker_doubt stands in for it. c2 to c4 are standard marine biology. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: three options on purpose: the kingdoms a player would weigh are animal, plant and fungus, and a fourth such as 'an alga' would be arguable, because reef corals carry algae inside them. 'A plant' is the planted trap. Argued against the key: the algae are partners living in the coral, not the coral itself. volatility: evergreen, a settled fact that cannot change; no time words, and nothing rests on knowledge newer than mid-2026. regional: coral reefs are known worldwide. style: Oxford spelling, plain hyphens only, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "593c83f302b8b16ff1e812149434d29e9e558219bc4b294e2d678d3ff482b626",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "An animal",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "are corals animals (cnidarian polyps related to jellyfish and sea anemones); clownfish are protandrous hermaphrodites, the breeding male changes sex to female",
+              "results": [
+                {
+                  "title": "Repetitive sex change in the stony coral Herpolitha limax across a wide geographic range",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6393666/"
+                },
+                {
+                  "title": "Sex Change in Clownfish: Molecular Insights from Transcriptome Analysis",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5066260/"
+                },
+                {
+                  "title": "Generation of the First Transgenic Line of the Iconic Coral Reef Fish *Amphiprion ocellaris*",
+                  "url": "https://www.biorxiv.org/content/10.1101/2024.06.05.597662.full.pdf"
+                },
+                {
+                  "title": "Diversity and behaviour in the animal kingdom - The Australian Museum",
+                  "url": "https://australian.museum/inside-out/pride-light/animals/"
+                },
+                {
+                  "title": "Cnidarian",
+                  "url": "https://www.britannica.com/animal/cnidarian"
+                },
+                {
+                  "title": "Sex Change in Clownfish: Molecular Insights from Transcriptome Analysis - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5066260/"
+                },
+                {
+                  "title": "Coral",
+                  "url": "https://en.wikipedia.org/wiki/Coral"
+                },
+                {
+                  "title": "Clownfish",
+                  "url": "https://en.wikipedia.org/wiki/Clownfish"
+                },
+                {
+                  "title": "An early Cambrian polyp reveals an anemone-like ancestor for medusozoan cnidarians",
+                  "url": "https://www.biorxiv.org/content/10.1101/2021.12.24.474121.full.pdf"
+                },
+                {
+                  "title": "High-Throughput Sequencing and Linkage Mapping of a Clownfish Genome Provide Insights on the Distribution of Molecular Players Involved in Sex Change",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5840384/"
+                }
+              ],
+              "summaryExcerpt": "Corals are animals. Corals are colonial marine invertebrates within the subphylum Anthozoa of the phylum Cnidaria, and they are classified as species of animals.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The quoted sentence follows the lead of the Wikipedia 'Coral' article (Tier B), with Britannica 'Cnidarian' in the same list. The two bioRxiv preprints in the list concern clownfish genetics and a Cambrian polyp, not this sentence. This call also serves p.nat.0169 and is counted here."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Corals are cnidarian animals, not plants or fungi.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "are corals animals (cnidarian polyps related to jellyfish and sea anemones); clownfish are protandrous hermaphrodites, the breeding male changes sex to female",
+              "results": [
+                {
+                  "title": "Repetitive sex change in the stony coral Herpolitha limax across a wide geographic range",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6393666/"
+                },
+                {
+                  "title": "Sex Change in Clownfish: Molecular Insights from Transcriptome Analysis",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5066260/"
+                },
+                {
+                  "title": "Generation of the First Transgenic Line of the Iconic Coral Reef Fish *Amphiprion ocellaris*",
+                  "url": "https://www.biorxiv.org/content/10.1101/2024.06.05.597662.full.pdf"
+                },
+                {
+                  "title": "Diversity and behaviour in the animal kingdom - The Australian Museum",
+                  "url": "https://australian.museum/inside-out/pride-light/animals/"
+                },
+                {
+                  "title": "Cnidarian",
+                  "url": "https://www.britannica.com/animal/cnidarian"
+                },
+                {
+                  "title": "Sex Change in Clownfish: Molecular Insights from Transcriptome Analysis - PMC",
+                  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5066260/"
+                },
+                {
+                  "title": "Coral",
+                  "url": "https://en.wikipedia.org/wiki/Coral"
+                },
+                {
+                  "title": "Clownfish",
+                  "url": "https://en.wikipedia.org/wiki/Clownfish"
+                },
+                {
+                  "title": "An early Cambrian polyp reveals an anemone-like ancestor for medusozoan cnidarians",
+                  "url": "https://www.biorxiv.org/content/10.1101/2021.12.24.474121.full.pdf"
+                },
+                {
+                  "title": "High-Throughput Sequencing and Linkage Mapping of a Clownfish Genome Provide Insights on the Distribution of Molecular Players Involved in Sex Change",
+                  "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5840384/"
+                }
+              ],
+              "summaryExcerpt": "The phylum also includes corals, hydras, jellyfish, sea anemones, and others. Sea anemones are in the same subphylum as corals, Anthozoa. ... A coral colony is built from many polyps",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Reef-building corals host symbiotic algae (zooxanthellae) whose photosynthesis supplies the coral with sugars.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "9dc21de5dc8c429a734853acda8b4bd8e3b0c51b3e8739973e25a07e3f26a84d",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "An animal",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Corals are animals (cnidarians).",
+              "confidence": "certain"
+            },
+            "note": "High-risk (checker_doubt): this record rests on knowledge, so the claim needs external evidence in check A (section 9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Corals are not plants or fungi.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Reef-building corals are colonies of small polyps, related to jellyfish and sea anemones.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Many reef corals host symbiotic algae that supply them with sugars from photosynthesis.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; high-risk c1 (web in A). Style, distractors and balance reviewed.",
+      "decidedAt": "2026-11-01T04:05:52Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:05:52Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "What kind of living thing is a coral?",
+  "answer": "An animal",
+  "wrong": ["A plant", "A fungus"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.72,
+    "spread": 0.351,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "id": "p.soc.0229",
+  "status": "cut",
+  "category": "soc",
+  "tags": ["institutions", "united-nations", "new-york"],
+  "region": "global",
+  "volatility": "slow",
+  "reviewBy": "2028-10-31",
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "John D. Rockefeller Jr. gave 8.5 million US dollars in 1946 to buy the East River site. Geneva, the League of Nations' old home, hosts the UN's main European office.",
+  "learnMore": "Headquarters of the United Nations",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "The headquarters of the United Nations is in New York City."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "The UN headquarters is not in Geneva, Paris or Washington, DC."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In December 1946, John D. Rockefeller Jr. donated 8.5 million US dollars to buy the East River site for the UN headquarters."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Geneva was the seat of the League of Nations and is home to the United Nations Office at Geneva, the UN's main European office."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: how institutions work (the UN, courts, heads of state, laws). lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. datasets: geonames-cities: New York City, US, lat 40.71427, lng -74.00597, for the city; c3 needs web evidence. rivalTest: Geneva is the planted trap, home of the League of Nations and many UN agencies; Washington, DC is the US seat of government. Nothing survives against New York. volatility: slow, because the location of an institution's offices could in principle change; the schema needs a reviewBy date for slow items, so 31 October 2028 is entered as a suggestion and the editor sets the final date at acceptance; no time words, and nothing rests on knowledge newer than mid-2026. regional: the UN is global, and its New York headquarters is widely known. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 30 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 2 (easy): most know it; Geneva catches a few. doubts: none. dedupe: C22 flags a near-duplicate of p.film.0144 (the setting of Friends); the pair shares only the answer word, not the fact, so related_ok is suggested to the editor.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "0a1877cd539dd743c1570de948612c4dbe07c7936768876333cb286533064fbd",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "New York City",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The UN headquarters is in Manhattan, New York City.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "The UN headquarters is not in Geneva, Paris or Washington, DC.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In December 1946 John D. Rockefeller Jr. gave 8.5 million US dollars to buy the East River site.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (number), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Geneva was the seat of the League of Nations and now hosts the United Nations Office at Geneva, the UN's main European office.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "54bc47aeb21996e05c4b9c5ac0a3421e2b1d2aa1adcc3d44d88a68513cb3f3d9",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "New York City",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "UN headquarters is in Manhattan, New York City.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "It is not in Geneva, Paris or Washington, DC.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Geneva has the UN's main European office, which is why it tempts, but headquarters is New York."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "On 11 December 1946 John D. Rockefeller Jr. offered 8.5 million dollars to buy the East River site.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Geneva was the League of Nations seat and houses the UN Office at Geneva.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk claim c3 (explanation, number) has only knowledge evidence, with no dataset or web evidence in any confirming check (both checkers ran 0 searches), so §9.9 rule 3 cannot pass. §9.2: an unevidenced high-risk claim is cut, never relabelled standard. Only explanation claims lack evidence, so the redraft can keep the question and write the explanation from standard-risk or dataset-backed facts. Also flagged as a near-duplicate of p.music.0141 (same answer); decide related_ok or not on the redraft. Redraft under a new id.",
+      "decidedAt": "2026-11-01T04:47:17Z"
+    }
+  },
+  "format": "mc",
+  "stem": "In which city is the headquarters of the United Nations?",
+  "answer": "New York City",
+  "wrong": ["Geneva", "Paris", "Washington, DC"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.86,
+    "spread": 0.405,
+    "estimator": "v0"
+  }
+}

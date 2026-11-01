@@ -1,0 +1,221 @@
+{
+  "id": "p.nat.0113",
+  "status": "active",
+  "category": "nat",
+  "tags": ["ocean-life", "invertebrates", "medicine"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": false,
+  "explanation": "Its blood cells clot around traces of bacterial toxins, so drug makers have long used them to check for contamination. Horseshoe crabs are closer to spiders and scorpions than to true crabs.",
+  "learnMore": "Horseshoe crab",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Blood from horseshoe crabs has been used for decades to make a test (LAL) that checks vaccines, injectable drugs and medical devices for bacterial endotoxins."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Octopus, lobster and squid blood is also blue but is not used to test medicines for bacterial toxins."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Horseshoe crab blood cells (amebocytes) clot in the presence of bacterial endotoxins."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Horseshoe crabs are chelicerates, more closely related to spiders and scorpions than to true crabs."
+    }
+  ],
+  "writerNotes": "Self-check (guide 9.3), all eleven codes confirmed true. The selfCheck field itself is left out because the CNT-1 item schema refuses it as an unknown key, so the codes are recorded here. lint: content:check reports no errors and no warnings for this item. claims: four listed, all standard; the stem says 'for decades', which is a duration word, not a number word. datasets: no pinned dataset in content/datasets/manifest.json covers animal or plant biology, so none applies and every high-risk claim needs web evidence from checker A. rivalTest: the distractors all have blue, copper-based blood too, so the colour alone cannot decide it; only horseshoe crab blood gives the endotoxin test. Argued against the key: the Asian horseshoe crab gives a similar test, which is still a horseshoe crab. volatility: evergreen: the stem is worded 'has been used for decades', which stays true if synthetic tests replace the crab-based one; no time words, and nothing rests on knowledge newer than mid-2026. regional: a global medical fact; the animal is known worldwide, and the options are familiar sea creatures. style: Oxford spelling, plain hyphens only, explanation of 30 words. myths: screened against content/reference/myths.json; no entry matches. mystery and encore: nothing of either kind in a multiple-choice item. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pnat01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "1969011af2c35786ea84cbb985ac59d411c0ca55d5edc9cf14710cb806b00d10",
+        "startedAt": "2026-11-01T00:58:00Z",
+        "finishedAt": "2026-11-01T01:33:06Z",
+        "coldSolve": {
+          "answerGiven": "Horseshoe crab",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Limulus amebocyte lysate (LAL), made from horseshoe crab blood, has been used since the 1970s to test injectable drugs, vaccines and devices for bacterial endotoxin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Octopus, squid and lobster blood is also blue (haemocyanin), but it is not the basis of the endotoxin test.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Horseshoe crab amebocytes clot when they meet bacterial endotoxin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Horseshoe crabs are chelicerates, closer to spiders and scorpions than to true crabs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pnat01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "20086bb2e48aef494c59f845eb98347a12d4774b14824d7619cc8c3689dcb40e",
+        "startedAt": "2026-11-01T01:03:48Z",
+        "finishedAt": "2026-11-01T01:27:01Z",
+        "coldSolve": {
+          "answerGiven": "Horseshoe crab",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Horseshoe crab blood is the basis of the LAL clotting test, used for decades to screen vaccines, injectable drugs and devices for bacterial endotoxin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Octopus, squid and lobster blood is also blue (copper-based haemocyanin) but is not used in endotoxin tests.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Horseshoe crab blood cells (amebocytes) clot when bacterial endotoxin is present.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Horseshoe crabs are chelicerates, nearer to spiders and scorpions than to true crabs.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "outdated",
+            "severity": "note",
+            "note": "The explanation says drug makers use the clotting test in the present tense. That is true today, but recombinant alternatives now exist and may displace horseshoe crab blood over time, so the present tense could age. The stem (\"has been used for decades\") is safe; consider \"have used\" in the explanation."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pnat01d",
+      "decision": "accept",
+      "reason": "A and B pass; all 4 claims confirmed in both checks; no high-risk claims; every knowledge confirmation at certain. Style, distractors and balance reviewed. Accepted after the wording-only fix in decisions1. (earlier, rewrite by ed-pnat01d: Wording only (§9.7): 'drug makers use them' becomes 'drug makers have long used them', so the line cannot date as recombinant tests spread (B's outdated note). Matches c1 ('has been used for decades'); no claim changes. [wording-only rewrite by ed-pnat01d at 2026-11-01T04:05:52Z of explanation; checks kept, packetSha256 re-stamped: pass A 7e859d8ce6f5d1d0132529f48ffb457ac49835f30c884949517bfb7c7ec15e39 -> 1969011af2c35786ea84cbb985ac59d411c0ca55d5edc9cf14710cb806b00d10; pass B 6c98ede9e488a25151b68a26f1b7b60ae082837a7d6213bd7b5bdd28fa357c1f -> 20086bb2e48aef494c59f845eb98347a12d4774b14824d7619cc8c3689dcb40e])",
+      "decidedAt": "2026-11-01T04:06:01Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pnat01e",
+        "at": "2026-11-01T00:59:37Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:06:01Z",
+      "nearestId": "p.sci.0235",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:06:01Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Whose blue blood has been used for decades to test vaccines and medicines for bacterial toxins?",
+  "answer": "Horseshoe crab",
+  "wrong": ["Octopus", "Lobster", "Squid"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.22,
+    "spread": 0.264,
+    "estimator": "v0"
+  }
+}

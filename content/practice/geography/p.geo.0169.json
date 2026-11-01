@@ -1,0 +1,277 @@
+{
+  "id": "p.geo.0169",
+  "status": "active",
+  "category": "geo",
+  "tags": ["borders", "maps", "south-america"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 5,
+  "counterintuitive": false,
+  "explanation": "Peru and Colombia lie between Ecuador and Brazil, while Peru, Bolivia and Argentina separate Chile from it. Brazil alone covers almost half the continent.",
+  "learnMore": "Borders of Brazil",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Of the independent South American countries, Brazil borders all except Chile and Ecuador."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Peru, Colombia and Bolivia all border Brazil."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Peru and Colombia lie between Ecuador and Brazil."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Peru, Bolivia and Argentina lie between Chile and Brazil."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Brazil covers almost half of South America's area."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: content:check reports no errors or warnings for this item. Claims: every checkable statement is listed; c1 is a claim about every member of a fixed set, which §3.5 treats as a superlative in disguise, and c5 carries a fraction, so both are high; the rest are standard. Datasets: mledoze-countries cca3=BRA borders ARG, BOL, COL, GUF, GUY, PRY, PER, SUR, URY, VEN; the other independent South American entries are CHL and ECU, which are missing (c1, c2). ECU borders COL, PER (c3); CHL borders ARG, BOL, PER (c4). c5: Brazil's 8,515,767 km² is 47.8 per cent of the 17,833,382 km² of all subregion South America entries. Rival test: Peru and Colombia are the natural guesses, Pacific-side countries like Chile, but both touch Brazil in the Amazon; Bolivia too. Against the key: none. Volatility: evergreen, settled geography with no review date; no time words, and nothing depends on knowledge newer than mid-2026. Regional: a map-reasoning question; anyone who pictures South America can work it out. Style: Oxford spelling, plain hyphens only, straight quotes, explanation of 24 words. Myths: every claim screened against content/reference/myths.json; no match. Mystery and encore: nothing of either kind to check in a practice item. Doubts: I left French Guiana out of the explanation so this item does not give away p.geo.0149.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pgeo01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "7c858608b0a5311af86b396d9084371e4a03ab5e8ee0af1a03e8ac614565303f",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:59:40Z",
+        "coldSolve": {
+          "answerGiven": "Ecuador",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=BRA",
+              "excerpt": "BRA: \"borders\": [\"ARG\",\"BOL\",\"COL\",\"GUF\",\"GUY\",\"PRY\",\"PER\",\"SUR\",\"URY\",\"VEN\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Against every independent: true entry with subregion South America (ARG, BOL, BRA, CHL, COL, ECU, GUY, PER, PRY, SUR, URY, VEN), BRA's border list misses only CHL and ECU."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=BRA",
+              "excerpt": "BRA: \"borders\": [\"ARG\",\"BOL\",\"COL\",\"GUF\",\"GUY\",\"PRY\",\"PER\",\"SUR\",\"URY\",\"VEN\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "PER, COL and BOL are all on the list."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=ECU",
+              "excerpt": "ECU: \"borders\": [\"COL\",\"PER\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Ecuador's only neighbours are Colombia and Peru, so they lie between it and Brazil."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=CHL",
+              "excerpt": "CHL: \"borders\": [\"ARG\",\"BOL\",\"PER\"]",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Chile's only neighbours are Argentina, Bolivia and Peru."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=BRA; subregion=South America (14 entries)",
+              "excerpt": "BRA \"area\": 8515767; sum of \"area\" over subregion South America = 17833382",
+              "retrievedAt": "2026-10-31"
+            },
+            "note": "Share 47.8%, almost half."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pgeo01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "aa58e572f86d982ce75e2b7a7ace0253b519f2cbb717a6fe3e60514221d99736",
+        "startedAt": "2026-11-01T01:36:21Z",
+        "finishedAt": "2026-11-01T01:59:12Z",
+        "coldSolve": {
+          "answerGiven": "Ecuador",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=BRA, cca3=CHL, cca3=ECU",
+              "excerpt": "BRA (Brazil): borders [\"ARG\",\"BOL\",\"COL\",\"GUF\",\"GUY\",\"PRY\",\"PER\",\"SUR\",\"URY\",\"VEN\"] | Independent South American records absent from Brazil's list: CHL, ECU",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=BRA",
+              "excerpt": "BRA (Brazil): borders [\"ARG\",\"BOL\",\"COL\",\"GUF\",\"GUY\",\"PRY\",\"PER\",\"SUR\",\"URY\",\"VEN\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "PER, COL and BOL are all in Brazil's list."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=ECU",
+              "excerpt": "ECU (Ecuador): borders [\"COL\",\"PER\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Ecuador's neighbours are Colombia and Peru."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=CHL",
+              "excerpt": "CHL (Chile): borders [\"ARG\",\"BOL\",\"PER\"]",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Chile's neighbours are Argentina, Bolivia and Peru."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "dataset",
+            "evidence": {
+              "kind": "dataset",
+              "dataset": "mledoze-countries",
+              "version": "6031f5df137c41c76d180c55a0782185ae3ed05b",
+              "file": "countries.json",
+              "locator": "cca3=BRA",
+              "excerpt": "BRA 8515767 / South America (14 records) 17833382 = 0.478",
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pgeo01e",
+        "at": "2026-11-01T01:33:24Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo01d",
+      "decision": "accept",
+      "reason": "Both checks pass with every claim confirmed; high-risk c1 and c5 carry mledoze-countries evidence in both checks (§9.9 rule 3). Lint clean, no myth hits. Dedupe pairs it with p.lang.0201 (0.80, same answer): that item asks which country is named after the Equator; the shared words are the South American setting, and the facts differ.",
+      "decidedAt": "2026-11-01T04:15:47Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "nearestId": "p.lang.0201",
+      "score": 0.8,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:15:47Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Brazil borders every South American country but two. One is Chile. Which is the other?",
+  "answer": "Ecuador",
+  "wrong": ["Peru", "Colombia", "Bolivia"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.185,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "id": "p.art.0267",
+  "status": "active",
+  "category": "art",
+  "tags": ["museums", "london", "paris"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "The British Museum opened in January 1759. The Louvre, a royal palace for centuries, became a public museum in August 1793, during the French Revolution.",
+  "learnMore": "British Museum",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The British Museum opened to the public on 15 January 1759."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Louvre opened as a public museum on 10 August 1793."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Louvre was a royal palace for centuries before it became a museum."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The Louvre's opening as a museum in 1793 came during the French Revolution."
+    }
+  ],
+  "writerNotes": "Self-check (§9.3). Lint: clean under content:check for writer w-part02w. Claims: every checkable statement in the stem, options and explanation is listed, with risk at or above the C26 floor and raised where a fact is beyond everyday knowledge; the item is counterintuitive, so the key claim is high-risk. Datasets: no dataset covers museums; both labels need a source. Rival test: argued for the Louvre: the palace itself is far older and its royal collection older still; but as a public museum it opened in 1793, 34 years after the British Museum. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: two of the world's most visited museums. Style: Oxford spelling, straight quotes, no en or em dashes, explanation of 25 words. Myths: screened against myths.json, no hit. Mystery: not applicable to a practice item. Encore: not applicable to a practice item. Doubts: the measure names opening to the public as a museum, so the palace's age cannot flip it.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-part02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "a5ce4d48aafb830044d358e42160a41fa5ee4d27753c9f1706553a6c7153ce48",
+        "startedAt": "2026-11-01T02:15:00Z",
+        "finishedAt": "2026-11-01T02:51:14Z",
+        "coldSolve": {
+          "answerGiven": "The British Museum",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The British Museum opened to the public on 15 January 1759.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Louvre opened as a public museum on 10 August 1793.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The Louvre was a royal palace for centuries before it became a museum.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "August 1793 falls during the French Revolution.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No pinned dataset covers it and WebSearch was unavailable in this run (the shared search limit was used up before any search ran), so it still needs dataset or web evidence in a confirming check before acceptance (§9.5.3)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-part02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "075ae9018bda449b031637958c0142751b5da69868cfdb420c2c4254ae067363",
+        "startedAt": "2026-11-01T02:25:00Z",
+        "finishedAt": "2026-11-01T02:51:43Z",
+        "coldSolve": {
+          "answerGiven": "The British Museum",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The British Museum opened to the public on 15 January 1759.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Louvre opened as a public museum on 10 August 1793.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Louvre was a royal palace for centuries before it became a museum.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The Louvre museum opened in 1793 during the French Revolution.",
+              "confidence": "certain"
+            },
+            "note": "Knowledge only: the web search budget was exhausted before any search, and this claim is high-risk, so it needs external evidence from check A or a follow-up."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-part02d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c1 (label, date), c2 (label, date) and c4 (explanation, date) rest on knowledge alone in both checks: neither checker could run a web search (the shared search limit was spent before this batch's checks) and neither check records dataset evidence for them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes a claim, which needs two fresh checks (§9.2, §9.5.2), so it is cut. Redraft under a new id with these facts evidenced (a dataset record or a Tier A or B search) or bounded.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-part02e",
+        "at": "2026-11-01T02:27:51Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "p.hist.0168",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which opened to the public first?",
+  "a": "The British Museum",
+  "b": "The Louvre museum",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year it opened to the public as a museum",
+  "unit": "year",
+  "values": {
+    "a": 1759,
+    "b": 1793
+  },
+  "valueDisplay": {
+    "a": "January 1759",
+    "b": "August 1793"
+  },
+  "predicted": {
+    "p": 0.46,
+    "spread": 0.156,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,320 @@
+{
+  "id": "p.soc.0255",
+  "status": "checking",
+  "category": "soc",
+  "tags": ["symbols", "road-signs", "shapes"],
+  "region": "global",
+  "volatility": "slow",
+  "reviewBy": "2028-10-31",
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "explanation": "From the 1920s, American stop signs were yellow octagons; the United States switched them to red in 1954. Japan uses a red downward-pointing triangle.",
+  "learnMore": "Stop sign",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "In most countries the stop sign is an octagon."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Give way, no entry and speed limit signs are not octagonal."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "From the 1920s, standard stop signs in the United States were yellow octagons (the first, in Detroit in 1915, was a white square)."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "The United States changed its stop signs to red with white letters in 1954."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Japan's stop sign is a red downward-pointing triangle."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3): all eleven codes are confirmed here, because the item schema has no selfCheck field. Subtopic: symbols and emblems. lint: content:check shows no errors for this item. claims: every checkable statement in the stem, options and explanation is listed, the distractors' wrongness included, with risk at or above the C26 floor and raised where honest. datasets: no pinned dataset covers road signs; c3 and c4 need web evidence. rivalTest: give way (yield) signs are triangles, no entry signs circles, speed limits circles; nothing survives against stop. volatility: slow, because road-sign designs are set by national rules that could change; the schema needs a reviewBy date for slow items, so 31 October 2028 is entered as a suggestion and the editor sets the final date at acceptance; no time words, and nothing rests on knowledge newer than mid-2026. regional: the octagon is used across most of the world, and Japan's exception is the surprise. style: Oxford spelling, plain hyphens, straight single quotes, no time words, explanation of 24 words. myths: every claim screened against content/reference/myths.json; no entry matches any claim. mystery and encore: nothing of either kind to check in a practice item. seed: 1 (easy): almost everyone knows it. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "27dee1cdf91a97eda69f0a7261119e6f27cc661d9a9c4f8638f83e83be8fb295",
+        "startedAt": "2026-11-01T03:30:00Z",
+        "finishedAt": "2026-11-01T03:59:00Z",
+        "coldSolve": {
+          "answerGiven": "Stop",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Most countries use an octagonal stop sign, the form the 1968 Vienna Convention on road signs sets out.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (superlative), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Give way signs are downward triangles, and no entry and speed limit signs are circles or rectangles, not octagons.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Detroit's first stop sign (1915) was a white square with black letters; the octagon was adopted in 1923, and standard US stop signs were yellow from the 1920s until 1954.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The 1954 edition of the US traffic-control manual made stop signs red with white letters.",
+              "confidence": "certain"
+            },
+            "note": "High-risk (date), knowledge only. No web search could run in this pass (the platform's per-turn search limit was used up before the first query) and no pinned dataset covers it, so it needs dataset or web evidence from a follow-up or tiebreak before acceptance (§9.9 rule 3)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Japan's stop sign is a red, downward-pointing triangle.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "4d6cf5d88f4607a658efbb7cd7b6cc2ad494de83e3951ba6e03dbc2625f09955",
+        "startedAt": "2026-11-01T03:28:00Z",
+        "finishedAt": "2026-11-01T04:02:43Z",
+        "coldSolve": {
+          "answerGiven": "Stop",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The stop sign is an octagon in most countries.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: Japan uses an inverted triangle, but the stem says 'in most countries'. Give way is a triangle and no entry and speed limit are circles in most countries."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Give way, no entry and speed limit signs are not octagonal.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The US fixed an octagonal stop sign in yellow with black lettering by the 1930s, and Detroit's 1915 sign is usually described as a white square. I cannot certify the 1920s start, the yellow colour or the first-sign detail.",
+              "confidence": "likely"
+            },
+            "note": "Uncertain: 'from the 1920s' and 'yellow' are not facts I can certify from memory. The 1915 Detroit detail needs a source too."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "uncertain",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "I recall the US changing stop signs from yellow to red with white lettering in 1954, but not with certainty.",
+              "confidence": "likely"
+            },
+            "note": "Uncertain: 1954 is the date I recall, not one I can certify."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Japan's stop sign is a red inverted triangle with Japanese text.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The key (Stop) is solid. Only the explanation's US sign history is in doubt: source it from a road-authority history or trim it to what holds, for example that Japan uses a red triangle."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "tiebreak": {
+      "checker": "fc-psoc02t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "03ea9c3f73e3ab606d75ef7e25870d85b24c5dcb786187bfa0fdc4177abbc7d1",
+      "startedAt": "2026-11-01T05:09:22Z",
+      "finishedAt": "2026-11-01T05:16:35Z",
+      "coldSolve": {
+        "answerGiven": "Stop",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "The red octagon is the stop sign of the 1968 Vienna Convention on Road Signs and Signals and of the US traffic-control manual, and the large majority of countries use it. Japan's downward-pointing triangle is the best-known exception.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed: A and B both confirmed it. It is high-risk (superlative) with no external evidence in any check, so rule 3 still needs dataset or web evidence. None could be gathered: the WebSearch call was refused (the turn's shared limit of 200 calls was used up) and no pinned dataset covers it. Knowledge does not count here (§9.5.3)."
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "everyday",
+            "restatement": "Give way signs are downward-pointing triangles, no entry signs are round (red with a white bar), and speed limit signs are round or, in North America, upright rectangles. None is an octagon.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed. Standard risk."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "uncertain",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "As I recall, the first stop signs went up in Detroit in 1915 as small square signs with black letters on white, the octagon was adopted in the early 1920s, and US stop signs stayed yellow until the 1950s. I cannot certify the decade, the colour or the 1915 details from memory.",
+            "confidence": "likely"
+          },
+          "note": "The disputed claim: B left it uncertain. I side with B. It bundles three dated details, high-risk by date, and a tiebreak needs dataset or web evidence on them. None could be gathered: the WebSearch call was refused (the turn's shared limit of 200 calls was used up) and no pinned dataset covers it. It stays unconfirmed."
+        },
+        {
+          "claimId": "c4",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "In 1954 the US national manual for traffic signs changed the standard stop sign from yellow to red with white letters.",
+            "confidence": "certain"
+          },
+          "note": "The disputed claim: B left it uncertain. 1954 is the year in every account I know, but knowledge counts neither in a tiebreak nor for a high-risk claim (§9.5.3, §9.7), so this result does not settle it. It still needs dataset or web evidence. None could be gathered: the WebSearch call was refused (the turn's shared limit of 200 calls was used up) and no pinned dataset covers it."
+        },
+        {
+          "claimId": "c5",
+          "verdict": "confirmed",
+          "method": "knowledge",
+          "evidence": {
+            "kind": "knowledge",
+            "basis": "reference",
+            "restatement": "Japan's stop sign is a red, downward-pointing triangle carrying the word tomare.",
+            "confidence": "certain"
+          },
+          "note": "Not disputed. Standard risk."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "Checker doubt on c3 (the record schema has no checker_doubt type, so it is filed as wording). This tiebreak could not settle c3 or c4: the WebSearch call was refused because the turn's shared limit of 200 calls was used up, and no pinned dataset covers road signs. Re-run the tiebreak (content:record with --replace) with Tier A or B sources for c3 and c4, for example a road authority's history of the sign or a reference work, and for c1, which is high-risk with knowledge only in every check. If evidence stays out of reach, B's suggestion holds: trim the explanation to what can be sourced. That drops c3 and c4, so the changed claims need fresh checks (§9.7)."
+        },
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "The key is solid in my cold solve and in both checks, and the stem's 'in most countries' covers Japan. Only the explanation's US sign history is in doubt, as B said."
+        }
+      ],
+      "searchesUsed": 0,
+      "verdict": "revise"
+    }
+  },
+  "format": "mc",
+  "stem": "Which road sign is shaped like an octagon in most countries?",
+  "answer": "Stop",
+  "wrong": ["Give way", "No entry", "Speed limit"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.92,
+    "spread": 0.397,
+    "estimator": "v0"
+  }
+}

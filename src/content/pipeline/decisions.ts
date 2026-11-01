@@ -143,7 +143,8 @@ export interface DecideOptions extends SaveOptions {
 
 type EditorRecord = NonNullable<Verification["editor"]>;
 
-function isoSeconds(iso: string): string {
+/** An ISO timestamp without milliseconds, as decisions record it. */
+export function isoSeconds(iso: string): string {
   return iso.replace(/\.\d{3}Z$/, "Z");
 }
 
@@ -227,6 +228,203 @@ function dedupeRefusal(record: BankItem, match: DedupeMatch): string {
     "the guide's example ",
   );
   return `near-duplicate of ${other} (${match.score.toFixed(2)}, ${match.reason}): ${ask}`;
+}
+
+/** The part of the accept screen that refused an item. */
+export type ScreenGate =
+  | "changed"
+  | "lint"
+  | "dedupe"
+  | "myths"
+  | "acceptance"
+  | "schema";
+
+export interface ScreenFailure {
+  gate: ScreenGate;
+  /** A rule code ("C10", "rule 3", "pass A"): never item text. */
+  code: string;
+  /** The message content:decide prints. Lint messages may quote the item. */
+  message: string;
+}
+
+export interface AcceptScreen {
+  /** Every refusal, in the order content:decide reports them. */
+  failures: ScreenFailure[];
+  warnings: string[];
+  /** What an accept records on the item; meaningful only when nothing failed. */
+  records: {
+    dedupe: NonNullable<Verification["dedupe"]>;
+    mythsScreen: NonNullable<Verification["mythsScreen"]>;
+    lint: NonNullable<Verification["lint"]>;
+  };
+}
+
+export interface AcceptScreenOptions {
+  /** The accepting editor (rule 1). */
+  editor: string;
+  /** When the item is accepted: the lint's today and rule 6's bound. */
+  decidedAt: string;
+  /** The editor's call on a near-duplicate that dedupe flags. */
+  dedupe?: DecisionInputEntry["dedupe"] | undefined;
+  includeGuide?: boolean;
+}
+
+/** Sorts acceptanceFailures' messages into the screen's gates. */
+function acceptanceGate(failure: string): ScreenGate {
+  if (failure.startsWith("rule 5: myths screen")) return "myths";
+  if (failure.startsWith("rule 5: dedupe")) return "dedupe";
+  if (failure.startsWith("rule 5: the lint")) return "lint";
+  return "acceptance";
+}
+
+/**
+ * Everything an accept decision runs before an item may become active
+ * (§9.9): every check still matches the item (packetSha256), the lint (a
+ * warning passes only with the editor's lintAllow; a C25 hit on a claim is
+ * the myths screen's call), the dedupe call, the myths screen and
+ * acceptanceFailures. `next` is the item as it would be accepted, its
+ * verification.editor already the accept. content:decide and
+ * content:reinstate both run this, so they apply one rule.
+ */
+export function acceptanceScreen(
+  bank: Bank,
+  batch: BatchEntry,
+  record: BankItem,
+  next: AnyItem,
+  options: AcceptScreenOptions,
+): AcceptScreen {
+  const { decidedAt } = options;
+  const failures: ScreenFailure[] = [];
+  const warnings: string[] = [];
+  for (const pass of changedSinceChecks(record.id, next)) {
+    failures.push({
+      gate: "changed",
+      code: `pass ${pass}`,
+      message: `the item changed after pass ${pass} was recorded; rebuild packets and re-check (§9.7)`,
+    });
+  }
+  const candidate = { ...record, item: next };
+  const raw = rawItemHits(
+    { bank, today: decidedAt.slice(0, 10) },
+    candidate,
+    scheduledDates(bank),
+  );
+  const kept = applyLintAllow(next, raw);
+  const waived = raw.filter((hit) => !kept.includes(hit));
+  const schema = schemaProblems(record.pool, next);
+  const lintErrors = kept.filter((hit) => hit.severity === "error");
+  // A warning passes only with an editor's lintAllow (ARCHITECTURE §5.2,
+  // §2.13). A C25 hit on a claim is the myths screen's call, below.
+  for (const hit of kept) {
+    if (hit.severity !== "warn") continue;
+    if (hit.rule === "C25" && hit.path?.startsWith("claims[")) continue;
+    failures.push({
+      gate: "lint",
+      code: hit.rule,
+      message:
+        `${hit.rule} ${hit.path ?? ""}: ${hit.message}. A warning passes only with the editor's lintAllow, which accept may add (ARCHITECTURE §5.2)`.replace(
+          " :",
+          ":",
+        ),
+    });
+  }
+  for (const hit of waived)
+    warnings.push(
+      `${hit.rule} ${hit.path ?? ""}: waived by lintAllow`.replace(" :", ":"),
+    );
+  const match = nearestForItem(
+    bank,
+    record,
+    next,
+    options.includeGuide !== false,
+  );
+  const flagged = match.nearestId !== null && match.score >= DEDUPE_FLAG;
+  if (flagged && options.dedupe === undefined)
+    failures.push({
+      gate: "dedupe",
+      code: "C22",
+      message: dedupeRefusal(record, match),
+    });
+  // Unflagged items are unique; flagged ones carry the editor's call (an
+  // unanswered flag is already a failure above, so it is not reported twice).
+  const dedupeVerdict = flagged ? (options.dedupe ?? "related_ok") : "unique";
+  const mythHits = next.claims.flatMap((claim) =>
+    bank.references.myths
+      .filter((myth) => mythMatches(myth, claim.text))
+      .map((myth) => ({
+        claimId: claim.id,
+        mythId: myth.id,
+        cleared: mythCleared(next, claim.id),
+      })),
+  );
+  const acceptance = acceptanceFailures({
+    item: next,
+    batch,
+    editor: options.editor,
+    decidedAt,
+    lintPassed: schema.length === 0 && lintErrors.length === 0,
+    dedupe: {
+      nearestId: match.nearestId,
+      score: match.score,
+      verdict: dedupeVerdict,
+    },
+    mythHits,
+    ...("kind" in next && next.kind === "mystery"
+      ? { answerKeys: mysteryKeys(bank, next as Mystery) }
+      : {}),
+  });
+  for (const failure of acceptance)
+    failures.push({
+      gate: acceptanceGate(failure),
+      code: /^rule \d+/.exec(failure)?.[0] ?? "acceptance",
+      message: failure,
+    });
+  for (const problem of schema)
+    failures.push({ gate: "schema", code: "C01", message: `C01 ${problem}` });
+  for (const hit of lintErrors)
+    failures.push({
+      gate: "lint",
+      code: hit.rule,
+      message: `${hit.rule} ${hit.path ?? ""}: ${hit.message}`.replace(
+        " :",
+        ":",
+      ),
+    });
+  const labels = (next as AnyItem & Record<string, unknown>).sourceLabels;
+  if (Array.isArray(labels) && labels.length === 0) {
+    const { a, b, t } = checksOf(next);
+    const external = [a, b, t].some((check) =>
+      check?.claimResults.some(
+        (r) => r.verdict === "confirmed" && r.method !== "knowledge",
+      ),
+    );
+    if (external)
+      warnings.push(
+        "sourceLabels is empty although external evidence exists; the editor fills it from the evidence (§2.3)",
+      );
+  }
+  return {
+    failures,
+    warnings,
+    records: {
+      dedupe: dedupeRecordFor(
+        record.file.sealed,
+        match,
+        decidedAt,
+        dedupeVerdict,
+      ),
+      mythsScreen: { checkedAt: decidedAt, hits: mythHits },
+      lint: {
+        version: LINT_VERSION,
+        passed: true,
+        warnings: waived.map((hit) => ({
+          rule: hit.rule,
+          path: hit.path ?? "",
+          message: hit.message,
+        })),
+      },
+    },
+  };
 }
 
 /**
@@ -381,110 +579,18 @@ export function decideOne(
   } else {
     // accept
     next.verification = verification;
-    for (const pass of changedSinceChecks(record.id, next)) {
-      errors.push(
-        `the item changed after pass ${pass} was recorded; rebuild packets and re-check (§9.7)`,
-      );
-    }
-    const candidate = { ...record, item: next };
-    const raw = rawItemHits(
-      { bank, today: decidedAt.slice(0, 10) },
-      candidate,
-      scheduledDates(bank),
-    );
-    const kept = applyLintAllow(next, raw);
-    const waived = raw.filter((hit) => !kept.includes(hit));
-    const schema = schemaProblems(record.pool, next);
-    const lintErrors = kept.filter((hit) => hit.severity === "error");
-    // A warning passes only with an editor's lintAllow (ARCHITECTURE §5.2,
-    // §2.13). A C25 hit on a claim is the myths screen's call, below.
-    for (const hit of kept) {
-      if (hit.severity !== "warn") continue;
-      if (hit.rule === "C25" && hit.path?.startsWith("claims[")) continue;
-      errors.push(
-        `${hit.rule} ${hit.path ?? ""}: ${hit.message}. A warning passes only with the editor's lintAllow, which accept may add (ARCHITECTURE §5.2)`.replace(
-          " :",
-          ":",
-        ),
-      );
-    }
-    for (const hit of waived)
-      outcome.warnings.push(
-        `${hit.rule} ${hit.path ?? ""}: waived by lintAllow`.replace(" :", ":"),
-      );
-    const match = nearestForItem(
-      bank,
-      record,
-      next,
-      options.includeGuide !== false,
-    );
-    const flagged = match.nearestId !== null && match.score >= DEDUPE_FLAG;
-    if (flagged && decision.dedupe === undefined)
-      errors.push(dedupeRefusal(record, match));
-    // Unflagged items are unique; flagged ones carry the editor's call (an
-    // unanswered flag is already an error above, so it is not reported twice).
-    const dedupeVerdict = flagged
-      ? (decision.dedupe ?? "related_ok")
-      : "unique";
-    const mythHits = next.claims.flatMap((claim) =>
-      bank.references.myths
-        .filter((myth) => mythMatches(myth, claim.text))
-        .map((myth) => ({
-          claimId: claim.id,
-          mythId: myth.id,
-          cleared: mythCleared(next, claim.id),
-        })),
-    );
-    const failures = acceptanceFailures({
-      item: next,
-      batch,
+    const screen = acceptanceScreen(bank, batch, record, next, {
       editor: decision.editor,
       decidedAt,
-      lintPassed: schema.length === 0 && lintErrors.length === 0,
-      dedupe: {
-        nearestId: match.nearestId,
-        score: match.score,
-        verdict: dedupeVerdict,
-      },
-      mythHits,
-      ...("kind" in next && next.kind === "mystery"
-        ? { answerKeys: mysteryKeys(bank, next as Mystery) }
-        : {}),
+      dedupe: decision.dedupe,
+      includeGuide: options.includeGuide !== false,
     });
-    errors.push(...failures);
-    for (const problem of schema) errors.push(`C01 ${problem}`);
-    for (const hit of lintErrors)
-      errors.push(
-        `${hit.rule} ${hit.path ?? ""}: ${hit.message}`.replace(" :", ":"),
-      );
-    if (Array.isArray(next.sourceLabels) && next.sourceLabels.length === 0) {
-      const external = [a, b, t].some((check) =>
-        check?.claimResults.some(
-          (r) => r.verdict === "confirmed" && r.method !== "knowledge",
-        ),
-      );
-      if (external)
-        outcome.warnings.push(
-          "sourceLabels is empty although external evidence exists; the editor fills it from the evidence (§2.3)",
-        );
-    }
+    errors.push(...screen.failures.map((failure) => failure.message));
+    outcome.warnings.push(...screen.warnings);
     if (errors.length > 0) return { outcome };
-    verification.dedupe = dedupeRecordFor(
-      record.file.sealed,
-      match,
-      decidedAt,
-      dedupeVerdict,
-    );
-    verification.mythsScreen = { checkedAt: decidedAt, hits: mythHits };
-    verification.lint = {
-      version: LINT_VERSION,
-      passed: true,
-      warnings: waived.map((hit) => ({
-        rule: hit.rule,
-        path: hit.path ?? "",
-        message: hit.message,
-      })),
-    };
+    verification.dedupe = screen.records.dedupe;
+    verification.mythsScreen = screen.records.mythsScreen;
+    verification.lint = screen.records.lint;
     verification.tiebreak ??= null;
     verification.rechecks ??= [];
     next.verification = verification;

@@ -1,0 +1,360 @@
+{
+  "id": "p.book.0127",
+  "status": "active",
+  "category": "book",
+  "tags": ["classic-novels", "dystopias"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "Aldous Huxley's novel came out 17 years before George Orwell's. Years earlier, Huxley had briefly taught French at Eton, where one of his pupils was Eric Blair, the future Orwell.",
+  "learnMore": "Brave New World",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "Aldous Huxley's Brave New World was first published in 1932."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "George Orwell's Nineteen Eighty-Four was first published in 1949."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Aldous Huxley briefly taught French at Eton College, where Eric Blair, later known as George Orwell, was one of his pupils."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "Brave New World appeared 17 years before Nineteen Eighty-Four."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3), all eleven codes confirmed in prose because this tooling's schema has no selfCheck field. Subtopic: classic novels. Lint: content:check reports no errors and no warnings on this item. Claims: every statement in the stem, options and explanation is listed; risk sits at or above the C26 floor (digits, number words, quotation marks, superlatives, only, first, invented, named after, comes from, means). Datasets: no pinned dataset covers publication dates; c4 is arithmetic on c1 and c2. Rival test: 17 years apart, so no near-tie; a player may feel Orwell is older because Animal Farm and the war years loom large, but the dates settle it. Volatility: evergreen; no time words; nothing depends on events after mid-2026. Regional: the work is read and adapted worldwide and the stem gives every player the same foothold, so a player in Lagos, Mumbai, Toronto or Sydney has the same chance as one in London or Chicago. Style: Oxford spelling, plain hyphens only, explanation of 30 words. Myths: screened against content/reference/myths.json; no claim resembles a listed myth. Mystery and encore codes: nothing of either kind to check in a practice item. Doubts: none beyond the high-risk claims, which checker A should evidence. WebSearch: none used by the writer.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pbook01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "21c6e5060a717802587d5d80dc8b51686f5846ef04cf643e7d16f63b05d04b70",
+        "startedAt": "2026-11-01T00:39:00Z",
+        "finishedAt": "2026-11-01T01:07:53Z",
+        "coldSolve": {
+          "answerGiven": "Brave New World",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "first published: Brave New World 1932, Nineteen Eighty-Four 1949, The Hobbit 1937, The Lion, the Witch and the Wardrobe 1950; Aldous Huxley taught French at Eton where Eric Blair (George Orwell) was his pupil",
+              "results": [
+                {
+                  "title": "Aldous Huxley",
+                  "url": "https://en.wikipedia.org/wiki/Aldous_Huxley"
+                },
+                {
+                  "title": "George Orwell",
+                  "url": "https://en.wikipedia.org/wiki/George_Orwell"
+                },
+                {
+                  "title": "George Orwell",
+                  "url": "https://www.britannica.com/biography/George-Orwell"
+                },
+                {
+                  "title": "Aldous Huxley - Students",
+                  "url": "https://kids.britannica.com/students/article/Aldous-Huxley/311775"
+                },
+                {
+                  "title": "George Lyttelton (teacher)",
+                  "url": "https://en.wikipedia.org/wiki/G._W._Lyttelton"
+                },
+                {
+                  "title": "King's Scholar",
+                  "url": "https://en.wikipedia.org/wiki/King's_Scholar"
+                },
+                {
+                  "title": "Old Etonians",
+                  "url": "https://en.wikipedia.org/wiki/Old_Etonians"
+                },
+                {
+                  "title": "Thomas Henry Huxley",
+                  "url": "https://en.wikipedia.org/wiki/Thomas_Henry_Huxley"
+                },
+                {
+                  "title": "Aldous Huxley",
+                  "url": "https://www.britannica.com/contributor/Aldous-Huxley/9484634"
+                },
+                {
+                  "title": "Such, Such Were the Joys",
+                  "url": "https://en.wikipedia.org/wiki/Such,_Such_Were_the_Joys"
+                }
+              ],
+              "summaryExcerpt": "Brave New World (1932): Confirmed. One source lists it alongside Huxley's other works with a 1932 date.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 11: Brave New World, 1932. Counts at Tier B."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Secker & Warburg published Nineteen Eighty-Four on 8 June 1949.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only. No dataset covers it and it fell outside the batch search cap, so it counts only with dataset or web evidence from check B or a follow-up (§9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "first published: Brave New World 1932, Nineteen Eighty-Four 1949, The Hobbit 1937, The Lion, the Witch and the Wardrobe 1950; Aldous Huxley taught French at Eton where Eric Blair (George Orwell) was his pupil",
+              "results": [
+                {
+                  "title": "Aldous Huxley",
+                  "url": "https://en.wikipedia.org/wiki/Aldous_Huxley"
+                },
+                {
+                  "title": "George Orwell",
+                  "url": "https://en.wikipedia.org/wiki/George_Orwell"
+                },
+                {
+                  "title": "George Orwell",
+                  "url": "https://www.britannica.com/biography/George-Orwell"
+                },
+                {
+                  "title": "Aldous Huxley - Students",
+                  "url": "https://kids.britannica.com/students/article/Aldous-Huxley/311775"
+                },
+                {
+                  "title": "George Lyttelton (teacher)",
+                  "url": "https://en.wikipedia.org/wiki/G._W._Lyttelton"
+                },
+                {
+                  "title": "King's Scholar",
+                  "url": "https://en.wikipedia.org/wiki/King's_Scholar"
+                },
+                {
+                  "title": "Old Etonians",
+                  "url": "https://en.wikipedia.org/wiki/Old_Etonians"
+                },
+                {
+                  "title": "Thomas Henry Huxley",
+                  "url": "https://en.wikipedia.org/wiki/Thomas_Henry_Huxley"
+                },
+                {
+                  "title": "Aldous Huxley",
+                  "url": "https://www.britannica.com/contributor/Aldous-Huxley/9484634"
+                },
+                {
+                  "title": "Such, Such Were the Joys",
+                  "url": "https://en.wikipedia.org/wiki/Such,_Such_Were_the_Joys"
+                }
+              ],
+              "summaryExcerpt": "He taught French for a year at Eton College, where Eric Blair (who was to take the pen name George Orwell) and Steven Runciman were among his pupils. Orwell's own article says Blair was taught French by Aldous Huxley.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Search 11: Huxley taught French for a year at Eton, and Eric Blair was among his pupils."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "1949 minus 1932 is 17.",
+              "confidence": "certain"
+            },
+            "note": "Arithmetic on c1 (web) and c2 (knowledge only). High-risk: knowledge only. No dataset covers it and it fell outside the batch search cap, so it counts only with dataset or web evidence from check B or a follow-up (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pbook01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "40be69a39d89f91cac24efa31aff6b028d6f420787b289ee48ca1250d70cdd63",
+        "startedAt": "2026-11-01T00:44:00Z",
+        "finishedAt": "2026-11-01T01:12:11Z",
+        "coldSolve": {
+          "answerGiven": "Brave New World",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Brave New World first appeared in 1932.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Nineteen Eighty-Four was first published in June 1949.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "Aldous Huxley taught French at Eton 1917 pupils included Eric Blair George Orwell",
+              "results": [
+                {
+                  "title": "George Orwell",
+                  "url": "https://en.wikipedia.org/wiki/Eric_Blair"
+                },
+                {
+                  "title": "Aldous Huxley",
+                  "url": "https://en.wikipedia.org/wiki/Aldous_Huxley"
+                },
+                {
+                  "title": "King's Scholar",
+                  "url": "https://en.wikipedia.org/wiki/King's_Scholar"
+                },
+                {
+                  "title": "George Lyttelton (teacher)",
+                  "url": "https://en.wikipedia.org/wiki/G._W._Lyttelton"
+                },
+                {
+                  "title": "George Orwell",
+                  "url": "https://www.britannica.com/biography/George-Orwell"
+                },
+                {
+                  "title": "Aldous Huxley - Students",
+                  "url": "https://kids.britannica.com/students/article/Aldous-Huxley/311775"
+                },
+                {
+                  "title": "Such, Such Were the Joys",
+                  "url": "https://en.wikipedia.org/wiki/Such,_Such_Were_the_Joys"
+                },
+                {
+                  "title": "Sir Julian Huxley",
+                  "url": "https://www.britannica.com/biography/Julian-Huxley"
+                },
+                {
+                  "title": "St Cyprian's School",
+                  "url": "https://en.wikipedia.org/wiki/St_Cyprian's_School"
+                }
+              ],
+              "summaryExcerpt": "Wikipedia's Eric Blair entry says Blair was taught French by Aldous Huxley. The Huxley entry says he taught French for a year at Eton College, where Eric Blair (who was to take the pen name George Orwell) and Steven Runciman were among his pupils.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "The call gives no teaching year; the claim says only that he taught briefly, which the Huxley entry supports (\"for a year\")."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "1949 minus 1932 is 17 years.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only in this check, so it counts only with external evidence in check A (§9.9)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Reinstated under decisions memo section 18; previous cut: Both checks pass, but high-risk c2 (label, date), c4 (explanation, number) rest on knowledge alone in both checks, and the batch's search cap is spent (29 of 26). Rule 3 of §9.9 cannot pass, and §9.2 leaves the precision ladder or a cut. Redraft under a new id with these facts evidenced or stepped down.",
+      "decidedAt": "2026-11-01T09:13:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pbook01e",
+        "at": "2026-11-01T00:45:05Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T09:13:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "comparison",
+  "stem": "Which was published first?",
+  "a": "Brave New World",
+  "b": "Nineteen Eighty-Four",
+  "answer": "a",
+  "relation": "earlier",
+  "measure": "year of first publication",
+  "unit": "year",
+  "values": {
+    "a": 1932,
+    "b": 1949
+  },
+  "valueDisplay": {
+    "a": "1932",
+    "b": "1949"
+  },
+  "predicted": {
+    "p": 0.56,
+    "spread": 0.226,
+    "estimator": "v0"
+  }
+}

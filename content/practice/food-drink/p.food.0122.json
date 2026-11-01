@@ -1,0 +1,273 @@
+{
+  "id": "p.food.0122",
+  "status": "active",
+  "category": "food",
+  "tags": ["fruit", "food-science", "desserts"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 4,
+  "counterintuitive": true,
+  "explanation": "Pineapple contains bromelain, an enzyme that breaks down gelatin's proteins. Tinned (canned) pineapple works fine, because heating destroys the enzyme. Fresh kiwifruit and papaya cause the same problem.",
+  "learnMore": "Bromelain",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "checker_doubt",
+      "text": "Fresh pineapple contains bromelain, a protein-digesting enzyme that breaks down gelatin, so a gelatin dessert containing fresh pineapple fails to set."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Tinned pineapple does not stop gelatin setting, because the heat of canning inactivates bromelain."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Fresh kiwifruit and papaya also contain protein-digesting enzymes (actinidin and papain) that stop gelatin from setting."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (high: c1). The item is counterintuitive, so its key claim (both labels, for a comparison) is high under the C26 floor; where no other reason applies, checker_doubt stands in for the guide's 'counterintuitive', which the schema's riskReason enum lacks. Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: 'can stop' is true for fresh pineapple in ordinary amounts; nobody could fairly argue false. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both the UK name jelly and the US gelatin dessert appear in the statement. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 28 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 4: it sounds made up, so many will answer false. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "66feb449bf89fa52b10eb39cf345148abdfe370161fe4829946878aa867bb1fa",
+        "startedAt": "2026-11-01T01:00:00Z",
+        "finishedAt": "2026-11-01T01:33:37Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "bromelain in fresh pineapple stops gelatin from setting; black, white and green peppercorns all come from the same plant Piper nigrum; 18th-century English ketchups made from mushrooms and walnuts before tomato ketchup",
+              "results": [
+                {
+                  "title": "Gelatine dessert",
+                  "url": "https://en.wikipedia.org/wiki/Gelatin_dessert#Gelatin_substitutes"
+                },
+                {
+                  "title": "Jell-O",
+                  "url": "https://en.wikipedia.org/wiki/Jell-O"
+                },
+                {
+                  "title": "Bromelain",
+                  "url": "https://en.wikipedia.org/wiki/Bromelain"
+                },
+                {
+                  "title": "Pineapple",
+                  "url": "https://en.wikipedia.org/wiki/Ananas_comosus"
+                },
+                {
+                  "title": "Actinidain",
+                  "url": "https://en.wikipedia.org/wiki/Actinidain"
+                },
+                {
+                  "title": "Bromelain (pharmacology)",
+                  "url": "https://en.wikipedia.org/wiki/Bromelain_(pharmacology)"
+                },
+                {
+                  "title": "Jello shot",
+                  "url": "https://en.wikipedia.org/wiki/Jell-O_shot"
+                },
+                {
+                  "title": "Ananain",
+                  "url": "https://en.wikipedia.org/wiki/Ananain"
+                },
+                {
+                  "title": "Ficain",
+                  "url": "https://en.wikipedia.org/wiki/Ficain"
+                },
+                {
+                  "title": "List of herbs with known adverse effects",
+                  "url": "https://en.wikipedia.org/wiki/List_of_herbs_with_known_adverse_effects"
+                }
+              ],
+              "summaryExcerpt": "Fresh pineapple's enzyme bromelain stops gelatin from setting. Enzymes that cut gelatin's protein chains into fragments too small to gel are the cause, and cooking or canning denatures and deactivates the proteases.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": "Every result is a Wikipedia article (Tier B). The query also named two other topics (peppercorns, ketchup); the summary says those were not searched, so this call is counted here only."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "web",
+            "evidence": {
+              "kind": "web",
+              "query": "bromelain in fresh pineapple stops gelatin from setting; black, white and green peppercorns all come from the same plant Piper nigrum; 18th-century English ketchups made from mushrooms and walnuts before tomato ketchup",
+              "results": [
+                {
+                  "title": "Gelatine dessert",
+                  "url": "https://en.wikipedia.org/wiki/Gelatin_dessert#Gelatin_substitutes"
+                },
+                {
+                  "title": "Jell-O",
+                  "url": "https://en.wikipedia.org/wiki/Jell-O"
+                },
+                {
+                  "title": "Bromelain",
+                  "url": "https://en.wikipedia.org/wiki/Bromelain"
+                },
+                {
+                  "title": "Pineapple",
+                  "url": "https://en.wikipedia.org/wiki/Ananas_comosus"
+                },
+                {
+                  "title": "Actinidain",
+                  "url": "https://en.wikipedia.org/wiki/Actinidain"
+                },
+                {
+                  "title": "Bromelain (pharmacology)",
+                  "url": "https://en.wikipedia.org/wiki/Bromelain_(pharmacology)"
+                },
+                {
+                  "title": "Jello shot",
+                  "url": "https://en.wikipedia.org/wiki/Jell-O_shot"
+                },
+                {
+                  "title": "Ananain",
+                  "url": "https://en.wikipedia.org/wiki/Ananain"
+                },
+                {
+                  "title": "Ficain",
+                  "url": "https://en.wikipedia.org/wiki/Ficain"
+                },
+                {
+                  "title": "List of herbs with known adverse effects",
+                  "url": "https://en.wikipedia.org/wiki/List_of_herbs_with_known_adverse_effects"
+                }
+              ],
+              "summaryExcerpt": "Enzymes that cut gelatin's protein chains into fragments too small to gel are the cause, and cooking or canning denatures and deactivates the proteases.",
+              "tiers": ["B"],
+              "conflictReported": false,
+              "retrievedAt": "2026-11-01"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Fresh kiwifruit (actinidin) and papaya (papain) also stop gelatin from setting.",
+              "confidence": "certain"
+            },
+            "note": "The same call's summary names actinidin as the cause of kiwifruit jelly failing to set."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "6806b0f98990c76aadb4edd7eaece00e5fd94e8b5e627496a54a3e9b790c2f44",
+        "startedAt": "2026-11-01T00:59:00Z",
+        "finishedAt": "2026-11-01T01:26:40Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Fresh pineapple contains bromelain, a protease that cuts gelatin, so a jelly made with it can fail to set.",
+              "confidence": "certain"
+            },
+            "note": "'Can' in the stem is the right strength: the effect depends on amount and time. High-risk claim: my knowledge check counts only together with external evidence in the other check (section 9.5.3)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The heat of canning denatures bromelain, so tinned pineapple does not stop gelatin setting.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Kiwifruit contains actinidin and papaya contains papain, proteases that also stop gelatin setting.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood01e",
+        "at": "2026-11-01T01:02:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood01d",
+      "decision": "accept",
+      "reason": "Both checks pass. Key c1 and explanation c2 carry Tier B web evidence in pass A (§9.9 rule 3).",
+      "decidedAt": "2026-11-01T04:17:24Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "nearestId": "p.food.0220",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:17:24Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "tf",
+  "stem": "Fresh pineapple can stop a jelly (gelatin dessert) from setting.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.64,
+    "spread": 0.271,
+    "estimator": "v0"
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "id": "p.lang.0104",
+  "status": "cut",
+  "category": "lang",
+  "tags": ["borrowed-words", "italian", "medicine-history"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "In the 1400s Venice made ships from plague-hit ports wait quaranta giorni, forty days, before anyone could land. Other Mediterranean ports copied the rule.",
+  "learnMore": "Quarantine",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "'Quarantine' comes from Venetian Italian quaranta giorni, 'forty days'."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The source of 'quarantine' refers to neither 14, 30 nor 100 days."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "date",
+      "text": "In the 15th century Venice required ships from plague-affected ports to wait 40 days before passengers and crew could land."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Other Mediterranean ports adopted similar waiting rules for ships."
+    }
+  ],
+  "writerNotes": "14 is the modern-isolation anchor; 30 tempts experts who know Ragusa's earlier 30-day trentino, a different word, so 30 stays definitely wrong for 'quarantine'. Self-check (9.3): lint run clean; every claim listed with risk at or above the C26 floor and raised where honest; datasets: no pinned dataset covers it; rival test: argued 30 hardest (Ragusa); the word quarantine is from quaranta, forty, so the key stands; volatility evergreen, no time words, nothing depends on knowledge newer than mid-2026; regional: the word is used in English everywhere and the foothold is in the word itself, so no country's schooling decides it; style: Oxford spelling, straight quotes, no en or em dashes, explanation within 35 words; myths: no match in myths.json; mystery and encore checks: not applicable to a practice item; doubts: the century in c3 is the commonly cited one; if a checker finds the Venetian 40-day rule dated differently, c3 can move down the precision ladder to 'in medieval Venice'",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang01a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "95dfc4eb32751ffafd568c81af8cfb0de0cec2b80db1770e50aa63f31c6a504d",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:57:40Z",
+        "coldSolve": {
+          "answerGiven": "40",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Quarantine comes from Venetian quarantena, from quaranta giorni, forty days.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Quaranta is forty, so 14, 30 and 100 days are all wrong. Ragusa's earlier 30-day isolation was called trentino, a different word.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "In the 1400s Venice made arrivals from plague-hit ports wait 40 days before passengers or crew could go ashore, and that 40-day period gave the word.",
+              "confidence": "certain"
+            },
+            "note": "High-risk: knowledge only, so it counts only once a confirming check carries dataset or web evidence (§9.9 rule 3). No pinned dataset states it, and this run had no WebSearch: the shared per-turn search budget was exhausted before its first search ran."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Other Mediterranean ports, Ragusa and Marseille among them, ran similar isolation periods for ships.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Explanation: 'Other Mediterranean ports copied the rule' implies Venice came first. Ragusa's 30-day isolation of 1377 is usually given as the earliest such rule, so 'adopted similar rules', as c4 puts it, is the safer wording."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang01b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "df43cc663ddbb100102d4f8204d702d3fa530c628b964d7dbc0c528b08efc279",
+        "startedAt": "2026-11-01T01:30:00Z",
+        "finishedAt": "2026-11-01T01:56:10Z",
+        "coldSolve": {
+          "answerGiven": "40",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Quarantine comes from Italian quaranta giorni, forty days, through Venetian quarantena.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The number behind the word is forty. Thirty belongs to the earlier trentino of Ragusa, a different term that never became the English word; 14 and 100 play no role.",
+              "confidence": "certain"
+            },
+            "note": "Rival test: the 30-day trentino is a real historical rival, but the stem asks for the source of 'quarantine'."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "During the 15th century Venice held ships from plague-affected ports for forty days before landing, with its lazaretto on an island in the lagoon.",
+              "confidence": "certain"
+            },
+            "note": "Century-level claim only. I could not look up the exact year (WebSearch budget was exhausted)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Other Mediterranean ports such as Ragusa, Genoa and Marseille adopted comparable isolation periods for ships from infected places.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang01e",
+        "at": "2026-11-01T01:33:59Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang01d",
+      "decision": "cut",
+      "reason": "Both checks pass, but high-risk c1 (key, etymology), c2 (distractor, number) and c3 (explanation, date) rest on knowledge alone in both checks. Neither checker could search (the batch used 0 of its 26 searches because the shared search budget was exhausted) and no pinned dataset covers them, so §9.9 rule 3 cannot pass. No wording fix adds evidence, and stepping down the precision ladder changes claims (§9.2), so it is cut. Both checkers found the content sound: redraft it under a new id once web evidence can be gathered. For the redraft: drop 'copied the rule', which implies Venice came first; A noted Ragusa's 30-day rule of 1377 is usually given as earlier.",
+      "decidedAt": "2026-11-01T04:15:43Z"
+    }
+  },
+  "format": "mc",
+  "stem": "The word 'quarantine' comes from the Venetian Italian for how many days?",
+  "answer": "40",
+  "wrong": ["14", "30", "100"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.281,
+    "estimator": "v0"
+  }
+}

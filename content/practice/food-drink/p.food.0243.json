@@ -1,0 +1,227 @@
+{
+  "id": "p.food.0243",
+  "status": "active",
+  "category": "food",
+  "tags": ["dips", "middle-east", "vegetables"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "explanation": "The aubergines are charred whole over a flame until the skin blackens and the flesh collapses, then mashed with tahini, lemon juice and garlic.",
+  "learnMore": "Baba ghanoush",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Baba ghanoush is made from roasted or charred aubergine (eggplant)."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Baba ghanoush is not made from courgette, red pepper or pumpkin."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "For baba ghanoush, aubergines are charred until the skin blackens and the flesh softens."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The flesh is mashed with tahini, lemon juice and garlic."
+    }
+  ],
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Lint: content:check run on the batch until this item showed no errors. Claims: every checkable statement is listed, distractors included; risk is at or above the C26 floor (no claim carries a digit, number word, quotation, superlative, only, first, invented, named after, comes from or means, so all are standard). Datasets: No pinned dataset covers this food fact (the manifest holds countries, cities, elements, languages, currencies, Nobel Prizes, World Cups, Olympic Games and artists), so the claims rest on checker knowledge, with external evidence needed for the high-risk ones. Rival test: Red pepper makes muhammara, another Levantine dip, which is the strongest confusion. Against the key: some versions skip tahini, which the claims do not rule out. Volatility: evergreen; no time words, and nothing depends on knowledge newer than mid-2026. Regional: both names of the vegetable are given, and the dip is sold worldwide. Style: Oxford spelling, plain hyphens, single quotation marks, explanation of 24 words. Myths: screened against content/reference/myths.json; no entry matches any claim. Mystery and encore checks: not applicable to a practice item. Seed: 2: most players who know the dip know it is aubergine. Doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-pfood02a",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": "4811ca463f1a9a02665489d88d90db5018c8dccd248ffe208edb32608c0fdd62",
+        "startedAt": "2026-11-01T02:01:07Z",
+        "finishedAt": "2026-11-01T02:27:36Z",
+        "coldSolve": {
+          "answerGiven": "Aubergine (eggplant)",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Baba ghanoush is made from charred, roasted aubergine.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "everyday",
+              "restatement": "Baba ghanoush is not made from courgette, red pepper or pumpkin.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The aubergines are charred until the skin blackens and the flesh collapses.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "The flesh is mashed with tahini, lemon juice and garlic.",
+              "confidence": "certain"
+            },
+            "note": "In parts of the Levant the tahini version is called mutabbal and baba ghanoush can name a tahini-free salad, but the claim describes the dip known by that name internationally."
+          },
+          {
+            "claimId": "x1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "reference",
+              "restatement": "Baba ghanoush is a Levantine, eastern Mediterranean dish.",
+              "confidence": "certain"
+            },
+            "note": "Checker addition (a stem fact, ref stem, risk standard): 'Baba ghanoush is a dip from the eastern Mediterranean.' No listed claim covers it."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-pfood02b",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": "b2a46e6f1c10b9be37513475418be9831e4a347e878efc7e440e4d6b3be65397",
+        "startedAt": "2026-11-01T02:05:29Z",
+        "finishedAt": "2026-11-01T02:31:02Z",
+        "coldSolve": {
+          "answerGiven": "Aubergine (eggplant)",
+          "confidence": "high",
+          "matchedKey": true
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "Baba ghanoush is made from roasted or charred aubergine (eggplant).",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "It is not made from courgette, red pepper or pumpkin.",
+              "confidence": "certain"
+            },
+            "note": "Red pepper has its own dip (muhammara), a plausible confusion but a different dish."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The aubergines are charred until the skin blackens and the flesh softens.",
+              "confidence": "certain"
+            },
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "method": "knowledge",
+            "evidence": {
+              "kind": "knowledge",
+              "basis": "textbook",
+              "restatement": "The flesh is mashed with tahini, lemon juice and garlic.",
+              "confidence": "certain"
+            },
+            "note": ""
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-pfood02e",
+        "at": "2026-11-01T02:03:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pfood02d",
+      "decision": "accept",
+      "reason": "Both checks pass and confirm every claim; all claims are standard risk. A's addition x1 (the dip is eastern Mediterranean) restates the stem's premise, which B's record also takes as given (its note sets muhammara beside it). A's note on mutabbal is weighed: c4 describes the dip known internationally by this name.",
+      "decidedAt": "2026-11-01T04:33:58Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "nearestId": "p.geo.0218",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-01T04:33:58Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "tiebreak": null,
+    "rechecks": []
+  },
+  "format": "mc",
+  "stem": "Baba ghanoush, a smoky dip from the eastern Mediterranean, is made from which roasted vegetable?",
+  "answer": "Aubergine (eggplant)",
+  "wrong": ["Courgette (zucchini)", "Red pepper", "Pumpkin"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.52,
+    "estimator": "v0"
+  }
+}
