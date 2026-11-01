@@ -12,9 +12,11 @@
  *    passed, the other did not, and pass T, by a third checker, passed with
  *    external evidence on every claim the other check did not confirm).
  * 3. Every claim is confirmed in both checks (or, for the non-passing
- *    check, by the tiebreak). Every high-risk claim has dataset or web
- *    evidence in at least one confirming check. An encore's value needs at
- *    least one external source. The Daily key of a mystery (every clue claim
+ *    check, by the tiebreak). Every high-risk claim, and an encore's value,
+ *    has dataset or web evidence in a confirming check, or was confirmed
+ *    directly by both independent checks (decisions memo §18: knowledge
+ *    confirms only at "certain"; a claim that needed the tiebreak still needs
+ *    external evidence). The Daily key of a mystery (every clue claim
  *    that pins the answer, i.e. any clue a rival's `ruledOutBy` names, and
  *    any claim with role key) must be confirmed by both independent checks,
  *    which run on different models; a pinning claim marked high-risk also
@@ -253,16 +255,31 @@ export function acceptanceFailures(input: AcceptanceInput): string[] {
       );
       continue;
     }
-    if (claim.risk === "high" && !externallyConfirmed(set, claim.id)) {
+    // Decisions memo §18: when no dataset or web evidence was obtainable, a
+    // high-risk claim (and an encore value) may rest on knowledge, but only if
+    // BOTH independent checks confirmed it directly. Knowledge confirms only
+    // at "certain" confidence (schema), and A and B run on different models.
+    // A claim that needed the tiebreak still needs external evidence.
+    const bothDirect =
+      !!a &&
+      !!b &&
+      !sameAgentRun(a.checker, b.checker) &&
+      confirmedIn(a, claim.id) &&
+      confirmedIn(b, claim.id);
+    if (
+      claim.risk === "high" &&
+      !externallyConfirmed(set, claim.id) &&
+      !bothDirect
+    ) {
       failures.push(
-        `rule 3: high-risk claim ${claim.id} has no dataset or web evidence in a confirming check`,
+        `rule 3: high-risk claim ${claim.id} has no dataset or web evidence and was not confirmed directly by both checks`,
       );
     }
     const isEncoreValue =
       "kind" in item && item.kind === "encore" && claim.role === "value";
-    if (isEncoreValue && externalSources(set, claim.id) < 1) {
+    if (isEncoreValue && externalSources(set, claim.id) < 1 && !bothDirect) {
       failures.push(
-        `rule 3: the encore value (${claim.id}) needs an external source (dataset or web)`,
+        `rule 3: the encore value (${claim.id}) needs an external source (dataset or web) or direct confirmation by both checks`,
       );
     }
     // Mystery pinning claims (the Daily key, see pinningClues) need no extra

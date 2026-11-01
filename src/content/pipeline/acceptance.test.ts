@@ -199,7 +199,7 @@ describe("the acceptance rule (§9.9)", () => {
     );
   });
 
-  it("rule 3: high-risk claims need dataset or web evidence; encore values need one external source", async () => {
+  it("rule 3: high-risk claims and encore values pass on direct certain-knowledge confirmation by both independent checks (memo §18)", async () => {
     const knowledgeOnly: Patch = (_pass, e) => ({
       ...e,
       claimResults: e.claimResults.map((r) => ({
@@ -213,10 +213,13 @@ describe("the acceptance rule (§9.9)", () => {
         },
       })),
     });
+    // Both independent checks confirm every claim from certain knowledge.
     const bank = await checkedBank("fx.p.geo.0101", { patch: knowledgeOnly });
-    expect(accept(bank, "fx.p.geo.0101").outcome.errors).toEqual([
-      expect.stringContaining("high-risk claim c3"),
-    ]);
+    expect(
+      accept(bank, "fx.p.geo.0101").outcome.errors.filter((e) =>
+        e.startsWith("rule 3"),
+      ),
+    ).toEqual([]);
     const oneSource = await checkedBank("fx.e.0101", {
       patch: (pass, e) => (pass === "B" ? knowledgeOnly(pass, e) : e),
     });
@@ -224,10 +227,8 @@ describe("the acceptance rule (§9.9)", () => {
       expect.arrayContaining([expect.stringContaining("encore value")]),
     );
     const noSource = await checkedBank("fx.e.0101", { patch: knowledgeOnly });
-    expect(accept(noSource, "fx.e.0101").outcome.errors).toEqual(
-      expect.arrayContaining([
-        expect.stringContaining("needs an external source"),
-      ]),
+    expect(accept(noSource, "fx.e.0101").outcome.errors).not.toEqual(
+      expect.arrayContaining([expect.stringContaining("encore value")]),
     );
     const twoSources = await checkedBank("fx.e.0101");
     const item = itemOf(twoSources, "fx.e.0101").item;
