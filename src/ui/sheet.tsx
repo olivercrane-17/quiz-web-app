@@ -10,7 +10,11 @@
  *   from 768 px. Escape, the scrim and the close button call `onClose`;
  *   without `onClose` the sheet can only be left through its own actions.
  *   Focus moves to `initialFocusRef` (else the first control) on open and
- *   back to the opener on close.
+ *   back to the opener on close. A sheet that must be answered and that the
+ *   browser closes anyway (Chromium stops letting Escape be cancelled after
+ *   repeated presses without a click) opens again at once. The dialog
+ *   carries its own pair of live regions, because the page's pair is inert
+ *   behind it; `announce()` writes there while the sheet is open.
  * - **Inline** (`modal={false}`): the explanation sheet of every reveal. It
  *   sits in space the layout reserved, so nothing above it moves, and stays
  *   until the player taps Continue. It is a labelled region; the round
@@ -185,8 +189,18 @@ function ModalSheet({
         if (onClose === undefined) event.preventDefault();
       }}
       // Closed by the browser (Escape) while the parent still has it open.
+      // A sheet that must be answered reopens: its cancel stops being
+      // cancelable after repeated Escapes without a user activation.
       onClose={() => {
-        if (open) onClose?.();
+        if (!open) return;
+        if (onClose !== undefined) {
+          onClose();
+          return;
+        }
+        const dialog = dialogRef.current;
+        if (dialog === null || dialog.hasAttribute("open")) return;
+        if (typeof dialog.showModal === "function") dialog.showModal();
+        else dialog.setAttribute("open", "");
       }}
       // A click on the scrim lands on the dialog itself, outside the body.
       onClick={(event) => {
@@ -215,6 +229,25 @@ function ModalSheet({
           closeButton={closeButton}
         />
       ) : null}
+      {/*
+       * showModal() makes everything outside the dialog inert, the body's
+       * live regions included, so announce() writes here while the sheet is
+       * open (WCAG 4.1.3). Both exist before the first message.
+       */}
+      <div
+        data-qz-live="polite"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      />
+      <div
+        data-qz-live="assertive"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        className="sr-only"
+      />
     </dialog>
   );
 }

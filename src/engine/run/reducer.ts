@@ -35,7 +35,9 @@
  * 6. End rules: `fixed` finishes on the Continue after the last round;
  *    `strikes` on the Continue after the max-th wrong verdict; `clock` on
  *    the first tick at or after `countdownEndsAt`, discarding an unresolved
- *    round.
+ *    round. A `finished` event on a reveal is ignored: the controller keeps
+ *    an early FinishSummary (the last act() returns one) and dispatches it
+ *    when the Continue emits `finish`.
  * 7. A hidden span during `active` or `judging` adds to the round's
  *    hiddenMs; every judge command carries the running total. In Blitz a
  *    hidden page also pauses the countdown.
@@ -575,16 +577,21 @@ function onContinue(state: RunState, at: EpochMs): Transition {
   };
 }
 
+/**
+ * `finished` applies while finishing (the answer to the `finish` command)
+ * or while opening (nothing is on screen to Continue from). It never applies
+ * on a reveal: invariant 6 finishes a fixed run on the Continue after the
+ * last round, so a summary that arrives early, with the last act() or with
+ * a begin_round that withdraws the last round, waits in the controller
+ * until the Continue's `finish` command (or `finish()` fetches it again,
+ * idempotently).
+ */
 function onFinished(
   state: RunState,
   event: EventOf<"finished">,
   at: EpochMs,
 ): Transition {
-  if (
-    state.phase !== "finishing" &&
-    state.phase !== "opening" &&
-    state.phase !== "revealed"
-  ) {
+  if (state.phase !== "finishing" && state.phase !== "opening") {
     return same(state);
   }
   const next: RunState = {

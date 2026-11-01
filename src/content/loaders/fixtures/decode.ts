@@ -492,11 +492,18 @@ export interface DecodedSpare {
   rounds: RoundSpec[];
 }
 
-/** A spare set (CONTENT_GUIDE §10.7): a Daily's round list with no date. */
+/**
+ * A spare set (CONTENT_GUIDE §10.7): a Daily's round list with no date.
+ * Ids are `spare.NN` as ARCHITECTURE §2.4 names them; `spare-NN`, the
+ * current content schema's spelling, is accepted until CNT-1 reconciles the
+ * schema and renames the fixture files, so that rename touches only content.
+ */
 export function decodeSpareSet(raw: unknown, path = "spare"): DecodedSpare {
   const o = object(raw, path);
   const id = text(o, "id", path);
-  if (!/^spare-\d{2}$/.test(id)) fail(`${path}.id`, "must be spare-NN");
+  if (!/^spare[.-]\d{2}$/.test(id)) {
+    fail(`${path}.id`, "must be spare.NN (or spare-NN)");
+  }
   return {
     id,
     track: oneOf(o, "track", path, ["main", "e2e"] as const),

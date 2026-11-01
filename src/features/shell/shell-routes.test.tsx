@@ -5,9 +5,10 @@ import { screen } from "@testing-library/react";
 import type { Metadata } from "next";
 import { PHASE_PRODUCTION_BUILD } from "next/constants";
 import type { ComponentType } from "react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { FEATURE_DEFAULTS } from "@/config/features";
+import type { FeatureFlag } from "@/config/features";
+import type * as EnvModule from "@/lib/env";
 import { renderWithUser } from "@/test/render";
 
 import config from "../../../next.config";
@@ -45,6 +46,33 @@ async function loadShell(
   };
 }
 
+/**
+ * Loads a shell page fresh, with one flag forced on or off, so the Beta
+ * checks hold whatever the defaults say (the orchestrator flips them at
+ * the gate). Flags are read when the module loads, as in a build.
+ */
+async function loadShellWithFlag(
+  group: string,
+  shell: string,
+  flag: FeatureFlag,
+  on: boolean,
+): Promise<{ default: ComponentType; metadata: Metadata }> {
+  vi.resetModules();
+  vi.doMock("@/lib/env", async (importOriginal) => {
+    const actual = await importOriginal<typeof EnvModule>();
+    return {
+      ...actual,
+      isFeatureEnabled: (name: FeatureFlag) =>
+        name === flag ? on : actual.isFeatureEnabled(name),
+    };
+  });
+  try {
+    return await loadShell(group, shell);
+  } finally {
+    vi.doUnmock("@/lib/env");
+  }
+}
+
 describe("shell routes", () => {
   it("rewrite exactly the patterns of ARCHITECTURE §10.1, one shell each", () => {
     expect(SHELL_ROUTES.map((route) => route.source).sort()).toEqual(
@@ -70,7 +98,7 @@ describe("shell routes", () => {
 
   it.each(SHELL_ROUTES)(
     "$source is served by $group/shell/$shell, which only re-exports its route module",
-    async ({ group, shell }) => {
+    async ({ group, shell, flag }) => {
       const file = pageFile(group, shell);
       expect(existsSync(file)).toBe(true);
       // Comments aside, the page is one re-export (however Prettier wraps it).
@@ -83,7 +111,8 @@ describe("shell routes", () => {
       );
       const page = await loadShell(group, shell);
       expect(page.metadata.robots).toEqual({ index: false });
-      expect(page.metadata.title).toMatch(/\S/);
+      // Beta shells name themselves only while their flag is on (below).
+      if (flag === null) expect(page.metadata.title).toMatch(/\S/);
     },
   );
 
@@ -97,11 +126,17 @@ describe("shell routes", () => {
   );
 
   it.each(SHELL_ROUTES.filter((route) => route.flag !== null))(
-    "$shell is the not-found page while its Beta flag ($flag) is off",
+    "$shell is the not-found page, with no title in its metadata, while its Beta flag ($flag) is off (AC-ROM-13)",
     async ({ group, shell, flag }) => {
       if (flag === null) throw new Error("unreachable");
-      expect(FEATURE_DEFAULTS[flag]).toBe(false);
-      const { default: Page } = await loadShell(group, shell);
+      const { default: Page, metadata } = await loadShellWithFlag(
+        group,
+        shell,
+        flag,
+        false,
+      );
+      // The title would sit in the 404's HTML and RSC payload otherwise.
+      expect(metadata).toEqual({ robots: { index: false } });
       let thrown: unknown = null;
       try {
         renderWithUser(<Page />);
@@ -111,6 +146,23 @@ describe("shell routes", () => {
       expect((thrown as { digest?: string } | null)?.digest).toBe(
         "NEXT_HTTP_ERROR_FALLBACK;404",
       );
+    },
+  );
+
+  it.each(SHELL_ROUTES.filter((route) => route.flag !== null))(
+    "$shell renders its page and its title once its Beta flag ($flag) is on",
+    async ({ group, shell, flag }) => {
+      if (flag === null) throw new Error("unreachable");
+      const { default: Page, metadata } = await loadShellWithFlag(
+        group,
+        shell,
+        flag,
+        true,
+      );
+      expect(metadata.title).toMatch(/\S/);
+      expect(metadata.robots).toEqual({ index: false });
+      renderWithUser(<Page />);
+      expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     },
   );
 });

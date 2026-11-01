@@ -44,6 +44,10 @@ function statusOf(state: RunState): RoundStatus {
     }
     case "opening":
     case "finishing":
+      // A silent retry of begin_round or finish reads as a wait, as while
+      // judging (invariant 4, PRD §3.0.2); retry.notice says when to speak.
+      if (failing !== null)
+        return failing.code === "offline" ? "offline" : "checking";
       if (state.error !== null) return errorStatus(state.error);
       return "judging";
     case "active":

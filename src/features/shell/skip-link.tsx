@@ -11,7 +11,7 @@
  */
 import { firstShown } from "@/ui/shown";
 
-import { SHELL_COPY } from "./copy";
+import { SHELL_CLIENT_COPY } from "./client-copy";
 import { MAIN_ID } from "./landmarks";
 
 export function SkipLink() {
@@ -26,7 +26,7 @@ export function SkipLink() {
       }}
       className="sr-only rounded-xl bg-background px-4 py-3 font-bold text-foreground outline-offset-[3px] focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:outline-[3px] focus:outline-foreground"
     >
-      {SHELL_COPY.skipLink}
+      {SHELL_CLIENT_COPY.skipLink}
     </a>
   );
 }

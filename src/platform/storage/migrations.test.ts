@@ -6,6 +6,7 @@ import {
   migrateStorage,
   runStorageMigrations,
 } from "./migrations";
+import { entrySize, quotaStorage } from "./testing";
 
 const NOW = Date.parse("2026-11-01T09:00:00Z");
 const IDENTITY = JSON.stringify({
@@ -54,6 +55,36 @@ describe("storage migrations", () => {
     );
     expect(storage.getItem("qz:practice")).toBe('{"seen":{"p.geo.0142":1}}');
     expect(storage.getItem("another-app:key")).toBe("kept");
+  });
+
+  it("quarantines on a full store without dropping any other key", () => {
+    const snapshot = {
+      ...v0Snapshot(),
+      "qz:history": `not json{${"x".repeat(100)}`,
+      "qz:outbox": '[{"id":"e1"}]',
+      "qz:drafts:quiz-1": '{"title":"Mine"}',
+    };
+    const used = Object.entries(snapshot).reduce(
+      (sum, [key, value]) => sum + entrySize(key, value, true),
+      0,
+    );
+    // Five characters to spare: the copy (a longer key) never fits.
+    const storage = quotaStorage(used + 5, snapshot, { countKeys: true });
+    const report = migrateStorage(createKv({ storage }), NOW);
+    expect(report.quarantined).toEqual(["qz:history"]);
+    expect(storage.map.has("qz:history")).toBe(false);
+    expect(storage.map.has("qz:quarantine:history")).toBe(false);
+    const kept = Object.entries(snapshot).filter(
+      ([key]) => key !== "qz:history",
+    );
+    expect(Object.fromEntries(storage.map)).toEqual({
+      ...Object.fromEntries(kept),
+      "qz:meta": JSON.stringify({
+        storageVersion: 1,
+        createdAt: NOW,
+        migratedAt: NOW,
+      }),
+    });
   });
 
   it("never deletes the identity, even when it is not JSON", () => {

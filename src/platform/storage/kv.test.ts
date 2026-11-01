@@ -1,55 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { createKv, createMemoryStorage, type StorageLike } from "./kv";
+import { createKv, createMemoryStorage } from "./kv";
+import { quotaStorage as smallStorage, throwingStorage } from "./testing";
 
 const asObject = (raw: unknown) =>
   typeof raw === "object" && raw !== null && !Array.isArray(raw)
     ? (raw as Record<string, unknown>)
     : null;
-
-/** A storage that refuses everything, as some private windows do. */
-function throwingStorage(): StorageLike {
-  const fail = () => {
-    throw new DOMException("The operation is insecure.", "SecurityError");
-  };
-  return {
-    get length(): number {
-      return fail();
-    },
-    key: fail,
-    getItem: fail,
-    setItem: fail,
-    removeItem: fail,
-  };
-}
-
-/** A storage that holds at most `capacity` characters of values. */
-function smallStorage(
-  capacity: number,
-  initial: Record<string, string> = {},
-): StorageLike & { map: Map<string, string> } {
-  const map = new Map(Object.entries(initial));
-  const used = () =>
-    [...map.values()].reduce((sum, value) => sum + value.length, 0);
-  return {
-    map,
-    get length() {
-      return map.size;
-    },
-    key: (index) => [...map.keys()][index] ?? null,
-    getItem: (key) => map.get(key) ?? null,
-    setItem(key, value) {
-      const before = map.get(key)?.length ?? 0;
-      if (used() - before + value.length > capacity) {
-        throw new DOMException("full", "QuotaExceededError");
-      }
-      map.set(key, value);
-    },
-    removeItem: (key) => {
-      map.delete(key);
-    },
-  };
-}
 
 describe("kv", () => {
   it("round-trips JSON values through per-key decoders", () => {
@@ -145,6 +102,70 @@ describe("kv", () => {
     expect(
       kv.read("qz:practice", (raw) => (typeof raw === "string" ? raw : null)),
     ).toBe("p".repeat(60));
+  });
+
+  /** Device-only records (§6.5) on a store with 36 characters to spare. */
+  const deviceOnly = () => ({
+    "qz:identity": '{"id":"me"}',
+    "qz:practice": `"${"p".repeat(40)}"`,
+    "qz:drafts:quiz-1": `"${"d".repeat(40)}"`,
+    "qz:outbox": `"${"o".repeat(40)}"`,
+  });
+  const asString = (raw: unknown) => (typeof raw === "string" ? raw : null);
+
+  it("never lets a cache write evict keys worth more than the cache, falling back to memory", () => {
+    const storage = smallStorage(220, deviceOnly(), { countKeys: true });
+    const kv = createKv({ storage });
+    const daily = "c".repeat(80);
+    expect(kv.write("qz:cache:daily", daily)).toBe(false);
+    expect(Object.fromEntries(storage.map)).toEqual(deviceOnly());
+    // This tab still sees the cache until the next load.
+    expect(kv.read("qz:cache:daily", asString)).toBe(daily);
+  });
+
+  it("lets a write evict only the keys ranked below it", () => {
+    const storage = smallStorage(
+      240,
+      { ...deviceOnly(), "qz:quarantine:history": '"old"' },
+      { countKeys: true },
+    );
+    const kv = createKv({ storage });
+    // The history (rank 40) may push out the quarantine copy (rank 0) but
+    // never the outbox (50), the practice record (80) or a draft (90).
+    const history = "h".repeat(60);
+    expect(kv.write("qz:history", history)).toBe(false);
+    expect(Object.fromEntries(storage.map)).toEqual(deviceOnly());
+    // The identity is never dropped, so its write may evict any ranked key,
+    // and only stored keys: the history that lives in memory stays readable.
+    expect(kv.write("qz:identity", { id: "me", secret: "s".repeat(50) })).toBe(
+      true,
+    );
+    expect(storage.map.has("qz:outbox")).toBe(false);
+    expect(storage.map.has("qz:practice")).toBe(true);
+    expect(storage.map.has("qz:drafts:quiz-1")).toBe(true);
+    expect(kv.read("qz:history", asString)).toBe(history);
+  });
+
+  it("quarantines a corrupt key on a full store without removing any other key", () => {
+    const corrupt = `{${"h".repeat(30)}`;
+    const storage = smallStorage(
+      230,
+      { ...deviceOnly(), "qz:history": corrupt },
+      { countKeys: true },
+    );
+    const kv = createKv({ storage });
+    expect(kv.read("qz:history", asObject)).toBeNull();
+    // The copy did not fit, so it was skipped; the bad key still went.
+    expect(Object.fromEntries(storage.map)).toEqual(deviceOnly());
+    expect(kv.readRaw("qz:quarantine:history")).toEqual({ state: "missing" });
+    expect(kv.readRaw("qz:history")).toEqual({ state: "missing" });
+
+    // With room to spare the copy lands as before.
+    const roomy = smallStorage(400, { "qz:history": corrupt });
+    createKv({ storage: roomy }).quarantine("qz:history");
+    expect(Object.fromEntries(roomy.map)).toEqual({
+      "qz:quarantine:history": corrupt,
+    });
   });
 
   it("refuses values that are not JSON", () => {

@@ -1,3 +1,6 @@
+import { readdirSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import raw from "./shared.json";
@@ -105,7 +108,7 @@ describe("tunables", () => {
 });
 
 describe("feature flags", () => {
-  it("names the flags of §10.5, all off until built or gated", () => {
+  it("names the flags of §10.5", () => {
     expect(FEATURE_FLAGS).toEqual([
       "rooms",
       "editor",
@@ -122,13 +125,35 @@ describe("feature flags", () => {
       "readable_text",
       "high_contrast",
     ]);
-    expect(Object.values(FEATURE_DEFAULTS).every((on) => on === false)).toBe(
-      true,
-    );
     expect(Object.keys(FEATURE_DEFAULTS).sort()).toEqual(
       [...FEATURE_FLAGS].sort(),
     );
     expect(isFeatureFlag("rooms")).toBe(true);
     expect(isFeatureFlag("adaptive_mixed")).toBe(false);
+  });
+
+  // No assertion here pins a default's value: owners flip their own file
+  // when a feature ships, and this test must not need their edits.
+  it("takes every default from exactly one owner file under flags/", async () => {
+    const dir = resolve(process.cwd(), "src/config/flags");
+    const files = readdirSync(dir).filter((name) => name.endsWith(".ts"));
+    const owners = new Map<string, string>();
+    const merged: Record<string, unknown> = {};
+    for (const file of files) {
+      const loaded = (await import(
+        /* @vite-ignore */ resolve(dir, file)
+      )) as Record<string, Record<string, unknown>>;
+      const exported = Object.values(loaded);
+      expect(exported, file).toHaveLength(1);
+      for (const [flag, value] of Object.entries(exported[0] ?? {})) {
+        expect(owners.get(flag), `${flag} in ${file}`).toBeUndefined();
+        owners.set(flag, file);
+        expect(typeof value).toBe("boolean");
+        merged[flag] = value;
+      }
+    }
+    expect([...owners.keys()].sort()).toEqual([...FEATURE_FLAGS].sort());
+    expect(FEATURE_DEFAULTS).toEqual(merged);
+    expect(Object.isFrozen(FEATURE_DEFAULTS)).toBe(true);
   });
 });

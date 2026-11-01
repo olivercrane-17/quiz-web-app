@@ -7,9 +7,11 @@
  *   A value that fails to decode is moved to `qz:quarantine:<key>` and
  *   reset; the rest of storage stays.
  * - When a write hits the quota, the least valuable keys (schema.ts ranks)
- *   are dropped first and the write is retried. A write that still can't
- *   land is kept in memory for this tab, so the app behaves the same until
- *   the next load.
+ *   are dropped first and the write is retried, but only keys ranked
+ *   strictly below the key being written. A write that still can't land is
+ *   kept in memory for this tab, so the app behaves the same until the next
+ *   load. Quarantine copies never evict anything: on a full store they are
+ *   skipped.
  * - Without usable storage (some private windows, unit tests) everything
  *   lives in memory and `persistent` is false.
  * - Device namespaces for tests: in mock builds a page that sets
@@ -123,7 +125,8 @@ export function createKv(
     }
   }
 
-  function storedKeys(): StorageKey[] {
+  /** Schema keys physically held by storage in this namespace. */
+  function persistedKeys(): StorageKey[] {
     const out: StorageKey[] = [];
     try {
       for (let i = 0; i < storage.length; i += 1) {
@@ -135,6 +138,14 @@ export function createKv(
     } catch {
       // A storage that can't be listed has nothing we can evict.
     }
+    return out;
+  }
+
+  /** Every key this tab can read: storage as the overlay amends it. */
+  function storedKeys(): StorageKey[] {
+    const out = persistedKeys().filter(
+      (key) => overlay.get(physical(key)) !== null,
+    );
     for (const [name, text] of overlay) {
       const logical = `qz:${name.slice(prefix.length)}`;
       if (text !== null && !out.includes(logical as StorageKey)) {
@@ -144,14 +155,22 @@ export function createKv(
     return out;
   }
 
-  /** Drops the least valuable stored key other than `keep`; false when none is left. */
+  /**
+   * Drops the least valuable stored key ranked strictly below `keep`; false
+   * when none is left. A write may only push out keys worth less than
+   * itself, so a re-fetchable cache can never cost the practice history,
+   * the outbox or a draft (§6.1, §6.5). A key that is never dropped (rank
+   * null) may evict any ranked key. Only keys storage holds count: dropping
+   * a value that lives in memory alone frees nothing.
+   */
   function evictOne(keep: StorageKey): boolean {
-    const candidates = storedKeys()
+    const keepRank = keyDefinition(keep)?.evictRank ?? Number.POSITIVE_INFINITY;
+    const candidates = persistedKeys()
       .filter((key) => key !== keep)
       .map((key) => ({ key, rank: keyDefinition(key)?.evictRank ?? null }))
       .filter(
         (entry): entry is { key: StorageKey; rank: number } =>
-          entry.rank !== null,
+          entry.rank !== null && entry.rank < keepRank,
       )
       .sort((a, b) => a.rank - b.rank || a.key.localeCompare(b.key));
     const victim = candidates[0];
@@ -201,13 +220,28 @@ export function createKv(
     }
   }
 
+  /**
+   * Stores a quarantine copy only if it fits as storage stands. It never
+   * evicts and never goes to the overlay: a copy is the least valuable
+   * thing we keep, so on a full or blocked store it is skipped.
+   */
+  function copyToQuarantine(key: StorageKey, text: string): void {
+    const name = physical(quarantineKeyFor(key));
+    try {
+      storage.setItem(name, text);
+      overlay.delete(name);
+    } catch {
+      // Skipped; the overlay is left alone.
+    }
+  }
+
   function quarantine(key: StorageKey): void {
     if (key.startsWith("qz:quarantine:")) {
       remove(key);
       return;
     }
     const text = getText(key);
-    if (text !== null) setText(quarantineKeyFor(key), text);
+    if (text !== null) copyToQuarantine(key, text);
     remove(key);
   }
 

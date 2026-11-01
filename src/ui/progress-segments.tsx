@@ -76,6 +76,9 @@ export function ProgressSegments({
 }: ProgressSegmentsProps) {
   return (
     <ol
+      // Preflight's list-style: none makes WebKit drop the list role (and
+      // with it this name) for VoiceOver unless the role is explicit.
+      role="list"
       aria-label={label}
       data-variant={variant}
       className={cx(

@@ -22,9 +22,11 @@ const SPECIAL_LETTERS: Readonly<Record<string, string>> = {
 
 /**
  * NFKD, combining marks stripped, lower case, `&` read as "and",
- * apostrophes dropped inside words ("O'Brien" is "obrien"), every other run
- * of punctuation or symbols turned into one space, whitespace collapsed and
- * trimmed, and a leading "the ", "a " or "an " dropped.
+ * apostrophes and periods deleted ("O'Brien" is "obrien", "R.E.M." is
+ * "rem", "U.S." is "us"), every other run of punctuation or symbols turned
+ * into one space (hyphens and slashes still split words: "Guinea-Bissau" is
+ * "guinea bissau", "AC/DC" is "ac dc"), whitespace collapsed and trimmed,
+ * and a leading "the ", "a " or "an " dropped.
  */
 export function normalizeName(text: string): string {
   const folded = text
@@ -33,7 +35,7 @@ export function normalizeName(text: string): string {
     .toLowerCase()
     .replace(/[ßæœøđðþłı]/gu, (letter) => SPECIAL_LETTERS[letter] ?? letter)
     .replace(/&/g, " and ")
-    .replace(/['‘’ʼ`]/gu, "")
+    .replace(/['‘’ʼ`.]/gu, "")
     .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim();
   return folded.replace(/^(?:the|an|a) (?=\S)/, "");

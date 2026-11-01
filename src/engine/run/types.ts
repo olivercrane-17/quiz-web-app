@@ -154,6 +154,11 @@ export type RunEvent =
     }
   | { type: "retry"; at: EpochMs }
   | { type: "continue"; at: EpochMs }
+  /**
+   * The answer to the `finish` command. Applies while finishing or opening,
+   * never on a reveal: a summary that arrives early (the last act() returns
+   * one) waits in the controller until the Continue emits `finish`.
+   */
   | { type: "finished"; at: EpochMs; summary: FinishSummary | null }
   | { type: "tick"; at: EpochMs }
   | { type: "visibility"; at: EpochMs; hidden: boolean }

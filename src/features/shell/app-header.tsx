@@ -24,7 +24,8 @@ export function AppHeader() {
           <StreakChip />
           <Link
             // /settings is built by SET-1. No prefetch until it exists: a
-            // prefetch of a missing route logs a 404 (PERF-1 tunes this).
+            // prefetch of a missing route logs a 404. SET-1 turns it on with
+            // its page (a one-line Touch, §12.3); PERF-1 is the backstop.
             href={"/settings" as Route}
             prefetch={false}
             className={buttonClasses({ variant: "ghost" })}

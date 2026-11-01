@@ -3,8 +3,10 @@
  * Leave, the run's progress, and the end slot for the stopwatch and the
  * More menu. No tab bar. The incident banner slot sits under it.
  *
- * Play screens render it as the first child of the play layout's `<main>`,
- * because it shows their run's state.
+ * Play screens don't render it directly: `<PlayFrame header={...}>` puts it
+ * before the screen's `<main>`, so it is the page's banner landmark and the
+ * skip link jumps past it (WCAG 2.4.1). It shows the run's state, which only
+ * the screen knows.
  */
 import type { Route } from "next";
 import Link from "next/link";

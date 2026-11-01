@@ -10,7 +10,7 @@
  * shows the original one: both must pick the same tab, or hydration would
  * not match.
  */
-import { SHELL_COPY } from "./copy";
+import { SHELL_CLIENT_COPY } from "./client-copy";
 
 export type TabId = "today" | "practice" | "groups" | "me";
 
@@ -20,23 +20,35 @@ export interface TabDefinition {
   label: string;
   /**
    * Whether the link prefetches. Off for destinations that later tickets
-   * build (PRA-2, GRP-1, STA-1): prefetching a route that doesn't exist yet
-   * logs a 404 in the console. PERF-1 turns it on when it tunes prefetching
-   * (ARCHITECTURE §10.9 item 5).
+   * build: prefetching a route that doesn't exist yet logs a 404 in the
+   * console. Each owner turns its own entry on in the pull request that
+   * builds the page, through a one-line Touch (§12.3): PRA-2 for
+   * /practice, GRP-1 for /g, STA-1 for /me. PERF-1 checks every link when
+   * it tunes prefetching (ARCHITECTURE §10.9 item 5), as the backstop.
    */
   prefetch: boolean;
 }
 
 export const TABS: readonly TabDefinition[] = [
-  { id: "today", href: "/", label: SHELL_COPY.tabs.today, prefetch: true },
+  {
+    id: "today",
+    href: "/",
+    label: SHELL_CLIENT_COPY.tabs.today,
+    prefetch: true,
+  },
   {
     id: "practice",
     href: "/practice",
-    label: SHELL_COPY.tabs.practice,
+    label: SHELL_CLIENT_COPY.tabs.practice,
     prefetch: false,
   },
-  { id: "groups", href: "/g", label: SHELL_COPY.tabs.groups, prefetch: false },
-  { id: "me", href: "/me", label: SHELL_COPY.tabs.me, prefetch: false },
+  {
+    id: "groups",
+    href: "/g",
+    label: SHELL_CLIENT_COPY.tabs.groups,
+    prefetch: false,
+  },
+  { id: "me", href: "/me", label: SHELL_CLIENT_COPY.tabs.me, prefetch: false },
 ];
 
 export interface ActiveTab {

@@ -7,7 +7,12 @@
  *
  * - Commit on release: the pressed look appears on `pointerdown` (same
  *   frame), the answer commits on `click`, so sliding off cancels.
- *   `onPressStart` runs with the press, for the tap sound and haptic.
+ *   `onPressStart` runs with the press, for the tap sound (DESIGN §8). The
+ *   haptic belongs to the commit, never the press: vibrate with
+ *   `HAPTICS.lockIn` in `onCommit` (DESIGN §9), because a pointerdown also
+ *   starts every scroll that begins on an option.
+ * - At least `TUNABLES.answers.buttonMinHeightPx` tall (PRD §3.0.3), read
+ *   from config so the tunable moves it; the content builds it taller.
  * - Only an `idle` option is interactive. Every other state keeps the
  *   button focusable with `aria-disabled`, so focus never falls to the page
  *   after a verdict and a screen reader can still read the state's words.
@@ -22,6 +27,8 @@
  *   question); `shortcut` only shows the hint and sets `aria-keyshortcuts`.
  */
 import type { ReactNode, Ref } from "react";
+
+import { TUNABLES } from "@/config/tunables";
 
 import { UI_COPY, type AnswerButtonLabels } from "./copy";
 import { cx } from "./cx";
@@ -61,7 +68,10 @@ export interface AnswerButtonProps {
   state?: AnswerState;
   /** The answer itself: runs on click (release), only while `idle`. */
   onCommit?: () => void;
-  /** Runs on `pointerdown` while `idle`, before any commit: the press sound and haptic. */
+  /**
+   * Runs on `pointerdown` while `idle`, before any commit: for the tap
+   * sound. Vibrate on commit instead (`HAPTICS.lockIn` in `onCommit`).
+   */
   onPressStart?: () => void;
   /** Forces the pressed look, such as while the option's shortcut key is held. */
   pressed?: boolean;
@@ -139,8 +149,9 @@ export function AnswerButton({
         if (interactive) onCommit?.();
       }}
       {...pressHandlers}
+      style={{ minHeight: TUNABLES.answers.buttonMinHeightPx }}
       className={cx(
-        "relative flex min-h-15 w-full touch-manipulation items-center gap-3 rounded-2xl border-2 bg-background px-4 py-3 text-left text-lg font-semibold text-foreground outline-offset-[3px] transition-transform duration-75 select-none focus-visible:outline-[3px] focus-visible:outline-foreground",
+        "relative flex w-full touch-manipulation items-center gap-3 rounded-2xl border-2 bg-background px-4 py-3 text-left text-lg font-semibold text-foreground outline-offset-[3px] transition-transform duration-75 select-none focus-visible:outline-[3px] focus-visible:outline-foreground",
         STATE_CLASSES[state],
         showPressed && "translate-y-0.5 border-foreground",
         className,

@@ -12,6 +12,13 @@ import type { EpochMs } from "@/engine/types";
 
 import { systemClock } from "./clock";
 
+/**
+ * The uncorrected device clock, re-exported so `src/backend` (whose layer
+ * rule allows `@/platform/server-clock` and nothing else from platform,
+ * ARCHITECTURE §2.2) can default the mock's clock to it.
+ */
+export { systemClock };
+
 export const SERVER_CLOCK_KEY = "qz:server-clock";
 const MAX_SAMPLES = 5;
 /** Offsets beyond a year, or round trips beyond a minute, are not clock samples. */

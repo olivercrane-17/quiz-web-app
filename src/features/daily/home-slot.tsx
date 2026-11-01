@@ -6,8 +6,10 @@
  * (HOME_PROMOTE_PRACTICE in @/features/home).
  *
  * A stub until DLY-1 (not started, in progress and finished), then DLY-2
- * (every state of PRD §3.1.7): it renders nothing. Every slot is a client
- * island or nothing, and loads its own data after first paint.
+ * (every state of PRD §3.1.7): it renders nothing. Size: the Daily card is
+ * one of the islands Home may load eagerly (§10.9 item 2), with a byte
+ * target of 4 kB gzipped; anything beyond the ticket (the Group line,
+ * offers) loads with dynamic(). It loads its own data after first paint.
  */
 export function DailyHomeSlot() {
   return null;

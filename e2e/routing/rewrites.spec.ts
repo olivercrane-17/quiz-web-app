@@ -6,10 +6,14 @@
  * page per pattern, no render per code or token), with the address bar
  * left on the original path. Real pages under the same prefixes must keep
  * winning over the patterns, because `rewrites()` runs after the
- * filesystem.
+ * filesystem. And since every id of a pattern lands on one shell segment,
+ * which Next reuses (and keeps mounted while hidden), the shell must follow
+ * the address through client navigations.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+
+import type { Page } from "@playwright/test";
 
 import {
   SHELL_ROUTES,
@@ -36,8 +40,20 @@ const EXAMPLES: Record<string, string> = {
   editor: "/create/3f2504e0-4f89-41d3-9a0c-0305e82c3301",
 };
 
-/** A path no route or pattern serves. */
-const NOWHERE = "/no-such-page-anywhere";
+/**
+ * The titles the Beta route modules carry while their flag is on. With the
+ * flag off (the default) none may appear anywhere in the response: not in
+ * the HTML, not in the RSC payload inside it (AC-ROM-13).
+ */
+const BETA_TITLES: Record<string, string> = {
+  join: "Joining a room",
+  room: "Room",
+  "host-room": "Host screen",
+  quiz: "Shared quiz",
+  "quiz-play": "Shared quiz play",
+  "quiz-result": "Shared quiz result",
+  editor: "Edit quiz",
+};
 
 /**
  * Real pages that sit under rewritten prefixes, the shell that must never
@@ -82,9 +98,14 @@ function dropNotFoundReport(errors: string[]): void {
 }
 
 test.describe("rewritten per-user paths", () => {
-  test("every pattern has an example address", () => {
+  test("every pattern has an example address, and every Beta shell its title", () => {
     expect(Object.keys(EXAMPLES).sort()).toEqual(
       SHELL_ROUTES.map((route) => route.shell).sort(),
+    );
+    expect(Object.keys(BETA_TITLES).sort()).toEqual(
+      SHELL_ROUTES.filter((route) => route.flag !== null)
+        .map((route) => route.shell)
+        .sort(),
     );
   });
 
@@ -97,19 +118,21 @@ test.describe("rewritten per-user paths", () => {
       consoleErrors,
     }) => {
       const example = exampleFor(route);
-      const [rewritten, shell, nowhere] = await Promise.all([
+      const [rewritten, shell] = await Promise.all([
         request.get(example),
         request.get(shellPath(route.shell)),
-        request.get(NOWHERE),
       ]);
       // The very page the shell's own address serves: one prerender for every code.
       expect(rewritten.status()).toBe(shell.status());
-      expect(await rewritten.text()).toBe(await shell.text());
+      const body = await rewritten.text();
+      expect(body).toBe(await shell.text());
       if (beta) {
-        // Beta flags are off by default, so the shell is the not-found page
-        // (AC-ROM-13), but its own one: not what an unknown path gets.
+        // Beta flags are off by default, so the shell is the not-found page,
+        // and nothing in it may name the feature (AC-ROM-13).
         expect(rewritten.status()).toBe(404);
-        expect(await rewritten.text()).not.toBe(await nowhere.text());
+        const title = BETA_TITLES[route.shell] ?? "";
+        expect(title).not.toBe("");
+        expect(body).not.toContain(title);
       } else {
         expect(rewritten.status()).toBe(200);
       }
@@ -155,4 +178,59 @@ test.describe("real pages under rewritten prefixes", () => {
       if (builtPage(path) && !beta) expect(own.status()).toBe(200);
     });
   }
+});
+
+/** The pathname the page shows, once it settles on `path`. */
+async function expectPath(page: Page, path: string): Promise<void> {
+  await expect.poll(() => new URL(page.url()).pathname).toBe(path);
+}
+
+/** A client navigation, as a Link or router.push makes one. */
+async function pushPath(page: Page, path: string): Promise<void> {
+  await page.evaluate((target) => {
+    const next = (
+      window as unknown as { next?: { router?: { push(href: string): void } } }
+    ).next;
+    if (next?.router === undefined) throw new Error("no Next router");
+    next.router.push(target);
+  }, path);
+  await expectPath(page, path);
+}
+
+test.describe("a reused shell follows the address", () => {
+  const A = "aaaa1111-0000-4000-8000-000000000001";
+  const B = "bbbb2222-0000-4000-8000-000000000002";
+
+  test("the Group shell reads each id through pushes, a tab switch and Back", async ({
+    page,
+  }) => {
+    await page.goto(`/g/${A}`);
+    // The param the shown shell holds (hidden routes stay mounted).
+    const param = page
+      .locator("main")
+      .filter({ visible: true })
+      .locator("[data-shell-param]");
+    test.skip(
+      (await param.count()) === 0,
+      "GRP-1 replaced the stub; its acceptance covers the same walk",
+    );
+    await expect(param).toHaveAttribute("data-shell-param", A);
+
+    // Via another tab: Next shows the hidden copy again for the next id.
+    await page.getByRole("link", { name: "Today", exact: true }).click();
+    await expectPath(page, "/");
+    await pushPath(page, `/g/${B}`);
+    await expect(param).toHaveAttribute("data-shell-param", B);
+
+    // Back through history: Today, then A.
+    await page.goBack();
+    await expectPath(page, "/");
+    await page.goBack();
+    await expectPath(page, `/g/${A}`);
+    await expect(param).toHaveAttribute("data-shell-param", A);
+
+    // Straight to the next id: the same instance, a new param.
+    await pushPath(page, `/g/${B}`);
+    await expect(param).toHaveAttribute("data-shell-param", B);
+  });
 });

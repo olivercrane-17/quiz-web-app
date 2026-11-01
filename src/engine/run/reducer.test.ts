@@ -437,6 +437,84 @@ describe("invariant 4: failures", () => {
     ]);
   });
 
+  it("shows a silent retry of begin_round after Continue as checking, with plain copy only after 5 s", () => {
+    const run = sealedRun(["mc", "mc"]);
+    const k = run.answer(0, T0 + 1000);
+    run.judgeLocally(
+      0,
+      { family: "choice", kind: "answer", option: 0 },
+      k,
+      T0 + 1100,
+    );
+    run.continue(T0 + 2000);
+    expect(run.state.phase).toBe("opening");
+    run.dispatch({
+      type: "failed",
+      at: T0 + 2100,
+      key: null,
+      error: err("rate_limited"),
+    });
+    let view = selectRunView(run.state, plugins);
+    expect(view.status).toBe("checking");
+    expect(view.retry).toMatchObject({ op: "open", notice: "silent" });
+    run.dispatch({ type: "tick", at: T0 + 7100 });
+    view = selectRunView(run.state, plugins);
+    expect(view.status).toBe("checking");
+    expect(view.retry?.notice).toBe("plain");
+
+    // A timeout retries the same way; offline reads as offline.
+    run.dispatch({ type: "retry", at: T0 + 7200 });
+    run.dispatch({
+      type: "failed",
+      at: T0 + 7300,
+      key: null,
+      error: err("timeout"),
+    });
+    expect(selectRunView(run.state, plugins).status).toBe("checking");
+    run.dispatch({ type: "retry", at: T0 + 9300 });
+    run.dispatch({
+      type: "failed",
+      at: T0 + 9400,
+      key: null,
+      error: err("offline"),
+    });
+    expect(selectRunView(run.state, plugins).status).toBe("offline");
+  });
+
+  it("shows a silent retry of finish as checking, and a refusal that can't be retried as an error", () => {
+    const run = sealedRun(["mc"]);
+    const k = run.answer(0, T0 + 1000);
+    run.judgeLocally(
+      0,
+      { family: "choice", kind: "answer", option: 0 },
+      k,
+      T0 + 1100,
+    );
+    run.continue(T0 + 2000);
+    expect(run.state.phase).toBe("finishing");
+    run.dispatch({
+      type: "failed",
+      at: T0 + 2100,
+      key: null,
+      error: err("rate_limited", { retryAfterMs: 2000 }),
+    });
+    expect(selectRunView(run.state, plugins)).toMatchObject({
+      status: "checking",
+      retry: { op: "finish", notice: "silent" },
+    });
+    run.dispatch({ type: "retry", at: T0 + 4100 });
+    run.dispatch({
+      type: "failed",
+      at: T0 + 4200,
+      key: null,
+      error: err("not_found"),
+    });
+    expect(selectRunView(run.state, plugins)).toMatchObject({
+      status: "error",
+      retry: null,
+    });
+  });
+
   it("refuses an intent the client half rejects, staying active", () => {
     const run = new Driver(config(metas("mc")), T0);
     const before = run.commands.length;
@@ -498,6 +576,28 @@ describe("invariant 6: end rules", () => {
     expect(selectRunView(run.state, plugins).isLast).toBe(true);
     expect(run.continue(T0 + 4000)).toContainEqual({ kind: "finish" });
     expect(run.state.phase).toBe("finishing");
+  });
+
+  it("fixed: a summary that arrives during the last reveal waits for the Continue", () => {
+    const run = sealedRun(["mc"]);
+    const k = run.answer(0, T0 + 1000);
+    run.judgeLocally(
+      0,
+      { family: "choice", kind: "answer", option: 0 },
+      k,
+      T0 + 1100,
+    );
+    expect(run.state.phase).toBe("revealed");
+    // The last act() returns the summary; passing it on at once changes nothing.
+    const onReveal = run.state;
+    expect(
+      run.dispatch({ type: "finished", at: T0 + 1200, summary: null }),
+    ).toEqual([]);
+    expect(run.state).toBe(onReveal);
+    // The Continue asks for it, and then it lands.
+    expect(run.continue(T0 + 5000)).toEqual([{ kind: "finish" }]);
+    run.dispatch({ type: "finished", at: T0 + 5100, summary: null });
+    expect(run.state.phase).toBe("finished");
   });
 
   it("strikes: finishes on the Continue after the third wrong verdict, never earlier", () => {

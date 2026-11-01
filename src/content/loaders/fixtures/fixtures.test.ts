@@ -53,6 +53,7 @@ import {
 import { FIXTURE_PRACTICE_FILES, FIXTURE_PRACTICE_ITEMS } from "./practice";
 import {
   FIXTURE_CHOICES,
+  FIXTURE_DAILY_CHOICES,
   FIXTURE_ENCORES,
   FIXTURE_MYSTERIES,
   FIXTURE_ROOM_PACKS,
@@ -325,20 +326,26 @@ describe("fixture mysteries, encores and packs", () => {
     expect(year).toMatchObject({ unit: "", unitShort: "", unitLabel: "" });
   });
 
-  it("has a 15-question room pack and the Daily choice rounds", () => {
-    expect([...FIXTURE_ROOM_PACKS.keys()].sort()).toEqual(["dly", "fx-party"]);
-    for (const { pack, questions } of FIXTURE_ROOM_PACKS.values()) {
-      expect(pack.questionIds).toHaveLength(15);
+  it("has one hostable 15-question room pack, and the Daily choice rounds apart from it", () => {
+    // The Dailies' sealed choice rounds must never be hostable in a room.
+    expect([...FIXTURE_ROOM_PACKS.keys()]).toEqual(["fx-party"]);
+    const [party] = FIXTURE_ROOM_PACKS.values();
+    expect(party?.pack.questionIds).toHaveLength(15);
+    const daily = [...FIXTURE_DAILY_CHOICES.values()];
+    expect(daily).toHaveLength(15);
+    expect(daily.every((q) => q.id.startsWith("fx.r.dly."))).toBe(true);
+    for (const questions of [party?.questions ?? [], daily]) {
       expect(new Set(questions.map((q) => q.options[q.correct])).size).toBe(15);
       for (const question of questions) {
         expect(question.options).toHaveLength(4);
         expect(question.kind).toBe("choice");
       }
     }
+    // fixtureRoundContent still finds both kinds.
     expect(FIXTURE_CHOICES.size).toBe(30);
-    expect(
-      [...FIXTURE_CHOICES.keys()].filter((id) => id.startsWith("fx.r.dly.")),
-    ).toHaveLength(15);
+    for (const question of daily) {
+      expect(fixtureRoundContent(question.id)).toBe(question);
+    }
   });
 });
 
@@ -389,17 +396,24 @@ describe("fixture Dailies", () => {
   });
 
   it("cycles the six spares by Daily number: set A on odd numbers, set B on even", () => {
-    expect(FIXTURE_SPARES.map((spare) => spare.id)).toEqual([
-      "spare-01",
-      "spare-02",
-      "spare-03",
-      "spare-04",
-      "spare-05",
-      "spare-06",
+    // spare-NN today, spare.NN once CNT-1 renames the ids (§2.4): either
+    // spelling passes, so the rename touches content files only.
+    const spareNumber = (id: string | undefined) =>
+      /^spare[.-](\d{2})$/.exec(id ?? "")?.[1] ?? null;
+    expect(FIXTURE_SPARES.map((spare) => spareNumber(spare.id))).toEqual([
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
     ]);
     const first = fixtureDailyFor(DAILY_EPOCH);
     expect(first?.daily.dailyNumber).toBe(1);
-    expect(first?.source).toEqual({ kind: "spare", spareId: "spare-01" });
+    expect(first?.source.kind).toBe("spare");
+    expect(
+      spareNumber(first?.source.kind === "spare" ? first.source.spareId : ""),
+    ).toBe("01");
     expect(first?.composition).toBe("m3e1");
     expect(first?.rounds.map((r) => r.contentId)).toEqual([
       "fx.m.film.0101",
@@ -409,7 +423,11 @@ describe("fixture Dailies", () => {
     ]);
     const daily42 = fixtureDailyFor(date("2026-11-01"));
     expect(daily42?.daily).toEqual({ dailyNumber: 42, date: "2026-11-01" });
-    expect(daily42?.source).toEqual({ kind: "spare", spareId: "spare-06" });
+    expect(
+      spareNumber(
+        daily42?.source.kind === "spare" ? daily42.source.spareId : "",
+      ),
+    ).toBe("06");
     expect(daily42?.rounds.map((r) => r.contentId)).toEqual([
       "fx.m.hist.0101",
       "fx.m.geo.0102",

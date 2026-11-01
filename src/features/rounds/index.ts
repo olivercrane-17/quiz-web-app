@@ -1,7 +1,9 @@
 /**
- * Round components (ARCHITECTURE §4.4.3): the screens that run rounds
- * (the Daily, practice, challenges, rooms, quizzes) render them from the
- * registry with the contract's props.
+ * Round components (ARCHITECTURE §4.4.3): the contract every round
+ * component takes, and the settings it reads. The components themselves
+ * are client components, so they come from `./client`, never from here: a
+ * route whose server code imports a barrel gets every client module the
+ * barrel re-exports in its first load (§2.2).
  */
 export {
   playSettingsFrom,
@@ -11,8 +13,3 @@ export {
   type RoundComponentProps,
   type Suggestion,
 } from "./contracts";
-export {
-  ROUND_COMPONENTS,
-  roundComponentFor,
-  type PlayableFamily,
-} from "./registry";

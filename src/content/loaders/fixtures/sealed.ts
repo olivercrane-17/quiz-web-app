@@ -1,7 +1,8 @@
 /**
  * The sealed fixture content (content/fixtures/, ARCHITECTURE §5.6),
- * decoded: mysteries, encores, the two packs, the e2e schedule and its
- * spare sets, plus the rule that gives every date a fixture Daily.
+ * decoded: mysteries, encores, the room pack, the Dailies' choice rounds,
+ * the e2e schedule and its spare sets, plus the rule that gives every date
+ * a fixture Daily.
  *
  * Sealed kinds exist on the client only in mock builds, so only the mock
  * backend and tests import this module, through dynamic imports
@@ -117,12 +118,28 @@ const PACKS: readonly DecodedRoomPack[] = PACK_SOURCES.map(([file, raw]) =>
   decodeRoomPack(raw, file),
 );
 
-/** Room packs, `dly` included (it holds the Daily compositions' choice rounds). */
+/**
+ * `room-packs/dly.json` is not a room pack: it holds the sealed choice
+ * rounds of the [mc ×9, encore] and [mc ×5, mystery, encore] Dailies, which
+ * the content schema has no other home for. It must never be hostable.
+ */
+const DAILY_CHOICES_FILE = "dly";
+const isDailyChoices = (pack: DecodedRoomPack) =>
+  pack.pack.id === DAILY_CHOICES_FILE;
+
+/** The hostable room packs: the one 15-question pack of §5.6, `fx-party`. */
 export const FIXTURE_ROOM_PACKS: ReadonlyMap<PackId, DecodedRoomPack> = new Map(
-  PACKS.map((pack) => [pack.pack.id, pack]),
+  PACKS.filter((pack) => !isDailyChoices(pack)).map((pack) => [
+    pack.pack.id,
+    pack,
+  ]),
 );
 
-/** Every sealed choice question, from every pack. */
+/** The fixture Dailies' sealed choice rounds (`fx.r.dly.*`). */
+export const FIXTURE_DAILY_CHOICES: ReadonlyMap<ItemId, SealedChoiceContent> =
+  byId(PACKS.filter(isDailyChoices).flatMap((pack) => pack.questions));
+
+/** Every sealed choice question: the room pack's and the Dailies'. */
 export const FIXTURE_CHOICES: ReadonlyMap<ItemId, SealedChoiceContent> = byId(
   PACKS.flatMap((pack) => pack.questions),
 );

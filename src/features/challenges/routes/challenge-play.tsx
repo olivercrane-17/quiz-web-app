@@ -5,14 +5,23 @@
  * which next.config.ts rewrites onto the static page /shell/challenge-play;
  * the address bar keeps the original path.
  *
+ * In the (play) group, so it renders <PlayFrame> (the play header, then
+ * <main>) around its screen.
+ *
  * A stub until CHL-1, which keeps the default export and the metadata. Its
- * island reads the param from location.pathname in an effect, never through
- * useParams (§10.2 rule 8); at /shell/challenge-play itself there is no
- * param, and it shows the invalid-link copy.
+ * island sits inside <Suspense> (§10.2 rule 2) and takes the param from
+ * usePathParam("/c/:code/play") (@/features/shell/client), never from
+ * useParams or a one-off read of location.pathname: Next reuses this one
+ * shell for every code, and keeps it mounted while hidden, so the param
+ * changes under a mounted island (§10.2 rule 8). Reset per-code state when
+ * it changes, or key the island by it. At /shell/challenge-play itself the
+ * param is null, and it shows the invalid-link copy. The stub's
+ * <ShellParam> marker goes with it.
  */
 import type { Metadata } from "next";
 
-import { PagePlaceholder } from "@/features/shell";
+import { PagePlaceholder, PlayFrame, SHELL_COPY } from "@/features/shell";
+import { ShellParam } from "@/features/shell/client";
 
 export const metadata: Metadata = {
   title: "Challenge play",
@@ -20,5 +29,13 @@ export const metadata: Metadata = {
 };
 
 export default function ChallengePlayRoute() {
-  return <PagePlaceholder title="Challenge play" className="px-4" />;
+  return (
+    <PlayFrame
+      header={{ leave: { href: "/", label: SHELL_COPY.leaveToToday } }}
+    >
+      <PagePlaceholder title="Challenge play" className="px-4">
+        <ShellParam source="/c/:code/play" />
+      </PagePlaceholder>
+    </PlayFrame>
+  );
 }

@@ -12,7 +12,7 @@
  */
 import type { Clock } from "@/engine/clock";
 import type { EpochMs, Result } from "@/engine/types";
-import { systemClock } from "@/platform/clock";
+import { systemClock } from "@/platform/server-clock";
 
 import { AREA_METHODS, composeBackend, type BackendMethod } from "../areas";
 import type { BackendDeps } from "../deps";

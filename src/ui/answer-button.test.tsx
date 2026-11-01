@@ -1,6 +1,7 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
+import { TUNABLES } from "@/config/tunables";
 import { renderWithUser } from "@/test/render";
 
 import {
@@ -41,6 +42,13 @@ function renderOption(
 describe("AnswerButton", () => {
   it("names options by letter, A to D", () => {
     expect([0, 1, 2, 3].map(answerLetter)).toEqual(["A", "B", "C", "D"]);
+  });
+
+  it("takes its minimum height from the tunable (PRD §3.0.3)", () => {
+    const { button } = renderOption("idle");
+    expect(button).toHaveStyle({
+      minHeight: `${TUNABLES.answers.buttonMinHeightPx}px`,
+    });
   });
 
   describe("idle", () => {

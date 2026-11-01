@@ -5,13 +5,19 @@
  * /shell/group; the address bar keeps the original path.
  *
  * A stub until GRP-1, which keeps the default export and the metadata. Its
- * island reads the param from location.pathname in an effect, never through
- * useParams (§10.2 rule 8); at /shell/group itself there is no param, and it
- * shows the invalid-link copy.
+ * island sits inside <Suspense> (§10.2 rule 2) and takes the param from
+ * usePathParam("/g/:groupId") (@/features/shell/client), never from
+ * useParams or a one-off read of location.pathname: Next reuses this one
+ * shell for every group, and keeps it mounted while hidden, so the param
+ * changes under a mounted island (§10.2 rule 8). Reset per-group state when
+ * it changes, or key the island by it. At /shell/group itself the param is
+ * null, and it shows the invalid-link copy. The stub's <ShellParam> marker
+ * goes with it.
  */
 import type { Metadata } from "next";
 
 import { PagePlaceholder } from "@/features/shell";
+import { ShellParam } from "@/features/shell/client";
 
 export const metadata: Metadata = {
   title: "Group board",
@@ -19,5 +25,9 @@ export const metadata: Metadata = {
 };
 
 export default function GroupBoardRoute() {
-  return <PagePlaceholder title="Group board" />;
+  return (
+    <PagePlaceholder title="Group board">
+      <ShellParam source="/g/:groupId" />
+    </PagePlaceholder>
+  );
 }

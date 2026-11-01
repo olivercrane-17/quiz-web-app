@@ -1,9 +1,10 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import { useRef, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { renderWithUser } from "@/test/render";
 
+import { LIVE_REGION_IDS, announce } from "./announce";
 import { Button } from "./button";
 import { Sheet } from "./sheet";
 
@@ -89,6 +90,65 @@ describe("Sheet (modal)", () => {
     expect(
       screen.getByRole("dialog", { name: "How old are you?" }),
     ).toBeInTheDocument();
+  });
+
+  it("reopens a sheet that must be answered when the browser closes it anyway", () => {
+    // jsdom has no showModal(); stand in for Chromium, whose cancel stops
+    // being cancelable after repeated Escapes and closes the dialog.
+    const proto = HTMLDialogElement.prototype as unknown as Record<
+      string,
+      unknown
+    >;
+    const showModal = vi.fn(function (this: HTMLDialogElement) {
+      this.setAttribute("open", "");
+    });
+    proto.showModal = showModal;
+    proto.close = function (this: HTMLDialogElement) {
+      this.removeAttribute("open");
+      this.dispatchEvent(new Event("close"));
+    };
+    try {
+      renderWithUser(
+        <Sheet open title="How old are you?">
+          <Button>13 to 17</Button>
+        </Sheet>,
+      );
+      const dialog = screen.getByRole<HTMLDialogElement>("dialog", {
+        name: "How old are you?",
+      });
+      expect(showModal).toHaveBeenCalledOnce();
+      dialog.close();
+      expect(dialog).toHaveAttribute("open");
+      expect(showModal).toHaveBeenCalledTimes(2);
+      expect(
+        screen.getByRole("button", { name: "13 to 17" }),
+      ).toBeInTheDocument();
+    } finally {
+      delete proto.showModal;
+      delete proto.close;
+    }
+  });
+
+  it("carries its own live regions, which announce() uses while it is open", async () => {
+    const { user } = renderWithUser(<ReportFlow />);
+    await user.click(screen.getByRole("button", { name: "Report a problem" }));
+    const dialog = screen.getByRole("dialog", { name: "What's wrong?" });
+    announce("That name isn't allowed. Try another.");
+    expect(within(dialog).getByRole("status")).toHaveTextContent(
+      "That name isn't allowed. Try another.",
+    );
+    expect(document.getElementById(LIVE_REGION_IDS.polite)).toBeNull();
+    announce("Can't send right now.", "assertive");
+    expect(within(dialog).getByRole("alert")).toHaveTextContent(
+      "Can't send right now.",
+    );
+
+    // Closed: the page's own pair takes messages again.
+    await user.click(screen.getByRole("button", { name: "Close" }));
+    announce("Report sent. Thanks.");
+    expect(document.getElementById(LIVE_REGION_IDS.polite)).toHaveTextContent(
+      "Report sent. Thanks.",
+    );
   });
 });
 

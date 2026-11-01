@@ -24,6 +24,8 @@ describe("ProgressSegments", () => {
       />,
     );
     const list = screen.getByRole("list", { name: "Daily progress" });
+    // Explicit, so WebKit keeps the role and the name under list-style: none.
+    expect(list).toHaveAttribute("role", "list");
     const steps = within(list).getAllByRole("listitem");
     expect(steps.map((step) => step.textContent)).toEqual([
       "Mystery 1, solved on clue 1",

@@ -131,9 +131,18 @@ describe("source decoders", () => {
       }),
     ).toThrow(/date/);
     expect(() =>
-      decodeSpareSet({ id: "spare.07", track: "e2e", rounds: [] }),
-    ).toThrow(/spare-NN/);
+      decodeSpareSet({ id: "spare_07", track: "e2e", rounds: [] }),
+    ).toThrow(/spare\.NN/);
+    expect(() =>
+      decodeSpareSet({ id: "spare.7", track: "e2e", rounds: [] }),
+    ).toThrow(/spare\.NN/);
     expect(() => decodeCategories({})).toThrow(/must be an array/);
+  });
+
+  it("accepts spare ids as §2.4 names them and as the content schema spells them today", () => {
+    for (const id of ["spare.07", "spare-07"]) {
+      expect(decodeSpareSet({ id, track: "e2e", rounds: [] }).id).toBe(id);
+    }
   });
 
   it("projects only active, unreplaced list entries", () => {
