@@ -1,0 +1,764 @@
+{
+  "$comment": [
+    "Encore parity table (ARCHITECTURE §4.13): every row of PRD §4.2.4, parse failures, years, and the exact boundaries (21 against 20 and 20 against 21 at exactly 5%, 23 against 20 at exactly 15%, 1,045 against 1,000 reading 5% off, every error under 1% reading under 1% off on the exact ratio before rounding, so 1,005 and 1,009 against 1,000 read under 1% off and 1,010 reads 1% off, 2 and 5 years).",
+    "parse: what the player types, read by the engine's parseEncoreInput (SQL never sees text). Each row gives the parsed value and its preview, or the error.",
+    "judge: a locked-in number against an answer. Engine (scoring/encore.ts, the encore plugin) and SQL (round_judge_encore, from SQL-5) must agree on display and band exactly; value is the float an EncoreError carries, rounded to 7 places for the comparison.",
+    "values: numbers the judge receives and must refuse (round_judge_encore re-checks them; the plugin answers invalid_input).",
+    "bands null means the defaults: within 5% and 15% for quantities, 2 and 5 years for years."
+  ],
+  "parse": [
+    {
+      "id": "prd-1200",
+      "typed": "1,200",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 1200,
+      "preview": "1,200"
+    },
+    {
+      "id": "prd-1300",
+      "typed": "1.300",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 1300,
+      "preview": "1,300"
+    },
+    {
+      "id": "prd-1100",
+      "typed": "1100",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 1100,
+      "preview": "1,100"
+    },
+    {
+      "id": "prd-1250",
+      "typed": "1250",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 1250,
+      "preview": "1,250"
+    },
+    {
+      "id": "prd-900",
+      "typed": "900",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 900,
+      "preview": "900"
+    },
+    {
+      "id": "prd-1252",
+      "typed": "1252",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 1252,
+      "preview": "1,252"
+    },
+    {
+      "id": "prd-2500",
+      "typed": "2500",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 2500,
+      "preview": "2,500"
+    },
+    {
+      "id": "prd-625",
+      "typed": "625",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 625,
+      "preview": "625"
+    },
+    {
+      "id": "prd-minus",
+      "typed": "-5",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_positive"
+    },
+    {
+      "id": "prd-zero",
+      "typed": "0",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_positive"
+    },
+    {
+      "id": "unicode-minus",
+      "typed": "−5",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_positive"
+    },
+    {
+      "id": "spaces-group",
+      "typed": " 1 250 ",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 1250,
+      "preview": "1,250"
+    },
+    {
+      "id": "no-break-space-groups",
+      "typed": "1\u00a0250",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 1250,
+      "preview": "1,250"
+    },
+    {
+      "id": "leading-zeros",
+      "typed": "0042",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 42,
+      "preview": "42"
+    },
+    {
+      "id": "full-width-digits",
+      "typed": "１２５０",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 1250,
+      "preview": "1,250"
+    },
+    {
+      "id": "full-width-separators",
+      "typed": "１，２５０．５",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 1250.5,
+      "preview": "1,250.5"
+    },
+    {
+      "id": "superscript-digit",
+      "typed": "10²",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_number"
+    },
+    {
+      "id": "circled-digits",
+      "typed": "①②",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_number"
+    },
+    {
+      "id": "mathematical-digits",
+      "typed": "𝟏𝟐",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_number"
+    },
+    {
+      "id": "grouping-ignored",
+      "typed": "1,2,50",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 1250,
+      "preview": "1,250"
+    },
+    {
+      "id": "letters",
+      "typed": "12a",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_number"
+    },
+    {
+      "id": "words",
+      "typed": "about 1200",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_number"
+    },
+    {
+      "id": "plus-sign",
+      "typed": "+5",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_number"
+    },
+    {
+      "id": "empty",
+      "typed": "",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "not_number"
+    },
+    {
+      "id": "separator-only",
+      "typed": ".",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "bad_separator"
+    },
+    {
+      "id": "fifteen-digits",
+      "typed": "123456789012345",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "value": 123456789012345,
+      "preview": "123,456,789,012,345"
+    },
+    {
+      "id": "sixteen-digits",
+      "typed": "1234567890123456",
+      "decimals": 0,
+      "valueKind": "quantity",
+      "error": "too_many_digits"
+    },
+    {
+      "id": "prd-decimal-both-comma-group",
+      "typed": "1,250.5",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 1250.5,
+      "preview": "1,250.5"
+    },
+    {
+      "id": "prd-decimal-both-dot-group",
+      "typed": "1.250,5",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 1250.5,
+      "preview": "1,250.5"
+    },
+    {
+      "id": "prd-decimal-one-comma",
+      "typed": "1250,5",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 1250.5,
+      "preview": "1,250.5"
+    },
+    {
+      "id": "prd-decimal-too-many",
+      "typed": "1,250",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "error": "too_many_decimals"
+    },
+    {
+      "id": "prd-decimal-last-kind-twice",
+      "typed": "1,250.5,3",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "error": "bad_separator"
+    },
+    {
+      "id": "decimal-one-kind-twice",
+      "typed": "1.250.5",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "error": "bad_separator"
+    },
+    {
+      "id": "decimal-leading-point",
+      "typed": ".5",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 0.5,
+      "preview": "0.5"
+    },
+    {
+      "id": "decimal-trailing-point",
+      "typed": "12.",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 12,
+      "preview": "12"
+    },
+    {
+      "id": "decimal-zero",
+      "typed": "0.0",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "error": "not_positive"
+    },
+    {
+      "id": "two-decimals",
+      "typed": "3.14",
+      "decimals": 2,
+      "valueKind": "quantity",
+      "value": 3.14,
+      "preview": "3.14"
+    },
+    {
+      "id": "two-decimals-too-many",
+      "typed": "3.141",
+      "decimals": 2,
+      "valueKind": "quantity",
+      "error": "too_many_decimals"
+    },
+    {
+      "id": "year",
+      "typed": "1969",
+      "decimals": 0,
+      "valueKind": "year",
+      "value": 1969,
+      "preview": "1969"
+    },
+    {
+      "id": "year-separators-ignored",
+      "typed": "1.969",
+      "decimals": 0,
+      "valueKind": "year",
+      "value": 1969,
+      "preview": "1969"
+    },
+    {
+      "id": "year-first",
+      "typed": "1",
+      "decimals": 0,
+      "valueKind": "year",
+      "value": 1,
+      "preview": "1"
+    },
+    {
+      "id": "year-last",
+      "typed": "9999",
+      "decimals": 0,
+      "valueKind": "year",
+      "value": 9999,
+      "preview": "9999"
+    },
+    {
+      "id": "year-zero",
+      "typed": "0",
+      "decimals": 0,
+      "valueKind": "year",
+      "error": "not_positive"
+    },
+    {
+      "id": "year-negative",
+      "typed": "-44",
+      "decimals": 0,
+      "valueKind": "year",
+      "error": "not_positive"
+    },
+    {
+      "id": "year-too-late",
+      "typed": "10000",
+      "decimals": 0,
+      "valueKind": "year",
+      "error": "year_range"
+    }
+  ],
+  "judge": [
+    {
+      "id": "prd-1200",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1250,
+      "guess": 1200,
+      "display": "4% off",
+      "band": "bullseye",
+      "value": 0.0416667
+    },
+    {
+      "id": "prd-1300",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1250,
+      "guess": 1300,
+      "display": "4% off",
+      "band": "bullseye",
+      "value": 0.04
+    },
+    {
+      "id": "prd-1100",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1250,
+      "guess": 1100,
+      "display": "14% off",
+      "band": "close",
+      "value": 0.1363636
+    },
+    {
+      "id": "prd-1250",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1250,
+      "guess": 1250,
+      "display": "Spot on",
+      "band": "bullseye",
+      "value": 0
+    },
+    {
+      "id": "prd-900",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1250,
+      "guess": 900,
+      "display": "39% off",
+      "band": null,
+      "value": 0.3888889
+    },
+    {
+      "id": "prd-1252",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1250,
+      "guess": 1252,
+      "display": "under 1% off",
+      "band": "bullseye",
+      "value": 0.0016
+    },
+    {
+      "id": "prd-2500",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1250,
+      "guess": 2500,
+      "display": "100% off",
+      "band": null,
+      "value": 1
+    },
+    {
+      "id": "prd-625",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1250,
+      "guess": 625,
+      "display": "100% off",
+      "band": null,
+      "value": 1
+    },
+    {
+      "id": "five-percent-above",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 20,
+      "guess": 21,
+      "display": "5% off",
+      "band": "bullseye",
+      "value": 0.05
+    },
+    {
+      "id": "five-percent-below",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 21,
+      "guess": 20,
+      "display": "5% off",
+      "band": "bullseye",
+      "value": 0.05
+    },
+    {
+      "id": "fifteen-percent",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 20,
+      "guess": 23,
+      "display": "15% off",
+      "band": "close",
+      "value": 0.15
+    },
+    {
+      "id": "twenty-percent",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 20,
+      "guess": 24,
+      "display": "20% off",
+      "band": null,
+      "value": 0.2
+    },
+    {
+      "id": "half-up",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 1045,
+      "display": "5% off",
+      "band": "bullseye",
+      "value": 0.045
+    },
+    {
+      "id": "half-a-percent",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 1005,
+      "display": "under 1% off",
+      "band": "bullseye",
+      "value": 0.005
+    },
+    {
+      "id": "under-half-a-percent",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 1004,
+      "display": "under 1% off",
+      "band": "bullseye",
+      "value": 0.004
+    },
+    {
+      "id": "just-under-one-percent",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 1009,
+      "display": "under 1% off",
+      "band": "bullseye",
+      "value": 0.009
+    },
+    {
+      "id": "half-a-percent-below",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 995,
+      "display": "under 1% off",
+      "band": "bullseye",
+      "value": 0.0050251
+    },
+    {
+      "id": "one-percent",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 1010,
+      "display": "1% off",
+      "band": "bullseye",
+      "value": 0.01
+    },
+    {
+      "id": "just-over-one-percent-below",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 990,
+      "display": "1% off",
+      "band": "bullseye",
+      "value": 0.010101
+    },
+    {
+      "id": "just-under-999",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 10984,
+      "display": "998% off",
+      "band": null,
+      "value": 9.984
+    },
+    {
+      "id": "rounds-to-999",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 10985,
+      "display": "over 999% off",
+      "band": null,
+      "value": 9.985
+    },
+    {
+      "id": "far-over",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1000,
+      "guess": 12000,
+      "display": "over 999% off",
+      "band": null,
+      "value": 11
+    },
+    {
+      "id": "decimal-spot-on",
+      "valueKind": "quantity",
+      "decimals": 1,
+      "bands": null,
+      "answer": 1250.5,
+      "guess": 1250.5,
+      "display": "Spot on",
+      "band": "bullseye",
+      "value": 0
+    },
+    {
+      "id": "decimal-off",
+      "valueKind": "quantity",
+      "decimals": 1,
+      "bands": null,
+      "answer": 1250.5,
+      "guess": 1300,
+      "display": "4% off",
+      "band": "bullseye",
+      "value": 0.0395842
+    },
+    {
+      "id": "own-bands-bullseye",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": { "bullseye": 0.02, "close": 0.1 },
+      "answer": 100,
+      "guess": 102,
+      "display": "2% off",
+      "band": "bullseye",
+      "value": 0.02
+    },
+    {
+      "id": "own-bands-close",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": { "bullseye": 0.02, "close": 0.1 },
+      "answer": 100,
+      "guess": 103,
+      "display": "3% off",
+      "band": "close",
+      "value": 0.03
+    },
+    {
+      "id": "own-bands-none",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "bands": { "bullseye": 0.02, "close": 0.1 },
+      "answer": 100,
+      "guess": 111,
+      "display": "11% off",
+      "band": null,
+      "value": 0.11
+    },
+    {
+      "id": "year-spot-on",
+      "valueKind": "year",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1969,
+      "guess": 1969,
+      "display": "Spot on",
+      "band": "bullseye",
+      "value": 0
+    },
+    {
+      "id": "year-one",
+      "valueKind": "year",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1969,
+      "guess": 1970,
+      "display": "1 year off",
+      "band": "bullseye",
+      "value": 1
+    },
+    {
+      "id": "year-two",
+      "valueKind": "year",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1969,
+      "guess": 1967,
+      "display": "2 years off",
+      "band": "bullseye",
+      "value": 2
+    },
+    {
+      "id": "year-three",
+      "valueKind": "year",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1969,
+      "guess": 1966,
+      "display": "3 years off",
+      "band": "close",
+      "value": 3
+    },
+    {
+      "id": "year-five",
+      "valueKind": "year",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1969,
+      "guess": 1974,
+      "display": "5 years off",
+      "band": "close",
+      "value": 5
+    },
+    {
+      "id": "year-six",
+      "valueKind": "year",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1969,
+      "guess": 1963,
+      "display": "6 years off",
+      "band": null,
+      "value": 6
+    },
+    {
+      "id": "year-twenty",
+      "valueKind": "year",
+      "decimals": 0,
+      "bands": null,
+      "answer": 1969,
+      "guess": 1989,
+      "display": "20 years off",
+      "band": null,
+      "value": 20
+    }
+  ],
+  "values": [
+    { "id": "negative", "valueKind": "quantity", "decimals": 0, "value": -5 },
+    { "id": "zero", "valueKind": "quantity", "decimals": 0, "value": 0 },
+    {
+      "id": "too-many-decimals",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "value": 12.5
+    },
+    {
+      "id": "too-many-decimals-one",
+      "valueKind": "quantity",
+      "decimals": 1,
+      "value": 1250.55
+    },
+    {
+      "id": "sixteen-digits",
+      "valueKind": "quantity",
+      "decimals": 0,
+      "value": 1234567890123456
+    },
+    { "id": "huge", "valueKind": "quantity", "decimals": 0, "value": 1e21 },
+    { "id": "tiny", "valueKind": "quantity", "decimals": 2, "value": 1e-7 },
+    { "id": "year-zero", "valueKind": "year", "decimals": 0, "value": 0 },
+    {
+      "id": "year-too-late",
+      "valueKind": "year",
+      "decimals": 0,
+      "value": 10000
+    },
+    {
+      "id": "year-fraction",
+      "valueKind": "year",
+      "decimals": 0,
+      "value": 1969.5
+    }
+  ]
+}

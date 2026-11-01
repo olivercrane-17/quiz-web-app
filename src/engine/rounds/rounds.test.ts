@@ -6,7 +6,6 @@ import { parseEntityId, type EntityId } from "../types/ids.ts";
 import { ROUND_FAMILY, ROUND_TYPES, type RoundMeta } from "../types/rounds.ts";
 import {
   PLUGINS,
-  PluginNotBuiltError,
   UnsupportedRoundTypeError,
   pluginFor,
 } from "./index.ts";
@@ -64,15 +63,6 @@ describe("the plugin registry", () => {
     expect(PLUGINS.comparison.maxPoints(meta("comparison"))).toBe(1);
     expect(PLUGINS.mystery.maxPoints(meta("mystery"))).toBe(4);
     expect(PLUGINS.encore.maxPoints(meta("encore"))).toBe(0);
-  });
-
-  it("keeps the Wave 0 stubs honest about who builds them", () => {
-    expect(() => PLUGINS.mystery.open({}, meta("mystery"), ctx())).toThrow(
-      /MYS-1/,
-    );
-    expect(() => PLUGINS.encore.check({}, {} as never)).toThrow(
-      PluginNotBuiltError,
-    );
   });
 
   it("refuses ordering rounds with unsupported_round_type", () => {
