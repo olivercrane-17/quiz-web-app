@@ -342,6 +342,13 @@ export function newestStoredRun(kv: Kv): StoredPracticeRun | null {
   return listStoredRuns(kv)[0] ?? null;
 }
 
+/** One unfinished run by its id; null when it is gone or doesn't decode. */
+export function readStoredRun(kv: Kv, runId: string): StoredPracticeRun | null {
+  if (runId === "") return null;
+  const run = kv.read(runKey(runId), decodeStoredRun);
+  return run !== null && run.snapshot.config.runId === runId ? run : null;
+}
+
 /** As stored: questions as [itemId, 1 or 0 for right, chosen source index or null]. */
 type StoredQuestion = [string, 0 | 1, number | null];
 interface StoredEntry extends Omit<PracticeHistoryEntry, "questions"> {

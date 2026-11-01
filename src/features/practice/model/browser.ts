@@ -1,10 +1,11 @@
 /**
  * The tab's practice controller, wired to the browser: the system clock,
  * the shared kv, the practice loader, UUIDs from crypto.getRandomValues, the
- * device's local date, the tunable bands, analytics (`practice_start`,
- * `run_complete`, PRD §7.2) and the run the results screen should show.
- * One per tab, created on first use; islands call it from effects and
- * handlers only, after `bootClient()`.
+ * device's local date, the tunable bands, the 400 ms suspense beat on
+ * setTimeout, this tab's run in session storage, analytics
+ * (`practice_start`, `run_complete`, PRD §7.2) and the run the results
+ * screen should show. One per tab, created on first use; islands call it
+ * from effects and handlers only, after `bootClient()`.
  *
  * Seen-tracking and the pulled-item denylist arrive with PRA-2, which
  * replaces the two empty sources below.
@@ -30,6 +31,7 @@ import {
 import { uuidV4 } from "./ids";
 import { rememberFinishedRun } from "./last-run";
 import { practiceScoreBand } from "./summary";
+import { sessionTabRun } from "./tab-run";
 
 const EMPTY_SEEN: SeenIndex = new Map();
 const EMPTY_DENYLIST: ReadonlySet<ItemId> = new Set();
@@ -70,6 +72,14 @@ export function getPracticeController(): PracticeController {
     seen: () => EMPTY_SEEN,
     denylist: () => EMPTY_DENYLIST,
     plan: { bands: TUNABLES.practice },
+    beat: {
+      ms: TUNABLES.answers.revealMs,
+      schedule(run, ms) {
+        const timer = setTimeout(run, ms);
+        return () => clearTimeout(timer);
+      },
+    },
+    tab: sessionTabRun,
     events: {
       started(request) {
         track("practice_start", {

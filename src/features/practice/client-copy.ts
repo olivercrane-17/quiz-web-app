@@ -20,8 +20,11 @@ export const PRACTICE_CLIENT_COPY = {
   mixed: "Mixed",
   difficulty: DIFFICULTY_WORDS,
   run: {
-    /** The X in the header; only the icon shows, so this is its whole name. */
-    leave: "Leave practice. Your progress is saved",
+    /**
+     * The X in the header; only the icon shows, so this is its whole name.
+     * It promises nothing more: nothing on Today resumes a run yet (PRA-2).
+     */
+    leave: "Leave practice",
     loading: "Loading your questions",
     progress: (question: number, total: number, right: number, wrong: number) =>
       `Question ${question} of ${total}. ${right} right, ${wrong} wrong so far.`,
@@ -57,14 +60,20 @@ export const PRACTICE_CLIENT_COPY = {
     exhausted: {
       title: (category: string) =>
         `You've played every Hard and Medium ${category} question. Try Hard Mixed?`,
+      /** A Mixed request is Hard Mixed already, so it offers repeats only. */
+      titleMixed: "You've played every Hard and Medium question.",
       hardMixed: "Play Hard Mixed",
       repeats: "Play with repeats",
     },
   },
   results: {
-    /** The page's one h1, for screen readers; the score shows large beside it. */
+    /**
+     * The page's one h1, which takes focus when the results arrive. Screen
+     * readers hear this; the eye sees the score large in the same heading.
+     */
     heading: (score: number, max: number) =>
       `Practice done. ${score} out of ${max}.`,
+    done: "Practice done.",
     outOf: (max: number) => `out of ${max}`,
     questions: "Your questions",
     question: (n: number) => `Question ${n}`,
@@ -72,6 +81,7 @@ export const PRACTICE_CLIENT_COPY = {
     wrong: "Not quite",
     answer: (text: string) => `Answer: ${text}`,
     yourAnswer: (text: string) => `You chose ${text}`,
+    /** The open-me hint at the end of each row's summary. */
     why: "Why",
     withdrawn: "This question is no longer in the pack.",
     playAgain: "Play again",

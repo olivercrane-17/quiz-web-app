@@ -1,4 +1,4 @@
-import { act, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -8,13 +8,20 @@ import { choicePlugin, type ChoiceContent } from "@/engine/rounds/choice";
 import type { RoundStatus } from "@/engine/run";
 import {
   parseItemId,
+  type ChoiceFormat,
   type RoundIntent,
   type RoundMeta,
   type RoundReveal,
 } from "@/engine/types";
 
 import type { PlaySettings } from "../contracts";
-import { ChoiceRound, SHEET_AFTER_MS, verdictText } from "./index";
+import { CHOICE_COPY } from "./copy";
+import {
+  ChoiceRound,
+  SHEET_AFTER_MS,
+  SHORT_SCREEN_QUERY,
+  verdictText,
+} from "./index";
 
 const ITEM_ID = parseItemId("p.sci.0042");
 if (ITEM_ID === null) throw new Error("bad id");
@@ -317,7 +324,9 @@ describe("ChoiceRound", () => {
     expect(spoken()).toBe("Not quite. You chose Venus. The answer is Uranus.");
     expect(screen.queryByRole("region")).toBeNull();
     wait(SHEET_AFTER_MS - 400);
-    const sheet = screen.getByRole("region", { name: "It's Uranus." });
+    const sheet = screen.getByRole("region", {
+      name: "Not quite. It's Uranus.",
+    });
     expect(within(sheet).getByText("Not quite")).toBeInTheDocument();
     expect(within(sheet).getByText(PLANETS.explanation)).toBeInTheDocument();
     expect(
@@ -327,7 +336,7 @@ describe("ChoiceRound", () => {
       "https://en.wikipedia.org/w/index.php?search=Uranus",
     );
     expect(
-      within(sheet).getByRole("heading", { name: "It's Uranus." }),
+      within(sheet).getByRole("heading", { name: "Not quite. It's Uranus." }),
     ).toHaveFocus();
     expect(
       within(sheet).getByRole("button", { name: "Next question" }),
@@ -341,11 +350,21 @@ describe("ChoiceRound", () => {
     expect(spoken()).toBe("Correct. Uranus.");
     wait(800);
     expect(
-      screen.getByRole("region", { name: "It's Uranus." }),
-    ).toHaveTextContent("Right");
+      screen.getByRole("region", { name: "Right. It's Uranus." }),
+    ).toBeVisible();
   });
 
-  it("completes the automatic part at once on a tap", async () => {
+  it("puts the verdict first in the sheet's heading, the one that takes focus", async () => {
+    const { user, option } = setup();
+    await user.click(option(/Venus/));
+    wait(SHEET_AFTER_MS);
+    const heading = screen.getByRole("heading", { level: 2 });
+    expect(heading).toHaveFocus();
+    expect(heading).toHaveAccessibleName("Not quite. It's Uranus.");
+    expect(heading.textContent).toMatch(/^Not quite/);
+  });
+
+  it("completes the automatic part at once on a tap, and lets the focused heading tell the verdict", async () => {
     const { user, option } = setup();
     await user.click(option(/Venus/));
     wait(100);
@@ -353,8 +372,158 @@ describe("ChoiceRound", () => {
       keys: "[MouseLeft]",
       target: screen.getByRole("heading", { level: 1 }),
     });
-    expect(screen.getByRole("region", { name: "It's Uranus." })).toBeVisible();
+    const sheet = screen.getByRole("region", {
+      name: "Not quite. It's Uranus.",
+    });
+    expect(sheet).toBeVisible();
+    expect(within(sheet).getByRole("heading")).toHaveFocus();
+    // Words sent now would be cut off by the focus move: the heading says it.
+    expect(spoken()).toBe("");
+    expect(option(/Venus/)).toHaveAttribute("data-state", "your-answer");
+    // The beat's own timer, still running, adds nothing.
+    wait(SHEET_AFTER_MS);
+    expect(spoken()).toBe("");
+  });
+
+  it("shows a verdict that lands as the beat ends in the same commit, as the practice controller delivers it", () => {
+    const opened = choicePlugin.open(PLANETS, meta(PLANETS), {
+      at: 0,
+      rng: createRng("held"),
+      shuffle: null,
+      optionsFromClue: 4,
+      entities: null,
+    });
+    function Held() {
+      const [reveal, setReveal] = useState<RoundReveal | null>(null);
+      const [status, setStatus] = useState<RoundStatus>("idle");
+      return (
+        <ChoiceRound
+          meta={meta(PLANETS)}
+          open={opened.open}
+          client={null}
+          status={status}
+          reveal={reveal}
+          error={null}
+          onIntent={(intent) => {
+            if (intent.family !== "choice") return;
+            setStatus("judging");
+            const result = choicePlugin.judge(PLANETS, opened.judge, intent, {
+              at: 0,
+              rng: createRng("held"),
+              shuffle: null,
+              optionsFromClue: 4,
+              entities: null,
+            });
+            // The controller holds the verdict for the beat, then delivers it.
+            setTimeout(() => {
+              if (result.ok && result.verdict.kind === "resolved") {
+                setReveal(result.verdict.reveal);
+                setStatus("revealed");
+              }
+            }, 400);
+          }}
+          onContinue={() => {}}
+          continueLabel="Next question"
+          context={{
+            mode: "practice",
+            sealed: false,
+            list: null,
+            itemRef: "p.sci.0042",
+            settings: SETTINGS,
+          }}
+        />
+      );
+    }
+    render(<Held />);
+    act(() => {
+      screen.getByRole("button", { name: /Venus/ }).click();
+    });
+    wait(399);
+    expect(screen.getByRole("button", { name: /Venus/ })).toHaveAttribute(
+      "data-state",
+      "locked",
+    );
+    // Only the controller's timer runs: the options change with it, in its
+    // commit, not in a timer of their own a task later.
+    act(() => {
+      vi.advanceTimersToNextTimer();
+    });
+    expect(screen.getByRole("button", { name: /Venus/ })).toHaveAttribute(
+      "data-state",
+      "your-answer",
+    );
     expect(spoken()).toBe("Not quite. You chose Venus. The answer is Uranus.");
+  });
+
+  it("only a fresh Enter completes the reveal or continues: a held key's repeats do nothing", async () => {
+    const { option, onContinue } = setup();
+    const venus = option(/Venus/);
+    venus.focus();
+    // Enter on an option commits through the browser's click.
+    act(() => {
+      fireEvent.keyDown(venus, { key: "Enter" });
+      venus.click();
+    });
+    wait(450);
+    // The repeats of the held key: none completes the reveal.
+    act(() => {
+      fireEvent.keyDown(venus, { key: "Enter", repeat: true });
+    });
+    expect(screen.queryByRole("region")).toBeNull();
+    wait(SHEET_AFTER_MS);
+    const title = screen.getByRole("heading", { level: 2 });
+    expect(title).toHaveFocus();
+    act(() => {
+      fireEvent.keyDown(title, { key: "Enter", repeat: true });
+    });
+    expect(onContinue).not.toHaveBeenCalled();
+    // A fresh press on the title continues.
+    act(() => {
+      fireEvent.keyDown(title, { key: "Enter" });
+    });
+    expect(onContinue).toHaveBeenCalledOnce();
+  });
+
+  it("focuses the sheet's title without the browser's scroll and brings all of Continue on screen", async () => {
+    const scrolls: unknown[] = [];
+    // jsdom has no scrollIntoView of its own.
+    Element.prototype.scrollIntoView = function (
+      this: Element,
+      arg?: boolean | ScrollIntoViewOptions,
+    ) {
+      scrolls.push([this.textContent, arg]);
+    };
+    const focus = vi.spyOn(HTMLElement.prototype, "focus");
+    try {
+      const { user, option } = setup();
+      await user.click(option(/Uranus/));
+      wait(SHEET_AFTER_MS);
+      const title = screen.getByRole("heading", { level: 2 });
+      expect(title).toHaveFocus();
+      expect(
+        focus.mock.contexts.some(
+          (element, i) =>
+            element === title &&
+            (focus.mock.calls[i]?.[0] as FocusOptions | undefined)
+              ?.preventScroll === true,
+        ),
+      ).toBe(true);
+      expect(scrolls).toEqual([["Next question", { block: "nearest" }]]);
+    } finally {
+      delete (Element.prototype as Partial<Element>).scrollIntoView;
+    }
+  });
+
+  it("keeps the question's height as the sheet joins it, so the options above it stay put", async () => {
+    const heights = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockReturnValue({ height: 612 } as DOMRect);
+    const { user, option, container } = setup();
+    await user.click(option(/Uranus/));
+    wait(SHEET_AFTER_MS);
+    const question = container.querySelector<HTMLElement>("[data-question]");
+    expect(question?.style.minHeight).toBe("612px");
+    heights.mockRestore();
   });
 
   it("continues from the sheet with Continue or with Enter", async () => {
@@ -419,7 +588,9 @@ describe("ChoiceRound", () => {
         }}
       />,
     );
-    const sheet = screen.getByRole("region", { name: "It's Uranus." });
+    const sheet = screen.getByRole("region", {
+      name: "Not quite. It's Uranus.",
+    });
     expect(within(sheet).getByRole("heading")).toHaveFocus();
     expect(
       screen.getByRole("button", { name: "A. Venus Your answer" }),
@@ -452,7 +623,87 @@ describe("ChoiceRound", () => {
     expect(option(/False/)).toHaveAccessibleName("B. False");
     await user.click(option(/True/));
     wait(SHEET_AFTER_MS);
-    expect(screen.getByRole("region", { name: "It's true." })).toBeVisible();
+    expect(
+      screen.getByRole("region", { name: "Right. It's true." }),
+    ).toBeVisible();
+  });
+
+  it("titles the sheet mid-sentence: a leading article in lower case, a title or a name as written", async () => {
+    const titled = (label: string, format: ChoiceFormat = "mc") =>
+      CHOICE_COPY.title(label, format);
+    expect(titled("The bell comb")).toBe("It's the bell comb.");
+    expect(titled("A tide staff")).toBe("It's a tide staff.");
+    expect(titled("An oxbow lake")).toBe("It's an oxbow lake.");
+    expect(titled("The Gorlund bell")).toBe("It's the Gorlund bell.");
+    expect(titled("The 1920s")).toBe("It's the 1920s.");
+    expect(titled("The Great Gatsby")).toBe("It's The Great Gatsby.");
+    expect(titled("A Tale of Two Cities")).toBe("It's A Tale of Two Cities.");
+    expect(titled("The Hague")).toBe("It's The Hague.");
+    expect(titled("Uranus")).toBe("It's Uranus.");
+    expect(titled("Theodore Roosevelt")).toBe("It's Theodore Roosevelt.");
+    expect(titled("True", "tf")).toBe("It's true.");
+
+    const { user } = setup({
+      content: {
+        ...COMPARISON,
+        options: ["The Cindral bell", "The Gorlund bell"],
+        correct: 1,
+      },
+    });
+    const buttons = within(screen.getByRole("list")).getAllByRole("button");
+    await user.click(buttons[0] as HTMLElement);
+    wait(SHEET_AFTER_MS);
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: /It's the Gorlund bell\.$/,
+      }),
+    ).toBeVisible();
+  });
+
+  describe("on a short screen, under 740 px tall", () => {
+    beforeEach(() => {
+      vi.stubGlobal(
+        "matchMedia",
+        (query: string) =>
+          ({
+            matches: query === SHORT_SCREEN_QUERY,
+            media: query,
+            addEventListener: () => {},
+            removeEventListener: () => {},
+          }) as unknown as MediaQueryList,
+      );
+    });
+
+    it("opens the sheet compact: the explanation's first line, Read more, and Continue", async () => {
+      const { user, option } = setup();
+      await user.click(option(/Uranus/));
+      wait(SHEET_AFTER_MS);
+      const sheet = screen.getByRole("region", { name: "Right. It's Uranus." });
+      const explanation = within(sheet).getByText(PLANETS.explanation);
+      expect(explanation).toHaveAttribute("data-clamped");
+      expect(explanation.className).toContain("line-clamp-1");
+      // The ghost actions wait for Read more; Continue doesn't.
+      expect(
+        within(sheet).queryByRole("link", { name: /Learn more/ }),
+      ).toBeNull();
+      expect(
+        within(sheet).getByRole("button", { name: "Next question" }),
+      ).toBeVisible();
+
+      const more = within(sheet).getByRole("button", { name: "Read more" });
+      expect(more).toHaveAttribute("aria-expanded", "false");
+      expect(more).toHaveAttribute("aria-controls", explanation.id);
+      await user.click(more);
+      expect(explanation).not.toHaveAttribute("data-clamped");
+      expect(explanation).toHaveFocus();
+      expect(
+        within(sheet).queryByRole("button", { name: "Read more" }),
+      ).toBeNull();
+      expect(
+        within(sheet).getByRole("link", { name: /^Learn more about Uranus/ }),
+      ).toBeVisible();
+    });
   });
 
   it("moves on by itself with auto-advance after 2 s plus 0.25 s a word, unless a tap stops it", async () => {

@@ -7,10 +7,16 @@
  * anywhere (AC-PRA-12). The last Continue reads "See your results" and the
  * run's results replace this page in the history, so Back goes to Today.
  *
+ * The play column fills the screen under the header, so ChoiceRound can
+ * anchor the options in the thumb zone. The header's segments and counts
+ * come from the controller, which holds each verdict for the 400 ms beat,
+ * so they change together with the options.
+ *
  * On mount, after `bootClient()`, the controller begins: a request left by
- * Quick play or Play again starts a new run, and with none the unfinished
- * run carries on, so a reload lands on the same question (invariant 8).
- * The server render is the loading state, so hydration never differs.
+ * Quick play or Play again starts a new run, and with none this tab's
+ * unfinished run carries on, so a reload lands on the same question
+ * (invariant 8). The server render is the loading state, so hydration
+ * never differs.
  */
 import { useRouter } from "next/navigation";
 import {
@@ -27,6 +33,7 @@ import { playSettingsFrom, type PlaySettings } from "@/features/rounds";
 import { ChoiceRound } from "@/features/rounds/client";
 import { PlayFrame } from "@/features/shell";
 import { DEFAULT_SETTINGS, getSettingsStore } from "@/platform/settings/store";
+import { announce, clearAnnouncements } from "@/ui/announce";
 import { Button } from "@/ui/button";
 import { ProgressSegments, type ProgressSegment } from "@/ui/progress-segments";
 import { Loading, Skeleton, SkeletonText } from "@/ui/skeleton";
@@ -142,7 +149,8 @@ function RunHeading({
   const wrong = state.marks.filter((mark) => mark === "wrong").length;
   return (
     <div className="flex flex-col gap-1.5 py-1">
-      <p className="flex min-h-5 items-baseline gap-2 text-sm leading-tight">
+      {/* Wraps at 320 px and at 200% text rather than widening the page. */}
+      <p className="flex min-h-5 flex-wrap items-baseline gap-x-2 text-sm leading-tight">
         <span className="text-muted-foreground">{COPY.practice}</span>
         {name === null ? null : <strong>{name}</strong>}
       </p>
@@ -231,6 +239,9 @@ export function PracticeRunScreen({
     if (state.status !== "finished" || state.runId === null) return;
     if (navigatedFor.current === state.runId) return;
     navigatedFor.current = state.runId;
+    // The last verdict stays in the status region otherwise, and the
+    // results screen would still say it.
+    clearAnnouncements();
     router.replace("/practice/results");
   }, [state.status, state.runId, router]);
 
@@ -238,25 +249,29 @@ export function PracticeRunScreen({
     void getPracticeController().start(request);
   };
   const category = categoryName(state.request?.category, categories);
-
-  let body: ReactNode;
   const view = state.view;
   const round = view?.round ?? null;
-  if (
+  const playing =
     (state.status === "playing" || state.status === "finished") &&
     view !== null &&
     round !== null &&
-    round.open !== null
-  ) {
+    round.open !== null;
+  const note = playing ? runNote(state, category) : null;
+
+  // The note sits above the question's heading, which takes focus, so a
+  // screen reader would never reach it: say it once, after the heading.
+  // This runs after ChoiceRound's focus effect, so it queues behind it.
+  const announcedFor = useRef<string | null>(null);
+  useEffect(() => {
+    if (note === null || state.runId === null) return;
+    if (announcedFor.current === state.runId) return;
+    announcedFor.current = state.runId;
+    announce(note);
+  }, [note, state.runId]);
+
+  let body: ReactNode;
+  if (playing && view !== null && round !== null && round.open !== null) {
     const item = state.items[view.index];
-    const note =
-      view.index === 0 && state.request !== null
-        ? state.notes.includes("hard_filled")
-          ? COPY.run.notes.hardFilled(category)
-          : state.notes.includes("repeats_mixed_in")
-            ? COPY.run.notes.repeats(areaWords(state.request, category))
-            : null
-        : null;
     body = (
       <>
         {note === null ? null : (
@@ -334,17 +349,32 @@ export function PracticeRunScreen({
     );
   } else if (state.status === "exhausted" && state.request !== null) {
     const request = state.request;
+    // Hard Mixed is the way out of a played-through category. A Mixed
+    // request is Hard Mixed already: offering it would plan the same run
+    // and land on this screen again.
+    const mixed = request.category === "mixed";
     body = (
-      <Message title={COPY.run.exhausted.title(category ?? COPY.mixed)}>
+      <Message
+        title={
+          mixed
+            ? COPY.run.exhausted.titleMixed
+            : COPY.run.exhausted.title(category ?? COPY.mixed)
+        }
+      >
+        {mixed ? null : (
+          <Button
+            variant="primary"
+            onClick={() =>
+              start({ ...request, category: "mixed", repeats: false })
+            }
+          >
+            {COPY.run.exhausted.hardMixed}
+          </Button>
+        )}
         <Button
-          variant="primary"
-          onClick={() =>
-            start({ ...request, category: "mixed", repeats: false })
-          }
+          variant={mixed ? "primary" : "secondary"}
+          onClick={() => start({ ...request, repeats: true })}
         >
-          {COPY.run.exhausted.hardMixed}
-        </Button>
-        <Button onClick={() => start({ ...request, repeats: true })}>
           {COPY.run.exhausted.repeats}
         </Button>
       </Message>
@@ -359,9 +389,31 @@ export function PracticeRunScreen({
         progress: <RunHeading state={state} labels={categories} />,
       }}
     >
-      <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 px-4 py-4">
+      {/* flex-1: the column fills the screen under the header, so the
+          round can anchor its options in the thumb zone. */}
+      <div className="mx-auto flex w-full max-w-[720px] flex-1 flex-col gap-4 px-4 py-4">
         {body}
       </div>
     </PlayFrame>
   );
+}
+
+/**
+ * The note shown once above question 1 (DESIGN §12.7, PRD §3.3.1). Repeats
+ * come first: a run with repeats mixed in says so, even when fresh Medium
+ * items fill it too ("Repeats come only from the second button, with the
+ * repeats note").
+ */
+export function runNote(
+  state: Pick<PracticeState, "notes" | "request" | "view">,
+  category: string | null,
+): string | null {
+  if (state.view?.index !== 0 || state.request === null) return null;
+  if (state.notes.includes("repeats_mixed_in")) {
+    return COPY.run.notes.repeats(areaWords(state.request, category));
+  }
+  if (state.notes.includes("hard_filled")) {
+    return COPY.run.notes.hardFilled(category);
+  }
+  return null;
 }

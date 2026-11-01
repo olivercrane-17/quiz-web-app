@@ -379,6 +379,67 @@ describe("planPracticeRun: short Hard filters", () => {
     );
     expect(plan).toEqual({ items: [], notes: ["hard_exhausted"] });
   });
+
+  it("AC-PRA-14 Play with repeats over a filter played through carries the repeats note alone", () => {
+    const seen = seenAll(
+      pool.filter((item) => item.category === "geo"),
+      TODAY_DAY - 1,
+    );
+    const plan = planPracticeRun(
+      pool,
+      request({ difficulty: "hard", category: "geo", seen, repeats: true }),
+    );
+    expect(plan.items).toHaveLength(10);
+    // Every Medium in it is a repeat, so it is no "toughest ones left" fill.
+    expect(plan.notes).toEqual(["repeats_mixed_in"]);
+  });
+
+  it("AC-PRA-14 Play with repeats keeps the hard_filled note when fresh Medium items fill the run too", () => {
+    const seen = seenAll(geoMedium.slice(0, 3), TODAY_DAY);
+    const plan = planPracticeRun(
+      pool,
+      request({ difficulty: "hard", category: "geo", seen, repeats: true }),
+    );
+    expect(plan.notes).toEqual(["hard_filled", "repeats_mixed_in"]);
+  });
+
+  it("AC-PRA-06 a Hard run with repeats fills with the least recently seen items, not the hardest", () => {
+    const hard = [0.42, 0.38, 0.3].map((value, i) =>
+      practiceItem({ id: `p.geo.010${i + 1}`, p: value }),
+    );
+    // Twelve Mediums: the seven hardest seen yesterday, the five easiest 50 days ago.
+    const medium = [
+      0.46, 0.47, 0.48, 0.49, 0.5, 0.51, 0.52, 0.6, 0.62, 0.64, 0.66, 0.68,
+    ].map((value, i) =>
+      practiceItem({ id: `p.geo.02${String(i).padStart(2, "0")}`, p: value }),
+    );
+    const seen = new Map<ItemId, number>([
+      ...hard.map((item) => [item.id, TODAY_DAY - 1] as const),
+      ...medium.map(
+        (item, i) => [item.id, TODAY_DAY - (i < 7 ? 1 : 50)] as const,
+      ),
+    ]);
+    for (let run = 0; run < 50; run += 1) {
+      const plan = planPracticeRun(
+        [...hard, ...medium],
+        request({
+          seed: `ac-pra-06-hard:${run}`,
+          difficulty: "hard",
+          category: "geo",
+          seen,
+          repeats: true,
+        }),
+      );
+      expect(plan.items).toHaveLength(10);
+      expect(plan.notes).toEqual(["repeats_mixed_in"]);
+      const ids = new Set(plan.items.map((item) => item.id));
+      // The Hard repeats first, then the Mediums seen longest ago.
+      for (const item of hard) expect(ids.has(item.id)).toBe(true);
+      for (const item of medium.slice(7)) expect(ids.has(item.id)).toBe(true);
+      const recent = medium.slice(0, 7).filter((item) => ids.has(item.id));
+      expect(recent).toHaveLength(2);
+    }
+  });
 });
 
 describe("planPracticeRun: freshness", () => {

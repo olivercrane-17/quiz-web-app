@@ -9,8 +9,12 @@
  * - `open_round`: plans nothing new; the choice plugin opens the round's
  *   item with the round's fork of the run seed, so a reopened round shows
  *   the same option order (§4.2).
- * - `judge`: the plugin's judge half, at once. The 400 ms suspense beat is
- *   the round component's: it holds the reveal on screen (PRD §3.0.3).
+ * - `judge`: the plugin's judge half, at once, but the verdict reaches the
+ *   run only when the 400 ms suspense beat after the answer is over
+ *   (`deps.beat`, PRD §3.0.3, DESIGN §7.3). Until then the run stays
+ *   `judging`, so the header's segment and counts, the saved run and the
+ *   round's reveal all change together, at 400 ms. The verdict keeps the
+ *   time it was judged, so the beat never counts as answer time.
  * - `persist`: saves `qz:runs:<runId>` (invariant 8), so a reload resumes.
  * - `finish`: the run goes to `qz:history` and its snapshot is removed.
  * - `announce` and `focus`: ChoiceRound speaks its own verdict and moves
@@ -18,24 +22,21 @@
  *
  * `begin(intent)` is the run screen's mount: a fresh request (Quick play,
  * Play again) starts a new run; with none, the run in memory carries on, or
- * the newest unfinished run on the device resumes, or Quick play starts.
+ * this tab's unfinished run resumes (`deps.tab`, so two tabs never swap
+ * runs), or failing that the newest unfinished run on the device, or Quick
+ * play starts.
  */
 import type { Clock } from "@/engine/clock";
 import { compositionIdOf } from "@/engine/composition";
 import {
   planPracticeRun,
   practiceJudgeContext,
-  practiceRoundRng,
   practiceRunConfig,
   type PlanOptions,
   type PracticeNote,
   type SeenIndex,
 } from "@/engine/practice";
-import {
-  choiceDisplayOrder,
-  choicePlugin,
-  type ChoiceJudge,
-} from "@/engine/rounds/choice";
+import { choicePlugin, type ChoiceJudge } from "@/engine/rounds/choice";
 import {
   createRun,
   reduceRun,
@@ -65,6 +66,7 @@ import {
   appendHistory,
   newestStoredRun,
   pruneRuns,
+  readStoredRun,
   removeRun,
   saveRun,
   type PracticeHistoryEntry,
@@ -129,6 +131,27 @@ export interface PracticeControllerDeps {
   /** The tunable bands (TUNABLES.practice). */
   plan?: PlanOptions;
   events?: Partial<PracticeEvents>;
+  /**
+   * The suspense beat: a verdict reaches the run `ms` after its answer
+   * (TUNABLES.answers.revealMs). `schedule` runs a callback later and
+   * returns its cancel (setTimeout in the browser). Without it, verdicts
+   * land at once.
+   */
+  beat?: {
+    ms: number;
+    schedule(run: () => void, ms: number): () => void;
+  };
+  /**
+   * The run this tab is playing (session storage, `qz:practice-run`), so a
+   * reload resumes this tab's run and never another tab's.
+   */
+  tab?: TabRunStore;
+}
+
+/** Where a tab keeps the id of the run it is playing. */
+export interface TabRunStore {
+  runId(): string | null;
+  setRunId(runId: string | null): void;
 }
 
 export interface PracticeController {
@@ -197,8 +220,17 @@ export function createPracticeController(
   let generation = 0;
   const queue: [ActiveRun, RunCommand][] = [];
   let draining = false;
+  /** The monotonic time of the latest answer, which starts the beat. */
+  let answeredAt: number | null = null;
+  /** Cancels the verdict held for the beat, if one is waiting. */
+  let cancelHeld: (() => void) | null = null;
 
   const now = () => deps.clock.now();
+
+  function dropHeld(): void {
+    cancelHeld?.();
+    cancelHeld = null;
+  }
 
   function publish(next: PracticeState): void {
     current = next;
@@ -230,6 +262,7 @@ export function createPracticeController(
     extra: Partial<Pick<PracticeState, "error" | "notes">> = {},
   ): void {
     active = null;
+    dropHeld();
     publish({ ...IDLE_PRACTICE_STATE, status, request, ...extra });
   }
 
@@ -330,12 +363,27 @@ export function createPracticeController(
       return;
     }
     run.judges.set(command.index, result.judge);
-    dispatch(run, {
-      type: "verdict",
-      at,
-      key: command.key,
-      verdict: result.verdict,
-    });
+    const deliver = () => {
+      cancelHeld = null;
+      dispatch(run, {
+        type: "verdict",
+        // When it was judged, so the beat isn't answer time, but never
+        // before an event the run has already seen (a page hidden meanwhile).
+        at: Math.max(at, run.state.updatedAt),
+        key: command.key,
+        verdict: result.verdict,
+      });
+    };
+    const elapsed =
+      answeredAt === null ? 0 : deps.clock.monotonic() - answeredAt;
+    const wait = deps.beat === undefined ? 0 : deps.beat.ms - elapsed;
+    if (deps.beat === undefined || wait <= 0) {
+      deliver();
+      return;
+    }
+    dropHeld();
+    // Whole milliseconds, rounded up: a timer never fires before the beat ends.
+    cancelHeld = deps.beat.schedule(deliver, Math.ceil(wait));
   }
 
   function stored(run: ActiveRun): StoredPracticeRun {
@@ -355,20 +403,25 @@ export function createPracticeController(
     saveRun(deps.kv, stored(run));
   }
 
-  /** The pick as a source index, so the history outlives any one display order. */
+  /**
+   * The pick as a source index, so the history outlives any one display
+   * order. It goes by the label the round showed, which the saved run
+   * keeps: a pack update between a reload and the finish may reorder or
+   * reword a resolved item, and a pick that no longer matches is dropped
+   * rather than misnamed.
+   */
   function chosenSource(run: ActiveRun, index: number): number | null {
     const item = run.items[index];
-    const reveal = run.state.slots[index]?.reveal;
+    const slot = run.state.slots[index];
+    const reveal = slot?.reveal;
     if (item === undefined || reveal?.family !== "choice") return null;
     if (reveal.chosenIndex === null) return null;
-    const order =
-      run.judges.get(index)?.order ??
-      choiceDisplayOrder(
-        item,
-        practiceRoundRng(run.state.config.seed, index),
-        null,
-      );
-    return order[reveal.chosenIndex] ?? null;
+    const open = slot?.open?.family === "choice" ? slot.open : null;
+    const label = open?.options.find(
+      (option) => option.index === reveal.chosenIndex,
+    )?.label;
+    const source = label === undefined ? -1 : item.options.indexOf(label);
+    return source >= 0 ? source : null;
   }
 
   function historyEntry(run: ActiveRun, at: number): PracticeHistoryEntry {
@@ -396,6 +449,7 @@ export function createPracticeController(
     const entry = historyEntry(run, at);
     appendHistory(deps.kv, entry);
     removeRun(deps.kv, run.runId);
+    if (deps.tab?.runId() === run.runId) deps.tab.setRunId(null);
     deps.events?.finished?.(
       entry,
       compositionIdOf(run.items.map((item) => item.format)),
@@ -453,6 +507,7 @@ export function createPracticeController(
       judges: new Map(),
     };
     active = run;
+    deps.tab?.setRunId(runId);
     publishRun(run);
     deps.events?.started?.(request);
     for (const command of created.commands) queue.push([run, command]);
@@ -526,6 +581,7 @@ export function createPracticeController(
       run.judges.set(index, rebuilt.judge);
     }
     active = run;
+    deps.tab?.setRunId(runId);
     publishRun(run);
     for (const command of resumed.commands) queue.push([run, command]);
     drain();
@@ -542,7 +598,13 @@ export function createPracticeController(
     generation += 1;
     const token = generation;
     settle("loading", null);
-    const saved = newestStoredRun(deps.kv);
+    // This tab's own run first. Storage is shared by every tab, so the
+    // newest run on the device may be another tab's; it is the fallback
+    // only for a tab with no run of its own (a new tab, a cleared session).
+    const mine = deps.tab?.runId() ?? null;
+    const saved =
+      (mine === null ? null : readStoredRun(deps.kv, mine)) ??
+      newestStoredRun(deps.kv);
     if (saved !== null && (await resume(saved, token))) return;
     if (token !== generation) return;
     await start(QUICK_PLAY_REQUEST);
@@ -566,6 +628,7 @@ export function createPracticeController(
     answer(intent) {
       const key = parseIdempotencyKey(deps.newId());
       if (key === null) return;
+      answeredAt = deps.clock.monotonic();
       withRun(() => ({ type: "intent", at: now(), intent, key }));
     },
     continue() {

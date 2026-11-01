@@ -26,7 +26,9 @@
  * - Hard: fresh Hard items first, then the hardest fresh Medium items of the
  *   same filter (`hard_filled`). When those run out too, the plan stops
  *   empty with `hard_exhausted` so the setup can offer Hard Mixed, and only
- *   `repeats: true` ("Play with repeats") lets repeats in (AC-PRA-14).
+ *   `repeats: true` ("Play with repeats") lets repeats in (AC-PRA-14): Hard
+ *   repeats, then Medium repeats, each least recently seen first.
+ *   `hard_filled` names a fresh Medium fill only; repeats carry their own note.
  * - Mixed: 4 Easy, 4 Medium and 2 Hard in the PRD's peak-end shape
  *   (AC-PRA-13): positions 1 to 4 the Easy items and 5 to 7 three Mediums,
  *   in non-increasing p; 8 and 9 the Hard items, the hardest at 8 or 9 by
@@ -265,23 +267,25 @@ function planHard(
     cands.filter((c) => c.band === "hard"),
     preferred,
   );
-  const medium = sorted(
-    cands.filter((c) => c.band === "medium"),
-    byP("hardest"),
-  );
+  const medium = cands.filter((c) => c.band === "medium");
   // Before any repeat: fresh Hard, then the hardest fresh Medium.
-  const freshOrder = [...hard, ...medium];
+  const freshOrder = [...hard, ...sorted(medium, byP("hardest"))];
   let picks = takeFrom(picker, freshOrder, length, isFresh);
   if (picks.length < length && !repeats) return { picks: [], exhausted: true };
+  // "Play with repeats": after every fresh pick, Hard repeats and then
+  // Medium repeats, each least recently seen first (AC-PRA-06), never the
+  // hardest first.
+  const repeatOrder = [
+    ...freshOrder.filter(isFresh),
+    ...hard.filter(isRepeat),
+    ...sorted(medium, preferred).filter(isRepeat),
+  ];
   if (picks.length < length) {
-    picks = [...picks, ...takeFrom(picker, freshOrder, length - picks.length)];
+    picks = [...picks, ...takeFrom(picker, repeatOrder, length - picks.length)];
   }
-  picks = withoutTrueFalseOpener(
-    picks,
-    picker,
-    freshOrder,
-    repeats ? () => true : isFresh,
-  );
+  picks = repeats
+    ? withoutTrueFalseOpener(picks, picker, repeatOrder)
+    : withoutTrueFalseOpener(picks, picker, freshOrder, isFresh);
   return { picks: openerThenShuffled(picks, rng), exhausted: false };
 }
 
@@ -458,7 +462,12 @@ export function planPracticeRun(
   if (shaped.exhausted) return { items: [], notes: ["hard_exhausted"] };
   const picks = shaped.picks.slice(0, length);
   const notes: PracticeNote[] = [];
-  if (req.difficulty === "hard" && picks.some((c) => c.band !== "hard")) {
+  // The fill of a short Hard filter is fresh Medium items. Medium repeats
+  // after "Play with repeats" carry the repeats note only (PRD §3.3.1).
+  if (
+    req.difficulty === "hard" &&
+    picks.some((c) => c.band !== "hard" && isFresh(c))
+  ) {
     notes.push("hard_filled");
   }
   if (picks.some(isRepeat)) notes.push("repeats_mixed_in");
