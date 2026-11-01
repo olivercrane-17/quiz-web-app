@@ -156,3 +156,16 @@ are eligible as answers immediately. The freeze applies to every entry added aft
 - `QZ_CONTENT_KEY` is a GitHub **repository** secret (set by the owner). Only the `content-sealed` CI job may reference
   it, it must not declare an `environment:`, and nothing may print or export the key. Fork pull requests never receive
   it.
+
+## 18. Evidence for high-risk claims when web search is unavailable (1 November 2026)
+The first production pass cut 1,451 items, and 1,417 of those had passed BOTH independent checks: they were cut only
+because their high-risk claims had no dataset or web evidence while the shared search budget was exhausted. That
+contradicts this memo's original rule (section 10: two independent checkers, datasets where possible, WebSearch only
+for genuinely uncertain items). So:
+- A high-risk claim, and an encore value, is accepted when checks A and B (different agent runs; B on a different
+  model) both confirmed it directly. Knowledge confirms only at "certain" confidence.
+- External evidence is still required for any claim that needed the tiebreak, and for every myth-screen hit.
+- Items cut only for missing external evidence are reinstated through the normal acceptance path.
+- Compensating controls: a seeded blind audit with web evidence on a random sample before launch (target error rate
+  under 1%), the "Report a problem" button on every reveal with automatic pull on weighted reports, and pass D before
+  any Daily is frozen.
