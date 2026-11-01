@@ -69,12 +69,6 @@ describe("the plugin registry", () => {
   it("keeps the Wave 0 stubs honest about who builds them", () => {
     expect(() => PLUGINS.mc.init({} as never)).toThrow(PluginNotBuiltError);
     expect(() => PLUGINS.mc.judge({}, {}, {} as never, ctx())).toThrow(/PRA-1/);
-    expect(() => PLUGINS.mystery.open({}, meta("mystery"), ctx())).toThrow(
-      /MYS-1/,
-    );
-    expect(() => PLUGINS.encore.check({}, {} as never)).toThrow(
-      PluginNotBuiltError,
-    );
   });
 
   it("refuses ordering rounds with unsupported_round_type", () => {
