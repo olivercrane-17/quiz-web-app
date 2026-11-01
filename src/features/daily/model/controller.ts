@@ -1,0 +1,609 @@
+/**
+ * The Daily controller (ARCHITECTURE §4.5): the run machine plus the
+ * backend. Framework-free; the screen reads it through
+ * `useSyncExternalStore` and sends it the player's intents.
+ *
+ * - **Start.** `sealed.start({ kind: 'today' })` returns the player's
+ *   attempt with round 0 already open, so one tap reaches clue 1
+ *   (AC-DLY-01). The controller builds the run from that snapshot with
+ *   `resume`, never running createRun's own `open_round`: the snapshot
+ *   already carries round 0. A finished attempt goes straight to its
+ *   results (AC-DLY-06); a reload resumes at the same clue with the same
+ *   wrong guesses, because all state lives on the server (AC-DLY-07).
+ * - **Commands.** `open_round` calls `beginRound`, `judge` calls `act` with
+ *   the round's current step, `finish` uses the summary the last call
+ *   returned or asks `finish()` (idempotent), `resync` reloads the
+ *   snapshot after `stale` (another tab moved on), `announce` turns the
+ *   plugin's announcement into copy, and `focus` is handed to the screen.
+ * - **Retries.** The reducer schedules them (§4.5 invariant 4): 2, 5, 10,
+ *   then 30 s for transport failures; Retry-After, else 1, 2, 4, 8 s, for
+ *   `rate_limited`, to which the controller adds up to 30% jitter. Every
+ *   retry re-sends the same idempotency key, so a guess never counts twice.
+ *   A failed start retries on the same schedule. The player's Retry runs
+ *   the next attempt at once.
+ * - **Waits.** While a call is in flight the controller ticks the run every
+ *   500 ms, so "Checking…" appears after 1.5 s (PRD §3.0.2).
+ */
+import {
+  backendError,
+  type BrowserContextInfo,
+  type GameBackend,
+} from "@/backend";
+import type { Clock } from "@/engine/clock";
+import type { PluginRegistry } from "@/engine/rounds";
+import {
+  CHECKING_AFTER_MS,
+  createRun,
+  reduceRun,
+  retryDelayMs,
+  selectRunView,
+  type RunCommand,
+  type RunEvent,
+  type RunState,
+  type RunView,
+} from "@/engine/run";
+import type {
+  AttemptId,
+  AttemptSnapshot,
+  BackendError,
+  BackendErrorCode,
+  CompositionId,
+  DailyIdentity,
+  EpochMs,
+  FinishSummary,
+  IdempotencyKey,
+  Result,
+  RoundIntent,
+  RoundOpen,
+  RunConfig,
+  TimeZone,
+} from "@/engine/types";
+
+import { DAILY_SCREEN_COPY } from "../client-copy";
+import { announcementText } from "./labels";
+
+export type FocusTarget = Extract<RunCommand, { kind: "focus" }>["target"];
+
+export type DailyStatus = "starting" | "playing" | "finished" | "failed";
+
+/** Why the start hasn't succeeded yet, or why it gave up ('failed'). */
+export interface StartProblem {
+  code: BackendErrorCode;
+  /** Failures in a row. */
+  count: number;
+  retrying: boolean;
+  refId: string | null;
+}
+
+export interface DailySnapshot {
+  status: DailyStatus;
+  problem: StartProblem | null;
+  /** The start has waited longer than 1.5 s: "Checking…". */
+  slowStart: boolean;
+  attemptId: AttemptId | null;
+  daily: DailyIdentity | null;
+  composition: CompositionId | null;
+  /** The window's close turned the run into an unranked archive play (§8.7). */
+  converted: boolean;
+  run: RunState | null;
+  view: RunView | null;
+  /** The latest focus move the run asked for; `seq` changes each time. */
+  focus: { target: FocusTarget; seq: number } | null;
+  /** Another tab moved this Daily on, and the screen caught up. */
+  movedOn: boolean;
+}
+
+export interface StartContext {
+  tz: TimeZone;
+  browser: BrowserContextInfo;
+  appVersion: string;
+}
+
+export interface DailyControllerDeps {
+  /** The tab's backend, after the client boot. */
+  backend(): Promise<GameBackend>;
+  plugins: PluginRegistry;
+  clock: Clock;
+  /** Runs `callback` after `ms`; returns a cancel function. */
+  schedule(callback: () => void, ms: number): () => void;
+  /** [0, 1), for retry jitter. */
+  random(): number;
+  newKey(): IdempotencyKey;
+  announce(message: string, politeness: "polite" | "assertive"): void;
+  startContext(): StartContext;
+  /** The run finished in this session (not a resumed finished attempt). */
+  onFinished?(summary: FinishSummary, composition: CompositionId): void;
+  /** The attempt is known: warm what its rounds need (the answer lists). */
+  onAttempt?(snapshot: AttemptSnapshot): void;
+}
+
+export interface DailyController {
+  getSnapshot(): DailySnapshot;
+  subscribe(listener: () => void): () => void;
+  /**
+   * Starts today's Daily, or resumes it from the server after stop(): the
+   * screen calls it on mount, and again when a hidden route shows (§10.2
+   * rule 6). A call while running does nothing.
+   */
+  start(): void;
+  /** Stops timers and drops answers still in flight; start() picks up again. */
+  stop(): void;
+  intent(intent: RoundIntent): void;
+  continue(): void;
+  /** The player's Retry: the waiting call goes out now, with the same key. */
+  retry(): void;
+  visibility(hidden: boolean): void;
+}
+
+/** How often a wait is ticked, so "Checking…" and retry notices appear on time. */
+export const TICK_MS = 500;
+/** Rate-limited retries without Retry-After wait up to this much longer. */
+export const RATE_LIMIT_JITTER = 0.3;
+
+/** The step a call names (§7.2): the clue number on a Mystery, else 1. */
+function stepOf(open: RoundOpen | null): number {
+  return open?.family === "mystery" ? open.clue : 1;
+}
+
+function configFor(snapshot: AttemptSnapshot): RunConfig {
+  return {
+    mode: snapshot.kind === "archive" ? "archive" : "daily",
+    sealed: true,
+    rounds: snapshot.rounds,
+    endRule: { kind: "fixed" },
+    timing: { kind: "stopwatch" },
+    scoring: "sealed",
+    seed: snapshot.attemptId,
+    runId: snapshot.attemptId,
+  };
+}
+
+const retryable = (error: BackendError) =>
+  error.code === "rate_limited" || error.retryable;
+
+export function createDailyController(
+  deps: DailyControllerDeps,
+): DailyController {
+  const listeners = new Set<() => void>();
+  /** Bumped by stop(): answers to calls made before it are dropped. */
+  let generation = 0;
+  /** Between start() and stop(). */
+  let active = false;
+
+  let status: DailyStatus = "starting";
+  let problem: StartProblem | null = null;
+  let slowStart = false;
+  let attemptId: AttemptId | null = null;
+  let daily: DailyIdentity | null = null;
+  let composition: CompositionId | null = null;
+  let converted = false;
+  let run: RunState | null = null;
+  let focus: DailySnapshot["focus"] = null;
+  let movedOn = false;
+  /** A FinishSummary that arrived before the Continue that asks for it (§4.5 invariant 6). */
+  let earlySummary: FinishSummary | null = null;
+  let resyncFailures = 0;
+
+  let cancelStartRetry: (() => void) | null = null;
+  let cancelSlowStart: (() => void) | null = null;
+  let cancelRetry: (() => void) | null = null;
+  let cancelTick: (() => void) | null = null;
+  let cancelResync: (() => void) | null = null;
+
+  let snapshot: DailySnapshot = build();
+
+  function build(): DailySnapshot {
+    return {
+      status,
+      problem,
+      slowStart,
+      attemptId,
+      daily,
+      composition,
+      converted,
+      run,
+      view: run === null ? null : selectRunView(run, deps.plugins),
+      focus,
+      movedOn,
+    };
+  }
+
+  function publish(): void {
+    snapshot = build();
+    for (const listener of [...listeners]) listener();
+    syncTicker();
+  }
+
+  const now = (): EpochMs => deps.clock.now();
+
+  async function call<T>(
+    fn: (backend: GameBackend) => Promise<Result<T>>,
+  ): Promise<Result<T>> {
+    try {
+      return await fn(await deps.backend());
+    } catch {
+      // A chunk that didn't load is a network failure as far as play goes.
+      return { ok: false, error: backendError("unreachable") };
+    }
+  }
+
+  // ----- the start ---------------------------------------------------------
+
+  function clearStartTimers(): void {
+    cancelStartRetry?.();
+    cancelStartRetry = null;
+    cancelSlowStart?.();
+    cancelSlowStart = null;
+  }
+
+  async function attemptStart(): Promise<void> {
+    const gen = generation;
+    clearStartTimers();
+    slowStart = false;
+    cancelSlowStart = deps.schedule(() => {
+      cancelSlowStart = null;
+      slowStart = true;
+      publish();
+    }, CHECKING_AFTER_MS);
+    const result = await call((backend) =>
+      backend.sealed.start({ kind: "today" }, deps.startContext()),
+    );
+    if (gen !== generation) return;
+    cancelSlowStart?.();
+    cancelSlowStart = null;
+    slowStart = false;
+    if (result.ok) {
+      begin(result.value);
+      return;
+    }
+    const error = result.error;
+    const again = retryable(error);
+    problem = {
+      code: error.code,
+      count: (problem?.count ?? 0) + 1,
+      retrying: again,
+      refId: error.refId,
+    };
+    if (!again) {
+      status = "failed";
+      publish();
+      return;
+    }
+    const limited = error.code === "rate_limited";
+    let wait = retryDelayMs(
+      limited ? "rate_limited" : "transport",
+      problem.count,
+      limited ? error.retryAfterMs : null,
+    );
+    if (limited && error.retryAfterMs === null) {
+      wait += Math.round(wait * RATE_LIMIT_JITTER * deps.random());
+    }
+    cancelStartRetry = deps.schedule(() => {
+      cancelStartRetry = null;
+      void attemptStart();
+    }, wait);
+    publish();
+  }
+
+  function begin(attempt: AttemptSnapshot): void {
+    attemptId = attempt.attemptId;
+    daily = attempt.daily;
+    composition = attempt.composition;
+    converted = converted || attempt.kind === "archive";
+    problem = null;
+    deps.onAttempt?.(attempt);
+    if (attempt.status === "finished") {
+      status = "finished";
+      publish();
+      return;
+    }
+    if (attempt.status === "abandoned") {
+      // An abandoned attempt reopens from its archive tile (ARC-1).
+      status = "failed";
+      problem = { code: "stale", count: 1, retrying: false, refId: null };
+      publish();
+      return;
+    }
+    // createRun's open_round(0) is never run: the snapshot carries round 0.
+    run = createRun(configFor(attempt), now()).state;
+    status = "playing";
+    dispatch({ type: "resume", at: now(), snapshot: attempt });
+  }
+
+  // ----- the run -----------------------------------------------------------
+
+  function dispatch(event: RunEvent): void {
+    if (!active || run === null) return;
+    let transition;
+    try {
+      transition = reduceRun(run, event, deps.plugins);
+    } catch (error) {
+      // A plugin that throws (a stub before its ticket builds it) is a bug,
+      // not a state the player can recover from.
+      console.error(
+        `[daily] the run machine refused ${event.type}: ${(error as Error)?.message ?? String(error)}`,
+      );
+      status = "failed";
+      problem = { code: "internal", count: 1, retrying: false, refId: null };
+      publish();
+      return;
+    }
+    const before = run;
+    run = transition.state;
+    if (
+      event.type === "failed" &&
+      event.error.code === "offline" &&
+      before.failing?.code !== "offline"
+    ) {
+      deps.announce(DAILY_SCREEN_COPY.lostConnection, "assertive");
+    }
+    for (const command of transition.commands) handle(command);
+    if (run.phase === "finished" && status === "playing") {
+      status = "finished";
+      if (event.type === "finished" && event.summary !== null) {
+        deps.onFinished?.(event.summary, composition ?? "");
+      }
+    }
+    publish();
+  }
+
+  function handle(command: RunCommand): void {
+    switch (command.kind) {
+      case "open_round":
+        void openRound(command.index);
+        return;
+      case "judge":
+        void judge(command);
+        return;
+      case "schedule_retry":
+        scheduleRetry(command.afterMs);
+        return;
+      case "resync":
+        void resync();
+        return;
+      case "finish":
+        void finish();
+        return;
+      case "persist":
+        // Sealed runs never persist locally (§4.5 invariant 8).
+        return;
+      case "announce":
+        deps.announce(
+          announcementText(command.announcement),
+          command.politeness,
+        );
+        return;
+      case "focus":
+        focus = { target: command.target, seq: (focus?.seq ?? 0) + 1 };
+        return;
+    }
+  }
+
+  function noteResponse(value: {
+    finished: FinishSummary | null;
+    converted: boolean;
+  }): void {
+    if (value.finished !== null) earlySummary = value.finished;
+    if (value.converted) converted = true;
+  }
+
+  async function openRound(index: number): Promise<void> {
+    const gen = generation;
+    const id = attemptId;
+    if (id === null) return;
+    const result = await call((backend) =>
+      backend.sealed.beginRound(id, index),
+    );
+    if (gen !== generation) return;
+    if (!result.ok) {
+      dispatch({ type: "failed", at: now(), key: null, error: result.error });
+      return;
+    }
+    noteResponse(result.value);
+    const start = result.value.start;
+    dispatch(
+      start.kind === "open"
+        ? { type: "opened", at: now(), index, open: start.open }
+        : {
+            type: "withdrawn",
+            at: now(),
+            index,
+            reveal: start.reveal,
+            next: start.next,
+          },
+    );
+  }
+
+  async function judge(
+    command: Extract<RunCommand, { kind: "judge" }>,
+  ): Promise<void> {
+    const gen = generation;
+    const id = attemptId;
+    if (id === null || run === null) return;
+    const step = stepOf(run.slots[command.index]?.open ?? null);
+    const result = await call((backend) =>
+      backend.sealed.act({
+        attemptId: id,
+        index: command.index,
+        step,
+        intent: command.intent,
+        clientActiveMs: Math.round(command.activeMs),
+        hiddenMs: Math.round(command.hiddenMs),
+        key: command.key,
+      }),
+    );
+    if (gen !== generation) return;
+    if (!result.ok) {
+      dispatch({
+        type: "failed",
+        at: now(),
+        key: command.key,
+        error: result.error,
+      });
+      return;
+    }
+    noteResponse(result.value);
+    dispatch({
+      type: "verdict",
+      at: now(),
+      key: command.key,
+      verdict: result.value.verdict,
+    });
+  }
+
+  function scheduleRetry(afterMs: number | null): void {
+    cancelRetry?.();
+    let wait = afterMs ?? 0;
+    const failing = run?.failing ?? null;
+    if (failing?.code === "rate_limited" && failing.retryAfterMs === null) {
+      wait += Math.round(wait * RATE_LIMIT_JITTER * deps.random());
+    }
+    cancelRetry = deps.schedule(() => {
+      cancelRetry = null;
+      dispatch({ type: "retry", at: now() });
+    }, wait);
+  }
+
+  async function resync(): Promise<void> {
+    const gen = generation;
+    const id = attemptId;
+    if (id === null) return;
+    cancelResync?.();
+    cancelResync = null;
+    const result = await call((backend) => backend.sealed.get(id));
+    if (gen !== generation) return;
+    if (!result.ok) {
+      if (!retryable(result.error)) {
+        status = "failed";
+        problem = {
+          code: result.error.code,
+          count: 1,
+          retrying: false,
+          refId: result.error.refId,
+        };
+        publish();
+        return;
+      }
+      resyncFailures += 1;
+      cancelResync = deps.schedule(
+        () => {
+          cancelResync = null;
+          void resync();
+        },
+        retryDelayMs("transport", resyncFailures),
+      );
+      return;
+    }
+    resyncFailures = 0;
+    movedOn = true;
+    earlySummary = null;
+    if (result.value.kind === "archive") converted = true;
+    dispatch({ type: "resume", at: now(), snapshot: result.value });
+  }
+
+  async function finish(): Promise<void> {
+    const gen = generation;
+    const id = attemptId;
+    if (id === null) return;
+    const ready = earlySummary;
+    if (ready !== null) {
+      earlySummary = null;
+      dispatch({ type: "finished", at: now(), summary: ready });
+      return;
+    }
+    const result = await call((backend) => backend.sealed.finish(id));
+    if (gen !== generation) return;
+    if (!result.ok) {
+      dispatch({ type: "failed", at: now(), key: null, error: result.error });
+      return;
+    }
+    dispatch({ type: "finished", at: now(), summary: result.value });
+  }
+
+  // ----- waits -------------------------------------------------------------
+
+  function waiting(): boolean {
+    if (run === null) return false;
+    return (
+      status === "playing" &&
+      (run.phase === "judging" ||
+        run.phase === "opening" ||
+        run.phase === "finishing")
+    );
+  }
+
+  function syncTicker(): void {
+    if (!active) return;
+    if (waiting() && cancelTick === null) {
+      cancelTick = deps.schedule(() => {
+        cancelTick = null;
+        dispatch({ type: "tick", at: now() });
+      }, TICK_MS);
+    } else if (!waiting() && cancelTick !== null) {
+      cancelTick();
+      cancelTick = null;
+    }
+  }
+
+  return {
+    getSnapshot: () => snapshot,
+    subscribe(listener) {
+      listeners.add(listener);
+      return () => {
+        listeners.delete(listener);
+      };
+    },
+    start() {
+      if (active) return;
+      active = true;
+      // From the top, or picking up after stop(): either way the server's
+      // snapshot is the truth, and the run is rebuilt from it.
+      if (status !== "finished") {
+        problem = null;
+        void attemptStart();
+      }
+    },
+    stop() {
+      if (!active) return;
+      active = false;
+      generation += 1;
+      clearStartTimers();
+      cancelRetry?.();
+      cancelTick?.();
+      cancelResync?.();
+      cancelRetry = cancelTick = cancelResync = null;
+      slowStart = false;
+      earlySummary = null;
+    },
+    intent(intent) {
+      dispatch({ type: "intent", at: now(), intent, key: deps.newKey() });
+    },
+    continue() {
+      if (movedOn) movedOn = false;
+      dispatch({ type: "continue", at: now() });
+    },
+    retry() {
+      if (status === "starting" && problem !== null) {
+        void attemptStart();
+        return;
+      }
+      if (status === "failed" && run === null) {
+        status = "starting";
+        problem = null;
+        void attemptStart();
+        publish();
+        return;
+      }
+      if (run?.failing != null) {
+        cancelRetry?.();
+        cancelRetry = null;
+        dispatch({ type: "retry", at: now() });
+        return;
+      }
+      if (cancelResync !== null) void resync();
+    },
+    visibility(hidden) {
+      dispatch({ type: "visibility", at: now(), hidden });
+    },
+  };
+}

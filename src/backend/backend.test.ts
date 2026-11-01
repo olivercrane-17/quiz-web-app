@@ -165,7 +165,9 @@ describe("the mock transport", () => {
     await mock.controls.seed("fresh");
     expect(mock.controls.inspect("attempts")).toBeUndefined();
     expect(mock.controls.responses()).toEqual([]);
-    await expect(mock.controls.seed("finished_today")).rejects.toThrow(
+    // finished_today and in_progress_mystery_2 are built (DLY-1); the
+    // Group scenario waits for GRP-1.
+    await expect(mock.controls.seed("group_of_4")).rejects.toThrow(
       /not built yet/,
     );
   });
