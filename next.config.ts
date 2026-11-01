@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 import { PHASE_PRODUCTION_BUILD } from "next/constants";
 
-// A relative import: the "@/" alias is not resolved for next.config.ts.
+// Relative imports: the "@/" alias is not resolved for next.config.ts.
+import { shellRewrites } from "./src/features/shell/shell-routes";
 import {
   DEFAULT_SUPABASE_URL,
   PUBLIC_ENV_NAMES,
@@ -92,6 +93,14 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
+  },
+  // Per-user paths (/c/:code, /g/:groupId, /claim/:token, ...) are served
+  // from one static shell page each (ARCHITECTURE §10.1), so no code or
+  // token costs a render or sits in a cached page. A plain array: Next
+  // applies it after the filesystem, so real pages such as /g/new, /join and
+  // /create/import still win. The table is src/features/shell/shell-routes.ts.
+  async rewrites() {
+    return shellRewrites();
   },
 };
 

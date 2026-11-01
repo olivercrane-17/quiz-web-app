@@ -14,6 +14,8 @@
  * next.config.ts shares.
  */
 
+import { FEATURE_DEFAULTS, type FeatureFlag } from "../config/features";
+
 import {
   LOCAL_SITE_URL,
   parsePublicEnv,
@@ -131,4 +133,16 @@ export function getSupabaseConfig(): SupabaseConfig | null {
 /** Absolute site URL without a trailing slash. Always a valid URL. */
 export function getSiteUrl(): string {
   return env.siteUrl;
+}
+
+/**
+ * True when a feature flag is on in this build (ARCHITECTURE §10.5, D19).
+ * Flags are fixed at build time, so a Beta route module that calls
+ * notFound() when its flag is off prerenders as the not-found page.
+ *
+ * A stub until PLT-1 parses NEXT_PUBLIC_FEATURES into `env.features`: it
+ * returns the defaults from src/config/features.ts.
+ */
+export function isFeatureEnabled(flag: FeatureFlag): boolean {
+  return FEATURE_DEFAULTS[flag];
 }

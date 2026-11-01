@@ -1,0 +1,57 @@
+{
+  "id": "fx.p.sci.0107",
+  "status": "draft",
+  "category": "sci",
+  "tags": ["fixtures", "bells"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "The Gorlund bell weighs 950 kg, and the Cindral bell 640 kg, so the harbour bell sounds deeper.",
+  "learnMore": "Gorlund bell (fixture)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "standard",
+      "text": "The Gorlund bell: 950 kg."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "standard",
+      "text": "The Cindral bell: 640 kg."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The Gorlund bell weighs 950 kg, and the Cindral bell 640 kg, so the harbour bell sounds deeper."
+    }
+  ],
+  "writerNotes": "Invented fixture for tests, the mock backend and the e2e track (ARCHITECTURE 5.6). Not a real fact; never scheduled on the main track.",
+  "format": "comparison",
+  "stem": "Which is heavier?",
+  "a": "The Gorlund bell",
+  "b": "The Cindral bell",
+  "answer": "a",
+  "relation": "heavier",
+  "measure": "mass",
+  "unit": "kg",
+  "values": {
+    "a": 950,
+    "b": 640
+  },
+  "valueDisplay": {
+    "a": "950 kg",
+    "b": "640 kg"
+  },
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.2,
+    "estimator": "fixture"
+  }
+}
