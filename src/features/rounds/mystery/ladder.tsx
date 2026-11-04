@@ -52,16 +52,22 @@ export interface ClueLadderProps {
 function Rung({
   n,
   state,
+  tight = false,
   children,
 }: {
   n: number;
   state: "past" | "current";
+  /** No room under it: the keyboard is up and the field follows (AC-DLY-32). */
+  tight?: boolean;
   children: ReactNode;
 }) {
   return (
     <li
       data-rung={state}
-      className="relative grid grid-cols-[1.875rem_minmax(0,1fr)] items-start gap-x-2.5 py-1"
+      className={cx(
+        "relative grid grid-cols-[1.875rem_minmax(0,1fr)] items-start gap-x-2.5",
+        tight ? "pt-1" : "py-1",
+      )}
     >
       <span
         aria-hidden="true"
@@ -120,7 +126,12 @@ export function ClueLadder({
           .filter(({ guess }) => guess.clue === n);
         const arrived = n > firstClue;
         return (
-          <Rung key={n} n={n} state={current ? "current" : "past"}>
+          <Rung
+            key={n}
+            n={n}
+            state={current ? "current" : "past"}
+            tight={current && compact}
+          >
             {current ? (
               <div
                 data-clue-card=""

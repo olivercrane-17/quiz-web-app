@@ -12,7 +12,10 @@
  * shorter than the tallest layout height seen at this width, which covers
  * browsers that only shrink the visual viewport (the default) and those
  * that resize the layout too (`interactive-widget=resizes-content`).
- * Pinch-zoom is scaled out, so zooming in is never mistaken for a keyboard.
+ * Pinch-zoom is scaled out, so zooming in is never mistaken for a keyboard,
+ * and so is the zoom-out of a page wider than the screen: a mobile browser
+ * widens the layout viewport to fit it, which makes it taller in the same
+ * proportion, and that was read as a keyboard (`layoutHeightOf`).
  *
  * `keepInView` scrolls the least distance that keeps a block (the field
  * and the rows under it, or the Encore's field and Lock in) above the
@@ -22,7 +25,9 @@
  * `keepBetween` is the same step against any bottom edge, such as the
  * visual viewport's own (`viewportBottom`) when no keyboard is up: zoom,
  * a short window, or a keyboard the page can't see (R1-11). There the
- * caller can let the read wins instead, for a block that may wait below.
+ * caller can let the read win instead: for a block that may wait below, or
+ * to hold a field's own top in view when it and its rows can't all fit
+ * (`roomBetweenEdges`).
  */
 import { useEffect, useState } from "react";
 
@@ -49,6 +54,27 @@ export function keyboardStateOf(
     : CLOSED;
 }
 
+/**
+ * The layout viewport's height on the visual viewport's scale. A page wider
+ * than the screen (`layoutWidth`, the window's inner width, past the visual
+ * viewport's width at its scale) makes a mobile browser widen the layout
+ * viewport to fit it, which lengthens it in the same proportion: 320 by 568
+ * becomes 418 by 742. Scaled back, a page that only overflows sideways
+ * keeps its real height and never reads as a keyboard, while a keyboard
+ * over it still does. A desktop scroll bar (counted in the inner width
+ * only) can only lower the figure, never raise it.
+ */
+export function layoutHeightOf(
+  viewport: Pick<VisualViewport, "width" | "scale">,
+  layoutHeight: number,
+  layoutWidth: number,
+): number {
+  const shown = viewport.width * viewport.scale;
+  return layoutWidth > shown && shown > 0
+    ? (layoutHeight * shown) / layoutWidth
+    : layoutHeight;
+}
+
 /** The keyboard's state while `active` (the guess field has focus); closed otherwise. */
 export function useOnScreenKeyboard(active: boolean): KeyboardState {
   const [state, setState] = useState<KeyboardState>(CLOSED);
@@ -56,18 +82,18 @@ export function useOnScreenKeyboard(active: boolean): KeyboardState {
     const viewport =
       typeof window === "undefined" ? undefined : window.visualViewport;
     if (!active || viewport === undefined || viewport === null) return;
+    // The layout viewport's height, scaled as the screen shows it.
+    const layoutHeight = () =>
+      layoutHeightOf(viewport, window.innerHeight, window.innerWidth);
     let width = window.innerWidth;
-    let tallest = Math.max(
-      window.innerHeight,
-      viewport.height * viewport.scale,
-    );
+    let tallest = Math.max(layoutHeight(), viewport.height * viewport.scale);
     const update = () => {
       if (window.innerWidth !== width) {
         // A rotation starts over.
         width = window.innerWidth;
-        tallest = window.innerHeight;
+        tallest = layoutHeight();
       }
-      tallest = Math.max(tallest, window.innerHeight);
+      tallest = Math.max(tallest, layoutHeight());
       const next = keyboardStateOf(viewport, tallest);
       setState((prev) =>
         prev.open === next.open && prev.bottom === next.bottom ? prev : next,
@@ -120,6 +146,15 @@ export function viewportBottom(): number {
   return viewport === null || viewport === undefined
     ? window.innerHeight
     : viewport.offsetTop + viewport.height;
+}
+
+/**
+ * The height that fits between the top edge and `bottomEdge` (layout
+ * coordinates), less the gap kept at each: what a block can take before
+ * `keepBetween` must choose between its top and its bottom.
+ */
+export function roomBetweenEdges(bottomEdge: number): number {
+  return bottomEdge - topEdge() - 2 * EDGE_GAP_PX;
 }
 
 /**

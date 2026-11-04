@@ -31,7 +31,7 @@ import type { RoundComponentProps } from "../contracts";
 import { MysteryRound } from ".";
 import { NARROW_FIELD_EM } from "./combobox";
 import { MysteryHarness, TEST_SETTINGS, mysteryMeta } from "./testing";
-import { keyboardStateOf } from "./use-keyboard";
+import { keyboardStateOf, layoutHeightOf } from "./use-keyboard";
 
 let lookup: EntityLookup;
 let people: MysteryAnswerList;
@@ -881,6 +881,27 @@ describe("MysteryRound with the keyboard open", () => {
     ).toBe(false);
   });
 
+  it("never reads a page that overflows sideways as a keyboard", () => {
+    // 320 by 568 at 200% text on a phone: a 418 px wide page widened the
+    // layout viewport to 418 by 742, 174 px taller than the 568 px the
+    // screen showed: "a keyboard", with none there.
+    const screenView = { width: 320, height: 568, offsetTop: 0, scale: 1 };
+    const layout = layoutHeightOf(screenView, 742, 418);
+    expect(layout).toBeCloseTo(568, 0);
+    expect(keyboardStateOf(screenView, layout).open).toBe(false);
+    // A real keyboard on the same page still counts: 300 px of 568 covered.
+    expect(keyboardStateOf({ ...screenView, height: 268 }, layout).open).toBe(
+      true,
+    );
+    // A page zoomed out to fit reads the same.
+    expect(
+      layoutHeightOf({ width: 418, scale: 320 / 418 }, 742, 418),
+    ).toBeCloseTo(568, 0);
+    // A page that fits is measured as before, pinch-zoom included.
+    expect(layoutHeightOf({ width: 360, scale: 1 }, 640, 360)).toBe(640);
+    expect(layoutHeightOf({ width: 180, scale: 2 }, 640, 360)).toBe(640);
+  });
+
   /** A wrong guess, then the keyboard opens over a 340 px viewport. */
   async function withKeyboardOpen() {
     const viewport = new FakeViewport();
@@ -936,7 +957,7 @@ describe("MysteryRound with the keyboard open", () => {
     expect(field()).toHaveValue("");
   });
 
-  it("R1-33 keeps the worth on the compact last clue: Last clue over then worth 1, named in full (AC-DLY-29)", async () => {
+  it("R1-33 keeps the worth on the compact last clue, showing every word of its full name in order (AC-DLY-29)", async () => {
     const { user, combobox } = await withKeyboardOpen();
     await user.click(
       within(combobox).getByRole("button", { name: /^Next clue/ }),
@@ -953,8 +974,10 @@ describe("MysteryRound with the keyboard open", () => {
       document.querySelector("[data-combobox]") as HTMLElement,
     ).getByRole("button", { name: /^Last clue/ });
     expect(beside).toHaveAttribute("data-compact");
-    // Marcus saw "Last clue" alone, with no word of what it cost.
-    expect(visibleText(beside)).toBe("Last clue then worth 1");
+    // Marcus saw "Last clue" alone, with no word of what it cost. The
+    // visible words are the name's, in its order, so a spoken "Last clue
+    // and options" finds the button (WCAG 2.5.3); only the dot is unseen.
+    expect(visibleText(beside)).toBe("Last clue and options then worth 1");
     expect(beside).toHaveAccessibleName("Last clue and options · then worth 1");
   });
 
@@ -1083,7 +1106,8 @@ describe("MysteryRound after RITE round 1", () => {
 
   it("R1-03 gives Guess its own row and drops Clear when the field is narrow in em, and wraps names with the qualifier under them", async () => {
     // Sam at 390 by 844 with 200% text: Guess and Clear kept their size
-    // inside the field, and rows truncated to "The L… 1987".
+    // inside the field, and rows truncated to "The L… 1987". The real
+    // layout is measured in e2e/daily/mystery-layout.spec.ts.
     const { user } = playFilm();
     await user.type(field(), "lan");
     const combobox = document.querySelector("[data-combobox]");
@@ -1091,28 +1115,104 @@ describe("MysteryRound after RITE round 1", () => {
     // The field's own width decides, in em, so text size counts as much as the screen.
     expect(combobox.className).toMatch(/(^|\s)@container\/guess(\s|$)/);
     const narrow = `@max-[${String(NARROW_FIELD_EM)}em]/guess:`;
-    const guessClasses = guessButton().className.split(/\s+/);
+    const classesOf = (element: Element | null | undefined) =>
+      (element?.getAttribute("class") ?? "").split(/\s+/);
+    const guessClasses = classesOf(guessButton());
     for (const placement of ["row-start-4", "col-start-1", "w-full"]) {
       expect(guessClasses).toContain(`${narrow}${placement}`);
     }
     expect(
-      screen.getByRole("button", { name: "Clear your guess" }).className,
+      classesOf(screen.getByRole("button", { name: "Clear your guess" })),
     ).toContain(`${narrow}hidden`);
-    // Rows wrap rather than truncate, and the qualifier drops under the name.
+    // The search icon and the rows' type icons give their room to the text.
+    expect(classesOf(document.querySelector("[data-field] > svg"))).toContain(
+      `${narrow}hidden`,
+    );
+    expect(
+      classesOf(document.querySelector('[role="option"] > svg')),
+    ).toContain(`${narrow}hidden`);
+    // A row is one 48 px line, as three rows above a keyboard need
+    // (AC-DLY-32); a narrow field's rows wrap their names instead, with the
+    // qualifier under them, never cut.
     const names = [...document.querySelectorAll("[data-row-name]")];
     expect(names.length).toBeGreaterThan(1);
     for (const name of names) {
-      expect(name.className).not.toMatch(/\btruncate\b/);
-      expect(name.className).toMatch(/\bbreak-words\b/);
+      const classes = classesOf(name);
+      expect(classes).toContain("truncate");
+      for (const wrap of ["whitespace-normal", "break-words"]) {
+        expect(classes).toContain(`${narrow}${wrap}`);
+      }
     }
     const aside = screen
       .getByRole("option", { name: /^The Lantern Keeper/ })
       .querySelector("[data-row-aside]");
     expect(aside).toHaveTextContent("1987");
-    expect(aside?.className).not.toMatch(/\btruncate\b/);
-    expect(aside?.className).toContain(`${narrow}basis-full`);
+    for (const wrap of ["basis-full", "whitespace-normal", "max-w-full"]) {
+      expect(classesOf(aside)).toContain(`${narrow}${wrap}`);
+    }
     // Wherever Guess sits, it follows the field in focus order.
     expect(before(field(), guessButton())).toBe(true);
+  });
+
+  it("R1-03 and D14 let a narrow field's placeholder wrap, so the type's noun is never cut", async () => {
+    // At 200% text the one-line placeholder lost its noun: "Start typing
+    // a fi…".
+    const { user } = playFilm();
+    const narrow = `@max-[${String(NARROW_FIELD_EM)}em]/guess:`;
+    expect(field()).toHaveAttribute("placeholder", "Start typing a film");
+    expect(field().getAttribute("class")?.split(/\s+/)).toContain(
+      `${narrow}placeholder:text-transparent`,
+    );
+    const drawn = document.querySelector("[data-placeholder]");
+    expect(drawn).toHaveTextContent("Start typing a film");
+    expect(drawn).toHaveAttribute("aria-hidden", "true");
+    const classes = drawn?.getAttribute("class")?.split(/\s+/) ?? [];
+    // Shown only where the field is narrow, where it may take two lines.
+    expect(classes).toContain("hidden");
+    expect(classes).toContain(`${narrow}flex`);
+    expect(classes).not.toContain("truncate");
+    // The field still reads its placeholder once, from the input itself.
+    expect(field()).toHaveAccessibleName("Your guess");
+    // Typing takes it away.
+    await user.type(field(), "l");
+    expect(document.querySelector("[data-placeholder]")).toBeNull();
+  });
+
+  it("AC-DLY-32 runs the list under Next clue too while the keyboard is up, so its rows keep the row's whole width", async () => {
+    const { user } = playFilm();
+    await user.type(field(), "the");
+    const list = screen.getByRole("listbox");
+    // Every column: under Guess, and under Next clue when it sits beside
+    // the field.
+    expect(list.getAttribute("class")?.split(/\s+/)).toContain("col-end-[-1]");
+    expect(list.getAttribute("class")).not.toMatch(/(^|\s)col-end-3(\s|$)/);
+  });
+
+  it("highlights and hovers rows in full ink, so the qualifier and the typo mark keep 4.5:1 on the tint", async () => {
+    const { user } = playFilm();
+    await user.type(field(), "the");
+    const ink = "text-[color:var(--kn-ink,var(--foreground))]";
+    const ink2 = "text-[color:var(--kn-ink-2,var(--muted-foreground))]";
+    const asideOf = (index: number) =>
+      (
+        screen
+          .getAllByRole("option")
+          [index]?.querySelector("[data-row-aside]")
+          ?.getAttribute("class") ?? ""
+      ).split(/\s+/);
+    // At rest: the secondary ink, turning to full ink under a hover.
+    expect(asideOf(0)).toContain(ink2);
+    expect(asideOf(0)).toContain(`group-hover/row:${ink}`);
+    expect(screen.getAllByRole("option")[0]).toHaveClass("group/row");
+    // Highlighted with the arrow keys: full ink.
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getAllByRole("option")[0]).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(asideOf(0)).toContain(ink);
+    expect(asideOf(0)).not.toContain(ink2);
+    expect(asideOf(1)).toContain(ink2);
   });
 
   it("R1-04 says what a wrong guess costs under Mystery 1's clue 1 in the player's first Daily, and nowhere else", async () => {
@@ -1191,6 +1291,88 @@ describe("MysteryRound after RITE round 1", () => {
     expect(height).toMatch(/^calc\(/);
     expect(height).toContain("9rem");
     expect(height).toContain("10px");
+  });
+
+  it("R1-03 never scrolls the field under the sticky header when it and three tall rows can't all fit", async () => {
+    // 360 by 640 at 200% text: a 113 px header, a 116 px field and rows
+    // about 200 px tall. Field and three rows (726 px) can't fit in 640, and
+    // "the block wins" had put the field, and what was typed, above the top.
+    vi.stubGlobal(
+      "visualViewport",
+      Object.assign(new EventTarget(), {
+        width: 360,
+        height: 640,
+        offsetTop: 0,
+        offsetLeft: 0,
+        pageTop: 0,
+        pageLeft: 0,
+        scale: 1,
+      }),
+    );
+    vi.stubGlobal("innerHeight", 640);
+    let scrolled = 0;
+    const scrollBy = vi.fn((options: ScrollToOptions) => {
+      scrolled += options.top ?? 0;
+    });
+    vi.stubGlobal("scrollBy", scrollBy);
+    const header = document.createElement("header");
+    header.style.position = "sticky";
+    document.body.prepend(header);
+    const at = (top: number, height: number) =>
+      DOMRect.fromRect({ x: 0, y: top - scrolled, width: 328, height });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function (this: HTMLElement) {
+        // Sticky: it stays at the top whatever the scroll.
+        if (this === header)
+          return DOMRect.fromRect({ width: 360, height: 113 });
+        if (this.hasAttribute("data-field-frame")) return at(500, 116);
+        if (this.hasAttribute("data-clue-card")) return at(300, 180);
+        if (this.getAttribute("role") === "option") return at(0, 200);
+        return at(0, 0);
+      },
+    );
+    try {
+      const { user } = playFilm();
+      await user.type(field(), "the");
+      expect(screen.getByRole("listbox")).toBeVisible();
+      // The field's top stops 8 px under the header (121): 379 px down,
+      // where three rows would have needed 594.
+      expect(scrollBy).toHaveBeenLastCalledWith({
+        top: 379,
+        behavior: "instant",
+      });
+      expect(500 - scrolled).toBeGreaterThanOrEqual(113);
+      // One whole 200 px row fits under the field (237 to 640), with the
+      // list's edges.
+      expect(screen.getByRole("listbox").style.maxHeight).toBe("210px");
+    } finally {
+      header.remove();
+    }
+  });
+
+  it("D9 keeps a press on Next clue from blurring the field, so a closing list can't move it from under the pointer", async () => {
+    // Desktop: with "zzzz" typed, the press blurred the field, "No matches"
+    // closed, Next clue jumped up and the release landed elsewhere.
+    const { user, onIntent } = playFilm();
+    await user.type(field(), "zzzz");
+    expect(
+      screen.getByText("No matches. Try another spelling, or use Next clue."),
+    ).toBeVisible();
+    // A prevented mousedown keeps focus, and the layout, where they are.
+    expect(fireEvent.mouseDown(nextClue())).toBe(false);
+    expect(field()).toHaveFocus();
+    await user.click(nextClue());
+    expect(onIntent).toHaveBeenLastCalledWith({
+      family: "mystery",
+      kind: "next_clue",
+    });
+    expect(document.querySelector('[data-round="mystery"]')).toHaveAttribute(
+      "data-clue",
+      "2",
+    );
+    // Focus then moves to the new clue, as after any Next clue.
+    expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
+    expect(field()).toHaveValue("zzzz");
   });
 
   it("R1-13 picks clue-4 options by letter, and by digit only when no option reads as a number", async () => {

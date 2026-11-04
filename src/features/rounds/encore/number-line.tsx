@@ -13,6 +13,12 @@
  * ("You 300 m →"), since the line can't show where it really lies. Screen
  * readers get the same facts as text (AC-DLY-35).
  *
+ * Labels never break inside a number, and never leave the card. An
+ * off-scale guess's label holds the end it points past and may wrap
+ * between its words. Under the line, when the labels' row is narrow in em
+ * (large text on a phone), the two ends' values share a line, each at its
+ * end, and "Answer 86.4 m" takes a centred line under them.
+ *
  * Every mark is a box with a fill, which forced colours would paint as
  * Canvas. There the line keeps its own system colours instead
  * (`forced-color-adjust: none`): the track, the answer and the needle in
@@ -87,17 +93,11 @@ export function NumberLine(props: NumberLineProps) {
   } as CSSProperties;
   const words = ENCORE_COPY.numberLine;
   const edge = line.guess.edge;
-  const guessLabel =
-    edge === "high"
-      ? words.offHigh(amount(guess, props))
-      : edge === "low"
-        ? words.offLow(amount(guess, props))
-        : words.you;
-  // The label sits over its mark, and turns to stay inside near an end.
+  // "You" sits over its mark, and turns to stay inside near an end.
   const guessAlign =
-    edge === "high" || (edge === null && line.guess.at > 0.9)
+    line.guess.at > 0.9
       ? "-translate-x-full"
-      : edge === "low" || line.guess.at < 0.1
+      : line.guess.at < 0.1
         ? "translate-x-0"
         : "-translate-x-1/2";
 
@@ -111,19 +111,37 @@ export function NumberLine(props: NumberLineProps) {
     >
       <div
         aria-hidden="true"
-        className="relative mx-3 h-[1.125rem] text-xs leading-none font-extrabold"
+        className="relative mx-3 min-h-[1.125rem] text-xs leading-none font-extrabold"
       >
-        <span
-          data-label="guess"
-          style={{ left: pct(line.guess.at) }}
-          className={cx(
-            "absolute bottom-0 whitespace-nowrap tabular-nums",
-            guessAlign,
-            TONE.ink,
-          )}
-        >
-          {guessLabel}
-        </span>
+        {edge === null ? (
+          <span
+            data-label="guess"
+            style={{ left: pct(line.guess.at) }}
+            className={cx(
+              "absolute bottom-0 whitespace-nowrap tabular-nums",
+              guessAlign,
+              TONE.ink,
+            )}
+          >
+            {words.you}
+          </span>
+        ) : (
+          // Off the line: the label holds the end the guess went past, in
+          // the line's width, and wraps between words if it must.
+          <p
+            data-label="guess"
+            data-edge={edge}
+            className={cx(
+              "max-w-full pb-0.5 leading-tight tabular-nums",
+              edge === "high" ? "text-right" : "text-left",
+              TONE.ink,
+            )}
+          >
+            {edge === "high"
+              ? words.offHigh(amount(guess, props))
+              : words.offLow(amount(guess, props))}
+          </p>
+        )}
       </div>
       <div className="relative mx-3 h-11">
         <span
@@ -189,27 +207,39 @@ export function NumberLine(props: NumberLineProps) {
         </span>
       </div>
       {/* The ends' values at the sides, the answer's label in the middle,
-          under its tick: equal side columns keep the middle centred. */}
-      <div
-        aria-hidden="true"
-        className={cx(
-          "mx-3 mt-1 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-x-2 text-xs font-semibold tabular-nums",
-          DISPLAY_FONT,
-          TONE.ink3,
-        )}
-      >
-        <span data-label="low" className="text-left break-words">
-          {amount(line.ends.low, props)}
-        </span>
-        <span
-          data-label="answer"
-          className={cx("text-center font-extrabold", TONE.ink)}
+          under its tick: equal side columns keep the middle centred. When
+          that row is narrow in em, the ends share the first line and the
+          answer's label takes a centred line under them. No value ever
+          breaks inside itself. */}
+      <div aria-hidden="true" className="@container/ends mx-3 mt-1 text-xs">
+        <div
+          data-ends=""
+          className={cx(
+            "grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-x-2 gap-y-0.5 font-semibold tabular-nums @max-[20em]/ends:flex @max-[20em]/ends:flex-wrap @max-[20em]/ends:justify-between",
+            DISPLAY_FONT,
+            TONE.ink3,
+          )}
         >
-          {words.answer} {amount(answer, props)}
-        </span>
-        <span data-label="high" className="text-right break-words">
-          {amount(line.ends.high, props)}
-        </span>
+          <span data-label="low" className="text-left whitespace-nowrap">
+            {amount(line.ends.low, props)}
+          </span>
+          <span
+            data-label="answer"
+            className={cx(
+              "text-center font-extrabold @max-[20em]/ends:order-last @max-[20em]/ends:basis-full",
+              TONE.ink,
+            )}
+          >
+            {words.answer}{" "}
+            <span className="whitespace-nowrap">{amount(answer, props)}</span>
+          </span>
+          <span
+            data-label="high"
+            className="text-right whitespace-nowrap @max-[20em]/ends:ml-auto"
+          >
+            {amount(line.ends.high, props)}
+          </span>
+        </div>
       </div>
     </figure>
   );

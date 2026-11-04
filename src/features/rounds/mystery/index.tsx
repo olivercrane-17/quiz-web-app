@@ -126,6 +126,16 @@ export function MysteryRound(props: RoundComponentProps) {
   return <MysteryPlay {...props} open={open} />;
 }
 
+/**
+ * The round context's first-Daily flag (PRD §3.1.4, R1-04): the player has
+ * never finished a Daily. The Daily sets it (FIX-DLY), and the field joins
+ * the contract in `../contracts.ts` with that change, which isn't this
+ * ticket's file; a context without it counts as a returning player.
+ */
+function firstDailyOf(context: RoundComponentProps["context"]): boolean {
+  return "firstDaily" in context && context.firstDaily === true;
+}
+
 /** Keys the round leaves alone: typing in a field. */
 function typingIn(target: EventTarget): boolean {
   return (
@@ -174,7 +184,7 @@ function MysteryPlay({
   // PRD §3.1.4: under Mystery 1's clue 1, in the player's first Daily only.
   // With the keyboard up the player is typing: the space goes to the rows.
   const firstDailyHint =
-    context.firstDaily === true &&
+    firstDailyOf(context) &&
     meta.ordinal === 1 &&
     open.clue === 1 &&
     !optionsShowing
@@ -295,7 +305,9 @@ function MysteryPlay({
       data-motion={settings.reducedMotion ? "reduce" : undefined}
       onKeyDown={onKeyDown}
       onMouseDown={keyboard.open ? keepFocusOnControls : undefined}
-      className="flex flex-col gap-2 py-2"
+      // With the keyboard up the gaps tighten, so the whole current clue
+      // fits above the field and its three rows (AC-DLY-32).
+      className={cx("flex flex-col py-2", keyboard.open ? "gap-1" : "gap-2")}
     >
       {/* At large text sizes the worth scale drops under the title instead of
           squeezing it: 11rem is the title's share before anything wraps. */}
@@ -373,7 +385,7 @@ function MysteryPlay({
           {nextClue === null ? null : <div className="mt-3">{nextClue}</div>}
         </div>
       ) : (
-        <div className="mt-1">
+        <div className={keyboard.open ? undefined : "mt-1"}>
           <GuessCombobox
             answerType={meta.answerType}
             list={list}

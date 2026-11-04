@@ -578,9 +578,13 @@ describe("EncoreRound, the result", () => {
     expect(label("answer")).toBe("Answer 86.4 m");
     expect(label("low")).toBe("43.2 m");
     expect(label("high")).toBe("172.8 m");
-    expect(document.querySelector('[data-label="guess"]')?.className).toMatch(
-      /-translate-x-full/,
-    );
+    // It holds the line's right end, in the line's own width, and wraps
+    // between words if it must: a long value never runs off the card.
+    const high = document.querySelector('[data-label="guess"]');
+    expect(high).toHaveAttribute("data-edge", "high");
+    expect(high?.className).toMatch(/(^|\s)text-right(\s|$)/);
+    expect(high?.className).toMatch(/(^|\s)max-w-full(\s|$)/);
+    expect(high?.className).not.toMatch(/whitespace-nowrap|translate-x/);
     // The pinned dot's arrow is drawn in ink on the card, not in the dot's
     // on-accent colour, which left it white on white.
     expect(
@@ -594,6 +598,61 @@ describe("EncoreRound, the result", () => {
       "data-edge",
       "low",
     );
+    expect(document.querySelector('[data-label="guess"]')?.className).toMatch(
+      /(^|\s)text-left(\s|$)/,
+    );
+  });
+
+  it("never breaks a value inside itself, and stacks the ends over the answer when the labels' row is narrow", () => {
+    // 320 by 568 at 200% text: the side columns shrank to nothing and
+    // "43.2 m" and "172.8 m" stood one character to a line.
+    renderWithUser(<EncoreRound {...ostry(100, "close")} />);
+    const narrow = "@max-[20em]/ends:";
+    const ends = document.querySelector("[data-ends]");
+    expect(ends?.parentElement?.className).toMatch(
+      /(^|\s)@container\/ends(\s|$)/,
+    );
+    for (const name of ["low", "high"] as const) {
+      const classes = document.querySelector(
+        `[data-label="${name}"]`,
+      )?.className;
+      expect(classes).toMatch(/(^|\s)whitespace-nowrap(\s|$)/);
+      expect(classes).not.toMatch(/break-words/);
+    }
+    // Narrow: the ends share a line, each at its end, and the answer's
+    // label takes a centred line of its own under them.
+    for (const layout of ["flex", "flex-wrap", "justify-between"]) {
+      expect(ends?.className.split(/\s+/)).toContain(`${narrow}${layout}`);
+    }
+    const answer = document.querySelector('[data-label="answer"]');
+    for (const placement of ["order-last", "basis-full"]) {
+      expect(answer?.className.split(/\s+/)).toContain(`${narrow}${placement}`);
+    }
+    expect(
+      document.querySelector('[data-label="high"]')?.className.split(/\s+/),
+    ).toContain(`${narrow}ml-auto`);
+    expect(answer?.querySelector(".whitespace-nowrap")).toHaveTextContent(
+      /^86\.4 m$/,
+    );
+  });
+
+  it("R1-03 moves the unit under the number when the field is narrow in em, so what you type stays in sight", () => {
+    // 360 by 640 at 200% text: "in metres" kept its 164 px beside a 44 px
+    // input, and "86.4" showed as "4".
+    renderWithUser(<EncoreRound {...ostry(100, null)} />);
+    const narrow = "@max-[20em]/encore:";
+    const fieldBox = document.querySelector("[data-encore-field]");
+    expect(fieldBox?.parentElement?.className).toMatch(
+      /(^|\s)@container\/encore(\s|$)/,
+    );
+    const classes = fieldBox?.className.split(/\s+/) ?? [];
+    expect(classes).toContain(`${narrow}flex-wrap`);
+    // The height follows the text (DESIGN §10.5).
+    expect(classes).toContain("min-h-[5.25rem]");
+    expect(classes).not.toContain("h-[5.25rem]");
+    const unit = document.querySelector("[data-encore-unit]");
+    expect(unit).toHaveTextContent("in metres");
+    expect(unit?.className.split(/\s+/)).toContain(`${narrow}basis-full`);
   });
 
   it("R1-26 marks a guess on the line as You, over its mark", () => {

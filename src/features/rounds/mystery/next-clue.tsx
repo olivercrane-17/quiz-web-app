@@ -16,15 +16,18 @@
  *
  * It sits after the guess field (or the options), in reading and focus
  * order, so the first Tab from the heading reaches the field and not a
- * button that costs a point (D15).
+ * button that costs a point (D15). Pressing it keeps focus where it is
+ * until the click lands: a blur from the field would close its list (or
+ * its "No matches" line) and lift the button out from under the pointer
+ * before the release, so the click would miss. Focus then moves to the new
+ * clue's heading as usual.
  *
  * While the keyboard is open the button sits beside the field (`compact`):
- * "Next clue" or "Last clue" over "then worth 2", two short lines, so the
- * field keeps room for the name and the worth still shows (AC-DLY-29,
- * R1-33). The words between them ("and options ·") are kept for screen
- * readers, so the name stays whole. Pressing it then keeps focus in the
- * field until the click lands: a blur would close the keyboard and move
- * the button back under the field before the click.
+ * the action over the worth in short lines ("Next clue" over "then worth
+ * 2", "Last clue" over "and options" over "then worth 1"), so the field
+ * keeps room for the name, and every word of the label still shows in the
+ * order it is read (AC-DLY-29, R1-33, WCAG 2.5.3). Keeping focus in the
+ * field there also keeps the keyboard up through the press.
  */
 import { Button } from "@/ui/button";
 import { cx } from "@/ui/cx";
@@ -80,10 +83,11 @@ export function NextClueButton({
   const copy = MYSTERY_COPY.nextClue;
   const thenWorth = copy.thenWorth(label.worth);
   if (compact) {
-    // "Next clue" or "Last clue" over the worth; the words between them are
-    // read, so the name stays whole: "Last clue and options · then worth 1".
+    // "Next clue" or "Last clue", then the rest of the action ("and
+    // options") on a line of its own, then the worth: the visible words are
+    // the name's, in its order ("Last clue and options · then worth 1").
     const short = label.action.startsWith(copy.last) ? copy.last : copy.next;
-    const between = `${label.action.slice(short.length)} ·`.trim();
+    const rest = label.action.slice(short.length).trim();
     return (
       <Button
         variant="secondary"
@@ -101,7 +105,15 @@ export function NextClueButton({
           TONE.ledge,
         )}
       >
-        <span>{short}</span> <span className="sr-only">{between}</span>{" "}
+        <span>{short}</span>{" "}
+        {rest === "" ? null : (
+          <>
+            <span data-rest="" className="text-xs">
+              {rest}
+            </span>{" "}
+          </>
+        )}
+        <span className="sr-only">·</span>{" "}
         <span data-worth="" className={cx("text-xs font-semibold", TONE.ink2)}>
           {thenWorth}
         </span>
@@ -115,6 +127,9 @@ export function NextClueButton({
       disabled={disabled}
       focusableWhenDisabled
       busy={busy}
+      // A pointer press leaves focus in the field until the click lands
+      // (above): the list it would close sits between the field and here.
+      onMouseDown={keepFieldFocus}
       onClick={onPress}
       className={cx(
         "min-h-12 w-full flex-wrap justify-between gap-x-3 gap-y-0.5 rounded-[14px]! px-3! py-1.5 text-left text-base whitespace-normal!",

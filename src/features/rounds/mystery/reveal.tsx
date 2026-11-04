@@ -6,9 +6,9 @@
  *
  * - Solved: the stamp stamped in (D10: "Knew it." for a typed solve on
  *   clue 1 or 2 with no miss, "Got there." on clue 3 or after a miss, "Got
- *   it." for a pick among the four options), "Solved on clue 2 · +3" with
- *   the points counting up from 1 (never a "+0" while it waits, R1-33),
- *   and the answer in large type.
+ *   it." for a pick among the four options on clue 4), "Solved on clue 2
+ *   · +3" with the points counting up from 1 (never a "+0" while it
+ *   waits, R1-33), and the answer in large type.
  * - Missed: "This one got away.", "The answer was Heat (1995) · 0 points",
  *   and no celebration.
  *

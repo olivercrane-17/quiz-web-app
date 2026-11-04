@@ -206,7 +206,7 @@ export const MYSTERY_COPY = {
     solved: "Knew it.",
     /** A solve on clue 3, or any solve after a wrong guess or pick (D10). */
     gotThere: "Got there.",
-    /** A solve picked from the four options. */
+    /** A solve picked from the four options on clue 4 (D10). */
     picked: "Got it.",
     missed: "This one got away.",
     solvedOn: (clue: number) => `Solved on clue ${String(clue)}`,
@@ -246,10 +246,11 @@ export const MYSTERY_COPY = {
 } as const;
 
 /**
- * The stamp for a solve (D10): "Got it." for a pick among the options,
- * "Knew it." for a typed solve on clue 1 or 2 with no wrong guess or pick
- * before it, and "Got there." for the rest: a solve on clue 3, or any solve
- * after a miss. "Knew it." after a miss read as unearned (R1-22).
+ * The stamp for a solve (D10): "Got it." for a pick among the options on
+ * clue 4, "Knew it." for a typed solve on clue 1 or 2 with no wrong guess
+ * or pick before it, and "Got there." for the rest: a solve on clue 3 (a
+ * pick there too, when the options come from clue 3), or any solve after a
+ * miss. "Knew it." after a miss read as unearned (R1-22).
  */
 export function solvedStamp(solve: {
   clue: number;
@@ -257,7 +258,7 @@ export function solvedStamp(solve: {
   missed: boolean;
 }): string {
   const copy = MYSTERY_COPY.reveal;
-  if (solve.picked) return copy.picked;
+  if (solve.picked && solve.clue >= 4) return copy.picked;
   return solve.clue <= 2 && !solve.missed ? copy.solved : copy.gotThere;
 }
 

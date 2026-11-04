@@ -7,12 +7,16 @@
  * - Suggestions come from the device's copy of the closed list as the
  *   player types, from the first character; nothing is sent per keystroke.
  *   Rows show the display form with the typed letters in bold, a
- *   disambiguation at the right ("cartographer", "1995", "France") that
- *   drops under the name when they don't share a line, and already-guessed
- *   entities stay listed, disabled, "Already guessed". Names wrap rather
- *   than truncate, so the word that tells decoys apart always shows
- *   (R1-03). A row that only a typo matched comes last, as the engine ranks
- *   it, and says "Similar spelling" (R1-37).
+ *   disambiguation at the right ("cartographer", "1995", "France"), and
+ *   already-guessed entities stay listed, disabled, "Already guessed". A
+ *   row is one 48 px line, so three whole rows fit above a keyboard
+ *   (AC-DLY-32); when the field is narrow in `em` (large text on a phone),
+ *   names wrap instead of truncating and the disambiguation drops under
+ *   them, so the word that tells decoys apart always shows (R1-03). A row
+ *   that only a typo matched comes last, as the engine ranks it, and says
+ *   "Similar spelling" (R1-37). A highlighted or hovered row sets its
+ *   disambiguation and marks in full ink, which keeps them readable on the
+ *   row's tint.
  * - Arrow keys move the highlight (`aria-activedescendant`), Enter on a
  *   highlighted row selects it, Escape closes the list (then clears the
  *   field), and Tab leaves. When exactly one selectable row matches, it is
@@ -36,21 +40,26 @@
  *   the typing and its list (D9).
  * - When the field is narrow in `em` (large text on a phone), Guess takes
  *   its own full-width row under the field and its list, and the inline
- *   Clear goes (Escape and Backspace still clear), so the field keeps room
- *   for the text (R1-03). A container query decides, so it follows the
- *   text size as well as the width.
+ *   Clear and the search icon go (Escape and Backspace still clear), so the
+ *   field keeps room for the text (R1-03). The placeholder may wrap there
+ *   (D14: its noun is the point), drawn over the field while it is empty;
+ *   the input's own placeholder stays for assistive tech. A container query
+ *   decides, so it follows the text size as well as the width.
  * - Whenever the list opens, the page scrolls the least distance that keeps
  *   the field and its first three rows above the visual viewport's bottom
  *   edge, and the list holds only the whole rows that fit there (R1-11):
  *   zoom and short windows leave the list below the fold as surely as a
- *   keyboard does.
+ *   keyboard does. The field itself never goes under the top edge (the
+ *   sticky header): when it and three rows can't all fit, as at large text
+ *   sizes, its top stays in view and the list holds the rows that fit.
  * - With the on-screen keyboard open (compact): the field keeps the room
  *   for the typed text and the chosen name (no search icon or Clear;
  *   Escape and Backspace still clear), Next clue sits beside it
- *   (`beside`), the space for three whole rows is reserved under it, and
- *   the page scrolls so the field, those rows and the top of the current
- *   clue (`keepVisible`) sit between the top edge and the keyboard. The list
- *   holds only whole rows that fit above the keyboard.
+ *   (`beside`), the list runs the full width under both, the space for
+ *   three whole rows is reserved under it, and the page scrolls so the
+ *   field, those rows and the top of the current clue (`keepVisible`) sit
+ *   between the top edge and the keyboard. The list holds only whole rows
+ *   that fit above the keyboard.
  */
 import {
   useEffect,
@@ -84,6 +93,7 @@ import { TONE } from "./tones";
 import {
   keepBetween,
   remPx,
+  roomBetweenEdges,
   viewportBottom,
   type KeyboardState,
 } from "./use-keyboard";
@@ -330,7 +340,10 @@ export function GuessCombobox({
   // to the rows above the bottom edge (the keyboard's, else the visual
   // viewport's: R1-11). With the keyboard up, the space for those rows is
   // reserved (below), so the scroll is the same before and after the list
-  // opens and is never cut short by the page ending.
+  // opens and is never cut short by the page ending. When the field and
+  // three rows are taller than the room between the edges (large text, R1-03),
+  // the field's own top is what must stay in view: the typing is what the
+  // player is reading, and the list then holds the one or two rows that fit.
   const fieldRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   /** The list's height cap: the whole rows that fit above the bottom edge. */
@@ -362,11 +375,16 @@ export function GuessCombobox({
     for (let index = 0; index < shownRows; index += 1) {
       block += rowHeight(index);
     }
-    keepBetween(
-      bottom,
-      before.bottom + block + LIST_CHROME_PX,
-      keepVisible?.()?.getBoundingClientRect().top ?? before.top,
-    );
+    const blockBottom = before.bottom + block + LIST_CHROME_PX;
+    if (blockBottom - before.top > roomBetweenEdges(bottom)) {
+      keepBetween(bottom, blockBottom, before.top, "read");
+    } else {
+      keepBetween(
+        bottom,
+        blockBottom,
+        keepVisible?.()?.getBoundingClientRect().top ?? before.top,
+      );
+    }
     // Whole rows down to the edge itself: the scroll above keeps a small
     // gap where it can, and a sub-pixel short scroll mustn't cost a row.
     const room = bottom - field.getBoundingClientRect().bottom - LIST_CHROME_PX;
@@ -504,6 +522,7 @@ export function GuessCombobox({
   }
 
   const plural = MYSTERY_COPY.guess.listLabel(answerType, query.trim());
+  const placeholder = words.placeholder(answerType);
   const describedBy = [
     hintId,
     moreDescription ?? null,
@@ -563,7 +582,14 @@ export function GuessCombobox({
           )}
         >
           {compact ? null : (
-            <SearchIcon size={22} className={cx("ml-3 shrink-0", TONE.ink2)} />
+            // A narrow field gives the icon's room to the text (R1-03, D14).
+            <SearchIcon
+              size={22}
+              className={cx(
+                "ml-3 shrink-0 @max-[18em]/guess:hidden",
+                TONE.ink2,
+              )}
+            />
           )}
           <div className="relative h-full min-w-0 flex-1">
             <label
@@ -575,6 +601,21 @@ export function GuessCombobox({
             >
               {words.label}
             </label>
+            {query === "" ? (
+              // A narrow field's placeholder: it wraps onto a second line
+              // rather than lose its noun (D14). The input's own, which
+              // assistive tech reads, is transparent there.
+              <span
+                aria-hidden="true"
+                data-placeholder=""
+                className={cx(
+                  "pointer-events-none absolute inset-x-0 top-[1.375rem] bottom-1 hidden items-center overflow-hidden pr-1 pl-2.5 text-xs leading-tight font-semibold @max-[18em]/guess:flex",
+                  TONE.ink2,
+                )}
+              >
+                {placeholder}
+              </span>
+            ) : null}
             <input
               ref={inputRef}
               id={inputId}
@@ -595,7 +636,7 @@ export function GuessCombobox({
               autoCapitalize="words"
               spellCheck={false}
               enterKeyHint="go"
-              placeholder={words.placeholder(answerType)}
+              placeholder={placeholder}
               value={query}
               onChange={(event) => {
                 setQuery(event.target.value);
@@ -616,8 +657,9 @@ export function GuessCombobox({
               }}
               className={cx(
                 // The placeholder is set smaller than the typed name, so the
-                // longest short noun (D14) fits beside Guess at 360 px.
-                "absolute inset-0 w-full truncate rounded-none border-0 bg-transparent pt-[1.375rem] pr-1 pb-1 pl-2.5 text-[1.1875rem] font-bold outline-none placeholder:text-[0.9375rem] placeholder:font-semibold placeholder:opacity-60",
+                // longest short noun (D14) fits beside Guess at 360 px; a
+                // narrow field draws its own, which can wrap (above).
+                "absolute inset-0 w-full truncate rounded-none border-0 bg-transparent pt-[1.375rem] pr-1 pb-1 pl-2.5 text-[1.1875rem] font-bold outline-none placeholder:text-[0.9375rem] placeholder:font-semibold placeholder:opacity-60 @max-[18em]/guess:placeholder:text-transparent",
                 TONE.ink,
               )}
             />
@@ -677,7 +719,9 @@ export function GuessCombobox({
           hidden={!listOpen}
           style={listMax === null ? undefined : { maxHeight: listMax }}
           className={cx(
-            "z-[3] col-start-1 col-end-3 row-start-2 overflow-y-auto rounded-b-2xl border-2 border-t-0 p-1 @max-[18em]/guess:col-end-[-1]",
+            // Every column: under Next clue too while it sits beside the
+            // field, so the rows keep the row's whole width (AC-DLY-32).
+            "z-[3] col-start-1 col-end-[-1] row-start-2 overflow-y-auto rounded-b-2xl border-2 border-t-0 p-1",
             TONE.surface,
             TONE.inkBorder,
             TONE.ledgeTall,
@@ -688,6 +732,13 @@ export function GuessCombobox({
             const { name, aside, asideStart } = splitDisplay(
               row.display,
               answerType,
+            );
+            // Full ink on the highlight's or the hover's tint, where the
+            // secondary ink falls short of 4.5:1 (WCAG 1.4.3).
+            const quiet = cx(
+              isActive ? TONE.ink : TONE.ink2,
+              !row.alreadyGuessed &&
+                "group-hover/row:text-[color:var(--kn-ink,var(--foreground))]",
             );
             return (
               <li
@@ -703,7 +754,10 @@ export function GuessCombobox({
                   choose(row);
                 }}
                 className={cx(
-                  "relative flex min-h-12 cursor-pointer items-center gap-2.5 rounded-[11px] py-1.5 pr-2.5 pl-3 text-lg select-none",
+                  // A narrow field's rows give their padding to the name,
+                  // so a long word fits whole ("Lighthouse" at 320 px and
+                  // 200% text).
+                  "group/row relative flex min-h-12 cursor-pointer items-center gap-2.5 rounded-[11px] py-1.5 pr-2.5 pl-3 text-lg select-none @max-[18em]/guess:pr-1.5 @max-[18em]/guess:pl-2.5",
                   index > 0 &&
                     !isActive &&
                     "shadow-[0_-1px_0_0_var(--kn-rule,var(--border))]",
@@ -728,23 +782,30 @@ export function GuessCombobox({
                   />
                 ) : null}
                 {answerType === null ? null : (
+                  // A narrow field gives the icon's room to the name.
                   <AnswerTypeIcon
                     type={answerType}
                     size={20}
-                    className={cx("shrink-0", TONE.ink3)}
+                    className={cx(
+                      "shrink-0 @max-[18em]/guess:hidden",
+                      TONE.ink3,
+                    )}
                   />
                 )}
-                {/* The name wraps; the qualifier and the marks share its
-                    line while they fit and drop under it when not, and when
-                    the field is narrow always sit under it (R1-03). */}
-                <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2.5 gap-y-0.5 leading-snug">
-                  <span data-row-name="" className="min-w-0 break-words">
+                {/* One line: the name truncates before the qualifier and the
+                    marks do. When the field is narrow (R1-03) the name
+                    wraps instead, and the qualifier sits under it. */}
+                <span className="flex min-w-0 flex-1 items-center gap-x-2.5 gap-y-0.5 leading-snug @max-[18em]/guess:flex-wrap @max-[18em]/guess:items-baseline">
+                  <span
+                    data-row-name=""
+                    className="min-w-0 truncate @max-[18em]/guess:overflow-visible @max-[18em]/guess:break-words @max-[18em]/guess:whitespace-normal"
+                  >
                     <Highlighted text={name} offset={0} match={row.match} />
                   </span>
                   {row.alreadyGuessed ? (
                     <>
                       <span className="sr-only">,</span>{" "}
-                      <span className="ml-auto text-sm font-semibold @max-[18em]/guess:ml-0 @max-[18em]/guess:basis-full">
+                      <span className="ml-auto shrink-0 text-sm font-semibold whitespace-nowrap @max-[18em]/guess:ml-0 @max-[18em]/guess:basis-full @max-[18em]/guess:whitespace-normal">
                         {words.alreadyGuessed}
                       </span>
                     </>
@@ -754,8 +815,8 @@ export function GuessCombobox({
                       <span
                         data-row-aside=""
                         className={cx(
-                          "ml-auto min-w-0 text-right text-sm font-semibold break-words @max-[18em]/guess:ml-0 @max-[18em]/guess:basis-full @max-[18em]/guess:text-left",
-                          TONE.ink2,
+                          "ml-auto max-w-[45%] shrink-0 truncate text-right text-sm font-semibold @max-[18em]/guess:ml-0 @max-[18em]/guess:max-w-full @max-[18em]/guess:basis-full @max-[18em]/guess:overflow-visible @max-[18em]/guess:text-left @max-[18em]/guess:break-words @max-[18em]/guess:whitespace-normal",
+                          quiet,
                         )}
                       >
                         <Highlighted
@@ -772,12 +833,12 @@ export function GuessCombobox({
                       <span
                         data-typo-mark=""
                         className={cx(
-                          "rounded-full border border-dashed px-2 text-xs leading-[1.4] font-bold whitespace-nowrap forced-colors:border-[color:CanvasText]",
+                          "shrink-0 rounded-full border border-dashed px-2 text-xs leading-[1.4] font-bold whitespace-nowrap @max-[18em]/guess:max-w-full @max-[18em]/guess:whitespace-normal forced-colors:border-[color:CanvasText]",
                           aside === null &&
                             !row.alreadyGuessed &&
                             "ml-auto @max-[18em]/guess:ml-0",
                           TONE.strongBorder,
-                          TONE.ink2,
+                          quiet,
                         )}
                       >
                         {words.typo}

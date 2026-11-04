@@ -99,7 +99,7 @@ describe("the Mystery's announcement copy", () => {
     ).toBeNull();
   });
 
-  it("R1-22 stamps Knew it. only for a typed solve on clue 1 or 2 with no miss, Got there. for the rest, Got it. for a pick", () => {
+  it("R1-22 stamps Knew it. only for a typed solve on clue 1 or 2 with no miss, Got there. for the rest, Got it. for a clue-4 pick", () => {
     expect(solvedStamp({ clue: 1, picked: false, missed: false })).toBe(
       "Knew it.",
     );
@@ -112,10 +112,17 @@ describe("the Mystery's announcement copy", () => {
     expect(solvedStamp({ clue: 3, picked: false, missed: false })).toBe(
       "Got there.",
     );
+    // D10 gives clue 3 "Got there.", a pick there too (options from clue 3).
+    expect(solvedStamp({ clue: 3, picked: true, missed: false })).toBe(
+      "Got there.",
+    );
     expect(solvedStamp({ clue: 3, picked: true, missed: true })).toBe(
-      "Got it.",
+      "Got there.",
     );
     expect(solvedStamp({ clue: 4, picked: true, missed: false })).toBe(
+      "Got it.",
+    );
+    expect(solvedStamp({ clue: 4, picked: true, missed: true })).toBe(
       "Got it.",
     );
     const solved = {
@@ -134,10 +141,13 @@ describe("the Mystery's announcement copy", () => {
     expect(
       mysteryAnnouncementText({ ...solved, clue: 3, points: 2 }, four),
     ).toBe("Got there. Ada Lovelace. Solved on clue 3, 2 points.");
-    // With options from clue 3, a clue-3 solve is a pick.
+    // With options from clue 3, a clue-3 solve is a pick, stamped as clue 3.
     expect(
       mysteryAnnouncementText({ ...solved, clue: 3, points: 2 }, three),
-    ).toBe("Got it. Ada Lovelace. Solved on clue 3, 2 points.");
+    ).toBe("Got there. Ada Lovelace. Solved on clue 3, 2 points.");
+    expect(
+      mysteryAnnouncementText({ ...solved, clue: 4, points: 1 }, three),
+    ).toBe("Got it. Ada Lovelace. Solved on clue 4, 1 point.");
   });
 
   it("finds a miss in a wrong guess or in an option a wrong pick disabled", () => {

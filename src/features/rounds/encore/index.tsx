@@ -7,18 +7,19 @@
  * The kicker ("Encore · one number, no points") and the question, the line
  * that says what the Encore decides ("If you tie on points, the closer
  * guess ranks higher.", D2), then one number field with its unit beside
- * it, one line beneath that shows the parsed preview ("You're answering
- * 1,250 km", grouped in the preview and never in the field, so the caret
- * never jumps) or, in its place, the inline error; the two band hints, and
- * Lock in. The line is spoken through the status region once typing has
- * settled for `PREVIEW_ANNOUNCE_DELAY_MS` (R1-34), so a screen reader hears
- * the number meant rather than every keystroke; the field's description
- * holds it too. The field asks for the numeric keypad (`inputmode`
- * numeric, or decimal when decimals are allowed), and Enter locks in too.
- * Locking in sends the parsed value once; the guess can't change
- * afterwards. Focusing the field reads the question with it, so a desktop
- * pointer (where the field takes focus on arrival) still hears what is
- * asked.
+ * it (under the number when the field is narrow in em, as at large text on
+ * a phone), one line beneath that shows the parsed preview ("You're
+ * answering 1,250 km", grouped in the preview and never in the field, so
+ * the caret never jumps) or, in its place, the inline error; the two band
+ * hints, and Lock in. The line is spoken through the status region once
+ * typing has settled for `PREVIEW_ANNOUNCE_DELAY_MS` (R1-34), so a screen
+ * reader hears the number meant rather than every keystroke; the field's
+ * description holds it too. The field asks for the numeric keypad
+ * (`inputmode` numeric, or decimal when decimals are allowed), and Enter
+ * locks in too. Locking in sends the parsed value once; the guess can't
+ * change afterwards. Focusing the field reads the question with it, so a
+ * desktop pointer (where the field takes focus on arrival) still hears
+ * what is asked.
  *
  * With the keypad open (tracked through `visualViewport`), Lock in sits
  * right under the preview, above the hints, and the page scrolls so the
@@ -257,77 +258,92 @@ function EncorePlay({
         {ENCORE_COPY.tiebreak}
       </p>
 
-      <div
-        ref={fieldRef}
-        className={cx(
-          // The focus ring is DESIGN §11's: 3 px of the focus token at 3 px.
-          "relative mt-4 flex h-[5.25rem] items-center gap-2.5 overflow-hidden rounded-2xl border-2 px-4 pb-3.5 outline-offset-[3px] has-[input:focus-visible]:outline-[3px] has-[input:focus-visible]:outline-[color:var(--kn-focus,var(--foreground))]",
-          TONE.surface,
-          TONE.inkBorder,
-        )}
-      >
-        <label
-          htmlFor={`${ids}-input`}
-          className={cx("absolute top-1.5 left-4 text-xs font-bold", TONE.ink3)}
-        >
-          {ENCORE_COPY.field}
-        </label>
-        <input
-          ref={inputRef}
-          id={`${ids}-input`}
-          type="text"
-          inputMode={encore.decimals === 0 ? "numeric" : "decimal"}
-          enterKeyHint="done"
-          autoComplete="off"
-          autoCorrect="off"
-          spellCheck={false}
-          value={shownValue}
-          readOnly={locked || offline}
-          aria-disabled={offline || undefined}
-          aria-invalid={invalid || undefined}
-          aria-describedby={[
-            // The question first: focusing the field reads what is asked.
-            questionId,
-            unitWord === "" ? null : unitId,
-            previewing ? previewId : null,
-            invalid ? errorId : null,
-          ]
-            .filter((part) => part !== null)
-            .join(" ")}
-          onChange={(event) => {
-            setRaw(event.target.value);
-          }}
-          onFocus={() => {
-            setFieldFocused(true);
-          }}
-          onBlur={() => {
-            setFieldFocused(false);
-          }}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && !event.nativeEvent.isComposing) {
-              event.preventDefault();
-              lockIn();
-            }
-          }}
+      {/* The field's width in em decides whether the unit fits beside the
+          number: when it doesn't (large text on a phone), the unit takes a
+          line of its own under it, so the number keeps the field's width
+          and what you type stays in sight (DESIGN §10.5, as R1-03 found for
+          the guess field). The height follows the text, never fixed. */}
+      <div className="@container/encore mt-4">
+        <div
+          ref={fieldRef}
+          data-encore-field=""
           className={cx(
-            "mt-4 min-w-0 flex-1 bg-transparent text-[2.75rem] leading-none font-bold tracking-[-0.01em] tabular-nums outline-none",
-            DISPLAY_FONT,
-            TONE.ink,
+            // The focus ring is DESIGN §11's: 3 px of the focus token at 3 px.
+            "relative flex min-h-[5.25rem] items-center gap-x-2.5 overflow-hidden rounded-2xl border-2 px-4 pb-3.5 outline-offset-[3px] has-[input:focus-visible]:outline-[3px] has-[input:focus-visible]:outline-[color:var(--kn-focus,var(--foreground))] @max-[20em]/encore:flex-wrap",
+            TONE.surface,
+            TONE.inkBorder,
           )}
-        />
-        {unitWord === "" ? null : (
-          <span
-            id={unitId}
-            className={cx("mt-4 shrink-0 text-lg font-bold", TONE.ink2)}
+        >
+          <label
+            htmlFor={`${ids}-input`}
+            className={cx(
+              "absolute top-1.5 left-4 text-xs font-bold",
+              TONE.ink3,
+            )}
           >
-            {unitWord}
-          </span>
-        )}
-        {/* A ruler along the bottom edge: the Encore is a measurement. */}
-        <span
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-[9px] bg-[repeating-linear-gradient(90deg,var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_40%,transparent))_0_1.5px,transparent_1.5px_9px)] bg-[length:auto_6px] bg-bottom bg-repeat-x opacity-70"
-        />
+            {ENCORE_COPY.field}
+          </label>
+          <input
+            ref={inputRef}
+            id={`${ids}-input`}
+            type="text"
+            inputMode={encore.decimals === 0 ? "numeric" : "decimal"}
+            enterKeyHint="done"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+            value={shownValue}
+            readOnly={locked || offline}
+            aria-disabled={offline || undefined}
+            aria-invalid={invalid || undefined}
+            aria-describedby={[
+              // The question first: focusing the field reads what is asked.
+              questionId,
+              unitWord === "" ? null : unitId,
+              previewing ? previewId : null,
+              invalid ? errorId : null,
+            ]
+              .filter((part) => part !== null)
+              .join(" ")}
+            onChange={(event) => {
+              setRaw(event.target.value);
+            }}
+            onFocus={() => {
+              setFieldFocused(true);
+            }}
+            onBlur={() => {
+              setFieldFocused(false);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.nativeEvent.isComposing) {
+                event.preventDefault();
+                lockIn();
+              }
+            }}
+            className={cx(
+              "mt-4 min-w-0 flex-1 bg-transparent text-[2.75rem] leading-none font-bold tracking-[-0.01em] tabular-nums outline-none",
+              DISPLAY_FONT,
+              TONE.ink,
+            )}
+          />
+          {unitWord === "" ? null : (
+            <span
+              id={unitId}
+              data-encore-unit=""
+              className={cx(
+                "mt-4 shrink-0 text-lg font-bold @max-[20em]/encore:mt-1 @max-[20em]/encore:basis-full",
+                TONE.ink2,
+              )}
+            >
+              {unitWord}
+            </span>
+          )}
+          {/* A ruler along the bottom edge: the Encore is a measurement. */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 h-[9px] bg-[repeating-linear-gradient(90deg,var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_40%,transparent))_0_1.5px,transparent_1.5px_9px)] bg-[length:auto_6px] bg-bottom bg-repeat-x opacity-70"
+          />
+        </div>
       </div>
 
       {/* One line: the preview, or the error that replaces it. The status
