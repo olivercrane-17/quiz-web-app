@@ -111,19 +111,37 @@ test.describe("accessibility", () => {
   test("every control on Today meets the 44 px target", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openToday(page);
+    // A control smaller than 44 px may still meet the target through a hit
+    // area drawn around it (`.kn-hit`, DESIGN §4): taps 21 px either side
+    // of its centre must still land on it.
     const small = await page.evaluate(() =>
       [...document.querySelectorAll<HTMLElement>("a[href], button")]
         .filter((element) => element.checkVisibility())
-        .map((element) => {
+        .filter((element) => {
+          if (
+            element.getBoundingClientRect().width >= 44 &&
+            element.getBoundingClientRect().height >= 44
+          ) {
+            return false;
+          }
+          element.scrollIntoView({ block: "center" });
           const box = element.getBoundingClientRect();
-          return {
-            name:
-              element.textContent?.trim() || element.getAttribute("aria-label"),
-            width: Math.round(box.width),
-            height: Math.round(box.height),
-          };
+          const x = box.left + box.width / 2;
+          const y = box.top + box.height / 2;
+          const reach = [
+            [x - 21, y],
+            [x + 21, y],
+            [x, y - 21],
+            [x, y + 21],
+          ] as const;
+          return !reach.every(([px, py]) =>
+            element.contains(document.elementFromPoint(px, py)),
+          );
         })
-        .filter((box) => box.width < 44 || box.height < 44),
+        .map(
+          (element) =>
+            element.textContent?.trim() || element.getAttribute("aria-label"),
+        ),
     );
     expect(small).toEqual([]);
   });
