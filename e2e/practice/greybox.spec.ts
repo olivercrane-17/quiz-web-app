@@ -491,13 +491,10 @@ test.describe("practice greybox", () => {
       await expectFits(page, "results at 200%");
     });
 
-    // The options' "Correct answer" and "Your answer" tags never wrap
-    // (src/ui/answer-button.tsx, CORE-0b, restyled by DS-1 and A11Y-1), so
-    // at 200% text the tag alone is wider than the button. Follow-up filed
-    // for that file; this goes green with it.
-    test.fixme("every reveal fits without sideways scrolling", async ({
-      page,
-    }) => {
+    // DS-1's AnswerButton puts a revealed option's tag beside its name
+    // only where the name leaves room, else under it, so at 200% text the
+    // tag never makes the option wider than the screen (R1-36).
+    test("every reveal fits without sideways scrolling", async ({ page }) => {
       await startAt200(page);
       for (let question = 1; question <= 10; question += 1) {
         await answer(page, question % 2);
