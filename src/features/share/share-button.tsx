@@ -1,17 +1,36 @@
+"use client";
+
 /**
  * Extension point (ARCHITECTURE §2.3): the Share button on the stop screen,
  * archive results, practice results and the finished home card (PRD §3.5,
  * DESIGN §6.11). Screens render `<ShareButton payload={...} surface="stop" />`
  * with text built by the engine's share module.
  *
- * A stub until SHR-1, which builds it: Web Share with text only, the
- * clipboard as fallback with its status copy, a selected read-only text box
- * as the last resort, the mini grid inside the button, and the
- * `share_open`, `share_complete` and `share_cancel` events. It renders
- * nothing until then.
+ * The greybox path (RITE round 1, R1-01), in PRD §3.5.2's order:
+ *
+ * 1. Web Share with the text alone, the link as its last line, so every app
+ *    keeps text-then-link order. Resolving logs `share_complete` (native);
+ *    an `AbortError` (the player closed the sheet) logs `share_cancel` and
+ *    nothing else. Any other refusal, as in-app browsers give, falls through.
+ * 2. The clipboard: on success, `share_complete` (clipboard) and "Copied.
+ *    Paste it into your group chat.", in the status region and on screen.
+ * 3. When both fail, a read-only text box with the text selected and "Copy
+ *    this text"; the player's own copy from it logs `share_complete`
+ *    (manual), once.
+ *
+ * Every press logs `share_open` first, which never counts as a share. A
+ * press while the share sheet is still open does nothing. SHR-1 owns this
+ * file from Wave 12: it draws the mini grid inside the button from
+ * `payload.grid`, moves these words into the share feature's copy, and
+ * swaps the on-screen confirmation for DS-1's toast.
  */
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+
 import type { EventProps } from "@/analytics/dictionary";
 import type { ShareCell } from "@/engine/types";
+import { track } from "@/features/analytics/track";
+import { announce } from "@/ui/announce";
+import { Button } from "@/ui/button";
 
 /** Where the button sits, as `share_open` records it. */
 export type ShareSurface = EventProps<"share_open">["surface"];
@@ -30,6 +49,147 @@ export interface ShareButtonProps {
   surface: ShareSurface;
 }
 
-export function ShareButton(_props: ShareButtonProps) {
-  return null;
+/** The button's words (PRD §3.5.2, DESIGN §1.4). */
+export const SHARE_BUTTON_COPY = {
+  share: "Share",
+  copied: "Copied. Paste it into your group chat.",
+  copyThis: "Copy this text",
+} as const;
+
+/** How long the on-screen "Copied." stays, as a toast would (DESIGN §6.9). */
+export const COPIED_MS = 4_000;
+
+type Shared = "native" | "cancelled" | "unavailable";
+
+function isAbort(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    (error as { name?: unknown }).name === "AbortError"
+  );
+}
+
+/** Web Share with the text alone (PRD §3.5.2). */
+async function shareNatively(text: string): Promise<Shared> {
+  const nav: Partial<Pick<Navigator, "share" | "canShare">> =
+    typeof navigator === "undefined" ? {} : navigator;
+  if (typeof nav.share !== "function") return "unavailable";
+  if (typeof nav.canShare === "function" && !nav.canShare({ text })) {
+    return "unavailable";
+  }
+  try {
+    await nav.share({ text });
+    return "native";
+  } catch (error) {
+    // The player closed the sheet; anything else falls to the clipboard.
+    return isAbort(error) ? "cancelled" : "unavailable";
+  }
+}
+
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    const clipboard =
+      typeof navigator === "undefined" ? undefined : navigator.clipboard;
+    if (typeof clipboard?.writeText !== "function") return false;
+    await clipboard.writeText(text);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function ShareButton({ payload, surface }: ShareButtonProps) {
+  const { text, mode } = payload;
+  const [copied, setCopied] = useState(false);
+  const [manual, setManual] = useState(false);
+  const sharing = useRef(false);
+  const copiedByHand = useRef(false);
+  const boxRef = useRef<HTMLTextAreaElement>(null);
+  const boxId = useId();
+
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => {
+      setCopied(false);
+    }, COPIED_MS);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [copied]);
+
+  // The last resort opens on the text, selected, so one copy takes it all.
+  useLayoutEffect(() => {
+    if (!manual) return;
+    const box = boxRef.current;
+    if (box === null) return;
+    box.focus();
+    box.select();
+  }, [manual]);
+
+  async function share() {
+    if (sharing.current) return;
+    sharing.current = true;
+    try {
+      track("share_open", { mode, surface });
+      const native = await shareNatively(text);
+      if (native === "native") {
+        track("share_complete", { method: "native", mode, surface });
+        return;
+      }
+      if (native === "cancelled") {
+        track("share_cancel", { mode, surface });
+        return;
+      }
+      if (await copyToClipboard(text)) {
+        track("share_complete", { method: "clipboard", mode, surface });
+        announce(SHARE_BUTTON_COPY.copied);
+        setCopied(true);
+        return;
+      }
+      copiedByHand.current = false;
+      setManual(true);
+    } finally {
+      sharing.current = false;
+    }
+  }
+
+  return (
+    <div className="flex flex-col items-start gap-2" data-share-button="">
+      <Button
+        variant="secondary"
+        onClick={() => {
+          void share();
+        }}
+      >
+        {SHARE_BUTTON_COPY.share}
+      </Button>
+      {copied ? (
+        // Seen, not heard: the status region already said it.
+        <p aria-hidden="true" className="text-sm font-semibold">
+          {SHARE_BUTTON_COPY.copied}
+        </p>
+      ) : null}
+      {manual ? (
+        <div className="flex w-full flex-col gap-1">
+          <label htmlFor={boxId} className="text-sm font-semibold">
+            {SHARE_BUTTON_COPY.copyThis}
+          </label>
+          <textarea
+            id={boxId}
+            ref={boxRef}
+            readOnly
+            value={text}
+            rows={text.split("\n").length}
+            data-share-fallback=""
+            onCopy={() => {
+              if (copiedByHand.current) return;
+              copiedByHand.current = true;
+              track("share_complete", { method: "manual", mode, surface });
+            }}
+            className="w-full resize-none rounded-xl border border-border bg-muted p-3 font-sans text-base outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground"
+          />
+        </div>
+      ) : null}
+    </div>
+  );
 }

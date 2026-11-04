@@ -769,3 +769,102 @@ describe("the [mc ×9, encore] and [mc ×5, mystery, encore] fixture Dailies", (
     }
   });
 });
+
+describe("the start's first-Daily flag (PRD §3.1.3 to §3.1.5)", () => {
+  /** Plays today's attempt to its finish. */
+  async function finishToday(t: ReturnType<typeof setup>) {
+    const { attemptId } = await started(t);
+    await playOut(t, attemptId);
+    return attemptId;
+  }
+
+  it("R1-04 says a new player has never finished a Daily, through their whole first Daily", async () => {
+    const t = setup();
+    const first = await t.mock.sealed.start({ kind: "today" }, START);
+    expect(first).toMatchObject({ ok: true, value: { firstDaily: true } });
+    // A reload mid-Daily asks again and still gets the hints.
+    expect(await t.mock.sealed.start({ kind: "today" }, START)).toMatchObject({
+      ok: true,
+      value: { firstDaily: true },
+    });
+  });
+
+  it("R1-04 stops once the player has finished a Daily: the next date's start says so", async () => {
+    const t = setup();
+    await finishToday(t);
+    t.clock.advance(24 * 60 * 60 * 1000);
+    expect(await t.mock.sealed.start({ kind: "today" }, START)).toMatchObject({
+      ok: true,
+      value: { daily: { dailyNumber: 43 }, firstDaily: false },
+    });
+  });
+
+  it("R1-04 keeps the hints for a player whose earlier Daily was never finished", async () => {
+    const t = setup();
+    await started(t);
+    t.clock.advance(24 * 60 * 60 * 1000);
+    expect(await t.mock.sealed.start({ kind: "today" }, START)).toMatchObject({
+      ok: true,
+      value: { daily: { dailyNumber: 43 }, firstDaily: true },
+    });
+  });
+
+  it("R1-04 counts only the caller's own finishes", async () => {
+    const t = setup();
+    await finishToday(t);
+    t.useDevice(device(7));
+    expect(await t.mock.sealed.start({ kind: "today" }, START)).toMatchObject({
+      ok: true,
+      value: { firstDaily: true },
+    });
+  });
+});
+
+describe("round times in the snapshot (PRD §4.1.4)", () => {
+  it("R1-06 carries each resolved round's server interval and the open round's so far, to the second", async () => {
+    const t = setup();
+    const { attemptId } = await started(t);
+    // 90.4 s on Mystery 1: begin plus the solve is 2 requests, so the
+    // server's interval less 800 ms beats the client's own 1 s (§4.3.3).
+    t.clock.advance(90_400);
+    expect(await act(t, attemptId, 0, 1, guess(ANSWERS[0]!))).toMatchObject({
+      ok: true,
+      value: { verdict: { kind: "resolved" } },
+    });
+    // Before Continue: no round is open, so none has a time so far.
+    const between = await t.mock.sealed.get(attemptId);
+    expect(between.ok && between.value.current).toEqual({
+      index: 1,
+      open: null,
+    });
+    expect(between.ok && between.value.resolved[0]?.activeMs).toBe(90_000);
+
+    t.clock.advance(5_000);
+    await t.mock.sealed.beginRound(attemptId, 1);
+    t.clock.advance(30_200);
+    const reloaded = await t.mock.sealed.start({ kind: "today" }, START);
+    expect(reloaded).toMatchObject({
+      ok: true,
+      value: {
+        resolved: [{ meta: { index: 0 }, activeMs: 90_000 }],
+        current: { index: 1, open: { clue: 1 }, activeMs: 30_000 },
+      },
+    });
+  });
+
+  it("R1-06 counts the open round from its first clue, not the clue on screen, and caps it at 15 minutes", async () => {
+    const t = setup();
+    const { attemptId } = await started(t);
+    t.clock.advance(20_000);
+    await act(t, attemptId, 0, 1, nextClue);
+    t.clock.advance(12_000);
+    const onClue2 = await t.mock.sealed.get(attemptId);
+    expect(onClue2.ok && onClue2.value.current).toMatchObject({
+      open: { clue: 2 },
+      activeMs: 32_000,
+    });
+    t.clock.advance(20 * 60 * 1000);
+    const capped = await t.mock.sealed.get(attemptId);
+    expect(capped.ok && capped.value.current?.activeMs).toBe(15 * 60 * 1000);
+  });
+});

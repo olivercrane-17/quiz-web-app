@@ -74,10 +74,12 @@ export function progressVariant(state: RunState): "pills" | "bar" {
 }
 
 /**
- * The header's pills (DESIGN §6.6): M1 to M3 and E, or one slim segment per
- * question when a composition has more rounds than pills fit. A solved
- * Mystery shows its points, a miss an X, a withdrawn round a dash; each has
- * its own screen-reader label ("Mystery 2, solved on clue 2").
+ * The header's pills (DESIGN §6.6, decision D11): M1 to M3 and E, or one
+ * slim segment per question when a composition has more rounds than pills
+ * fit. A solved Mystery shows the points it earned as "+2" on the correct
+ * fill, so the mark can't be read as a clue or Mystery number; a miss shows
+ * the X, a withdrawn round a dash. Each has its own screen-reader label
+ * ("Mystery 1, solved on clue 3, 2 points").
  */
 export function progressSegments(state: RunState): ProgressSegment[] {
   const pills = progressVariant(state) === "pills";
@@ -123,36 +125,89 @@ export function progressSegments(state: RunState): ProgressSegment[] {
     if (outcome.family === "mystery") {
       return outcome.solvedOn === null
         ? { status: "wrong", current, label }
-        : { status: "correct", current, label, mark: String(outcome.points) };
+        : {
+            status: "correct",
+            current,
+            label: `${label}, ${words.points(outcome.points)}`,
+            mark: words.gained(outcome.points),
+          };
     }
     return { status: outcome.correct ? "correct" : "wrong", current, label };
   });
 }
 
 /**
+ * Where the run stands in words, for a header too narrow for the pills (at
+ * 200% text on a phone, R1-03): "Mystery 2 of 3", "Encore", "Question 4 of
+ * 9". The screen shows it in the pills' place, never beside them.
+ */
+export function progressText(state: RunState): string {
+  const slot = state.slots[state.index];
+  if (slot === undefined) return DAILY_SCREEN_COPY.progress;
+  const words = DAILY_SCREEN_COPY.roundLabel;
+  const family = ROUND_FAMILY[slot.meta.type];
+  return family === "encore"
+    ? words.encore
+    : family === "mystery"
+      ? words.mystery(slot.meta.ordinal, slot.meta.ofType)
+      : words.choice(slot.meta.ordinal, slot.meta.ofType);
+}
+
+/** The open round's number for `how_to_play_open` (PRD §7.2), or "none" between runs. */
+export function openRoundNumber(state: RunState | null): number | "none" {
+  if (state === null) return "none";
+  return state.phase === "opening" ||
+    state.phase === "active" ||
+    state.phase === "judging" ||
+    state.phase === "revealed"
+    ? state.index + 1
+    : "none";
+}
+
+/**
+ * The time a round had before this page loaded, which the server counted
+ * and the device can't have (R1-06): added to that round's running total,
+ * open or resolved, until the next snapshot replaces it.
+ */
+export interface TimeOffset {
+  index: number;
+  ms: number;
+}
+
+/**
  * Total active time so far (PRD §3.1.3): each round's active interval,
  * capped at 15 minutes; it runs only while a round is open and frozen on
- * reveals and between rounds. The device's own measure; the server's
- * decides.
+ * reveals and between rounds. The device's own measure, plus what the
+ * server counted before a reload (R1-06): resolved rounds arrive with their
+ * server interval in `activeMs`, and the round open at the reload carries
+ * `offset`. The server's figure decides.
  */
-export function elapsedMs(state: RunState, now: EpochMs): number {
+export function elapsedMs(
+  state: RunState,
+  now: EpochMs,
+  offset: TimeOffset | null = null,
+): number {
   let total = 0;
   state.slots.forEach((slot, index) => {
+    const before = offset !== null && offset.index === index ? offset.ms : 0;
     if (slot.outcome !== null) {
-      total += Math.min(slot.activeMs, SHARED.roundCapMs);
+      total += Math.min(slot.activeMs + before, SHARED.roundCapMs);
       return;
     }
     const running =
       index === state.index &&
       slot.openedAt !== null &&
       (state.phase === "active" || state.phase === "judging");
-    if (!running || slot.openedAt === null) return;
+    if (!running || slot.openedAt === null) {
+      total += Math.min(before, SHARED.roundCapMs);
+      return;
+    }
     const hiddenNow =
       state.hiddenAt === null
         ? 0
         : Math.max(0, now - Math.max(state.hiddenAt, slot.openedAt));
     const active = now - slot.openedAt - slot.hiddenMs - hiddenNow;
-    total += Math.min(Math.max(0, active), SHARED.roundCapMs);
+    total += Math.min(Math.max(0, active) + before, SHARED.roundCapMs);
   });
   return total;
 }

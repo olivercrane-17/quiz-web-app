@@ -269,7 +269,7 @@ describe("Today's Daily card", () => {
       }),
     ).toBeVisible();
     expect(region()).toHaveAttribute("data-daily-card", "finished");
-    expect(region()).toHaveTextContent("✅⬜⬜⬜🟥✅⬜⬜🟥🟥✅⬜");
+    expect(region()).toHaveTextContent("✅⬜⬜⬜🟧✅⬜⬜🟧🟧✅⬜");
     expect(
       within(region()).getByRole("link", { name: "See results" }),
     ).toHaveAttribute("href", "/daily/42/results");
@@ -300,6 +300,35 @@ describe("Today's Daily card", () => {
       true,
     );
     expect(region()).toHaveTextContent("🟦⬜⬜⬜🟧🟦⬜⬜🟧🟧🟦⬜");
+  });
+
+  it("R1-02 shows no Past 7 days link in any state while the archive has no route", async () => {
+    for (const state of [
+      card(),
+      card({
+        status: "in_progress",
+        attemptId: FINISHED.attemptId,
+        progress: { roundIndex: 1, of: 4 },
+      }),
+      card(FINISHED),
+    ]) {
+      answers(state);
+      vi.mocked(loadSharePayload).mockResolvedValue(null);
+      const calls = vi.mocked(loadTodayCard).mock.calls.length;
+      const { region, unmount } = renderCard();
+      // The card's first lazy chunk can take a while to load in a test.
+      await vi.waitFor(
+        () => {
+          expect(loadTodayCard).toHaveBeenCalledTimes(calls + 1);
+          expect(region()).toHaveAttribute("data-daily-card", state.status);
+        },
+        { timeout: 5_000 },
+      );
+      expect(
+        within(region()).queryByRole("link", { name: "Past 7 days" }),
+      ).toBeNull();
+      unmount();
+    }
   });
 
   it("keeps Play working when get_today fails", async () => {

@@ -19,6 +19,9 @@ function entity(text: string): EntityId {
   return id;
 }
 
+/** The echo mystery's default answer. */
+const ECHO = entity("fx.x.country.echo");
+
 function err(
   code: BackendError["code"],
   extra: Partial<BackendError> = {},
@@ -998,6 +1001,123 @@ describe("invariant 8: persistence and resume", () => {
       plugins,
     );
     expect(abandoned.state.phase).toBe("abandoned");
+  });
+
+  /**
+   * A sealed run's snapshot after round 0 resolved on the server and
+   * round 1 opened, as a reload finds it (PRD §4.1.4).
+   */
+  function reloadSnapshot(timing: {
+    resolvedMs?: number;
+    openMs?: number;
+  }): AttemptSnapshot {
+    const played = sealedRun(["mystery", "mystery", "encore"]);
+    const answer = {
+      family: "mystery",
+      kind: "guess",
+      entityId: ECHO,
+    } as const;
+    const k = played.intent(answer, T0 + 90_000);
+    played.judgeLocally(0, answer, k, T0 + 90_000);
+    played.continue(T0 + 95_000);
+    played.openRound(1, T0 + 95_000);
+    const [first, second] = played.state.slots;
+    const attemptId = parseAttemptId("3f2b8c1e-9d4a-4e6f-8b2c-1a2b3c4d5e6f");
+    if (
+      attemptId === null ||
+      first === undefined ||
+      first.outcome === null ||
+      first.reveal === null ||
+      second === undefined ||
+      second.open === null
+    ) {
+      throw new Error("setup");
+    }
+    return {
+      attemptId,
+      kind: "daily",
+      ranked: true,
+      daily: null,
+      composition: "m2e1",
+      rounds: played.state.slots.map((slot) => slot.meta),
+      maxPoints: 8,
+      resolved: [
+        {
+          meta: first.meta,
+          outcome: first.outcome,
+          reveal: first.reveal,
+          ...(timing.resolvedMs === undefined
+            ? {}
+            : { activeMs: timing.resolvedMs }),
+        },
+      ],
+      current: {
+        index: 1,
+        open: second.open,
+        ...(timing.openMs === undefined ? {} : { activeMs: timing.openMs }),
+      },
+      status: "active",
+      points: 4,
+      startedAt: T0,
+      serverTime: T0 + 125_000,
+    };
+  }
+
+  it("R1-06 seeds each resolved round's activeMs from the snapshot's server interval", () => {
+    const at = T0 + 126_000;
+    const resumed = reduceRun(
+      createRun(config(metas("mystery", "mystery", "encore")), at).state,
+      {
+        type: "resume",
+        at,
+        snapshot: reloadSnapshot({ resolvedMs: 90_000, openMs: 30_000 }),
+      },
+      plugins,
+    ).state;
+    expect(resumed.phase).toBe("active");
+    expect(resumed.index).toBe(1);
+    expect(resumed.slots[0]?.activeMs).toBe(90_000);
+    // The open round's client measure restarts at the reload.
+    expect(resumed.slots[1]).toMatchObject({ openedAt: at, activeMs: 0 });
+  });
+
+  it("R1-06 reports only the device's own measure for the round open at the reload", () => {
+    const at = T0 + 126_000;
+    const resumed = reduceRun(
+      createRun(config(metas("mystery", "mystery", "encore")), at).state,
+      {
+        type: "resume",
+        at,
+        snapshot: reloadSnapshot({ resolvedMs: 90_000, openMs: 30_000 }),
+      },
+      plugins,
+    ).state;
+    const next = reduceRun(
+      resumed,
+      {
+        type: "intent",
+        at: at + 5_000,
+        intent: { family: "mystery", kind: "next_clue" },
+        key: key(9),
+      },
+      plugins,
+    );
+    // PRD §4.3.3 compares the server's interval with the client's own, so
+    // the 30 s the server counted before the reload are never reported.
+    expect(next.commands).toEqual([
+      expect.objectContaining({ kind: "judge", index: 1, activeMs: 5_000 }),
+    ]);
+  });
+
+  it("R1-06 resumes a resolved round at 0 when the backend reports no interval, as before", () => {
+    const at = T0 + 126_000;
+    const resumed = reduceRun(
+      createRun(config(metas("mystery", "mystery", "encore")), at).state,
+      { type: "resume", at, snapshot: reloadSnapshot({}) },
+      plugins,
+    ).state;
+    expect(resumed.slots.map((slot) => slot.activeMs)).toEqual([0, 0, 0]);
+    expect(resumed.slots[1]?.openedAt).toBe(at);
   });
 });
 

@@ -11,10 +11,16 @@ import {
   type RoundReveal,
 } from "@/engine/types";
 
+import { getSiteUrl } from "@/lib/env";
+
+import { DEFAULT_GLYPHS, HIGH_CONTRAST_GLYPHS, glyphsFor } from "./glyphs";
 import {
   BRAND,
+  SHARE_PATH,
   categoryShortName,
   dailyGrid,
+  dailyLegend,
+  dailyShareLink,
   dailySharePayload,
   dailyShareText,
 } from "./share";
@@ -115,10 +121,10 @@ describe("the stop screen's share text (PRD §3.5.1, DESIGN §6.11)", () => {
       highContrast: false,
     });
     expect(text.split("\n")).toEqual([
-      `${BRAND} Daily${NBSP}#42 · 9/12 · Encore${NBSP}4%${NBSP}off 🎯`,
+      `${BRAND} Daily${NBSP}#42 · 9/12 · Encore${NBSP}off${NBSP}by${NBSP}4% 🎯`,
       "History ✅⬜⬜⬜",
-      "Geography 🟥✅⬜⬜",
-      "Science & Tech 🟥🟥✅⬜",
+      "Geography 🟧✅⬜⬜",
+      "Science & Tech 🟧🟧✅⬜",
       "https://knewt.app/daily",
     ]);
     for (const answer of ["Odile Marsh", "Valdoria", "Bismuth", "86.4"]) {
@@ -126,7 +132,7 @@ describe("the stop screen's share text (PRD §3.5.1, DESIGN §6.11)", () => {
     }
   });
 
-  it("swaps red and green for orange and blue in high contrast", () => {
+  it("draws the solve in blue in high contrast, where a used clue is 🟧 too", () => {
     const text = dailyShareText(finished(), {
       siteUrl: "https://knewt.app",
       highContrast: true,
@@ -155,5 +161,49 @@ describe("the stop screen's share text (PRD §3.5.1, DESIGN §6.11)", () => {
   it("names a category by its short name, and an unknown id as itself", () => {
     expect(categoryShortName("film" as CategoryId)).toBe("Film & TV");
     expect(categoryShortName("nope" as CategoryId)).toBe("nope");
+  });
+
+  it("R1-18 links to getSiteUrl() plus a path, as both Share surfaces build it", () => {
+    // The stop screen and the home card pass no origin, so the link is
+    // always the build's own site URL (a port the personas didn't play on
+    // was the harness's NEXT_PUBLIC_SITE_URL, not this code).
+    const link = dailyShareText(finished(), { highContrast: false })
+      .split("\n")
+      .at(-1);
+    expect(link).toBe(`${getSiteUrl()}${SHARE_PATH}`);
+    expect(link).toMatch(/^https?:\/\/[^/?#]+\/daily$/);
+    expect(
+      dailySharePayload(finished(), { highContrast: true })
+        .text.split("\n")
+        .at(-1),
+    ).toBe(link);
+    expect(dailyShareLink("https://knewt.app///")).toBe(
+      "https://knewt.app/daily",
+    );
+  });
+});
+
+describe("decision D3 on the stop screen (R1-16)", () => {
+  it("R1-16 paints every clue used before the solve 🟧, never red, in both sets", () => {
+    for (const glyphs of [DEFAULT_GLYPHS, HIGH_CONTRAST_GLYPHS]) {
+      expect(glyphs.cells.passed).toBe("🟧");
+      expect(glyphs.cells.unused).toBe("⬜");
+    }
+    expect(DEFAULT_GLYPHS.cells.solved).toBe("✅");
+    expect(HIGH_CONTRAST_GLYPHS.cells.solved).toBe("🟦");
+    const text = dailyShareText(finished(), { highContrast: false });
+    expect(text).not.toContain("🟥");
+    expect(glyphsFor(true)).toBe(HIGH_CONTRAST_GLYPHS);
+    expect(glyphsFor(false)).toBe(DEFAULT_GLYPHS);
+  });
+
+  it("R1-16 explains the grid in one line, in the player's glyph set", () => {
+    expect(dailyLegend(finished(), false)).toBe(
+      "🟧 clue used · ✅ solved · ⬜ not needed",
+    );
+    expect(dailyLegend(finished(), true)).toBe(
+      "🟧 clue used · 🟦 solved · ⬜ not needed",
+    );
+    expect(dailyLegend(finished({ resolved: [ENCORE] }), false)).toBeNull();
   });
 });

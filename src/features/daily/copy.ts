@@ -10,6 +10,7 @@ import {
   STOP_SCREEN_COPY,
 } from "./client-copy";
 import { HOME_CARD_COPY } from "./home-copy";
+import { HOW_TO_PLAY } from "./how-to-play";
 import { ANSWER_TYPE_WORDS, DIFFICULTY_WORDS } from "./words";
 
 export const DAILY_COPY = {
@@ -19,6 +20,8 @@ export const DAILY_COPY = {
   screen: DAILY_SCREEN_COPY,
   announce: ANNOUNCE_COPY,
   stopScreen: STOP_SCREEN_COPY,
+  /** The More menu's sheet, and `/how-scoring-works` (PRD §3.1.3). */
+  howToPlay: HOW_TO_PLAY,
   /** The routes' document titles. */
   metadata: {
     daily: "Today's Daily",

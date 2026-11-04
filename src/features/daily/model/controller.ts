@@ -9,7 +9,12 @@
  *   `resume`, never running createRun's own `open_round`: the snapshot
  *   already carries round 0. A finished attempt goes straight to its
  *   results (AC-DLY-06); a reload resumes at the same clue with the same
- *   wrong guesses, because all state lives on the server (AC-DLY-07).
+ *   wrong guesses, because all state lives on the server (AC-DLY-07). The
+ *   start also says whether the player has never finished a Daily
+ *   (`firstDaily`, for the first-Daily hints), and every snapshot carries
+ *   the open round's server time so far, which the stopwatch adds
+ *   (`timeOffset`, R1-06) while the judge keeps reporting the device's own
+ *   measure.
  * - **Commands.** `open_round` calls `beginRound`, `judge` calls `act` with
  *   the round's current step, `finish` uses the summary the last call
  *   returned or asks `finish()` (idempotent), `resync` reloads the
@@ -82,7 +87,7 @@ import {
 } from "@/features/rounds";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
-import { announcementText } from "./labels";
+import { announcementText, type TimeOffset } from "./labels";
 
 export type FocusTarget = Extract<RunCommand, { kind: "focus" }>["target"];
 
@@ -127,6 +132,17 @@ export interface DailySnapshot {
   focus: { target: FocusTarget; seq: number } | null;
   /** Another tab moved this Daily on, and the screen caught up. */
   movedOn: boolean;
+  /**
+   * The player has never finished a Daily, as the start said: the
+   * first-Daily hints show (PRD §3.1.3 to §3.1.5), and the round context
+   * carries it to the rounds.
+   */
+  firstDaily: boolean;
+  /**
+   * The time the open round had before this page loaded, as the latest
+   * snapshot said (R1-06): the stopwatch adds it, the judge never reports it.
+   */
+  timeOffset: TimeOffset | null;
 }
 
 export interface StartContext {
@@ -200,6 +216,34 @@ function configFor(snapshot: AttemptSnapshot): RunConfig {
 const retryable = (error: BackendError) =>
   error.code === "rate_limited" || error.retryable;
 
+/**
+ * Whether the start says the player has never finished a Daily, for the
+ * first-Daily hints (PRD §3.1.3 to §3.1.5). The flag rides beside the
+ * snapshot's own fields until ARCHITECTURE §3.4 names it: the mock sends
+ * it, and a backend that doesn't counts as false, so a returning player is
+ * never shown the hints again.
+ */
+export function firstDailyOf(snapshot: AttemptSnapshot): boolean {
+  return (
+    (snapshot as AttemptSnapshot & { firstDaily?: unknown }).firstDaily === true
+  );
+}
+
+/**
+ * What the round open in a snapshot had on the server's clock before this
+ * page loaded (R1-06): its interval so far, or, from a backend that doesn't
+ * report one, the time since its current clue was issued, which can only
+ * count short. Null with no round open.
+ */
+export function timeOffsetOf(snapshot: AttemptSnapshot): TimeOffset | null {
+  const current = snapshot.current;
+  if (current === null || current.open === null) return null;
+  const ms =
+    current.activeMs ??
+    Math.max(0, snapshot.serverTime - current.open.issuedAt);
+  return ms > 0 ? { index: current.index, ms } : null;
+}
+
 /** Choice verdicts, which ChoiceRound announces itself as its reveal shows. */
 const SPOKEN_BY_ROUND: ReadonlySet<string> = new Set([
   "correct",
@@ -251,6 +295,8 @@ export function createDailyController(
   let run: RunState | null = null;
   let focus: DailySnapshot["focus"] = null;
   let movedOn = false;
+  let firstDaily = false;
+  let timeOffset: TimeOffset | null = null;
   /** A FinishSummary that arrived before the Continue that asks for it (§4.5 invariant 6). */
   let earlySummary: FinishSummary | null = null;
   let resyncFailures = 0;
@@ -279,6 +325,8 @@ export function createDailyController(
       view: run === null ? null : selectRunView(run, deps.plugins),
       focus,
       movedOn,
+      firstDaily,
+      timeOffset,
     };
   }
 
@@ -417,6 +465,8 @@ export function createDailyController(
     composition = attempt.composition;
     converted = converted || attempt.kind === "archive";
     problem = null;
+    firstDaily = firstDailyOf(attempt);
+    timeOffset = timeOffsetOf(attempt);
     deps.onAttempt?.(attempt);
     if (attempt.status === "finished") {
       status = "finished";
@@ -686,6 +736,7 @@ export function createDailyController(
     movedOn = true;
     earlySummary = null;
     if (result.value.kind === "archive") converted = true;
+    timeOffset = timeOffsetOf(result.value);
     dispatch({ type: "resume", at: now(), snapshot: result.value });
   }
 

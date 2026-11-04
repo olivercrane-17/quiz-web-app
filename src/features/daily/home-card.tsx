@@ -12,11 +12,13 @@
  * show only before the Daily starts; the rule line describes Mysteries
  * only when the day has one. The finished card draws its mini grid in the
  * player's glyph set and carries Share with the stop screen's own text
- * (AC-SHR-11), built in that chunk; SHR-1 fills the button itself.
+ * (AC-SHR-11), built in that chunk. Past 7 days shows once the archive has
+ * a route (R1-02).
  *
  * Size: one of Home's eager islands, with a 4 kB gzipped target, so it
  * imports no engine module (the day names are repeated below, and a test
- * keeps them equal to the engine's), and the backend loads with import().
+ * keeps them equal to the engine's), and the backend and the Share button
+ * load with import(), only for a finished card.
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -24,15 +26,20 @@ import {
   useEffect,
   useState,
   useSyncExternalStore,
+  type ComponentType,
   type ReactNode,
 } from "react";
 
 import type { DailyTodayCard, TodayRoundChip } from "@/engine/types";
-import { ShareButton, type SharePayload } from "@/features/share/share-button";
+import type {
+  ShareButtonProps,
+  SharePayload,
+} from "@/features/share/share-button";
 import { buttonClasses } from "@/ui/button-classes";
 
-import { DEFAULT_GLYPHS, HIGH_CONTRAST_GLYPHS } from "./glyphs";
+import { glyphsFor } from "./glyphs";
 import { HOME_CARD_COPY } from "./home-copy";
+import { ARCHIVE_HREF } from "./links";
 import { ANSWER_TYPE_WORDS, DIFFICULTY_WORDS, waitWords } from "./words";
 
 const COPY = HOME_CARD_COPY;
@@ -130,6 +137,12 @@ interface Loaded {
   highContrast: boolean;
 }
 
+/** The finished card's Share: the stop screen's text and the button, loaded together. */
+interface ShareSlot {
+  payload: SharePayload;
+  Button: ComponentType<ShareButtonProps>;
+}
+
 function warm(): void {
   void import("./home-data").then((data) => {
     data.warmDaily();
@@ -173,7 +186,7 @@ export interface DailyHomeCardProps {
 
 export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
   const [loaded, setLoaded] = useState<Loaded | null>(null);
-  const [share, setShare] = useState<SharePayload | null>(null);
+  const [share, setShare] = useState<ShareSlot | null>(null);
   // The device's date is only known in the browser; the prerender holds a
   // same-length placeholder, hidden until it is replaced.
   const today = useSyncExternalStore(never, deviceDate, () => null);
@@ -207,10 +220,16 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
   useEffect(() => {
     if (finishedId === null) return;
     let live = true;
-    void import("./home-data")
-      .then((data) => data.loadSharePayload(finishedId, highContrast))
-      .then((payload) => {
-        if (live) setShare(payload);
+    void Promise.all([
+      import("./home-data").then((data) =>
+        data.loadSharePayload(finishedId, highContrast),
+      ),
+      import("@/features/share/share-button"),
+    ])
+      .then(([payload, share]) => {
+        if (live && payload !== null) {
+          setShare({ payload, Button: share.ShareButton });
+        }
       })
       .catch(() => {
         // The card works without Share; See results still has it.
@@ -277,7 +296,7 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     body = <></>;
   } else if (card?.finished && loaded !== null) {
     const { points, maxPoints, rows } = card.finished;
-    const glyphs = highContrast ? HIGH_CONTRAST_GLYPHS : DEFAULT_GLYPHS;
+    const glyphs = glyphsFor(highContrast);
     heading = COPY.doneHeading(points, maxPoints);
     action = (
       <Link
@@ -296,7 +315,9 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
             </span>
           ))}
         </div>
-        {share === null ? null : <ShareButton payload={share} surface="home" />}
+        {share === null ? null : (
+          <share.Button payload={share.payload} surface="home" />
+        )}
       </>
     );
     after = <NextDaily loaded={loaded} />;
@@ -320,14 +341,18 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
       {body}
       {action}
       {after}
-      <Link
-        href={"/archive" as Route}
-        // Built by a later ticket: no prefetch, which would 404 until then.
-        prefetch={false}
-        className={buttonClasses({ variant: "text", className: "self-start" })}
-      >
-        {COPY.pastWeek}
-      </Link>
+      {ARCHIVE_HREF === null ? null : (
+        <Link
+          href={ARCHIVE_HREF}
+          prefetch={false}
+          className={buttonClasses({
+            variant: "text",
+            className: "self-start",
+          })}
+        >
+          {COPY.pastWeek}
+        </Link>
+      )}
     </section>
   );
 }

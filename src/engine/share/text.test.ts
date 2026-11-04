@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { mysteryCells } from "../run/outcome.ts";
 import type {
   CategoryId,
   EncoreBand,
@@ -9,10 +10,14 @@ import type {
 import {
   buildDailyShareText,
   encoreToken,
+  shareErrorWords,
   shareGrid,
+  shareLegend,
+  shareRowLines,
   shareRows,
   type DailyShareInput,
   type ShareGlyphs,
+  type ShareLegendWords,
 } from "./text.ts";
 
 const GLYPHS: ShareGlyphs = {
@@ -26,6 +31,38 @@ const GLYPHS: ShareGlyphs = {
   },
   bullseye: "@",
 };
+/**
+ * DESIGN §6.11's bytes after decision D3, as the feature layer passes them
+ * in: a used clue is 🟧 in both sets, so a wrong guess and Next clue look
+ * alike and neither is red; the high-contrast set keeps 🟧 and 🟦.
+ */
+const DESIGN_GLYPHS: ShareGlyphs = {
+  cells: {
+    passed: "🟧",
+    solved: "✅",
+    unused: "⬜",
+    voided: "⬜",
+    correct: "✅",
+    wrong: "🟥",
+  },
+  bullseye: "🎯",
+};
+const HIGH_CONTRAST_GLYPHS: ShareGlyphs = {
+  cells: {
+    passed: "🟧",
+    solved: "🟦",
+    unused: "⬜",
+    voided: "⬜",
+    correct: "🟦",
+    wrong: "🟧",
+  },
+  bullseye: "🎯",
+};
+const LEGEND: ShareLegendWords = {
+  passed: "clue used",
+  solved: "solved",
+  unused: "not needed",
+};
 const SHORT: Partial<Record<CategoryId, string>> = {
   geo: "Geography",
   film: "Film & TV",
@@ -37,7 +74,8 @@ const LABELS: DailyShareInput["labels"] = {
   choiceRow: "Questions",
   voided: "voided",
 };
-const NBSP = " ";
+/** U+00A0, which keeps a token on one line. */
+const NBSP = "\u00a0";
 
 const cellsFor = (solvedOn: 1 | 2 | 3 | 4 | null): ShareCell[] =>
   solvedOn === null
@@ -119,7 +157,7 @@ describe("the Daily share text (PRD §3.5.1, DESIGN §6.11)", () => {
       }),
     );
     expect(text.split("\n")).toEqual([
-      `Knewt Daily${NBSP}#42 · 9/12 · Encore${NBSP}4%${NBSP}off @`,
+      `Knewt Daily${NBSP}#42 · 9/12 · Encore${NBSP}off${NBSP}by${NBSP}4% @`,
       "Geography SUUU",
       "Film & TV RSUU",
       "Science & Tech RRSU",
@@ -142,7 +180,7 @@ describe("the Daily share text (PRD §3.5.1, DESIGN §6.11)", () => {
       }),
     );
     expect(text.split("\n")).toEqual([
-      `Knewt Daily${NBSP}#40 (archive) · 6/12 · Encore${NBSP}3${NBSP}years${NBSP}off`,
+      `Knewt Daily${NBSP}#40 (archive) · 6/12 · Encore${NBSP}off${NBSP}by${NBSP}3${NBSP}years`,
       "History RSUU",
       "Geography RRRR",
       "Science & Tech · voided",
@@ -150,14 +188,25 @@ describe("the Daily share text (PRD §3.5.1, DESIGN §6.11)", () => {
     ]);
   });
 
-  it("writes Encore tokens as DESIGN.md spells them, and none for a voided Encore", () => {
+  it("R1-19 D4 words the Encore token 'off by', so line 1 never reads like a sale, and none for a voided Encore", () => {
     const token = (display: string) =>
       encoreToken([encore(display, null)], GLYPHS)?.replaceAll(NBSP, " ");
+    expect(token("4% off")).toBe("Encore off by 4%");
+    expect(token("39% off")).toBe("Encore off by 39%");
+    expect(token("under 1% off")).toBe("Encore off by under 1%");
+    expect(token("over 999% off")).toBe("Encore off by over 999%");
+    expect(token("1 year off")).toBe("Encore off by 1 year");
+    expect(token("3 years off")).toBe("Encore off by 3 years");
     expect(token("Spot on")).toBe("Encore spot on");
-    expect(token("under 1% off")).toBe("Encore under 1% off");
-    expect(token("over 999% off")).toBe("Encore over 999% off");
     expect(encoreToken([encore("", null, true)], GLYPHS)).toBeNull();
     expect(encoreToken([mystery("geo", 1)], GLYPHS)).toBeNull();
+  });
+
+  it("R1-19 keeps the token on one line with no-break spaces, the bullseye glyph after it", () => {
+    expect(encoreToken([encore("4% off", "bullseye")], GLYPHS)).toBe(
+      `Encore${NBSP}off${NBSP}by${NBSP}4% @`,
+    );
+    expect(shareErrorWords("")).toBe("");
   });
 
   it("AC-DLY-09 collapses consecutive choice rounds into one row: nine for [mc ×9, encore], five then a Mystery row for [mc ×5, mystery, encore]", () => {
@@ -174,7 +223,7 @@ describe("the Daily share text (PRD §3.5.1, DESIGN §6.11)", () => {
       }),
     ).split("\n");
     expect(nine).toEqual([
-      `Knewt Daily${NBSP}#42 · 7/9 · Encore${NBSP}12%${NBSP}off`,
+      `Knewt Daily${NBSP}#42 · 7/9 · Encore${NBSP}off${NBSP}by${NBSP}12%`,
       "Questions CCWCCCWCC",
       "https://knewt.app/daily",
     ]);
@@ -223,5 +272,62 @@ describe("the Daily share text (PRD §3.5.1, DESIGN §6.11)", () => {
     );
     expect(text).not.toMatch(/%\s*of players|streak|\d+:\d\d/i);
     expect(text.split("\n").at(-1)).toMatch(/^https:\/\/[^?#]+$/);
+  });
+});
+
+describe("decision D3: one glyph for every clue used before the solve", () => {
+  it("R1-16 draws a wrong guess and Next clue alike: every clue before the solve is passed, the solve is solved, the rest unused", () => {
+    // The cells carry no record of how a clue was passed, so the share
+    // can't tell a miss from a skip, and a miss is four passed cells.
+    expect(mysteryCells(3)).toEqual(["passed", "passed", "solved", "unused"]);
+    expect(mysteryCells(null)).toEqual([
+      "passed",
+      "passed",
+      "passed",
+      "passed",
+    ]);
+  });
+
+  it("R1-16 paints a used clue 🟧, never red, keeping ✅ and ⬜, in both glyph sets", () => {
+    const outcomes = [
+      mystery("hist", 2),
+      mystery("geo", null),
+      mystery("sci", 4),
+      encore("4% off", "bullseye"),
+    ];
+    const rows = shareRows(outcomes);
+    expect(shareRowLines(rows, DESIGN_GLYPHS, LABELS)).toEqual([
+      "History 🟧✅⬜⬜",
+      "Geography 🟧🟧🟧🟧",
+      "Science & Tech 🟧🟧🟧✅",
+    ]);
+    expect(shareRowLines(rows, HIGH_CONTRAST_GLYPHS, LABELS)).toEqual([
+      "History 🟧🟦⬜⬜",
+      "Geography 🟧🟧🟧🟧",
+      "Science & Tech 🟧🟧🟧🟦",
+    ]);
+    for (const line of shareRowLines(rows, DESIGN_GLYPHS, LABELS)) {
+      expect(line).not.toContain("🟥");
+    }
+  });
+
+  it("R1-16 explains the grid in one legend line, in the player's glyph set", () => {
+    const rows = shareRows([mystery("geo", 1), mystery("film", null)]);
+    expect(shareLegend(rows, DESIGN_GLYPHS, LEGEND)).toBe(
+      "🟧 clue used · ✅ solved · ⬜ not needed",
+    );
+    expect(shareLegend(rows, HIGH_CONTRAST_GLYPHS, LEGEND)).toBe(
+      "🟧 clue used · 🟦 solved · ⬜ not needed",
+    );
+  });
+
+  it("R1-16 shows no legend for a grid with no Mystery row to explain", () => {
+    expect(
+      shareLegend(shareRows([choice(true), choice(false)]), GLYPHS, LEGEND),
+    ).toBeNull();
+    expect(
+      shareLegend(shareRows([mystery("geo", null, true)]), GLYPHS, LEGEND),
+    ).toBeNull();
+    expect(shareLegend([], GLYPHS, LEGEND)).toBeNull();
   });
 });

@@ -672,6 +672,10 @@ function resumeSealed(
       reveal: done.reveal,
       outcome: done.outcome,
       resolvedAt: at,
+      // The server's interval for a round resolved before the reload, so
+      // the running total survives it (AC-DLY-07, AC-DLY-12); 0 when the
+      // backend doesn't report one.
+      activeMs: Math.max(0, done.activeMs ?? 0),
     };
   });
   const config: RunConfig = {
@@ -721,7 +725,9 @@ function resumeSealed(
       ...slot,
       open: current.open,
       client: plugin.init(current.open),
-      // The client measure restarts at the reload; the server keeps its own.
+      // The client measure restarts at the reload; the server keeps its
+      // own. The time before the reload (`current.activeMs`) is the
+      // screen's to show, never part of what the next judge reports.
       openedAt: at,
     });
     return {
