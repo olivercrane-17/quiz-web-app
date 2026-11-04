@@ -6,6 +6,10 @@
  * region inside the dialog stays. The unit tests check that announce()
  * writes into the open sheet's region; this checks the browser half
  * through the accessibility tree that screen readers read.
+ *
+ * Tagged @cdp: it reads that tree through Chromium's DevTools protocol,
+ * which WebKit and Firefox don't speak, so playwright.config.ts runs it in
+ * the Chromium projects only.
  */
 import type { CDPSession, Page } from "@playwright/test";
 
@@ -47,28 +51,30 @@ async function openModalSheet(page: Page): Promise<void> {
   });
 }
 
-test("a modal sheet hides the page's live region from screen readers, but not its own", async ({
-  page,
-}) => {
-  await page.goto("/");
-  await expect(page.locator("#qz-live-polite")).toBeAttached();
-  const cdp = await page.context().newCDPSession(page);
-  await cdp.send("DOM.enable");
-  await cdp.send("Accessibility.enable");
+test(
+  "a modal sheet hides the page's live region from screen readers, but not its own",
+  { tag: "@cdp" },
+  async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("#qz-live-polite")).toBeAttached();
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send("DOM.enable");
+    await cdp.send("Accessibility.enable");
 
-  const before = await axNode(cdp, "#qz-live-polite");
-  expect(before.ignored).toBe(false);
-  expect(before.role?.value).toBe("status");
+    const before = await axNode(cdp, "#qz-live-polite");
+    expect(before.ignored).toBe(false);
+    expect(before.role?.value).toBe("status");
 
-  await openModalSheet(page);
+    await openModalSheet(page);
 
-  const pageRegion = await axNode(cdp, "#qz-live-polite");
-  expect(pageRegion.ignored).toBe(true);
-  expect(pageRegion.ignoredReasons?.map((reason) => reason.name)).toContain(
-    "activeModalDialog",
-  );
+    const pageRegion = await axNode(cdp, "#qz-live-polite");
+    expect(pageRegion.ignored).toBe(true);
+    expect(pageRegion.ignoredReasons?.map((reason) => reason.name)).toContain(
+      "activeModalDialog",
+    );
 
-  const sheetRegion = await axNode(cdp, 'dialog [data-qz-live="polite"]');
-  expect(sheetRegion.ignored).toBe(false);
-  expect(sheetRegion.role?.value).toBe("status");
-});
+    const sheetRegion = await axNode(cdp, 'dialog [data-qz-live="polite"]');
+    expect(sheetRegion.ignored).toBe(false);
+    expect(sheetRegion.role?.value).toBe("status");
+  },
+);
