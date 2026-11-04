@@ -200,6 +200,17 @@ describe("Today's Daily card", () => {
     expect(region()).toHaveAttribute("data-daily-card", "not_started");
   });
 
+  it("R1-27 draws each round as the design system's flat chip, not a pill that reads as a control", async () => {
+    answers(card());
+    const { region } = renderCard();
+    await within(region()).findByText("A person · Easy");
+    for (const item of within(region()).getAllByRole("listitem")) {
+      const chip = item.querySelector(".kn-chip");
+      expect(chip).toHaveAttribute("data-tone", "default");
+      expect(item.className).not.toMatch(/rounded-full/);
+    }
+  });
+
   it("not started: a Daily of questions alone gets its own rule line", async () => {
     answers(
       card({

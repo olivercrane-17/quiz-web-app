@@ -37,6 +37,7 @@ import type {
   SharePayload,
 } from "@/features/share/share-button";
 import { buttonClasses } from "@/ui/button-classes";
+import { Chip } from "@/ui/chip";
 
 import { glyphsFor } from "./glyphs";
 import { HOME_CARD_COPY } from "./home-copy";
@@ -238,14 +239,12 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
   let body = (
     <>
       <p className="text-base">{rule}</p>
+      {/* Flat labels, never pills that read as controls (R1-27). */}
       <ul aria-label={COPY.roundsLabel} className="flex flex-wrap gap-2">
         {(card?.rounds.map(chipText) ?? COPY.placeholderChips).map(
           (chip, index) => (
-            <li
-              key={index}
-              className="rounded-full border border-border px-3 py-1 text-sm"
-            >
-              {chip}
+            <li key={index} className="flex max-w-full">
+              <Chip className="max-w-full whitespace-normal">{chip}</Chip>
             </li>
           ),
         )}

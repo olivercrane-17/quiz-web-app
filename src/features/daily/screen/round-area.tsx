@@ -50,6 +50,7 @@ import { ROUND_COMPONENTS } from "@/features/rounds/client";
 import { Button } from "@/ui/button";
 import { buttonClasses } from "@/ui/button-classes";
 import { Card } from "@/ui/card";
+import { Chip } from "@/ui/chip";
 import { UI_COPY } from "@/ui/copy";
 import { Loading, Skeleton } from "@/ui/skeleton";
 
@@ -120,8 +121,9 @@ function RoundHeader({ meta }: { meta: RoundMeta }) {
         {roundLabel(meta)}
       </h2>
       {category === null ? null : (
-        <p className="w-fit rounded-full border border-border px-3 py-1 text-sm font-semibold">
-          {category}
+        // A flat label, never a pill that reads as a control (R1-27).
+        <p className="flex">
+          <Chip className="max-w-full whitespace-normal">{category}</Chip>
         </p>
       )}
     </div>
