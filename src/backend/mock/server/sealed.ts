@@ -8,7 +8,12 @@
  *   resolves the effective today (§8.7), and returns the player's attempt
  *   for that Daily, finished or not (AC-DLY-05, AC-DLY-06), or creates a
  *   ranked one. A new attempt comes back with round 0 already open, and
- *   that start counts as round 0's `begin_round` (§8.4).
+ *   that start counts as round 0's `begin_round` (§8.4). The start also
+ *   says whether the player has never finished a Daily (`firstDaily`, for
+ *   the first-Daily hints of PRD §3.1.3 to §3.1.5).
+ * - Every snapshot carries each resolved round's server interval and the
+ *   open round's interval so far, to the second (PRD §4.1.4), so the
+ *   stopwatch picks up where it was after a reload.
  * - `beginRound` opens the current round once the previous one resolved.
  *   Repeated calls return the same open state without moving its issue
  *   time or counting a request. A voided round never opens: it resolves at
@@ -345,6 +350,21 @@ function currentMeta(
   return voided === row.meta.voided ? row.meta : { ...row.meta, voided };
 }
 
+/**
+ * A round time as the snapshot carries it: to the whole second, which is
+ * all the stopwatch shows, so a time can never match a sealed value by
+ * chance in the payload scans (AC-DLY-04's matching rules).
+ */
+function toSecond(ms: number): number {
+  return Math.round(ms / 1000) * 1000;
+}
+
+/** The open round's server interval so far, from its first issue (PRD §4.1.4), capped. */
+function openRoundMs(row: MockRoundRow, now: EpochMs): number {
+  if (row.issuedAt === null || row.open === null) return 0;
+  return toSecond(Math.min(Math.max(0, now - row.issuedAt), SHARED.roundCapMs));
+}
+
 /** The attempt as the client may see it (§3.4): reveals only for resolved rounds. */
 export function snapshotOf(
   db: Readonly<MockDb>,
@@ -362,6 +382,9 @@ export function snapshotOf(
             meta: rounds[index] as RoundMeta,
             outcome: row.outcome,
             reveal: row.reveal,
+            // What the round counts toward total time, so the stopwatch
+            // survives a reload (R1-06).
+            activeMs: toSecond(effectiveRoundMs(row)),
           },
         ],
   );
@@ -380,7 +403,13 @@ export function snapshotOf(
     resolved,
     current:
       attempt.status === "active" && currentRow !== undefined
-        ? { index: attempt.current, open: currentRow.open }
+        ? {
+            index: attempt.current,
+            open: currentRow.open,
+            ...(currentRow.open === null
+              ? {}
+              : { activeMs: openRoundMs(currentRow, now) }),
+          }
         : null,
     status: attempt.status,
     points: attempt.points,
@@ -422,6 +451,32 @@ export function attemptFor(
 export function allAttempts(db: Readonly<MockDb>): MockAttemptRow[] {
   return Object.values(readAttempts(db));
 }
+
+/**
+ * True until the player has finished a Daily other than `attempt`: the
+ * first-Daily hints (PRD §3.1.3 to §3.1.5) show once per player, for the
+ * whole of their first Daily, a reload included.
+ */
+export function isFirstDaily(
+  db: Readonly<MockDb>,
+  attempt: MockAttemptRow,
+): boolean {
+  return !allAttempts(db).some(
+    (other) =>
+      other.id !== attempt.id &&
+      other.playerId === attempt.playerId &&
+      other.status === "finished" &&
+      other.dailyNumber !== null,
+  );
+}
+
+/**
+ * What start() answers: the attempt, and whether the player has never
+ * finished a Daily (`firstDaily`), which the first-Daily hints read. The
+ * flag rides beside the snapshot's own fields until ARCHITECTURE §3.4
+ * names it, for SQL-4's start_daily to return as well.
+ */
+export type StartedSnapshot = AttemptSnapshot & { firstDaily: boolean };
 
 /**
  * After its date's global window closes, a ranked attempt converts in place
@@ -981,7 +1036,10 @@ export function createSealedArea(ctx: MockContext): SealedRunApi {
           const now = ctx.clock.now();
           convertIfClosed(attempt, now);
           withdrawIfVoided(ctx, db, attempt, now, { onlyIfOpen: true });
-          return ok(snapshotOf(db, attempt, now));
+          return ok<StartedSnapshot>({
+            ...snapshotOf(db, attempt, now),
+            firstDaily: isFirstDaily(db, attempt),
+          });
         },
         TABLES,
       );

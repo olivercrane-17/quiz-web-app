@@ -15,15 +15,13 @@ import {
 import { track } from "@/features/analytics/track";
 import { bootClient } from "@/features/identity";
 import { preloadAnswerLists } from "@/features/rounds/client";
+import { getAppVersion } from "@/lib/env";
 import { systemClock } from "@/platform/clock";
 import { uuidV4 } from "@/platform/identity/local";
 import { announce } from "@/ui/announce";
 
 import type { DailyControllerDeps, StartContext } from "./controller";
 import { scoreBand } from "./labels";
-
-/** Reported with every start until PLT-1 reads the build's commit as the app version. */
-export const APP_VERSION = "greybox";
 
 /** The device's IANA zone (PRD §4.4.1); the server falls back for an unknown one. */
 export function deviceZone(): TimeZone {
@@ -57,7 +55,8 @@ export function startContext(): StartContext {
       app: "none",
       platform: "other",
     },
-    appVersion: APP_VERSION,
+    // The build's commit on Vercel, `local` elsewhere (PLT-1's env-parse).
+    appVersion: getAppVersion(),
   };
 }
 

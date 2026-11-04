@@ -228,136 +228,177 @@ function wrongGuessFor(content: MysteryContent): EntityId {
   return other.id as EntityId;
 }
 
+/**
+ * Plays today's fixture Daily at `at` through the mock with the real
+ * plugins, Mysteries and Encores only, scanning every response the player
+ * could see before each round resolves (AC-DLY-03, AC-DLY-04): a wrong
+ * guess, Next clue to the options, then the answer's option; the Encore at
+ * twice its value. Returns what leaked, the rounds' content ids and the
+ * finish.
+ */
+async function playAndScan(at: number) {
+  const mock = setup(at);
+  const started = await mock.sealed.start({ kind: "today" }, START);
+  if (!started.ok) throw new Error(started.error.code);
+  const { attemptId } = started.value;
+  const problems: string[] = [];
+  // The start is round 0's begin, so its scan starts at the first response.
+  let from = 0;
+
+  for (let index = 0; index < started.value.rounds.length; index += 1) {
+    if (index > 0) {
+      from = mock.controls.responses().length;
+      await mock.sealed.beginRound(attemptId, index);
+    }
+    const content = await contentOf(mock, attemptId, index);
+    if (content.kind === "mystery") {
+      const scan = (label: string, issued: number, options: boolean) => {
+        for (const problem of mysteryLeaks(
+          since(mock, from),
+          content,
+          issued,
+          options,
+        )) {
+          problems.push(`Mystery ${index + 1}, ${label}: ${problem}`);
+        }
+      };
+      scan("clue 1", 1, false);
+      const guessed = await actOn(mock, attemptId, index, 1, {
+        family: "mystery",
+        kind: "guess",
+        entityId: wrongGuessFor(content),
+      });
+      expect(guessed).toMatchObject({
+        ok: true,
+        value: { verdict: { kind: "continue" } },
+      });
+      // A stale call answers with the attempt's snapshot.
+      expect(
+        await actOn(mock, attemptId, index, 1, {
+          family: "mystery",
+          kind: "next_clue",
+        }),
+      ).toMatchObject({ ok: false, error: { code: "stale" } });
+      await mock.sealed.get(attemptId);
+      scan("after a wrong guess", 2, false);
+
+      let clue = 2;
+      for (;;) {
+        const snapshot = await mock.sealed.get(attemptId);
+        const open = snapshot.ok ? snapshot.value.current?.open : null;
+        if (open?.family !== "mystery") throw new Error("not a Mystery");
+        if (open.options !== null) {
+          scan(`with the options on clue ${open.clue}`, open.clue, true);
+          for (const option of open.options) {
+            expect(Object.keys(option).sort()).toEqual([
+              "alreadyGuessed",
+              "index",
+              "label",
+            ]);
+          }
+          const answer = ENTITIES.get(content.answer);
+          const pick = open.options.find(
+            (option) =>
+              answer !== undefined && hasName(option.label, answer.display),
+          );
+          if (pick === undefined) throw new Error("the answer isn't an option");
+          const picked = await actOn(mock, attemptId, index, open.clue, {
+            family: "mystery",
+            kind: "pick",
+            option: pick.index,
+          });
+          expect(picked).toMatchObject({
+            ok: true,
+            value: { verdict: { kind: "resolved" } },
+          });
+          break;
+        }
+        const next = await actOn(mock, attemptId, index, clue, {
+          family: "mystery",
+          kind: "next_clue",
+        });
+        expect(next).toMatchObject({ ok: true });
+        clue += 1;
+        // The options name the answer among three others once issued.
+        const issued =
+          next.ok && next.value.verdict.kind === "continue"
+            ? next.value.verdict.open
+            : null;
+        scan(
+          `on clue ${clue}`,
+          clue,
+          issued?.family === "mystery" && issued.options !== null,
+        );
+      }
+    } else if (content.kind === "encore") {
+      const encore: EncoreContent = content;
+      await mock.sealed.get(attemptId);
+      const payloads = since(mock, from);
+      const json = JSON.stringify(payloads);
+      for (const { path, value } of numbers(payloads)) {
+        if (value === encore.answer) {
+          problems.push(`Encore: the answer ${value} at ${path}`);
+        }
+      }
+      for (const { path, text } of strings(payloads)) {
+        if (hasNumber(text, encore.answer)) {
+          problems.push(`Encore: the answer in "${text}" at ${path}`);
+        }
+      }
+      if (json.includes(encore.id)) problems.push("Encore: its content id");
+      if (json.includes(encore.explanation)) {
+        problems.push("Encore: the explanation");
+      }
+      const locked = await actOn(mock, attemptId, index, 1, {
+        family: "encore",
+        kind: "lock_in",
+        value: Math.max(1, Math.round(encore.answer * 2)),
+      });
+      expect(locked).toMatchObject({
+        ok: true,
+        value: { verdict: { kind: "resolved" } },
+      });
+    } else {
+      throw new Error(`playAndScan plays no ${content.kind} rounds`);
+    }
+  }
+  const contentIds: string[] = [];
+  for (let index = 0; index < started.value.rounds.length; index += 1) {
+    contentIds.push((await contentOf(mock, attemptId, index)).id);
+  }
+  return {
+    problems,
+    contentIds,
+    finished: await mock.sealed.finish(attemptId),
+  };
+}
+
 describe("sealed secrecy with the real plugins", () => {
   it("AC-DLY-03 AC-DLY-04 Daily #42 (three Mysteries and an Encore): no key before each round resolves", async () => {
-    const mock = setup(Date.UTC(2026, 10, 1, 9));
-    const started = await mock.sealed.start({ kind: "today" }, START);
-    if (!started.ok) throw new Error(started.error.code);
-    const { attemptId } = started.value;
-    const problems: string[] = [];
-    // The start is round 0's begin, so its scan starts at the first response.
-    let from = 0;
+    const played = await playAndScan(Date.UTC(2026, 10, 1, 9));
+    expect(played.contentIds).toEqual([
+      "fx.m.hist.0101",
+      "fx.m.geo.0102",
+      "fx.m.sci.0102",
+      "fx.e.0103",
+    ]);
+    expect(played.problems).toEqual([]);
+    expect(played.finished).toMatchObject({
+      ok: true,
+      value: { maxPoints: 12 },
+    });
+  });
 
-    for (let index = 0; index < started.value.rounds.length; index += 1) {
-      if (index > 0) {
-        from = mock.controls.responses().length;
-        await mock.sealed.beginRound(attemptId, index);
-      }
-      const content = await contentOf(mock, attemptId, index);
-      if (content.kind === "mystery") {
-        const scan = (label: string, issued: number, options: boolean) => {
-          for (const problem of mysteryLeaks(
-            since(mock, from),
-            content,
-            issued,
-            options,
-          )) {
-            problems.push(`Mystery ${index + 1}, ${label}: ${problem}`);
-          }
-        };
-        scan("clue 1", 1, false);
-        const guessed = await actOn(mock, attemptId, index, 1, {
-          family: "mystery",
-          kind: "guess",
-          entityId: wrongGuessFor(content),
-        });
-        expect(guessed).toMatchObject({
-          ok: true,
-          value: { verdict: { kind: "continue" } },
-        });
-        // A stale call answers with the attempt's snapshot.
-        expect(
-          await actOn(mock, attemptId, index, 1, {
-            family: "mystery",
-            kind: "next_clue",
-          }),
-        ).toMatchObject({ ok: false, error: { code: "stale" } });
-        await mock.sealed.get(attemptId);
-        scan("after a wrong guess", 2, false);
-
-        let clue = 2;
-        for (;;) {
-          const snapshot = await mock.sealed.get(attemptId);
-          const open = snapshot.ok ? snapshot.value.current?.open : null;
-          if (open?.family !== "mystery") throw new Error("not a Mystery");
-          if (open.options !== null) {
-            scan(`with the options on clue ${open.clue}`, open.clue, true);
-            for (const option of open.options) {
-              expect(Object.keys(option).sort()).toEqual([
-                "alreadyGuessed",
-                "index",
-                "label",
-              ]);
-            }
-            const answer = ENTITIES.get(content.answer);
-            const pick = open.options.find(
-              (option) =>
-                answer !== undefined && hasName(option.label, answer.display),
-            );
-            if (pick === undefined)
-              throw new Error("the answer isn't an option");
-            const picked = await actOn(mock, attemptId, index, open.clue, {
-              family: "mystery",
-              kind: "pick",
-              option: pick.index,
-            });
-            expect(picked).toMatchObject({
-              ok: true,
-              value: { verdict: { kind: "resolved" } },
-            });
-            break;
-          }
-          const next = await actOn(mock, attemptId, index, clue, {
-            family: "mystery",
-            kind: "next_clue",
-          });
-          expect(next).toMatchObject({ ok: true });
-          clue += 1;
-          // The options name the answer among three others once issued.
-          const issued =
-            next.ok && next.value.verdict.kind === "continue"
-              ? next.value.verdict.open
-              : null;
-          scan(
-            `on clue ${clue}`,
-            clue,
-            issued?.family === "mystery" && issued.options !== null,
-          );
-        }
-      } else if (content.kind === "encore") {
-        const encore: EncoreContent = content;
-        await mock.sealed.get(attemptId);
-        const payloads = since(mock, from);
-        const json = JSON.stringify(payloads);
-        for (const { path, value } of numbers(payloads)) {
-          if (value === encore.answer) {
-            problems.push(`Encore: the answer ${value} at ${path}`);
-          }
-        }
-        for (const { path, text } of strings(payloads)) {
-          if (hasNumber(text, encore.answer)) {
-            problems.push(`Encore: the answer in "${text}" at ${path}`);
-          }
-        }
-        if (json.includes(encore.id)) problems.push("Encore: its content id");
-        if (json.includes(encore.explanation)) {
-          problems.push("Encore: the explanation");
-        }
-        const locked = await actOn(mock, attemptId, index, 1, {
-          family: "encore",
-          kind: "lock_in",
-          value: Math.max(1, Math.round(encore.answer * 2)),
-        });
-        expect(locked).toMatchObject({
-          ok: true,
-          value: { verdict: { kind: "resolved" } },
-        });
-      } else {
-        throw new Error(`Daily #42 has no ${content.kind} rounds`);
-      }
-    }
-    expect(problems).toEqual([]);
-    expect(await mock.sealed.finish(attemptId)).toMatchObject({
+  it("AC-DLY-03 AC-DLY-04 Daily #43 (The Lantern Keeper, cobalt, Arvenna and an Encore, as R1-30 rewrote them): no key before each round resolves", async () => {
+    const played = await playAndScan(Date.UTC(2026, 10, 2, 9));
+    expect(played.contentIds).toEqual([
+      "fx.m.film.0101",
+      "fx.m.sci.0101",
+      "fx.m.geo.0101",
+      "fx.e.0101",
+    ]);
+    expect(played.problems).toEqual([]);
+    expect(played.finished).toMatchObject({
       ok: true,
       value: { maxPoints: 12 },
     });

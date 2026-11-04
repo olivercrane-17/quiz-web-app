@@ -75,8 +75,14 @@ export interface AttemptSnapshot {
   rounds: RoundMeta[];
   maxPoints: number;
   resolved: ResolvedRound[];
-  /** open null: Continue not tapped yet. */
-  current: { index: number; open: RoundOpen | null } | null;
+  /**
+   * open null: Continue not tapped yet. activeMs: the open round's server
+   * interval so far, from its first clue, stem or question to serverTime,
+   * capped at 15 minutes and to the whole second (PRD §4.1.4), so the
+   * stopwatch picks up where it was after a reload; left out by a backend
+   * that doesn't report it.
+   */
+  current: { index: number; open: RoundOpen | null; activeMs?: number } | null;
   status: "active" | "finished" | "abandoned";
   points: number;
   startedAt: EpochMs;

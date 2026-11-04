@@ -232,4 +232,11 @@ export interface ResolvedRound {
   meta: RoundMeta;
   outcome: RoundOutcome;
   reveal: RoundReveal;
+  /**
+   * The round's server interval (PRD §4.1.4) with the latency allowance
+   * applied and the 15-minute cap (§4.3.2, §4.3.3), to the whole second:
+   * what the stopwatch counts for the round after a reload. A backend
+   * that doesn't report it leaves it out, and the round then counts 0.
+   */
+  activeMs?: number;
 }

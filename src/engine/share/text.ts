@@ -3,20 +3,23 @@
  * text first and the link last, no answers, no clue text, no percentile,
  * streak or time.
  *
- *   Knewt Daily #42 · 9/12 · Encore 4% off 🎯
+ *   Knewt Daily #42 · 9/12 · Encore off by 4% 🎯
  *   Geography ✅⬜⬜⬜
- *   Film & TV 🟥✅⬜⬜
- *   Science & Tech 🟥🟥✅⬜
+ *   Film & TV 🟧✅⬜⬜
+ *   Science & Tech 🟧🟧✅⬜
  *   https://knewt.app/daily
  *
  * - Line 1: the brand, "Daily #N" (" (archive)" after it for archive plays),
- *   the score out of the Daily's maximum, and the Encore token ("Encore 4%
- *   off", "Encore spot on", "Encore 3 years off") with the bullseye glyph
- *   inside the bullseye band. A Daily with no Encore, or a voided one, has
- *   no token. No-break spaces sit inside "Daily #42" and the Encore token,
- *   so a narrow chat bubble breaks between tokens, never inside one.
+ *   the score out of the Daily's maximum, and the Encore token ("Encore off
+ *   by 4%", "Encore off by 3 years", "Encore spot on": decision D4, which
+ *   keeps the in-app "4% off") with the bullseye glyph inside the bullseye
+ *   band. A Daily with no Encore, or a voided one, has no token. No-break
+ *   spaces sit inside "Daily #42" and the Encore token, so a narrow chat
+ *   bubble breaks between tokens, never inside one.
  * - One row per Mystery: the category's short name, a space, then four
- *   glyphs; a voided Mystery reads "History · voided", in words only.
+ *   glyphs; a voided Mystery reads "History · voided", in words only. A
+ *   wrong guess and Next clue cost the same, so both are one *passed* cell
+ *   (decision D3), which the glyph sets draw as a used clue, never red.
  * - Consecutive choice rounds collapse into one row, one glyph per question
  *   (`[mc ×9, encore]` shares one row of nine, AC-DLY-09).
  * - The link is the last line, path-only on our origin. Until ENG-2's share
@@ -92,8 +95,16 @@ const NBSP = " ";
 
 const keepTogether = (text: string) => text.replace(/ /g, NBSP);
 
-/** "4% off", "spot on", "3 years off": the error's display as the token reads it. */
-function tokenWords(display: string): string {
+const OFF = / off$/;
+
+/**
+ * The error's display as the share token reads it (decision D4): "4% off"
+ * becomes "off by 4%", "under 1% off" "off by under 1%", "3 years off"
+ * "off by 3 years", so line 1 never reads like a sale; "Spot on" becomes
+ * "spot on". The in-app result keeps the display as it is.
+ */
+export function shareErrorWords(display: string): string {
+  if (OFF.test(display)) return `off by ${display.replace(OFF, "")}`;
   return display.length === 0
     ? display
     : `${display.charAt(0).toLowerCase()}${display.slice(1)}`;
@@ -111,8 +122,33 @@ export function encoreToken(
   if (encore === undefined || encore.voided || encore.error === null) {
     return null;
   }
-  const token = keepTogether(`Encore ${tokenWords(encore.error.display)}`);
+  const token = keepTogether(`Encore ${shareErrorWords(encore.error.display)}`);
   return encore.band === "bullseye" ? `${token} ${glyphs.bullseye}` : token;
+}
+
+/** The words of the grid's legend, one per Mystery cell. */
+export interface ShareLegendWords {
+  passed: string;
+  solved: string;
+  unused: string;
+}
+
+/**
+ * The one-line legend under the stop screen's grid (decision D3), in the
+ * player's glyph set: "🟧 clue used · ✅ solved · ⬜ not needed". Null for
+ * a grid with no Mystery row it could explain (a choice-only Daily, or
+ * Mysteries that were all withdrawn, whose rows are in words).
+ */
+export function shareLegend(
+  rows: readonly ShareRow[],
+  glyphs: ShareGlyphs,
+  words: ShareLegendWords,
+): string | null {
+  const explains = rows.some((row) => row.kind === "mystery" && !row.voided);
+  if (!explains) return null;
+  return (["passed", "solved", "unused"] as const)
+    .map((cell) => `${glyphs.cells[cell]} ${words[cell]}`)
+    .join(" · ");
 }
 
 export interface DailyShareInput {
@@ -130,7 +166,7 @@ export interface DailyShareInput {
   link: string;
 }
 
-/** Line 1: "Knewt Daily #42 · 9/12 · Encore 4% off 🎯". */
+/** Line 1: "Knewt Daily #42 · 9/12 · Encore off by 4% 🎯". */
 export function shareHeadline(input: DailyShareInput): string {
   const daily = keepTogether(`Daily #${input.dailyNumber}`);
   const parts = [

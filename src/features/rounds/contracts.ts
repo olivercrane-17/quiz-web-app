@@ -105,6 +105,8 @@ export interface RoundComponentProps {
     /** For RevealActions (hearts, reports): 'p.geo.0142', 'daily:42:2'. */
     itemRef: string;
     settings: PlaySettings;
+    /** The player has never finished a Daily (PRD 3.1.4 first-Daily hints). */
+    firstDaily?: boolean;
   };
 }
 

@@ -8,7 +8,7 @@
   "reviewBy": null,
   "seededDifficulty": 4,
   "counterintuitive": false,
-  "explanation": "Bismuth expands as it sets, which fills every corner of a type mould, and its crystals grow in rainbow-tinted steps.",
+  "explanation": "Bismuth-209 decays so slowly that it passed for stable until 2003. Like water it expands as it freezes, and its crystals grow in rainbow-tinted steps.",
   "learnMore": "Bismuth",
   "claims": [
     {
@@ -21,8 +21,9 @@
       "id": "c2",
       "role": "clue",
       "ref": "clue:1",
-      "risk": "standard",
-      "text": "The printers of fixture Gorlund mixed it into their type metal to keep the letters sharp."
+      "risk": "high",
+      "riskReason": "superlative",
+      "text": "Long counted the heaviest stable element, it was found in 2003 to decay, with a half-life over a billion times the age of the universe."
     },
     {
       "id": "c3",
@@ -55,16 +56,16 @@
       "id": "c7",
       "role": "explanation",
       "risk": "standard",
-      "text": "Bismuth expands as it sets, which fills every corner of a type mould, and its crystals grow in rainbow-tinted steps."
+      "text": "Bismuth-209 decays so slowly that it passed for stable until 2003. Like water it expands as it freezes, and its crystals grow in rainbow-tinted steps."
     }
   ],
-  "writerNotes": "Invented fixture for tests, the mock backend and the e2e track (ARCHITECTURE 5.6). Not a real fact; never scheduled on the main track.",
+  "writerNotes": "Invented fixture for tests, the mock backend and the e2e track (ARCHITECTURE 5.6). Not a real fact; never scheduled on the main track. Real chemistry (R1-30): clue 1 alone points to bismuth, so clues 1 and 2 together no longer fit antimony, which also expands as it freezes. Bismuth-209's half-life is about 2 x 10^19 years, some 1.4 billion times the universe's 13.8 billion; the decay was reported in Nature in 2003.",
   "kind": "mystery",
   "answerType": "element",
   "answer": "fx.x.element.bismuth",
   "accepted": [],
   "clues": [
-    "The printers of fixture Gorlund mixed it into their type metal to keep the letters sharp.",
+    "Long counted the heaviest stable element, it was found in 2003 to decay, with a half-life over a billion times the age of the universe.",
     "Like water, it expands as it freezes.",
     "Its crystals grow in stepped squares with a rainbow sheen.",
     "This element's symbol is Bi, and its atomic number is 83."
@@ -81,27 +82,33 @@
     "fx.x.element.lead",
     "fx.x.element.tin",
     "fx.x.element.gallium",
+    "fx.x.element.polonium",
     "fx.x.element.mercury",
+    "fx.x.element.thallium",
     "fx.x.element.zinc"
   ],
   "rivals": [
     {
       "id": "fx.x.element.antimony",
-      "ruledOutBy": [3]
+      "ruledOutBy": [1, 3]
+    },
+    {
+      "id": "fx.x.element.gallium",
+      "ruledOutBy": [1, 3]
     },
     {
       "id": "fx.x.element.lead",
-      "ruledOutBy": [2, 3]
+      "ruledOutBy": [1, 2, 3]
     },
     {
-      "id": "fx.x.element.tin",
-      "ruledOutBy": [2, 3]
+      "id": "fx.x.element.polonium",
+      "ruledOutBy": [1, 3]
     }
   ],
   "giveawayTerms": [],
-  "seedSolveShares": [0.12, 0.35, 0.62, 0.9],
+  "seedSolveShares": [0.12, 0.38, 0.66, 0.9],
   "predicted": {
-    "solveByClue": [0.12, 0.35, 0.62, 0.9],
+    "solveByClue": [0.12, 0.38, 0.66, 0.9],
     "spread": 0.2,
     "estimator": "fixture"
   }

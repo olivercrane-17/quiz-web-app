@@ -8,7 +8,7 @@
   "reviewBy": null,
   "seededDifficulty": 4,
   "counterintuitive": false,
-  "explanation": "Every clue points at the river kingdom ruled from Cindral, where lamps float downstream each new year.",
+  "explanation": "Swap the R and A of the raven on its banners and you get Arven, as in the Arven Republic, which elects a president. Its name starts and ends with A.",
   "learnMore": "Arvenna (fixture)",
   "claims": [
     {
@@ -22,28 +22,28 @@
       "role": "clue",
       "ref": "clue:1",
       "risk": "standard",
-      "text": "Its banners show a silver heron flying over three blue waves."
+      "text": "Swap the two letters at the front of the black bird on its banners, and you have the start of its name."
     },
     {
       "id": "c3",
       "role": "clue",
       "ref": "clue:2",
       "risk": "standard",
-      "text": "Its calendar has thirteen months of 28 days each."
+      "text": "Unlike the kingdoms around it, it elects a president."
     },
     {
       "id": "c4",
       "role": "clue",
       "ref": "clue:3",
       "risk": "standard",
-      "text": "Its people greet each new year by floating lamps down every river."
+      "text": "Its name begins and ends with the letter A."
     },
     {
       "id": "c5",
       "role": "clue",
       "ref": "clue:4",
       "risk": "standard",
-      "text": "This fixture country rules the river city of Cindral from a palace on an island."
+      "text": "This fixture country's name starts with A and has a double N in the middle."
     },
     {
       "id": "c6",
@@ -55,19 +55,19 @@
       "id": "c7",
       "role": "explanation",
       "risk": "standard",
-      "text": "Every clue points at the river kingdom ruled from Cindral, where lamps float downstream each new year."
+      "text": "Swap the R and A of the raven on its banners and you get Arven, as in the Arven Republic, which elects a president. Its name starts and ends with A."
     }
   ],
-  "writerNotes": "Invented fixture for tests, the mock backend and the e2e track (ARCHITECTURE 5.6). Not a real fact; never scheduled on the main track.",
+  "writerNotes": "Invented fixture for tests, the mock backend and the e2e track (ARCHITECTURE 5.6). Not a real fact; never scheduled on the main track. Every country in the list is invented, so no player can know a fact about one: this ladder is solved by deduction from the list itself (R1-30). Clue 1 is wordplay (raven, swapped, begins Arven), clue 2 sends a player searching for republic, which finds Arvenna and Évrenne, and clue 3 keeps the one that starts and ends with A.",
   "kind": "mystery",
   "answerType": "country",
   "answer": "fx.x.country.arvenna",
   "accepted": [],
   "clues": [
-    "Its banners show a silver heron flying over three blue waves.",
-    "Its calendar has thirteen months of 28 days each.",
-    "Its people greet each new year by floating lamps down every river.",
-    "This fixture country rules the river city of Cindral from a palace on an island."
+    "Swap the two letters at the front of the black bird on its banners, and you have the start of its name.",
+    "Unlike the kingdoms around it, it elects a president.",
+    "Its name begins and ends with the letter A.",
+    "This fixture country's name starts with A and has a double N in the middle."
   ],
   "distractors": [
     "fx.x.country.belloria",
@@ -77,31 +77,37 @@
   "slot": 3,
   "sourceLabels": [],
   "likelyGuesses": [
+    "fx.x.country.evrenne",
+    "fx.x.country.araeria",
+    "fx.x.country.arimar",
+    "fx.x.country.araemont",
+    "fx.x.country.arumont",
     "fx.x.country.belloria",
     "fx.x.country.cassova",
-    "fx.x.country.dravenor",
-    "fx.x.country.elmaris",
-    "fx.x.country.fendara",
-    "fx.x.country.gavrenne"
+    "fx.x.country.dravenor"
   ],
   "rivals": [
     {
-      "id": "fx.x.country.belloria",
+      "id": "fx.x.country.evrenne",
+      "ruledOutBy": [1, 3]
+    },
+    {
+      "id": "fx.x.country.araeria",
       "ruledOutBy": [1, 2]
     },
     {
-      "id": "fx.x.country.cassova",
-      "ruledOutBy": [2, 3]
+      "id": "fx.x.country.arimar",
+      "ruledOutBy": [1, 2, 3]
     },
     {
-      "id": "fx.x.country.elmaris",
-      "ruledOutBy": [1, 3]
+      "id": "fx.x.country.belloria",
+      "ruledOutBy": [1, 2, 3]
     }
   ],
-  "giveawayTerms": ["Arvennan"],
-  "seedSolveShares": [0.15, 0.4, 0.65, 0.9],
+  "giveawayTerms": ["Arvennan", "raven"],
+  "seedSolveShares": [0.15, 0.4, 0.68, 0.92],
   "predicted": {
-    "solveByClue": [0.15, 0.4, 0.65, 0.9],
+    "solveByClue": [0.15, 0.4, 0.68, 0.92],
     "spread": 0.2,
     "estimator": "fixture"
   }

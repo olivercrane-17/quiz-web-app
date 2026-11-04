@@ -19,6 +19,17 @@ export const DAILY_SCREEN_COPY = {
     choice: "Loading the next question",
   },
   stopwatch: "Time so far",
+  /** Beside the stopwatch, in the player's first Daily only (PRD §3.1.3, DESIGN §1.4). */
+  stopwatchHint: "Take your time. Time only breaks ties.",
+  /** The toast on Leave (DESIGN §6.9), which the X's name already says. */
+  saved: "Saved",
+  /** The focus-mode header's overflow menu (DESIGN §6.13, PRD §3.1.3). */
+  more: {
+    label: "More",
+    howToPlay: "How to play",
+    hideStopwatch: "Hide stopwatch",
+    showStopwatch: "Show stopwatch",
+  },
   roundLabel: {
     mystery: (ordinal: number, ofType: number) =>
       ofType > 1 ? `Mystery ${ordinal} of ${ofType}` : "Mystery",
@@ -41,6 +52,23 @@ export const DAILY_SCREEN_COPY = {
     playing: "playing now",
     upcoming: "not started",
     solvedOn: (clue: number) => `solved on clue ${clue}`,
+    /** After "solved on clue 3" (decision D11): "2 points". */
+    points: (points: number) =>
+      `${points} ${points === 1 ? "point" : "points"}`,
+    /** A solved pill's mark, on the correct fill (decision D11): "+2". */
+    gained: (points: number) => `+${points}`,
+    /**
+     * A Mystery pill's mark ("M1"), and the header's words for the finished
+     * rounds when the pills don't fit (R1-03): what each pill shows, "M1
+     * +3", "M2 ✕" or "M3 –", and the questions right so far. For the eye
+     * only: screen readers hear the pills' own labels.
+     */
+    marks: {
+      mystery: (ordinal: number) => `M${ordinal}`,
+      missed: "✕",
+      withdrawn: "–",
+      right: (right: number, asked: number) => `${right} of ${asked} right`,
+    },
     missed: "missed",
     lockedIn: "locked in",
     right: "right",
@@ -147,11 +175,21 @@ export const STOP_SCREEN_COPY = {
     `${points} out of ${maxPoints}`,
   shareHeading: "Your share text",
   shareNote: "No answers inside.",
+  /** Under the score card's grid (decision D3), after each glyph. */
+  legend: {
+    passed: "clue used",
+    solved: "solved",
+    unused: "not needed",
+  },
+  /** The score card's total time (decision D7): never in the share text. */
+  time: (clock: string) => `Time ${clock} · only breaks ties`,
   roundsHeading: "Your rounds",
   mysteryRow: (ordinal: number, category: string) =>
     `Mystery ${ordinal} · ${category}`,
   choiceRow: (ordinal: number) => `Question ${ordinal}`,
   encoreRow: "Encore",
+  /** The Encore row's purpose for a solo player (decision D2, R1-07). */
+  encoreNote: "Breaks ties. Scores no points.",
   solved: (clue: number, points: number) =>
     `Solved on clue ${clue} · ${points} ${points === 1 ? "point" : "points"}`,
   missed: "Missed · 0 points",

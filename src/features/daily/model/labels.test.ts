@@ -1,17 +1,26 @@
 import { describe, expect, it } from "vitest";
 
-import { createRun, reduceRun } from "@/engine/run";
+import { createRun, reduceRun, type RunState } from "@/engine/run";
 import { config, metas, roundMeta } from "@/engine/run/testing";
 import { createEchoRegistry } from "@/engine/rounds/testing/echo";
-import type { RoundMeta } from "@/engine/types";
+import {
+  parseAttemptId,
+  type AttemptSnapshot,
+  type RoundMeta,
+  type RoundOpen,
+  type RoundReveal,
+} from "@/engine/types";
 
+import { timeOffsetOf } from "./controller";
 import {
   announcementText,
   answerTypeLine,
   continueLabel,
   elapsedMs,
   formatStopwatch,
+  openRoundNumber,
   progressSegments,
+  progressText,
   progressVariant,
   roundLabel,
   scoreBand,
@@ -24,6 +33,72 @@ const daily = (): RoundMeta[] =>
     { ...roundMeta(2, "mystery"), ordinal: 3, ofType: 3, difficulty: "hard" },
     roundMeta(3, "encore"),
   ] as RoundMeta[];
+
+const plugins = createEchoRegistry();
+const KEY = "00000000-0000-4000-8000-000000000001" as never;
+
+function mysteryOpen(index: number, issuedAt: number): RoundOpen {
+  return {
+    family: "mystery",
+    index,
+    clue: 1,
+    clues: ["Echo clue 1"],
+    wrongGuesses: [],
+    options: null,
+    issuedAt,
+  };
+}
+
+function mysteryReveal(solvedOn: 1 | 2 | 3 | 4 | null): RoundReveal {
+  return {
+    family: "mystery",
+    answer: { entityId: "fx.x.country.echo" as never, display: "Echo" },
+    clues: ["1", "2", "3", "4"],
+    solvedOn,
+    points: solvedOn === null ? 0 : 5 - solvedOn,
+    pickedOption: null,
+    explanation: "",
+    learnMore: "",
+    sourceLabels: [],
+    crowd: null,
+  };
+}
+
+/** The four-round Daily with round `index` opened at `at`. */
+function opened(state: RunState, index: number, at: number): RunState {
+  return reduceRun(
+    state,
+    { type: "opened", at, index, open: mysteryOpen(index, at) },
+    plugins,
+  ).state;
+}
+
+/** Resolves the open round at `at` with the reveal given. */
+function resolved(state: RunState, at: number, reveal: RoundReveal): RunState {
+  const asked = reduceRun(
+    state,
+    {
+      type: "intent",
+      at,
+      key: KEY,
+      intent: { family: "mystery", kind: "next_clue" },
+    },
+    plugins,
+  ).state;
+  return reduceRun(
+    asked,
+    {
+      type: "verdict",
+      at,
+      key: KEY,
+      verdict: { kind: "resolved", next: null, reveal },
+    },
+    plugins,
+  ).state;
+}
+
+const fresh = () =>
+  createRun(config(daily(), { mode: "daily", sealed: true }), 0).state;
 
 describe("round labels", () => {
   it("name the round by type, place and difficulty (PRD §3.1.4)", () => {
@@ -133,8 +208,8 @@ describe("Continue labels and progress pills", () => {
     expect(progressSegments(state)[0]).toEqual({
       status: "correct",
       current: true,
-      label: "Mystery 1, solved on clue 2",
-      mark: "3",
+      label: "Mystery 1, solved on clue 2, 3 points",
+      mark: "+3",
     });
 
     // At the last Mystery's reveal, Continue goes to the Encore; at the Encore's, to the results.
@@ -163,7 +238,266 @@ describe("Continue labels and progress pills", () => {
   });
 });
 
+describe("the header pills after decision D11", () => {
+  it("R1-08 shows '+2' on a Mystery solved on clue 3, and names the 2 points for screen readers", () => {
+    const state = resolved(opened(fresh(), 0, 0), 5_000, mysteryReveal(3));
+    const [pill] = progressSegments(state);
+    expect(pill).toMatchObject({ status: "correct", mark: "+2" });
+    expect(pill?.label).toBe("Mystery 1, solved on clue 3, 2 points");
+    expect(pill?.label).toContain("2 points");
+  });
+
+  it("R1-08 shows the X for a missed Mystery and says it was missed, with no number to misread", () => {
+    const state = resolved(opened(fresh(), 0, 0), 5_000, mysteryReveal(null));
+    const [pill] = progressSegments(state);
+    expect(pill).toEqual({
+      status: "wrong",
+      current: true,
+      label: "Mystery 1, missed",
+    });
+  });
+
+  it("R1-08 names a clue-4 solve's single point", () => {
+    const state = resolved(opened(fresh(), 0, 0), 5_000, mysteryReveal(4));
+    expect(progressSegments(state)[0]).toMatchObject({
+      mark: "+1",
+      label: "Mystery 1, solved on clue 4, 1 point",
+    });
+  });
+});
+
+describe("the header's words when the pills don't fit (R1-03)", () => {
+  it("R1-03 says where the run stands in words: the Mystery of three, the Encore, a question of nine", () => {
+    expect(progressText(opened(fresh(), 0, 0))).toBe("Mystery 1 of 3");
+    expect(progressText({ ...fresh(), index: 3 })).toBe("Encore");
+    const nine = createRun(
+      config(
+        metas(
+          "mc",
+          "mc",
+          "mc",
+          "mc",
+          "mc",
+          "mc",
+          "mc",
+          "mc",
+          "mc",
+          "encore",
+        ).map((meta, index) =>
+          index < 9 ? { ...meta, ordinal: index + 1, ofType: 9 } : meta,
+        ),
+        { sealed: true },
+      ),
+      0,
+    ).state;
+    expect(progressText({ ...nine, index: 3 })).toBe("Question 4 of 9");
+    expect(progressText({ ...fresh(), index: 9 })).toBe("Daily progress");
+  });
+
+  it("R1-03 keeps each finished Mystery's mark in the words, as its pill shows it", () => {
+    const m1 = resolved(opened(fresh(), 0, 0), 5_000, mysteryReveal(2));
+    // The reveal still open: Mystery 1's own mark shows at once.
+    expect(progressText(m1)).toBe("Mystery 1 of 3 · M1 +3");
+    const m2 = opened({ ...m1, index: 1, phase: "opening" }, 1, 6_000);
+    expect(progressText(m2)).toBe("Mystery 2 of 3 · M1 +3");
+    const missed = resolved(m2, 9_000, mysteryReveal(null));
+    const m3 = resolved(
+      opened({ ...missed, index: 2, phase: "opening" }, 2, 10_000),
+      12_000,
+      mysteryReveal(4),
+    );
+    expect(progressText({ ...m3, index: 3, phase: "opening" })).toBe(
+      "Encore · M1 +3 · M2 ✕ · M3 +1",
+    );
+    // A withdrawn Mystery shows the pill's dash, never its 4 points.
+    const slots = m2.slots.map((slot, index) =>
+      index === 0 && slot.outcome?.family === "mystery"
+        ? { ...slot, outcome: { ...slot.outcome, voided: true, points: 4 } }
+        : slot,
+    );
+    expect(progressText({ ...m2, slots })).toBe("Mystery 2 of 3 · M1 –");
+  });
+
+  it("R1-03 counts the questions right so far, in round order, for compositions with choice rounds", () => {
+    const answered = (correct: boolean, voided = false) => ({
+      family: "choice" as const,
+      correct,
+      points: correct ? 1 : 0,
+      voided,
+      answerMs: null,
+      cells: [],
+    });
+    const mixed = createRun(
+      config(
+        metas("mc", "mc", "mc", "mc", "mc", "mystery", "encore").map(
+          (meta, index) =>
+            index < 5
+              ? { ...meta, ordinal: index + 1, ofType: 5 }
+              : index === 5
+                ? { ...meta, ordinal: 1, ofType: 1 }
+                : meta,
+        ),
+        { sealed: true },
+      ),
+      0,
+    ).state;
+    const results = [true, true, false, true, true];
+    const upTo = (count: number) =>
+      mixed.slots.map((slot, index) =>
+        index < count ? { ...slot, outcome: answered(results[index]!) } : slot,
+      );
+    expect(progressText({ ...mixed, slots: upTo(3), index: 3 })).toBe(
+      "Question 4 of 5 · 2 of 3 right",
+    );
+    const done = upTo(5);
+    const solved = done.map((slot, index) =>
+      index === 5
+        ? {
+            ...slot,
+            outcome: {
+              family: "mystery" as const,
+              solvedOn: 3 as const,
+              points: 2,
+              voided: false,
+              category: "film" as never,
+              cells: [],
+            },
+          }
+        : slot,
+    );
+    expect(progressText({ ...mixed, slots: solved, index: 6 })).toBe(
+      "Encore · 4 of 5 right · M1 +2",
+    );
+    // A withdrawn question is out of the count, as it is out of play.
+    const withdrawn = done.map((slot, index) =>
+      index === 2 ? { ...slot, outcome: answered(false, true) } : slot,
+    );
+    expect(progressText({ ...mixed, slots: withdrawn, index: 5 })).toBe(
+      "Mystery · 4 of 4 right",
+    );
+  });
+
+  it("names the open round for how_to_play_open, and none once the run is over", () => {
+    expect(openRoundNumber(null)).toBe("none");
+    expect(openRoundNumber(opened(fresh(), 0, 0))).toBe(1);
+    expect(openRoundNumber({ ...fresh(), index: 2, phase: "revealed" })).toBe(
+      3,
+    );
+    expect(openRoundNumber({ ...fresh(), phase: "finished" })).toBe("none");
+  });
+});
+
 describe("the stopwatch", () => {
+  it("AC-DLY-12 shows the running total across rounds, still on a reveal and before the next clue arrives, at most 15 minutes a round", () => {
+    let state = opened(fresh(), 0, 10_000);
+    expect(elapsedMs(state, 70_000)).toBe(60_000);
+    state = resolved(state, 70_000, mysteryReveal(2));
+    // The reveal is open: reading never counts.
+    expect(elapsedMs(state, 130_000)).toBe(60_000);
+    state = reduceRun(state, { type: "continue", at: 130_000 }, plugins).state;
+    expect(state.phase).toBe("opening");
+    // Continue tapped, the next clue not here yet: still frozen.
+    expect(elapsedMs(state, 135_000)).toBe(60_000);
+    state = opened(state, 1, 136_000);
+    expect(elapsedMs(state, 166_000)).toBe(90_000);
+    // One round adds 15 minutes at most, however long it stays open.
+    expect(elapsedMs(state, 136_000 + 60 * 60_000)).toBe(60_000 + 15 * 60_000);
+  });
+
+  it("R1-06 resuming a snapshot whose Mystery 1 took 90 s and whose Mystery 2 had 30 s gives 2:00", () => {
+    const rounds = daily();
+    const attemptId = parseAttemptId("3f2b8c1e-9d4a-4e6f-8b2c-1a2b3c4d5e6f");
+    if (attemptId === null) throw new Error("setup");
+    const reveal = mysteryReveal(2);
+    const snapshot: AttemptSnapshot = {
+      attemptId,
+      kind: "daily",
+      ranked: true,
+      daily: null,
+      composition: "m3e1",
+      rounds,
+      maxPoints: 12,
+      resolved: [
+        {
+          meta: rounds[0]!,
+          outcome: {
+            family: "mystery",
+            solvedOn: 2,
+            points: 3,
+            voided: false,
+            category: "geo",
+            cells: ["passed", "solved", "unused", "unused"],
+          },
+          reveal,
+          activeMs: 90_000,
+        },
+      ],
+      current: {
+        index: 1,
+        // The open Mystery's clue was issued 30 s before serverTime.
+        open: mysteryOpen(1, 470_000),
+        activeMs: 30_000,
+      },
+      status: "active",
+      points: 3,
+      startedAt: 0,
+      serverTime: 500_000,
+    };
+    const at = 2_000_000;
+    const state = reduceRun(
+      fresh(),
+      { type: "resume", at, snapshot },
+      plugins,
+    ).state;
+    const offset = timeOffsetOf(snapshot);
+    expect(offset).toEqual({ index: 1, ms: 30_000 });
+    expect(elapsedMs(state, at, offset)).toBe(120_000);
+    expect(formatStopwatch(elapsedMs(state, at, offset))).toBe("2:00");
+    expect(elapsedMs(state, at + 5_000, offset)).toBe(125_000);
+
+    // Once that Mystery resolves, its time before the reload still counts.
+    const done = resolved(state, at + 10_000, mysteryReveal(3));
+    expect(done.slots[1]?.activeMs).toBe(10_000);
+    expect(elapsedMs(done, at + 60_000, offset)).toBe(130_000);
+  });
+
+  it("R1-06 falls back to the time since the open clue was issued when the backend reports no interval", () => {
+    const attemptId = parseAttemptId("3f2b8c1e-9d4a-4e6f-8b2c-1a2b3c4d5e6f");
+    if (attemptId === null) throw new Error("setup");
+    const base: AttemptSnapshot = {
+      attemptId,
+      kind: "daily",
+      ranked: true,
+      daily: null,
+      composition: "m3e1",
+      rounds: daily(),
+      maxPoints: 12,
+      resolved: [],
+      current: { index: 0, open: mysteryOpen(0, 470_000) },
+      status: "active",
+      points: 0,
+      startedAt: 0,
+      serverTime: 500_000,
+    };
+    expect(timeOffsetOf(base)).toEqual({ index: 0, ms: 30_000 });
+    expect(timeOffsetOf({ ...base, serverTime: 470_000 })).toBeNull();
+    expect(
+      timeOffsetOf({ ...base, current: { index: 1, open: null } }),
+    ).toBeNull();
+    expect(timeOffsetOf({ ...base, current: null })).toBeNull();
+  });
+
+  it("caps a round's time before the reload with the rest of it at 15 minutes", () => {
+    const state = opened(fresh(), 0, 0);
+    expect(elapsedMs(state, 10 * 60_000, { index: 0, ms: 10 * 60_000 })).toBe(
+      15 * 60_000,
+    );
+    // An offset for a round that isn't running still counts, capped.
+    expect(elapsedMs(fresh(), 0, { index: 2, ms: 20 * 60_000 })).toBe(
+      15 * 60_000,
+    );
+  });
+
   it("counts only open rounds, never a reveal or the time hidden, each capped at 15 minutes", () => {
     const plugins = createEchoRegistry();
     let state = createRun(config(daily(), { sealed: true }), 0).state;

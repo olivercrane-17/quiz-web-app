@@ -14,8 +14,9 @@
  * - `finished_today`: today's Daily finished by the device's identity:
  *   the Mysteries solved on clues 1, 2 and 3 in turn (one wrong guess before
  *   the second, Next clue before the third), choice rounds right, and the
- *   Encore 4% off (or 3 years off). On a three-Mystery Daily that is
- *   "9/12 · Encore 4% off" (PRD §3.5.1's example).
+ *   Encore 4% off (or 3 years off). On a three-Mystery Daily that shares
+ *   as "9/12 · Encore off by 4%" (PRD §3.5.1's example, in decision D4's
+ *   words).
  * - `in_progress_mystery_2`: Mystery 1 solved on clue 2 after a wrong
  *   guess, and Mystery 2 open on clue 2 with one wrong guess (AC-DLY-07).
  *
