@@ -16,6 +16,7 @@ import {
 } from "./__fixtures__/builders.ts";
 import type { Bank } from "./bank.ts";
 import {
+  barredCheckers,
   checkRecord,
   mergeRecord,
   recordFileErrors,
@@ -323,6 +324,35 @@ describe("content:record validation", () => {
       checkRecord(barred, batch, "B", itemOf(barred, "fx.p.geo.0101"), entry)
         .errors,
     ).toEqual([expect.stringContaining("fabricated-source incident")]);
+  });
+
+  it("refuses the checker an invalid_check incident barred, and says which incident", async () => {
+    const bank = await loadFx();
+    const batch = requireBatch(bank, "p.geo.b01");
+    batch.incidents.push(
+      // Only fabricated_source and invalid_check incidents bar anyone.
+      {
+        date: "2026-11-01",
+        kind: "other",
+        note: "A late submission.",
+        checkers: [CHECKER_A],
+      },
+      {
+        date: "2026-11-04",
+        kind: "invalid_check",
+        note: "Pass B records were templated.",
+        checkers: [CHECKER_B],
+      },
+    );
+    expect(barredCheckers(batch)).toEqual([CHECKER_B]);
+    const record = itemOf(bank, "fx.p.geo.0101");
+    expect(
+      check(bank, record.id, "A", fxRecord(bank, record, "A")).errors,
+    ).toEqual([]);
+    const entry = fxRecord(bank, record, "B", { checker: "fc-FX-bravo" });
+    expect(check(bank, record.id, "B", entry).errors).toEqual([
+      "checker fc-FX-bravo is barred from this batch by its invalid_check incident of 2026-11-04, which voided their records; a new checker id records this pass",
+    ]);
   });
 
   it("refuses records for active or cut items", async () => {

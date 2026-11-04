@@ -64,7 +64,12 @@ describe("the stored dedupe record", () => {
       ["guide:e.0004", false],
       ["guide:r.screen-time.90", false],
     ] as const) {
-      const record = dedupeRecordFor(false, match(nearest, sealed), AT, "unique");
+      const record = dedupeRecordFor(
+        false,
+        match(nearest, sealed),
+        AT,
+        "unique",
+      );
       expect(record, nearest).toEqual({
         checkedAt: AT,
         nearestId: "sealed",
@@ -88,7 +93,12 @@ describe("the stored dedupe record", () => {
       expect.objectContaining({ nearestId: "p.hist.0203", score: 0.42 }),
     );
     // A sealed item's own file is an envelope, so it may name its neighbour.
-    const sealedSide = dedupeRecordFor(true, match("guide:e.0004"), AT, "unique");
+    const sealedSide = dedupeRecordFor(
+      true,
+      match("guide:e.0004"),
+      AT,
+      "unique",
+    );
     expect(sealedSide).toEqual(
       expect.objectContaining({ nearestId: "e.0004", score: 0.42 }),
     );
