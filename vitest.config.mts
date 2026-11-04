@@ -48,8 +48,10 @@ export default defineConfig({
     unstubGlobals: true,
     coverage: {
       provider: "v8",
-      include: ["src/engine/**/*.ts"],
-      exclude: ["src/engine/**/*.{test,spec,bench}.ts"],
+      // The lint refuses engine files that aren't plain .ts; .tsx is here
+      // too, so one that got past it would still be measured.
+      include: ["src/engine/**/*.{ts,tsx}"],
+      exclude: ["src/engine/**/*.{test,spec,bench}.{ts,tsx}"],
       reporter: ["text-summary", "html"],
       thresholds: { lines: 95, branches: 90 },
     },
@@ -82,7 +84,9 @@ export default defineConfig({
         test: {
           name: "engine",
           environment: "node",
-          include: ["src/engine/**/*.{test,spec}.ts"],
+          // The unit project leaves src/engine out entirely, so every
+          // engine test, .tsx included, is collected here.
+          include: ["src/engine/**/*.{test,spec}.{ts,tsx}"],
           exclude: [...configDefaults.exclude, BENCHMARKS],
         },
       },

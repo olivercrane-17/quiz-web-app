@@ -7,8 +7,8 @@
  * `serwist build` on that build (scripts/pwa/spike/build.mts writes
  * public/sw.js), then starts a `next start` of its own: `next start` reads
  * public/ once, when it starts, and the web server started before the
- * worker existed. The test registers the worker on a first visit, then stops
- * that server and takes the context offline, and plays /practice/run to its
+ * worker existed. The test registers the worker on a first visit, then takes
+ * the context offline and stops that server, and plays /practice/run to its
  * results from the precache alone.
  *
  * Once `npm run build` writes PWA-1's own worker to public/sw.js, the spike
@@ -420,9 +420,14 @@ test.describe("the service-worker spike", () => {
     });
 
     await test.step("offline, with its server stopped, the run reloads from the precache and plays to its results", async () => {
+      // Offline first, then stop the server. The other way round, a request
+      // the page sends in between (the router's idle prefetch of Today's
+      // chunks, which the spike doesn't precache) meets a closed port and
+      // logs net::ERR_CONNECTION_REFUSED instead of the offline error that
+      // dropOfflineLoadErrors expects.
+      await goOffline(page);
       await spike.stop();
       expect(await tryFetch(`${origin}/sw.js`)).toBeNull();
-      await goOffline(page);
 
       const response = await page.reload();
       expect(response?.fromServiceWorker()).toBe(true);

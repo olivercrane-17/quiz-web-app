@@ -12,8 +12,9 @@
  *
  * e2e/pwa/spike.spec.ts runs the last two steps itself, on the build its
  * web server made, and deletes the worker when it is done. A worker left
- * behind is harmless to the app (nothing registers it) but ESLint would
- * lint it, so remove it with --clean.
+ * behind is harmless (nothing registers it, and git and ESLint both ignore
+ * public/sw.js), but every later `next start` would serve it, so remove it
+ * with --clean.
  *
  * This script only ever writes or deletes a public/sw.js that starts with
  * the spike's banner. Any other worker there is PWA-1's, written by its

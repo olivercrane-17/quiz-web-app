@@ -21,6 +21,16 @@
  *    URL cache first, navigations included, and it is registered before any
  *    other route.
  *
+ * For PWA-1: rule 3 here looks the shell up by the navigation's own path,
+ * which is enough for the two practice shells the spike precaches, because
+ * each is served at its own path. It is not enough for §10.7, which also
+ * precaches one shell per rewritten pattern (§10.1): `/c/AB12CD34` is served
+ * by `/shell/challenge`, so a lookup by path misses it offline. PWA-1's
+ * fallback must map each rewrite source onto its `/shell/<name>` entry
+ * first. The table is SHELL_ROUTES in src/features/shell/shell-routes.ts,
+ * which src/pwa may not import (§2.2); where the worker gets it from is an
+ * open decision for the architecture owner (see PWA-0's pull request).
+ *
  * A new worker installs and waits; Serwist activates it when a page posts
  * `{ type: "SKIP_WAITING" }`, which PWA-1's `useSafePoint()` will send.
  */
@@ -87,7 +97,10 @@ const navigations = new NetworkOnly({
   networkTimeoutSeconds: NAVIGATION_TIMEOUT_SECONDS,
   plugins: [
     {
-      // Links are path-only (§10.2 rule 3), so the path names the shell.
+      // The spike precaches the practice shells only, and each one is
+      // served at its own path. A rewritten per-user path is not: /c/:code
+      // is served by /shell/challenge (§10.1), so PWA-1 maps the path onto
+      // its shell before this lookup (see the note at the top).
       handlerDidError: ({ request }) =>
         serwist.matchPrecache(new URL(request.url).pathname),
     },

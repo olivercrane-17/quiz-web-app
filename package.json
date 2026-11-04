@@ -32,6 +32,7 @@
     "content:build": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/build.ts",
     "content:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/check.ts",
     "content:packet": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/packet.ts",
+    "content:packets": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/packet.ts",
     "content:record": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/record.ts",
     "content:estimate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/estimate.ts",
     "content:decide": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/decide.ts",
@@ -86,6 +87,7 @@
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.3",
     "eslint-config-prettier": "10.1.8",
+    "globals": "17.13.0",
     "jsdom": "30.1.3",
     "prettier": "3.9.10",
     "prettier-plugin-tailwindcss": "0.8.1",
@@ -95,5 +97,10 @@
     "vite": "8.3.5",
     "vitest": "5.0.5",
     "zod": "4.6.7"
+  },
+  "overrides": {
+    "@serwist/cli": {
+      "zod": "4.6.7"
+    }
   }
 }
