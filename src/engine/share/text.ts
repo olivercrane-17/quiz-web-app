@@ -166,7 +166,7 @@ export interface DailyShareInput {
   link: string;
 }
 
-/** Line 1: "Knewt Daily #42 · 9/12 · Encore 4% off 🎯". */
+/** Line 1: "Knewt Daily #42 · 9/12 · Encore off by 4% 🎯". */
 export function shareHeadline(input: DailyShareInput): string {
   const daily = keepTogether(`Daily #${input.dailyNumber}`);
   const parts = [
