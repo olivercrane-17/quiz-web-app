@@ -3,7 +3,7 @@
  * Checkers never edit items; `content:record` merges their records into
  * `verification.checks` (passes A and B) or `verification.tiebreak` (T).
  */
-import type { BatchEntry } from "../schema/batches.ts";
+import type { BatchEntry, Incident } from "../schema/batches.ts";
 import { datasetVersion } from "../schema/datasets.ts";
 import type { RecordInputEntry } from "../schema/inputs.ts";
 import type { AnyItem } from "../schema/items.ts";
@@ -46,10 +46,32 @@ function keyText(item: AnyItem): string | null {
   return item.answer;
 }
 
-/** Checkers a fabricated-source incident barred from this batch (§9.6). */
+/** Incident kinds whose `checkers` may never check the batch again. */
+const BARRING_KINDS: ReadonlySet<Incident["kind"]> = new Set([
+  "fabricated_source",
+  "invalid_check",
+]);
+
+/**
+ * Checkers an incident barred from this batch: everyone who had checked it
+ * when a fabricated source was found (§9.6), and the checker whose records
+ * an invalid_check incident voided.
+ */
 export function barredCheckers(batch: BatchEntry): string[] {
   return batch.incidents.flatMap((incident) =>
-    incident.kind === "fabricated_source" ? (incident.checkers ?? []) : [],
+    BARRING_KINDS.has(incident.kind) ? (incident.checkers ?? []) : [],
+  );
+}
+
+/** The first incident that barred `checker` from this batch, if any. */
+export function barringIncident(
+  batch: BatchEntry,
+  checker: string,
+): Incident | undefined {
+  return batch.incidents.find(
+    (incident) =>
+      BARRING_KINDS.has(incident.kind) &&
+      anyAgentRun(checker, incident.checkers ?? []),
   );
 }
 
@@ -102,9 +124,12 @@ export function checkRecord(
       `checker ${entry.checker} estimated this item; one run holds one role (§0.2)`,
     );
   }
-  if (anyAgentRun(entry.checker, barredCheckers(batch))) {
+  const barred = barringIncident(batch, entry.checker);
+  if (barred) {
     errors.push(
-      `checker ${entry.checker} checked this batch before its fabricated-source incident; fresh checkers re-check every item (§9.6)`,
+      barred.kind === "fabricated_source"
+        ? `checker ${entry.checker} checked this batch before its fabricated-source incident; fresh checkers re-check every item (§9.6)`
+        : `checker ${entry.checker} is barred from this batch by its ${barred.kind} incident of ${barred.date}, which voided their records; a new checker id records this pass`,
     );
   }
 
