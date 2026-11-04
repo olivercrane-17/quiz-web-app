@@ -7,8 +7,8 @@
  */
 export const HOME_CARD_COPY = {
   heading: "Today's Daily",
-  dailyLine: (dailyNumber: number, date: string) =>
-    `Daily #${dailyNumber} · ${date}`,
+  /** No date: Today's dateline names the day once (D18). */
+  dailyLine: (dailyNumber: number) => `Daily #${dailyNumber}`,
   minutes: (minutes: number) => `About ${minutes} minutes`,
   /** The one-line rule (PRD §3.1.7), for a Daily with Mysteries. */
   rule: "Fewer clues, more points. Then one number.",

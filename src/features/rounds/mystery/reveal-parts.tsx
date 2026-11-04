@@ -6,12 +6,20 @@
  * the sources line, the withdrawn card of a voided round, and the points
  * count-up.
  */
-import { useEffect, useRef, useState, type ReactNode, type Ref } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type Ref,
+} from "react";
 
 import { buttonClasses } from "@/ui/button-classes";
 import { Button } from "@/ui/button";
 import { cx } from "@/ui/cx";
 
+import { focusReveal } from "../viewport";
 import { MYSTERY_COPY } from "./copy";
 import { continueOnEnter, focusTargetProps } from "./focus";
 import { BookOpenIcon } from "./icons";
@@ -100,11 +108,25 @@ export function useCountUp(
   return animate ? shown : target;
 }
 
-/** Focus `ref` once, when the element mounts (AC-DLY-18: the reveal heading). */
+/**
+ * Focus `ref` once, when the element mounts (AC-DLY-18: the reveal
+ * heading). A reveal card (`[data-reveal]`) replaces its round in place,
+ * often above the screen once the page has scrolled to the options: its
+ * heading takes focus without the browser's scroll, which would leave the
+ * heading at the screen's top edge with the stamp and kicker under the
+ * sticky header, and the card then starts just below the header (R1-12,
+ * `focusReveal`). A heading outside such a card, like the Encore's result
+ * line under its field, is brought into view by the browser as it takes
+ * focus. A layout effect, so the reveal never paints in the wrong place.
+ */
 export function useFocusOnMount<T extends HTMLElement>(): Ref<T> {
   const ref = useRef<T>(null);
-  useEffect(() => {
-    ref.current?.focus({ preventScroll: false });
+  useLayoutEffect(() => {
+    const heading = ref.current;
+    if (heading === null) return;
+    const card = heading.closest<HTMLElement>("[data-reveal]");
+    if (card === null) heading.focus({ preventScroll: false });
+    else focusReveal(heading, card);
   }, []);
   return ref;
 }

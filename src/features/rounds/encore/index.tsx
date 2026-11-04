@@ -27,6 +27,11 @@
  * have no return key. Pressing a button then keeps focus in the field
  * until the click lands, so the keypad doesn't close under the finger.
  *
+ * The number shows whole as it is typed: when it would run past the field
+ * (at 200% text on a phone, "1,250,000" needs 344 px of a 258 px field),
+ * its font steps down until it fits, and grows back as it shortens
+ * (`useFittedFont`, R1-03). Short answers keep the full size.
+ *
  * The hints, the number line and its text name the Encore's own bands
  * (`encoreBandsOf`), or the defaults for its kind.
  *
@@ -39,7 +44,14 @@
  * (AC-DLY-18), and Enter there continues (PRD §3.0.3). A voided Encore
  * shows the withdrawn card.
  */
-import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 
 import { TUNABLES } from "@/config/tunables";
 import { formatEncoreAmount, parseEncoreInput } from "@/engine/encore";
@@ -116,6 +128,52 @@ export function EncoreRound(props: RoundComponentProps) {
       result={reveal?.family === "encore" ? reveal : null}
     />
   );
+}
+
+/** The least the number shrinks to: about the size of body text at 200%. */
+const MIN_FIELD_FONT_PX = 20;
+
+/**
+ * Fits what the field shows to its width (R1-03): from the field's full
+ * size, the font steps down until the number no longer scrolls inside the
+ * field, so its leading digits never hide, and comes back up as the number
+ * shortens. Measured rather than worked out from the length, since digits,
+ * separators and the unit beside the field each take their own room. It
+ * fits again when the window's size changes, as on a rotation.
+ */
+function useFittedFont(
+  ref: RefObject<HTMLInputElement | null>,
+  value: string,
+): void {
+  useLayoutEffect(() => {
+    const input = ref.current;
+    if (input === null) return;
+    const fit = () => {
+      input.style.fontSize = "";
+      const width = input.clientWidth;
+      if (width === 0 || input.scrollWidth <= width) return;
+      const full = Number.parseFloat(getComputedStyle(input).fontSize);
+      if (!(full > MIN_FIELD_FONT_PX)) return;
+      let size = Math.max(
+        MIN_FIELD_FONT_PX,
+        Math.floor((full * width) / input.scrollWidth),
+      );
+      input.style.fontSize = `${String(size)}px`;
+      // Rounding and the caret can leave a pixel over.
+      while (
+        input.scrollWidth > input.clientWidth &&
+        size > MIN_FIELD_FONT_PX
+      ) {
+        size -= 1;
+        input.style.fontSize = `${String(size)}px`;
+      }
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    return () => {
+      window.removeEventListener("resize", fit);
+    };
+  }, [ref, value]);
 }
 
 /** True on a desktop pointer, where the field takes focus at once (PRD §3.1.5 Empty). */
@@ -199,6 +257,7 @@ function EncorePlay({
 
   // What the field shows once locked in: the value sent, or after a reload the reveal's guess.
   const shownValue = result !== null && raw === "" ? String(result.guess) : raw;
+  useFittedFont(inputRef, shownValue);
 
   const errorText =
     invalid && !parsed.ok

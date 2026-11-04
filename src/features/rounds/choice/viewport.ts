@@ -1,13 +1,13 @@
 /**
- * Where a choice round sits on the screen, and where focus may go (RITE
- * round 1: R1-12, R1-14, R1-21; DESIGN §6.10, §10.2, §11; WCAG 2.4.11).
- * Plain DOM code, called from the round's layout effects, so every change
- * lands before paint. Without layout (a test DOM, a hidden route) each
- * helper leaves the page alone.
+ * Where a choice round's explanation sheet sits on the screen, and where
+ * focus may go (RITE round 1: R1-14, R1-21; DESIGN §6.10, §11). The
+ * question's top under the sticky header (R1-12) is shared with the other
+ * round families, in ../viewport.ts. Plain DOM code, called from the
+ * round's layout effects, so every change lands before paint. Without
+ * layout (a test DOM, a hidden route) each helper leaves the page alone.
  */
+import { TOP_GAP_PX, visibleArea } from "../viewport";
 
-/** Room between the sticky header and the question's top: the play column's own top padding. */
-export const QUESTION_TOP_GAP_PX = 16;
 /** The least of the sheet's body that shows when the sheet has to scroll inside itself. */
 export const MIN_SHEET_BODY_PX = 96;
 
@@ -45,59 +45,8 @@ export function focusIsElsewhere(root: Element | null): boolean {
   return isRendered(active);
 }
 
-/**
- * How far down the screen the sticky or fixed headers reach: the play
- * header with its incident banner, or the page's `scroll-padding-top` when
- * that is larger (DS-1 sets it from the header's height, DESIGN §10.2).
- */
-export function topInset(): number {
-  let inset =
-    Number.parseFloat(
-      getComputedStyle(document.documentElement).scrollPaddingTop,
-    ) || 0;
-  for (const header of document.querySelectorAll("header")) {
-    const { position } = getComputedStyle(header);
-    if (position !== "sticky" && position !== "fixed") continue;
-    const rect = header.getBoundingClientRect();
-    // Hidden with its route, or not at the top edge.
-    if (rect.height === 0 || rect.top > 1) continue;
-    inset = Math.max(inset, rect.bottom);
-  }
-  return inset;
-}
-
-/**
- * The part of the screen the player sees, in the viewport coordinates
- * `getBoundingClientRect()` uses: from under the sticky header (`top`) to
- * the bottom of the visual viewport (`bottom`). When a page is wider than a
- * phone's screen (a revealed option's tag at 200% text, say), Chrome makes
- * the layout viewport, and `innerHeight` with it, taller than the screen,
- * so the visual viewport is what's on the glass.
- */
-export function visibleArea(): { top: number; bottom: number } {
-  const viewport = window.visualViewport;
-  const offset = viewport?.offsetTop ?? 0;
-  return {
-    top: Math.max(topInset(), offset),
-    bottom: viewport ? offset + viewport.height : window.innerHeight,
-  };
-}
-
 function canScroll(): boolean {
   return typeof window !== "undefined" && typeof window.scrollBy === "function";
-}
-
-/**
- * R1-12: scrolls up just enough that `element`'s top sits below the sticky
- * header, with the column's gap. A question that already starts lower (a
- * note above question 1, a page at its top) stays where it is.
- */
-export function keepTopBelowHeader(element: HTMLElement | null): void {
-  if (element === null || !canScroll()) return;
-  const rect = element.getBoundingClientRect();
-  if (rect.height === 0) return;
-  const over = topInset() + QUESTION_TOP_GAP_PX - rect.top;
-  if (over > 0) window.scrollBy({ top: -over, behavior: "instant" });
 }
 
 export interface SheetParts {
@@ -166,7 +115,7 @@ export function keepSheetInView(
     for (let first = 0; first < kept.length; first += 1) {
       const rest = kept.slice(first);
       if (needed - scrollRoom(rect.top, rest, area.top, 0) <= spare) {
-        room = scrollRoom(rect.top, rest, area.top, QUESTION_TOP_GAP_PX);
+        room = scrollRoom(rect.top, rest, area.top, TOP_GAP_PX);
         break;
       }
     }

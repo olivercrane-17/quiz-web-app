@@ -1,13 +1,7 @@
 import { render, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import {
-  MONTH_NAMES,
-  WEEKDAY_NAMES,
-  addDays,
-  dailyNumberFor,
-  formatLongDate,
-} from "@/engine/time";
+import { addDays, dailyNumberFor } from "@/engine/time";
 import {
   parseAttemptId,
   parseDailyNumber,
@@ -18,14 +12,7 @@ import {
   type TodayRoundChip,
 } from "@/engine/types";
 
-import {
-  DailyHomeCard,
-  MONTHS,
-  WEEKDAYS,
-  chipText,
-  dailyLine,
-  progressLine,
-} from "./home-card";
+import { DailyHomeCard, chipText, dailyLine, progressLine } from "./home-card";
 import { loadSharePayload, loadTodayCard } from "./home-data";
 
 vi.mock("./home-data", () => ({
@@ -129,15 +116,13 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-describe("the card's own day and month names", () => {
-  it("are the engine's, so the card's line matches formatLongDate without importing it", () => {
-    expect(WEEKDAYS).toEqual(WEEKDAY_NAMES);
-    expect(MONTHS).toEqual(MONTH_NAMES);
-    // Every weekday and month, across a leap day.
+describe("the card's own Daily number", () => {
+  it("is the engine's, without importing it, and never repeats Today's date (D18)", () => {
+    // Every day for two and a half years, across a leap day.
     for (let day = 0; day < 900; day += 1) {
       const at = addDays(date(EPOCH), day);
       expect(dailyLine(at, EPOCH)).toBe(
-        `Daily #${dailyNumberFor(at, date(EPOCH))} · ${formatLongDate(at)}`,
+        `Daily #${dailyNumberFor(at, date(EPOCH))}`,
       );
     }
   });
@@ -181,15 +166,15 @@ describe("chips and progress lines", () => {
 });
 
 describe("Today's Daily card", () => {
-  it("shows the number, date and a live Play before get_today answers", () => {
+  it("shows the number, the minutes and a live Play before get_today answers, and no date (D18)", () => {
     vi.mocked(loadTodayCard).mockReturnValue(new Promise(() => {}));
     const { region } = renderCard();
     expect(region()).toHaveAttribute("data-daily-card", "not_started");
     expect(region()).toHaveAccessibleName("Today's Daily");
-    expect(
-      within(region()).getByText("Daily #42 · Sunday 1 November"),
-    ).toBeVisible();
+    expect(within(region()).getByText("Daily #42")).toBeVisible();
     expect(within(region()).getByText(/About 6 minutes/)).toBeVisible();
+    // Today's dateline names the day; the card doesn't say it again.
+    expect(region()).not.toHaveTextContent(/Sunday|November/);
     expect(
       within(region()).getByText("Fewer clues, more points. Then one number."),
     ).toBeVisible();
@@ -254,8 +239,8 @@ describe("Today's Daily card", () => {
       within(region()).getByRole("link", { name: "Continue" }),
     ).toHaveAttribute("href", "/daily");
     expect(within(region()).queryByRole("list")).toBeNull();
-    // The heading names the Daily; the line under it keeps the date alone.
-    expect(within(region()).getByText("Sunday 1 November")).toBeVisible();
+    // The heading names the Daily, and Today's dateline the day (D18).
+    expect(region()).not.toHaveTextContent(/Sunday|November/);
     expect(region()).not.toHaveTextContent(/minutes/);
   });
 
@@ -277,9 +262,8 @@ describe("Today's Daily card", () => {
     expect(
       within(region()).queryByRole("link", { name: "Play today's Daily" }),
     ).toBeNull();
-    expect(
-      within(region()).getByText("Daily #42 · Sunday 1 November"),
-    ).toBeVisible();
+    expect(within(region()).getByText("Daily #42")).toBeVisible();
+    expect(region()).not.toHaveTextContent(/Sunday|November/);
     expect(region()).not.toHaveTextContent(/minutes/);
   });
 

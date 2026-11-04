@@ -102,12 +102,9 @@ import { CheckIcon, CrossIcon } from "@/ui/icons";
 import { Sheet } from "@/ui/sheet";
 
 import type { PlaySettings, RoundComponentProps } from "../contracts";
+import { keepTopBelowHeader } from "../viewport";
 import { CHOICE_COPY, DIFFICULTY_PIPS, learnMoreUrl } from "./copy";
-import {
-  focusIsElsewhere,
-  keepSheetInView,
-  keepTopBelowHeader,
-} from "./viewport";
+import { focusIsElsewhere, keepSheetInView } from "./viewport";
 
 type ChoiceOpen = Extract<RoundOpen, { family: "choice" }>;
 type ChoiceReveal = Extract<RoundReveal, { family: "choice" }>;

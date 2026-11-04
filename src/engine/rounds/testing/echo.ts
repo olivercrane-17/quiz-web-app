@@ -219,6 +219,7 @@ function mysteryReveal(
   content: EchoContent,
   solvedOn: 1 | 2 | 3 | 4 | null,
   pickedOption: number | null,
+  wrongGuesses: readonly WrongGuess[],
 ): RoundReveal {
   return {
     family: "mystery",
@@ -230,6 +231,9 @@ function mysteryReveal(
     solvedOn,
     points: solvedOn === null ? 0 : 5 - solvedOn,
     pickedOption,
+    // The round's misses, as the real plugin's reveal carries them (R1-22).
+    wrongGuesses: wrongGuesses.map((g) => ({ ...g })),
+    pickedLabel: pickedOption === null ? null : label(pickedOption),
     explanation: "Echo explanation.",
     learnMore: "Echo",
     sourceLabels: [],
@@ -337,7 +341,7 @@ export const echoMysteryPlugin: RoundPlugin<
       judge,
       verdict: {
         kind: "resolved",
-        reveal: mysteryReveal(content, solvedOn, picked),
+        reveal: mysteryReveal(content, solvedOn, picked, judge.wrongGuesses),
         next: null,
       },
     });

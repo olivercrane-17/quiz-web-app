@@ -271,6 +271,8 @@ describe("the mystery plugin", () => {
         solvedOn: 1,
         points: 4,
         pickedOption: null,
+        wrongGuesses: [],
+        pickedLabel: null,
         explanation: "She mapped the coast.",
         learnMore: "Odile Marsh (fixture)",
         sourceLabels: ["Fixture atlas"],
@@ -288,9 +290,11 @@ describe("the mystery plugin", () => {
     ).toEqual({ ok: false, error: "stale" });
   });
 
-  it("records the picked option, right or wrong", () => {
+  it("records the picked option, right or wrong, with the label the player saw", () => {
     const content = mystery();
     const judge = toClue4();
+    // The stored shuffle [2, 0, 3, 1] shows Mira, Odile, Liesl, Corin, and
+    // Odile's bracket-free display keeps every label plain.
     const wrong = mysteryPlugin.judge(
       content,
       judge,
@@ -302,6 +306,7 @@ describe("the mystery plugin", () => {
       solvedOn: null,
       points: 0,
       pickedOption: 0,
+      pickedLabel: "Mira Tolland",
     });
     const right = mysteryPlugin.judge(
       content,
@@ -314,6 +319,55 @@ describe("the mystery plugin", () => {
       solvedOn: 4,
       points: 1,
       pickedOption: 1,
+      pickedLabel: "Odile Marsh",
+    });
+  });
+
+  it("R1-22 carries the round's misses in its reveal, so a reload can show them", () => {
+    const content = mystery();
+    let { judge } = mysteryPlugin.open(content, meta, ctx());
+    for (const intent of [
+      { family: "mystery", kind: "guess", entityId: CORIN },
+      { family: "mystery", kind: "next_clue" },
+      { family: "mystery", kind: "guess", entityId: LIESL },
+    ] as const) {
+      const step = mysteryPlugin.judge(content, judge, intent, ctx());
+      if (!step.ok) throw new Error(step.error);
+      judge = step.judge;
+    }
+    const solved = mysteryPlugin.judge(
+      content,
+      judge,
+      { family: "mystery", kind: "pick", option: 1 },
+      ctx(),
+    );
+    if (!solved.ok || solved.verdict.kind !== "resolved") throw new Error();
+    expect(solved.verdict.reveal).toMatchObject({
+      solvedOn: 4,
+      wrongGuesses: [
+        { clue: 1, entityId: CORIN, display: "Corin Ashby" },
+        { clue: 3, entityId: LIESL, display: "Liesl Varo" },
+      ],
+      pickedLabel: "Odile Marsh",
+    });
+    // The replay of a key rebuilds the same reveal (§8.8).
+    expect(mysteryVerdictOf(content, solved.judge, ctx())).toEqual(
+      solved.verdict,
+    );
+    // When any option's display shows a bracket, all four show their
+    // descriptors (§5.5), and the pick's label is the one the player saw.
+    const bracketed = mystery({ distractors: [CORIN, MIRA, ADA] });
+    const atClue4 = toClue4(bracketed);
+    const picked = mysteryPlugin.judge(
+      bracketed,
+      atClue4,
+      { family: "mystery", kind: "pick", option: 2 },
+      ctx(),
+    );
+    if (!picked.ok || picked.verdict.kind !== "resolved") throw new Error();
+    expect(picked.verdict.reveal).toMatchObject({
+      solvedOn: null,
+      pickedLabel: "Ada Morrow (cartographer)",
     });
   });
 

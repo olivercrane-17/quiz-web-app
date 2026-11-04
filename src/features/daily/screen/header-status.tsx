@@ -10,11 +10,13 @@
  *   icon, then its place beside the pills, and sits under them at the
  *   right, so the pills keep their own row (320 px with ordinary text).
  * - Too narrow even for that (large text on a phone): the pills give way to
- *   the same facts in words, "Mystery 2 of 3 · M1 +3", with each finished
- *   round's mark as its pill shows it. The words keep their natural width,
- *   so at 200% text they wrap by word on lines of their own and the
+ *   where the run stands in words, "Mystery 2 of 3" or "Encore". The words
+ *   keep their natural width, so at 200% text they wrap by word and the
  *   stopwatch drops under them, rather than being squeezed letter by
- *   letter. Nothing ever scrolls sideways.
+ *   letter. Nothing ever scrolls sideways. They leave out the finished
+ *   rounds' marks, which took the sticky header to four lines, a third of
+ *   a 360 by 640 screen, from Mystery 3 on; the header stays under 160 px
+ *   there.
  *
  * The pills' labelled list stays in the accessibility tree at every width,
  * only hidden from sight while the words show, so a screen reader always

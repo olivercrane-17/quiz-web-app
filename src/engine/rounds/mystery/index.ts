@@ -27,7 +27,9 @@
  * store it, and `clue` is the step a round action must name (§7.2: a
  * mismatch is `stale`). `mysteryVerdictOf` rebuilds the response for a
  * replayed idempotency key from the current state (§8.8), and
- * `mysteryOpenOf` the open a resume snapshot carries.
+ * `mysteryOpenOf` the open a resume snapshot carries. The reveal carries
+ * the round's misses (its wrong typed guesses and the picked option's
+ * label), so a reveal a reload brings back reads as the live one (R1-22).
  *
  * Mystery judging needs the round's answer list (`JudgeContext.entities`):
  * without it every guess is `invalid_entity`, and the options can't be
@@ -56,6 +58,7 @@ import {
 } from "../../scoring/mystery.ts";
 import type {
   Announcement,
+  EntityLookup,
   IntentCheck,
   JudgeContext,
   JudgeResult,
@@ -161,7 +164,22 @@ export function mysteryOpenOf(
   };
 }
 
-/** The full reveal of a resolved judge state. */
+/** The label the player saw on a picked option, or null without a pick or the list. */
+function pickedLabelOf(
+  content: MysteryContent,
+  judge: MysteryJudge,
+  entities: EntityLookup | null,
+): string | null {
+  const picked = judge.result?.pickedOption ?? null;
+  if (picked === null || entities === null) return null;
+  return optionLabels(content, judge.order, entities)[picked] ?? null;
+}
+
+/**
+ * The full reveal of a resolved judge state, with the round's misses: its
+ * wrong typed guesses and the label of the option picked (R1-22), which a
+ * reveal brought back after a reload needs and the player has already seen.
+ */
 export function mysteryRevealOf(
   content: MysteryContent,
   judge: MysteryJudge,
@@ -179,6 +197,8 @@ export function mysteryRevealOf(
     solvedOn,
     points: mysteryPoints(solvedOn),
     pickedOption: result?.pickedOption ?? null,
+    wrongGuesses: judge.wrongGuesses.map((g) => ({ ...g })),
+    pickedLabel: pickedLabelOf(content, judge, ctx.entities),
     explanation: content.explanation,
     learnMore: content.learnMore,
     sourceLabels: [...content.sourceLabels],

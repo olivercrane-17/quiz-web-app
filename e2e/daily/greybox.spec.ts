@@ -54,7 +54,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe("Today's Daily card", () => {
-  test("shows today's number, date and minutes at once, then one chip per round from get_today", async ({
+  test("D18 shows today's number and minutes at once, never the date the dateline gives, then one chip per round from get_today", async ({
     page,
   }) => {
     await page.goto("/");
@@ -62,9 +62,10 @@ test.describe("Today's Daily card", () => {
     await expect(
       card.getByRole("heading", { name: "Today's Daily" }),
     ).toBeVisible();
-    await expect(card).toContainText(
-      "Daily #42 · Sunday 1 November · About 4 minutes",
-    );
+    await expect(card).toContainText("Daily #42 · About 4 minutes");
+    // One date on Today: the dateline's, above the greeting.
+    await expect(page.getByText(/Sunday 1 November/)).toHaveCount(1);
+    await expect(card).not.toContainText("November");
     await expect(card).toContainText(
       "Fewer clues, more points. Then one number.",
     );
@@ -706,7 +707,7 @@ test.describe("RITE round 1", () => {
       await expect(page.locator("[data-stopwatch] svg")).toBeVisible();
     });
 
-    test("R1-03 at 200% text a finished Mystery keeps its result: the words show 'M1 +3' and the list still names its 3 points", async ({
+    test("R1-03 at 200% text the words say only where the run is, and the list still names a finished Mystery's 3 points", async ({
       page,
     }) => {
       await mockInit(page, { scenario: "in_progress_mystery_2" });
@@ -715,8 +716,9 @@ test.describe("RITE round 1", () => {
         page.getByRole("list", { name: "Daily progress" }),
       ).toBeVisible();
       await page.addStyleTag({ content: BIG_TEXT });
+      // The finished rounds' marks took the header to four lines.
       await expect(page.locator("[data-progress-text]")).toHaveText(
-        "Mystery 2 of 3 · M1 +3",
+        "Mystery 2 of 3",
       );
       await expect(page.getByRole("banner")).toMatchAriaSnapshot(`
         - list "Daily progress":
@@ -749,6 +751,45 @@ test.describe("RITE round 1", () => {
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth),
       ).toBeLessThanOrEqual(320);
+    });
+
+    test("R1-03 at 360 by 640 with 200% text the sticky header stays under 160 px on every round, the Encore included", async ({
+      page,
+    }) => {
+      // The words grew a line per finished Mystery: 217 px, a third of the
+      // screen, from Mystery 3 on.
+      await page.setViewportSize({ width: 360, height: 640 });
+      await page.goto("/daily");
+      await expect(
+        page.getByRole("heading", { name: /clue 1/i }),
+      ).toBeVisible();
+      await page.addStyleTag({ content: BIG_TEXT });
+      const header = page.locator("header").first();
+      const words = page.locator("[data-progress-text]");
+      const height = async () => (await header.boundingBox())?.height ?? 0;
+      for (const [where, next] of [
+        ["Mystery 1 of 3", "Next mystery"],
+        ["Mystery 2 of 3", "Next mystery"],
+        ["Mystery 3 of 3", "On to the Encore"],
+      ] as const) {
+        await expect(words).toHaveText(where);
+        expect(await height(), where).toBeLessThanOrEqual(160);
+        for (let clue = 1; clue < 4; clue += 1) {
+          await page
+            .getByRole("button", { name: /^(Next clue|Last clue)/ })
+            .click();
+        }
+        await page.getByRole("button", { name: /^A\. / }).click();
+        await page.getByRole("button", { name: next }).click();
+      }
+      await expect(words).toHaveText("Encore");
+      expect(await height()).toBeLessThanOrEqual(160);
+      // Every result is still in the pills' list.
+      await expect(
+        page
+          .getByRole("list", { name: "Daily progress" })
+          .getByRole("listitem"),
+      ).toHaveCount(4);
     });
 
     // At 200% text from 768 px the header has room for the pills, but
@@ -1045,6 +1086,88 @@ test.describe("RITE round 1", () => {
     await expect(statusRegion(page)).toHaveText(
       "Got there. Odile Marsh. Solved on clue 2, 3 points.",
     );
+  });
+
+  test.describe("a resumed reveal keeps the round's misses (R1-22, D10)", () => {
+    /** The reveal's row for clue `n`. */
+    const clueRow = (page: Page, n: number) =>
+      page.locator("[data-reveal] ol li").nth(n - 1);
+
+    /** A wrong guess of Corin Ashby on Mystery 1's clue 1. */
+    async function guessCorin(page: Page) {
+      await page.goto("/daily");
+      const round = page.locator("[data-round-area]");
+      await round.getByRole("combobox").fill("Cor");
+      await page.getByRole("option", { name: /Corin Ashby/ }).click();
+      await round.getByRole("button", { name: "Guess", exact: true }).click();
+      await expect(
+        round.getByRole("heading", { name: /clue 2/i }),
+      ).toBeVisible();
+    }
+
+    /** Leave for Today, then Continue from the Daily card. */
+    async function leaveAndContinue(page: Page) {
+      await page
+        .getByRole("link", { name: "Leave the Daily. Your progress is saved." })
+        .click();
+      await expect(page).toHaveURL("/");
+      await page
+        .locator('[data-daily-card="in_progress"]')
+        .getByRole("link", { name: "Continue" })
+        .click();
+      await expect(page).toHaveURL("/daily");
+    }
+
+    test("R1-22 D10 a solve after a wrong guess still stamps Got there. and says You guessed after a reload, and after Leave and Continue", async ({
+      page,
+    }) => {
+      await guessCorin(page);
+      const round = page.locator("[data-round-area]");
+      await round.getByRole("combobox").fill("Odile");
+      await page.getByRole("option", { name: /Odile Marsh/ }).click();
+      await round.getByRole("button", { name: "Guess", exact: true }).click();
+      const stamp = page.locator('[data-verdict="solved"]');
+      const expectTheMiss = async () => {
+        await expect(stamp).toHaveText("Got there.");
+        await expect(clueRow(page, 1)).toContainText("You guessed Corin Ashby");
+        await expect(clueRow(page, 2)).toContainText("Solved here");
+        await expect(
+          page.getByRole("heading", { level: 1, name: "Odile Marsh" }),
+        ).toBeFocused();
+      };
+      await expectTheMiss();
+      await page.reload();
+      await expectTheMiss();
+      await leaveAndContinue(page);
+      await expectTheMiss();
+    });
+
+    test("R1-22 a miss keeps You guessed and You picked after a reload, and after Leave and Continue", async ({
+      page,
+    }) => {
+      await guessCorin(page);
+      for (let clue = 2; clue < 4; clue += 1) {
+        await page
+          .getByRole("button", { name: /^(Next clue|Last clue)/ })
+          .click();
+      }
+      // A wrong pick: Mira Tolland, one of the three decoys.
+      await page
+        .getByRole("button", { name: /^[A-D]\. Mira Tolland$/ })
+        .click();
+      const expectTheMisses = async () => {
+        await expect(page.locator('[data-verdict="missed"]')).toHaveText(
+          "This one got away.",
+        );
+        await expect(clueRow(page, 1)).toContainText("You guessed Corin Ashby");
+        await expect(clueRow(page, 4)).toContainText("You picked Mira Tolland");
+      };
+      await expectTheMisses();
+      await page.reload();
+      await expectTheMisses();
+      await leaveAndContinue(page);
+      await expectTheMisses();
+    });
   });
 
   test("R1-34 the Daily screen has one h1 while a round shows: the round's own", async ({

@@ -6,7 +6,11 @@
 import { describe, expect, it } from "vitest";
 
 import { createFakeClock } from "@/engine/clock";
-import type { AnyRoundPlugin, PluginRegistry } from "@/engine/rounds";
+import {
+  PLUGINS,
+  type AnyRoundPlugin,
+  type PluginRegistry,
+} from "@/engine/rounds";
 import { createEchoRegistry } from "@/engine/rounds/testing/echo";
 import {
   parseEntityId,
@@ -816,6 +820,51 @@ describe("the start's first-Daily flag (PRD §3.1.3 to §3.1.5)", () => {
     expect(await t.mock.sealed.start({ kind: "today" }, START)).toMatchObject({
       ok: true,
       value: { firstDaily: true },
+    });
+  });
+});
+
+describe("a resolved Mystery's misses (R1-22)", () => {
+  it("R1-22 keeps the wrong guesses and the picked option's label in the reveal a reload reads", async () => {
+    // The real plugins, which label the options from the fixture lists.
+    const t = setup(NOV_1, PLUGINS);
+    const { attemptId } = await started(t);
+    expect(await act(t, attemptId, 0, 1, guess(WRONG[0]!))).toMatchObject({
+      ok: true,
+      value: { verdict: { kind: "continue" } },
+    });
+    await act(t, attemptId, 0, 2, nextClue);
+    await act(t, attemptId, 0, 3, nextClue);
+    const clue4 = await t.mock.sealed.get(attemptId);
+    const options =
+      clue4.ok && clue4.value.current?.open?.family === "mystery"
+        ? (clue4.value.current.open.options ?? [])
+        : [];
+    const wrongPick = options.find(
+      (option) => !option.alreadyGuessed && option.label !== "Odile Marsh",
+    );
+    if (wrongPick === undefined) throw new Error("no wrong option to pick");
+    const missed = await act(t, attemptId, 0, 4, {
+      family: "mystery",
+      kind: "pick",
+      option: wrongPick.index,
+    });
+    const expected = {
+      family: "mystery",
+      solvedOn: null,
+      pickedOption: wrongPick.index,
+      pickedLabel: wrongPick.label,
+      wrongGuesses: [{ clue: 1, entityId: WRONG[0], display: "Liesl Varo" }],
+    };
+    expect(missed).toMatchObject({
+      ok: true,
+      value: { verdict: { kind: "resolved", reveal: expected } },
+    });
+    // A reload, or Leave then Continue, starts again and reads the same.
+    const reloaded = await t.mock.sealed.start({ kind: "today" }, START);
+    expect(reloaded).toMatchObject({
+      ok: true,
+      value: { resolved: [{ meta: { index: 0 }, reveal: expected }] },
     });
   });
 });

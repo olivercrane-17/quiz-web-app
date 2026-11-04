@@ -495,6 +495,100 @@ test.describe("rows on a tint (WCAG 1.4.3)", () => {
   });
 });
 
+test.describe("the reveal under the sticky header (R1-12)", () => {
+  /** Picks `answer` among clue 4's options and waits for the reveal to settle. */
+  async function pickOnClue4(page: Page, answer: string) {
+    await toClue(page, 4);
+    await page
+      .getByRole("button", { name: new RegExp(`^[A-D]\\. ${answer}`) })
+      .click();
+    await expect(page.locator("[data-reveal]")).toBeVisible();
+    // The stamp lands at 680 ms; measure where it comes to rest.
+    await page.waitForFunction(() =>
+      (
+        document
+          .querySelector("[data-reveal]")
+          ?.getAnimations({ subtree: true }) ?? []
+      ).every((animation) => animation.playState !== "running"),
+    );
+  }
+
+  /** The stamp and the round's kicker below the header, the focused heading whole on screen. */
+  async function expectRevealInView(
+    page: Page,
+    answer: string,
+    height: number,
+  ) {
+    const top = await headerBottom(page);
+    const heading = page.getByRole("heading", { level: 1, name: answer });
+    await expect(heading).toBeFocused();
+    const verdict = await boxOf(page.locator("[data-verdict]"));
+    expect(verdict.top, `${answer}'s stamp`).toBeGreaterThanOrEqual(top);
+    const kicker = await boxOf(page.locator("[data-reveal] > p").first());
+    expect(kicker.top, `${answer}'s kicker`).toBeGreaterThanOrEqual(top);
+    const box = await boxOf(heading);
+    expect(box.top, `${answer}'s heading`).toBeGreaterThanOrEqual(top);
+    expect(box.bottom, `${answer}'s heading`).toBeLessThanOrEqual(height);
+  }
+
+  test.describe("at 200% zoom on 1280 by 800", () => {
+    test.use({ viewport: { width: 640, height: 400 }, deviceScaleFactor: 2 });
+
+    test("R1-12 after a clue-4 pick the stamp and the focused heading sit below the header, on Mystery 1 and Mystery 2", async ({
+      page,
+    }) => {
+      // Sam: "Cobalt" at y 0 to 30 and "Got it." at y -49, both under the
+      // 57 px header.
+      await page.goto("/daily");
+      await expect(
+        page.getByRole("combobox", { name: "Your guess" }),
+      ).toBeVisible();
+      await pickOnClue4(page, "The Lantern Keeper");
+      await expectRevealInView(page, "The Lantern Keeper (1987)", 400);
+      await page.getByRole("button", { name: "Next mystery" }).click();
+      await expect(
+        page.getByRole("combobox", { name: "Your guess" }),
+      ).toBeVisible();
+      await pickOnClue4(page, "Cobalt");
+      await expectRevealInView(page, "Cobalt", 400);
+    });
+  });
+
+  test("R1-12 at 360 by 640 the kicker and the stamp show after a clue-4 pick, the page no longer kept at the options", async ({
+    page,
+  }) => {
+    // The page kept its 96 px scroll: the kicker hidden and the stamp cut.
+    await openDaily(page, { width: 360, height: 640 });
+    await pickOnClue4(page, "The Lantern Keeper");
+    await expectRevealInView(page, "The Lantern Keeper (1987)", 640);
+  });
+});
+
+test.describe("the clue ladder at 200% text (R1-03)", () => {
+  test("R1-03 at 360 by 640 with 200% text a long word in clue 4 breaks inside its card, and the options keep to the screen", async ({
+    page,
+  }) => {
+    // "lighthouse's" ran past the card, and the options ran to x 363.
+    await openDaily(page, { width: 360, height: 640 }, true);
+    await toClue(page, 4);
+    const card = await boxOf(page.locator("[data-clue-card]"));
+    expect(card.right).toBeLessThanOrEqual(360);
+    const heading = page.locator("[data-clue-card] h2");
+    await expect(heading).toContainText("lighthouse");
+    expect(
+      await heading.evaluate(
+        (element) => element.scrollWidth - element.clientWidth,
+      ),
+    ).toBeLessThanOrEqual(0);
+    for (const option of await page.locator("[data-options] button").all()) {
+      expect((await boxOf(option)).right).toBeLessThanOrEqual(360);
+    }
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBeLessThanOrEqual(360);
+  });
+});
+
 test.describe("the Encore at 200% text", () => {
   test("R1-03 at 360 by 640 with 200% text the Encore's field shows the whole typed number, its unit under it", async ({
     page,
@@ -515,6 +609,43 @@ test.describe("the Encore at 200% text", () => {
     const unit = await boxOf(page.locator("[data-encore-unit]"));
     expect(unit.top).toBeGreaterThanOrEqual((await boxOf(input)).bottom - 1);
   });
+
+  // "1,250,000" showed as "250,000" in a 258 px field, and "1,234.5" as
+  // ",234.5" at 360 px.
+  for (const { width, height, value } of [
+    { width: 390, height: 844, value: "1,250,000" },
+    { width: 360, height: 640, value: "1,234.5" },
+    { width: 360, height: 640, value: "12,345" },
+  ]) {
+    test(`R1-03 at ${String(width)} by ${String(height)} with 200% text "${value}" shrinks to fit the field, leading digits and all, while "86.4" keeps the full size`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height });
+      await page.goto("/daily");
+      await toTheEncore(page);
+      await page.addStyleTag({ content: LARGE_TEXT });
+      const input = page.getByRole("textbox", { name: "Your number" });
+      const fontSize = async () =>
+        Number.parseFloat(
+          await input.evaluate((element) => getComputedStyle(element).fontSize),
+        );
+      await input.pressSequentially("86.4");
+      expect(await fontSize()).toBe(88);
+      await input.fill("");
+      await input.pressSequentially(value);
+      await expect(page.getByText("You're answering")).toBeVisible();
+      const fit = await input.evaluate((element) => ({
+        shown: element.clientWidth,
+        needed: element.scrollWidth,
+      }));
+      expect(fit.needed).toBeLessThanOrEqual(fit.shown);
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBeLessThanOrEqual(width);
+      // Every digit shows, still well above body text.
+      expect(await fontSize()).toBeGreaterThanOrEqual(32);
+    });
+  }
 
   test("at 320 by 568 with 200% text the number line keeps every label whole and inside the card", async ({
     page,

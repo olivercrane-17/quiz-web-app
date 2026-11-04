@@ -11,6 +11,11 @@
  * D10's stamps: `mysteryMissed` tells a controller whether a round showed a
  * miss before its solve, which `mysteryAnnouncementText` and `solvedStamp`
  * take, so a solve after a miss reads "Got there.", never "Knew it.".
+ *
+ * `focusReveal` is how a screen moves focus to a reveal it draws or finds:
+ * the heading takes focus without the browser's scroll, and the reveal's
+ * card then starts just below the sticky header (R1-12), as the rounds' own
+ * reveals do.
  */
 export {
   playSettingsFrom,
@@ -26,3 +31,4 @@ export {
   mysteryMissed,
   solvedStamp,
 } from "./mystery/copy";
+export { focusReveal } from "./viewport";

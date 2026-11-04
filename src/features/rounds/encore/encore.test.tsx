@@ -655,6 +655,43 @@ describe("EncoreRound, the result", () => {
     expect(unit?.className.split(/\s+/)).toContain(`${narrow}basis-full`);
   });
 
+  it("R1-03 steps the number's font down until a long number fits the field, and back up as it shortens", async () => {
+    // jsdom has no layout: a 228 px field (360 by 640 at 200% text) whose
+    // full size is 88 px, and characters 0.6 em wide.
+    const sheet = document.createElement("style");
+    sheet.textContent = "input { font-size: 88px; }";
+    document.head.append(sheet);
+    vi.spyOn(HTMLInputElement.prototype, "clientWidth", "get").mockReturnValue(
+      228,
+    );
+    vi.spyOn(
+      HTMLInputElement.prototype,
+      "scrollWidth",
+      "get",
+    ).mockImplementation(function (this: HTMLInputElement) {
+      const size = Number.parseFloat(getComputedStyle(this).fontSize);
+      return Math.ceil(this.value.length * size * 0.6);
+    });
+    try {
+      const { user } = play(encore({ decimals: 1, answer: 1250.5 }));
+      await user.type(numberField(), "86.4");
+      // Short numbers keep the field's full size.
+      expect(numberField().style.fontSize).toBe("");
+      await user.clear(numberField());
+      await user.type(numberField(), "1,234.5");
+      const size = Number.parseFloat(numberField().style.fontSize);
+      expect(size).toBeLessThan(88);
+      expect(size).toBeGreaterThanOrEqual(20);
+      expect(numberField().scrollWidth).toBeLessThanOrEqual(228);
+      // Shorter again: back to the full size.
+      await user.clear(numberField());
+      await user.type(numberField(), "12");
+      expect(numberField().style.fontSize).toBe("");
+    } finally {
+      sheet.remove();
+    }
+  });
+
   it("R1-26 marks a guess on the line as You, over its mark", () => {
     renderWithUser(<EncoreRound {...ostry(100, "close")} />);
     expect(label("guess")).toBe("You");

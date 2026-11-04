@@ -18,12 +18,16 @@
  * chart, Learn more, the heart and report actions, and Continue. Focus
  * lands on the answer heading (AC-DLY-18), and Enter there continues (PRD
  * §3.0.3), so the keyboard never has to tab past the actions.
+ *
+ * The guesses, the pick and the stamp come from the round's misses, which
+ * the reveal itself carries, so a reveal that a reload or Leave and
+ * Continue brings back reads as the live one did (R1-22, D10).
  */
 import { useEffect, useRef } from "react";
 
 import { TUNABLES } from "@/config/tunables";
 import type { MysteryOpen, MysteryReveal } from "@/engine/rounds/mystery";
-import type { RoundMeta, RunMode } from "@/engine/types";
+import type { RoundMeta, RunMode, WrongGuess } from "@/engine/types";
 import { analyticsMode } from "@/features/analytics/track";
 import { RevealActions } from "@/features/reports/reveal-actions";
 import { HAPTICS, vibrate } from "@/platform/haptics";
@@ -49,7 +53,11 @@ import { DISPLAY_FONT, TONE, enter } from "./tones";
 export interface MysteryRevealCardProps {
   meta: RoundMeta;
   reveal: MysteryReveal;
-  /** The clue screen the player last saw, when the device still has it: its guesses and option labels. */
+  /**
+   * The clue screen the player last saw, when the device still has it: its
+   * guesses and option labels, for a reveal from a backend that doesn't
+   * report the round's misses itself.
+   */
   lastOpen: MysteryOpen | null;
   continueLabel: string;
   onContinue(): void;
@@ -61,16 +69,39 @@ export interface MysteryRevealCardProps {
 type ClueRow =
   { state: "solved" } | { state: "used"; tags: string[] } | { state: "spare" };
 
-function clueRows(
+/**
+ * The round's misses (R1-22): from the reveal, which carries them once the
+ * round resolves, so a reload or a resume brings them back; else from the
+ * clue screen the device last showed.
+ */
+function revealHistory(
   reveal: MysteryReveal,
   lastOpen: MysteryOpen | null,
-): ClueRow[] {
-  const guesses = lastOpen?.wrongGuesses ?? [];
+): {
+  guesses: readonly WrongGuess[];
+  picked: string | null;
+  missed: boolean;
+} {
+  const guesses = reveal.wrongGuesses ?? lastOpen?.wrongGuesses ?? [];
   const picked =
     reveal.pickedOption === null
       ? null
-      : (lastOpen?.options?.find((o) => o.index === reveal.pickedOption)
-          ?.label ?? null);
+      : (reveal.pickedLabel ??
+        lastOpen?.options?.find((o) => o.index === reveal.pickedOption)
+          ?.label ??
+        null);
+  return {
+    guesses,
+    picked,
+    missed: guesses.length > 0 || mysteryMissed(lastOpen),
+  };
+}
+
+function clueRows(
+  reveal: MysteryReveal,
+  history: ReturnType<typeof revealHistory>,
+): ClueRow[] {
+  const { guesses, picked } = history;
   return reveal.clues.map((_, i) => {
     const n = i + 1;
     if (reveal.solvedOn === n) return { state: "solved" };
@@ -101,7 +132,8 @@ export function MysteryRevealCard({
   const headingRef = useFocusOnMount<HTMLHeadingElement>();
   const solved = reveal.solvedOn !== null;
   const shownPoints = useCountUp(reveal.points, settings.reducedMotion);
-  const rows = clueRows(reveal, lastOpen);
+  const history = revealHistory(reveal, lastOpen);
+  const rows = clueRows(reveal, history);
   const copy = MYSTERY_COPY.reveal;
 
   // One cue per reveal, as it lands.
@@ -151,7 +183,7 @@ export function MysteryRevealCard({
             {solvedStamp({
               clue: reveal.solvedOn ?? 4,
               picked: reveal.pickedOption !== null,
-              missed: mysteryMissed(lastOpen),
+              missed: history.missed,
             })}
           </span>
         ) : (
@@ -251,7 +283,8 @@ export function MysteryRevealCard({
               >
                 {i + 1}
               </span>
-              <p>
+              {/* A long word breaks inside its row, as on the ladder (R1-03). */}
+              <p className="wrap-anywhere">
                 <span className="sr-only">
                   {MYSTERY_COPY.ladder.clue(i + 1)}:
                 </span>{" "}
@@ -311,7 +344,7 @@ export function MysteryRevealCard({
           itemRef={itemRef}
           mode={analyticsMode(mode)}
           round="mystery"
-          wrongGuesses={lastOpen?.wrongGuesses ?? []}
+          wrongGuesses={history.guesses}
         />
         <LearnMoreLink name={reveal.learnMore} />
       </div>

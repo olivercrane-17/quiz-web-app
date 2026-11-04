@@ -4,9 +4,6 @@ import {
   MIN_SHEET_BODY_PX,
   focusIsElsewhere,
   keepSheetInView,
-  keepTopBelowHeader,
-  topInset,
-  visibleArea,
 } from "./viewport";
 
 type Box = { top: number; bottom: number; height: number };
@@ -43,88 +40,6 @@ beforeEach(() => {
 afterEach(() => {
   document.body.replaceChildren();
   document.documentElement.style.scrollPaddingTop = "";
-});
-
-describe("the header inset", () => {
-  it("reaches the bottom of a sticky or fixed header at the top edge", () => {
-    const header = element("header", "header");
-    header.style.position = "sticky";
-    layout({ header: { top: 0, bottom: 57, height: 57 } });
-    expect(topInset()).toBe(57);
-  });
-
-  it("ignores a header that scrolls with the page, is hidden or isn't at the top", () => {
-    element("header", "plain");
-    const hidden = element("header", "hidden");
-    hidden.style.position = "fixed";
-    const lower = element("header", "lower");
-    lower.style.position = "sticky";
-    layout({
-      plain: { top: 0, bottom: 80, height: 80 },
-      hidden: { top: 0, bottom: 0, height: 0 },
-      lower: { top: 200, bottom: 260, height: 60 },
-    });
-    expect(topInset()).toBe(0);
-  });
-
-  it("takes the page's scroll padding when that is larger", () => {
-    document.documentElement.style.scrollPaddingTop = "72px";
-    const header = element("header", "header");
-    header.style.position = "sticky";
-    layout({ header: { top: 0, bottom: 57, height: 57 } });
-    expect(topInset()).toBe(72);
-  });
-});
-
-describe("R1-12 the question's top", () => {
-  it("scrolls back up just enough to sit below the header, with the gap", () => {
-    const header = element("header", "header");
-    header.style.position = "sticky";
-    const question = element("div", "question");
-    layout({
-      header: { top: 0, bottom: 56, height: 56 },
-      question: { top: 30, bottom: 530, height: 500 },
-    });
-    keepTopBelowHeader(question);
-    expect(scrollBy).toHaveBeenCalledExactlyOnceWith({
-      top: -42,
-      behavior: "instant",
-    });
-  });
-
-  it("leaves a question that already starts below the header where it is", () => {
-    const header = element("header", "header");
-    header.style.position = "sticky";
-    const question = element("div", "question");
-    layout({
-      header: { top: 0, bottom: 56, height: 56 },
-      question: { top: 120, bottom: 620, height: 500 },
-    });
-    keepTopBelowHeader(question);
-    expect(scrollBy).not.toHaveBeenCalled();
-  });
-
-  it("does nothing without layout", () => {
-    keepTopBelowHeader(element("div", "none"));
-    keepTopBelowHeader(null);
-    expect(scrollBy).not.toHaveBeenCalled();
-  });
-});
-
-describe("the visible area", () => {
-  it("runs from under the header to the bottom of the visual viewport", () => {
-    const header = element("header", "header");
-    header.style.position = "sticky";
-    layout({ header: { top: 0, bottom: 57, height: 57 } });
-    expect(visibleArea()).toEqual({ top: 57, bottom: 844 });
-    // A page wider than the phone: the layout viewport is taller than the
-    // screen, and the visual viewport may sit lower in it.
-    vi.stubGlobal("innerHeight", 945);
-    vi.stubGlobal("visualViewport", { offsetTop: 40, height: 839 });
-    expect(visibleArea()).toEqual({ top: 57, bottom: 879 });
-    vi.stubGlobal("visualViewport", { offsetTop: 90, height: 839 });
-    expect(visibleArea()).toEqual({ top: 90, bottom: 929 });
-  });
 });
 
 describe("R1-21 the explanation sheet on screen", () => {

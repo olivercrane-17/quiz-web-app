@@ -5,20 +5,21 @@
  * progress and finished. DLY-2 adds the rest (offline, outage, the played
  * count, the Group line, the first-paint date script).
  *
- * The number, date, minutes and rule line render at once from the epoch
- * and the device's date, and Play is live before anything loads: it starts
- * the Daily in one tap (AC-DLY-01). The status and chips arrive with
+ * The number, minutes and rule line render at once from the epoch and the
+ * device's date, and Play is live before anything loads: it starts the
+ * Daily in one tap (AC-DLY-01). The status and chips arrive with
  * `get_today` after first paint, from a lazily loaded chunk. The minutes
  * show only before the Daily starts; the rule line describes Mysteries
- * only when the day has one. The finished card draws its mini grid in the
- * player's glyph set and carries Share with the stop screen's own text
- * (AC-SHR-11), built in that chunk. Past 7 days shows once the archive has
- * a route (R1-02).
+ * only when the day has one. The card never repeats the date: Today's
+ * dateline above it names the day (D18). The finished card draws its mini
+ * grid in the player's glyph set and carries Share with the stop screen's
+ * own text (AC-SHR-11), built in that chunk. Past 7 days shows once the
+ * archive has a route (R1-02).
  *
  * Size: one of Home's eager islands, with a 4 kB gzipped target, so it
- * imports no engine module (the day names are repeated below, and a test
- * keeps them equal to the engine's), and the backend and the Share button
- * load with import(), only for a finished card.
+ * imports no engine module (the Daily's number is worked out below, and a
+ * test keeps it equal to the engine's), and the backend and the Share
+ * button load with import(), only for a finished card.
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -44,30 +45,6 @@ import { ANSWER_TYPE_WORDS, DIFFICULTY_WORDS, waitWords } from "./words";
 
 const COPY = HOME_CARD_COPY;
 
-export const WEEKDAYS = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-] as const;
-export const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-] as const;
-
 const DAY_MS = 86_400_000;
 
 function utcDay(date: string): number {
@@ -75,16 +52,13 @@ function utcDay(date: string): number {
   return Date.UTC(year, month - 1, day);
 }
 
-/** "Sunday 1 November" for a date (`YYYY-MM-DD`). */
-export function longDate(date: string): string {
-  const at = new Date(utcDay(date));
-  return `${WEEKDAYS[at.getUTCDay()]} ${at.getUTCDate()} ${MONTHS[at.getUTCMonth()]}`;
-}
-
-/** "Daily #42 · Sunday 1 November" for a date (`YYYY-MM-DD`) and the epoch. */
+/**
+ * "Daily #42" for a date (`YYYY-MM-DD`) and the epoch. No date: Today's
+ * dateline names the day once (D18).
+ */
 export function dailyLine(date: string, epoch: string): string {
   const number = Math.round((utcDay(date) - utcDay(epoch)) / DAY_MS) + 1;
-  return COPY.dailyLine(number, longDate(date));
+  return COPY.dailyLine(number);
 }
 
 /** The device's local date, `YYYY-MM-DD`. */
@@ -240,13 +214,10 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
   }, [finishedId, highContrast]);
 
   const date = card?.daily.date ?? today;
-  // The minutes say how long a Daily takes, so only before it starts.
-  const line =
-    date === null
-      ? null
-      : status === "in_progress"
-        ? longDate(date)
-        : dailyLine(date, epoch);
+  // Which Daily, and before it starts how long it takes; the dateline
+  // above names the day (D18). An unfinished run's heading names the Daily
+  // itself, so it has no line.
+  const line = date === null ? null : dailyLine(date, epoch);
   const dailyNumber = card?.daily.dailyNumber;
   const rule =
     card === null || card.rounds.some((chip) => chip.type === "mystery")
@@ -332,12 +303,14 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
       <h2 id="qz-daily-card" className="text-xl font-bold">
         {heading}
       </h2>
-      <p className="text-sm font-semibold">
-        <span className={line === null ? "invisible" : undefined}>
-          {line ?? COPY.dailyLine(0, "Wednesday 30 September")}
-        </span>
-        {status === "not_started" ? ` · ${COPY.minutes(minutes)}` : null}
-      </p>
+      {status === "in_progress" ? null : (
+        <p className="text-sm font-semibold">
+          <span className={line === null ? "invisible" : undefined}>
+            {line ?? COPY.dailyLine(0)}
+          </span>
+          {status === "not_started" ? ` · ${COPY.minutes(minutes)}` : null}
+        </p>
+      )}
       {body}
       {action}
       {after}

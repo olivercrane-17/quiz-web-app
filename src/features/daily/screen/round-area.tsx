@@ -14,11 +14,15 @@
  *   round's card (PRD §3.13.4), and on the card of a choice or Encore round
  *   that resolved before this page loaded. A Mystery that resolved before a
  *   reload shows its own reveal again, from the clue screen its reveal
- *   carries (DESIGN §12.2: a resume lands on the same screen).
+ *   carries, misses included (DESIGN §12.2: a resume lands on the same
+ *   screen; R1-22).
  * - Focus follows the run's focus commands to the element marked
  *   `data-focus-target` for that target, as MYS-1's rounds mark theirs; a
  *   mounted component focuses its own heading as it arrives, and a wrong
  *   guess leaves focus in the field, so the keyboard stays up (DESIGN §6.4).
+ *   A reveal's heading takes focus without the browser's scroll, and its
+ *   card then starts just below the sticky header, so the stamp and the
+ *   round's kicker above the heading show too (R1-12).
  * - Below the round: a retry's notice in its own words (a lost request, or
  *   a rate limit, which reached us and used up nothing), the offline line
  *   where the round component doesn't draw one, "Checking…" for a slow
@@ -41,7 +45,7 @@ import {
   type RoundOutcome,
   type RoundReveal,
 } from "@/engine/types";
-import type { PlaySettings } from "@/features/rounds";
+import { focusReveal, type PlaySettings } from "@/features/rounds";
 import { ROUND_COMPONENTS } from "@/features/rounds/client";
 import { Button } from "@/ui/button";
 import { buttonClasses } from "@/ui/button-classes";
@@ -64,6 +68,9 @@ const DRAWS_WITHDRAWN: ReadonlySet<RoundFamily> = new Set([
   "mystery",
   "encore",
 ]);
+/** The cards a reveal heading sits in: a round component's, or the area's own. */
+const REVEAL_CARDS =
+  "[data-reveal], [data-round-resolved], [data-round-withdrawn]";
 
 type MysteryReveal = Extract<RoundReveal, { family: "mystery" }>;
 type MysteryOpen = Extract<RoundOpen, { family: "mystery" }>;
@@ -81,8 +88,11 @@ function learnMoreHref(topic: string): string {
 
 /**
  * The clue screen a Mystery's reveal closed, rebuilt from the reveal, which
- * carries all four clues: what a round resolved before this page loaded
- * hands its component. The snapshot keeps no guesses, so it shows none.
+ * carries all four clues and the round's misses (R1-22): what a round
+ * resolved before this page loaded hands its component, so its reveal
+ * stamps "Got there." after a wrong guess and says "You guessed ..." and
+ * "You picked ..." as the live one did. The options themselves are gone;
+ * the reveal names the one picked.
  */
 function clueScreenOf(meta: RoundMeta, reveal: MysteryReveal): MysteryOpen {
   const clue = reveal.solvedOn ?? 4;
@@ -91,7 +101,7 @@ function clueScreenOf(meta: RoundMeta, reveal: MysteryReveal): MysteryOpen {
     index: meta.index,
     clue,
     clues: reveal.clues.slice(0, clue),
-    wrongGuesses: [],
+    wrongGuesses: (reveal.wrongGuesses ?? []).map((g) => ({ ...g })),
     options: null,
     issuedAt: 0,
   };
@@ -379,9 +389,16 @@ export function RoundArea({
     ) {
       return;
     }
-    area
-      .querySelector<HTMLElement>(`[data-focus-target="${focus.target}"]`)
-      ?.focus();
+    const target = area.querySelector<HTMLElement>(
+      `[data-focus-target="${focus.target}"]`,
+    );
+    if (focus.target === "reveal_heading") {
+      // Without the browser's scroll, which would leave the reveal's stamp
+      // and kicker under the sticky header: its card starts below it (R1-12).
+      focusReveal(target, target?.closest<HTMLElement>(REVEAL_CARDS) ?? null);
+      return;
+    }
+    target?.focus();
   }, [focus]);
 
   const context = useMemo(

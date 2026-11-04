@@ -145,6 +145,18 @@ export type RoundReveal =
       solvedOn: 1 | 2 | 3 | 4 | null;
       points: number;
       pickedOption: number | null;
+      /**
+       * The round's misses, no secret once it has resolved (R1-22): every
+       * wrong typed guess on the clue it was made on, and the label of the
+       * option picked (`pickedOption`), so a reveal brought back by a
+       * reload or a resume says "You guessed ..." and "You picked ..." and
+       * stamps as the live one did (D10). A backend that doesn't report
+       * them leaves them out, and the reveal then shows what the device
+       * still has. SQL-5's round_action and get_attempt return them too;
+       * an engine contract change for ENG to review.
+       */
+      wrongGuesses?: WrongGuess[];
+      pickedLabel?: string | null;
       explanation: string;
       learnMore: string;
       sourceLabels: string[];

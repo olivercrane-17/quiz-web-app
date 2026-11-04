@@ -46,6 +46,11 @@ vi.mock(import("@/features/rounds/client"), async (importOriginal) => {
           data-clue={
             props.open.family === "mystery" ? props.open.clue : undefined
           }
+          data-guesses={
+            props.open.family === "mystery"
+              ? props.open.wrongGuesses.map((g) => g.display).join(", ")
+              : undefined
+          }
           data-reveal={props.reveal?.family ?? ""}
           data-first-daily={String(props.context.firstDaily)}
         />
@@ -222,12 +227,23 @@ describe("the Daily's round area", () => {
     const { user } = renderWithUser(<Screen controller={t.controller} />);
     await begin(t.controller);
     await run(() => t.controller.intent(guess(ODILE)));
+    const focus = vi.spyOn(HTMLElement.prototype, "focus");
     await run(() => t.controller.continue());
 
     const withdrawn = screen.getByRole("heading", {
       name: "This Mystery was withdrawn because we got it wrong. Everyone gets 4 points.",
     });
     expect(withdrawn).toHaveFocus();
+    // R1-12: without the browser's scroll, which would leave the card's top
+    // under the sticky header; the card then starts below it.
+    expect(focus.mock.contexts.some((element) => element === withdrawn)).toBe(
+      true,
+    );
+    for (const [index, element] of focus.mock.contexts.entries()) {
+      if (element === withdrawn) {
+        expect(focus.mock.calls[index]).toEqual([{ preventScroll: true }]);
+      }
+    }
     expect(
       screen.getAllByRole("heading", { name: "Mystery 2 of 3 · Medium" }),
     ).toHaveLength(1);
@@ -385,6 +401,32 @@ describe("the Daily's round area", () => {
       ),
     ).not.toBeNull();
     expect(area().querySelector("[data-round-resolved]")).toBeNull();
+  });
+
+  it("R1-22 brings a Mystery's misses back with its reveal after a reload", async () => {
+    const t = setup();
+    await begin(t.controller);
+    // A wrong guess on clue 1, then the answer on clue 2.
+    await run(() => t.controller.intent(guess(LIESL)));
+    await run(() => t.controller.intent(guess(ODILE)));
+    t.controller.stop();
+    const reloaded = t.make();
+    renderWithUser(<Screen controller={reloaded} />);
+    await begin(reloaded);
+    const reveal = reloaded.getSnapshot().view?.round?.reveal;
+    expect(reveal).toMatchObject({
+      family: "mystery",
+      solvedOn: 2,
+      wrongGuesses: [{ clue: 1, entityId: LIESL, display: "Liesl Varo" }],
+      pickedLabel: null,
+    });
+    // The rebuilt clue screen carries the miss too, so the reveal stamps
+    // "Got there." and says "You guessed Liesl Varo" (D10).
+    expect(
+      area().querySelector(
+        '[data-probe="mystery"][data-reveal="mystery"][data-clue="2"]',
+      ),
+    ).toHaveAttribute("data-guesses", "Liesl Varo");
   });
 
   it("shows a choice round resolved before a reload with its explanation and Learn more", async () => {

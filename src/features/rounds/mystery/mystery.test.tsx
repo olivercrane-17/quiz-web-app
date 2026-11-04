@@ -691,6 +691,55 @@ describe("MysteryRound, the reveal", () => {
     expect(screen.queryByRole("figure")).toBeNull();
   });
 
+  it("R1-22 D10 a reveal brought back by a reload still stamps Got there. and names the round's misses, which the reveal carries", () => {
+    const corin = {
+      clue: 1 as const,
+      entityId: parseEntityId("fx.x.person.corin-ashby")!,
+      display: "Corin Ashby",
+    };
+    // Solved on clue 2 after a wrong guess; the reloaded clue screen the
+    // round area hands the component has no guesses of its own.
+    const solved = renderWithUser(
+      <MysteryRound
+        {...revealProps({
+          ...solvedReveal(null),
+          solvedOn: 2,
+          points: 3,
+          wrongGuesses: [corin],
+          pickedLabel: null,
+        } as RoundReveal)}
+      />,
+    );
+    expect(within(reveal()).getByText("Got there.")).toBeInTheDocument();
+    expect(within(reveal()).queryByText("Knew it.")).toBeNull();
+    const rows = within(reveal()).getAllByRole("listitem");
+    expect(
+      within(rows[0] as HTMLElement).getByText("You guessed Corin Ashby"),
+    ).toBeInTheDocument();
+    solved.unmount();
+
+    // A miss: the wrong guess, then a wrong pick on clue 4.
+    renderWithUser(
+      <MysteryRound
+        {...revealProps({
+          ...solvedReveal(null),
+          solvedOn: null,
+          points: 0,
+          pickedOption: 2,
+          wrongGuesses: [corin],
+          pickedLabel: "Liesl Varo",
+        } as RoundReveal)}
+      />,
+    );
+    const missed = within(reveal()).getAllByRole("listitem");
+    expect(
+      within(missed[0] as HTMLElement).getByText("You guessed Corin Ashby"),
+    ).toBeInTheDocument();
+    expect(
+      within(missed[3] as HTMLElement).getByText("You picked Liesl Varo"),
+    ).toBeInTheDocument();
+  });
+
   it("shows the withdrawn card for a voided Mystery", async () => {
     const props = revealProps({
       family: "withdrawn",

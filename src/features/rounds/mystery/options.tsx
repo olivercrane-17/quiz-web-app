@@ -104,9 +104,12 @@ export function MysteryOptions(props: MysteryOptionsProps) {
           {MYSTERY_COPY.options.keys(digitsPick(options))}
         </p>
       ) : null}
-      <ol className="mt-2 grid gap-2.5">
+      {/* grid-cols-1 is minmax(0, 1fr): the longest word in a label can't
+          widen the column past the screen, as "Ferryman" took it to 331 px
+          of 296 at 200% text on a 360 px phone (R1-03); it breaks instead. */}
+      <ol className="mt-2 grid grid-cols-1 gap-2.5">
         {options.map((option) => (
-          <li key={option.index}>
+          <li key={option.index} className="min-w-0">
             <AnswerButton
               index={option.index}
               state={stateOf(option, props)}

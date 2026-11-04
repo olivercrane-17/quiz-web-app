@@ -20,6 +20,11 @@
  *
  * Clues and stamps that arrive while the round is on screen animate in
  * (DESIGN §7.4); the ones a reload brings back are simply there.
+ *
+ * A word too long for a line of its own, as "lighthouse's" is at 200% text
+ * on a 360 px phone, breaks inside the clue rather than running past the
+ * card and widening the page (R1-03). Only such a word breaks: no
+ * hyphenation, which would change every clue at every text size.
  */
 import type { ReactNode, Ref } from "react";
 
@@ -48,6 +53,9 @@ export interface ClueLadderProps {
   /** A line under the current clue's card, with the id the field's description points at. */
   note?: { id: string; text: string } | null;
 }
+
+/** Clue text: a word too long for its line breaks, never runs past the card (R1-03). */
+const CLUE_TEXT = "wrap-anywhere";
 
 function Rung({
   n,
@@ -136,7 +144,7 @@ export function ClueLadder({
               <div
                 data-clue-card=""
                 className={cx(
-                  "relative rounded-[14px] border-[1.5px] outline-offset-[3px] has-[h2:focus-visible]:outline-[3px] has-[h2:focus-visible]:outline-[color:var(--kn-focus,var(--foreground))]",
+                  "relative min-w-0 rounded-[14px] border-[1.5px] outline-offset-[3px] has-[h2:focus-visible]:outline-[3px] has-[h2:focus-visible]:outline-[color:var(--kn-focus,var(--foreground))]",
                   // With the keyboard up the card slims, so the field and
                   // three rows fit under it (AC-DLY-32).
                   compact ? "px-3 py-1.5" : "px-3.5 pt-3 pb-3",
@@ -169,6 +177,7 @@ export function ClueLadder({
                   className={cx(
                     // The card draws the focus ring (above).
                     "font-semibold text-pretty outline-none",
+                    CLUE_TEXT,
                     compact
                       ? "text-[0.9375rem] leading-snug"
                       : "text-lg leading-[1.38]",
@@ -184,6 +193,7 @@ export function ClueLadder({
               <p
                 className={cx(
                   "pt-1",
+                  CLUE_TEXT,
                   optionsShowing || compact
                     ? "text-sm leading-[1.35]"
                     : "text-[0.9375rem] leading-[1.4]",
@@ -201,6 +211,7 @@ export function ClueLadder({
                 data-clue-note=""
                 className={cx(
                   "mt-2 rounded-xl px-3 py-2 text-[0.9375rem] leading-snug font-semibold text-pretty forced-colors:border forced-colors:border-[color:CanvasText]",
+                  CLUE_TEXT,
                   TONE.accentTint,
                   TONE.ink,
                 )}
