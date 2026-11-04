@@ -1,0 +1,445 @@
+{
+  "$comment": [
+    "Percentile parity table (ARCHITECTURE §4.13, PRD §4.3.4, AC-DLY-20): pools at 49 and 50, ties, a tied top, P = 100 and under 5, flagged and low-trust players, bands and the all-bands fallback; the offset bands; and the largest-remainder shares of the crowd stats (PRD §4.1.5).",
+    "Replayed by Vitest against src/engine/scoring/percentile.ts, and from SQL-7 by generated tests against get_daily_numbers (§8.9), which expand each pool into daily_results rows.",
+    "minN is percentile_min_n; the engine test checks it against src/config/shared.json, so a change there fails until this table follows.",
+    "pools: me is the player's run (its offset band, and whether it is eligible: a flagged, low-trust or archive run is not). others are other players' eligible runs, each group by band and by how it ranks against the player (worse, tied or better; generated rows take the player's rank key minus 1, the same key, or plus 1). ranked is false for an archive or challenge-only play; windowOpen says the date is still open somewhere.",
+    "The band scope applies when the player's band holds minN eligible runs, the player's own counted only when eligible; otherwise every band. N counts the player once, P = floor(100 × (B + 0.5 × T) / (N - 1)). headline: nobody_better when nothing ranks strictly better (B + T = N - 1), tough when P is under 5, else beat; null when no ranked number shows.",
+    "shares: whole percentages that sum to 100 by largest remainder; equal remainders go to the earlier bucket (clue 1, clue 2, clue 3, clue 4, missed)."
+  ],
+  "minN": 50,
+  "pools": [
+    {
+      "id": "cold-49",
+      "ac": "AC-DLY-20",
+      "title": "49 eligible finishers counting the player: cold start, no number",
+      "me": { "band": 1, "eligible": true },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 30 },
+        { "band": 0, "vs": "better", "count": 18 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": { "status": "cold_start", "finishers": 49 },
+        "headline": null,
+        "scope": "all"
+      }
+    },
+    {
+      "id": "pool-50",
+      "ac": "AC-DLY-20",
+      "title": "the 50th finisher brings the number: 31 worse of 49 others is 63%",
+      "me": { "band": 1, "eligible": true },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 30 },
+        { "band": 0, "vs": "better", "count": 18 },
+        { "band": 2, "vs": "worse", "count": 1 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 63,
+          "pool": 50,
+          "scope": "all",
+          "final": false
+        },
+        "headline": "beat",
+        "scope": "all"
+      }
+    },
+    {
+      "id": "ties-half",
+      "ac": "AC-DLY-20",
+      "title": "ties count half: 20 worse and 9 tied of 49 is exactly 50%",
+      "me": { "band": 1, "eligible": true },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 20 },
+        { "band": 1, "vs": "tied", "count": 9 },
+        { "band": 1, "vs": "better", "count": 20 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 50,
+          "pool": 50,
+          "scope": "band",
+          "final": false
+        },
+        "headline": "beat",
+        "scope": "band"
+      }
+    },
+    {
+      "id": "p-100",
+      "ac": "AC-DLY-20",
+      "title": "better than everyone: 100%, and nobody has beaten you",
+      "me": { "band": 1, "eligible": true },
+      "others": [{ "band": 1, "vs": "worse", "count": 49 }],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 100,
+          "pool": 50,
+          "scope": "band",
+          "final": false
+        },
+        "headline": "nobody_better"
+      }
+    },
+    {
+      "id": "tied-top",
+      "ac": "AC-DLY-20",
+      "title": "a tied top: nobody better, 9 tied, so P is 90 and the copy still says nobody has beaten you",
+      "me": { "band": 1, "eligible": true },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 40 },
+        { "band": 1, "vs": "tied", "count": 9 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 90,
+          "pool": 50,
+          "scope": "band",
+          "final": false
+        },
+        "headline": "nobody_better"
+      }
+    },
+    {
+      "id": "all-tied",
+      "ac": "AC-DLY-20",
+      "title": "everyone tied: 50%, and nobody has beaten you",
+      "me": { "band": 1, "eligible": true },
+      "others": [{ "band": 1, "vs": "tied", "count": 49 }],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 50,
+          "pool": 50,
+          "scope": "band",
+          "final": false
+        },
+        "headline": "nobody_better"
+      }
+    },
+    {
+      "id": "under-5",
+      "ac": "AC-DLY-20",
+      "title": "P under 5 with runs ranked better: 4%, read as a tough one",
+      "me": { "band": 1, "eligible": true },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 2 },
+        { "band": 1, "vs": "better", "count": 47 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 4,
+          "pool": 50,
+          "scope": "band",
+          "final": false
+        },
+        "headline": "tough"
+      }
+    },
+    {
+      "id": "exactly-5",
+      "ac": "AC-DLY-20",
+      "title": "exactly 5% reads as a number again",
+      "me": { "band": 1, "eligible": true },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 2 },
+        { "band": 1, "vs": "tied", "count": 1 },
+        { "band": 1, "vs": "better", "count": 46 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 5,
+          "pool": 50,
+          "scope": "band",
+          "final": false
+        },
+        "headline": "beat"
+      }
+    },
+    {
+      "id": "last",
+      "ac": "AC-DLY-20",
+      "title": "behind everyone: 0%, read as a tough one",
+      "me": { "band": 1, "eligible": true },
+      "others": [{ "band": 1, "vs": "better", "count": 49 }],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 0,
+          "pool": 50,
+          "scope": "band",
+          "final": false
+        },
+        "headline": "tough"
+      }
+    },
+    {
+      "id": "band-scope",
+      "ac": "AC-DLY-20",
+      "title": "a band holding 50 eligible runs with the player ranks within it alone",
+      "me": { "band": 2, "eligible": true },
+      "others": [
+        { "band": 2, "vs": "worse", "count": 25 },
+        { "band": 2, "vs": "better", "count": 24 },
+        { "band": 1, "vs": "worse", "count": 100 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 51,
+          "pool": 50,
+          "scope": "band",
+          "final": false
+        },
+        "headline": "beat",
+        "worse": 25,
+        "tied": 0
+      }
+    },
+    {
+      "id": "band-fallback",
+      "ac": "AC-DLY-20",
+      "title": "a band of 49 falls back to the all-bands pool",
+      "me": { "band": 2, "eligible": true },
+      "others": [
+        { "band": 2, "vs": "worse", "count": 10 },
+        { "band": 2, "vs": "better", "count": 38 },
+        { "band": 1, "vs": "worse", "count": 100 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 74,
+          "pool": 149,
+          "scope": "all",
+          "final": false
+        },
+        "headline": "beat",
+        "worse": 110
+      }
+    },
+    {
+      "id": "flagged",
+      "ac": "AC-DLY-20",
+      "title": "a flagged player still sees a number, placed in the pool without counting toward its band",
+      "me": { "band": 2, "eligible": false },
+      "others": [
+        { "band": 2, "vs": "worse", "count": 30 },
+        { "band": 2, "vs": "better", "count": 19 },
+        { "band": 0, "vs": "worse", "count": 51 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 81,
+          "pool": 101,
+          "scope": "all",
+          "final": false
+        },
+        "headline": "beat"
+      }
+    },
+    {
+      "id": "flagged-band",
+      "ac": "AC-DLY-20",
+      "title": "a flagged player in a band of 50 eligible others ranks within the band",
+      "me": { "band": 1, "eligible": false },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 25 },
+        { "band": 1, "vs": "better", "count": 25 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 50,
+          "pool": 51,
+          "scope": "band",
+          "final": false
+        },
+        "headline": "beat"
+      }
+    },
+    {
+      "id": "low-trust",
+      "ac": "AC-DLY-20",
+      "title": "a low-trust player's run is placed the same way and still gets a number",
+      "me": { "band": 0, "eligible": false },
+      "others": [
+        { "band": 0, "vs": "worse", "count": 10 },
+        { "band": 0, "vs": "tied", "count": 2 },
+        { "band": 0, "vs": "better", "count": 38 }
+      ],
+      "ranked": true,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 22,
+          "pool": 51,
+          "scope": "band",
+          "final": false
+        },
+        "headline": "beat"
+      }
+    },
+    {
+      "id": "archive",
+      "title": "an archive play reads the same pool as \"You'd have beaten 50%\" while the date is still open",
+      "me": { "band": 1, "eligible": false },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 30 },
+        { "band": 1, "vs": "better", "count": 30 }
+      ],
+      "ranked": false,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "unranked",
+          "wouldHaveBeaten": 50,
+          "windowOpen": true
+        },
+        "headline": null
+      }
+    },
+    {
+      "id": "archive-few",
+      "title": "an archive play under the threshold shows no number",
+      "me": { "band": 1, "eligible": false },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 20 },
+        { "band": 1, "vs": "better", "count": 10 }
+      ],
+      "ranked": false,
+      "windowOpen": false,
+      "expect": {
+        "view": {
+          "status": "unranked",
+          "wouldHaveBeaten": null,
+          "windowOpen": false
+        },
+        "headline": null
+      }
+    },
+    {
+      "id": "final",
+      "title": "once the date's window has closed everywhere the number is final",
+      "me": { "band": 1, "eligible": true },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 30 },
+        { "band": 0, "vs": "better", "count": 18 },
+        { "band": 2, "vs": "worse", "count": 1 }
+      ],
+      "ranked": true,
+      "windowOpen": false,
+      "expect": {
+        "view": {
+          "status": "ready",
+          "percentile": 63,
+          "pool": 50,
+          "scope": "all",
+          "final": true
+        }
+      }
+    }
+  ],
+  "bands": [
+    { "offsetMinutes": -720, "band": 0 },
+    { "offsetMinutes": -121, "band": 0 },
+    { "offsetMinutes": -120, "band": 1 },
+    { "offsetMinutes": -60, "band": 1 },
+    { "offsetMinutes": 0, "band": 1 },
+    { "offsetMinutes": 239, "band": 1 },
+    { "offsetMinutes": 240, "band": 2 },
+    { "offsetMinutes": 330, "band": 2 },
+    { "offsetMinutes": 840, "band": 2 }
+  ],
+  "shares": [
+    {
+      "id": "thirds",
+      "title": "three equal counts: the spare point goes to the first",
+      "counts": [1, 1, 1],
+      "shares": [34, 33, 33]
+    },
+    {
+      "id": "empty",
+      "title": "no answers yet: all zeros",
+      "counts": [0, 0, 0, 0, 0],
+      "shares": [0, 0, 0, 0, 0]
+    },
+    {
+      "id": "prd-example",
+      "title": "the PRD's crowd chart: clue 1 14%, clue 2 31%, clue 3 22%, clue 4 18%, missed 15%",
+      "counts": [140, 310, 220, 180, 150],
+      "shares": [14, 31, 22, 18, 15]
+    },
+    {
+      "id": "one-two",
+      "title": "1 and 2: 33 and 67",
+      "counts": [1, 2],
+      "shares": [33, 67]
+    },
+    {
+      "id": "two-one",
+      "title": "2 and 1: 67 and 33",
+      "counts": [2, 1],
+      "shares": [67, 33]
+    },
+    {
+      "id": "all-one",
+      "title": "everyone in one bucket: 100",
+      "counts": [5, 0, 0, 0, 0],
+      "shares": [100, 0, 0, 0, 0]
+    },
+    {
+      "id": "sevenths",
+      "title": "seven equal counts: two buckets take the two spare points",
+      "counts": [1, 1, 1, 1, 1, 1, 1],
+      "shares": [15, 15, 14, 14, 14, 14, 14]
+    },
+    {
+      "id": "largest-remainders",
+      "title": "the spare points go by remainder, not by count",
+      "counts": [10, 5, 6],
+      "shares": [48, 24, 28]
+    },
+    {
+      "id": "equal-remainders",
+      "title": "3, 3 and 1: the two equal remainders both take a point",
+      "counts": [3, 3, 1],
+      "shares": [43, 43, 14]
+    }
+  ]
+}
