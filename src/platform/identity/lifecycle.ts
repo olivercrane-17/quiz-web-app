@@ -74,6 +74,9 @@ import {
   type LocalIdentityProvider,
   type RandomBytes,
 } from "./local";
+import type { RecoveryOutcome, SentCredential } from "./provider";
+
+export type { RecoveryOutcome, SentCredential } from "./provider";
 
 /** The slice of the Web Locks API the loader uses. */
 export interface LocksLike {
@@ -130,12 +133,6 @@ export interface LoadIdentityOptions {
   onRestored?: (source: RestoreSource) => void;
 }
 
-/** What `recover()` did (§9.6, §7.3 `auth_failed`). */
-export type RecoveryOutcome = "restored" | "minted";
-
-/** The credential a write was sent with. */
-export type SentCredential = Pick<LocalIdentity, "playerId" | "secret">;
-
 /** The tab's identity, as the boot keeps it. */
 export interface ManagedIdentity extends LocalIdentityProvider {
   /**
@@ -148,6 +145,8 @@ export interface ManagedIdentity extends LocalIdentityProvider {
    * again with a new identity (`minted`, which the caller explains: "We
    * couldn't find your profile on this device, so we started a new
    * one..."). Recoveries run one at a time, under the identity lock.
+   * This is `IdentityProvider.recover`, which the Supabase RPC wrapper
+   * calls once on `auth_failed` (src/backend/supabase/rpc.ts).
    */
   recover(failed: SentCredential): Promise<RecoveryOutcome>;
   /**

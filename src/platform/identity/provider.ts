@@ -8,6 +8,12 @@
  */
 import type { LocalIdentity } from "@/engine/types";
 
+/** What a recovery did (§9.6, §7.3 `auth_failed`). */
+export type RecoveryOutcome = "restored" | "minted";
+
+/** The credential a call was sent with. */
+export type SentCredential = Pick<LocalIdentity, "playerId" | "secret">;
+
 export interface IdentityProvider {
   /** Mints on first use; never null. */
   current(): LocalIdentity;
@@ -22,4 +28,14 @@ export interface IdentityProvider {
    * and posts it to the backup cookie when it is registered.
    */
   replace(next: LocalIdentity): void;
+  /**
+   * After a call sent with `failed` answered `auth_failed` (a wrong or
+   * pruned credential, §9.6): one backup-cookie restore, else a new
+   * identity. `restored` means `current()` is worth one retry (it may have
+   * moved on already, in another tab or an earlier recovery); `minted`
+   * means the player starts again. The tab's provider is the lifecycle's
+   * (`ManagedIdentity.recover`, IDN-1); one without it leaves `auth_failed`
+   * as the answer.
+   */
+  recover?(failed: SentCredential): Promise<RecoveryOutcome>;
 }

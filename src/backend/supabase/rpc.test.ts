@@ -2,7 +2,8 @@
  * call(), the RPC wrapper (ARCHITECTURE §7.5): envelope mapping, 429 with
  * Retry-After or the wait in its body, offline and unreachable, timeout
  * (the SDK download included), server-clock samples, the credential,
- * markRegistered and the reports. It drives the real
+ * markRegistered, the one recovery after auth_failed and the reports. It
+ * drives the real
  * supabase-js client, with its fetch recording responses, over a stubbed
  * platform fetch.
  */
@@ -10,8 +11,10 @@ import { createClient } from "@supabase/supabase-js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { parsePlayerId, parseSecret, type LocalIdentity } from "@/engine/types";
+import type { IdentityProvider } from "@/platform/identity/provider";
 
 import internalEnvelope from "./__fixtures__/envelope.internal.json";
+import authFailedEnvelope from "./__fixtures__/identity.auth-failed.json";
 import okEnvelope from "./__fixtures__/envelope.ok.json";
 import rateLimitedEnvelope from "./__fixtures__/envelope.rate-limited.json";
 import staleEnvelope from "./__fixtures__/envelope.stale.json";
@@ -38,6 +41,14 @@ const KEY = "sb_publishable_test_key";
 const PLAYER = parsePlayerId("6f1d2c3b-4a5e-4f60-8a7b-9c8d7e6f5a4b");
 const SECRET = parseSecret("BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc");
 if (PLAYER === null || SECRET === null) throw new Error("bad test identity");
+/** The identity a recovery brings back from the backup cookie. */
+const COOKIE_PLAYER = parsePlayerId("0b9c8d7e-6f5a-4b3c-9d2e-1f0a9b8c7d6e");
+const COOKIE_SECRET = parseSecret(
+  "CAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg",
+);
+if (COOKIE_PLAYER === null || COOKIE_SECRET === null) {
+  throw new Error("bad cookie identity");
+}
 
 // One real client for the file: supabase-js warns when a page holds more.
 const client = createClient(
@@ -65,13 +76,19 @@ function setup(
     registered?: boolean;
     online?: boolean;
     runtime?: Partial<RpcRuntime>;
+    /** The provider's recover(); none by default, as in the contract harness. */
+    recover?: IdentityProvider["recover"];
   } = {},
 ) {
   const observe = vi.fn();
-  const provider = {
+  const provider: IdentityProvider & {
+    current: ReturnType<typeof vi.fn<() => LocalIdentity>>;
+    markRegistered: ReturnType<typeof vi.fn<() => void>>;
+  } = {
     current: vi.fn(() => identity(options.registered ?? false)),
     markRegistered: vi.fn(),
     replace: vi.fn(),
+    ...(options.recover === undefined ? {} : { recover: options.recover }),
   };
   const ctx: SupabaseContext = {
     deps: {
@@ -122,6 +139,33 @@ function sentBody(
 ): Record<string, unknown> {
   const init = fetch.mock.calls[index]?.[1];
   return JSON.parse(String(init?.body)) as Record<string, unknown>;
+}
+
+/** Answers each request with the next body, then repeats the last. */
+function replies(...bodies: unknown[]) {
+  let next = 0;
+  const fetch = vi.fn(
+    async (_input: RequestInfo | URL, _init?: RequestInit) => {
+      const body = bodies[Math.min(next, bodies.length - 1)];
+      next += 1;
+      return new Response(JSON.stringify(body), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+  );
+  vi.stubGlobal("fetch", fetch);
+  return fetch;
+}
+
+/** The cookie's identity, which a `restored` recovery leaves current. */
+function cookieIdentity(): LocalIdentity {
+  return {
+    ...identity(true),
+    playerId: COOKIE_PLAYER as NonNullable<typeof COOKIE_PLAYER>,
+    secret: COOKIE_SECRET as NonNullable<typeof COOKIE_SECRET>,
+    source: "cookie",
+  };
 }
 
 describe("call", () => {
@@ -594,6 +638,147 @@ describe("call", () => {
       ok: false,
       error: { code: "unavailable" },
     });
+  });
+});
+
+describe("auth_failed and the identity's recovery (§9.6)", () => {
+  /** A provider whose recover() moves current() to `next` and answers `outcome`. */
+  function recovering(
+    outcome: "restored" | "minted",
+    next: LocalIdentity | null,
+    registered = true,
+  ) {
+    const recover = vi.fn(async () => {
+      if (next !== null) t.provider.current.mockReturnValue(next);
+      return outcome;
+    });
+    const t = setup({ registered, recover });
+    return { t, recover };
+  }
+
+  it("runs the identity's recover() once for a registered player, then sends the call again with the restored identity", async () => {
+    const fetch = replies(authFailedEnvelope, okEnvelope);
+    const { t, recover } = recovering("restored", cookieIdentity());
+
+    const result = await t.call(
+      t.ctx,
+      "create_challenge",
+      { p_attempt: "a1" },
+      decodeCode,
+      { auth: "player" },
+    );
+
+    expect(result).toEqual({
+      ok: true,
+      value: { code: "AB12CD34", expiresAt: 1795000000000 },
+    });
+    expect(recover).toHaveBeenCalledTimes(1);
+    expect(recover).toHaveBeenCalledWith({ playerId: PLAYER, secret: SECRET });
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(sentBody(fetch, 0)).toEqual({
+      p_attempt: "a1",
+      p_player: PLAYER,
+      p_secret: SECRET,
+    });
+    // The same arguments, with the credential the cookie brought back.
+    expect(sentBody(fetch, 1)).toEqual({
+      p_attempt: "a1",
+      p_player: COOKIE_PLAYER,
+      p_secret: COOKIE_SECRET,
+    });
+  });
+
+  it("recovers once per call: a second auth_failed is the answer", async () => {
+    const fetch = replies(authFailedEnvelope);
+    const { t, recover } = recovering("restored", cookieIdentity());
+
+    const result = await t.call(t.ctx, "get_profile", {}, none, {
+      auth: "player",
+    });
+
+    expect(result).toMatchObject({
+      ok: false,
+      error: { code: "auth_failed", retryable: false },
+    });
+    expect(recover).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("answers auth_failed without sending again when the recovery minted a new identity", async () => {
+    const fetch = replies(authFailedEnvelope, okEnvelope);
+    const { t, recover } = recovering("minted", null);
+
+    const result = await t.call(t.ctx, "export_my_data", {}, none, {
+      auth: "player",
+    });
+
+    expect(result).toMatchObject({ ok: false, error: { code: "auth_failed" } });
+    expect(recover).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("a write recovers even before registration, and marks the identity registered once the retry succeeds", async () => {
+    const fetch = replies(authFailedEnvelope, okEnvelope);
+    // Another tab moved on to an identity it has not registered yet.
+    const moved: LocalIdentity = { ...cookieIdentity(), registered: false };
+    const { t, recover } = recovering("restored", moved, false);
+
+    const result = await t.call(t.ctx, "register_player", {}, none, {
+      auth: "player",
+      write: true,
+    });
+
+    expect(result.ok).toBe(true);
+    expect(recover).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(t.provider.markRegistered).toHaveBeenCalledTimes(1);
+  });
+
+  it("leaves an unregistered identity's read alone: the server has never seen it, so auth_failed is its answer", async () => {
+    const fetch = replies(authFailedEnvelope);
+    const { t, recover } = recovering("minted", null, false);
+
+    const result = await t.call(t.ctx, "get_profile", {}, none, {
+      auth: "player",
+    });
+
+    expect(result).toMatchObject({ ok: false, error: { code: "auth_failed" } });
+    expect(recover).not.toHaveBeenCalled();
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("recovers player calls only, and answers auth_failed when the provider has no recover()", async () => {
+    replies(authFailedEnvelope);
+    const { t, recover } = recovering("restored", cookieIdentity());
+    for (const auth of ["optional", "none"] as const) {
+      await expect(
+        t.call(t.ctx, "get_today", {}, none, { auth }),
+      ).resolves.toMatchObject({ ok: false, error: { code: "auth_failed" } });
+    }
+    expect(recover).not.toHaveBeenCalled();
+
+    const fetch = replies(authFailedEnvelope, okEnvelope);
+    const bare = setup({ registered: true });
+    await expect(
+      bare.call(bare.ctx, "get_profile", {}, none, { auth: "player" }),
+    ).resolves.toMatchObject({ ok: false, error: { code: "auth_failed" } });
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("never rejects when the recovery itself fails", async () => {
+    const fetch = replies(authFailedEnvelope, okEnvelope);
+    const t = setup({
+      registered: true,
+      recover: () => Promise.reject(new Error("lock refused")),
+    });
+
+    await expect(
+      t.call(t.ctx, "create_sync_code", {}, none, {
+        auth: "player",
+        write: true,
+      }),
+    ).resolves.toMatchObject({ ok: false, error: { code: "auth_failed" } });
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 });
 

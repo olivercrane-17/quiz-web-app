@@ -12,7 +12,9 @@
  *    `identity_restored` (source `cookie`) and `storage_lost` (AC-CKE-02);
  *    else a new one. It is handed to the backend with
  *    `configureBackend({ identity })`, so a call that needs identity never
- *    meets "No identity provider". From then on the identity posts its
+ *    meets "No identity provider", and its `recover()` is the
+ *    `IdentityProvider.recover` the Supabase RPC wrapper runs once when a
+ *    call answers `auth_failed`. From then on the identity posts its
  *    backup cookie after registration and every 7 days, and follows the
  *    other tabs. After an Under 13 answer (`qz:under13`, §9.7) the identity
  *    lives in memory only and the cookie is never read or posted again.

@@ -165,6 +165,31 @@ describe("after the boot", () => {
     stop();
   });
 
+  it("hands the backend IDN-1's recovery as IdentityProvider.recover, so a refused credential restores the cookie's identity (§9.6)", async () => {
+    stubRoutes({ status: 204 });
+    await bootClient();
+    const backend = (await getBackend()) as MockBackend;
+    const provider = backend.context.identity();
+    const failed = provider.current();
+    // The backup cookie now holds the player's identity (another tab
+    // registered and posted it), which the wrapper's recovery finds.
+    const saved = { ...mintIdentity(NOW), registered: true };
+    stubRoutes({
+      status: 200,
+      body: { playerId: saved.playerId, secret: saved.secret },
+    });
+    await expect(provider.recover?.(failed)).resolves.toBe("restored");
+    expect(provider.current()).toMatchObject({
+      playerId: saved.playerId,
+      secret: saved.secret,
+      registered: true,
+      source: "cookie",
+    });
+    expect(
+      JSON.parse(localStorage.getItem("qz:identity") ?? "null").playerId,
+    ).toBe(saved.playerId);
+  });
+
   it("stops listening when unsubscribed before the boot finished", async () => {
     stubRoutes({ status: 204 });
     const heard: string[] = [];

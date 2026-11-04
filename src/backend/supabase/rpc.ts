@@ -8,7 +8,17 @@
  *   an unregistered secret means nothing to the server.
  * - Every call ends after 8 s (`timeout`, §7.3), counted from the start of
  *   the call, so a first visit's SDK download shares the budget with the
- *   request. Nothing is retried here: callers retry, with the same key (§7.1).
+ *   request. Nothing is retried here but a refused credential (below):
+ *   callers retry, with the same key (§7.1).
+ * - `auth_failed` on a player call (§9.6, §7.3), for a registered identity
+ *   or for a write (§9.6's "a write fails with auth_failed"): the
+ *   identity's `recover(failed)` runs once, one backup-cookie restore,
+ *   else a new identity. On `restored` the call is sent once more, with
+ *   the same arguments and the current identity, on a budget of its own;
+ *   on `minted`, or a second `auth_failed`, the caller gets `auth_failed`.
+ *   An unregistered identity's read answers `auth_failed` by design (the
+ *   server has never seen it), so it is left alone rather than swapped for
+ *   a new identity on every read.
  * - Transport mapping: a fetch that fails while offline is `offline`,
  *   otherwise `unreachable`; HTTP 429 (the pre-request hook) is
  *   `rate_limited` with scope `ip` and retryAfterMs from Retry-After, or,
@@ -29,6 +39,7 @@
  * call() never throws and never rejects.
  */
 import type { EpochMs, LocalIdentity } from "@/engine/types";
+import type { RecoveryOutcome } from "@/platform/identity/provider";
 import { systemClock } from "@/platform/server-clock";
 
 import {
@@ -211,12 +222,56 @@ export function createRpcCaller(overrides: Partial<RpcRuntime> = {}): RpcCall {
     return fail("internal");
   }
 
+  /** The identity's recovery after `auth_failed`; null when it has none or it failed. */
+  async function recoverFrom(
+    ctx: SupabaseContext,
+    failed: LocalIdentity,
+  ): Promise<RecoveryOutcome | null> {
+    try {
+      const provider = ctx.deps.identity();
+      if (provider.recover === undefined) return null;
+      return await provider.recover({
+        playerId: failed.playerId,
+        secret: failed.secret,
+      });
+    } catch {
+      return null;
+    }
+  }
+
   return async function call<T>(
     ctx: SupabaseContext,
     fn: string,
     args: Record<string, unknown>,
     decode: Decoder<T>,
     options: RpcOptions = {},
+  ): Promise<Result<T>> {
+    const sent: SentWith = { identity: null };
+    const result = await send(ctx, fn, args, decode, options, sent);
+    const failed = sent.identity;
+    if (
+      result.ok ||
+      result.error.code !== "auth_failed" ||
+      options.auth !== "player" ||
+      failed === null ||
+      !(failed.registered || options.write === true)
+    ) {
+      return result;
+    }
+    const outcome = await recoverFrom(ctx, failed);
+    return outcome === "restored"
+      ? send(ctx, fn, args, decode, options, { identity: null })
+      : result;
+  };
+
+  /** One request; `sent` learns the identity whose credential it carried. */
+  async function send<T>(
+    ctx: SupabaseContext,
+    fn: string,
+    args: Record<string, unknown>,
+    decode: Decoder<T>,
+    options: RpcOptions,
+    sent: SentWith,
   ): Promise<Result<T>> {
     try {
       const auth = options.auth ?? "none";
@@ -234,6 +289,7 @@ export function createRpcCaller(overrides: Partial<RpcRuntime> = {}): RpcCall {
           identity = null;
         }
       }
+      sent.identity = identity;
 
       // One budget for the whole call, started before the client: on a first
       // visit getClient() downloads the SDK, and a stalled download must end
@@ -355,7 +411,12 @@ export function createRpcCaller(overrides: Partial<RpcRuntime> = {}): RpcCall {
       report({ type: "internal_error", fn, status: null });
       return fail("internal");
     }
-  };
+  }
+}
+
+/** The identity a request carried the credential of, if any. */
+interface SentWith {
+  identity: LocalIdentity | null;
 }
 
 /** The wrapper every Supabase adapter uses. */
