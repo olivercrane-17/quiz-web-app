@@ -162,6 +162,12 @@
   margin-inline: auto;
   padding-inline: max(6px, calc(var(--kn-gutter) - 10px));
 }
+/* No end slot: the progress (practice's heading and segments) ends at the
+ * page's gutter, as the content under it does, not at the inset the icon
+ * buttons' own boxes allow for (R1-36). */
+.kn-playbar-row[data-end="none"] {
+  padding-inline-end: var(--kn-gutter);
+}
 /* At the gutters, not the row's icon-button insets, so the segments run
  * as wide as the screen's content. */
 .kn-playbar-below {
@@ -226,9 +232,12 @@
 .kn-tabs {
   display: flex;
 }
+/* A gap between the tabs and a little padding inside each keep two labels
+ * at least 12 px apart, however large the reader's text (R1-34). */
 .kn-tabbar .kn-tabs {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 4px;
 }
 .kn-tab {
   position: relative;
@@ -244,13 +253,13 @@
   gap: 3px;
   min-width: 0;
   min-height: 56px;
-  padding: 4px 2px;
+  padding: 4px;
   border-radius: 12px;
   /* 12 px, growing with the reader's text size only as far as the tab's
-   * width allows (about 18 px at 390 and 15 px at 320 at 200% text), so
+   * width allows (about 17 px at 390 and 14 px at 320 at 200% text), so
    * "Practice" and "Groups" stay whole words: Chromium has no hyphenation
    * dictionary on Linux or Windows, and "Groups" has no break point. */
-  font-size: min(0.75rem, 4.6vw);
+  font-size: min(0.75rem, 4.3vw);
   line-height: 1.2;
   text-align: center;
   overflow-wrap: normal;
@@ -269,7 +278,9 @@
   top: -5px;
   border-radius: 0 0 3px 3px;
 }
-.kn-tab:focus-visible {
+/* The bottom tabs sit against the screen's edge, where a ring outside them
+ * would be cut off: the same 3 px ring, drawn just inside the tab. */
+.kn-tabbar .kn-tab:focus-visible {
   outline-offset: -3px;
 }
 
@@ -329,6 +340,18 @@
 .kn-skip:focus-visible {
   position: fixed;
   translate: none;
+}
+
+/* --------------------------------------------------------- Tab pages' main */
+
+/* Phones: the last line stays clear of the fixed tab bar, by the bar's
+ * measured height (`--kn-inset-bottom`, ./scroll-inset.tsx) plus 24 px, so
+ * 200% text and the safe area count; its usual height until the page
+ * hydrates. From 768 px the bar is in the header and `md:pb-10` applies. */
+.kn-tabs-main {
+  padding-bottom: calc(
+    var(--kn-inset-bottom, calc(61px + env(safe-area-inset-bottom))) + 24px
+  );
 }
 
 /* ----------------------------------------------------------------- Footer */

@@ -9,14 +9,18 @@
  * whole summary ("Question 4 of 10. 3 right, 1 wrong so far."). The
  * current step carries `aria-current="step"`.
  *
- * Never colour alone: correct shows a check (or the points earned, when the
- * caller passes a mark), wrong an X and a dashed edge, voided a dash and a
- * dotted edge. The looks are `.kn-progress` and `.kn-step` in `ui.css`:
- * pills of 38 by 30 in Fraunces (32 wide under 360 px), the current one
- * with an ink border and a ledge; slim 20 px segments for practice, empty
- * wells until answered, then the correct fill or the incorrect tint with
- * its edge, the current one outlined in ink. Both fill with their verdict
- * over 200 ms, and both keep their size at 200% text.
+ * Never colour alone: correct shows a check (or the points earned, "+3",
+ * when the caller passes a mark, D11), wrong an X and a dashed edge, voided
+ * a dash and a dotted edge. The looks are `.kn-progress` and `.kn-step` in
+ * `ui.css`, flat progress marks rather than buttons (RITE round 1, R1-08,
+ * R1-27): no ledge, no raised fill, no pointer. Pills of 38 by 30 in
+ * Fraunces (32 wide under 360 px) that give up width, down to 28 px,
+ * before a narrow header would overflow (R1-03); slim 20 px segments for
+ * practice, empty wells until answered, then the correct fill or the
+ * incorrect tint with its edge. The current step has an ink edge and an
+ * eft bar under it, the active tab's mark, so it never looks like keyboard
+ * focus. Both fill with their verdict over 200 ms, and both keep their
+ * size at 200% text.
  */
 import { cx } from "./cx";
 import { CheckIcon, CrossIcon, DashIcon } from "./icons";

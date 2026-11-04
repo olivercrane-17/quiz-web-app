@@ -1,8 +1,8 @@
 /**
  * The footer on Today and Me (DESIGN §6.13, PRD §6.1): the seven legal and
- * trust pages as 44 px links. LGL-1 builds the pages and touches this file;
- * the links don't prefetch until then, because a prefetch of a missing
- * route logs a 404 in the console.
+ * trust pages as 44 px links. Each opens a page in the (info) group: a
+ * placeholder until LGL-1 writes it and touches this file, so the links
+ * don't prefetch until then (a prefetch would only fetch the placeholder).
  */
 import type { Route } from "next";
 import Link from "next/link";

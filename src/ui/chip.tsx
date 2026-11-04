@@ -1,15 +1,18 @@
 /**
- * A chip (DESIGN §6.14 and the prototype): a small pill with a word, and an
- * icon when it helps.
+ * A chip (DESIGN §6.14 and the prototype): a small label with a word, and
+ * an icon when it helps. A label, not a control, so it is drawn as a flat
+ * printed tag with a 6 px corner (RITE round 1, R1-27): nothing about it
+ * invites a tap.
  *
- * - `default`: outlined on surface; the category chip beside "A person".
- * - `sunken`: a well; hint chips ("Within 5% is a bullseye").
+ * - `default`: a hairline tag; the category chip beside "A person".
+ * - `sunken`: a wash; hint chips ("Within 5% is a bullseye").
  * - `correct`: the band chip ("Bullseye"), always beside its word.
- * - `accent`: a count badge ("2 challenges waiting").
+ * - `accent`: a round count badge ("2 challenges waiting").
  * - `beta`: the "Beta" label, outlined in ink-2 and never orange.
  *
- * A chip that is a link or a button keeps a 44 px hit area through
- * `chipClasses({ interactive: true })`.
+ * A chip that is a link or a button (`<Link className={chipClasses({
+ * interactive: true })}>`) gets the outlined pill of a control instead,
+ * hover included, with a 44 px hit area.
  */
 import type { HTMLAttributes, ReactNode } from "react";
 

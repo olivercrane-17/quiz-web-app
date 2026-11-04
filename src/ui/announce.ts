@@ -23,9 +23,30 @@
  * Each message goes in as a new node, so the same text twice in a row ("Not
  * quite...") is announced twice. Never use it for timers or the stopwatch,
  * which stay silent.
+ *
+ * **A message belongs to its page** (RITE round 1, R1-09). The regions
+ * outlive every route, so the shell clears them when the address changes
+ * (`clearRouteAnnouncements`, from a layout effect in the root layout):
+ * the previous page's "Clue 2 is in. Now worth 3." must never be read on
+ * Today. That runs before the new page's own effects, which is where every
+ * screen announces, so a page that speaks as it arrives keeps its words. A
+ * message meant to outlive the page that said it, such as a toast's
+ * ("Saved" on Leave), passes `{ keepOnRouteChange: true }`.
  */
 
 export type Politeness = "polite" | "assertive";
+
+export interface AnnounceOptions {
+  /**
+   * Keep the message through the next change of address, as a toast's
+   * words, which the toast's own pill outlives the route with. Its caller
+   * removes it when it no longer applies (`withdrawAnnouncement`).
+   */
+  keepOnRouteChange?: boolean;
+}
+
+/** Marks a message node that survives the next change of address. */
+const KEEP_ATTRIBUTE = "data-qz-keep";
 
 export const LIVE_REGION_IDS: Readonly<Record<Politeness, string>> = {
   polite: "qz-live-polite",
@@ -75,16 +96,28 @@ export function ensureLiveRegions(): void {
   region("assertive");
 }
 
-/** Speaks `message` through a live region. A no-op on the server and for empty text. */
+/**
+ * Speaks `message` through a live region. A no-op on the server and for
+ * empty text. Returns the node that holds it (null when nothing was
+ * written), which `withdrawAnnouncement` takes.
+ */
 export function announce(
   message: string,
   politeness: Politeness = "polite",
-): void {
-  if (typeof document === "undefined" || message.trim() === "") return;
+  options: AnnounceOptions = {},
+): HTMLElement | null {
+  if (typeof document === "undefined" || message.trim() === "") return null;
   const target = region(politeness);
   const node = document.createElement("p");
   node.textContent = message;
+  if (options.keepOnRouteChange === true) node.setAttribute(KEEP_ATTRIBUTE, "");
   target.replaceChildren(node);
+  return node;
+}
+
+/** Removes one message that `announce` returned, if it is still there. */
+export function withdrawAnnouncement(node: HTMLElement | null): void {
+  node?.remove();
 }
 
 /** Empties every region, the open sheets' too, such as when a screen unmounts. */
@@ -95,5 +128,23 @@ export function clearAnnouncements(): void {
   }
   for (const inner of document.querySelectorAll("[data-qz-live]")) {
     inner.replaceChildren();
+  }
+}
+
+/**
+ * Empties the page's pair of what the previous page said, keeping the
+ * messages announced with `keepOnRouteChange`. The shell calls it when the
+ * address changes, so a screen reader that reads to the end of the page
+ * never meets an old verdict there (R1-09). A sheet's own pair goes with
+ * its route.
+ */
+export function clearRouteAnnouncements(): void {
+  if (typeof document === "undefined") return;
+  for (const id of Object.values(LIVE_REGION_IDS)) {
+    const target = document.getElementById(id);
+    if (target === null) continue;
+    for (const node of [...target.children]) {
+      if (!node.hasAttribute(KEEP_ATTRIBUTE)) node.remove();
+    }
   }
 }

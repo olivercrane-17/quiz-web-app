@@ -20,11 +20,12 @@ export interface TabDefinition {
   label: string;
   /**
    * Whether the link prefetches. Off for destinations that later tickets
-   * build: prefetching a route that doesn't exist yet logs a 404 in the
-   * console. Each owner turns its own entry on in the pull request that
-   * builds the page, through a one-line Touch (§12.3): PRA-2 for
-   * /practice, GRP-1 for /g, STA-1 for /me. PERF-1 checks every link when
-   * it tunes prefetching (ARCHITECTURE §10.9 item 5), as the backstop.
+   * build, which are placeholders until then (/g and /me, from FIX-DS) or
+   * a greybox (/practice): prefetching one only fetches the placeholder.
+   * Each owner turns its own entry on in the pull request that builds the
+   * page, through a one-line Touch (§12.3): PRA-2 for /practice, GRP-1 for
+   * /g, STA-1 for /me. PERF-1 checks every link when it tunes prefetching
+   * (ARCHITECTURE §10.9 item 5), as the backstop.
    */
   prefetch: boolean;
 }

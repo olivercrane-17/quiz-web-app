@@ -22,9 +22,11 @@
  *
  * It builds its own element at the end of `<body>` when called, so a screen
  * that never shows one pays nothing, and no provider is needed. Call it
- * from an event handler or an effect, never during render.
+ * from an event handler or an effect, never during render. Like the pill,
+ * its words outlive the page that showed it ("Saved" on Leave is heard on
+ * Today), and they leave the status region with the pill.
  */
-import { announce } from "./announce";
+import { announce, withdrawAnnouncement } from "./announce";
 import { UI_COPY } from "./copy";
 import { firstShown } from "./shown";
 
@@ -98,6 +100,8 @@ export function showToast(
 
   let timer: ReturnType<typeof setTimeout> | undefined;
   let gone = false;
+  /** The toast's words in the status region, kept through a change of address. */
+  let spoken: HTMLElement | null = null;
   const onKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Escape") dismiss();
   };
@@ -106,6 +110,7 @@ export function showToast(
     gone = true;
     clearTimeout(timer);
     document.removeEventListener("keydown", onKeyDown);
+    withdrawAnnouncement(spoken);
     element.dataset.leaving = "";
     setTimeout(() => {
       element.remove();
@@ -145,10 +150,12 @@ export function showToast(
 
   document.body.append(element);
   current = { element, dismiss };
-  announce(
+  spoken = announce(
     action === undefined
       ? message
       : `${sentence(message)} ${UI_COPY.toast.actionAvailable(action.label)}`,
+    "polite",
+    { keepOnRouteChange: true },
   );
   return dismiss;
 }

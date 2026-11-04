@@ -1,13 +1,15 @@
 /**
- * The stopwatch pill (DESIGN §6.7): the timer icon and `m:ss` in tabular
- * figures, `ink-2` on a `rule` border, 36 px tall with a 44 px hit area.
- * Silent to screen readers as it ticks (`aria-live="off"`); they read it
- * when they reach it, after the label ("Time 1:12"). Under 360 px the icon
- * drops so the digits keep their room.
+ * The stopwatch (DESIGN §6.7): the timer icon and `m:ss` in tabular
+ * figures, `ink-2`, 36 px tall. Silent to screen readers as it ticks
+ * (`aria-live="off"`); they read it when they reach it, after the label
+ * ("Time 1:12"). Under 360 px the icon drops so the digits keep their room.
  *
  * It only shows a time: the screen owns the clock (it runs only while a
- * round is open) and the "Hide stopwatch" choice. With `onClick` the pill
- * is a button that opens the More menu at "Hide stopwatch".
+ * round is open) and the "Hide stopwatch" choice. With `onClick` it is a
+ * button that opens the More menu at "Hide stopwatch", drawn as a pill on
+ * a `rule` border with a 44 px hit area; without, it is a flat reading
+ * with no edge, so it never looks like something to tap (RITE round 1,
+ * R1-27).
  */
 import { cx } from "./cx";
 import { TimerIcon } from "./icons";

@@ -10,11 +10,19 @@
  * the screen knows.
  *
  * 56 px tall over a 720 px column, sticky, on the page's own paper and
- * grain (`.kn-playbar` in shell.css), with the progress centred between
- * Leave and the end slot. A practice round (DESIGN §12.7) passes its
- * two-line title ("Practice" over the category) as `progress`, the sound
- * toggle as `end` and its ten segments as `below`, which runs them the
- * width of the column, at the page's gutters.
+ * grain (`.kn-playbar` in shell.css), with the progress between Leave and
+ * the end slot. Its height is the page's top scroll inset (`ScrollInset`),
+ * the `below` row included, so a focused option never sits under it.
+ *
+ * - A practice round (DESIGN §12.7) passes its two-line title ("Practice"
+ *   over the category) as `progress`, the sound toggle as `end` and its
+ *   ten segments as `below`, which runs them the width of the column, at
+ *   the page's gutters.
+ * - Without `end`, the progress keeps the page's gutter on the right, as
+ *   the Leave button's box keeps it on the left (RITE round 1, R1-36).
+ * - The row never runs wider than the screen (R1-03): the progress shrinks
+ *   first (the Daily's pills give up their spare width), and the end slot
+ *   keeps its size.
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -23,6 +31,8 @@ import type { ReactNode } from "react";
 import { IncidentBanner } from "@/features/incidents/banner";
 import { buttonClasses } from "@/ui/button-classes";
 import { CrossIcon } from "@/ui/icons";
+
+import { ScrollInset } from "./scroll-inset";
 
 export interface PlayHeaderProps {
   leave: {
@@ -44,7 +54,11 @@ export interface PlayHeaderProps {
 export function PlayHeader({ leave, progress, end, below }: PlayHeaderProps) {
   return (
     <header className="kn-playbar kn-grain">
-      <div className="kn-playbar-row">
+      <ScrollInset edge="top" />
+      <div
+        className="kn-playbar-row"
+        data-end={end === undefined ? "none" : undefined}
+      >
         <Link
           href={leave.href as Route}
           aria-label={leave.label}

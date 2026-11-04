@@ -3,6 +3,7 @@
  * components, so a utility class on the same element still wins. */
 @import "../ui/ui.css" layer(components);
 @import "../features/shell/shell.css" layer(components);
+@import "../features/home/home.css" layer(components);
 
 /* Research docs are prose, not markup: keep them out of class detection. */
 @source not "../../docs";
@@ -833,15 +834,22 @@
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
-    /* Every frame has a sticky bar on top: what focus scrolls to lands
-     * below it, never under it (WCAG 2.4.11). */
-    scroll-padding-top: calc(64px + env(safe-area-inset-top));
+    /* Every frame has a sticky bar on top, and on phones the tab pages a
+     * fixed tab bar at the bottom: what focus scrolls to lands between
+     * them, never under either, with room for the 3 px ring at its 3 px
+     * offset (WCAG 2.4.11, RITE round 1 R1-12). The shell measures the
+     * bars that are on screen (src/features/shell/scroll-inset.tsx); the
+     * fallbacks are their usual heights, for the moments before it runs. */
+    scroll-padding-top: calc(
+      var(--kn-inset-top, calc(56px + env(safe-area-inset-top))) + 8px
+    );
+    scroll-padding-bottom: calc(var(--kn-inset-bottom, 0px) + 8px);
   }
-  /* On phones the tab pages have the fixed tab bar at the bottom too: the
-   * same 5.5rem their <main> keeps clear under it. */
   @media (max-width: 767px) {
     html:has(.kn-tabbar) {
-      scroll-padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+      scroll-padding-bottom: calc(
+        var(--kn-inset-bottom, calc(61px + env(safe-area-inset-bottom))) + 8px
+      );
     }
   }
   body {

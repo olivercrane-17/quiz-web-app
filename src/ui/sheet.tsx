@@ -28,10 +28,19 @@
  *   simply there. Its `data-arrival` says which.
  *
  * The looks are `.kn-dialog` and `.kn-sheet` in `ui.css`: surface, a 28 px
- * top radius, the 36 by 4 grab handle, the sheet shadow, a rise of 360 ms
- * while a modal's scrim fades in (a fade under reduced motion). A modal's
- * title is set in `display-5`, the explanation sheet's in `display-3`.
- * `Dialog` (./dialog) is the modal one by name.
+ * top radius, the sheet shadow, a rise of 360 ms while a modal's scrim
+ * fades in (a fade under reduced motion). A modal's title is set in
+ * `display-5`, the explanation sheet's in `display-3`. `Dialog` (./dialog)
+ * is the modal one by name.
+ *
+ * **The grab handle** (36 by 4) does what it looks like it does (RITE
+ * round 1, R1-36): on a modal sheet that can be dismissed, on a phone,
+ * dragging it down moves the sheet with the finger, and letting go past a
+ * third of its height (at most 120 px) or with a downward flick closes it
+ * through `onClose`; a shorter drag springs back. The close button, the
+ * scrim and Escape stay the ways to close it without dragging (WCAG
+ * 2.5.7). A sheet that must be answered, and the inline explanation sheet,
+ * which nothing dismisses but Continue, show no handle at all.
  *
  * The parent owns `open`. Children render only while open.
  */
@@ -40,6 +49,7 @@ import {
   useId,
   useLayoutEffect,
   useRef,
+  type PointerEvent,
   type ReactNode,
   type Ref,
   type RefObject,
@@ -100,6 +110,100 @@ function watchPresses(): void {
   window.addEventListener("keydown", mark, true);
 }
 
+/** Past this far down, letting go closes the sheet: a third of it, at most 120 px. */
+export function dragDismissDistance(sheetHeight: number): number {
+  return Math.max(48, Math.min(120, sheetHeight / 3));
+}
+
+/** A flick this fast downward (px per ms) closes the sheet however short the drag. */
+const FLICK_SPEED = 0.6;
+
+interface Drag {
+  pointerId: number;
+  startY: number;
+  lastY: number;
+  lastAt: number;
+  speed: number;
+}
+
+/**
+ * The grab handle of a dismissible modal sheet: drag it down to close the
+ * sheet. Pointer input only, so it is hidden from screen readers; the
+ * close button, the scrim and Escape do the same without a drag.
+ */
+function SheetGrab({
+  sheetRef,
+  onDismiss,
+}: {
+  sheetRef: RefObject<HTMLElement | null>;
+  onDismiss: () => void;
+}) {
+  const drag = useRef<Drag | null>(null);
+
+  const move = (offset: number) => {
+    const sheet = sheetRef.current;
+    if (sheet === null) return;
+    sheet.style.translate = offset > 0 ? `0 ${offset}px` : "";
+  };
+  const end = (event: PointerEvent<HTMLElement>, cancelled: boolean) => {
+    const current = drag.current;
+    if (current === null || current.pointerId !== event.pointerId) return;
+    drag.current = null;
+    const sheet = sheetRef.current;
+    if (sheet !== null) delete sheet.dataset.dragging;
+    const offset = event.clientY - current.startY;
+    const height = sheet?.getBoundingClientRect().height ?? 0;
+    if (
+      !cancelled &&
+      offset > 0 &&
+      (offset >= dragDismissDistance(height) || current.speed >= FLICK_SPEED)
+    ) {
+      onDismiss();
+      return;
+    }
+    // Spring back; the sheet's own transition carries it home.
+    move(0);
+  };
+
+  return (
+    <div
+      aria-hidden="true"
+      data-sheet-grab=""
+      className="kn-sheet-grab"
+      onPointerDown={(event) => {
+        if (event.button !== 0 || sheetRef.current === null) return;
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+        drag.current = {
+          pointerId: event.pointerId,
+          startY: event.clientY,
+          lastY: event.clientY,
+          lastAt: performance.now(),
+          speed: 0,
+        };
+        sheetRef.current.dataset.dragging = "";
+      }}
+      onPointerMove={(event) => {
+        const current = drag.current;
+        if (current === null || current.pointerId !== event.pointerId) return;
+        const now = performance.now();
+        const elapsed = now - current.lastAt;
+        if (elapsed > 0) {
+          current.speed = (event.clientY - current.lastY) / elapsed;
+        }
+        current.lastY = event.clientY;
+        current.lastAt = now;
+        move(Math.max(0, event.clientY - current.startY));
+      }}
+      onPointerUp={(event) => {
+        end(event, false);
+      }}
+      onPointerCancel={(event) => {
+        end(event, true);
+      }}
+    />
+  );
+}
+
 function SheetBody({
   title,
   hideTitle,
@@ -112,6 +216,7 @@ function SheetBody({
   children,
   compact,
   closeButton,
+  grab,
 }: Pick<
   SheetProps,
   | "title"
@@ -126,10 +231,12 @@ function SheetBody({
   titleId: string;
   descriptionId: string;
   closeButton: ReactNode;
+  /** The grab handle, on a sheet a drag can dismiss; null elsewhere. */
+  grab: ReactNode;
 }) {
   return (
     <div className="kn-sheet-body" data-compact={compact ? "" : undefined}>
-      <span aria-hidden="true" className="kn-sheet-grab" />
+      {grab}
       <div className="kn-sheet-head">
         <Heading
           ref={titleRef}
@@ -175,6 +282,9 @@ function ModalSheet({
       document.activeElement instanceof HTMLElement
         ? document.activeElement
         : null;
+    // A sheet closed by a drag opens again in its place.
+    dialog.style.translate = "";
+    delete dialog.dataset.dragging;
     if (!dialog.hasAttribute("open")) {
       if (typeof dialog.showModal === "function") dialog.showModal();
       else dialog.setAttribute("open", "");
@@ -253,6 +363,11 @@ function ModalSheet({
           titleId={titleId}
           descriptionId={descriptionId}
           closeButton={closeButton}
+          grab={
+            onClose === undefined ? null : (
+              <SheetGrab sheetRef={dialogRef} onDismiss={onClose} />
+            )
+          }
         />
       ) : null}
       {/*
@@ -352,6 +467,8 @@ function InlineSheet({
         titleId={titleId}
         descriptionId={descriptionId}
         closeButton={null}
+        // Nothing dismisses the explanation sheet but Continue: no handle.
+        grab={null}
       />
     </section>
   );

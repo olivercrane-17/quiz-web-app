@@ -235,7 +235,12 @@
 
 /* DESIGN §6.2 and the reveal of §7.3. The component switches data-state at
  * the 400 ms reveal; the delays below count from that moment. The padding
- * makes up for the border width, so no state moves the text. */
+ * makes up for the border width, so no state moves the text.
+ *
+ * A grid: the badge, then the option's text with the whole rest of the
+ * width, and under the text a row for the state's words ("Correct
+ * answer"), closed until a state has words and opening with the reveal,
+ * so the pill never squeezes the answer (RITE round 1, R1-36). */
 .kn-answer {
   --opt-bg: var(--kn-surface);
   --opt-fg: var(--kn-ink);
@@ -244,9 +249,11 @@
   --opt-ledge: var(--kn-ledge);
   --opt-ledge-h: var(--kn-ledge-2);
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  grid-template-rows: auto 0fr;
   align-items: center;
-  gap: 6px 12px;
+  column-gap: 12px;
   width: 100%;
   padding: calc(11.5px - var(--opt-border-w)) calc(13.5px - var(--opt-border-w))
     calc(11.5px - var(--opt-border-w)) calc(12.5px - var(--opt-border-w));
@@ -271,11 +278,15 @@
     color var(--kn-dur-reveal) var(--kn-ease-out),
     border-color var(--kn-dur-lock) var(--kn-ease-out),
     box-shadow var(--kn-dur-press) var(--kn-ease-press),
-    transform var(--kn-dur-press) var(--kn-ease-press);
+    transform var(--kn-dur-press) var(--kn-ease-press),
+    grid-template-rows var(--kn-dur-base) var(--kn-ease-out);
 }
+/* The badge spans both rows, so it stays centred on the whole option. Its
+ * letter is the option's one key hint (D6). */
 .kn-answer-badge {
+  grid-row: 1 / -1;
+  grid-column: 1;
   display: inline-grid;
-  flex: none;
   place-items: center;
   width: 36px;
   height: 36px;
@@ -295,56 +306,41 @@
 .kn-answer-badge > svg {
   stroke-width: 3;
 }
-/* At most the room beside the 36 px badge and its 12 px gap, so the name
- * always shares the badge's line. */
+/* All the room beside the 36 px badge and its 12 px gap, which no tag
+ * shares: the name never squeezes or breaks mid-word (DESIGN §3.3, §10.5). */
 .kn-answer-text {
-  flex: 1 1 auto;
+  grid-row: 1;
+  grid-column: 2;
   min-width: 0;
-  max-width: calc(100% - 48px);
   overflow-wrap: anywhere;
 }
-/* With its verdict tag: when a long name or 200% text leaves the tag no
- * room beside it, the tag goes under the name, at the right, and the name
- * keeps the line's width, never squeezed to a sliver or broken mid-word
- * (DESIGN §3.3, §10.5). A short name keeps its tag on its line. */
+/* The state's words, under the name and lined up with it. The row is
+ * closed (0fr) while the option is idle and opens with the state. */
+.kn-answer-tag-row {
+  grid-row: 2;
+  grid-column: 2;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
 .kn-answer:is(
   [data-state="correct"],
   [data-state="your-answer"],
   [data-state="already-guessed"]
 ) {
-  flex-wrap: wrap;
+  grid-template-rows: auto 1fr;
 }
 .kn-answer-tag {
   display: inline-flex;
   flex: none;
   align-items: center;
   gap: 5px;
-  margin-inline-start: auto;
+  margin-top: 6px;
   font-size: 0.8125rem;
   font-weight: 800;
   letter-spacing: 0.01em;
   white-space: nowrap;
   animation: kn-rise-sm var(--kn-dur-base) var(--kn-ease-out) 200ms both;
-}
-/* Keys 1 to 4, shown from 768 px, while the option is idle. */
-.kn-answer-kbd {
-  display: none;
-  flex: none;
-  min-width: 26px;
-  padding: 0 6px;
-  border: 1px solid var(--kn-rule-strong);
-  border-radius: 6px;
-  color: var(--kn-ink-3);
-  font-family: var(--kn-font-text);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  line-height: 1.6;
-  text-align: center;
-}
-@media (min-width: 768px) {
-  .kn-answer-kbd {
-    display: inline-block;
-  }
 }
 @media (hover: hover) {
   .kn-answer[data-state="idle"]:hover {
@@ -536,17 +532,23 @@
 /* ----------------------------------------------------------------- Chips */
 
 /* DESIGN §6.14 and the prototype's chips: the category chip, hint chips and
- * the band chip. Every tone keeps a visible edge or a word. */
+ * the band chip. Every tone keeps a visible edge or a word.
+ *
+ * A chip is a label, so it looks like a printed tag, never a button (RITE
+ * round 1, R1-27): a 6 px corner, a hairline or a wash, no raised fill and
+ * no pointer. Only a chip that is a link or a button gets the outlined
+ * pill of a control (last rules), with its 44 px hit area from
+ * `chipClasses({ interactive: true })`. */
 .kn-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 28px;
-  padding: 2px 11px;
-  border: 1.5px solid var(--kn-rule-strong);
-  border-radius: var(--kn-radius-pill);
-  background-color: var(--kn-surface);
-  color: var(--kn-ink);
+  min-height: 24px;
+  padding: 1px 8px;
+  border: 1px solid var(--kn-rule-strong);
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--kn-ink-2);
   font-size: 0.8125rem;
   font-weight: 700;
   line-height: 1.2;
@@ -554,17 +556,19 @@
   white-space: nowrap;
 }
 .kn-chip[data-tone="sunken"] {
-  border-color: transparent;
+  padding: 2px 9px;
+  border-width: 0;
   background-color: var(--kn-sunken);
-  color: var(--kn-ink-2);
 }
 .kn-chip[data-tone="correct"] {
   border-color: var(--kn-correct-line);
   background-color: var(--kn-correct-tint);
   color: var(--kn-ink);
 }
+/* A count badge ("2 challenges waiting"): a round mark. */
 .kn-chip[data-tone="accent"] {
   border-color: var(--kn-accent-ledge);
+  border-radius: var(--kn-radius-pill);
   background-color: var(--kn-accent);
   color: var(--kn-on-accent);
 }
@@ -573,43 +577,69 @@
   min-height: 22px;
   padding: 0 8px;
   border-color: var(--kn-ink-2);
-  border-radius: 6px;
-  background-color: transparent;
-  color: var(--kn-ink-2);
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.02em;
 }
+/* A chip that does something: the outlined pill of a control. */
 a.kn-chip,
 button.kn-chip {
+  min-height: 28px;
+  padding: 2px 11px;
+  border: 1.5px solid var(--kn-rule-strong);
+  border-radius: var(--kn-radius-pill);
+  background-color: var(--kn-surface);
+  color: var(--kn-ink);
   cursor: pointer;
+}
+@media (hover: hover) {
+  a.kn-chip:hover,
+  button.kn-chip:hover {
+    background-color: var(--kn-surface-2);
+  }
 }
 
 /* --------------------------------------------------------------- Progress */
 
 /* DESIGN §6.6: the Daily's four pills and practice's ten segments. They
- * keep their size at 200% text (DESIGN §10.5), so their type is in px. */
+ * keep their size at 200% text (DESIGN §10.5), so their type is in px.
+ *
+ * Marks, never controls (RITE round 1, R1-08 and R1-27; D11): flat, with
+ * no ledge, no raised fill and no pointer, so nobody taps one expecting it
+ * to open a round. The current step carries an eft bar under it, the same
+ * "you are here" mark as the active tab, rather than a ring that reads
+ * like keyboard focus; `play-accent` turns ink with high-contrast feedback,
+ * where orange means wrong (DESIGN §2.1). */
 .kn-progress {
   display: flex;
   align-items: center;
   gap: 5px;
+  min-width: 0;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .kn-progress[data-variant="bar"] {
   width: 100%;
   gap: 4px;
 }
 .kn-step {
+  position: relative;
   display: inline-grid;
   flex: none;
   place-items: center;
-  border: 1.5px solid var(--kn-rule-strong);
+  border: 1px solid var(--kn-rule-strong);
+  background-color: transparent;
   color: var(--kn-ink-3);
   font-variant-numeric: tabular-nums;
   /* A step fills with its verdict at the 400 ms reveal (DESIGN §7.3). */
   transition: background-color 200ms var(--kn-ease-out);
 }
+/* 38 by 30, giving up width before the header would run off a narrow
+ * screen (R1-03): never under 28 px, which still fits "+3" and "M3". */
 .kn-progress[data-variant="pills"] .kn-step {
-  width: 38px;
+  flex: 0 1 38px;
+  min-width: 28px;
   height: 30px;
   border-radius: var(--kn-radius-sm);
   font-family: var(--kn-font-display);
@@ -632,6 +662,10 @@ button.kn-chip {
   border-color: var(--kn-rule);
   background-color: var(--kn-sunken);
 }
+.kn-progress[data-variant="bar"]
+  .kn-step[data-status="upcoming"][data-current] {
+  border: 2px solid var(--kn-ink);
+}
 /* The verdict glyphs, drawn as heavily as the prototype's (DESIGN §6.6). */
 .kn-progress[data-variant="pills"] .kn-step svg {
   stroke-width: 2.8;
@@ -643,55 +677,53 @@ button.kn-chip {
   font-style: italic;
   font-weight: 450;
 }
+/* The one open now: an ink edge, the same flat face. */
 .kn-step[data-current] {
   border: 2px solid var(--kn-ink);
-  background-color: var(--kn-surface);
   color: var(--kn-ink);
-  box-shadow: 0 2px 0 var(--kn-ledge);
 }
 .kn-step[data-status="correct"] {
   border: 1.5px solid var(--kn-correct-line);
   background-color: var(--kn-correct);
   color: var(--kn-on-correct);
-  box-shadow: none;
 }
 .kn-step[data-status="wrong"] {
   border: 1.5px dashed var(--kn-incorrect-line);
   background-color: var(--kn-incorrect-tint);
   color: var(--kn-incorrect-text);
-  box-shadow: none;
 }
 .kn-step[data-status="voided"] {
   border: 1.5px dotted var(--kn-rule-strong);
   background-color: transparent;
   color: var(--kn-ink-2);
-  box-shadow: none;
 }
 .kn-step[data-status="done"] {
   border: 1.5px solid var(--kn-ink-2);
   background-color: var(--kn-sunken);
   color: var(--kn-ink);
-  box-shadow: none;
 }
-/* Resolved and current: the fill plus a 2 px ink outline. */
-.kn-step[data-current]:not([data-status="upcoming"]) {
-  outline: 2px solid var(--kn-ink);
-  outline-offset: 2px;
-}
-.kn-progress[data-variant="bar"] .kn-step[data-current] {
-  outline: 2px solid var(--kn-ink);
-  outline-offset: 2px;
-  box-shadow: none;
+/* Current, resolved or not: the eft bar under the step. */
+.kn-step[data-current]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 18%;
+  bottom: -7px;
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--kn-play-accent);
 }
 @media (max-width: 359px) {
   .kn-progress[data-variant="pills"] .kn-step {
-    width: 32px;
+    flex-basis: 32px;
   }
 }
 
 /* -------------------------------------------------------------- Stopwatch */
 
-/* DESIGN §6.7: a 36 px pill with a 44 px hit area, tabular m:ss. */
+/* DESIGN §6.7: tabular m:ss beside the timer icon, 36 px tall. Only the
+ * button (the screen's way into the More menu at "Hide stopwatch") is a
+ * pill on a `rule` border, with a 44 px hit area; a plain reading has no
+ * edge, so it never looks like something to tap (RITE round 1, R1-27). */
 .kn-watch {
   position: relative;
   display: inline-flex;
@@ -699,8 +731,8 @@ button.kn-chip {
   align-items: center;
   gap: 5px;
   height: 36px;
-  padding: 0 10px 0 8px;
-  border: 1.5px solid var(--kn-rule);
+  padding: 0 11.5px 0 9.5px;
+  border: 0;
   border-radius: var(--kn-radius-pill);
   background-color: transparent;
   color: var(--kn-ink-2);
@@ -710,18 +742,28 @@ button.kn-chip {
   line-height: 1;
   white-space: nowrap;
 }
-.kn-watch::after {
+button.kn-watch {
+  padding: 0 10px 0 8px;
+  border: 1.5px solid var(--kn-rule);
+  cursor: pointer;
+}
+button.kn-watch::after {
   content: "";
   position: absolute;
   inset: -4px 0;
 }
-button.kn-watch {
-  cursor: pointer;
+@media (hover: hover) {
+  button.kn-watch:hover {
+    background-color: var(--kn-surface-2);
+  }
 }
 @media (max-width: 359px) {
   .kn-watch {
-    padding: 0 7px 0 6px;
+    padding: 0 8.5px 0 7.5px;
     font-size: 14px;
+  }
+  button.kn-watch {
+    padding: 0 7px 0 6px;
   }
   .kn-watch > svg {
     display: none;
@@ -781,9 +823,10 @@ button.kn-watch {
   color: var(--kn-ink);
   box-shadow: 0 2px 0 var(--kn-ledge);
 }
+/* The page's one ring (DESIGN §11, R1-34), on the segment the radio fills. */
 .kn-segment:has(input:focus-visible) {
   outline: 3px solid var(--kn-focus);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 .kn-segment:has(input:disabled) {
   color: var(--kn-ink-3);
@@ -889,13 +932,34 @@ button.kn-watch {
   gap: 8px;
   padding: 16px var(--kn-gutter);
 }
+/* The grab handle of a modal sheet a drag can dismiss (./sheet.tsx): the
+ * 36 by 4 bar, drawn in a strip across the sheet's top edge that takes the
+ * finger. The sheet follows it without its transition while dragged, and
+ * springs back with it. */
 .kn-sheet-grab {
-  align-self: center;
+  position: relative;
+  align-self: stretch;
+  height: 28px;
+  margin: -20px calc(-1 * var(--kn-gutter)) -16px;
+  cursor: grab;
+  touch-action: none;
+}
+.kn-sheet-grab::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 50%;
   width: 36px;
   height: 4px;
-  margin: -8px 0 -4px;
+  margin-left: -18px;
   border-radius: 2px;
-  background-color: var(--kn-rule);
+  background-color: var(--kn-rule-strong);
+}
+.kn-dialog[data-dragging] {
+  transition: none;
+}
+.kn-dialog[data-dragging] .kn-sheet-grab {
+  cursor: grabbing;
 }
 @media (min-width: 768px) {
   .kn-dialog .kn-sheet-grab {
@@ -908,13 +972,15 @@ button.kn-watch {
   justify-content: space-between;
   gap: 12px;
 }
+/* Focus moves here when a sheet opens; after a key press it shows the
+ * page's one 3 px ring like everything else (DESIGN §11, R1-34). */
 .kn-sheet-title {
   font-family: var(--kn-font-display);
   font-size: var(--kn-text-display-3);
   font-weight: var(--kn-text-display-3--font-weight);
   line-height: var(--kn-text-display-3--line-height);
   letter-spacing: var(--kn-text-display-3--letter-spacing);
-  outline: none;
+  border-radius: 4px;
 }
 .kn-dialog .kn-sheet-title {
   font-size: var(--kn-text-display-5);
@@ -1219,10 +1285,10 @@ button.kn-watch {
   .kn-step[data-status="wrong"] {
     border: 2px dashed CanvasText;
   }
-  /* As specific as the bar's own current rule, so both variants get it. */
-  .kn-progress[data-variant] .kn-step[data-current] {
-    outline: 2px solid Highlight;
-    outline-offset: 2px;
+  /* The current step's bar, in the system's highlight colour. */
+  .kn-step[data-current]::after {
+    background-color: Highlight;
+    forced-color-adjust: none;
   }
   .kn-segment:has(input:checked) {
     border: 2px solid Highlight;

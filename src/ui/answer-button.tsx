@@ -22,12 +22,21 @@
  *   `ui.css` styles: the fills, the 400 ms reveal's stamp, shake and tag
  *   rise (DESIGN §7.3), and the forced-colours borders (double for correct,
  *   dashed for a wrong pick).
- * - The letter badge reads "A." to screen readers, so the accessible name
- *   contains the visible label: "A. Venus Your answer" (WCAG 2.5.3). The
- *   `{" "}` text nodes between the parts keep the words of that name apart;
- *   flex layout ignores them.
- * - Keys 1 to 4 are the round's job (they work while focus is in the
- *   question); `shortcut` only shows the hint and sets `aria-keyshortcuts`.
+ * - The state's words sit in their own row under the option's text, never
+ *   beside it, so a pill never squeezes the answer onto two or three lines
+ *   (RITE round 1, R1-36); the row opens with the reveal.
+ * - The badge's letter is the one name and the one key hint the option
+ *   has: it reads "A." to screen readers, so the accessible name contains
+ *   the visible label once, "A. Venus Your answer" (WCAG 2.5.3; R1-40
+ *   checked the tree for a doubled letter). Where a check or an X replaces
+ *   the letter, the letter stays for screen readers alone. The `{" "}` text
+ *   nodes between the parts keep the words of the name apart; the grid
+ *   ignores them.
+ * - Keys are the round's job (decision D6, R1-13: the letters A to D pick,
+ *   matching the badges, and digits 1 to 4 only where no option is a
+ *   number). `shortcut` names the keys that pick this option, in
+ *   `aria-keyshortcuts` form ("A 1", or "A"), set only while it is idle;
+ *   nothing else draws a hint, since the badge already shows the letter.
  */
 import type { ReactNode, Ref } from "react";
 
@@ -78,7 +87,11 @@ export interface AnswerButtonProps {
   onPressStart?: () => void;
   /** Forces the pressed look, such as while the option's shortcut key is held. */
   pressed?: boolean;
-  /** The key that picks this option ("1" to "4"); null or absent when shortcuts are off. */
+  /**
+   * The keys that pick this option, as `aria-keyshortcuts` lists them ("A
+   * 1", or "A" where digits don't pick); null or absent when shortcuts are
+   * off. Drawn nowhere: the badge's letter is the hint (D6).
+   */
   shortcut?: string | null;
   /** Wording for the state words; the defaults are UI_COPY.answer. */
   labels?: Partial<AnswerButtonLabels>;
@@ -116,6 +129,12 @@ export function AnswerButton({
         : state === "already-guessed"
           ? words.alreadyGuessed
           : null;
+  const Glyph =
+    state === "correct"
+      ? CheckIcon
+      : state === "your-answer"
+        ? CrossIcon
+        : null;
 
   return (
     <button
@@ -134,30 +153,30 @@ export function AnswerButton({
       style={{ minHeight: TUNABLES.answers.buttonMinHeightPx }}
       className={cx("kn-answer", className)}
     >
-      <span aria-hidden="true" className="kn-answer-badge">
-        {state === "correct" ? (
-          <CheckIcon />
-        ) : state === "your-answer" ? (
-          <CrossIcon />
+      <span className="kn-answer-badge">
+        {Glyph === null ? (
+          <>
+            {letter}
+            <span className="sr-only">.</span>
+          </>
         ) : (
-          letter
+          <>
+            <Glyph />
+            <span className="sr-only">{letter}.</span>
+          </>
         )}
-      </span>
-      <span className="sr-only">{letter}.</span>{" "}
+      </span>{" "}
       <span className="kn-answer-text">{children}</span>{" "}
       {tag === null ? null : (
-        <span className="kn-answer-tag">
-          {state === "correct" ? <CheckIcon size={14} /> : null}
-          {tag}
+        <span className="kn-answer-tag-row">
+          <span className="kn-answer-tag">
+            {state === "correct" ? <CheckIcon size={14} /> : null}
+            {tag}
+          </span>
         </span>
       )}
       {state === "locked" ? (
         <span className="sr-only">{words.lockedIn}</span>
-      ) : null}
-      {interactive && shortcut ? (
-        <kbd aria-hidden="true" className="kn-answer-kbd">
-          {shortcut}
-        </kbd>
       ) : null}
     </button>
   );

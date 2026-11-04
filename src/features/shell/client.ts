@@ -6,6 +6,7 @@
  * hook cost it about 0.2 kB through `SiteFooter`'s import). Client islands
  * import from here, and unused exports are dropped from their chunks.
  */
+export { ScrollInset, type ScrollEdge } from "./scroll-inset";
 export { ShellParam } from "./shell-param";
 export { TopBarTitle, type TopBarTitleProps } from "./top-bar-title";
 export { usePathParam } from "./use-path-param";

@@ -1,0 +1,113 @@
+/*
+ * Today's sections (./sections.tsx; DESIGN §10.1, §12.1). globals.css
+ * imports this file into the components layer. Every rule keys off the
+ * slots' own wrappers, so no slot reaches into another.
+ */
+
+/* Below 1024 px, one column: the two column wrappers dissolve, so every
+ * slot is one item of the list, in reading order. */
+.kn-home {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.kn-home-column {
+  display: contents;
+}
+/* A slot that renders nothing leaves no gap. */
+.kn-home-slot:empty {
+  display: none;
+}
+/* One notice above Practice at a time: the first with content wins. */
+.kn-home-slot[data-home-notice]:not(:empty) ~ .kn-home-slot[data-home-notice] {
+  display: none;
+}
+/* Practice promoted (the Daily card's offline state, PRD §3.1.7): the
+ * copy before the Daily shows, the one after the notices hides. */
+.kn-home-slot[data-home-slot="practice-promoted"] {
+  display: none;
+}
+.kn-home:has([data-home-promote="practice"])
+  > .kn-home-column
+  > [data-home-slot="practice-promoted"]:not(:empty) {
+  display: block;
+}
+.kn-home:has([data-home-promote="practice"])
+  > .kn-home-column
+  > [data-home-slot="practice"] {
+  display: none;
+}
+
+/* From 1024 px, two columns: the ticket and Practice on the left (7/12),
+ * the week, challenges and Groups on the right (5/12). */
+@media (min-width: 1024px) {
+  .kn-home {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: 24px;
+    align-items: start;
+  }
+  .kn-home-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+  .kn-home-column[data-home-column="left"] {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .kn-home-column[data-home-column="right"] {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  /*
+   * While the right column has nothing to show (STK-1's This week card
+   * comes first there), Practice takes its place beside the ticket, so
+   * Today is two columns from 1024 px rather than one column hugging the
+   * left (RITE round 1, R1-35). The left column becomes a subgrid on the
+   * page's own 7/5 split; the Daily and any notice stay on the left. A
+   * promoted Practice comes first, on the left, with the Daily beside it,
+   * so reading order still follows the screen.
+   */
+  .kn-home:not(:has(> [data-home-column="right"] > .kn-home-slot:not(:empty)))
+    > [data-home-column="right"] {
+    display: none;
+  }
+  .kn-home:not(:has(> [data-home-column="right"] > .kn-home-slot:not(:empty)))
+    > [data-home-column="left"] {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    row-gap: 12px;
+    align-items: start;
+  }
+  .kn-home:not(:has(> [data-home-column="right"] > .kn-home-slot:not(:empty)))
+    > [data-home-column="left"]
+    > .kn-home-slot {
+    grid-column: 1;
+  }
+  .kn-home:not(:has(> [data-home-column="right"] > .kn-home-slot:not(:empty)))
+    > [data-home-column="left"]
+    > [data-home-slot="practice"] {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  .kn-home:has([data-home-promote="practice"]):not(
+      :has(> [data-home-column="right"] > .kn-home-slot:not(:empty))
+    )
+    > [data-home-column="left"]
+    > [data-home-slot="practice-promoted"] {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .kn-home:has([data-home-promote="practice"]):not(
+      :has(> [data-home-column="right"] > .kn-home-slot:not(:empty))
+    )
+    > [data-home-column="left"]
+    > [data-home-slot="daily"] {
+    grid-row: 1;
+    grid-column: 2;
+  }
+}

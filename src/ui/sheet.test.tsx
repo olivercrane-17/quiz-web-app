@@ -1,12 +1,12 @@
-import { act, screen, within } from "@testing-library/react";
+import { act, fireEvent, screen, within } from "@testing-library/react";
 import { useRef, useState } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { renderWithUser } from "@/test/render";
 
 import { LIVE_REGION_IDS, announce } from "./announce";
 import { Button } from "./button";
-import { Sheet } from "./sheet";
+import { Sheet, dragDismissDistance } from "./sheet";
 
 function ReportFlow({ onClose }: { onClose?: () => void }) {
   const [open, setOpen] = useState(false);
@@ -228,5 +228,118 @@ describe("Sheet (inline)", () => {
       />,
     );
     expect(heading).toBe(screen.getByRole("heading", { name: "It's Uranus." }));
+  });
+
+  it("R1-36 shows no grab handle: nothing drags the explanation sheet away", () => {
+    renderWithUser(<Sheet modal={false} open title="It's Uranus." />);
+    expect(
+      screen.getByRole("region").querySelector("[data-sheet-grab]"),
+    ).toBeNull();
+  });
+});
+
+describe("the grab handle", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  /**
+   * A drag on the handle, by pointer events, from y 100 to `100 + distance`
+   * in four moves `msPerStep` apart (on a fake `performance` clock).
+   */
+  function drag(
+    handle: Element,
+    distance: number,
+    { msPerStep = 40, cancel = false } = {},
+  ) {
+    vi.useFakeTimers({ toFake: ["performance"] });
+    const at = (y: number) => ({ pointerId: 7, button: 0, clientY: y });
+    fireEvent.pointerDown(handle, at(100));
+    const steps = 4;
+    for (let step = 1; step <= steps; step += 1) {
+      vi.advanceTimersByTime(msPerStep);
+      fireEvent.pointerMove(handle, at(100 + (distance * step) / steps));
+    }
+    if (cancel) fireEvent.pointerCancel(handle, at(100 + distance));
+    else fireEvent.pointerUp(handle, at(100 + distance));
+    vi.useRealTimers();
+  }
+
+  it("R1-36 drags a dismissible sheet down and closes it past a third of its height", async () => {
+    const onClose = vi.fn();
+    const { user } = renderWithUser(<ReportFlow onClose={onClose} />);
+    await user.click(screen.getByRole("button", { name: "Report a problem" }));
+    const dialog = screen.getByRole("dialog");
+    const handle = dialog.querySelector("[data-sheet-grab]");
+    if (handle === null) throw new Error("no grab handle");
+    // Decorative for screen readers: the close button does the same.
+    expect(handle).toHaveAttribute("aria-hidden", "true");
+
+    // The sheet follows the finger, without its transition.
+    fireEvent.pointerDown(handle, { pointerId: 7, button: 0, clientY: 100 });
+    fireEvent.pointerMove(handle, { pointerId: 7, clientY: 140 });
+    expect(dialog.style.translate).toBe("0 40px");
+    expect(dialog).toHaveAttribute("data-dragging");
+    // Never above its place.
+    fireEvent.pointerMove(handle, { pointerId: 7, clientY: 60 });
+    expect(dialog.style.translate).toBe("");
+    fireEvent.pointerUp(handle, { pointerId: 7, clientY: 60 });
+
+    drag(handle, 160, { msPerStep: 400 });
+    expect(onClose).toHaveBeenCalledOnce();
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("R1-36 springs back from a short, slow drag, or a cancelled one", async () => {
+    const onClose = vi.fn();
+    const { user } = renderWithUser(<ReportFlow onClose={onClose} />);
+    await user.click(screen.getByRole("button", { name: "Report a problem" }));
+    const dialog = screen.getByRole("dialog");
+    const handle = dialog.querySelector("[data-sheet-grab]");
+    if (handle === null) throw new Error("no grab handle");
+
+    drag(handle, 30, { msPerStep: 400 });
+    expect(onClose).not.toHaveBeenCalled();
+    expect(dialog.style.translate).toBe("");
+    expect(dialog).not.toHaveAttribute("data-dragging");
+
+    drag(handle, 200, { cancel: true });
+    expect(onClose).not.toHaveBeenCalled();
+    expect(dialog.style.translate).toBe("");
+  });
+
+  it("R1-36 a quick downward flick closes it however short", async () => {
+    const onClose = vi.fn();
+    const { user } = renderWithUser(<ReportFlow onClose={onClose} />);
+    await user.click(screen.getByRole("button", { name: "Report a problem" }));
+    const handle = screen
+      .getByRole("dialog")
+      .querySelector("[data-sheet-grab]");
+    if (handle === null) throw new Error("no grab handle");
+    // 40 px in 4 steps of 10 ms: 1 px a millisecond.
+    drag(handle, 40, { msPerStep: 10 });
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  it("R1-36 a sheet that must be answered has no handle to drag", async () => {
+    function MustAnswer() {
+      return (
+        <Sheet
+          open
+          title="How old are you?"
+          actions={<Button>13 to 17</Button>}
+        />
+      );
+    }
+    renderWithUser(<MustAnswer />);
+    expect(
+      screen.getByRole("dialog").querySelector("[data-sheet-grab]"),
+    ).toBeNull();
+  });
+
+  it("closes past a third of the sheet, never more than 120 px and never under 48 px", () => {
+    expect(dragDismissDistance(300)).toBe(100);
+    expect(dragDismissDistance(900)).toBe(120);
+    expect(dragDismissDistance(0)).toBe(48);
   });
 });

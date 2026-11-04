@@ -12,7 +12,7 @@ import { IncidentBanner } from "@/features/incidents/banner";
 import { LiveRegions } from "@/ui/live-regions";
 
 import { SHELL_COPY } from "../copy";
-import { MAIN_ID } from "../landmarks";
+import { MainLandmark } from "../main-landmark";
 import { SkipLink } from "../skip-link";
 
 const SCALE = { "--u": "min(1vw, 1.7778vh)" } as CSSProperties;
@@ -22,13 +22,9 @@ export default function HostLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-dvh flex-col" style={SCALE}>
       <SkipLink />
       <IncidentBanner />
-      <main
-        id={MAIN_ID}
-        tabIndex={-1}
-        className="flex flex-1 flex-col p-[5vmin] outline-none max-lg:hidden [@media(max-height:575px)]:hidden"
-      >
+      <MainLandmark className="flex flex-1 flex-col p-[5vmin] outline-none max-lg:hidden [@media(max-height:575px)]:hidden">
         {children}
-      </main>
+      </MainLandmark>
       <p className="m-auto hidden max-w-md p-6 text-center text-lead max-lg:block [@media(max-height:575px)]:block">
         {SHELL_COPY.hostTooSmall}
       </p>

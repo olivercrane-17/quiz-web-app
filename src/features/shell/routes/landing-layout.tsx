@@ -11,7 +11,8 @@ import type { ReactNode } from "react";
 import { IncidentBanner } from "@/features/incidents/banner";
 import { LiveRegions } from "@/ui/live-regions";
 
-import { MAIN_ID } from "../landmarks";
+import { MainLandmark } from "../main-landmark";
+import { ScrollInset } from "../scroll-inset";
 import { SkipLink } from "../skip-link";
 import { Wordmark } from "../wordmark";
 
@@ -20,18 +21,15 @@ export default function LandingLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-dvh flex-col">
       <SkipLink />
       <header className="kn-topbar kn-grain" data-column="play">
+        <ScrollInset edge="top" />
         <div className="kn-topbar-row">
           <Wordmark />
         </div>
         <IncidentBanner />
       </header>
-      <main
-        id={MAIN_ID}
-        tabIndex={-1}
-        className="mx-auto w-full max-w-narrow flex-1 px-gutter pt-2 pb-10 outline-none md:max-w-play"
-      >
+      <MainLandmark className="mx-auto w-full max-w-narrow flex-1 px-gutter pt-2 pb-10 outline-none md:max-w-play">
         {children}
-      </main>
+      </MainLandmark>
       <LiveRegions />
     </div>
   );

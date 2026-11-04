@@ -6,6 +6,12 @@ import { renderWithUser } from "@/test/render";
 import TabsLayout from "./layout";
 import HomePage from "./page";
 
+// Today asks the router whether it arrived by a push (HomeArrival).
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/",
+  useRouter: () => ({ bfcacheId: "_b_1_" }),
+}));
+
 function renderHome() {
   return renderWithUser(
     <TabsLayout>
@@ -16,6 +22,7 @@ function renderHome() {
 
 afterEach(() => {
   vi.useRealTimers();
+  localStorage.clear();
 });
 
 describe("HomePage", () => {
@@ -44,6 +51,39 @@ describe("HomePage", () => {
       "Good morning.",
     );
     expect(screen.getByText("Sunday 1 November")).toBeInTheDocument();
+  });
+
+  it("R1-35 says Hello. just after midnight (D18), in the greeting's rem-sized token", () => {
+    vi.useFakeTimers({ now: new Date(2026, 10, 1, 0, 32), toFake: ["Date"] });
+    renderHome();
+
+    const greeting = screen.getByRole("heading", { level: 1 });
+    expect(greeting).toHaveTextContent("Hello.");
+    // display-2 is in rem, so at 200% text the h1 outgrows the h2s (R1-34).
+    expect(greeting).toHaveClass("text-display-2");
+  });
+
+  it("R1-35 tells a newcomer what the Daily asks, under the greeting, and nobody else (D18)", async () => {
+    const { resetIntroForTests } = await import("@/features/home/intro");
+    resetIntroForTests();
+    const first = renderHome();
+    const line = screen.getByText(
+      "Name the mystery in as few clues as you can.",
+    );
+    expect(line).toBeVisible();
+    expect(
+      screen.getByRole("heading", { level: 1 }).compareDocumentPosition(line) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    first.unmount();
+
+    // A device that already holds an identity has been here before.
+    localStorage.setItem("qz:identity", "{}");
+    resetIntroForTests();
+    renderHome();
+    expect(
+      screen.getByText("Name the mystery in as few clues as you can."),
+    ).not.toBeVisible();
   });
 
   it("offers the four tab destinations by name", () => {

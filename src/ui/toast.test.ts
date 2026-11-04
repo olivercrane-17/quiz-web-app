@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { LIVE_REGION_IDS } from "./announce";
+import { LIVE_REGION_IDS, clearRouteAnnouncements } from "./announce";
 import { showToast } from "./toast";
 
 const toasts = () => [
@@ -28,6 +28,16 @@ describe("showToast", () => {
     expect(document.getElementById(LIVE_REGION_IDS.polite)).toHaveTextContent(
       "Copied. Paste it into your group chat.",
     );
+  });
+
+  it("R1-09 keeps its words through a change of address, and takes them back as it leaves", () => {
+    const region = () => document.getElementById(LIVE_REGION_IDS.polite);
+    // "Saved" on Leave: the shell clears the old page's messages on arrival.
+    showToast("Saved");
+    clearRouteAnnouncements();
+    expect(region()).toHaveTextContent("Saved");
+    vi.advanceTimersByTime(4_000);
+    expect(region()).toBeEmptyDOMElement();
   });
 
   it("shows one at a time", () => {

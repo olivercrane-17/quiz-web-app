@@ -6,7 +6,7 @@
  * providers: islands reach settings, identity and the backend through
  * module singletons, which keeps the shared bundle small. The skip link
  * and the live regions come with each route group's layout, first and
- * last in its frame.
+ * last in its frame; the live regions empty when the address changes.
  */
 import type { Metadata, Viewport } from "next";
 
@@ -15,6 +15,7 @@ import {
   DisplaySettingsSync,
   ROOT_METADATA,
   ROOT_VIEWPORT,
+  RouteChangeEffects,
 } from "@/features/shell/routes/root-layout";
 import { getSiteUrl, isMockBackend } from "@/lib/env";
 
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body>
         <DisplaySettingsSync devices={devices} />
+        <RouteChangeEffects />
         {children}
       </body>
     </html>

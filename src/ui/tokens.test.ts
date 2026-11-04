@@ -240,7 +240,13 @@ describe("design tokens", () => {
   });
 
   it("every --kn-* token the code reads is defined", () => {
-    const defined = new Set<string>(["toast-bottom"]); // set from script (toast.ts)
+    // Set from script, each read with a fallback: the toast's offset
+    // (toast.ts) and the bars' measured heights (shell/scroll-inset.tsx).
+    const defined = new Set<string>([
+      "toast-bottom",
+      "inset-top",
+      "inset-bottom",
+    ]);
     const used = new Map<string, string>();
     const walk = (dir: string) => {
       for (const entry of readdirSync(dir)) {

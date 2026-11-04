@@ -73,6 +73,39 @@ describe("the shell's chrome", () => {
     expect(
       screen.getByRole("banner").querySelector(".kn-playbar-below"),
     ).toBeNull();
+    // With an end slot, the row keeps the icon buttons' insets.
+    expect(
+      screen.getByRole("banner").querySelector(".kn-playbar-row"),
+    ).not.toHaveAttribute("data-end");
+  });
+
+  it("R1-36 without an end slot, the play header's progress keeps the page's gutter on the right", () => {
+    renderWithUser(
+      <PlayHeader
+        leave={{ href: "/", label: "Leave practice. This run won't count" }}
+        progress={
+          <ol aria-label="Question 1 of 10. 0 right, 0 wrong so far." />
+        }
+      />,
+    );
+    // shell.css pads `[data-end="none"]` by the gutter on its right.
+    expect(
+      screen.getByRole("banner").querySelector(".kn-playbar-row"),
+    ).toHaveAttribute("data-end", "none");
+  });
+
+  it("R1-12 both bars report their height for the page's scroll padding", () => {
+    renderWithUser(
+      <>
+        <AppHeader />
+        <PlayHeader leave={{ href: "/", label: "Leave" }} />
+      </>,
+    );
+    for (const banner of screen.getAllByRole("banner")) {
+      expect(
+        banner.querySelector(':scope > [data-scroll-inset="top"]'),
+      ).not.toBeNull();
+    }
   });
 
   it("the play header runs a row under the bar when the screen gives one", () => {
