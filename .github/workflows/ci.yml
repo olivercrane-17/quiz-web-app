@@ -51,8 +51,14 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      # Vitest's unit, engine and bench projects; the static import checks of
+      # ARCHITECTURE §11.2 run inside them.
       - name: Unit tests
         run: npm test
+
+      # src/engine keeps 95% line and 90% branch coverage (ARCHITECTURE §4.1).
+      - name: Engine coverage
+        run: npm run test:coverage
 
       # Schemas and lint over content/ and its fixtures (CNT-1, ARCHITECTURE
       # §5.7). Sealed content is not decrypted here: its messages never quote
@@ -73,10 +79,27 @@ jobs:
       - name: Bundle budget
         run: npm run check:bundle
 
+  # The browser matrix of ARCHITECTURE §11.8, one browser per leg. Every leg
+  # runs on every push: the release criteria need CI green in Chromium,
+  # WebKit and Firefox (decisions memo §13).
   e2e:
-    name: E2E (Playwright)
+    name: E2E (${{ matrix.browser }})
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
+    strategy:
+      # One browser failing never hides another's result.
+      fail-fast: false
+      matrix:
+        include:
+          - browser: chromium
+            projects: --project=desktop-chromium --project=mobile-chromium --project=pwa-chromium
+          - browser: webkit
+            projects: --project=mobile-webkit
+          - browser: firefox
+            projects: --project=desktop-firefox
+    env:
+      # Puts the WebKit and Firefox projects in playwright.config.ts's list.
+      E2E_ALL_BROWSERS: "1"
     steps:
       - name: Check out
         uses: actions/checkout@v7
@@ -92,18 +115,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install Playwright ${{ matrix.browser }}
+        run: npx playwright install --with-deps ${{ matrix.browser }}
 
       # Builds and starts the app with the mock backend (see playwright.config.ts).
       - name: Run E2E tests
-        run: npm run test:e2e
+        run: npm run test:e2e -- ${{ matrix.projects }}
 
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browser }}
           path: playwright-report/
           retention-days: 14
           if-no-files-found: ignore

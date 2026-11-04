@@ -1,9 +1,10 @@
 /**
- * Stop-screen offer cards. Providers import the types and `OfferCard` from
- * here; the stop screen imports the registry. Providers import types only,
- * so the registry's imports of the providers never form a runtime cycle.
+ * Stop-screen offer cards. Providers import the types from here and
+ * `OfferCard` from `./client`; the stop screen imports the registry.
+ * Providers import types only from here, so the registry's imports of the
+ * providers never form a runtime cycle.
  */
-export { OfferCard, type OfferCardLayoutProps } from "./offer-card";
+export type { OfferCardLayoutProps } from "./offer-card";
 export { OFFER_PROVIDERS, pickOffer } from "./registry";
 export {
   OFFER_IDS,
