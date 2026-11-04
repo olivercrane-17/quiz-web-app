@@ -10,7 +10,7 @@
  * CI rebuilds it and fails on any difference (ARCHITECTURE §5.3).
  */
 export const FIXTURE_DATA = {
-  version: "f51ed855",
+  version: "f3408d36",
   mysteries: [
     {
       id: "fx.m.film.0101",
@@ -21,17 +21,17 @@ export const FIXTURE_DATA = {
       reviewBy: null,
       seededDifficulty: 2,
       explanation:
-        "The film follows a watchman who tends a light on a sea rock, and it took the Gold Gull prize a year after its release.",
+        "The top of a lighthouse is its lantern, and the one who tends it is the keeper. The film's watchman and his grey cat won the Gold Gull a year after its release.",
       learnMore: "The Lantern Keeper (fixture film)",
       kind: "mystery",
       answerType: "film",
       answer: "fx.x.film.the-lantern-keeper-1987",
       accepted: [],
       clues: [
-        "Its director shot every scene by candlelight in a fixture valley above Cindral.",
+        "Its title names the job of whoever tends the lamp at the top of a lighthouse.",
         "Its hero tends a light on a sea rock for thirty winters with a grey cat.",
-        "This fixture film won the Gold Gull prize at the Halvessa festival in 1988.",
-        "This fixture film is about a lighthouse watchman and his cat.",
+        "This fixture film won the Gold Gull prize in 1988, the year after it came out.",
+        "One word of its title names the glass room that holds a lighthouse's lamp.",
       ],
       distractors: [
         "fx.x.film.the-tide-clock-1985",
@@ -40,7 +40,7 @@ export const FIXTURE_DATA = {
       ],
       slot: 1,
       predicted: {
-        solveByClue: [0.55, 0.78, 0.9, 0.96],
+        solveByClue: [0.55, 0.8, 0.93, 0.97],
         spread: 0.2,
         estimator: "fixture",
       },
@@ -55,17 +55,17 @@ export const FIXTURE_DATA = {
       reviewBy: null,
       seededDifficulty: 4,
       explanation:
-        "Every clue points at the river kingdom ruled from Cindral, where lamps float downstream each new year.",
+        "Swap the R and A of the raven on its banners and you get Arven, as in the Arven Republic, which elects a president. Its name starts and ends with A.",
       learnMore: "Arvenna (fixture)",
       kind: "mystery",
       answerType: "country",
       answer: "fx.x.country.arvenna",
       accepted: [],
       clues: [
-        "Its banners show a silver heron flying over three blue waves.",
-        "Its calendar has thirteen months of 28 days each.",
-        "Its people greet each new year by floating lamps down every river.",
-        "This fixture country rules the river city of Cindral from a palace on an island.",
+        "Swap the two letters at the front of the black bird on its banners, and you have the start of its name.",
+        "Unlike the kingdoms around it, it elects a president.",
+        "Its name begins and ends with the letter A.",
+        "This fixture country's name starts with A and has a double N in the middle.",
       ],
       distractors: [
         "fx.x.country.belloria",
@@ -74,7 +74,7 @@ export const FIXTURE_DATA = {
       ],
       slot: 3,
       predicted: {
-        solveByClue: [0.15, 0.4, 0.65, 0.9],
+        solveByClue: [0.15, 0.4, 0.68, 0.92],
         spread: 0.2,
         estimator: "fixture",
       },
@@ -191,14 +191,14 @@ export const FIXTURE_DATA = {
       reviewBy: null,
       seededDifficulty: 4,
       explanation:
-        "Bismuth expands as it sets, which fills every corner of a type mould, and its crystals grow in rainbow-tinted steps.",
+        "Bismuth-209 decays so slowly that it passed for stable until 2003. Like water it expands as it freezes, and its crystals grow in rainbow-tinted steps.",
       learnMore: "Bismuth",
       kind: "mystery",
       answerType: "element",
       answer: "fx.x.element.bismuth",
       accepted: [],
       clues: [
-        "The printers of fixture Gorlund mixed it into their type metal to keep the letters sharp.",
+        "Long counted the heaviest stable element, it was found in 2003 to decay, with a half-life over a billion times the age of the universe.",
         "Like water, it expands as it freezes.",
         "Its crystals grow in stepped squares with a rainbow sheen.",
         "This element's symbol is Bi, and its atomic number is 83.",
@@ -210,7 +210,7 @@ export const FIXTURE_DATA = {
       ],
       slot: 3,
       predicted: {
-        solveByClue: [0.12, 0.35, 0.62, 0.9],
+        solveByClue: [0.12, 0.38, 0.66, 0.9],
         spread: 0.2,
         estimator: "fixture",
       },
