@@ -49,6 +49,7 @@ import { bootClient } from "@/features/identity";
 import { useSafePoint } from "@/features/pwa/safe-point";
 import { ShareButton } from "@/features/share/share-button";
 import { PlayFrame } from "@/features/shell";
+import { ScrollInset } from "@/features/shell/client";
 import { StreakLine } from "@/features/streaks/stop-screen-line";
 import { getServerClock } from "@/platform/server-clock";
 import { getSettingsStore } from "@/platform/settings/store";
@@ -329,13 +330,28 @@ function Results({
         </ol>
       </section>
 
-      <div className="flex flex-col items-start gap-2">
+      {/*
+       * The dock (DESIGN §12.4): "Done for today", the screen's one
+       * primary, held at the bottom of the screen while the results scroll
+       * under it. Its height is the page's bottom scroll inset, so keyboard
+       * focus never lands under it (R1-12, WCAG 2.4.11), and toasts rise
+       * above it (DESIGN §6.9). The next Daily and practice follow it in
+       * the page, so at 200% text the dock stays one button tall.
+       */}
+      <div
+        data-results-dock=""
+        data-toast-anchor=""
+        className="sticky bottom-0 z-10 -mx-4 border-t border-border bg-background px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]"
+      >
+        <ScrollInset edge="bottom" />
         <Link
           href="/"
           className={buttonClasses({ variant: "primary", block: true })}
         >
           {COPY.done}
         </Link>
+      </div>
+      <div className="flex flex-col items-start gap-2">
         {nextUnlockAt === null ? null : <NextDaily at={nextUnlockAt} />}
         <Link
           href={PRACTICE_HREF}

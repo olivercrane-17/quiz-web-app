@@ -1025,6 +1025,67 @@ test.describe("RITE round 1", () => {
       expect(lines.join("\n")).not.toMatch(/\d+:\d\d/);
     });
 
+    test("R1-12 the dock holds Done for today at the bottom, and tabbing never leaves focus under it, at 200% text", async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 390, height: 640 });
+      await page.addStyleTag({ content: BIG_TEXT });
+      const dock = page.locator("[data-results-dock]");
+      await expect(
+        dock.getByRole("link", { name: "Done for today" }),
+      ).toBeVisible();
+      // Sticky at the screen's bottom while the results scroll under it,
+      // one button tall even at 200% text.
+      const box = await dock.boundingBox();
+      expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(640.5);
+      expect(box?.height ?? Infinity).toBeLessThan(640 / 4);
+      // Its height is the page's bottom scroll inset (ScrollInset).
+      await expect
+        .poll(() =>
+          page.evaluate(() =>
+            Number.parseFloat(
+              getComputedStyle(document.documentElement).getPropertyValue(
+                "--kn-inset-bottom",
+              ),
+            ),
+          ),
+        )
+        .toBeGreaterThanOrEqual(Math.floor(box?.height ?? Infinity));
+      const hidden: string[] = [];
+      for (let step = 0; step < 40; step += 1) {
+        await page.keyboard.press("Tab");
+        const focus = await page.evaluate(() => {
+          const element = document.activeElement;
+          const bar = document.querySelector("[data-results-dock]");
+          const header = document.querySelector("header");
+          if (!(element instanceof HTMLElement) || bar === null) return null;
+          const rect = element.getBoundingClientRect();
+          return {
+            name: element.textContent?.trim().slice(0, 40) ?? "",
+            inDock: bar.contains(element),
+            top: rect.top,
+            bottom: rect.bottom,
+            dockTop: bar.getBoundingClientRect().top,
+            headerBottom: header?.getBoundingClientRect().bottom ?? 0,
+          };
+        });
+        if (focus === null || focus.inDock) break;
+        // Never under the dock (WCAG 2.4.11), and whole above it, with room
+        // for the 3 px ring at its 3 px offset, wherever it can fit there.
+        const room = focus.dockTop - focus.headerBottom;
+        const whole = focus.bottom - focus.top + 12 <= room;
+        if (
+          focus.top > focus.dockTop - 6 ||
+          (whole && focus.bottom > focus.dockTop - 6)
+        ) {
+          hidden.push(
+            `${focus.name}: ${Math.round(focus.top)} to ${Math.round(focus.bottom)}, dock at ${Math.round(focus.dockTop)}`,
+          );
+        }
+      }
+      expect(hidden).toEqual([]);
+    });
+
     test("R1-34 the results open on their heading, the route's one h1", async ({
       page,
     }) => {
