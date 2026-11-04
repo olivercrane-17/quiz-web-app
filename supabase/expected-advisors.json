@@ -1,0 +1,56 @@
+{
+  "about": "The advisor findings we accept on purpose (ARCHITECTURE §8.2 rule 4, §11.6). npm run sql:advisors compares get_advisors output (security and performance) with this file: a finding that matches no entry fails, and a required entry with no finding fails. Every entry says why it is accepted. Edit it in the same pull request as the migration that causes the finding.",
+  "live": {
+    "checked": "2026-11-04",
+    "applied": ["20261031000000_key_escrow"],
+    "security": [],
+    "performance": [],
+    "note": "Before SQL-1 the project held only CNT-0's private.key_escrow, and both advisors reported nothing. A restrictive deny-all policy counts as a policy for lint 0008."
+  },
+  "rpc": {
+    "lints": [
+      "anon_security_definer_function_executable",
+      "authenticated_security_definer_function_executable"
+    ],
+    "functions": [],
+    "why": "Every RPC is a SECURITY DEFINER function in public that anon is meant to call; that is the whole API (§8.2 rule 2). Lint 0028 flags each one for anon and lint 0029 for authenticated, which keeps EXECUTE because migrations never take a grant away (decisions memo §14.4). Each RPC validates its input, caps payloads and rate-limits itself, so both findings are expected for exactly these names. The list mirrors private.rpc_allowlist: npm run sql:bundle checks that the two agree, and the ticket that adds an RPC adds its name to both. SQL-1 adds none."
+  },
+  "accepted": [
+    {
+      "lint": "unused_index",
+      "schema": "private",
+      "table": "rate_counters",
+      "index": "rate_counters_window_start_idx",
+      "required": false,
+      "ticket": "SQL-1",
+      "why": "The hourly job prunes counters older than 2 days through this index. Until pg_cron runs it (SQL-8) and the table grows past a few pages, no plan uses it, so INFO 0005 reports it as unused."
+    },
+    {
+      "lint": "unused_index",
+      "schema": "private",
+      "table": "write_keys",
+      "index": "write_keys_created_at_idx",
+      "required": false,
+      "ticket": "SQL-1",
+      "why": "The hourly job prunes write keys older than 48 hours through this index; unused until the job runs over a table large enough to scan by index."
+    },
+    {
+      "lint": "unused_index",
+      "schema": "private",
+      "table": "write_keys",
+      "index": "write_keys_player_id_idx",
+      "required": false,
+      "ticket": "SQL-1",
+      "why": "delete_player (SQL-2) removes a player's write keys by player id with this index, so the deletion stays an index lookup (AC-DAT-02). Nothing uses it before SQL-2."
+    },
+    {
+      "lint": "unused_index",
+      "schema": "private",
+      "table": "rpc_errors",
+      "index": "rpc_errors_at_idx",
+      "required": false,
+      "ticket": "SQL-1",
+      "why": "The owner reads recent errors by time through MCP (the content queue, SQL-8). It stays unused until then."
+    }
+  ]
+}
