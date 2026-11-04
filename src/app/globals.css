@@ -830,6 +830,9 @@
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
+    /* Every frame has a sticky bar on top: what focus scrolls to lands
+     * below it, never under it (WCAG 2.4.11). */
+    scroll-padding-top: calc(64px + env(safe-area-inset-top));
   }
   body {
     /* A stacking context, so the grain (z-index -1) paints over the page

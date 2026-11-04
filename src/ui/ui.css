@@ -101,6 +101,8 @@
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
+  /* Scrolled into view, the ledge under it shows too. */
+  scroll-margin-bottom: 8px;
   transition:
     transform var(--kn-dur-press) var(--kn-ease-press),
     box-shadow var(--kn-dur-press) var(--kn-ease-press),
@@ -263,6 +265,7 @@
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
+  scroll-margin-bottom: 8px;
   transition:
     background-color var(--kn-dur-reveal) var(--kn-ease-out),
     color var(--kn-dur-reveal) var(--kn-ease-out),
@@ -805,7 +808,9 @@ button.kn-watch {
     }
   }
 }
-/* The explanation sheet: inline, in space the layout reserved, rising in. */
+/* The explanation sheet: inline, in space the layout reserved. It rises
+ * into that space as a reveal from its bottom edge, so its box (and
+ * Continue in it) never moves: a tap aimed at Continue lands on it. */
 .kn-sheet {
   position: relative;
   border-radius: var(--kn-radius-sheet) var(--kn-radius-sheet) 0 0;
@@ -814,7 +819,7 @@ button.kn-watch {
   box-shadow:
     0 -1px 0 var(--kn-rule),
     var(--kn-shadow-sheet);
-  animation: kn-sheet-rise var(--kn-dur-sheet) var(--kn-ease-out) both;
+  animation: kn-sheet-rise var(--kn-dur-sheet) var(--kn-ease-out) backwards;
 }
 /* From 768 px the sheet sits in a 720 px column, not against the screen's
  * bottom edge, so it is rounded all round. */
@@ -1039,14 +1044,15 @@ button.kn-watch {
     transform: none;
   }
 }
+/* The negative insets leave room for the sheet's shadow. */
 @keyframes kn-sheet-rise {
   from {
     opacity: 0;
-    transform: translateY(calc(24px * var(--kn-motion-distance)));
+    clip-path: inset(calc(100% * var(--kn-motion-distance)) -64px 0 -64px);
   }
   to {
     opacity: 1;
-    transform: none;
+    clip-path: inset(-64px -64px 0 -64px);
   }
 }
 @keyframes kn-banner-in {
