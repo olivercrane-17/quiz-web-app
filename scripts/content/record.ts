@@ -23,6 +23,7 @@ import {
 import {
   checkRecord,
   mergeRecord,
+  recordFileErrors,
   searchUse,
 } from "../../src/content/pipeline/records.ts";
 import {
@@ -111,6 +112,9 @@ run("content:record", async () => {
       seen.add(entry.itemId);
       report.push(checkRecord(bank, batch, pass, record, entry));
     }
+    const fileErrors = recordFileErrors(bank, parsed.data);
+    if (fileErrors.length > 0)
+      report.push({ itemId: "record file", errors: fileErrors, warnings: [] });
   }
 
   const rejected = report.filter((entry) => entry.errors.length > 0);

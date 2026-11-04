@@ -782,9 +782,20 @@ describe("the committed content files", () => {
   });
 
   it("start the register with the production plan", () => {
-    const { batches } = BatchRegisterSchema.parse(
+    const { batches: all } = BatchRegisterSchema.parse(
       readJson("content/batches.json"),
     );
+    // Top-up batches (content:batch -- open --target) join the register later
+    // with a bare plan of target and draft; the production plan is the rest.
+    const isTopUp = (batch: (typeof all)[number]) =>
+      Object.keys(batch.plan).every(
+        (key) => key === "target" || key === "draft",
+      );
+    for (const batch of all.filter(isTopUp)) {
+      expect(batch.status, batch.batchId).not.toBe("planned");
+      expect(batch.writer, batch.batchId).toEqual(expect.any(String));
+    }
+    const batches = all.filter((batch) => !isTopUp(batch));
     const pool = (name: string) =>
       batches.filter((batch) => batch.pool === name);
     expect(pool("practice")).toHaveLength(24);
@@ -823,9 +834,13 @@ describe("the committed content files", () => {
     expect(listTarget("person")).toBe(1000);
     expect(listTarget("element")).toBe(118);
     expect(pool("list")).toHaveLength(38);
+    // Production has started: a batch is either still planned with no writer,
+    // or past planning with its writer named.
     expect(
-      batches.every(
-        (batch) => batch.status === "planned" && batch.writer === null,
+      batches.every((batch) =>
+        batch.status === "planned"
+          ? batch.writer === null
+          : typeof batch.writer === "string" && batch.writer.length > 0,
       ),
     ).toBe(true);
   });

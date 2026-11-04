@@ -40,6 +40,23 @@ function makeRepo(): string {
   ]) {
     cpSync(join(REPO_ROOT, path), join(repo, path), { recursive: true });
   }
+  // The real register holds production progress; the test needs the plan as
+  // it was before any batch opened.
+  const registerPath = join(repo, "content/batches.json");
+  const register = JSON.parse(readFileSync(registerPath, "utf8")) as {
+    batches: Record<string, unknown>[];
+  };
+  for (const batch of register.batches) {
+    Object.assign(batch, {
+      status: "planned",
+      writer: null,
+      accepted: null,
+      cut: null,
+      lastSequence: 0,
+      incidents: [],
+    });
+  }
+  writeFileSync(registerPath, `${JSON.stringify(register, null, 2)}\n`);
   return repo;
 }
 

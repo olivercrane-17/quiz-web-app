@@ -135,6 +135,21 @@ export function checkRecord(
       );
   }
 
+  // Knowledge confirms only in the checker's own words (§9.5): a
+  // restatement that repeats the claim's wording shows nothing was checked.
+  const claimWording = new Map(
+    item.claims.map((claim) => [claim.id, wording(claim.text)]),
+  );
+  for (const result of entry.claimResults) {
+    const evidence = result.evidence;
+    if (evidence.kind !== "knowledge") continue;
+    const text = claimWording.get(result.claimId);
+    if (text && wording(evidence.restatement) === text)
+      errors.push(
+        `claim ${result.claimId}: the restatement repeats the claim's wording; restate the fact in your own words from your own check (§9.5)`,
+      );
+  }
+
   // Evidence: dataset records must name a pinned manifest dataset.
   entry.claimResults.forEach((result) => {
     const evidence = result.evidence;
@@ -243,6 +258,50 @@ export function checkRecord(
       );
   }
   return { itemId: record.id, errors, warnings };
+}
+
+/** Text compared for wording only: case, punctuation and spacing ignored. */
+function wording(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+}
+
+/** The least time a check of one item takes (§9.4), in seconds. */
+export const MIN_SECONDS_PER_ITEM = { mystery: 30, other: 8 } as const;
+
+/**
+ * File-level sanity (§9.4): a file of real checks spans real time. Checkers
+ * set startedAt and finishedAt from their own clock, so a file whose span is
+ * far shorter than the work it records was not checked item by item.
+ * Files of fewer than five records (tiebreaks, re-checks) are exempt.
+ */
+export function recordFileErrors(
+  bank: Bank,
+  entries: readonly RecordInputEntry[],
+): string[] {
+  if (entries.length < 5) return [];
+  const starts = entries
+    .map((entry) => Date.parse(entry.startedAt))
+    .filter(Number.isFinite);
+  const ends = entries
+    .map((entry) => Date.parse(entry.finishedAt))
+    .filter(Number.isFinite);
+  if (starts.length === 0 || ends.length === 0) return [];
+  const span = (Math.max(...ends) - Math.min(...starts)) / 1000;
+  let need = 0;
+  for (const entry of entries) {
+    const item = bank.itemsById.get(entry.itemId)?.item;
+    need +=
+      item && "kind" in item && item.kind === "mystery"
+        ? MIN_SECONDS_PER_ITEM.mystery
+        : MIN_SECONDS_PER_ITEM.other;
+  }
+  if (span >= need) return [];
+  return [
+    `this file records ${entries.length} checks made in ${Math.round(span / 60)} minute(s), but checking that many items properly takes at least ${Math.ceil(need / 60)} minutes. Record each item from your own cold solve and verification, never from a script or a template (§9.4)`,
+  ];
 }
 
 /** Total searches recorded so far in a batch, plus the cap. */
