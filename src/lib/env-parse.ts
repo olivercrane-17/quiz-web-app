@@ -1,13 +1,21 @@
 /**
- * Pure parsing of the public configuration: no imports, no globals, no side
- * effects.
+ * Pure parsing of the public configuration: no globals, no side effects.
  *
  * Two places feed raw values in. `src/lib/env.ts` does it at runtime, and
  * `next.config.ts` does it at build time to stop unsafe builds. The config
  * file can only load this module through a relative import (the "@/" alias
- * is not available there), so keep it free of imports and of process.env
- * reads. App code imports everything through `@/lib/env` instead.
+ * is not available there), so keep it free of process.env reads and of
+ * imports other than the feature flag table, which is plain data reached
+ * by relative paths too. App code imports everything through `@/lib/env`
+ * instead.
  */
+
+import {
+  FEATURE_DEFAULTS,
+  FEATURE_FLAGS,
+  isFeatureFlag,
+  type FeatureFlag,
+} from "../config/features";
 
 export const BACKEND_MODES = ["supabase", "mock", "off"] as const;
 
@@ -33,12 +41,19 @@ export const PUBLIC_ENV_NAMES = [
   /** Legacy JWT "anon" key. Only used when the publishable key is unset. */
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
   "NEXT_PUBLIC_SITE_URL",
+  /**
+   * The feature flags that are on in this build, comma-separated, or `none`.
+   * Unset means the defaults in src/config/features.ts (ARCHITECTURE §10.5).
+   */
+  "NEXT_PUBLIC_FEATURES",
   /** Set by Vercel: "production", "preview" or "development". */
   "NEXT_PUBLIC_VERCEL_ENV",
   /** Set by Vercel: host of the current deployment, without protocol. */
   "NEXT_PUBLIC_VERCEL_URL",
   /** Set by Vercel: production host of the project, without protocol. */
   "NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL",
+  /** Set by Vercel: the commit the deployment was built from. The app version. */
+  "NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA",
 ] as const;
 
 export type PublicEnvName = (typeof PUBLIC_ENV_NAMES)[number];
@@ -53,6 +68,17 @@ export const DEFAULT_SUPABASE_PUBLISHABLE_KEY =
 
 export const DEFAULT_BACKEND_MODE: BackendMode = "supabase";
 export const LOCAL_SITE_URL = "http://localhost:3000";
+
+/**
+ * The NEXT_PUBLIC_FEATURES value that turns every flag off. An empty value
+ * can't say that, because blank counts as unset, which means the defaults.
+ */
+export const NO_FEATURES = "none";
+
+/** The app version of a build that was not made from a known commit. */
+export const LOCAL_APP_VERSION = "local";
+
+export type FeatureFlags = Readonly<Record<FeatureFlag, boolean>>;
 
 export interface SupabaseConfig {
   readonly url: string;
@@ -69,6 +95,16 @@ export interface PublicEnv {
   readonly supabase: SupabaseConfig | null;
   /** Absolute site URL without a trailing slash, e.g. https://example.com */
   readonly siteUrl: string;
+  /**
+   * Every feature flag, on or off for this build: the flags that
+   * NEXT_PUBLIC_FEATURES lists, or the defaults when it is unset.
+   */
+  readonly features: FeatureFlags;
+  /**
+   * The build's version, sent with attempt starts and analytics events:
+   * the lowercase commit SHA Vercel built from, or `local`.
+   */
+  readonly appVersion: string;
   /** Human-readable configuration problems. Empty when all is well. */
   readonly issues: readonly string[];
 }
@@ -76,6 +112,8 @@ export interface PublicEnv {
 const SECRET_KEY_PREFIX = "sb_secret_";
 const HAS_PROTOCOL = /^[a-z][a-z\d+.-]*:\/\//i;
 const SUPABASE_HOST = /^https:\/\/([a-z\d]+)\.supabase\.co$/i;
+/** A full or abbreviated git commit hash. */
+const COMMIT_SHA = /^[\da-f]{7,40}$/i;
 
 /**
  * Turns raw environment values into a validated configuration.
@@ -98,8 +136,78 @@ export function parsePublicEnv(source: PublicEnvSource): PublicEnv {
     backendMode,
     supabase,
     siteUrl: resolveSiteUrl(source, issues),
+    features: parseFeatures(source.NEXT_PUBLIC_FEATURES, issues),
+    appVersion: resolveAppVersion(
+      source.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
+      issues,
+    ),
     issues,
   };
+}
+
+/**
+ * NEXT_PUBLIC_FEATURES names the flags that are on, comma-separated
+ * ("rooms,blitz"); every flag it leaves out is off. `none` turns them all
+ * off. Unset or blank means the defaults (ARCHITECTURE §10.5). Names are
+ * read case-insensitively, with hyphens for underscores.
+ *
+ * An unknown name is reported and ignored. A value that names no known
+ * flag at all keeps the defaults, so a typo can't switch every feature off.
+ */
+function parseFeatures(
+  raw: string | undefined,
+  issues: string[],
+): FeatureFlags {
+  const entries = (clean(raw) ?? "")
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter((entry) => entry !== "");
+  if (entries.length === 0) return FEATURE_DEFAULTS;
+
+  const on = new Set<FeatureFlag>();
+  const unknown: string[] = [];
+  let none = false;
+  for (const entry of entries) {
+    const name = entry.toLowerCase().replaceAll("-", "_");
+    if (isFeatureFlag(name)) on.add(name);
+    else if (name === NO_FEATURES) none = true;
+    else unknown.push(entry);
+  }
+
+  if (unknown.length > 0) {
+    issues.push(
+      `NEXT_PUBLIC_FEATURES names unknown flags (${unknown.join(", ")}), which were ignored. Known flags: ${FEATURE_FLAGS.join(", ")}.`,
+    );
+  }
+  if (none && on.size > 0) {
+    issues.push(
+      `NEXT_PUBLIC_FEATURES lists "${NO_FEATURES}" together with flags, so "${NO_FEATURES}" was ignored.`,
+    );
+  }
+  if (on.size === 0 && !none) {
+    issues.push(
+      "NEXT_PUBLIC_FEATURES names no known flag, so the default flags apply.",
+    );
+    return FEATURE_DEFAULTS;
+  }
+
+  return Object.freeze(
+    Object.fromEntries(FEATURE_FLAGS.map((flag) => [flag, on.has(flag)])),
+  ) as FeatureFlags;
+}
+
+/**
+ * The commit SHA that Vercel exposes to every build, lowercased, or
+ * `local` for builds made anywhere else (local runs, CI, E2E).
+ */
+function resolveAppVersion(raw: string | undefined, issues: string[]): string {
+  const sha = clean(raw);
+  if (sha === undefined) return LOCAL_APP_VERSION;
+  if (COMMIT_SHA.test(sha)) return sha.toLowerCase();
+  issues.push(
+    `NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA is not a git commit hash. Using "${LOCAL_APP_VERSION}" as the app version.`,
+  );
+  return LOCAL_APP_VERSION;
 }
 
 /**

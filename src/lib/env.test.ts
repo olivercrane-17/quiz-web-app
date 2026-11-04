@@ -41,6 +41,37 @@ describe("env module", () => {
     );
   });
 
+  it("keeps every feature flag at its default while NEXT_PUBLIC_FEATURES is unset", async () => {
+    const env = await import("./env");
+    const { FEATURE_DEFAULTS, FEATURE_FLAGS } =
+      await import("../config/features");
+
+    for (const flag of FEATURE_FLAGS) {
+      expect(env.isFeatureEnabled(flag)).toBe(FEATURE_DEFAULTS[flag]);
+    }
+  });
+
+  it("turns on the flags NEXT_PUBLIC_FEATURES lists, and only those", async () => {
+    vi.stubEnv("NEXT_PUBLIC_FEATURES", "rooms, readable_text");
+    vi.resetModules();
+    const env = await import("./env");
+    const { FEATURE_FLAGS } = await import("../config/features");
+
+    expect(FEATURE_FLAGS.filter((flag) => env.isFeatureEnabled(flag))).toEqual([
+      "rooms",
+      "readable_text",
+    ]);
+  });
+
+  it("reports the build's commit as the app version, or local", async () => {
+    expect((await import("./env")).getAppVersion()).toBe("local");
+
+    vi.stubEnv("NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA", "0A1B2C3D4E5F");
+    vi.resetModules();
+
+    expect((await import("./env")).getAppVersion()).toBe("0a1b2c3d4e5f");
+  });
+
   it("reads every name in PUBLIC_ENV_NAMES from its own variable", async () => {
     // next.config.ts pins exactly these names at build time, so a name that
     // readPublicEnvSource() skips or reads from the wrong variable would be
