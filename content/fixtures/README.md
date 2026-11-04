@@ -8,9 +8,19 @@ mysteries, which hint at real chemistry. None of it is real scheduled content
 (CONTENT_GUIDE §11.2), and none of it may be copied into `content/`.
 
 The files follow the content source formats (`src/content/schema/`), so
-`npm run content:check` validates them on every run, in CI too. Browser code
-reads them through `src/content/loaders/fixtures/`, which decodes them into
-the built shapes of ARCHITECTURE §3.2.
+`npm run content:check` validates them on every run, in CI too.
+
+**Edit a fixture, then run `npm run content:build`.** Mock builds (the E2E
+build, local development, the playtest build) play the fixture world from
+the build's generated copies, in the built shapes of ARCHITECTURE §3.2:
+the practice packs and answer lists in
+`src/content/generated/fixture-world.json`, and the mock backend's
+mysteries, encores, choice rounds, room packs, Dailies and spare sets in
+`src/backend/mock/fixtures.generated.ts` (§5.3). Commit them with the
+fixture: `content:check`'s drift check (X31) fails until they match. Unit
+tests and the E2E support code read the files themselves through
+`src/content/loaders/fixtures/`, and a parity test keeps both readings
+equal.
 
 | Folder             | What it holds                                                                                                                                                                                                        |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -26,5 +36,6 @@ the built shapes of ARCHITECTURE §3.2.
 other date on or after `dailyEpoch` (`src/config/shared.json`) plays spare
 set `((n - 1) mod 6) + 1`, where `n` is its Daily number: set A of the
 mysteries on odd numbers, set B on even ones, and the three encores in turn.
-`fixtureDailyFor()` in `src/content/loaders/fixtures/sealed.ts` implements
-it, and the e2e-track seed (SQL-3) must generate the same Dailies.
+`fixtureDailyFrom()` in `src/content/loaders/fixtures/cycle.ts` implements
+it for the mock and the tests alike, and the e2e-track seed (SQL-3) must
+generate the same Dailies.

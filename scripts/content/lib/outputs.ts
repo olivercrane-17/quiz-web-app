@@ -433,17 +433,13 @@ function mockFixtures(fixtures: Bank, problems: BuildProblem[]) {
   return data;
 }
 
-function lineFiles(raw: string | null): string[] {
+/** Reads content/names/*.txt and content/safety/*.txt: one entry per line, # comments. */
+export function parseLineFile(raw: string | null): string[] {
   if (raw === null) return [];
   return raw
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => line !== "" && !line.startsWith("#"));
-}
-
-/** Reads content/names/*.txt and content/safety/*.txt: one entry per line, # comments. */
-export function parseLineFile(raw: string | null): string[] {
-  return lineFiles(raw);
 }
 
 /**
