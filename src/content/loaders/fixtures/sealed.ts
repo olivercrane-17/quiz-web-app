@@ -1,25 +1,22 @@
 /**
  * The sealed fixture content (content/fixtures/, ARCHITECTURE §5.6),
- * decoded: mysteries, encores, the room pack, the Dailies' choice rounds,
- * the e2e schedule and its spare sets, plus the rule that gives every date
- * a fixture Daily.
+ * decoded straight from the source files: mysteries, encores, the room
+ * pack, the Dailies' choice rounds, the e2e schedule and its spare sets,
+ * plus the rule that gives every date a fixture Daily (cycle.ts).
  *
- * Sealed kinds exist on the client only in mock builds, so only the mock
- * backend and tests import this module, through dynamic imports
- * (loaders/fixture-daily.ts), never a page.
+ * The mock backend plays the build's generated copy of the same content
+ * (src/backend/mock/fixtures.generated.ts); this module serves tests and
+ * the E2E support code, which read the sources, and a parity test keeps
+ * the two equal. Sealed kinds exist on the client only in mock builds, so
+ * no page imports this module.
  */
 import { DAILY_EPOCH } from "@/config/shared";
-import { compositionIdOf } from "@/engine/composition";
-import { dailyNumberFor } from "@/engine/time";
 import type {
-  CompositionId,
-  DailyIdentity,
   EncoreContent,
   ItemId,
   LocalDate,
   MysteryContent,
   PackId,
-  RoundSpec,
   SealedChoiceContent,
 } from "@/engine/types";
 
@@ -41,6 +38,7 @@ import spare03 from "../../../../content/fixtures/spares/spare.03.json";
 import spare04 from "../../../../content/fixtures/spares/spare.04.json";
 import spare05 from "../../../../content/fixtures/spares/spare.05.json";
 import spare06 from "../../../../content/fixtures/spares/spare.06.json";
+import { fixtureDailyFrom, type FixtureDaily } from "./cycle";
 import {
   decodeEncore,
   decodeMystery,
@@ -168,13 +166,7 @@ export function fixtureRoundContent(id: ItemId): FixtureRoundContent | null {
   );
 }
 
-export interface FixtureDaily {
-  daily: DailyIdentity;
-  composition: CompositionId;
-  rounds: RoundSpec[];
-  /** Where the Daily came from: a dated row, or the spare its number picks. */
-  source: { kind: "schedule" } | { kind: "spare"; spareId: string };
-}
+export type { FixtureDaily };
 
 /**
  * The fixture Daily for a date (content/fixtures/README.md): the dated row
@@ -185,24 +177,5 @@ export function fixtureDailyFor(
   date: LocalDate,
   epoch: LocalDate = DAILY_EPOCH,
 ): FixtureDaily | null {
-  const dailyNumber = dailyNumberFor(date, epoch);
-  if (dailyNumber === null) return null;
-  const daily: DailyIdentity = { dailyNumber, date };
-  const dated = FIXTURE_SCHEDULE.find((row) => row.date === date);
-  if (dated !== undefined) {
-    return {
-      daily,
-      composition: compositionIdOf(dated.rounds.map((round) => round.type)),
-      rounds: dated.rounds,
-      source: { kind: "schedule" },
-    };
-  }
-  const spare = FIXTURE_SPARES[(dailyNumber - 1) % FIXTURE_SPARES.length];
-  if (spare === undefined) return null;
-  return {
-    daily,
-    composition: compositionIdOf(spare.rounds.map((round) => round.type)),
-    rounds: spare.rounds,
-    source: { kind: "spare", spareId: spare.id },
-  };
+  return fixtureDailyFrom(date, epoch, FIXTURE_SCHEDULE, FIXTURE_SPARES);
 }
