@@ -1129,7 +1129,10 @@ button.kn-watch::after {
   gap: 10px;
   width: max-content;
   max-width: min(420px, calc(100vw - 2 * var(--kn-gutter)));
-  padding: 12px 18px 12px 14px;
+  padding: 10px 16px 10px 12px;
+  /* Transparent until forced colours paint it in CanvasText, so the pill
+   * keeps its shape when its fill drops out (DESIGN §11). */
+  border: 2px solid transparent;
   border-radius: var(--kn-radius-pill);
   background-color: var(--kn-primary);
   color: var(--kn-on-primary);
@@ -1155,7 +1158,7 @@ button.kn-watch::after {
 .kn-toast button {
   flex: none;
   min-height: 44px;
-  margin: -12px -8px -12px 4px;
+  margin: -10px -6px -10px 4px;
   padding: 0 8px;
   color: inherit;
   font: inherit;

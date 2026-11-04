@@ -1,16 +1,13 @@
 /**
- * The Daily's "Saved" toast on Leave (DESIGN §6.9, RITE round 1 R1-38).
+ * The Daily's "Saved" toast on Leave (DESIGN §6.9, RITE round 1 R1-38),
+ * which is the design system's toast (`@/ui/toast`) since FIX-DS.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { LIVE_REGION_IDS } from "@/ui/announce";
+import { TOAST_ANCHOR } from "@/ui/toast";
 
-import {
-  TOAST_MS,
-  TOAST_WAIT_MS,
-  showToast,
-  showToastAfterLeaving,
-} from "./toast";
+import { TOAST_WAIT_MS, showToastAfterLeaving } from "./leave-toast";
 
 /** Animation frames the test runs by hand. */
 let frames: FrameRequestCallback[] = [];
@@ -39,14 +36,12 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  for (const toast of toasts()) toast.remove();
-  document.getElementById(LIVE_REGION_IDS.polite)?.remove();
-  document.querySelector("nav[data-placement]")?.remove();
-  vi.useRealTimers();
+  document.body.replaceChildren();
+  delete (Element.prototype as { checkVisibility?: unknown }).checkVisibility;
 });
 
-describe("the Daily's toast", () => {
-  it("R1-38 shows 'Saved' once Leave has taken the player off the Daily, and says it in the status region", () => {
+describe("the Daily's toast on Leave", () => {
+  it("R1-38 shows 'Saved' as the design system's toast once Leave has taken the player off the Daily, and says it in the status region", () => {
     showToastAfterLeaving("Saved", "/daily");
     runFrames(5);
     // Still on the Daily: the next screen isn't there to sit on yet.
@@ -56,39 +51,31 @@ describe("the Daily's toast", () => {
     runFrames(2);
     const [toast] = toasts();
     expect(toast).toHaveTextContent("Saved");
+    expect(toast).toHaveClass("kn-toast");
     expect(toast).toHaveAttribute("aria-hidden", "true");
     expect(status()).toBe("Saved");
   });
 
-  it("R1-38 sits 16 px above Today's bottom tab bar", () => {
+  it("R1-38 sits 16 px above the tab bar of the screen it lands on", () => {
+    showToastAfterLeaving("Saved", "/daily");
+    window.history.pushState(null, "", "/");
+    // Today's bottom tab bar, the toast's anchor, arrives with the route.
     const nav = document.createElement("nav");
-    nav.dataset.placement = "bottom";
+    nav.setAttribute(TOAST_ANCHOR.slice(1, -1), "");
     nav.getBoundingClientRect = () => ({ top: 700 }) as DOMRect;
-    nav.checkVisibility = () => true;
+    (Element.prototype as { checkVisibility?: () => boolean }).checkVisibility =
+      () => true;
     document.body.append(nav);
     vi.stubGlobal("innerHeight", 760);
-    showToast("Saved");
-    expect(toasts()[0]?.style.bottom).toBe("76px");
+    runFrames(2);
+    expect(toasts()[0]?.style.getPropertyValue("--kn-toast-bottom")).toBe(
+      "76px",
+    );
   });
 
   it("shows anyway if the address never changes, after a short wait", () => {
     showToastAfterLeaving("Saved", "/daily");
     runFrames(Math.ceil(TOAST_WAIT_MS / 16) + 2);
     expect(toasts()).toHaveLength(1);
-  });
-
-  it("keeps one toast at a time, leaves after 4 s, and goes on a tap", () => {
-    vi.useFakeTimers();
-    showToast("First");
-    showToast("Saved");
-    expect(toasts().map((toast) => toast.textContent)).toEqual(["Saved"]);
-    vi.advanceTimersByTime(TOAST_MS);
-    expect(toasts()).toEqual([]);
-
-    showToast("Saved");
-    toasts()[0]?.click();
-    expect(toasts()).toEqual([]);
-    expect(showToast("   ")).toBeTypeOf("function");
-    expect(toasts()).toEqual([]);
   });
 });

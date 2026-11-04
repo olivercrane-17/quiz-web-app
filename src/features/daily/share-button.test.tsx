@@ -16,7 +16,8 @@ import {
 } from "@/features/share/share-button";
 import { LIVE_REGION_IDS } from "@/ui/announce";
 
-import { TOAST_MS } from "./toast";
+/** A toast's 4 s (DESIGN §6.9), then its 200 ms fade (`@/ui/toast`). */
+const TOAST_MS = 4_000 + 200;
 
 const TEXT = [
   "Knewt Daily #42 · 9/12 · Encore off by 4% 🎯",
@@ -52,9 +53,16 @@ function named(name: string): TrackedEvent[] {
   return log().filter((event) => event.name === name);
 }
 
-/** The toasts on screen (DESIGN §6.9), not the status region's copy. */
+/**
+ * The toasts on screen (DESIGN §6.9), not the status region's copy, nor
+ * one fading out as the next replaces it.
+ */
 function toasts(): HTMLElement[] {
-  return [...document.querySelectorAll<HTMLElement>("[data-toast]")];
+  return [
+    ...document.querySelectorAll<HTMLElement>(
+      "[data-toast]:not([data-leaving])",
+    ),
+  ];
 }
 
 function status(): string {

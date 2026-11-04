@@ -70,9 +70,9 @@ import {
 } from "../model/controller";
 import { rememberFinished } from "../model/handoff";
 import { openRoundNumber } from "../model/labels";
-import { showToastAfterLeaving } from "../toast";
 import { HeaderStatus } from "./header-status";
 import { HowToPlaySheet } from "./how-to-play-sheet";
+import { showToastAfterLeaving } from "./leave-toast";
 import { MoreMenu, type MoreMenuItem } from "./more-menu";
 import { RoundArea, screenTitle } from "./round-area";
 import { Stopwatch } from "./stopwatch";

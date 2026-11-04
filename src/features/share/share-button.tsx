@@ -21,8 +21,7 @@
  *
  * Every press logs `share_open` first, which never counts as a share. A
  * press while the share sheet is still open does nothing. The toast is the
- * Daily's greybox `showToast` until DS-1's `src/ui/toast.ts` replaces it (a
- * FIX-DS follow-up, with the same signature). SHR-1 owns this file from
+ * design system's (`@/ui/toast`). SHR-1 owns this file from
  * Wave 12: it draws the mini grid inside the button from `payload.grid`
  * and moves these words into the share feature's copy.
  */
@@ -31,8 +30,8 @@ import { useId, useLayoutEffect, useRef, useState } from "react";
 import type { EventProps } from "@/analytics/dictionary";
 import type { ShareCell } from "@/engine/types";
 import { track } from "@/features/analytics/track";
-import { showToast } from "@/features/daily";
 import { Button } from "@/ui/button";
+import { showToast } from "@/ui/toast";
 
 /** Where the button sits, as `share_open` records it. */
 export type ShareSurface = EventProps<"share_open">["surface"];
