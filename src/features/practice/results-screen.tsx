@@ -248,7 +248,8 @@ export function PracticeResultsScreen({
             ref={headingRef}
             tabIndex={-1}
             data-practice-score=""
-            className="flex flex-wrap items-baseline gap-x-2 font-bold tabular-nums outline-none"
+            // The app's one 3 px ring when focus came from the keyboard (R1-34).
+            className="flex flex-wrap items-baseline gap-x-2 font-bold tabular-nums"
           >
             <span className="sr-only">{COPY.results.done} </span>
             <span className="text-6xl leading-none">{entry.score}</span>{" "}

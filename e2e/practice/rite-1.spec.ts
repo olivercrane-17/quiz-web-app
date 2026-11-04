@@ -533,6 +533,32 @@ test.describe("RITE round 1: practice", () => {
     });
   });
 
+  test("R1-34 played by keyboard, each new question's stem and the results' score show the app's one 3 px ring", async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    await startQuickPlay(page);
+    /** The focused element's ring, as `getComputedStyle` reports it. */
+    const ring = (target: Locator) =>
+      target.evaluate((element) => {
+        const style = getComputedStyle(element);
+        return `${style.outlineWidth} ${style.outlineStyle} ${style.outlineOffset}`;
+      });
+    for (let n = 1; n <= 10; n += 1) {
+      await expect(round(page).getByText(`Question ${n} of 10`)).toBeVisible();
+      await expect(stem(page)).toBeFocused();
+      // From question 2 the focus move follows a key press, so it is
+      // :focus-visible, and the heading keeps the global ring (DESIGN §11).
+      if (n > 1)
+        expect(await ring(stem(page)), `question ${n}`).toBe("3px solid 3px");
+      await answerByKey(page, "a");
+    }
+    await expect(page).toHaveURL("/practice/results");
+    const score = page.locator("[data-practice-score]");
+    await expect(score).toBeFocused();
+    expect(await ring(score)).toBe("3px solid 3px");
+  });
+
   test.describe("at 360 by 640", () => {
     test.use({ viewport: { width: 360, height: 640 } });
 

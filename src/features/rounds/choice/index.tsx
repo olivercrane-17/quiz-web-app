@@ -541,11 +541,13 @@ function ChoiceRoundView({
               </>
             )}
           </p>
+          {/* It takes focus for each new question, and shows the app's one
+              3 px ring when that came from the keyboard (R1-34). */}
           <h1
             ref={stemRef}
             id={stemId}
             tabIndex={-1}
-            className="text-2xl leading-snug font-bold text-balance outline-none"
+            className="text-2xl leading-snug font-bold text-balance"
           >
             {open.stem}
           </h1>

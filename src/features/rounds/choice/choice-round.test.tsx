@@ -269,6 +269,13 @@ describe("ChoiceRound", () => {
     );
   });
 
+  it("R1-34 gives the stem no outline-none, so it shows the app's one ring when focused from the keyboard", () => {
+    setup();
+    const stem = screen.getByRole("heading", { level: 1 });
+    expect(stem).toHaveAttribute("tabindex", "-1");
+    expect(stem.className).not.toMatch(/\boutline-none\b/);
+  });
+
   it("moves focus to the question's heading when the round opens", () => {
     setup();
     expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
