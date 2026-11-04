@@ -1025,6 +1025,28 @@ test.describe("RITE round 1", () => {
     }
   });
 
+  test("R1-22 D10 a solve after a wrong guess stamps and says Got there., never Knew it.", async ({
+    page,
+  }) => {
+    await page.goto("/daily");
+    const round = page.locator("[data-round-area]");
+    const field = round.getByRole("combobox");
+    await field.fill("Cor");
+    await page.getByRole("option", { name: /Corin Ashby/ }).click();
+    await round.getByRole("button", { name: "Guess", exact: true }).click();
+    await expect(round.getByRole("heading", { name: /clue 2/i })).toBeVisible();
+    await field.fill("Odile");
+    await page.getByRole("option", { name: /Odile Marsh/ }).click();
+    await round.getByRole("button", { name: "Guess", exact: true }).click();
+    // The reveal's stamp and the status region agree (the controller
+    // passes the round's miss to the announcement).
+    const stamp = round.locator('[data-verdict="solved"]');
+    await expect(stamp).toHaveText("Got there.");
+    await expect(statusRegion(page)).toHaveText(
+      "Got there. Odile Marsh. Solved on clue 2, 3 points.",
+    );
+  });
+
   test("R1-34 the Daily screen has one h1 while a round shows: the round's own", async ({
     page,
   }) => {
