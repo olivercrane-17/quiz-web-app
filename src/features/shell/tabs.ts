@@ -23,9 +23,8 @@ export interface TabDefinition {
    * included (/g and /me until GRP-1 and STA-1): a prefetched page arrives
    * with its title, so Next's route announcer reads "Groups · Knewt"
    * rather than whatever heading the document holds first (RITE round 1,
-   * R1-09). Off only while a destination has no page on this branch, since
-   * that prefetch would log a 404: /practice until FIX-PRA's greybox
-   * merges, and PRA-2 turns it on with the hub (a one-line Touch, §12.3).
+   * R1-09). Off only while a destination has no page, since that prefetch
+   * would log a 404; every tab has one since FIX-PRA's greybox /practice.
    * PERF-1 checks every link when it tunes prefetching (ARCHITECTURE §10.9
    * item 5).
    */
@@ -43,7 +42,7 @@ export const TABS: readonly TabDefinition[] = [
     id: "practice",
     href: "/practice",
     label: SHELL_CLIENT_COPY.tabs.practice,
-    prefetch: false,
+    prefetch: true,
   },
   {
     id: "groups",

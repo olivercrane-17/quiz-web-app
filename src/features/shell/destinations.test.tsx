@@ -39,13 +39,6 @@ function pages(): Map<string, { file: string; group: string | null }> {
   return found;
 }
 
-/**
- * Destinations other lanes build on their own branches: FIX-PRA's greybox
- * /practice (RITE round 1, R1-02). Once it merges, the check below covers it
- * like the rest; until then the not-found page catches the tab.
- */
-const BUILT_ELSEWHERE = new Set(["/practice"]);
-
 /** Every address the shell's chrome links to: the tabs, Settings, the footer, the wordmark. */
 const SHELL_LINKS = [
   "/",
@@ -76,13 +69,13 @@ describe("every destination the shell draws", () => {
   const routes = pages();
 
   it("R1-02 has a page, in the route group ARCHITECTURE §10.1 gives it", () => {
-    const missing = SHELL_LINKS.filter(
-      (href) => !routes.has(href) && !BUILT_ELSEWHERE.has(href),
-    );
+    const missing = SHELL_LINKS.filter((href) => !routes.has(href));
     expect(missing).toEqual([]);
     for (const [href, group] of Object.entries(GROUP_OF)) {
       expect(routes.get(href)?.group, href).toBe(group);
     }
+    // FIX-PRA's greybox hub, which the Practice tab opens (R1-02).
+    expect(routes.get("/practice")?.group).toBe("(tabs)");
   });
 
   it.each(

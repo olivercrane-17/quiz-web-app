@@ -35,9 +35,6 @@ import type { CDPSession, Page } from "@playwright/test";
 import { expect, test } from "../fixtures";
 import { setClock } from "../support/clock";
 
-/** Destinations other lanes build: FIX-PRA's greybox /practice (R1-02). */
-const BUILT_ELSEWHERE = new Set(["/practice"]);
-
 const NOT_FOUND_HEADING = "We couldn't find that page.";
 
 /**
@@ -173,7 +170,6 @@ test.describe("R1-02 dead links", () => {
   ]) {
     test(`R1-02 every link the shell draws on Today opens a page in the shell, never the bare 404, at ${viewport.width} px`, async ({
       page,
-      consoleErrors,
     }) => {
       test.setTimeout(90_000);
       await page.setViewportSize(viewport);
@@ -181,19 +177,16 @@ test.describe("R1-02 dead links", () => {
       const hrefs = (await shellLinks(page)).filter((href) => href !== "/");
       // The tabs, Settings and the seven trust pages, at least.
       expect(hrefs.length).toBeGreaterThanOrEqual(10);
+      // FIX-PRA's greybox /practice among them, since it merged.
+      expect(hrefs).toContain("/practice");
       for (const href of hrefs) {
-        // Direct load: a real page, or (for a page another lane builds)
-        // the in-shell not-found page.
+        // Direct load: a real page, never the not-found one.
         const response = await page.goto(href);
-        const status = response?.status();
-        if (BUILT_ELSEWHERE.has(href)) expect([200, 404]).toContain(status);
-        else expect(status, href).toBe(200);
+        expect(response?.status(), href).toBe(200);
         await expectPageInTheShell(page);
-        if (!BUILT_ELSEWHERE.has(href)) {
-          await expect(
-            page.getByRole("heading", { name: NOT_FOUND_HEADING }),
-          ).toHaveCount(0);
-        }
+        await expect(
+          page.getByRole("heading", { name: NOT_FOUND_HEADING }),
+        ).toHaveCount(0);
 
         // And by the link itself, as a client navigation from Today.
         await openToday(page);
@@ -204,10 +197,6 @@ test.describe("R1-02 dead links", () => {
           .click();
         await expect(page).toHaveURL(href);
         await expectPageInTheShell(page);
-      }
-      // Only the destinations other lanes build may 404 here.
-      if ([...BUILT_ELSEWHERE].some((href) => hrefs.includes(href))) {
-        dropExpected(consoleErrors, NOT_FOUND_LOAD);
       }
     });
   }
@@ -582,6 +571,11 @@ test.describe("R1-09 text from the page you just left", () => {
     await tab("Groups").click();
     await expect(page).toHaveURL("/g");
     await expect.poll(() => announcer(page)).toBe("Groups · Knewt");
+
+    // FIX-PRA's greybox hub, prefetched since it merged.
+    await tab("Practice").click();
+    await expect(page).toHaveURL("/practice");
+    await expect.poll(() => announcer(page)).toBe("Practice · Knewt");
 
     await tab("Me").click();
     await expect(page).toHaveURL("/me");
@@ -1511,10 +1505,9 @@ test.describe("R1-34 rings, headings and tab labels", () => {
     test.setTimeout(60_000);
     await page.setViewportSize({ width: 320, height: 640 });
     await openToday(page);
-    const hrefs = (await shellLinks(page)).filter(
-      (href) => !BUILT_ELSEWHERE.has(href),
-    );
+    const hrefs = await shellLinks(page);
     expect(hrefs).toContain("/accessibility");
+    expect(hrefs).toContain("/practice");
     for (const path of [...hrefs, "/no-such-page"]) {
       await page.goto(path);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
