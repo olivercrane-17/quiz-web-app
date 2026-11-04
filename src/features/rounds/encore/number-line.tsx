@@ -6,9 +6,12 @@
  * either side), with the close band and the bullseye band shaded around
  * the answer, marks for the guess, the answer and (once crowd stats
  * qualify) the crowd's median. On the reveal a needle eases from the guess
- * to the answer; under reduced motion it is a static drawing. A guess
- * beyond either end sits at the edge with an arrow. Screen readers get the
- * same facts as text (AC-DLY-35).
+ * to the answer; under reduced motion it is a static drawing. Both marks
+ * are labelled (R1-26): "You" over the guess and "Answer" with its value
+ * under the answer, between the two ends' values. A guess beyond either
+ * end sits at the edge with an arrow, and its label gives its value there
+ * ("You 300 m →"), since the line can't show where it really lies. Screen
+ * readers get the same facts as text (AC-DLY-35).
  *
  * Every mark is a box with a fill, which forced colours would paint as
  * Canvas. There the line keeps its own system colours instead
@@ -79,6 +82,21 @@ export function NumberLine(props: NumberLineProps) {
     "--from": pct(line.guess.at),
     "--to": pct(line.answer),
   } as CSSProperties;
+  const words = ENCORE_COPY.numberLine;
+  const edge = line.guess.edge;
+  const guessLabel =
+    edge === "high"
+      ? words.offHigh(amount(guess, props))
+      : edge === "low"
+        ? words.offLow(amount(guess, props))
+        : words.you;
+  // The label sits over its mark, and turns to stay inside near an end.
+  const guessAlign =
+    edge === "high" || (edge === null && line.guess.at > 0.9)
+      ? "-translate-x-full"
+      : edge === "low" || line.guess.at < 0.1
+        ? "translate-x-0"
+        : "-translate-x-1/2";
 
   return (
     <figure
@@ -88,6 +106,22 @@ export function NumberLine(props: NumberLineProps) {
       data-motion={reducedMotion ? "reduce" : undefined}
       className="mt-3"
     >
+      <div
+        aria-hidden="true"
+        className="relative mx-3 h-[1.125rem] text-xs leading-none font-extrabold"
+      >
+        <span
+          data-label="guess"
+          style={{ left: pct(line.guess.at) }}
+          className={cx(
+            "absolute bottom-0 whitespace-nowrap tabular-nums",
+            guessAlign,
+            TONE.ink,
+          )}
+        >
+          {guessLabel}
+        </span>
+      </div>
       <div className="relative mx-3 h-11">
         <span
           aria-hidden="true"
@@ -151,17 +185,28 @@ export function NumberLine(props: NumberLineProps) {
           {line.guess.edge === null ? null : <Arrow edge={line.guess.edge} />}
         </span>
       </div>
+      {/* The ends' values at the sides, the answer's label in the middle,
+          under its tick: equal side columns keep the middle centred. */}
       <div
         aria-hidden="true"
         className={cx(
-          "mt-1 flex justify-between text-xs font-semibold tabular-nums",
+          "mx-3 mt-1 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-x-2 text-xs font-semibold tabular-nums",
           DISPLAY_FONT,
           TONE.ink3,
         )}
       >
-        <span>{amount(line.ends.low, props)}</span>
-        <span className={TONE.ink}>{amount(answer, props)}</span>
-        <span>{amount(line.ends.high, props)}</span>
+        <span data-label="low" className="text-left break-words">
+          {amount(line.ends.low, props)}
+        </span>
+        <span
+          data-label="answer"
+          className={cx("text-center font-extrabold", TONE.ink)}
+        >
+          {words.answer} {amount(answer, props)}
+        </span>
+        <span data-label="high" className="text-right break-words">
+          {amount(line.ends.high, props)}
+        </span>
       </div>
     </figure>
   );

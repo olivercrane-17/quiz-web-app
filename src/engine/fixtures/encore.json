@@ -1,7 +1,7 @@
 {
   "$comment": [
     "Encore parity table (ARCHITECTURE §4.13): every row of PRD §4.2.4, parse failures, years, and the exact boundaries (21 against 20 and 20 against 21 at exactly 5%, 23 against 20 at exactly 15%, 1,045 against 1,000 reading 5% off, every error under 1% reading under 1% off on the exact ratio before rounding, so 1,005 and 1,009 against 1,000 read under 1% off and 1,010 reads 1% off, 2 and 5 years).",
-    "parse: what the player types, read by the engine's parseEncoreInput (SQL never sees text). Each row gives the parsed value and its preview, or the error.",
+    "parse: what the player types, read by the engine's parseEncoreInput (SQL never sees text). Each row gives the parsed value and its preview, or the error. Decision D1 (02-PRODUCT-DECISIONS §19) replaces PRD §4.2.4's '1,250 rejected' example: with decimals allowed, commas that group thousands (each followed by exactly three digits, or Indian grouping) are grouping, so prd-decimal-comma-thousands reads 1,250 as 1250; the d1- rows cover the rest of the rule.",
     "judge: a locked-in number against an answer. Engine (scoring/encore.ts, the encore plugin) and SQL (round_judge_encore, from SQL-5) must agree on display and band exactly; value is the float an EncoreError carries, rounded to 7 places for the comparison.",
     "values: numbers the judge receives and must refuse (round_judge_encore re-checks them; the plugin answers invalid_input).",
     "bands null means the defaults: within 5% and 15% for quantities, 2 and 5 years for years."
@@ -236,8 +236,122 @@
       "preview": "1,250.5"
     },
     {
-      "id": "prd-decimal-too-many",
+      "id": "prd-decimal-comma-thousands",
       "typed": "1,250",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 1250,
+      "preview": "1,250"
+    },
+    {
+      "id": "d1-thousands-comma",
+      "typed": "1,200",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 1200,
+      "preview": "1,200"
+    },
+    {
+      "id": "d1-thousands-commas",
+      "typed": "12,345,678",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 12345678,
+      "preview": "12,345,678"
+    },
+    {
+      "id": "d1-indian-grouping",
+      "typed": "1,20,000",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 120000,
+      "preview": "120,000"
+    },
+    {
+      "id": "d1-indian-grouping-long",
+      "typed": "12,34,56,789",
+      "decimals": 2,
+      "valueKind": "quantity",
+      "value": 123456789,
+      "preview": "123,456,789"
+    },
+    {
+      "id": "d1-thousands-two-decimals",
+      "typed": "1,234",
+      "decimals": 2,
+      "valueKind": "quantity",
+      "value": 1234,
+      "preview": "1,234"
+    },
+    {
+      "id": "d1-thousands-leading-zeros",
+      "typed": "001,250",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 1250,
+      "preview": "1,250"
+    },
+    {
+      "id": "d1-comma-point",
+      "typed": "300,5",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "value": 300.5,
+      "preview": "300.5"
+    },
+    {
+      "id": "d1-comma-point-two-decimals",
+      "typed": "12,34",
+      "decimals": 2,
+      "valueKind": "quantity",
+      "value": 12.34,
+      "preview": "12.34"
+    },
+    {
+      "id": "d1-four-after-comma",
+      "typed": "1,2345",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "error": "too_many_decimals"
+    },
+    {
+      "id": "d1-zero-lead-is-a-point",
+      "typed": "0,500",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "error": "too_many_decimals"
+    },
+    {
+      "id": "d1-no-lead-is-a-point",
+      "typed": ",500",
+      "decimals": 2,
+      "valueKind": "quantity",
+      "error": "too_many_decimals"
+    },
+    {
+      "id": "d1-broken-thousands",
+      "typed": "1,200,5",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "error": "bad_separator"
+    },
+    {
+      "id": "d1-broken-indian-grouping",
+      "typed": "1,20,00",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "error": "bad_separator"
+    },
+    {
+      "id": "d1-mixed-group-sizes",
+      "typed": "1,234,56,789",
+      "decimals": 1,
+      "valueKind": "quantity",
+      "error": "bad_separator"
+    },
+    {
+      "id": "d1-dot-stays-the-point",
+      "typed": "1.200",
       "decimals": 1,
       "valueKind": "quantity",
       "error": "too_many_decimals"

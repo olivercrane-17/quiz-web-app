@@ -15,11 +15,19 @@
  *   and is ignored: "1,250" and "1.250" both mean 1250.
  * - With decimals: when both kinds appear, the last separator is the point
  *   and must be the only one of its kind, and every earlier one is
- *   grouping ("1,250.5" and "1.250,5" both mean 1250.5); when one kind
- *   appears, its first occurrence is the point and any further separator is
- *   `bad_separator` ("Check the dots and commas."); more digits after the
- *   point than allowed is `too_many_decimals` ("Up to 1 decimal place,
- *   please."). Separators with no digits at all are `bad_separator` too.
+ *   grouping ("1,250.5" and "1.250,5" both mean 1250.5). When only commas
+ *   appear and they group thousands (decision D1, which replaces PRD
+ *   §4.2.1's "`1,250` rejected" example), they are ignored: every comma
+ *   followed by exactly three digits ("1,200" is 1200, "12,345,678" is
+ *   12345678), or Indian grouping, two-digit groups ending in a
+ *   three-digit one ("1,20,000" is 120000), after a positive leading
+ *   group. Otherwise, when one kind appears, its first occurrence is the
+ *   point ("300,5" is 300.5) and any further separator is `bad_separator`
+ *   ("Check the dots and commas."); more digits after the point than
+ *   allowed is `too_many_decimals` ("Up to 1 decimal place, please."), so
+ *   "1,2345" with one decimal still is. D1 names commas only: a dot keeps
+ *   its reading as the point. Separators with no digits at all are
+ *   `bad_separator` too.
  * - Leading zeros are ignored; at most 15 significant digits
  *   (`too_many_digits`); years are whole numbers from 1 to 9999
  *   (`year_range`).
@@ -80,7 +88,29 @@ const fail = (error: EncoreParseError): EncoreParseResult => ({
   error,
 });
 
-/** Splits the digits into the integer part and the fraction by PRD §4.2.1's separator rules. */
+const THREE_DIGITS = /^\d{3}$/;
+const TWO_DIGITS = /^\d{2}$/;
+
+/**
+ * True when the commas of `body` (digits and commas) group thousands (D1):
+ * each one followed by exactly three digits, or Indian grouping (two-digit
+ * groups ending in a three-digit one), after a leading group that is a
+ * positive number. "0,500" and ",500" aren't grouping: a grouped number is
+ * 1,000 or more, so they keep the comma as the point.
+ */
+function commasGroupThousands(body: string): boolean {
+  const [lead, ...groups] = body.split(",");
+  const last = groups.at(-1);
+  if (lead === undefined || last === undefined) return false;
+  if (!/^\d*[1-9]\d*$/.test(lead) || !THREE_DIGITS.test(last)) return false;
+  const middle = groups.slice(0, -1);
+  return (
+    middle.every((group) => THREE_DIGITS.test(group)) ||
+    middle.every((group) => TWO_DIGITS.test(group))
+  );
+}
+
+/** Splits the digits into the integer part and the fraction by PRD §4.2.1's separator rules, as D1 amends them. */
 function splitAtPoint(
   body: string,
   decimals: number,
@@ -89,6 +119,10 @@ function splitAtPoint(
   const dots = count(body, ".");
   const commas = count(body, ",");
   if (dots === 0 && commas === 0) return { int: body, frac: "" };
+  // D1: commas that group thousands stay grouping when decimals are allowed.
+  if (dots === 0 && commasGroupThousands(body)) {
+    return { int: body.replace(/,/g, ""), frac: "" };
+  }
   if (dots > 0 && commas > 0) {
     // The last separator is the point and must be the only one of its kind;
     // every earlier separator is then of the other kind, so it is grouping.

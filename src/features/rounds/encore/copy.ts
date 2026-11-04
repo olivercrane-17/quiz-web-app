@@ -1,7 +1,11 @@
 /**
  * The Encore round's words (PRD §3.1.5, §4.2; DESIGN §1.4, §6.5, §12.2).
  * DESIGN's polished strings win where it has one; PRD wording fills the
- * rest. `encoreAnnouncementText` words the plugin's announcement for every
+ * rest, and the decisions after RITE round 1 (02-PRODUCT-DECISIONS §19)
+ * override both: D2 says what the Encore does for a solo player ("one
+ * number, no points"; ties on points go to the closer guess), and D16 names
+ * the close band's chip "Close guess", so it never reads as a close button.
+ * `encoreAnnouncementText` words the plugin's announcement for every
  * controller that runs an Encore.
  */
 import type { EncoreParseError } from "@/engine/encore";
@@ -18,10 +22,17 @@ export function bandWords(
   return `${String(Number((limit * 100).toFixed(2)))}%`;
 }
 
+/**
+ * The preview line is spoken once typing settles this long (R1-34): a
+ * screen reader hears the number the player meant, not every keystroke.
+ */
+export const PREVIEW_ANNOUNCE_DELAY_MS = 600;
+
 export const ENCORE_COPY = {
-  kicker: "Encore · one number, the tiebreak",
+  /** D2: on every Daily, what the Encore is for when nobody else is in sight. */
+  kicker: "Encore · one number, no points",
   label: "Encore",
-  tiebreak: "Closest guess wins the tiebreak.",
+  tiebreak: "If you tie on points, the closer guess ranks higher.",
   field: "Your number",
   /** "You're answering 1,250 km": the amount is set in bold. */
   previewLead: "You're answering",
@@ -52,7 +63,13 @@ export const ENCORE_COPY = {
     /** "Your guess 1,200 km · Answer 1,250 km · 4% off" */
     line: (guess: string, answer: string, error: string) =>
       `Your guess ${guess} · Answer ${answer} · ${error}`,
+    /** The band as the verdict says it: "Close. 14% off." */
     band: { bullseye: "Bullseye", close: "Close" } satisfies Record<
+      Exclude<EncoreBand, null>,
+      string
+    >,
+    /** The band chip on the result card (D16). */
+    chip: { bullseye: "Bullseye", close: "Close guess" } satisfies Record<
       Exclude<EncoreBand, null>,
       string
     >,
@@ -78,6 +95,12 @@ export const ENCORE_COPY = {
         .join(" "),
     half: "half",
     double: "double",
+    /** The marks' labels on the line (R1-26). */
+    you: "You",
+    answer: "Answer",
+    /** A guess off the line's end shows its value at that end: "You 300 m →". */
+    offHigh: (amount: string) => `You ${amount} →`,
+    offLow: (amount: string) => `← You ${amount}`,
   },
   withdrawn: "The Encore was withdrawn, so ties fall to time.",
 } as const;
