@@ -1,18 +1,38 @@
 /**
- * The mock identity area (ARCHITECTURE §7.4, §8.5, §9.1), following the
- * SQL rules with engine code: the device mints its player id and secret,
- * nothing reaches the server until a write, and the first write registers
- * the identity (`start_daily` is "auth, registers"). The server keeps only a
- * hash of the secret, and a wrong secret always answers `auth_failed`.
+ * The mock identity area (ARCHITECTURE §7.4, §8.5, §8.6, §9.1), following
+ * the SQL rules with engine code: the device mints its player id and
+ * secret, nothing reaches the server until a write, and the first write
+ * registers the identity (`start_daily` is "auth, registers"). The server
+ * keeps only a hash of the secret, and a wrong secret always answers
+ * `auth_failed`.
  *
- * DLY-1 builds registration on first write, `register` and `getProfile`,
- * and the helpers every other area authenticates with (`authenticate`,
+ * Registration follows `private.authenticate` step 5 (§8.5) with the
+ * limits of §8.6, for one browser, which the mock treats as one IP subject:
+ *
+ * - Refused past 20 new identities a minute (`identity_1m`, scope `ip`) or
+ *   past 5,000 an hour project-wide (`identity_all_1h`, scope `project`),
+ *   with `rate_limited` and the time left in the window that refused. A
+ *   refusal creates no player and counts only on the counter that refused
+ *   it. So 30 identities from one browser in 10 minutes all register
+ *   (AC-IDN-05), and the client's registration copy can name the right
+ *   scope (AC-IDN-04).
+ * - Past 60 an hour (`identity_soft_1h`) a new identity still registers, as
+ *   low trust. The mark lifts once it is 24 hours old or has finished 2
+ *   Dailies. Test identities (`e2e2e2e2-`) count in their own bucket
+ *   (`identity_test_1h`, 200 an hour) and are never low trust.
+ * - The browser context and app sent with a registration must be in their
+ *   enums (`invalid_input`), as `register_player` and `start_daily` check.
+ *
+ * DLY-1 built registration on first write, `register`, `getProfile` and the
+ * helpers every other area authenticates with (`authenticate`,
  * `verifyCredential`, `confirmRegistered`) and dates with (`resolveZone`,
  * `playerToday`, the effective today of §8.7). IDN-1 owns the area from
- * Wave 3 (the full lifecycle and AC-IDN-05's limits), and IDN-2 adds sync
- * codes and claims. Rate limits and low trust are not modelled yet.
+ * Wave 3 and added the limits and low trust; IDN-2 adds sync codes and
+ * claims. Counter rows live in `rateCounters`, one per bucket, subject and
+ * aligned window, which other areas' limits can share through `hitLimit`.
  */
-import type { BrowserContextKind } from "@/analytics/dictionary";
+import type { BrowserContextKind, Platform } from "@/analytics/dictionary";
+import { TUNABLES } from "@/config/tunables";
 import { localDateOf } from "@/engine/time";
 import {
   TEST_PLAYER_PREFIX,
@@ -32,6 +52,7 @@ import { fail, ok } from "../../errors";
 import type { AppTag, BrowserContextInfo, IdentityApi } from "../../types";
 import type { MockContext } from "../context";
 import type { MockDb } from "../store";
+import type { MockAttemptRow } from "./sealed";
 
 /** The methods this area really implements; the mock contract run skips the rest (§7.5). */
 export const MOCK_CAPABILITIES: readonly (keyof IdentityApi)[] = [
@@ -56,6 +77,12 @@ export interface MockPlayerRow {
   lastSeenAt: EpochMs | null;
   firstContext: BrowserContextKind | null;
   firstApp: AppTag | null;
+  /**
+   * Registered past the soft threshold (§8.5): its reports weigh 0 and its
+   * first finished Daily stays out of the crowd's numbers. Absent on rows
+   * written before IDN-1, which read as normal trust.
+   */
+  lowTrust?: boolean;
 }
 
 /** One credential: a player id and a hash of one device's secret (§8.3, D8). */
@@ -105,6 +132,256 @@ export function hashSecret(secret: string): string {
 
 const credentialKey = (playerId: PlayerId, hash: string) =>
   `${playerId}:${hash}`;
+
+// ---------------------------------------------------------------------------
+// Rate limits (§8.6): one counter row per bucket, subject and aligned window
+// ---------------------------------------------------------------------------
+
+const MINUTE = 60_000;
+const HOUR = 60 * MINUTE;
+
+/** A limit: at most `max` hits per aligned window of `windowMs`. */
+export interface MockLimit {
+  bucket: string;
+  windowMs: number;
+  max: number;
+}
+
+/**
+ * The registration limits of §8.5 and §8.6, from the tunables SQL copies
+ * into `private.config.limits`.
+ */
+export const IDENTITY_LIMITS = {
+  /** Refused past this many new identities a minute from one IP subject. */
+  burst: {
+    bucket: "identity_1m",
+    windowMs: MINUTE,
+    max: TUNABLES.identity.burstPerIpPerMinute,
+  },
+  /** Refused past this many new identities an hour, project-wide. */
+  ceiling: {
+    bucket: "identity_all_1h",
+    windowMs: HOUR,
+    max: TUNABLES.identity.projectPerHour,
+  },
+  /** Past this many an hour from one IP subject, new identities are low trust. */
+  soft: {
+    bucket: "identity_soft_1h",
+    windowMs: HOUR,
+    max: TUNABLES.identity.normalTrustPerIpPerHour,
+  },
+  /** Test identities' own bucket (§8.6, §8.17). */
+  test: { bucket: "identity_test_1h", windowMs: HOUR, max: 200 },
+} as const satisfies Record<string, MockLimit>;
+
+/** The mock serves one browser, so every call comes from one IP subject. */
+export const MOCK_IP_SUBJECT = "ip:local";
+/** The subject of project-wide ceilings, which need no IP at all. */
+export const PROJECT_SUBJECT = "project";
+
+/** One counter row (§8.3 `private.rate_counters`). */
+export interface MockRateCounterRow {
+  bucket: string;
+  subject: string;
+  windowStart: EpochMs;
+  windowMs: number;
+  /** Every hit in the window, refused ones included (the refusals are hits past the cap). */
+  hits: number;
+}
+
+/** Where a window's row lives in `rateCounters`. */
+export function rateCounterKey(
+  bucket: string,
+  subject: string,
+  windowStart: EpochMs,
+): string {
+  return `${bucket}|${subject}|${windowStart}`;
+}
+
+/** The start of the aligned window that holds `now`. */
+export function windowStartOf(now: EpochMs, windowMs: number): EpochMs {
+  return Math.floor(now / windowMs) * windowMs;
+}
+
+function readCounters(
+  db: Readonly<MockDb>,
+): Readonly<Record<string, MockRateCounterRow>> {
+  return (db.rateCounters ?? {}) as Record<string, MockRateCounterRow>;
+}
+
+/** The hits counted so far in the window that holds `now` (`private.peek_*`). */
+export function peekLimit(
+  db: Readonly<MockDb>,
+  limit: MockLimit,
+  subject: string,
+  now: EpochMs,
+): number {
+  const key = rateCounterKey(
+    limit.bucket,
+    subject,
+    windowStartOf(now, limit.windowMs),
+  );
+  return readCounters(db)[key]?.hits ?? 0;
+}
+
+export interface MockLimitResult {
+  allowed: boolean;
+  /** The time left in the window that refused, or would have. */
+  retryAfterMs: number;
+}
+
+/**
+ * `private.hit` (§8.6): counts one hit in the current window, refused ones
+ * included, and says whether it fits under the cap. Rows of ended windows
+ * are dropped as it goes.
+ */
+export function hitLimit(
+  db: MockDb,
+  limit: MockLimit,
+  subject: string,
+  now: EpochMs,
+): MockLimitResult {
+  db.rateCounters ??= {};
+  const rows = db.rateCounters as Record<string, MockRateCounterRow>;
+  for (const [key, row] of Object.entries(rows)) {
+    if (row.windowStart + row.windowMs <= now) delete rows[key];
+  }
+  const windowStart = windowStartOf(now, limit.windowMs);
+  const key = rateCounterKey(limit.bucket, subject, windowStart);
+  const row = rows[key] ?? {
+    bucket: limit.bucket,
+    subject,
+    windowStart,
+    windowMs: limit.windowMs,
+    hits: 0,
+  };
+  row.hits += 1;
+  rows[key] = row;
+  return {
+    allowed: row.hits <= limit.max,
+    retryAfterMs: windowStart + limit.windowMs - now,
+  };
+}
+
+type Admission =
+  { ok: true; lowTrust: boolean } | { ok: false; result: Result<never> };
+
+function refused(hit: MockLimitResult, scope: "ip" | "project"): Admission {
+  return {
+    ok: false,
+    result: fail("rate_limited", {
+      retryAfterMs: hit.retryAfterMs,
+      limitScope: scope,
+    }),
+  };
+}
+
+/**
+ * Whether a new identity may register now (§8.5 step 5), and as low trust
+ * or not. A refusal consumes nothing but the counter that refused it, so
+ * the ceiling and the burst are read before either is counted.
+ */
+function admitRegistration(
+  db: MockDb,
+  now: EpochMs,
+  isTest: boolean,
+): Admission {
+  const { burst, ceiling, soft, test } = IDENTITY_LIMITS;
+  if (isTest) {
+    const hit = hitLimit(db, test, MOCK_IP_SUBJECT, now);
+    return hit.allowed ? { ok: true, lowTrust: false } : refused(hit, "ip");
+  }
+  if (peekLimit(db, ceiling, PROJECT_SUBJECT, now) >= ceiling.max) {
+    // SQL also writes an owner alert here; the mock has no owner to tell.
+    return refused(hitLimit(db, ceiling, PROJECT_SUBJECT, now), "project");
+  }
+  if (peekLimit(db, burst, MOCK_IP_SUBJECT, now) >= burst.max) {
+    return refused(hitLimit(db, burst, MOCK_IP_SUBJECT, now), "ip");
+  }
+  hitLimit(db, ceiling, PROJECT_SUBJECT, now);
+  hitLimit(db, burst, MOCK_IP_SUBJECT, now);
+  return {
+    ok: true,
+    lowTrust: !hitLimit(db, soft, MOCK_IP_SUBJECT, now).allowed,
+  };
+}
+
+/** Finished Dailies of a player, as `low_trust` lifting counts them (§8.5 step 3). */
+function finishedDailies(db: Readonly<MockDb>, playerId: PlayerId): number {
+  const attempts = (db.attempts ?? {}) as Record<string, MockAttemptRow>;
+  let count = 0;
+  for (const attempt of Object.values(attempts)) {
+    if (
+      attempt.playerId === playerId &&
+      attempt.kind === "daily" &&
+      attempt.status === "finished"
+    ) {
+      count += 1;
+    }
+  }
+  return count;
+}
+
+/** Clears low trust once the identity is 24 hours old or has finished 2 Dailies (§8.5 step 3). */
+function liftLowTrust(db: MockDb, player: MockPlayerRow, now: EpochMs): void {
+  if (player.lowTrust !== true) return;
+  if (
+    now - player.createdAt >= TUNABLES.identity.lowTrustUntilAgeMs ||
+    finishedDailies(db, player.id) >= TUNABLES.identity.lowTrustUntilFinishes
+  ) {
+    player.lowTrust = false;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Players and credentials
+// ---------------------------------------------------------------------------
+
+const CONTEXTS = [
+  "browser",
+  "installed",
+  "in_app",
+  "unknown",
+] as const satisfies readonly BrowserContextKind[];
+const APPS = [
+  "whatsapp",
+  "instagram",
+  "facebook",
+  "messenger",
+  "tiktok",
+  "snapchat",
+  "linkedin",
+  "telegram",
+  "google",
+  "other",
+  "none",
+] as const satisfies readonly AppTag[];
+const PLATFORMS = [
+  "ios",
+  "android",
+  "desktop",
+  "other",
+] as const satisfies readonly Platform[];
+
+/** Fails to compile when an enum gains a value the lists above miss. */
+type Covers<All, Listed> = [Exclude<All, Listed>] extends [never]
+  ? true
+  : never;
+const ENUMS_COVERED: [
+  Covers<BrowserContextKind, (typeof CONTEXTS)[number]>,
+  Covers<AppTag, (typeof APPS)[number]>,
+  Covers<Platform, (typeof PLATFORMS)[number]>,
+] = [true, true, true];
+void ENUMS_COVERED;
+
+/** True when every field of the browser context is in its enum (`invalid_input` otherwise). */
+export function isBrowserContextInfo(browser: BrowserContextInfo): boolean {
+  return (
+    (CONTEXTS as readonly string[]).includes(browser.context) &&
+    (APPS as readonly string[]).includes(browser.app) &&
+    (PLATFORMS as readonly string[]).includes(browser.platform)
+  );
+}
 
 /** Generated friendly names (§3.10.1); MOD-1 loads the reviewed lists. */
 const ADJECTIVES = [
@@ -189,19 +466,23 @@ export type AuthOutcome =
 
 /**
  * `private.authenticate` (§8.5) for the calling device, inside a write.
- * A known credential returns its player (touching its last use); a known
- * player with another secret is `auth_failed`; an unknown player is
- * created on the spot when `register` is set, with a generated friendly
- * name and a `mint` credential.
+ * A known credential returns its player (touching its last use and lifting
+ * low trust when it is due); a known player with another secret is
+ * `auth_failed`; an unknown player is created on the spot when `register`
+ * is set and the limits admit it, with a generated friendly name and a
+ * `mint` credential.
  */
 export function authenticate(
   ctx: MockContext,
   db: MockDb,
   options: { register: boolean; browser?: BrowserContextInfo },
 ): AuthOutcome {
-  const refused: AuthOutcome = { ok: false, result: fail("auth_failed") };
+  const refusedAuth: AuthOutcome = { ok: false, result: fail("auth_failed") };
+  if (options.browser !== undefined && !isBrowserContextInfo(options.browser)) {
+    return { ok: false, result: fail("invalid_input") };
+  }
   const credential = deviceCredential(ctx);
-  if (credential === null) return refused;
+  if (credential === null) return refusedAuth;
   const tables = identityTables(db);
   const now = ctx.clock.now();
   const hash = hashSecret(credential.secret);
@@ -211,10 +492,13 @@ export function authenticate(
   if (existing !== undefined && row !== undefined) {
     row.lastUsedAt = now;
     existing.lastSeenAt = now;
+    liftLowTrust(db, existing, now);
     return { ok: true, player: existing, registered: false };
   }
-  if (existing !== undefined || !options.register) return refused;
+  if (existing !== undefined || !options.register) return refusedAuth;
   const isTest = credential.playerId.startsWith(TEST_PLAYER_PREFIX);
+  const admission = admitRegistration(db, now, isTest);
+  if (!admission.ok) return admission;
   const player: MockPlayerRow = {
     id: credential.playerId,
     createdAt: now,
@@ -228,6 +512,7 @@ export function authenticate(
     lastSeenAt: now,
     firstContext: options.browser?.context ?? null,
     firstApp: options.browser?.app ?? null,
+    lowTrust: admission.lowTrust,
   };
   tables.players[player.id] = player;
   tables.credentials[key] = {
@@ -242,7 +527,7 @@ export function authenticate(
 
 /**
  * After a successful write: the identity is now known to the server, so the
- * provider records it (and IDN-1's provider posts the backup cookie, §9.1).
+ * provider records it and posts the backup cookie (§9.1 step 2).
  */
 export function confirmRegistered(ctx: MockContext): void {
   try {
@@ -296,7 +581,7 @@ export function createIdentityArea(ctx: MockContext): IdentityApi {
           const auth = authenticate(ctx, db, { register: true, browser });
           return auth.ok ? ok(profileOf(auth.player)) : auth.result;
         },
-        ["players", "credentials"],
+        ["players", "credentials", "rateCounters"],
       );
       if (result.ok) confirmRegistered(ctx);
       return result;
