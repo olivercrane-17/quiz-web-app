@@ -52,7 +52,6 @@ afterEach(() => {
 
 /** Runs the slot's inline script as the HTML parser would. */
 function runScript(source: string): void {
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- the script ships as text
   new Function(source)();
 }
 

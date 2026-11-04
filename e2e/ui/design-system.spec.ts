@@ -82,7 +82,9 @@ async function revealWithAWrongPick(page: Page): Promise<void> {
     await page.locator('main [data-state="idle"]').first().click();
     await expect(page.locator('[data-state="correct"]')).toHaveCount(1);
     if ((await page.locator('[data-state="your-answer"]').count()) > 0) return;
-    await page.getByRole("button", { name: /^(Next question|Continue)/ }).click();
+    await page
+      .getByRole("button", { name: /^(Next question|Continue)/ })
+      .click();
   }
   throw new Error("ten first options in a row were right");
 }
@@ -115,7 +117,8 @@ test.describe("accessibility", () => {
         .map((element) => {
           const box = element.getBoundingClientRect();
           return {
-            name: element.textContent?.trim() || element.getAttribute("aria-label"),
+            name:
+              element.textContent?.trim() || element.getAttribute("aria-label"),
             width: Math.round(box.width),
             height: Math.round(box.height),
           };
@@ -153,7 +156,9 @@ test.describe("forced colours", () => {
       width: "1px",
     });
     // The verdict glyphs stay, so no state rests on a colour.
-    await expect(page.locator('[data-state="correct"] svg').first()).toBeVisible();
+    await expect(
+      page.locator('[data-state="correct"] svg').first(),
+    ).toBeVisible();
     await expect(
       page.locator('[data-state="your-answer"] svg').first(),
     ).toBeVisible();
@@ -182,7 +187,10 @@ test.describe("forced colours", () => {
 });
 
 test.describe("reflow at 320 px", () => {
-  test.use({ viewport: { width: 320, height: 640 }, timezoneId: "Europe/London" });
+  test.use({
+    viewport: { width: 320, height: 640 },
+    timezoneId: "Europe/London",
+  });
 
   test.beforeEach(async ({ page }) => {
     await page.clock.setFixedTime(new Date("2026-11-01T09:00:00Z"));
@@ -204,7 +212,9 @@ test.describe("reflow at 320 px", () => {
     await openToday(page);
     await expectNoHorizontalScroll(page, "Today");
     await page.getByRole("link", { name: "Quick play" }).first().click();
-    await expect(page.locator('main [data-state="idle"]').first()).toBeVisible();
+    await expect(
+      page.locator('main [data-state="idle"]').first(),
+    ).toBeVisible();
     await expectNoHorizontalScroll(page, "a practice question");
     await page.locator('main [data-state="idle"]').first().click();
     await expect(page.locator('[data-state="correct"]')).toHaveCount(1);
@@ -220,7 +230,9 @@ test.describe("reflow at 320 px", () => {
     ).toBeVisible();
     await expectNoHorizontalScroll(page, "a Mystery");
     for (let clue = 1; clue < 4; clue += 1) {
-      await page.getByRole("button", { name: /^(Next clue|Last clue)/ }).click();
+      await page
+        .getByRole("button", { name: /^(Next clue|Last clue)/ })
+        .click();
     }
     await expect(page.locator('[data-state="idle"]').first()).toBeVisible();
     await expectNoHorizontalScroll(page, "the last clue's options");
@@ -282,19 +294,24 @@ test.describe("the settings' switches reach the tokens", () => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await openToday(page);
     await page.evaluate(() => {
-      localStorage.setItem("qz:settings", JSON.stringify({ v: 1, motion: "on" }));
+      localStorage.setItem(
+        "qz:settings",
+        JSON.stringify({ v: 1, motion: "on" }),
+      );
     });
     await page.reload();
     await expect(page.locator("html")).toHaveAttribute("data-motion", "reduce");
     expect(await distance()).toBe("0");
-    await expect(page.getByRole("link", { name: "Quick play" }).first()).toHaveCSS(
-      "transition-duration",
-      /0\.14s/,
-    );
+    await expect(
+      page.getByRole("link", { name: "Quick play" }).first(),
+    ).toHaveCSS("transition-duration", /0\.14s/);
 
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.evaluate(() => {
-      localStorage.setItem("qz:settings", JSON.stringify({ v: 1, motion: "off" }));
+      localStorage.setItem(
+        "qz:settings",
+        JSON.stringify({ v: 1, motion: "off" }),
+      );
     });
     await page.reload();
     await expect(page.locator("html")).toHaveAttribute("data-motion", "full");
@@ -322,7 +339,9 @@ test.describe("the settings' switches reach the tokens", () => {
       .getByText("Ten questions on anything. Works offline.")
       .evaluate((element) => {
         const css = getComputedStyle(element);
-        return Number.parseFloat(css.lineHeight) / Number.parseFloat(css.fontSize);
+        return (
+          Number.parseFloat(css.lineHeight) / Number.parseFloat(css.fontSize)
+        );
       });
     expect(line).toBeCloseTo(1.6, 2);
   });
@@ -366,9 +385,9 @@ test.describe("the date slot", () => {
       `<p><span id="qz-daily-slot" data-pending>Daily #00 · Wednesday 30 September</span><script>${script}</script></p>` +
         `<script>window.__seen = document.getElementById("qz-daily-slot").textContent</script>`,
     );
-    expect(await page.evaluate(() => (window as { __seen?: string }).__seen)).toBe(
-      "Daily #42 · Sunday 1 November",
-    );
+    expect(
+      await page.evaluate(() => (window as { __seen?: string }).__seen),
+    ).toBe("Daily #42 · Sunday 1 November");
     await expect(page.locator("#qz-daily-slot")).not.toHaveAttribute(
       "data-pending",
     );

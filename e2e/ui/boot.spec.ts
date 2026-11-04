@@ -192,7 +192,9 @@ test.describe("the fonts", () => {
     const response = await page.goto("/");
     const preloads = (response?.headers().link ?? "")
       .split(",")
-      .filter((link) => link.includes("rel=preload") && link.includes("as=\"font\""));
+      .filter(
+        (link) => link.includes("rel=preload") && link.includes('as="font"'),
+      );
     expect(preloads).toHaveLength(2);
     const families = await page.evaluate(async () => {
       await document.fonts.ready;

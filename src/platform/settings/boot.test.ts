@@ -26,7 +26,6 @@ function attributesNow(): Record<string, string | null> {
 
 /** Runs the inline script as the HTML parser would, before any React. */
 function runBootScript(devices = false): void {
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval -- the script ships as text
   new Function(bootScript({ devices }))();
 }
 
