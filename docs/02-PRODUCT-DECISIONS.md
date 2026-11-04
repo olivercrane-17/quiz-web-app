@@ -169,3 +169,51 @@ for genuinely uncertain items). So:
 - Compensating controls: a seeded blind audit with web evidence on a random sample before launch (target error rate
   under 1%), the "Report a problem" button on every reveal with automatic pull on weighted reports, and pass D before
   any Daily is frozen.
+
+## 19. Decisions after RITE round 1 (4 November 2026)
+Round 1's synthesis (`docs/playtests/rite-1.md`, section 6) proposed D1 to D18. These override the PRD and DESIGN.md
+where they differ, until those documents are updated.
+- **D1, Encore commas.** With decimals allowed, commas that are each followed by exactly three digits, or that form
+  Indian grouping, are thousands separators: "1,200" is 1200 and "1,20,000" is 120000. A comma before one or two final
+  digits is still the decimal point ("300,5" is 300.5). Replace the "`1,250` rejected" worked example.
+- **D2, Encore purpose.** "Encore · one number, no points" and "If you tie on points, the closer guess ranks higher."
+  on every Daily. The stop screen's Encore row adds "Breaks ties. Scores no points."
+- **D3, share glyphs.** A wrong guess and Next clue cost the same, so the share no longer tells them apart, and it stops
+  painting them red: every clue used before the solve is 🟧, the solving clue stays ✅ and an unneeded clue stays ⬜.
+  A miss is 🟧🟧🟧🟧. 🟧 is the high-contrast set's checked "passed" glyph, so that set keeps 🟧 and 🟦. The stop
+  screen shows a one-line legend under its grid: "🟧 clue used · ✅ solved · ⬜ not needed".
+- **D4, Encore token.** The share's first line says "Encore off by 4%" ("off by under 1%", "off by over 999%",
+  "off by 3 years"); "Encore spot on" stays. The in-app result keeps "4% off".
+- **D5, one match.** When exactly one selectable suggestion matches, it is highlighted, so Enter or Go picks it and a
+  second Enter submits. Namesakes still pick nothing.
+- **D6, keys.** Letters A to D pick, matching the badges. Digits 1 to 4 pick only when no option is a number. One key
+  hint per option.
+- **D7, time.** The stop screen's score card shows the total time ("Time 3:12 · only breaks ties"). Time never enters
+  the share text.
+- **D8, stopwatch default.** Decided after round 2: if personas still hurry with the hint in place, the stopwatch is
+  hidden by default until the first Daily is finished.
+- **D9, Next clue keeps the typing.** Next clue keeps the typed text and its list; a wrong guess still clears.
+- **D10, stamps.** "Knew it." only for a solve on clue 1 or 2 with no wrong guess; "Got there." for clue 3 or any
+  solve after a miss; "Got it." for a clue-4 pick.
+- **D11, header pills.** A solved pill shows "+3" on the correct fill and a missed one the X; pills are flat marks,
+  never button-like. No running total in the header for now.
+- **D12, explanations.** The compact sheet shows the whole explanation (35 words at most) and scrolls, instead of one
+  line and Read more.
+- **D13, practice results.** Each row carries a short stem and, on a miss, "You chose X"; Play again sits above the
+  list.
+- **D14, placeholder.** A short noun per answer type ("Start typing an element") that fits beside Guess at 360 px.
+- **D15, focus order.** Next clue comes after the field in reading and focus order, so the first Tab reaches the
+  field.
+- **D16, band chip.** The chip reads "Close guess", and the result card keeps both band lines, so a guess outside them
+  still shows where they were.
+- **D17, no matches.** "No matches. Try another spelling, or use Next clue."
+- **D18, Today.** One date on Today. A first-visit line under the greeting: "Name the mystery in as few clues as you
+  can." From midnight to 4:59 the greeting is "Hello."
+
+## 20. Plan changes (4 November 2026)
+- **Wave 3 overlaps Wave 2F.** SQL-1, CNT-1, CNT-2 and IDN-1 change no screen the RITE rounds judge, so they start
+  once PLT-1 (and, for CNT-1, CNT-0) has merged, beside the RITE fixes. The M1 exit review still gates every M2 ticket
+  that changes a Must screen (DLY-2, PRA-2, DLY-3, STK-1 and later). This trades a little rework risk for days of
+  calendar time against the usage limit.
+- **FIX-DS.** Round 1 found shell and primitive defects while DS-1 was mid-build. They go to a FIX-DS follow-up on
+  DS-1's lane instead of the feature lanes, so two lanes never edit `src/ui/**` or `src/features/shell/**` at once.
