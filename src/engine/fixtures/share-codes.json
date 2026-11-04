@@ -1,0 +1,608 @@
+{
+  "$comment": [
+    "Share-code parity table (ARCHITECTURE §4.10, §4.13; PRD §3.5): round trips, the largest payloads and malformed codes.",
+    "Replayed by Vitest against src/engine/share/code.ts with the layouts of content/compositions.json. The expected codes come from an independent implementation of the format; SQL-4's finish_attempt_internal stores the same code for each finished attempt.",
+    "code = layout + payload. The payload is a mixed-radix integer in lowercase base36 (no leading zero), least significant digit first: the archive flag (radix 2); then per round in layout order a Mystery's outcome (radix 6: 0 missed, 1 to 4 the solving clue, 5 voided) and category (radix 12, in the order geo, hist, sci, nat, film, music, art, book, sport, food, lang, soc), a choice round's outcome (radix 3: wrong, correct, voided), or the Encore's token (radix 11,001: 0 spot on, 1 under 1% off, n + 1 for n% off up to 998%, 1,000 over 999% off, 1,000 + n for n years off, 11,000 voided) and band (radix 3: none, close, bullseye).",
+    "roundTrips: rounds name each round's type and its result as the share text shows it (an Encore by its display). points and maxPoints are what the decoded code reports (a voided Mystery scores 4, a voided choice round 1).",
+    "capacities: how many distinct payloads a composition has, the largest payload in base36 and whether it fits in 7 characters.",
+    "malformed: codes and Daily numbers decodeShareCode turns down, including combinations no result produces (a voided Encore with a band, a spot-on Encore outside the bullseye)."
+  ],
+  "roundTrips": [
+    {
+      "id": "prd-example",
+      "title": "AC-SHR-01's result: Geography on clue 1, Film & TV on clue 3, Science & Tech missed, Encore 4% off in the bullseye",
+      "number": 42,
+      "composition": "m3e1",
+      "archive": false,
+      "rounds": [
+        {
+          "type": "mystery",
+          "category": "geo",
+          "solvedOn": 1,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "film",
+          "solvedOn": 3,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "sci",
+          "solvedOn": null,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "4% off",
+          "band": "bullseye",
+          "voided": false
+        }
+      ],
+      "code": "a7joyr02",
+      "points": 6,
+      "maxPoints": 12
+    },
+    {
+      "id": "perfect",
+      "title": "a perfect 12/12 with a spot-on Encore",
+      "number": 42,
+      "composition": "m3e1",
+      "archive": false,
+      "rounds": [
+        {
+          "type": "mystery",
+          "category": "hist",
+          "solvedOn": 1,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "music",
+          "solvedOn": 1,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "art",
+          "solvedOn": 1,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "Spot on",
+          "band": "bullseye",
+          "voided": false
+        }
+      ],
+      "code": "a7jmwbge",
+      "points": 12,
+      "maxPoints": 12
+    },
+    {
+      "id": "archive",
+      "title": "the same result played from the archive differs only in the archive digit",
+      "number": 40,
+      "composition": "m3e1",
+      "archive": true,
+      "rounds": [
+        {
+          "type": "mystery",
+          "category": "geo",
+          "solvedOn": 1,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "film",
+          "solvedOn": 3,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "sci",
+          "solvedOn": null,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "4% off",
+          "band": "bullseye",
+          "voided": false
+        }
+      ],
+      "code": "a7joyr03",
+      "points": 6,
+      "maxPoints": 12
+    },
+    {
+      "id": "voided-mystery",
+      "title": "a voided Mystery scores its 4 points and keeps its category",
+      "number": 42,
+      "composition": "m3e1",
+      "archive": false,
+      "rounds": [
+        {
+          "type": "mystery",
+          "category": "nat",
+          "solvedOn": 2,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "book",
+          "solvedOn": null,
+          "voided": true
+        },
+        {
+          "type": "mystery",
+          "category": "sport",
+          "solvedOn": 4,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "12% off",
+          "band": "close",
+          "voided": false
+        }
+      ],
+      "code": "a3rzfp94",
+      "points": 8,
+      "maxPoints": 12
+    },
+    {
+      "id": "voided-encore",
+      "title": "a voided Encore has no token and no band",
+      "number": 42,
+      "composition": "m3e1",
+      "archive": false,
+      "rounds": [
+        {
+          "type": "mystery",
+          "category": "food",
+          "solvedOn": 2,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "lang",
+          "solvedOn": 3,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "soc",
+          "solvedOn": 4,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": null,
+          "band": null,
+          "voided": true
+        }
+      ],
+      "code": "a3rtbr34",
+      "points": 6,
+      "maxPoints": 12
+    },
+    {
+      "id": "years",
+      "title": "a year Encore 3 years off, close",
+      "number": 42,
+      "composition": "m3e1",
+      "archive": false,
+      "rounds": [
+        {
+          "type": "mystery",
+          "category": "hist",
+          "solvedOn": 2,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "hist",
+          "solvedOn": 2,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "hist",
+          "solvedOn": 2,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "3 years off",
+          "band": "close",
+          "voided": false
+        }
+      ],
+      "code": "a4475swg",
+      "points": 9,
+      "maxPoints": 12
+    },
+    {
+      "id": "one-year",
+      "title": "1 year off, in the bullseye",
+      "number": 42,
+      "composition": "m3e1",
+      "archive": false,
+      "rounds": [
+        {
+          "type": "mystery",
+          "category": "sci",
+          "solvedOn": 1,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "nat",
+          "solvedOn": 2,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "film",
+          "solvedOn": 3,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "1 year off",
+          "band": "bullseye",
+          "voided": false
+        }
+      ],
+      "code": "a7vzq28q",
+      "points": 9,
+      "maxPoints": 12
+    },
+    {
+      "id": "under-1",
+      "title": "under 1% off, from the archive",
+      "number": 38,
+      "composition": "m3e1",
+      "archive": true,
+      "rounds": [
+        {
+          "type": "mystery",
+          "category": "geo",
+          "solvedOn": 4,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "geo",
+          "solvedOn": 3,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "geo",
+          "solvedOn": 2,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "under 1% off",
+          "band": "bullseye",
+          "voided": false
+        }
+      ],
+      "code": "a7jn4gc9",
+      "points": 6,
+      "maxPoints": 12
+    },
+    {
+      "id": "over-999",
+      "title": "over 999% off, everything missed",
+      "number": 42,
+      "composition": "m3e1",
+      "archive": false,
+      "rounds": [
+        {
+          "type": "mystery",
+          "category": "music",
+          "solvedOn": null,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "art",
+          "solvedOn": null,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "book",
+          "solvedOn": null,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "over 999% off",
+          "band": null,
+          "voided": false
+        }
+      ],
+      "code": "accpg1o",
+      "points": 0,
+      "maxPoints": 12
+    },
+    {
+      "id": "worst",
+      "title": "998% off, the largest percent token",
+      "number": 42,
+      "composition": "m3e1",
+      "archive": false,
+      "rounds": [
+        {
+          "type": "mystery",
+          "category": "soc",
+          "solvedOn": null,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "soc",
+          "solvedOn": null,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "soc",
+          "solvedOn": null,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "998% off",
+          "band": null,
+          "voided": false
+        }
+      ],
+      "code": "accevfo",
+      "points": 0,
+      "maxPoints": 12
+    },
+    {
+      "id": "c9e1",
+      "title": "[mc ×9, encore]: nine choice rounds, one voided, then the Encore",
+      "number": 56,
+      "composition": "c9e1",
+      "archive": false,
+      "rounds": [
+        {
+          "type": "mc",
+          "correct": true,
+          "voided": false
+        },
+        {
+          "type": "mc",
+          "correct": false,
+          "voided": false
+        },
+        {
+          "type": "mc",
+          "correct": true,
+          "voided": false
+        },
+        {
+          "type": "mc",
+          "correct": true,
+          "voided": false
+        },
+        {
+          "type": "mc",
+          "correct": false,
+          "voided": true
+        },
+        {
+          "type": "mc",
+          "correct": true,
+          "voided": false
+        },
+        {
+          "type": "mc",
+          "correct": false,
+          "voided": false
+        },
+        {
+          "type": "mc",
+          "correct": true,
+          "voided": false
+        },
+        {
+          "type": "mc",
+          "correct": true,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "27% off",
+          "band": null,
+          "voided": false
+        }
+      ],
+      "code": "bo0ok",
+      "points": 7,
+      "maxPoints": 9
+    },
+    {
+      "id": "c5m1e1",
+      "title": "[mc ×5, mystery, encore] with true/false and comparison rounds among the five, 9,999 years off",
+      "number": 57,
+      "composition": "c5m1e1",
+      "archive": true,
+      "rounds": [
+        {
+          "type": "mc",
+          "correct": true,
+          "voided": false
+        },
+        {
+          "type": "tf",
+          "correct": false,
+          "voided": false
+        },
+        {
+          "type": "comparison",
+          "correct": true,
+          "voided": false
+        },
+        {
+          "type": "mc",
+          "correct": true,
+          "voided": false
+        },
+        {
+          "type": "mc",
+          "correct": true,
+          "voided": false
+        },
+        {
+          "type": "mystery",
+          "category": "film",
+          "solvedOn": 2,
+          "voided": false
+        },
+        {
+          "type": "encore",
+          "display": "9999 years off",
+          "band": null,
+          "voided": false
+        }
+      ],
+      "code": "c6d5ixl",
+      "points": 7,
+      "maxPoints": 9
+    }
+  ],
+  "capacities": [
+    {
+      "composition": "m3e1",
+      "capacity": "24636607488",
+      "largestPayload": "bbfzzzz",
+      "fits": true
+    },
+    {
+      "composition": "c9e1",
+      "capacity": "1299196098",
+      "largestPayload": "lhia4h",
+      "fits": true
+    },
+    {
+      "composition": "c5m1e1",
+      "capacity": "1154840976",
+      "largestPayload": "j3k8zz",
+      "fits": true
+    },
+    {
+      "composition": "c12e1",
+      "capacity": "35078294646",
+      "largestPayload": "g44pldh",
+      "fits": true
+    },
+    {
+      "composition": "m4e1",
+      "capacity": "1773835739136",
+      "largestPayload": "mmvzzzzz",
+      "fits": false
+    },
+    {
+      "composition": "o1e1",
+      "capacity": null,
+      "largestPayload": null,
+      "fits": false
+    }
+  ],
+  "malformed": [
+    {
+      "id": "empty",
+      "title": "an empty code",
+      "number": 42,
+      "code": ""
+    },
+    {
+      "id": "layout-only",
+      "title": "a layout with no payload",
+      "number": 42,
+      "code": "a"
+    },
+    {
+      "id": "uppercase",
+      "title": "upper case",
+      "number": 42,
+      "code": "A7JOYR02"
+    },
+    {
+      "id": "unknown-layout",
+      "title": "a layout no composition uses",
+      "number": 42,
+      "code": "z7joyr02"
+    },
+    {
+      "id": "too-long",
+      "title": "nine characters",
+      "number": 42,
+      "code": "a7joyr02x"
+    },
+    {
+      "id": "leading-zero",
+      "title": "a payload with a leading zero",
+      "number": 42,
+      "code": "a07joyr0"
+    },
+    {
+      "id": "punctuation",
+      "title": "punctuation",
+      "number": 42,
+      "code": "a7jo-r02"
+    },
+    {
+      "id": "over-capacity",
+      "title": "the first payload past the composition's capacity",
+      "number": 42,
+      "code": "abbg0000"
+    },
+    {
+      "id": "voided-with-band",
+      "title": "a voided Encore with a band",
+      "number": 42,
+      "code": "a7jm8842"
+    },
+    {
+      "id": "spot-on-no-band",
+      "title": "a spot-on Encore outside the bullseye band",
+      "number": 42,
+      "code": "a842"
+    },
+    {
+      "id": "spot-on-close",
+      "title": "a spot-on Encore in the close band",
+      "number": 42,
+      "code": "a3rtc842"
+    },
+    {
+      "id": "number-zero",
+      "title": "Daily number 0",
+      "number": 0,
+      "code": "a7joyr02"
+    },
+    {
+      "id": "number-negative",
+      "title": "a negative Daily number",
+      "number": -1,
+      "code": "a7joyr02"
+    },
+    {
+      "id": "number-fraction",
+      "title": "a fractional Daily number",
+      "number": 4.5,
+      "code": "a7joyr02"
+    }
+  ]
+}
