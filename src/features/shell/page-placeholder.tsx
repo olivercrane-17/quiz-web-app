@@ -27,8 +27,8 @@ export function PagePlaceholder({
 }) {
   return (
     <div className={cx("flex flex-col items-start gap-4 py-6", className)}>
-      <h1 className="text-2xl font-bold">{title}</h1>
-      <p className="text-base text-muted-foreground">{SHELL_COPY.notReady}</p>
+      <h1 className="font-display text-display-2">{title}</h1>
+      <p className="text-body text-ink-2">{SHELL_COPY.notReady}</p>
       <Link href="/" className={buttonClasses({ variant: "secondary" })}>
         {SHELL_COPY.goToToday}
       </Link>

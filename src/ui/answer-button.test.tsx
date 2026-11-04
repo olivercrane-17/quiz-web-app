@@ -74,12 +74,22 @@ describe("AnswerButton", () => {
       expect(onCommit).toHaveBeenCalledTimes(2);
     });
 
-    it("shows its shortcut hint and announces the key", () => {
-      const { button } = renderOption("idle", { shortcut: "2" });
-      expect(button).toHaveAttribute("aria-keyshortcuts", "2");
-      // The hint is decorative: the name stays the letter and the text.
+    it("R1-13 names the keys that pick it and draws one hint, the badge's letter (D6)", () => {
+      const { button, unmount } = renderOption("idle", { shortcut: "B 2" });
+      expect(button).toHaveAttribute("aria-keyshortcuts", "B 2");
+      // The name stays the letter and the text.
       expect(button).toHaveAccessibleName("B. Uranus");
-      expect(button.querySelector("kbd")).toHaveTextContent("2");
+      // No keycap beside the text: the letter in the badge is the hint.
+      expect(button.querySelector("kbd")).toBeNull();
+      expect(button.querySelector(".kn-answer-badge")).toHaveAttribute(
+        "data-letter",
+        "B",
+      );
+      unmount();
+      // Where digits don't pick, the letter alone.
+      const letterOnly = renderOption("idle", { shortcut: "B" }).button;
+      expect(letterOnly).toHaveAttribute("aria-keyshortcuts", "B");
+      expect(letterOnly.querySelector("kbd")).toBeNull();
     });
   });
 
@@ -193,15 +203,52 @@ describe("AnswerButton", () => {
       },
     );
 
-    it("correct and your-answer swap the letter for a glyph", () => {
-      const correct = renderOption("correct").button;
-      expect(correct.querySelector("[aria-hidden] svg")).not.toBeNull();
-      expect(correct.querySelector("[aria-hidden]")).not.toHaveTextContent("B");
+    it("correct and your-answer swap the letter for a glyph, keeping it for screen readers", () => {
+      for (const state of ["correct", "your-answer"] as const) {
+        const { button, unmount } = renderOption(state);
+        const badge = button.querySelector(".kn-answer-badge");
+        expect(badge).toHaveAttribute("aria-hidden", "true");
+        expect(badge?.querySelector("svg")).not.toBeNull();
+        expect(badge).not.toHaveAttribute("data-letter");
+        // The letter is there for screen readers alone, once.
+        expect(button.querySelector(".sr-only")).toHaveTextContent("B.");
+        unmount();
+      }
     });
 
     it("keeps the letter for the other states", () => {
       const dimmed = renderOption("dimmed").button;
-      expect(dimmed.querySelector("[aria-hidden]")).toHaveTextContent("B");
+      const badge = dimmed.querySelector(".kn-answer-badge");
+      // Drawn by CSS from the attribute, so it isn't text a second time.
+      expect(badge).toHaveAttribute("data-letter", "B");
+      expect(badge).toBeEmptyDOMElement();
+    });
+
+    it.each(ANSWER_STATES.map((state) => [state]))(
+      "R1-40 reads its letter once in the %s state: never 'B B.'",
+      (state) => {
+        const { button } = renderOption(state, { shortcut: "B" });
+        // The accessible name (aria-hidden parts excluded)...
+        expect(button).toHaveAccessibleName(/^B\. Uranus( |$)/);
+        // ...and the plain text a tool might read (nothing hidden is skipped).
+        expect(button.textContent).toMatch(/^B\. Uranus/);
+        expect(button.textContent?.match(/B/g)).toHaveLength(1);
+      },
+    );
+
+    it("R1-36 puts the state's words after the text, as their own flex item, so they wrap under a name that leaves no room", () => {
+      const { button, unmount } = renderOption("correct");
+      const text = button.querySelector(".kn-answer-text");
+      const tag = button.querySelector(".kn-answer-tag");
+      expect(tag).toContainElement(screen.getByText("Correct answer"));
+      // A child of the button, after the text: the row wraps before it,
+      // never inside the name (ui.css, e2e/ui/rite-1.spec.ts measures it).
+      expect(text?.nextElementSibling).toBe(tag);
+      expect(tag?.parentElement).toBe(button);
+      unmount();
+      // An idle option has no words to show.
+      const idle = renderOption("idle").button;
+      expect(idle.querySelector(".kn-answer-tag")).toBeNull();
     });
 
     it("drops the pressed look when the option stops being idle mid-press", () => {

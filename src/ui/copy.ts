@@ -15,6 +15,10 @@ export const UI_COPY = {
     /** Screen readers only: the pick waiting for its verdict. */
     lockedIn: "Locked in",
   },
+  toast: {
+    /** Screen readers only, after the words of a toast that holds an action: "Quiz deleted. Undo is available." */
+    actionAvailable: (label: string) => `${label} is available.`,
+  },
 } as const;
 
 export interface AnswerButtonLabels {

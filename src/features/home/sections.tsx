@@ -1,12 +1,16 @@
 /**
  * Extension point (ARCHITECTURE §2.3): Today's slots, in DESIGN §12.1's
  * order. Each feature fills its own `home-slot.tsx` or `home-notice.tsx`;
- * this file never needs to change for them.
+ * this file never needs to change for them. The layout is `home.css`.
  *
- * Phones (one column): the Daily, at most one notice, Practice, This week,
- * review, challenges, the Group row, then the Beta rows. From 1024 px, two
- * columns: the Daily, the notice and Practice on the left (7/12), the rest
- * on the right (5/12). A slot that renders nothing leaves no gap.
+ * Phones and tablets (one column): the Daily, at most one notice,
+ * Practice, This week, review, challenges, the Group row, then the Beta
+ * rows. From 1024 px, two columns (DESIGN §10.1): the Daily, the notice
+ * and Practice on the left (7/12), the rest on the right (5/12). While
+ * the right column has nothing to show (before STK-1's This week card),
+ * Practice takes its place beside the ticket, so Today is two columns from
+ * 1024 px from day one instead of one column hugging the left (RITE round
+ * 1, R1-35). A slot that renders nothing leaves no gap.
  *
  * **Notices.** DESIGN §12.1 allows one card above Practice at a time, in
  * this priority: the streak repair card (the archive slot, ARC-1), a freeze
@@ -18,11 +22,12 @@
  *
  * **Practice promoted.** When any slot renders an element with
  * `data-home-promote="practice"` (the Daily card's offline state, PRD
- * §3.1.7), the Practice card shows above the Daily. A CSS reorder would
- * leave focus and reading order starting at the Daily (WCAG 1.3.2, 2.4.3),
- * so Practice renders in both places, as the tab bar does with its two
- * lists, and CSS shows one (`:has()`): `placement="promoted"` before the
- * Daily, `placement="regular"` after the notices. The other copy is
+ * §3.1.7), the Practice card shows above the Daily (before it, on the
+ * left, when the two sit side by side). A CSS reorder would leave focus
+ * and reading order starting at the Daily (WCAG 1.3.2, 2.4.3), so Practice
+ * renders in both places, as the tab bar does with its two lists, and CSS
+ * shows one (`:has()`): `placement="promoted"` before the Daily,
+ * `placement="regular"` after the notices. The other copy is
  * `display: none`, out of the tab order and the accessibility tree.
  *
  * **Size** (§10.9 item 2; Home had about 8.4 kB of its 150 kB left after
@@ -51,68 +56,58 @@ import { RoomsHomeSlot } from "@/features/rooms/home-slot";
 import { StreakNotice } from "@/features/streaks/home-notice";
 import { StreaksHomeSlot } from "@/features/streaks/home-slot";
 
-const SLOT = "empty:hidden";
-const COLUMN = "contents lg:flex lg:flex-col lg:gap-3";
-/** Hidden when empty, or when an earlier notice has content. */
-const NOTICE = "order-2 empty:hidden [[data-home-notice]:not(:empty)~&]:hidden";
-
 export function HomeSections() {
   return (
-    <div
-      data-home-sections=""
-      className="group/home flex flex-col gap-3 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-6"
-    >
-      <div className={`${COLUMN} lg:col-span-7`}>
-        <div
-          data-home-slot="practice-promoted"
-          className="order-1 hidden group-has-[[data-home-promote=practice]]/home:[&:not(:empty)]:block"
-        >
+    <div data-home-sections="" className="kn-home">
+      <div data-home-column="left" className="kn-home-column">
+        <div data-home-slot="practice-promoted" className="kn-home-slot">
           <PracticeHomeSlot placement="promoted" />
         </div>
-        <div data-home-slot="daily" className={`order-1 ${SLOT}`}>
+        <div data-home-slot="daily" className="kn-home-slot">
           <DailyHomeSlot />
         </div>
-        <div data-home-slot="archive" data-home-notice="" className={NOTICE}>
+        <div
+          data-home-slot="archive"
+          data-home-notice=""
+          className="kn-home-slot"
+        >
           <ArchiveHomeSlot />
         </div>
         <div
           data-home-slot="streak-notice"
           data-home-notice=""
-          className={NOTICE}
+          className="kn-home-slot"
         >
           <StreakNotice />
         </div>
         <div
           data-home-slot="restore-notice"
           data-home-notice=""
-          className={NOTICE}
+          className="kn-home-slot"
         >
           <RestoreNotice />
         </div>
-        <div
-          data-home-slot="practice"
-          className={`order-3 group-has-[[data-home-promote=practice]]/home:hidden ${SLOT}`}
-        >
+        <div data-home-slot="practice" className="kn-home-slot">
           <PracticeHomeSlot placement="regular" />
         </div>
       </div>
-      <div className={`${COLUMN} lg:col-span-5`}>
-        <div data-home-slot="streaks" className={`order-4 ${SLOT}`}>
+      <div data-home-column="right" className="kn-home-column">
+        <div data-home-slot="streaks" className="kn-home-slot">
           <StreaksHomeSlot />
         </div>
-        <div data-home-slot="review" className={`order-5 ${SLOT}`}>
+        <div data-home-slot="review" className="kn-home-slot">
           <ReviewHomeSlot />
         </div>
-        <div data-home-slot="challenges" className={`order-6 ${SLOT}`}>
+        <div data-home-slot="challenges" className="kn-home-slot">
           <ChallengesHomeSlot />
         </div>
-        <div data-home-slot="groups" className={`order-7 ${SLOT}`}>
+        <div data-home-slot="groups" className="kn-home-slot">
           <GroupsHomeSlot />
         </div>
-        <div data-home-slot="rooms" className={`order-8 ${SLOT}`}>
+        <div data-home-slot="rooms" className="kn-home-slot">
           <RoomsHomeSlot />
         </div>
-        <div data-home-slot="editor" className={`order-9 ${SLOT}`}>
+        <div data-home-slot="editor" className="kn-home-slot">
           <EditorHomeSlot />
         </div>
       </div>

@@ -17,14 +17,31 @@
  *   button focusable with `aria-disabled`, so focus never falls to the page
  *   after a verdict and a screen reader can still read the state's words.
  * - Never colour alone: the states differ by border, badge glyph and words
- *   ("Correct answer", "Your answer", "Already guessed"), and every state is
- *   exposed as `data-state` (plus `data-pressed`) for DS-1's styles.
- * - The letter badge reads "A." to screen readers, so the accessible name
- *   contains the visible label: "A. Venus Your answer" (WCAG 2.5.3). The
- *   `{" "}` text nodes between the parts keep the words of that name apart;
- *   flex layout ignores them.
- * - Keys 1 to 4 are the round's job (they work while focus is in the
- *   question); `shortcut` only shows the hint and sets `aria-keyshortcuts`.
+ *   ("Correct answer", "Your answer", "Already guessed"). Every state is
+ *   exposed as `data-state` (plus `data-pressed`), which `.kn-answer` in
+ *   `ui.css` styles: the fills, the 400 ms reveal's stamp, shake and tag
+ *   rise (DESIGN §7.3), and the forced-colours borders (double for correct,
+ *   dashed for a wrong pick).
+ * - The state's words sit at the right end of the option's line, beside a
+ *   name that leaves room for them, and go under it only where it doesn't
+ *   (a long name, 200% text). Either way the name keeps its whole line, so
+ *   a pill never squeezes the answer onto two or three lines (RITE round
+ *   1, R1-36), and a short option never grows at the reveal (`.kn-answer`
+ *   in `ui.css`).
+ * - The letter is said once (R1-40 checked for a doubled one). Screen
+ *   readers get "A." from one visually hidden element, so the accessible
+ *   name contains the visible label once, "A. Venus Your answer" (WCAG
+ *   2.5.3). The badge draws the letter as generated content (`data-letter`)
+ *   and is hidden from them, so no reading of the button, its text content
+ *   included, meets the letter twice. Where a check or an X replaces the
+ *   letter, the hidden "A." stays. The `{" "}` text nodes between the
+ *   parts keep the words of the name apart; flex layout ignores them.
+ * - The badge's letter is also the option's one key hint.
+ * - Keys are the round's job (decision D6, R1-13: the letters A to D pick,
+ *   matching the badges, and digits 1 to 4 only where no option is a
+ *   number). `shortcut` names the keys that pick this option, in
+ *   `aria-keyshortcuts` form ("A 1", or "A"), set only while it is idle;
+ *   nothing else draws a hint, since the badge already shows the letter.
  */
 import type { ReactNode, Ref } from "react";
 
@@ -75,7 +92,11 @@ export interface AnswerButtonProps {
   onPressStart?: () => void;
   /** Forces the pressed look, such as while the option's shortcut key is held. */
   pressed?: boolean;
-  /** The key that picks this option ("1" to "4"); null or absent when shortcuts are off. */
+  /**
+   * The keys that pick this option, as `aria-keyshortcuts` lists them ("A
+   * 1", or "A" where digits don't pick); null or absent when shortcuts are
+   * off. Drawn nowhere: the badge's letter is the hint (D6).
+   */
   shortcut?: string | null;
   /** Wording for the state words; the defaults are UI_COPY.answer. */
   labels?: Partial<AnswerButtonLabels>;
@@ -84,27 +105,6 @@ export interface AnswerButtonProps {
   "aria-describedby"?: string;
   ref?: Ref<HTMLButtonElement>;
 }
-
-const STATE_CLASSES: Record<AnswerState, string> = {
-  idle: "border-foreground/55 hover:border-foreground",
-  locked: "border-foreground ring-2 ring-inset ring-foreground",
-  correct:
-    "border-foreground bg-foreground/10 ring-2 ring-inset ring-foreground",
-  "your-answer": "border-dashed border-foreground",
-  dimmed: "translate-y-0.5 border-foreground/30 text-muted-foreground",
-  "already-guessed": "border-foreground/30 bg-muted text-muted-foreground",
-  disabled: "cursor-not-allowed border-foreground/55",
-};
-
-const BADGE_CLASSES: Record<AnswerState, string> = {
-  idle: "",
-  locked: "",
-  correct: "border-foreground bg-foreground text-background",
-  "your-answer": "border-dashed border-foreground",
-  dimmed: "border-foreground/40",
-  "already-guessed": "border-foreground/40",
-  disabled: "",
-};
 
 export function AnswerButton({
   index,
@@ -134,6 +134,12 @@ export function AnswerButton({
         : state === "already-guessed"
           ? words.alreadyGuessed
           : null;
+  const Glyph =
+    state === "correct"
+      ? CheckIcon
+      : state === "your-answer"
+        ? CrossIcon
+        : null;
 
   return (
     <button
@@ -150,52 +156,25 @@ export function AnswerButton({
       }}
       {...pressHandlers}
       style={{ minHeight: TUNABLES.answers.buttonMinHeightPx }}
-      className={cx(
-        "relative flex w-full touch-manipulation items-center gap-3 rounded-2xl border-2 bg-background px-4 py-3 text-left text-lg font-semibold text-foreground outline-offset-[3px] transition-transform duration-75 select-none focus-visible:outline-[3px] focus-visible:outline-foreground",
-        STATE_CLASSES[state],
-        showPressed && "translate-y-0.5 border-foreground",
-        className,
-      )}
+      className={cx("kn-answer", className)}
     >
       <span
         aria-hidden="true"
-        className={cx(
-          "inline-grid size-9 shrink-0 place-items-center rounded-[11px] border-[1.5px] border-current text-lg font-bold",
-          BADGE_CLASSES[state],
-        )}
+        data-letter={Glyph === null ? letter : undefined}
+        className="kn-answer-badge"
       >
-        {state === "correct" ? (
-          <CheckIcon />
-        ) : state === "your-answer" ? (
-          <CrossIcon />
-        ) : (
-          letter
-        )}
+        {Glyph === null ? null : <Glyph />}
       </span>
       <span className="sr-only">{letter}.</span>{" "}
-      <span className="min-w-0 flex-1 break-words">{children}</span>{" "}
+      <span className="kn-answer-text">{children}</span>{" "}
       {tag === null ? null : (
-        <span
-          className={cx(
-            "inline-flex shrink-0 items-center gap-1 text-sm font-extrabold whitespace-nowrap",
-            state === "correct" &&
-              "rounded-full border-[1.5px] border-current px-2.5 py-1",
-          )}
-        >
+        <span className="kn-answer-tag">
           {state === "correct" ? <CheckIcon size={14} /> : null}
           {tag}
         </span>
       )}
       {state === "locked" ? (
         <span className="sr-only">{words.lockedIn}</span>
-      ) : null}
-      {interactive && shortcut ? (
-        <kbd
-          aria-hidden="true"
-          className="hidden shrink-0 rounded-md border border-foreground/40 px-1.5 font-sans text-sm text-muted-foreground md:inline-block"
-        >
-          {shortcut}
-        </kbd>
       ) : null}
     </button>
   );

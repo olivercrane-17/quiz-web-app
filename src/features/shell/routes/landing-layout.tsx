@@ -1,7 +1,9 @@
 /**
  * The `(landing)` layout (ARCHITECTURE §2.1): a minimal header for deep
  * links (share, challenge, invite, claim, room and quiz landings), which
- * open as first visits with no prior state (PRD §6.1).
+ * open as first visits with no prior state (PRD §6.1). One centred column:
+ * 560 px of content below 768 px, the 720 px play column from there
+ * (DESIGN §10.1), with the header's row and banners on the same column.
  * `src/app/(landing)/layout.tsx` re-exports it.
  */
 import type { ReactNode } from "react";
@@ -9,7 +11,8 @@ import type { ReactNode } from "react";
 import { IncidentBanner } from "@/features/incidents/banner";
 import { LiveRegions } from "@/ui/live-regions";
 
-import { MAIN_ID } from "../landmarks";
+import { MainLandmark } from "../main-landmark";
+import { ScrollInset } from "../scroll-inset";
 import { SkipLink } from "../skip-link";
 import { Wordmark } from "../wordmark";
 
@@ -17,19 +20,16 @@ export default function LandingLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">
       <SkipLink />
-      <header className="border-b border-border bg-background pt-[env(safe-area-inset-top)]">
-        <div className="mx-auto flex min-h-14 w-full max-w-[720px] items-center px-4">
+      <header className="kn-topbar kn-grain" data-column="play">
+        <ScrollInset edge="top" />
+        <div className="kn-topbar-row">
           <Wordmark />
         </div>
         <IncidentBanner />
       </header>
-      <main
-        id={MAIN_ID}
-        tabIndex={-1}
-        className="mx-auto w-full max-w-[720px] flex-1 px-4 py-6 outline-none"
-      >
+      <MainLandmark className="mx-auto w-full max-w-narrow flex-1 px-gutter pt-2 pb-10 outline-none md:max-w-play">
         {children}
-      </main>
+      </MainLandmark>
       <LiveRegions />
     </div>
   );

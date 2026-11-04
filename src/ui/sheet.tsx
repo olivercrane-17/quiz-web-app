@@ -19,18 +19,43 @@
  *   sits in space the layout reserved, so nothing above it moves, and stays
  *   until the player taps Continue. It is a labelled region; the round
  *   decides where focus goes (usually `titleRef`, the reveal heading).
+ *   Opening by itself (the reveal's 1.2 s beat), it rises from below into
+ *   that space (DESIGN §7.3): unseen for its first frame, so the round's
+ *   scroll to Continue measures the final box, then 360 ms up, and a tap or
+ *   key anywhere completes the rise at once. Opened by the player's own
+ *   press (a pointerdown or keydown handler, as the tap that completes the
+ *   automatic part at once), or open from the start (a reload), it is
+ *   simply there. Its `data-arrival` says which.
+ *
+ * The looks are `.kn-dialog` and `.kn-sheet` in `ui.css`: surface, a 28 px
+ * top radius, the sheet shadow, a rise of 360 ms while a modal's scrim
+ * fades in (a fade under reduced motion). A modal's title is set in
+ * `display-5`, the explanation sheet's in `display-3`. `Dialog` (./dialog)
+ * is the modal one by name.
+ *
+ * **The grab handle** (36 by 4) does what it looks like it does (RITE
+ * round 1, R1-36): on a modal sheet that can be dismissed, on a phone,
+ * dragging it down moves the sheet with the finger, and letting go past a
+ * third of its height (at most 120 px) or with a downward flick closes it
+ * through `onClose`; a shorter drag springs back. The close button, the
+ * scrim and Escape stay the ways to close it without dragging (WCAG
+ * 2.5.7). A sheet that must be answered, and the inline explanation sheet,
+ * which nothing dismisses but Continue, show no handle at all.
  *
  * The parent owns `open`. Children render only while open.
  */
 import {
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
+  type PointerEvent,
   type ReactNode,
   type Ref,
   type RefObject,
 } from "react";
 
+import { buttonClasses } from "./button-classes";
 import { UI_COPY } from "./copy";
 import { cx } from "./cx";
 import { CrossIcon } from "./icons";
@@ -63,6 +88,122 @@ export interface SheetProps {
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+/**
+ * True for the rest of the task in which the player pressed (a pointerdown
+ * or keydown anywhere), so an inline sheet that opens in that task knows the
+ * press opened it. Watched from the first inline sheet's mount; these
+ * listeners run before React's own, which sit on the document.
+ */
+let pressing = false;
+let watchingPresses = false;
+
+function watchPresses(): void {
+  if (watchingPresses || typeof window === "undefined") return;
+  watchingPresses = true;
+  const mark = () => {
+    pressing = true;
+    setTimeout(() => {
+      pressing = false;
+    }, 0);
+  };
+  window.addEventListener("pointerdown", mark, true);
+  window.addEventListener("keydown", mark, true);
+}
+
+/** Past this far down, letting go closes the sheet: a third of it, at most 120 px. */
+export function dragDismissDistance(sheetHeight: number): number {
+  return Math.max(48, Math.min(120, sheetHeight / 3));
+}
+
+/** A flick this fast downward (px per ms) closes the sheet however short the drag. */
+const FLICK_SPEED = 0.6;
+
+interface Drag {
+  pointerId: number;
+  startY: number;
+  lastY: number;
+  lastAt: number;
+  speed: number;
+}
+
+/**
+ * The grab handle of a dismissible modal sheet: drag it down to close the
+ * sheet. Pointer input only, so it is hidden from screen readers; the
+ * close button, the scrim and Escape do the same without a drag.
+ */
+function SheetGrab({
+  sheetRef,
+  onDismiss,
+}: {
+  sheetRef: RefObject<HTMLElement | null>;
+  onDismiss: () => void;
+}) {
+  const drag = useRef<Drag | null>(null);
+
+  const move = (offset: number) => {
+    const sheet = sheetRef.current;
+    if (sheet === null) return;
+    sheet.style.translate = offset > 0 ? `0 ${offset}px` : "";
+  };
+  const end = (event: PointerEvent<HTMLElement>, cancelled: boolean) => {
+    const current = drag.current;
+    if (current === null || current.pointerId !== event.pointerId) return;
+    drag.current = null;
+    const sheet = sheetRef.current;
+    if (sheet !== null) delete sheet.dataset.dragging;
+    const offset = event.clientY - current.startY;
+    const height = sheet?.getBoundingClientRect().height ?? 0;
+    if (
+      !cancelled &&
+      offset > 0 &&
+      (offset >= dragDismissDistance(height) || current.speed >= FLICK_SPEED)
+    ) {
+      onDismiss();
+      return;
+    }
+    // Spring back; the sheet's own transition carries it home.
+    move(0);
+  };
+
+  return (
+    <div
+      aria-hidden="true"
+      data-sheet-grab=""
+      className="kn-sheet-grab"
+      onPointerDown={(event) => {
+        if (event.button !== 0 || sheetRef.current === null) return;
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+        drag.current = {
+          pointerId: event.pointerId,
+          startY: event.clientY,
+          lastY: event.clientY,
+          lastAt: performance.now(),
+          speed: 0,
+        };
+        sheetRef.current.dataset.dragging = "";
+      }}
+      onPointerMove={(event) => {
+        const current = drag.current;
+        if (current === null || current.pointerId !== event.pointerId) return;
+        const now = performance.now();
+        const elapsed = now - current.lastAt;
+        if (elapsed > 0) {
+          current.speed = (event.clientY - current.lastY) / elapsed;
+        }
+        current.lastY = event.clientY;
+        current.lastAt = now;
+        move(Math.max(0, event.clientY - current.startY));
+      }}
+      onPointerUp={(event) => {
+        end(event, false);
+      }}
+      onPointerCancel={(event) => {
+        end(event, true);
+      }}
+    />
+  );
+}
+
 function SheetBody({
   title,
   hideTitle,
@@ -75,6 +216,7 @@ function SheetBody({
   children,
   compact,
   closeButton,
+  grab,
 }: Pick<
   SheetProps,
   | "title"
@@ -89,37 +231,31 @@ function SheetBody({
   titleId: string;
   descriptionId: string;
   closeButton: ReactNode;
+  /** The grab handle, on a sheet a drag can dismiss; null elsewhere. */
+  grab: ReactNode;
 }) {
   return (
-    <div className={cx("flex flex-col", compact ? "gap-2 p-4" : "gap-4 p-5")}>
-      <span
-        aria-hidden="true"
-        className="mx-auto h-1 w-9 rounded-full bg-foreground/25 md:hidden"
-      />
-      <div className="flex items-start justify-between gap-3">
+    <div className="kn-sheet-body" data-compact={compact ? "" : undefined}>
+      {grab}
+      <div className="kn-sheet-head">
         <Heading
           ref={titleRef}
           id={titleId}
           tabIndex={-1}
-          className={cx(
-            "text-xl font-bold outline-none",
-            hideTitle && "sr-only",
-          )}
+          className={cx("kn-sheet-title", hideTitle && "sr-only")}
         >
           {title}
         </Heading>
         {closeButton}
       </div>
       {description === undefined ? null : (
-        <div id={descriptionId} className="text-base">
+        <div id={descriptionId} className="kn-sheet-text">
           {description}
         </div>
       )}
       {children}
       {actions === undefined ? null : (
-        <div className="flex flex-col gap-3 md:flex-row-reverse md:justify-start">
-          {actions}
-        </div>
+        <div className="kn-sheet-actions">{actions}</div>
       )}
     </div>
   );
@@ -146,6 +282,9 @@ function ModalSheet({
       document.activeElement instanceof HTMLElement
         ? document.activeElement
         : null;
+    // A sheet closed by a drag opens again in its place.
+    dialog.style.translate = "";
+    delete dialog.dataset.dragging;
     if (!dialog.hasAttribute("open")) {
       if (typeof dialog.showModal === "function") dialog.showModal();
       else dialog.setAttribute("open", "");
@@ -170,9 +309,9 @@ function ModalSheet({
         type="button"
         aria-label={closeLabel}
         onClick={onClose}
-        className="-m-2 inline-grid size-11 shrink-0 place-items-center rounded-xl outline-offset-[3px] hover:bg-foreground/5 focus-visible:outline-[3px] focus-visible:outline-foreground"
+        className={buttonClasses({ variant: "icon", className: "-m-2" })}
       >
-        <CrossIcon />
+        <CrossIcon size={24} />
       </button>
     );
 
@@ -215,10 +354,7 @@ function ModalSheet({
           onClose?.();
         }
       }}
-      className={cx(
-        "mx-0 mt-auto mb-0 max-h-[85dvh] w-full max-w-none overflow-y-auto rounded-t-[28px] border-0 bg-background p-0 text-foreground shadow-[0_-8px_24px_0] shadow-foreground/15 backdrop:bg-foreground/40 md:m-auto md:w-[min(480px,calc(100%-2rem))] md:rounded-[28px]",
-        className,
-      )}
+      className={cx("kn-dialog", className)}
     >
       {open ? (
         <SheetBody
@@ -227,6 +363,11 @@ function ModalSheet({
           titleId={titleId}
           descriptionId={descriptionId}
           closeButton={closeButton}
+          grab={
+            onClose === undefined ? null : (
+              <SheetGrab sheetRef={dialogRef} onDismiss={onClose} />
+            )
+          }
         />
       ) : null}
       {/*
@@ -262,22 +403,63 @@ function InlineSheet({
 }: SheetProps) {
   const titleId = useId();
   const descriptionId = useId();
+  const sectionRef = useRef<HTMLElement>(null);
+  /** False while the sheet has been open since it mounted (a reload). */
+  const closedSinceMount = useRef(!open);
+
+  useEffect(() => {
+    watchPresses();
+  }, []);
 
   useEffect(() => {
     if (open) initialFocusRef?.current?.focus();
   }, [open, initialFocusRef]);
 
+  // Before paint, and before the round's own layout effects (a child's
+  // effects run first): there at once, or unseen until it rises.
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!open || section === null) {
+      closedSinceMount.current = true;
+      return;
+    }
+    if (section.dataset.arrival !== undefined) return;
+    section.dataset.arrival =
+      !closedSinceMount.current || pressing ? "instant" : "pending";
+  }, [open]);
+
+  // After every layout effect of the commit (the round's scroll to Continue
+  // among them), the rise starts; a tap or key anywhere completes it.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!open || section === null) return;
+    if (section.dataset.arrival === "pending") section.dataset.arrival = "rise";
+    if (
+      section.dataset.arrival !== "rise" ||
+      typeof section.getAnimations !== "function"
+    ) {
+      return;
+    }
+    const complete = () => {
+      for (const animation of section.getAnimations()) animation.finish();
+    };
+    window.addEventListener("pointerdown", complete, true);
+    window.addEventListener("keydown", complete, true);
+    return () => {
+      window.removeEventListener("pointerdown", complete, true);
+      window.removeEventListener("keydown", complete, true);
+    };
+  }, [open]);
+
   if (!open) return null;
   return (
     <section
+      ref={sectionRef}
       id={id}
       aria-labelledby={titleId}
       aria-describedby={description === undefined ? undefined : descriptionId}
       data-sheet="inline"
-      className={cx(
-        "rounded-t-[28px] border border-foreground/25 bg-background text-foreground shadow-[0_-8px_24px_0] shadow-foreground/10",
-        className,
-      )}
+      className={cx("kn-sheet", className)}
     >
       <SheetBody
         {...body}
@@ -285,6 +467,8 @@ function InlineSheet({
         titleId={titleId}
         descriptionId={descriptionId}
         closeButton={null}
+        // Nothing dismisses the explanation sheet but Continue: no handle.
+        grab={null}
       />
     </section>
   );

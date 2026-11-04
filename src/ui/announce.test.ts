@@ -4,7 +4,9 @@ import {
   LIVE_REGION_IDS,
   announce,
   clearAnnouncements,
+  clearRouteAnnouncements,
   ensureLiveRegions,
+  withdrawAnnouncement,
 } from "./announce";
 
 afterEach(() => {
@@ -60,6 +62,42 @@ describe("announce", () => {
     announce("Saved");
     clearAnnouncements();
     expect(regionOf(LIVE_REGION_IDS.polite)).toBeEmptyDOMElement();
+  });
+});
+
+describe("clearRouteAnnouncements", () => {
+  it("R1-09 empties what the previous page said from both regions", () => {
+    announce("Clue 2 is in. Now worth 3.");
+    announce("You're offline. Your progress is saved.", "assertive");
+    clearRouteAnnouncements();
+    expect(regionOf(LIVE_REGION_IDS.polite)).toBeEmptyDOMElement();
+    expect(regionOf(LIVE_REGION_IDS.assertive)).toBeEmptyDOMElement();
+    // The regions themselves stay, ready for the next page's first message.
+    expect(regionOf(LIVE_REGION_IDS.polite)).toHaveAttribute("role", "status");
+  });
+
+  it("R1-09 keeps a message meant to outlive its page, such as a toast's", () => {
+    const saved = announce("Saved", "polite", { keepOnRouteChange: true });
+    clearRouteAnnouncements();
+    expect(regionOf(LIVE_REGION_IDS.polite)).toHaveTextContent("Saved");
+    // Its owner takes it back when it no longer applies.
+    withdrawAnnouncement(saved);
+    expect(regionOf(LIVE_REGION_IDS.polite)).toBeEmptyDOMElement();
+  });
+
+  it("R1-09 lets the new page's own words through", () => {
+    clearRouteAnnouncements();
+    announce("Question 1 of 10");
+    expect(regionOf(LIVE_REGION_IDS.polite)).toHaveTextContent(
+      "Question 1 of 10",
+    );
+  });
+
+  it("does nothing before any region exists", () => {
+    expect(() => {
+      clearRouteAnnouncements();
+    }).not.toThrow();
+    expect(withdrawAnnouncement(null)).toBeUndefined();
   });
 });
 

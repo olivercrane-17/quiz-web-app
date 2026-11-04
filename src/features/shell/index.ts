@@ -8,6 +8,7 @@
  */
 export { SHELL_COPY } from "./copy";
 export { LEGAL_LINKS, SiteFooter } from "./footer";
+export { NOT_FOUND_METADATA } from "./not-found-metadata";
 export { PagePlaceholder } from "./page-placeholder";
 export { PlayFrame, type PlayFrameProps } from "./play-frame";
 export { PlayHeader, type PlayHeaderProps } from "./play-header";

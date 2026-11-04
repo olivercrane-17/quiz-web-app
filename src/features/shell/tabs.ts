@@ -19,12 +19,15 @@ export interface TabDefinition {
   href: string;
   label: string;
   /**
-   * Whether the link prefetches. Off for destinations that later tickets
-   * build: prefetching a route that doesn't exist yet logs a 404 in the
-   * console. Each owner turns its own entry on in the pull request that
-   * builds the page, through a one-line Touch (§12.3): PRA-2 for
-   * /practice, GRP-1 for /g, STA-1 for /me. PERF-1 checks every link when
-   * it tunes prefetching (ARCHITECTURE §10.9 item 5), as the backstop.
+   * Whether the link prefetches. On wherever a page exists, placeholders
+   * included (/g and /me until GRP-1 and STA-1): a prefetched page arrives
+   * with its title, so Next's route announcer reads "Groups · Knewt"
+   * rather than whatever heading the document holds first (RITE round 1,
+   * R1-09). Off only while a destination has no page on this branch, since
+   * that prefetch would log a 404: /practice until FIX-PRA's greybox
+   * merges, and PRA-2 turns it on with the hub (a one-line Touch, §12.3).
+   * PERF-1 checks every link when it tunes prefetching (ARCHITECTURE §10.9
+   * item 5).
    */
   prefetch: boolean;
 }
@@ -46,9 +49,9 @@ export const TABS: readonly TabDefinition[] = [
     id: "groups",
     href: "/g",
     label: SHELL_CLIENT_COPY.tabs.groups,
-    prefetch: false,
+    prefetch: true,
   },
-  { id: "me", href: "/me", label: SHELL_CLIENT_COPY.tabs.me, prefetch: false },
+  { id: "me", href: "/me", label: SHELL_CLIENT_COPY.tabs.me, prefetch: true },
 ];
 
 export interface ActiveTab {

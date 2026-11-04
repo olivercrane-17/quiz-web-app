@@ -3,15 +3,35 @@
  * renders it twice: once as the `<Suspense>` fallback with no marker (what
  * a prerender shows while `usePathname` suspends, ARCHITECTURE §10.2 rule
  * 2), and once from `ActiveTabList` with the marker.
+ *
+ * At the bottom (phones) each tab is an icon over its label; in the top bar
+ * (from 768 px) the label alone. The active tab is in ink with an eft bar,
+ * at its top edge below and under the label above (DESIGN §6.13); the bar
+ * is decorative, `aria-current` carries the state.
  */
 import type { Route } from "next";
 import Link from "next/link";
+import type { ComponentType } from "react";
 
-import { cx } from "@/ui/cx";
+import {
+  CalendarDaysIcon,
+  LayersIcon,
+  UserRoundIcon,
+  UsersIcon,
+  type IconProps,
+} from "@/ui/icons";
 
-import { TABS, type ActiveTab } from "./tabs";
+import { TABS, type ActiveTab, type TabId } from "./tabs";
 
 export type TabPlacement = "top" | "bottom";
+
+/** DESIGN §5's tab icons. */
+const TAB_ICONS: Record<TabId, ComponentType<IconProps>> = {
+  today: CalendarDaysIcon,
+  practice: LayersIcon,
+  groups: UsersIcon,
+  me: UserRoundIcon,
+};
 
 export function TabList({
   active,
@@ -21,19 +41,12 @@ export function TabList({
   placement: TabPlacement;
 }) {
   return (
-    <ul
-      className={cx(
-        "flex",
-        placement === "bottom" ? "w-full" : "items-center gap-1",
-      )}
-    >
+    <ul className="kn-tabs">
       {TABS.map((tab) => {
         const current = active?.tab === tab.id;
+        const Icon = TAB_ICONS[tab.id];
         return (
-          <li
-            key={tab.id}
-            className={placement === "bottom" ? "flex-1" : undefined}
-          >
+          <li key={tab.id}>
             <Link
               // Practice, Groups and Me are built by later tickets; the
               // destinations are fixed by PRD §6.1.
@@ -43,23 +56,12 @@ export function TabList({
                 current ? (active.exact ? "page" : "true") : undefined
               }
               data-active={current ? "" : undefined}
-              className={cx(
-                "relative flex items-center justify-center font-bold outline-offset-[-3px] focus-visible:outline-[3px] focus-visible:outline-foreground",
-                placement === "bottom"
-                  ? "min-h-14 flex-col gap-0.5 text-xs"
-                  : "min-h-11 rounded-lg px-3 text-base",
-                current ? "text-foreground" : "text-muted-foreground",
-              )}
+              className="kn-tab"
             >
               {current ? (
-                <span
-                  aria-hidden="true"
-                  className={cx(
-                    "absolute h-[3px] w-7 rounded-full bg-foreground",
-                    placement === "bottom" ? "top-0" : "bottom-0.5",
-                  )}
-                />
+                <span aria-hidden="true" className="kn-tab-marker" />
               ) : null}
+              {placement === "bottom" ? <Icon size={24} /> : null}
               {tab.label}
             </Link>
           </li>
