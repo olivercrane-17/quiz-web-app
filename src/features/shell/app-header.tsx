@@ -25,7 +25,14 @@ import { Wordmark } from "./wordmark";
 /** The column the bar's row and banners line up with (`--kn-column`, shell.css). */
 export type HeaderColumn = "page" | "reading";
 
-export function AppHeader({ column = "page" }: { column?: HeaderColumn }) {
+export function AppHeader({
+  column = "page",
+  markTab = true,
+}: {
+  column?: HeaderColumn;
+  /** False on a page that belongs to no tab (`TabBar`'s `marked`). */
+  markTab?: boolean;
+}) {
   return (
     <header
       className="kn-topbar kn-grain"
@@ -36,15 +43,18 @@ export function AppHeader({ column = "page" }: { column?: HeaderColumn }) {
         <Wordmark />
         {/* TOP_BAR_TITLE_SLOT (./landmarks): TopBarTitle portals into it. */}
         <div data-topbar-title="" className="kn-topbar-title" />
-        <TabBar placement="top" className="kn-toptabs ml-4 hidden md:block" />
+        <TabBar
+          placement="top"
+          marked={markTab}
+          className="kn-toptabs ml-4 hidden md:block"
+        />
         <div className="kn-topbar-end">
           <StreakChip />
           <Link
-            // /settings is a placeholder until SET-1 builds it, so the link
-            // doesn't prefetch: SET-1 turns that on with its page (a
-            // one-line Touch, §12.3); PERF-1 is the backstop.
+            // A placeholder until SET-1 builds it. Prefetched like every
+            // page that exists, so its title lands with it for the route
+            // announcer (R1-09).
             href={"/settings" as Route}
-            prefetch={false}
             aria-label={SHELL_COPY.settings}
             className={buttonClasses({ variant: "icon" })}
           >

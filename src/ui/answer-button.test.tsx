@@ -81,7 +81,10 @@ describe("AnswerButton", () => {
       expect(button).toHaveAccessibleName("B. Uranus");
       // No keycap beside the text: the letter in the badge is the hint.
       expect(button.querySelector("kbd")).toBeNull();
-      expect(button.querySelector(".kn-answer-badge")).toHaveTextContent("B.");
+      expect(button.querySelector(".kn-answer-badge")).toHaveAttribute(
+        "data-letter",
+        "B",
+      );
       unmount();
       // Where digits don't pick, the letter alone.
       const letterOnly = renderOption("idle", { shortcut: "B" }).button;
@@ -204,19 +207,21 @@ describe("AnswerButton", () => {
       for (const state of ["correct", "your-answer"] as const) {
         const { button, unmount } = renderOption(state);
         const badge = button.querySelector(".kn-answer-badge");
-        expect(badge?.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
+        expect(badge).toHaveAttribute("aria-hidden", "true");
+        expect(badge?.querySelector("svg")).not.toBeNull();
+        expect(badge).not.toHaveAttribute("data-letter");
         // The letter is there for screen readers alone, once.
-        expect(badge?.querySelector(".sr-only")).toHaveTextContent("B.");
-        expect(badge).toHaveTextContent(/^B\.$/);
+        expect(button.querySelector(".sr-only")).toHaveTextContent("B.");
         unmount();
       }
     });
 
     it("keeps the letter for the other states", () => {
       const dimmed = renderOption("dimmed").button;
-      expect(dimmed.querySelector(".kn-answer-badge")).toHaveTextContent(
-        /^B\.$/,
-      );
+      const badge = dimmed.querySelector(".kn-answer-badge");
+      // Drawn by CSS from the attribute, so it isn't text a second time.
+      expect(badge).toHaveAttribute("data-letter", "B");
+      expect(badge).toBeEmptyDOMElement();
     });
 
     it.each(ANSWER_STATES.map((state) => [state]))(

@@ -1,55 +1,34 @@
 /**
- * The not-found page (DESIGN §1.4, §12.42; RITE round 1, R1-02): "We
- * couldn't find that page." with the one smile, Go to Today as the primary
- * and Practice beside it, inside the tab pages' frame, so the top bar and
- * the tab bar are there and a dead link never strands anyone (an installed
- * app has no Back button). The newt "looking for something" stands beside
- * it, at the 64 px detail level, decorative (DESIGN §1.6).
+ * The not-found page for an address no route matches (DESIGN §12.42; RITE
+ * round 1, R1-02), inside the tab pages' frame, so the top bar and the tab
+ * bar are there and a dead link never strands anyone (an installed app has
+ * no Back button). Next renders `src/app/not-found.tsx`, which re-exports
+ * this module, inside the root layout alone, so it brings the frame
+ * itself. A `notFound()` inside a route group renders inside that group's
+ * layout instead, through the group's own not-found file
+ * (`./not-found-in-frame.tsx`, `./not-found-in-play.tsx`).
  *
- * Next renders `src/app/not-found.tsx` (which re-exports this module) for
- * every unmatched URL and every `notFound()`, such as a Beta route with
- * its flag off, inside the root layout only, so this module brings the
- * frame itself. Static, with its own title ("Page not found · Knewt"); Next
- * adds the noindex meta to every 404 response by itself.
+ * Next prerenders this page once and serves it at every unknown address,
+ * `/practice` among them until that page exists, so its tab bar marks no
+ * tab: one it marked at `/practice` would not match the prerender. Static,
+ * with its own title ("Page not found · Knewt"); Next adds the noindex
+ * meta to every 404 response by itself.
  */
-import type { Metadata, Route } from "next";
-import Link from "next/link";
-
-import { buttonClasses } from "@/ui/button-classes";
-import { NewtMark } from "@/ui/newt-mark";
+import type { Metadata } from "next";
 
 import { SHELL_COPY } from "../copy";
+import { NotFoundContent } from "../not-found";
 import { TabsFrame } from "./tabs-layout";
 
-const COPY = SHELL_COPY.notFound;
-
 export const metadata: Metadata = {
-  title: COPY.title,
+  title: SHELL_COPY.notFound.title,
   robots: { index: false },
 };
 
 export default function NotFoundRoute() {
   return (
-    <TabsFrame>
-      <div data-not-found="" className="flex flex-col items-start gap-4 py-6">
-        <NewtMark size={64} />
-        <h1 className="font-display text-display-2">{COPY.heading}</h1>
-        <p className="text-body text-ink-2">{COPY.smile}</p>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/" className={buttonClasses({ variant: "primary" })}>
-            {COPY.goToToday}
-          </Link>
-          <Link
-            // The hub is FIX-PRA's greybox until PRA-2 (typed once it merges);
-            // no prefetch from a dead end.
-            href={"/practice" as Route}
-            prefetch={false}
-            className={buttonClasses({ variant: "secondary" })}
-          >
-            {COPY.practice}
-          </Link>
-        </div>
-      </div>
+    <TabsFrame markTab={false}>
+      <NotFoundContent />
     </TabsFrame>
   );
 }

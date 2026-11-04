@@ -9,7 +9,9 @@
  * frame: the tab bar hides only in play (PRD §6.1), and every page the
  * footer or a dead link opens keeps a way back to Today (RITE round 1,
  * R1-02). `column="reading"` narrows the page to the 640 px reading column
- * (DESIGN §12.40).
+ * (DESIGN §12.40). `markTab={false}` marks no tab (the not-found page);
+ * `outer={false}` leaves out the skip link and the live regions, for a
+ * frame inside the `(play)` layout, which has its own.
  *
  * On phones `.kn-tabs-main` (shell.css) keeps the last line clear of the
  * fixed tab bar by the bar's measured height (`ScrollInset`), so 200% text
@@ -32,15 +34,19 @@ const COLUMNS: Record<HeaderColumn, string> = {
 
 export function TabsFrame({
   column = "page",
+  markTab = true,
+  outer = true,
   children,
 }: {
   column?: HeaderColumn;
+  markTab?: boolean;
+  outer?: boolean;
   children: ReactNode;
 }) {
   return (
     <div className="flex min-h-dvh flex-col">
-      <SkipLink />
-      <AppHeader column={column} />
+      {outer ? <SkipLink /> : null}
+      <AppHeader column={column} markTab={markTab} />
       <MainLandmark
         className={cx(
           "kn-tabs-main mx-auto w-full max-w-narrow flex-1 px-gutter outline-none md:pb-10",
@@ -49,8 +55,12 @@ export function TabsFrame({
       >
         {children}
       </MainLandmark>
-      <TabBar placement="bottom" className="kn-tabbar md:hidden" />
-      <LiveRegions />
+      <TabBar
+        placement="bottom"
+        marked={markTab}
+        className="kn-tabbar md:hidden"
+      />
+      {outer ? <LiveRegions /> : null}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { screen, within } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { renderWithUser } from "@/test/render";
 
@@ -20,8 +20,15 @@ function renderHome() {
   );
 }
 
+beforeEach(() => {
+  // A client render is a push arrival, which scrolls to the top
+  // (@/features/home/arrival.test.tsx); jsdom has no scrolling.
+  vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+});
+
 afterEach(() => {
   vi.useRealTimers();
+  vi.restoreAllMocks();
   localStorage.clear();
 });
 

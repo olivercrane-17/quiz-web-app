@@ -25,13 +25,15 @@
  * - The state's words sit in their own row under the option's text, never
  *   beside it, so a pill never squeezes the answer onto two or three lines
  *   (RITE round 1, R1-36); the row opens with the reveal.
- * - The badge's letter is the one name and the one key hint the option
- *   has: it reads "A." to screen readers, so the accessible name contains
- *   the visible label once, "A. Venus Your answer" (WCAG 2.5.3; R1-40
- *   checked the tree for a doubled letter). Where a check or an X replaces
- *   the letter, the letter stays for screen readers alone. The `{" "}` text
- *   nodes between the parts keep the words of the name apart; the grid
- *   ignores them.
+ * - The letter is said once (R1-40 checked for a doubled one). Screen
+ *   readers get "A." from one visually hidden element, so the accessible
+ *   name contains the visible label once, "A. Venus Your answer" (WCAG
+ *   2.5.3). The badge draws the letter as generated content (`data-letter`)
+ *   and is hidden from them, so no reading of the button, its text content
+ *   included, meets the letter twice. Where a check or an X replaces the
+ *   letter, the hidden "A." stays. The `{" "}` text nodes between the
+ *   parts keep the words of the name apart; the grid ignores them.
+ * - The badge's letter is also the option's one key hint.
  * - Keys are the round's job (decision D6, R1-13: the letters A to D pick,
  *   matching the badges, and digits 1 to 4 only where no option is a
  *   number). `shortcut` names the keys that pick this option, in
@@ -153,19 +155,14 @@ export function AnswerButton({
       style={{ minHeight: TUNABLES.answers.buttonMinHeightPx }}
       className={cx("kn-answer", className)}
     >
-      <span className="kn-answer-badge">
-        {Glyph === null ? (
-          <>
-            {letter}
-            <span className="sr-only">.</span>
-          </>
-        ) : (
-          <>
-            <Glyph />
-            <span className="sr-only">{letter}.</span>
-          </>
-        )}
-      </span>{" "}
+      <span
+        aria-hidden="true"
+        data-letter={Glyph === null ? letter : undefined}
+        className="kn-answer-badge"
+      >
+        {Glyph === null ? null : <Glyph />}
+      </span>
+      <span className="sr-only">{letter}.</span>{" "}
       <span className="kn-answer-text">{children}</span>{" "}
       {tag === null ? null : (
         <span className="kn-answer-tag-row">

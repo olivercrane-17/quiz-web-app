@@ -15,6 +15,7 @@ import { TABS } from "./tabs";
 vi.mock("next/navigation", () => ({ usePathname: () => "/no-such-page" }));
 
 const APP = join(process.cwd(), "src/app");
+const NOT_FOUND_HEADING = "We couldn't find that page.";
 
 /** Every page under src/app, by the address it serves and the group it sits in. */
 function pages(): Map<string, { file: string; group: string | null }> {
@@ -144,11 +145,52 @@ describe("the not-found page", () => {
     expect(
       within(main).getByRole("link", { name: "Practice" }),
     ).toHaveAttribute("href", "/practice");
-    // The tab bar is there, so a dead link never strands anyone.
+    // The tab bar is there, so a dead link never strands anyone...
+    const bars = screen.getAllByRole("navigation", {
+      name: SHELL_COPY.mainNav,
+    });
+    expect(bars).not.toHaveLength(0);
+    // ...with no tab marked: the page is prerendered once for every address.
+    for (const bar of bars) {
+      for (const link of within(bar).getAllByRole("link")) {
+        expect(link).not.toHaveAttribute("aria-current");
+      }
+    }
+    expect(screen.getByRole("link", { name: "Skip to content" })).toBeVisible();
+    expect(metadata?.title).toBe("Page not found");
+  });
+
+  it.each(["(tabs)", "(info)", "(landing)", "(host)"])(
+    "R1-02 inside the %s group, where the layout drew the frame, says only its words",
+    async (group) => {
+      const { default: NotFound } = await loadPage(
+        join(APP, group, "not-found.tsx"),
+      );
+      const { container } = renderWithUser(<NotFound />);
+      expect(
+        screen.getByRole("heading", { level: 1, name: NOT_FOUND_HEADING }),
+      ).toBeVisible();
+      expect(screen.getByRole("link", { name: "Go to Today" })).toBeVisible();
+      // No second header, main or tab bar inside the group's own.
+      expect(container.querySelector("header, main, nav")).toBeNull();
+    },
+  );
+
+  it("R1-02 inside the (play) group, whose screens draw their own frame, brings the tab frame without a second skip link", async () => {
+    const { default: NotFound } = await loadPage(
+      join(APP, "(play)", "not-found.tsx"),
+    );
+    renderWithUser(<NotFound />);
+    expect(
+      within(screen.getByRole("main")).getByRole("heading", {
+        level: 1,
+        name: NOT_FOUND_HEADING,
+      }),
+    ).toBeVisible();
     expect(
       screen.getAllByRole("navigation", { name: SHELL_COPY.mainNav }),
     ).not.toHaveLength(0);
-    expect(screen.getByRole("link", { name: "Skip to content" })).toBeVisible();
-    expect(metadata?.title).toBe("Page not found");
+    // The (play) layout has the skip link and the live regions already.
+    expect(screen.queryByRole("link", { name: "Skip to content" })).toBeNull();
   });
 });

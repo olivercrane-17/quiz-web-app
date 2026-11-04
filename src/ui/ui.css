@@ -302,6 +302,11 @@
     background-color var(--kn-dur-reveal) var(--kn-ease-out),
     color var(--kn-dur-reveal) var(--kn-ease-out);
 }
+/* The letter is generated content of the hidden badge, so the button's
+ * text holds it once: in the visually hidden "A." (R1-40). */
+.kn-answer-badge[data-letter]::before {
+  content: attr(data-letter);
+}
 /* The stamped check and X, as heavy as the prototype's beside 18 px text. */
 .kn-answer-badge > svg {
   stroke-width: 3;
@@ -330,17 +335,22 @@
 ) {
   grid-template-rows: auto 1fr;
 }
+/* One line wherever it fits; at 200% text on a 320 px screen its words
+ * wrap inside the row rather than run past the option's edge. */
 .kn-answer-tag {
   display: inline-flex;
-  flex: none;
   align-items: center;
   gap: 5px;
+  max-width: 100%;
   margin-top: 6px;
   font-size: 0.8125rem;
   font-weight: 800;
   letter-spacing: 0.01em;
-  white-space: nowrap;
+  text-wrap: balance;
   animation: kn-rise-sm var(--kn-dur-base) var(--kn-ease-out) 200ms both;
+}
+.kn-answer-tag > svg {
+  flex: none;
 }
 @media (hover: hover) {
   .kn-answer[data-state="idle"]:hover {

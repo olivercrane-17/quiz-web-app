@@ -1,8 +1,9 @@
 /**
  * The footer on Today and Me (DESIGN §6.13, PRD §6.1): the seven legal and
- * trust pages as 44 px links. Each opens a page in the (info) group: a
- * placeholder until LGL-1 writes it and touches this file, so the links
- * don't prefetch until then (a prefetch would only fetch the placeholder).
+ * trust pages as 44 px links. Each opens a page in the (info) group, a
+ * placeholder until LGL-1 writes it and touches this file. They prefetch
+ * once they scroll into view, like every link to a page that exists, so a
+ * page's title arrives with it for the route announcer (R1-09).
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -26,9 +27,7 @@ export function SiteFooter() {
         <ul>
           {LEGAL_LINKS.map((link) => (
             <li key={link.href}>
-              <Link href={link.href as Route} prefetch={false}>
-                {link.label}
-              </Link>
+              <Link href={link.href as Route}>{link.label}</Link>
             </li>
           ))}
         </ul>

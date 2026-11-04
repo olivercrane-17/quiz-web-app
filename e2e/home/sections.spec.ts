@@ -76,11 +76,17 @@ test("a promoted Practice card comes before the Daily in reading order, not only
   await expect(quickPlay).toHaveCount(1);
   await expect(page.locator('[data-home-slot="practice"]')).toBeHidden();
   expect(await follows()).toBe(false);
-  const [quickBox, playBox] = await Promise.all([
-    quickPlay.boundingBox(),
-    play.boundingBox(),
+  // On screen too: above the Daily, or to its left where the two share a
+  // row (from 1024 px, while Today's right column is still empty, R1-35).
+  const [practiceBox, dailyBox] = await Promise.all([
+    page.locator('[data-home-slot="practice-promoted"]').boundingBox(),
+    page.locator('[data-home-slot="daily"]').boundingBox(),
   ]);
-  expect(quickBox?.y ?? Infinity).toBeLessThan(playBox?.y ?? -Infinity);
+  if (practiceBox === null || dailyBox === null) throw new Error("slot boxes");
+  const sameRow = Math.abs(practiceBox.y - dailyBox.y) < 1;
+  expect(
+    sameRow ? practiceBox.x < dailyBox.x : practiceBox.y < dailyBox.y,
+  ).toBe(true);
 
   // Keyboard order agrees: from the Daily's link, Shift+Tab reaches Quick play.
   await play.focus();

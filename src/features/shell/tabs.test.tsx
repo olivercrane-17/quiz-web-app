@@ -63,10 +63,13 @@ describe("tabForPath", () => {
 });
 
 describe("TABS", () => {
-  it("prefetch only Today while the other destinations are still to be built", () => {
-    // A prefetch of a route that doesn't exist yet logs a 404 in the console.
+  it("R1-09 prefetch every destination with a page, so its title lands with it, and not /practice before it has one", () => {
+    // A prefetch of a route that doesn't exist yet logs a 404 in the
+    // console; FIX-PRA's greybox hub is on its own branch.
     expect(TABS.filter((tab) => tab.prefetch).map((tab) => tab.id)).toEqual([
       "today",
+      "groups",
+      "me",
     ]);
   });
 });

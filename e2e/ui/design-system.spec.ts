@@ -414,7 +414,20 @@ test.describe("forced colours", () => {
     await page.goto("/daily");
     const current = page.locator('.kn-step[aria-current="step"]');
     await expect(current).toHaveCount(1);
-    await expect(current).toHaveCSS("outline-style", "solid");
+    // The current pill's mark is its bar, kept in the system's highlight
+    // colour, rather than a ring that reads like focus (R1-08).
+    const bar = await current.evaluate((step) => {
+      const css = getComputedStyle(step, "::after");
+      return {
+        content: css.content,
+        height: css.height,
+        fill: css.backgroundColor,
+      };
+    });
+    expect(bar.content).not.toBe("none");
+    expect(bar.height).toBe("3px");
+    expect(bar.fill).not.toBe("rgba(0, 0, 0, 0)");
+    await expect(current).toHaveCSS("outline-style", "none");
     const upcoming = page.locator(".kn-step:not([aria-current])").first();
     await expect(upcoming).toHaveCSS("border-top-style", "solid");
     await expect(upcoming).toHaveCSS("outline-style", "none");
