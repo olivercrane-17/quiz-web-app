@@ -29,6 +29,12 @@ export const RISK_REASONS = [
   "record",
   "recent_change",
   "checker_doubt",
+  // The rest of C26's risk floor (CONTENT_GUIDE §2.13): "only" in the
+  // text, the key claim of a counterintuitive item, and a clue, value or
+  // input claim in a sealed pool.
+  "only",
+  "counterintuitive",
+  "sealed_pool",
 ] as const;
 export type RiskReason = (typeof RISK_REASONS)[number];
 

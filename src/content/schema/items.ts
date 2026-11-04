@@ -68,6 +68,34 @@ export const EncorePredictedSchema = z
     }
   });
 
+/**
+ * + The writer's self-check (§2.3, §9.3): the eleven codes, each true to
+ * leave draft. `mystery` and `encore` are true on other kinds too: the
+ * writer confirms there is nothing of that kind to check. Optional in the
+ * file, because the bank predates the field; once present on an item past
+ * draft, every code must be true.
+ */
+export const SELF_CHECK_CODES = [
+  "lint",
+  "claims",
+  "datasets",
+  "rivalTest",
+  "volatility",
+  "regional",
+  "style",
+  "myths",
+  "mystery",
+  "encore",
+  "doubts",
+] as const;
+
+export const SelfCheckSchema = z.strictObject(
+  Object.fromEntries(SELF_CHECK_CODES.map((code) => [code, z.boolean()])) as {
+    [K in (typeof SELF_CHECK_CODES)[number]]: z.ZodBoolean;
+  },
+);
+export type SelfCheck = z.infer<typeof SelfCheckSchema>;
+
 /** Fields every item carries (§2.3). */
 const commonShape = {
   id: z.string(),
@@ -82,6 +110,7 @@ const commonShape = {
   explanation: text,
   learnMore: text,
   claims: z.array(ClaimSchema).min(1),
+  selfCheck: SelfCheckSchema.optional(),
   writerNotes: z.string().optional(),
   lintAllow: z.array(LintAllowSchema).optional(),
   verification: VerificationSchema.optional(),
@@ -142,6 +171,7 @@ interface ItemLike {
   status: string;
   volatility: string;
   reviewBy: string | null;
+  selfCheck?: SelfCheck | undefined;
   claims: Claim[];
   verification?: Verification | undefined;
   predicted?: unknown;
@@ -170,8 +200,26 @@ function refineCommon(item: ItemLike, ctx: Ctx, idPattern: RegExp): void {
       `id ${JSON.stringify(item.id)} does not match ${idPattern.source}`,
     );
   }
-  if (item.volatility === "slow" && item.reviewBy === null) {
+  // The editor sets a slow item's reviewBy at acceptance (§2.3), so a
+  // draft or a checking item may still hold null.
+  if (
+    item.volatility === "slow" &&
+    item.reviewBy === null &&
+    item.status !== "draft" &&
+    item.status !== "checking"
+  ) {
     issue(ctx, ["reviewBy"], "a slow item needs a reviewBy date (§3.4)");
+  }
+  if (item.selfCheck !== undefined && item.status !== "draft") {
+    for (const code of SELF_CHECK_CODES) {
+      if (item.selfCheck[code] !== true) {
+        issue(
+          ctx,
+          ["selfCheck", code],
+          `every self-check code is true before an item leaves draft (§9.3)`,
+        );
+      }
+    }
   }
   if (item.volatility !== "slow" && item.reviewBy !== null) {
     issue(
@@ -303,10 +351,26 @@ export const ComparisonItemSchema = z
     unit: text,
     values: z.strictObject({ a: z.number(), b: z.number() }),
     valueDisplay: z.strictObject({ a: text, b: text }),
+    /**
+     * + The ISO dates of both events when two year values are under 10
+     * apart (§2.6): the separation guard then asks 365 days between them.
+     */
+    exactDates: z.strictObject({ a: isoDate, b: isoDate }).optional(),
     predicted: PredictedRateSchema.optional(),
   })
   .superRefine((item, ctx) => {
     refineCommon(item, ctx, ID_PATTERNS.practice);
+    if (item.exactDates !== undefined) {
+      for (const side of ["a", "b"] as const) {
+        if (Number(item.exactDates[side].slice(0, 4)) !== item.values[side]) {
+          issue(
+            ctx,
+            ["exactDates", side],
+            "the exact date's year must equal its value (§2.6)",
+          );
+        }
+      }
+    }
     for (const side of ["a", "b"] as const) {
       if (
         !item.claims.some(
