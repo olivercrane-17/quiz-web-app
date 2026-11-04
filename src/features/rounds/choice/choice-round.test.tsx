@@ -8,6 +8,7 @@ import { choicePlugin, type ChoiceContent } from "@/engine/rounds/choice";
 import type { RoundStatus } from "@/engine/run";
 import {
   parseItemId,
+  type CategoryId,
   type ChoiceFormat,
   type RoundIntent,
   type RoundMeta,
@@ -65,6 +66,44 @@ const TRUE_FALSE: ChoiceContent = {
   order: "fixed",
 };
 
+/** fx.p.hist.0104: a title-case name with a leading The. */
+const GUILDS: ChoiceContent = {
+  ...PLANETS,
+  category: "hist",
+  stem: "Which fixture guild built the glass bridge of Cindral?",
+  options: [
+    "The Glaziers' Guild",
+    "The Masons' Guild",
+    "The Smiths' Guild",
+    "The Weavers' Guild",
+  ],
+  correct: 0,
+  order: "fixed",
+  learnMore: "Glass bridge of Cindral (fixture)",
+};
+
+/** fx.p.geo.0109: one era beside bare years, in ascending order. */
+const OLD_WALL: ChoiceContent = {
+  ...PLANETS,
+  category: "geo",
+  stem: "When was the fixture Old Wall of Gorlund begun?",
+  options: ["120 BC", "300 BC", "45", "210"],
+  correct: 0,
+  order: "ascending",
+  learnMore: "Old Wall of Gorlund (fixture)",
+};
+
+/** fx.p.geo.0103: "How many bridges cross the Corran?" (2, 4, 9, 15). */
+const BRIDGES: ChoiceContent = {
+  ...PLANETS,
+  category: "geo",
+  stem: "How many bridges cross the fixture river Corran?",
+  options: ["4", "2", "9", "15"],
+  correct: 0,
+  order: "ascending",
+  learnMore: "Corran bridges (fixture)",
+};
+
 const SETTINGS: PlaySettings = {
   shortcuts: true,
   reducedMotion: false,
@@ -81,7 +120,7 @@ function meta(content: ChoiceContent, index = 3): RoundMeta {
     index,
     type: content.format,
     difficulty: "medium",
-    category: "sci",
+    category: content.category,
     answerType: null,
     ordinal: index + 1,
     ofType: 10,
@@ -215,7 +254,7 @@ describe("ChoiceRound", () => {
     const names = within(list)
       .getAllByRole("button")
       .map((button) => button.getAttribute("aria-keyshortcuts"));
-    expect(names).toEqual(["1", "2", "3", "4"]);
+    expect(names).toEqual(["A 1", "B 2", "C 3", "D 4"]);
     for (const [i, name] of [
       "A. Venus",
       "B. Uranus",
@@ -226,7 +265,7 @@ describe("ChoiceRound", () => {
     }
     expect(screen.getByRole("button", { name: "B. Uranus" })).toHaveAttribute(
       "aria-keyshortcuts",
-      "2",
+      "B 2",
     );
   });
 
@@ -307,6 +346,159 @@ describe("ChoiceRound", () => {
     await user.keyboard("3");
     await user.keyboard("{Control>}1{/Control}");
     expect(onIntent).not.toHaveBeenCalled();
+  });
+
+  it("R1-13 picks by the letters A to D, matching the badges, on keydown and keyup", async () => {
+    const { user, onIntent, option } = setup();
+    await user.keyboard("{c>}");
+    expect(option(/Neptune/)).toHaveAttribute("data-pressed");
+    expect(onIntent).not.toHaveBeenCalled();
+    await user.keyboard("{/c}");
+    expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+      family: "choice",
+      kind: "answer",
+      option: 2,
+    });
+  });
+
+  it("R1-13 with word options, 3 and c both pick option C, and so does a capital C", async () => {
+    for (const key of ["3", "c", "C"]) {
+      const { user, onIntent, unmount } = setup();
+      await user.keyboard(key);
+      expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+        family: "choice",
+        kind: "answer",
+        option: 2,
+      });
+      unmount();
+    }
+  });
+
+  it("R1-13 with number options, 4 picks nothing and b picks option B", async () => {
+    const { user, onIntent, option } = setup({ content: BRIDGES });
+    // Ascending: 2, 4, 9, 15. Four was the answer; D was 15.
+    expect(option(/^D\. 15/)).toHaveAttribute("data-state", "idle");
+    for (const digit of ["1", "2", "3", "4"]) await user.keyboard(digit);
+    expect(onIntent).not.toHaveBeenCalled();
+    for (const button of within(screen.getByRole("list")).getAllByRole(
+      "button",
+    )) {
+      expect(button).toHaveAttribute("data-state", "idle");
+    }
+    await user.keyboard("b");
+    expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+      family: "choice",
+      kind: "answer",
+      option: 1,
+    });
+  });
+
+  it("R1-13 names one key per option on a number question: the letter on its badge", () => {
+    setup({ content: BRIDGES });
+    const keys = within(screen.getByRole("list"))
+      .getAllByRole("button")
+      .map((button) => button.getAttribute("aria-keyshortcuts"));
+    expect(keys).toEqual(["A", "B", "C", "D"]);
+  });
+
+  it("R1-12 focuses the stem without the browser's scroll when a question opens", () => {
+    const focus = vi.spyOn(HTMLElement.prototype, "focus");
+    setup();
+    const stem = screen.getByRole("heading", { level: 1 });
+    expect(stem).toHaveFocus();
+    expect(
+      focus.mock.contexts.some(
+        (element, i) =>
+          element === stem &&
+          (focus.mock.calls[i]?.[0] as FocusOptions | undefined)
+            ?.preventScroll === true,
+      ),
+    ).toBe(true);
+  });
+
+  it("R1-12 keeps the question's top below the sticky header when a question opens scrolled under it", () => {
+    const scrollBy = vi.fn();
+    vi.stubGlobal("scrollBy", scrollBy);
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function (this: HTMLElement) {
+        // The page is scrolled 120 px: the question starts under the header.
+        if (this.tagName === "HEADER") {
+          return { top: 0, bottom: 56, height: 56 } as DOMRect;
+        }
+        if (this.hasAttribute("data-question")) {
+          return { top: -48, bottom: 552, height: 600 } as DOMRect;
+        }
+        return { top: 0, bottom: 0, height: 0 } as DOMRect;
+      },
+    );
+    const header = document.createElement("header");
+    header.style.position = "sticky";
+    document.body.prepend(header);
+    try {
+      setup();
+      // Up by 120 px less nothing: 56 (header) + 16 (gap) - (-48).
+      expect(scrollBy).toHaveBeenCalledExactlyOnceWith({
+        top: -120,
+        behavior: "instant",
+      });
+      expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
+    } finally {
+      header.remove();
+    }
+  });
+
+  it("R1-14 leaves focus where the player moved it before the sheet opened, and still says the verdict", async () => {
+    const { user } = setup();
+    // By key, from the stem: B is Uranus, the answer.
+    await user.keyboard("b");
+    wait(100);
+    const outside = screen.getByRole("button", { name: "Outside the round" });
+    act(() => {
+      outside.focus();
+    });
+    wait(300);
+    expect(spoken()).toBe("Correct. Uranus.");
+    wait(SHEET_AFTER_MS);
+    expect(
+      screen.getByRole("region", { name: "Right. It's Uranus." }),
+    ).toBeVisible();
+    expect(outside).toHaveFocus();
+  });
+
+  it("R1-14 moves focus to the sheet while it is still on the answered option", async () => {
+    const { user, option } = setup();
+    await user.click(option(/Venus/));
+    expect(option(/Venus/)).toHaveFocus();
+    wait(SHEET_AFTER_MS);
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "Not quite. It's Uranus.",
+      }),
+    ).toHaveFocus();
+  });
+
+  it("R1-14 moves focus to the sheet when focus is on the page itself, or on something hidden", async () => {
+    const first = setup();
+    await first.user.keyboard("a");
+    act(() => {
+      (document.activeElement as HTMLElement | null)?.blur();
+    });
+    expect(document.activeElement).toBe(document.body);
+    wait(SHEET_AFTER_MS);
+    expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
+    first.unmount();
+
+    // A route Next keeps mounted behind this one is display: none.
+    const second = setup();
+    const outside = screen.getByRole("button", { name: "Outside the round" });
+    await second.user.keyboard("a");
+    act(() => {
+      outside.focus();
+      outside.style.display = "none";
+    });
+    wait(SHEET_AFTER_MS);
+    expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
   });
 
   it("locks the pick at once and reveals at 400 ms, then opens the sheet at 1.2 s", async () => {
@@ -484,46 +676,48 @@ describe("ChoiceRound", () => {
     expect(onContinue).toHaveBeenCalledOnce();
   });
 
-  it("focuses the sheet's title without the browser's scroll and brings all of Continue on screen", async () => {
-    const scrolls: unknown[] = [];
-    // jsdom has no scrollIntoView of its own.
-    Element.prototype.scrollIntoView = function (
-      this: Element,
-      arg?: boolean | ScrollIntoViewOptions,
-    ) {
-      scrolls.push([this.textContent, arg]);
-    };
+  it("focuses the sheet's title without the browser's scroll", async () => {
     const focus = vi.spyOn(HTMLElement.prototype, "focus");
-    try {
-      const { user, option } = setup();
-      await user.click(option(/Uranus/));
-      wait(SHEET_AFTER_MS);
-      const title = screen.getByRole("heading", { level: 2 });
-      expect(title).toHaveFocus();
-      expect(
-        focus.mock.contexts.some(
-          (element, i) =>
-            element === title &&
-            (focus.mock.calls[i]?.[0] as FocusOptions | undefined)
-              ?.preventScroll === true,
-        ),
-      ).toBe(true);
-      expect(scrolls).toEqual([["Next question", { block: "nearest" }]]);
-    } finally {
-      delete (Element.prototype as Partial<Element>).scrollIntoView;
-    }
-  });
-
-  it("keeps the question's height as the sheet joins it, so the options above it stay put", async () => {
-    const heights = vi
-      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
-      .mockReturnValue({ height: 612 } as DOMRect);
-    const { user, option, container } = setup();
+    const { user, option } = setup();
     await user.click(option(/Uranus/));
     wait(SHEET_AFTER_MS);
+    const title = screen.getByRole("heading", { level: 2 });
+    expect(title).toHaveFocus();
+    expect(
+      focus.mock.contexts.some(
+        (element, i) =>
+          element === title &&
+          (focus.mock.calls[i]?.[0] as FocusOptions | undefined)
+            ?.preventScroll === true,
+      ),
+    ).toBe(true);
+  });
+
+  it("R1-21 collapses the thumb-zone spacer once the answer locks, so the sheet takes that room at the bottom", async () => {
+    const { user, option, container } = setup({ judge: false });
     const question = container.querySelector<HTMLElement>("[data-question]");
-    expect(question?.style.minHeight).toBe("612px");
-    heights.mockRestore();
+    const list = screen.getByRole("list");
+    // Open: the question fills the column and the options anchor at its foot.
+    expect(question).not.toHaveAttribute("data-settled");
+    expect(question?.className).toContain("flex-1");
+    expect(list.className).toContain("mt-auto");
+    await user.click(option(/Venus/));
+    // Locked in: the options close up under the stem at once.
+    expect(option(/Venus/)).toHaveAttribute("data-state", "locked");
+    expect(question).toHaveAttribute("data-settled");
+    expect(question?.className).not.toContain("flex-1");
+    expect(list.className).not.toContain("mt-auto");
+  });
+
+  it("R1-21 puts the sheet at the foot of the round, where the answers were", async () => {
+    const { user, option } = setup();
+    await user.click(option(/Uranus/));
+    wait(SHEET_AFTER_MS);
+    const sheet = screen.getByRole("region", { name: "Right. It's Uranus." });
+    expect(sheet.className).toContain("mt-auto");
+    expect(
+      sheet.closest("[data-round]")?.querySelector("[data-question]"),
+    ).toHaveAttribute("data-settled");
   });
 
   it("continues from the sheet with Continue or with Enter", async () => {
@@ -629,16 +823,23 @@ describe("ChoiceRound", () => {
   });
 
   it("titles the sheet mid-sentence: a leading article in lower case, a title or a name as written", async () => {
-    const titled = (label: string, format: ChoiceFormat = "mc") =>
-      CHOICE_COPY.title(label, format);
+    const titled = (
+      label: string,
+      format: ChoiceFormat = "mc",
+      category: CategoryId | null = null,
+    ) => CHOICE_COPY.title(label, format, category);
     expect(titled("The bell comb")).toBe("It's the bell comb.");
     expect(titled("A tide staff")).toBe("It's a tide staff.");
     expect(titled("An oxbow lake")).toBe("It's an oxbow lake.");
     expect(titled("The Gorlund bell")).toBe("It's the Gorlund bell.");
     expect(titled("The 1920s")).toBe("It's the 1920s.");
-    expect(titled("The Great Gatsby")).toBe("It's The Great Gatsby.");
-    expect(titled("A Tale of Two Cities")).toBe("It's A Tale of Two Cities.");
-    expect(titled("The Hague")).toBe("It's The Hague.");
+    expect(titled("The Great Gatsby", "mc", "book")).toBe(
+      "It's The Great Gatsby.",
+    );
+    expect(titled("A Tale of Two Cities", "mc", "book")).toBe(
+      "It's A Tale of Two Cities.",
+    );
+    expect(titled("The Hague", "mc", "geo")).toBe("It's The Hague.");
     expect(titled("Uranus")).toBe("It's Uranus.");
     expect(titled("Theodore Roosevelt")).toBe("It's Theodore Roosevelt.");
     expect(titled("True", "tf")).toBe("It's true.");
@@ -661,6 +862,48 @@ describe("ChoiceRound", () => {
     ).toBeVisible();
   });
 
+  it("R1-25 lowers a leading The on a name in title case: It's the Glaziers' Guild", async () => {
+    expect(CHOICE_COPY.title("The Glaziers' Guild", "mc", "hist")).toBe(
+      "It's the Glaziers' Guild.",
+    );
+    expect(CHOICE_COPY.title("The Ashen Hills", "mc", "geo")).toBe(
+      "It's the Ashen Hills.",
+    );
+    const { user } = setup({ content: GUILDS });
+    await user.click(screen.getByRole("button", { name: /Glaziers/ }));
+    wait(SHEET_AFTER_MS);
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "Right. It's the Glaziers' Guild.",
+      }),
+    ).toHaveFocus();
+  });
+
+  it("R1-25 marks the era on every option once one is BC, in the options, the title and the status", async () => {
+    const { user } = setup({ content: OLD_WALL });
+    const buttons = within(screen.getByRole("list")).getAllByRole("button");
+    // Ascending, as the item asks: 300 BC, 120 BC, then the AD years.
+    for (const [i, name] of [
+      "A. 300 BC",
+      "B. 120 BC",
+      "C. AD 45",
+      "D. AD 210",
+    ].entries()) {
+      expect(buttons[i]).toHaveAccessibleName(name);
+    }
+    await user.click(screen.getByRole("button", { name: /AD 45/ }));
+    wait(400);
+    expect(spoken()).toBe("Not quite. You chose AD 45. The answer is 120 BC.");
+    wait(SHEET_AFTER_MS);
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "Not quite. It's 120 BC.",
+      }),
+    ).toBeVisible();
+  });
+
   describe("on a short screen, under 740 px tall", () => {
     beforeEach(() => {
       vi.stubGlobal(
@@ -675,34 +918,26 @@ describe("ChoiceRound", () => {
       );
     });
 
-    it("opens the sheet compact: the explanation's first line, Read more, and Continue", async () => {
+    it("R1-31 opens the sheet compact but whole: the explanation, Learn more and Continue, with no Read more", async () => {
       const { user, option } = setup();
       await user.click(option(/Uranus/));
       wait(SHEET_AFTER_MS);
       const sheet = screen.getByRole("region", { name: "Right. It's Uranus." });
       const explanation = within(sheet).getByText(PLANETS.explanation);
-      expect(explanation).toHaveAttribute("data-clamped");
-      expect(explanation.className).toContain("line-clamp-1");
-      // The ghost actions wait for Read more; Continue doesn't.
-      expect(
-        within(sheet).queryByRole("link", { name: /Learn more/ }),
-      ).toBeNull();
-      expect(
-        within(sheet).getByRole("button", { name: "Next question" }),
-      ).toBeVisible();
-
-      const more = within(sheet).getByRole("button", { name: "Read more" });
-      expect(more).toHaveAttribute("aria-expanded", "false");
-      expect(more).toHaveAttribute("aria-controls", explanation.id);
-      await user.click(more);
-      expect(explanation).not.toHaveAttribute("data-clamped");
-      expect(explanation).toHaveFocus();
+      expect(explanation.className).not.toContain("line-clamp");
       expect(
         within(sheet).queryByRole("button", { name: "Read more" }),
       ).toBeNull();
       expect(
         within(sheet).getByRole("link", { name: /^Learn more about Uranus/ }),
       ).toBeVisible();
+      expect(
+        within(sheet).getByRole("button", { name: "Next question" }),
+      ).toBeVisible();
+      // Compact still: the tighter spacing of DESIGN §6.10.
+      expect(sheet.querySelector("[data-sheet-body]")?.className).toContain(
+        "gap-2",
+      );
     });
   });
 

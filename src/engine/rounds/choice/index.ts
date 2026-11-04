@@ -32,6 +32,7 @@ import type {
 import { choiceDisplayOrder } from "./order.ts";
 
 export { choiceDisplayOrder, isPermutation } from "./order.ts";
+export { displayLabels, hasNumberOption, midSentence } from "./labels.ts";
 
 /** What the judge half reads: a practice item or sealed choice content. */
 export type ChoiceContent = Omit<ChoiceItem, "predicted">;

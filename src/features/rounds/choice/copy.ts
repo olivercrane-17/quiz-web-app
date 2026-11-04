@@ -4,7 +4,8 @@
  * The round component is a client component, so these ship with it; they
  * are kept apart from the markup so the design team edits them here.
  */
-import type { ChoiceFormat, DifficultyBand } from "@/engine/types";
+import { midSentence } from "@/engine/rounds/choice/labels";
+import type { CategoryId, ChoiceFormat, DifficultyBand } from "@/engine/types";
 
 const DIFFICULTY: Readonly<Record<DifficultyBand, string>> = {
   easy: "Easy",
@@ -19,46 +20,6 @@ export const DIFFICULTY_PIPS: Readonly<Record<DifficultyBand, number>> = {
   hard: 3,
 };
 
-/** Short words that stay lower case inside a title ("A Tale of Two Cities"). */
-const MINOR_WORDS = new Set([
-  "a",
-  "an",
-  "and",
-  "as",
-  "at",
-  "by",
-  "for",
-  "from",
-  "in",
-  "into",
-  "of",
-  "on",
-  "or",
-  "the",
-  "to",
-  "with",
-]);
-
-/**
- * An option label as it reads mid-sentence. Labels are sentence case, so a
- * leading article is capitalized only because it comes first: "The bell
- * comb" reads "the bell comb" and "A tide staff" "a tide staff". A label in
- * title case is a name or a title and keeps its article as it is: "The
- * Great Gatsby", "The Hague", "A Tale of Two Cities".
- */
-export function midSentence(label: string): string {
-  const match = /^(The|A|An) (.+)$/.exec(label);
-  if (match === null) return label;
-  const [, article = "", rest = ""] = match;
-  const words = rest.split(/\s+/);
-  const titled =
-    words.some((word) => /^\p{Lu}/u.test(word)) &&
-    words.every(
-      (word) => MINOR_WORDS.has(word.toLowerCase()) || !/^\p{Ll}/u.test(word),
-    );
-  return titled ? label : `${article.toLowerCase()} ${rest}`;
-}
-
 export const CHOICE_COPY = {
   /** "Question 4 of 10"; the difficulty word follows it. */
   kicker: (ordinal: number, ofType: number) =>
@@ -68,16 +29,19 @@ export const CHOICE_COPY = {
   right: "Right",
   wrong: "Not quite",
   /**
-   * The sheet's title: "It's Uranus.", "It's the bell comb." (a leading
-   * article in lower case, see `midSentence`), and for true/false "It's
-   * true."
+   * The sheet's title, with the answer as it reads mid-sentence (R1-25):
+   * "It's Uranus.", "It's the bell comb.", "It's the Glaziers' Guild.",
+   * "It's The Great Gatsby." (a title keeps its article), and for
+   * true/false "It's true."
    */
-  title: (answer: string, format: ChoiceFormat) =>
+  title: (
+    answer: string,
+    format: ChoiceFormat,
+    category: CategoryId | null = null,
+  ) =>
     format === "tf"
       ? `It's ${answer.toLowerCase()}.`
-      : `It's ${midSentence(answer)}.`,
-  /** The compact sheet's way to the rest of the explanation (DESIGN §6.10). */
-  readMore: "Read more",
+      : `It's ${midSentence(answer, category)}.`,
   /** The crowd line beside the verdict, once the numbers exist. */
   crowd: (percent: number) => `${percent}% got this one`,
   /** The polite status message at the reveal (PRD §3.0.3). */
