@@ -409,14 +409,19 @@ describe("playing", () => {
     });
     await act(h, guess(ODILE));
     expect(h.state().view).toMatchObject({ phase: "revealed", score: 3 });
+    // D10: a wrong guess came first, so not "Knew it." (R1-22).
     expect(h.announced.at(-1)?.message).toBe(
-      "Knew it. Echo answer. Solved on clue 2, 3 points.",
+      "Got there. Echo answer. Solved on clue 2, 3 points.",
     );
     expect(h.state().focus).toMatchObject({ target: "reveal_heading" });
 
     await next(h);
     expect(h.state().view).toMatchObject({ phase: "active", index: 1 });
     await act(h, guess(VALDORIA));
+    // No miss before it: the stamp is earned.
+    expect(h.announced.at(-1)?.message).toBe(
+      "Knew it. Echo answer. Solved on clue 1, 4 points.",
+    );
     await next(h);
     await act(h, guess(BISMUTH));
     await next(h);

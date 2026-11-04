@@ -149,10 +149,15 @@ export const ANNOUNCE_COPY = {
     `Not ${guess}. Clue ${clue}, now worth ${worth}: ${text}`,
   nextClue: (clue: number, worth: number, text: string) =>
     `Clue ${clue}, now worth ${worth}: ${text}`,
-  solved: (answer: string, clue: number, points: number) =>
+  /**
+   * A solve after its stamp, decision D10's "Knew it.", "Got there." or
+   * "Got it.", which the rounds' `solvedStamp` picks: the pun lives there
+   * alone (DESIGN §1.1).
+   */
+  solved: (stamp: string, answer: string, clue: number, points: number) =>
     clue === 4
-      ? `Got it. ${answer}, on the last clue. 1 point.`
-      : `Knew it. ${answer}, solved on clue ${clue}. ${points} points.`,
+      ? `${stamp} ${answer}, on the last clue. 1 point.`
+      : `${stamp} ${answer}, solved on clue ${clue}. ${points} points.`,
   missed: (answer: string) =>
     `This one got away. The answer was ${answer}. 0 points.`,
   encore: {

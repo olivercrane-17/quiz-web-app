@@ -40,7 +40,10 @@
  *   controller that runs Mysteries and Encores speaks alike, with
  *   `labels.ts` for anything a round leaves unworded; a withdrawn round's
  *   own words instead of a verdict; and none for choice verdicts, which
- *   ChoiceRound speaks itself in step with its reveal.
+ *   ChoiceRound speaks itself in step with its reveal. A solve's stamp
+ *   follows decision D10, so the controller says whether the round showed
+ *   a miss first (`mysteryMissed` over its last clue screen): a solve
+ *   after a miss is "Got there.", never "Knew it.".
  */
 import {
   backendError,
@@ -60,6 +63,7 @@ import {
   retryNotice,
   selectRunView,
   type RetryNotice,
+  type RoundSlot,
   type RunCommand,
   type RunEvent,
   type RunState,
@@ -84,6 +88,7 @@ import type {
 import {
   encoreAnnouncementText,
   mysteryAnnouncementText,
+  mysteryMissed,
 } from "@/features/rounds";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
@@ -251,17 +256,33 @@ const SPOKEN_BY_ROUND: ReadonlySet<string> = new Set([
 ]);
 
 /**
+ * Whether the round showed a miss before its verdict (decision D10): a
+ * wrong guess or a wrongly picked option on its last clue screen. A
+ * resolving verdict leaves the slot's `open` at that screen.
+ */
+function historyOf(slot: RoundSlot | undefined): { missed: boolean } {
+  const open = slot?.open ?? null;
+  return { missed: open?.family === "mystery" && mysteryMissed(open) };
+}
+
+/**
  * A verdict in the words of the round that gave it (MYS-1's copy, the words
  * every controller that runs Mysteries and Encores uses); `labels.ts` words
- * anything the rounds leave to the screen.
+ * anything the rounds leave to the screen. `history` picks a solve's stamp
+ * (D10).
  */
-function verdictText(announcement: Announcement): string {
+function verdictText(
+  announcement: Announcement,
+  history: { missed: boolean },
+): string {
   return (
-    mysteryAnnouncementText(announcement, {
-      optionsFromClue: TUNABLES.daily.optionsFromClue,
-    }) ??
+    mysteryAnnouncementText(
+      announcement,
+      { optionsFromClue: TUNABLES.daily.optionsFromClue },
+      history,
+    ) ??
     encoreAnnouncementText(announcement) ??
-    announcementText(announcement)
+    announcementText(announcement, history)
   );
 }
 
@@ -577,9 +598,10 @@ export function createDailyController(
         // Sealed runs never persist locally (§4.5 invariant 8).
         return;
       case "announce": {
+        const slot = run?.slots[run.index];
         // A round withdrawn mid-round resolves with the withdrawn reveal,
         // which the plugin can't word; the round's own line says why.
-        const reveal = run?.slots[run.index]?.reveal ?? null;
+        const reveal = slot?.reveal ?? null;
         if (reveal?.family === "withdrawn") {
           deps.announce(
             DAILY_SCREEN_COPY.withdrawn[reveal.round],
@@ -588,7 +610,10 @@ export function createDailyController(
           return;
         }
         if (SPOKEN_BY_ROUND.has(command.announcement.kind)) return;
-        deps.announce(verdictText(command.announcement), command.politeness);
+        deps.announce(
+          verdictText(command.announcement, historyOf(slot)),
+          command.politeness,
+        );
         return;
       }
       case "focus":

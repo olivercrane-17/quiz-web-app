@@ -13,6 +13,7 @@ import {
   type RoundMeta,
   type RoundOutcome,
 } from "@/engine/types";
+import { solvedStamp } from "@/features/rounds";
 import type { ProgressSegment } from "@/ui/progress-segments";
 
 import { ANNOUNCE_COPY, DAILY_SCREEN_COPY } from "../client-copy";
@@ -271,8 +272,15 @@ const worthOn = (clue: number) => Math.max(1, 5 - clue);
 const capitalize = (text: string) =>
   text.length === 0 ? text : `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 
-/** The polite status message for a verdict (PRD §3.0.3, §3.1.4). */
-export function announcementText(announcement: Announcement): string {
+/**
+ * The polite status message for a verdict (PRD §3.0.3, §3.1.4). `history`
+ * says whether the round showed a miss before a solve, which picks D10's
+ * stamp; without it a solve on clue 1 or 2 reads "Knew it.".
+ */
+export function announcementText(
+  announcement: Announcement,
+  history?: { missed: boolean },
+): string {
   const words = ANNOUNCE_COPY;
   switch (announcement.kind) {
     case "correct":
@@ -294,6 +302,12 @@ export function announcementText(announcement: Announcement): string {
       );
     case "mystery_solved":
       return words.solved(
+        solvedStamp({
+          clue: announcement.clue,
+          // Clue 4 shows the four options alone, so its solve is a pick.
+          picked: announcement.clue === 4,
+          missed: history?.missed ?? false,
+        }),
         announcement.answer,
         announcement.clue,
         announcement.points,

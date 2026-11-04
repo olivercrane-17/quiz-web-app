@@ -540,6 +540,26 @@ describe("the stopwatch", () => {
 });
 
 describe("announcements", () => {
+  it("R1-22 D10 stamp a solve: Knew it. on clue 1 or 2 with no miss, Got there. on clue 3 or after a miss, Got it. on clue 4", () => {
+    const solved = (clue: 1 | 2 | 3 | 4, missed?: boolean) =>
+      announcementText(
+        { kind: "mystery_solved", answer: "Chile", clue, points: 5 - clue },
+        missed === undefined ? undefined : { missed },
+      );
+    expect(solved(1)).toBe("Knew it. Chile, solved on clue 1. 4 points.");
+    expect(solved(2, false)).toBe(
+      "Knew it. Chile, solved on clue 2. 3 points.",
+    );
+    // A wrong guess first: "Knew it." would read as unearned (R1-22).
+    expect(solved(2, true)).toBe(
+      "Got there. Chile, solved on clue 2. 3 points.",
+    );
+    expect(solved(3, false)).toBe(
+      "Got there. Chile, solved on clue 3. 2 points.",
+    );
+    expect(solved(4, true)).toBe("Got it. Chile, on the last clue. 1 point.");
+  });
+
   it("say the verdict in words (PRD §3.0.3, §3.1.4)", () => {
     expect(
       announcementText({
@@ -559,7 +579,7 @@ describe("announcements", () => {
         clue: 3,
         points: 2,
       }),
-    ).toBe("Knew it. Chile, solved on clue 3. 2 points.");
+    ).toBe("Got there. Chile, solved on clue 3. 2 points.");
     expect(
       announcementText({
         kind: "mystery_solved",

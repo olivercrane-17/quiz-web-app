@@ -7,7 +7,10 @@
  *
  * The rounds' words for the plugins' announcements are plain modules, so
  * they come from here: every controller that runs Mysteries and Encores
- * (the Daily, the archive, challenges) speaks a verdict the same way.
+ * (the Daily, the archive, challenges) speaks a verdict the same way. So do
+ * D10's stamps: `mysteryMissed` tells a controller whether a round showed a
+ * miss before its solve, which `mysteryAnnouncementText` and `solvedStamp`
+ * take, so a solve after a miss reads "Got there.", never "Knew it.".
  */
 export {
   playSettingsFrom,
@@ -18,4 +21,8 @@ export {
   type Suggestion,
 } from "./contracts";
 export { encoreAnnouncementText } from "./encore/copy";
-export { mysteryAnnouncementText } from "./mystery/copy";
+export {
+  mysteryAnnouncementText,
+  mysteryMissed,
+  solvedStamp,
+} from "./mystery/copy";
