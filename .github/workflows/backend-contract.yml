@@ -1,0 +1,66 @@
+name: Backend contract
+
+# The contract suites against the real Supabase project (ARCHITECTURE §7.5,
+# §11.7): `*.real.test.ts`, in Node, with test identities that play the e2e
+# track. GitHub runners can reach Supabase; the agents' sandbox cannot. They
+# include SQL-1's API surface checks (the OpenAPI root and GraphQL reach no
+# RPC, no private table or function is reachable) and, from SQL-2, the
+# client-ip check. No secret is needed: the built-in public URL and
+# publishable key are enough, which is also why fork pull requests may run it.
+on:
+  push:
+    paths:
+      - "supabase/**"
+      - "src/backend/**"
+      - ".github/workflows/backend-contract.yml"
+  # For pull requests from forks only: a branch of this repository already
+  # runs on push, and a second run of the same commit would queue in the
+  # e2e-real group and could push a waiting run (the nightly one, say) out.
+  pull_request:
+    paths:
+      - "supabase/**"
+      - "src/backend/**"
+      - ".github/workflows/backend-contract.yml"
+  schedule:
+    # Nightly, clear of the e2e-real job at 05:17 UTC.
+    - cron: "41 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  contract:
+    name: Contract suites against the real project
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    # The real-backend jobs run one at a time to stay clear of the rate
+    # limits (ARCHITECTURE §11.7), and a running job is never cancelled
+    # midway. The group sits on the job, so a skipped pull_request job never
+    # takes the group's one waiting place.
+    concurrency:
+      group: e2e-real
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # vitest.config.mts's contract-real project, with
+      # NEXT_PUBLIC_BACKEND_MODE=supabase and the built-in project values.
+      - name: Contract suites (real project)
+        run: npm run test:contract:real
