@@ -331,7 +331,7 @@ function Results({
         </Link>
         {nextUnlockAt === null ? null : <NextDaily at={nextUnlockAt} />}
         <Link
-          href={PRACTICE_HREF as Route}
+          href={PRACTICE_HREF}
           // Rarely followed: no prefetch.
           prefetch={false}
           // The one long link here: it wraps at 200% text or with text

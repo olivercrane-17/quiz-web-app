@@ -28,7 +28,6 @@
  * - The round context carries the start's first-Daily flag, for the
  *   rounds' first-Daily hints (PRD §3.1.4, R1-04).
  */
-import type { Route } from "next";
 import Link from "next/link";
 import { useEffect, useMemo, useRef } from "react";
 
@@ -285,7 +284,7 @@ export function screenTitle(snapshot: DailySnapshot): string {
 function PracticeLink() {
   return (
     <Link
-      href={PRACTICE_HREF as Route}
+      href={PRACTICE_HREF}
       // Rarely followed: no prefetch.
       prefetch={false}
       className={buttonClasses({ variant: "text" })}

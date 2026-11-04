@@ -123,7 +123,7 @@ describe("a start that can't go through", () => {
     expect(screen.getByText("Practice still works.")).toBeVisible();
     expect(
       screen.getByRole("link", { name: "Play practice instead" }),
-    ).toHaveAttribute("href", "/practice/run");
+    ).toHaveAttribute("href", "/practice");
   });
 
   it("keeps the unreachable copy, with Practice at once", () => {
@@ -135,7 +135,7 @@ describe("a start that can't go through", () => {
     ).toBeVisible();
     expect(
       screen.getByRole("link", { name: "Play practice instead" }),
-    ).toHaveAttribute("href", "/practice/run");
+    ).toHaveAttribute("href", "/practice");
     screen.getByRole("button", { name: "Try again" }).click();
     expect(retry).toHaveBeenCalledTimes(1);
   });

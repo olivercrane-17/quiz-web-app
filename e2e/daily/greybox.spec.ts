@@ -121,7 +121,7 @@ test.describe("the Daily screen's start states", () => {
     ).toBeVisible();
     await expect(
       problem.getByRole("link", { name: "Play practice instead" }),
-    ).toHaveAttribute("href", "/practice/run");
+    ).toHaveAttribute("href", "/practice");
     // No Daily content renders behind it.
     await expect(page.locator("[data-round-area]")).toHaveCount(0);
     await expect(

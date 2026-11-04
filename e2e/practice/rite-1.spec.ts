@@ -7,6 +7,7 @@ import { devices, type Locator, type Page } from "@playwright/test";
 
 import { MIN_SHEET_BODY_PX } from "../../src/features/rounds/choice/viewport";
 import { expect, test } from "../fixtures";
+import { mockInit } from "../support/mock";
 
 const round = (page: Page) => page.locator('[data-round="choice"]');
 const stem = (page: Page) => round(page).getByRole("heading", { level: 1 });
@@ -640,6 +641,31 @@ test.describe("RITE round 1: practice", () => {
         .getByRole("main")
         .getByRole("link", { name: "Continue practice · 3 of 10" }),
     ).toBeVisible();
+  });
+
+  test.describe("from the Daily's stop screen", () => {
+    test.use({ timezoneId: "Europe/London" });
+
+    test("R1-36 Want more? Try a practice round. opens /practice, which offers the open run instead of resuming it", async ({
+      page,
+    }) => {
+      // Sunday 1 November 2026: Daily #42, already finished today.
+      await page.clock.setFixedTime(new Date("2026-11-01T09:00:00Z"));
+      await mockInit(page, { scenario: "finished_today" });
+      await openRunAtQuestion3(page);
+
+      await page.goto("/daily/42/results");
+      await page
+        .getByRole("link", { name: "Want more? Try a practice round." })
+        .click();
+      await expect(page).toHaveURL("/practice");
+      await expect(
+        page
+          .getByRole("main")
+          .getByRole("link", { name: "Continue practice · 3 of 10" }),
+      ).toBeVisible();
+      await expect(round(page)).toHaveCount(0);
+    });
   });
 
   test("R1-17 results rows carry a short stem and, on a miss, what the player chose; Play again sits above them", async ({

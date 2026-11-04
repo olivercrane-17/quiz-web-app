@@ -193,7 +193,7 @@ export function StartProblemCard({
         ) : null}
         {words.practice ? (
           <Link
-            href={PRACTICE_HREF as Route}
+            href={PRACTICE_HREF}
             // Rarely followed: no prefetch.
             prefetch={false}
             className={buttonClasses({ variant: "text" })}

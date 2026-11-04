@@ -2,6 +2,8 @@
 /**
  * The Daily's links lead only where a route answers (RITE round 1, R1-02):
  * Past 7 days shows once ARC-1's `/archive` route exists, and not before.
+ * Practice is the hub, so an open practice run is offered, never resumed
+ * silently (R1-36).
  */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
@@ -19,8 +21,8 @@ describe("where the Daily links", () => {
     if (ARCHIVE_HREF !== null) expect(ARCHIVE_HREF).toBe("/archive");
   });
 
-  it("sends the Practice fallbacks to a route that exists", () => {
-    expect(PRACTICE_HREF).toBe("/practice/run");
-    expect(existsSync(join(APP, "(play)/practice/run/page.tsx"))).toBe(true);
+  it("R1-36 sends the Practice links to the hub, which exists, never straight into a run", () => {
+    expect(PRACTICE_HREF).toBe("/practice");
+    expect(existsSync(join(APP, "(tabs)/practice/page.tsx"))).toBe(true);
   });
 });
