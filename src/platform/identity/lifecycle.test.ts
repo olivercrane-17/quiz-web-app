@@ -447,16 +447,47 @@ describe("tabs and locks", () => {
     expect(storage.getItem("qz:d:phone-3:identity")).not.toBeNull();
   });
 
-  it("rejects when no identity can be minted (§9.1 step 5)", async () => {
+  it("rejects when no identity can be minted (§9.1 step 5), closing the channel it opened", async () => {
+    const closed: string[] = [];
+    class FakeChannel {
+      constructor(readonly name: string) {}
+      postMessage() {}
+      addEventListener() {}
+      removeEventListener() {}
+      close() {
+        closed.push(this.name);
+      }
+    }
+    vi.stubGlobal("BroadcastChannel", FakeChannel);
     await expect(
-      load({
+      loadIdentity({
         kv: createKv(),
         backup: fakeBackup({ kind: "none" }).backup,
+        locks: null,
+        online: null,
         random: () => {
           throw new Error("crypto.getRandomValues is missing");
         },
       }),
     ).rejects.toThrow();
+    expect(closed).toEqual(["qz"]);
+  });
+
+  it("hears a change another tab made while it was settling", async () => {
+    const storage = createMemoryStorage();
+    const other = mintIdentity(NOW);
+    const backup: BackupTransport = {
+      restore() {
+        // Another tab stores its identity while this one asks the cookie.
+        storage.setItem(IDENTITY_KEY, JSON.stringify(other));
+        return Promise.resolve({ kind: "failed" });
+      },
+      save: () => Promise.resolve(true),
+      remove: () => Promise.resolve(true),
+    };
+    const identity = await load({ kv: createKv({ storage }), backup });
+    expect(identity.current()).toEqual(other);
+    expect(identity.stored).toBe(true);
   });
 });
 

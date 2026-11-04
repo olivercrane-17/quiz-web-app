@@ -200,7 +200,13 @@ export async function loadIdentity(
     return { identity, stored: true, fresh: true, restored: false };
   };
 
-  const settled = await underLock(locks, settle);
+  let settled: Settled;
+  try {
+    settled = await underLock(locks, settle);
+  } catch (error) {
+    if (ownChannel) channel?.close();
+    throw error;
+  }
   const provider = createLocalIdentityProvider({
     kv,
     now,
@@ -213,6 +219,9 @@ export async function loadIdentity(
   const stopTabs = channel?.listen(() => {
     provider.reload();
   });
+  // A tab that changed the identity after the lock was released and before
+  // the listener above existed went unheard: read once more.
+  provider.reload();
   if (settled.restored) onRestored("cookie");
   // §9.1 step 3: a registered identity re-posts a cookie 7 days old or
   // more; a restored one re-posts at once, its cookie's age unknown.
