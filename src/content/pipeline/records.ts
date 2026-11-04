@@ -3,7 +3,7 @@
  * Checkers never edit items; `content:record` merges their records into
  * `verification.checks` (passes A and B) or `verification.tiebreak` (T).
  */
-import type { BatchEntry } from "../schema/batches.ts";
+import type { BatchEntry, Incident } from "../schema/batches.ts";
 import { datasetVersion } from "../schema/datasets.ts";
 import type { RecordInputEntry } from "../schema/inputs.ts";
 import type { AnyItem } from "../schema/items.ts";
@@ -46,10 +46,32 @@ function keyText(item: AnyItem): string | null {
   return item.answer;
 }
 
-/** Checkers a fabricated-source incident barred from this batch (§9.6). */
+/** Incident kinds whose `checkers` may never check the batch again. */
+const BARRING_KINDS: ReadonlySet<Incident["kind"]> = new Set([
+  "fabricated_source",
+  "invalid_check",
+]);
+
+/**
+ * Checkers an incident barred from this batch: everyone who had checked it
+ * when a fabricated source was found (§9.6), and the checker whose records
+ * an invalid_check incident voided.
+ */
 export function barredCheckers(batch: BatchEntry): string[] {
   return batch.incidents.flatMap((incident) =>
-    incident.kind === "fabricated_source" ? (incident.checkers ?? []) : [],
+    BARRING_KINDS.has(incident.kind) ? (incident.checkers ?? []) : [],
+  );
+}
+
+/** The first incident that barred `checker` from this batch, if any. */
+export function barringIncident(
+  batch: BatchEntry,
+  checker: string,
+): Incident | undefined {
+  return batch.incidents.find(
+    (incident) =>
+      BARRING_KINDS.has(incident.kind) &&
+      anyAgentRun(checker, incident.checkers ?? []),
   );
 }
 
@@ -102,9 +124,12 @@ export function checkRecord(
       `checker ${entry.checker} estimated this item; one run holds one role (§0.2)`,
     );
   }
-  if (anyAgentRun(entry.checker, barredCheckers(batch))) {
+  const barred = barringIncident(batch, entry.checker);
+  if (barred) {
     errors.push(
-      `checker ${entry.checker} checked this batch before its fabricated-source incident; fresh checkers re-check every item (§9.6)`,
+      barred.kind === "fabricated_source"
+        ? `checker ${entry.checker} checked this batch before its fabricated-source incident; fresh checkers re-check every item (§9.6)`
+        : `checker ${entry.checker} is barred from this batch by its ${barred.kind} incident of ${barred.date}, which voided their records; a new checker id records this pass`,
     );
   }
 
@@ -132,6 +157,21 @@ export function checkRecord(
     if (missing.length > 0)
       errors.push(
         `no result for claim(s) ${missing.join(", ")}; both passes verify every claim (§9.4)`,
+      );
+  }
+
+  // Knowledge confirms only in the checker's own words (§9.5): a
+  // restatement that repeats the claim's wording shows nothing was checked.
+  const claimWording = new Map(
+    item.claims.map((claim) => [claim.id, wording(claim.text)]),
+  );
+  for (const result of entry.claimResults) {
+    const evidence = result.evidence;
+    if (evidence.kind !== "knowledge") continue;
+    const text = claimWording.get(result.claimId);
+    if (text && wording(evidence.restatement) === text)
+      errors.push(
+        `claim ${result.claimId}: the restatement repeats the claim's wording; restate the fact in your own words from your own check (§9.5)`,
       );
   }
 
@@ -243,6 +283,50 @@ export function checkRecord(
       );
   }
   return { itemId: record.id, errors, warnings };
+}
+
+/** Text compared for wording only: case, punctuation and spacing ignored. */
+function wording(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+}
+
+/** The least time a check of one item takes (§9.4), in seconds. */
+export const MIN_SECONDS_PER_ITEM = { mystery: 30, other: 8 } as const;
+
+/**
+ * File-level sanity (§9.4): a file of real checks spans real time. Checkers
+ * set startedAt and finishedAt from their own clock, so a file whose span is
+ * far shorter than the work it records was not checked item by item.
+ * Files of fewer than five records (tiebreaks, re-checks) are exempt.
+ */
+export function recordFileErrors(
+  bank: Bank,
+  entries: readonly RecordInputEntry[],
+): string[] {
+  if (entries.length < 5) return [];
+  const starts = entries
+    .map((entry) => Date.parse(entry.startedAt))
+    .filter(Number.isFinite);
+  const ends = entries
+    .map((entry) => Date.parse(entry.finishedAt))
+    .filter(Number.isFinite);
+  if (starts.length === 0 || ends.length === 0) return [];
+  const span = (Math.max(...ends) - Math.min(...starts)) / 1000;
+  let need = 0;
+  for (const entry of entries) {
+    const item = bank.itemsById.get(entry.itemId)?.item;
+    need +=
+      item && "kind" in item && item.kind === "mystery"
+        ? MIN_SECONDS_PER_ITEM.mystery
+        : MIN_SECONDS_PER_ITEM.other;
+  }
+  if (span >= need) return [];
+  return [
+    `this file records ${entries.length} checks made in ${Math.round(span / 60)} minute(s), but checking that many items properly takes at least ${Math.ceil(need / 60)} minutes. Record each item from your own cold solve and verification, never from a script or a template (§9.4)`,
+  ];
 }
 
 /** Total searches recorded so far in a batch, plus the cap. */

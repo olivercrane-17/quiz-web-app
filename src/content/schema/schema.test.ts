@@ -725,6 +725,57 @@ describe("answer lists, schedules and the register", () => {
     };
     expect(BatchRegisterSchema.safeParse(listByWriter).success).toBe(false);
   });
+
+  it("counts a batch at close, and lets one an invalid_check incident reopened keep its counts", () => {
+    const register = fxRegister() as { batches: Record<string, unknown>[] };
+    const entry = (patch: Record<string, unknown>) =>
+      BatchRegisterSchema.safeParse({
+        batches: [{ ...register.batches[0], ...patch }],
+      });
+    const incident = {
+      date: "2026-11-04",
+      kind: "invalid_check",
+      note: "Pass B records were templated.",
+      checkers: ["fc-fx-bravo"],
+    };
+    const counts = { accepted: 28, cut: 7 };
+    expect(messages(entry({ status: "closed", ...counts }))).toEqual([]);
+    expect(
+      messages(entry({ status: "checking", ...counts, incidents: [incident] })),
+    ).toEqual([]);
+    expect(
+      messages(entry({ status: "checking", incidents: [incident] })),
+    ).toEqual([]);
+    expect(
+      messages(entry({ status: "closed", ...counts, incidents: [incident] })),
+    ).toEqual([]);
+    for (const patch of [
+      { status: "closed" },
+      { status: "checking", ...counts },
+      { status: "submitted", ...counts, incidents: [incident] },
+      { status: "checking", accepted: 28, incidents: [incident] },
+      {
+        status: "checking",
+        ...counts,
+        incidents: [{ ...incident, kind: "fabricated_source" }],
+      },
+    ])
+      expect(messages(entry(patch)), JSON.stringify(patch)).toEqual([
+        "batches.0.accepted: accepted and cut are counted at close, and null before; a batch an invalid_check incident reopened keeps its last counts until it closes again",
+      ]);
+    // An invalid_check incident names its one checker, a checker's id.
+    for (const checkers of [undefined, [], ["fc-fx-bravo", "fc-fx-alpha"]])
+      expect(
+        messages(entry({ incidents: [{ ...incident, checkers }] })),
+        JSON.stringify(checkers),
+      ).toEqual([
+        "batches.0.incidents.0.checkers: an invalid_check incident names the one checker whose records were voided",
+      ]);
+    expect(
+      entry({ incidents: [{ ...incident, checkers: ["w-fx-writer"] }] })
+        .success,
+    ).toBe(false);
+  });
 });
 
 describe("the committed content files", () => {
@@ -782,9 +833,20 @@ describe("the committed content files", () => {
   });
 
   it("start the register with the production plan", () => {
-    const { batches } = BatchRegisterSchema.parse(
+    const { batches: all } = BatchRegisterSchema.parse(
       readJson("content/batches.json"),
     );
+    // Top-up batches (content:batch -- open --target) join the register later
+    // with a bare plan of target and draft; the production plan is the rest.
+    const isTopUp = (batch: (typeof all)[number]) =>
+      Object.keys(batch.plan).every(
+        (key) => key === "target" || key === "draft",
+      );
+    for (const batch of all.filter(isTopUp)) {
+      expect(batch.status, batch.batchId).not.toBe("planned");
+      expect(batch.writer, batch.batchId).toEqual(expect.any(String));
+    }
+    const batches = all.filter((batch) => !isTopUp(batch));
     const pool = (name: string) =>
       batches.filter((batch) => batch.pool === name);
     expect(pool("practice")).toHaveLength(24);

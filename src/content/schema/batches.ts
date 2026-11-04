@@ -58,17 +58,39 @@ export const BatchPlanSchema = z.strictObject({
 });
 export type BatchPlan = z.infer<typeof BatchPlanSchema>;
 
-export const IncidentSchema = z.strictObject({
-  date: isoDate,
-  kind: z.enum(["fabricated_source", "audit_failure", "other"]),
-  note: text,
-  /**
-   * + fabricated_source: everyone who had checked an item of the batch when
-   * the incident was recorded. Their checks were voided and none of them may
-   * check the batch again: fresh checkers re-check every item (§9.6).
-   */
-  checkers: z.array(agentId("fc")).optional(),
-});
+export const IncidentSchema = z
+  .strictObject({
+    date: isoDate,
+    kind: z.enum([
+      "fabricated_source",
+      "invalid_check",
+      "audit_failure",
+      "other",
+    ]),
+    note: text,
+    /**
+     * + fabricated_source: everyone who had checked an item of the batch when
+     * the incident was recorded. Their checks were voided and none of them
+     * may check the batch again: fresh checkers re-check every item (§9.6).
+     *
+     * + invalid_check: the one checker whose records were voided, on every
+     * item of the batch, active ones included, because they were not real
+     * checks (templated, say). That checker may not check the batch again: a
+     * new checker run redoes the pass and the editor decides again.
+     */
+    checkers: z.array(agentId("fc")).optional(),
+  })
+  .superRefine((incident, ctx) => {
+    if (incident.kind === "invalid_check" && incident.checkers?.length !== 1) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["checkers"],
+        message:
+          "an invalid_check incident names the one checker whose records were voided",
+      });
+    }
+  });
+export type Incident = z.infer<typeof IncidentSchema>;
 
 export const BatchEntrySchema = z
   .strictObject({
@@ -124,11 +146,23 @@ export const BatchEntrySchema = z
       if (!batch.writer.startsWith(role))
         add("writer", `${batch.pool} batches are written by ${role} agents`);
     }
+    // Counted at close, and null before. A closed batch that an invalid_check
+    // incident reopened is checking again but keeps its last counts until the
+    // next close counts it afresh.
+    const counted = batch.accepted !== null && batch.cut !== null;
+    const uncounted = batch.accepted === null && batch.cut === null;
+    const reopened =
+      batch.status === "checking" &&
+      batch.incidents.some((incident) => incident.kind === "invalid_check");
     if (
-      (batch.status === "closed") !==
-      (batch.accepted !== null && batch.cut !== null)
+      batch.status === "closed"
+        ? !counted
+        : !(uncounted || (reopened && counted))
     ) {
-      add("accepted", "accepted and cut are counted at close, and null before");
+      add(
+        "accepted",
+        "accepted and cut are counted at close, and null before; a batch an invalid_check incident reopened keeps its last counts until it closes again",
+      );
     }
   });
 export type BatchEntry = z.infer<typeof BatchEntrySchema>;

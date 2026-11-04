@@ -1,6 +1,6 @@
 {
   "id": "p.book.0232",
-  "status": "checking",
+  "status": "active",
   "category": "book",
   "tags": ["childrens-books", "fairy-tales"],
   "region": "global",
@@ -180,12 +180,132 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp1t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "ac9f99c83b3ead655aa598e5c7f18fbafaaa2f46e79d47d89f1b7e42a1821fda",
+      "startedAt": "2026-11-04T13:01:55Z",
+      "finishedAt": "2026-11-04T13:26:26Z",
+      "coldSolve": {
+        "answerGiven": "Jack",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "Jack and the Beanstalk earliest printed version 1734 Jack Spriggins Tabart 1807 giant's chant King Lear Edgar fie foh fum British man",
+            "results": [
+              {
+                "title": "Jack and the Beanstalk",
+                "url": "https://en.wikipedia.org/wiki/Jack_and_the_Beanstalk"
+              },
+              {
+                "title": "Jack and the Beanstalk",
+                "url": "https://www.britannica.com/topic/Jack-and-the-Beanstalk"
+              },
+              {
+                "title": "Fee-fi-fo-fum",
+                "url": "https://en.wikipedia.org/wiki/Fee-fi-fo-fum"
+              },
+              {
+                "title": "Benjamin Tabart",
+                "url": "https://en.wikipedia.org/wiki/Benjamin_Tabart"
+              },
+              {
+                "title": "Talk:Jack and the Beanstalk",
+                "url": "https://en.wikipedia.org/wiki/Talk:Jack_and_the_Beanstalk"
+              },
+              {
+                "title": "Jack the Giant Killer",
+                "url": "https://en.wikipedia.org/wiki/Jack_the_Giant_Killer"
+              }
+            ],
+            "summaryExcerpt": "The chant and King Lear: Shakespeare's King Lear has Edgar, referring to the legend of Childe Rowland, exclaim \"Fie, foh, and fum, I smell the blood of a British man.\" Wikipedia dates the play to about 1605, while another entry gives c. 1606 and places the line in Act 3, Scene 4. The fairy-tale chant itself is older: the earliest form of the rhyme appears in The Old Wives' Tale, a play by George Peele first printed in 1595.",
+            "tiers": ["B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "Word for word as the claim has it, spoken by Edgar (Act 3, Scene 4)."
+        },
+        {
+          "claimId": "c4",
+          "verdict": "confirmed",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "Jack and the Beanstalk earliest printed version 1734 Jack Spriggins Tabart 1807 giant's chant King Lear Edgar fie foh fum British man",
+            "results": [
+              {
+                "title": "Jack and the Beanstalk",
+                "url": "https://en.wikipedia.org/wiki/Jack_and_the_Beanstalk"
+              },
+              {
+                "title": "Jack and the Beanstalk",
+                "url": "https://www.britannica.com/topic/Jack-and-the-Beanstalk"
+              },
+              {
+                "title": "Fee-fi-fo-fum",
+                "url": "https://en.wikipedia.org/wiki/Fee-fi-fo-fum"
+              },
+              {
+                "title": "Benjamin Tabart",
+                "url": "https://en.wikipedia.org/wiki/Benjamin_Tabart"
+              },
+              {
+                "title": "Talk:Jack and the Beanstalk",
+                "url": "https://en.wikipedia.org/wiki/Talk:Jack_and_the_Beanstalk"
+              },
+              {
+                "title": "Jack the Giant Killer",
+                "url": "https://en.wikipedia.org/wiki/Jack_the_Giant_Killer"
+              }
+            ],
+            "summaryExcerpt": "The earliest printed version appeared in 1734, and the Tabart text of 1807 is the one that became standard. 1734: Britannica says the earliest printed version of the story appeared as part of an anonymously published pamphlet titled Round About Our Coal-Fire; or, Christmas Entertainments in 1734. The chant and King Lear: Shakespeare's King Lear has Edgar, referring to the legend of Childe Rowland, exclaim \"Fie, foh, and fum, I smell the blood of a British man.\" Wikipedia dates the play to about 1605, while another entry gives c. 1606 and places the line in Act 3, Scene 4. The fairy-tale chant itself is older: the earliest form of the rhyme appears in The Old Wives' Tale, a play by George Peele first printed in 1595.",
+            "tiers": ["B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "Settles checker B's doubt: Britannica, named in the summary, calls the 1734 text in Round About Our Coal-Fire the earliest printed version of the story, and Tabart's of 1807 the most influential. King Lear (about 1605 or 1606) is older than either."
+        }
+      ],
+      "issues": [],
+      "searchesUsed": 1,
+      "verdict": "pass"
+    },
     "estimates": [
       {
         "by": "es-pbook02e",
         "at": "2026-11-01T03:29:59Z"
       }
-    ]
+    ],
+    "editor": {
+      "editor": "ed-pbook02d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp1t. A pass, B revise, T pass. B's revise was its doubt on c4's '18th century' for the earliest printed tale (the 1734 chapbook or Tabart's 1807 text). T's Tier B search names Britannica: the earliest printed version appeared in Round About Our Coal-Fire in 1734, so King Lear (about 1605 or 1606) is older either way, and the quotation in c3 matches word for word. B's fix is rejected on that evidence. The explanation never says Lear holds the oldest form of the rhyme, so Peele's 1595 play, which T mentions, does not touch it. The acceptance rule passes.",
+      "decidedAt": "2026-11-04T13:40:17Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-04T13:40:17Z",
+      "nearestId": "p.book.0138",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T13:40:17Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "Which fairy-tale hero climbs a beanstalk to a giant's castle in the clouds?",

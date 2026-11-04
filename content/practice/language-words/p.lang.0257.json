@@ -1,6 +1,6 @@
 {
   "id": "p.lang.0257",
-  "status": "checking",
+  "status": "cut",
   "category": "lang",
   "tags": ["borrowed-words", "japanese", "word-origins"],
   "region": "global",
@@ -153,71 +153,97 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp3t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "a94949ebab42535dd64165e8da977721fe3566af6ca5a192185c00e85c72ce67",
+      "startedAt": "2026-11-04T13:32:05Z",
+      "finishedAt": "2026-11-04T13:55:32Z",
+      "coldSolve": {
+        "answerGiven": "Tsunami",
+        "confidence": "medium",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c2",
+          "verdict": "refuted",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "teenager word origin earliest recorded use hyphenated teen-ager 1920s first known use",
+            "results": [
+              {
+                "title": "Teenager (word)",
+                "url": "https://en.wikipedia.org/wiki/Teenager_(word)"
+              },
+              {
+                "title": "teenager, n. meanings, etymology and more",
+                "url": "https://www.oed.com/dictionary/teenager_n"
+              },
+              {
+                "title": "TEENAGER Definition & Meaning - Merriam-Webster",
+                "url": "https://www.merriam-webster.com/dictionary/teenager"
+              },
+              {
+                "title": "Teenage - Etymology, Origin & Meaning",
+                "url": "https://www.etymonline.com/word/teenage"
+              },
+              {
+                "title": "teenage, n.¹ meanings, etymology and more",
+                "url": "https://www.oed.com/dictionary/teenage_n1"
+              },
+              {
+                "title": "Teen - Etymology, Origin & Meaning",
+                "url": "https://www.etymonline.com/word/teen"
+              },
+              {
+                "title": "teenage, adj. & n.² meanings, etymology and more",
+                "url": "https://www.oed.com/dictionary/teenage_adj"
+              },
+              {
+                "title": "teenage - Wiktionary, the free dictionary",
+                "url": "https://en.wikipedia.org/wiki/wikt:teenage"
+              },
+              {
+                "title": "TEENAGE Definition & Meaning - Merriam-Webster",
+                "url": "https://www.merriam-webster.com/dictionary/teenage"
+              },
+              {
+                "title": "TEENAGER definition and meaning",
+                "url": "https://www.collinsdictionary.com/dictionary/english/teenager"
+              }
+            ],
+            "summaryExcerpt": "The earliest known print use of \"teenager\" is generally dated to 1913, though some sources date it later. [...] The Oxford English Dictionary's earliest evidence is from 1913, in the Every Evening Commercial of Wilmington, Delaware. [...] Merriam-Webster also gives 1913 as the first known use. [...] The Wikipedia article says the Wilmington paper printed it as two words, \"Teen Ager,\" [...] Etymonline puts the noun at 1922 [...] Collins gives [1935–40; teenage + -er 1] as the word origin. [...] The 1913 date is the best-supported answer for the first known use.",
+            "tiers": ["B"],
+            "conflictReported": true,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "The OED and Merriam-Webster both date 'teenager' to 1913, printed as two words ('Teen Ager'); only Etymonline gives 1922. So 'first recorded in the 1920s, in the hyphenated form' is wrong as written, and so are the value 1922, the display 'the 1920s' and the explanation's 'turns up only in the 1920s'."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "Fixable: restate teenager as first recorded in 1913 (OED, Merriam-Webster). The key survives the fix: a second search ('tsunami earliest use in English Lafcadio Hearn 1897 Gleanings in Buddha-Fields Japanese harbour wave') found the OED, Merriam-Webster and Etymonline all dating tsunami to 1896, 17 years before 1913, so C17's ten-year gap still holds. That search tied Hearn's 1897 book to the word only through a Wikipedia reference-desk thread (Tier C), so the Hearn attribution in c1 and in the explanation needs its own Tier A or B source. Changed values and claims need two fresh checks (§9.7)."
+        }
+      ],
+      "searchesUsed": 2,
+      "verdict": "fail"
+    },
     "estimates": [
       {
         "by": "es-plang02e",
         "at": "2026-11-01T03:03:38Z"
       }
     ],
-    "tiebreak": {
-      "checker": "fc-plang02t",
-      "pass": "T",
-      "brief": "tiebreak",
-      "packetSha256": "a94949ebab42535dd64165e8da977721fe3566af6ca5a192185c00e85c72ce67",
-      "startedAt": "2026-11-01T05:04:45Z",
-      "finishedAt": "2026-11-01T05:10:48Z",
-      "coldSolve": {
-        "answerGiven": "Tsunami",
-        "confidence": "high",
-        "matchedKey": true
-      },
-      "claimResults": [
-        {
-          "claimId": "c1",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Lafcadio Hearn's Gleanings in Buddha-Fields, published in 1897, uses the Japanese word tsunami, so the word was in English use by 1897.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed: A and B both confirmed it on knowledge. It is high-risk and no check carries dataset or web evidence for it, so rule 3 still needs external evidence. This run's only WebSearch call was refused (the turn's shared search limit was used up) and no pinned dataset covers first-record dates. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
-        },
-        {
-          "claimId": "c2",
-          "verdict": "uncertain",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Teenager, first written teen-ager, is a twentieth-century word recorded decades after tsunami. I recall first-record years from the early 1920s to about 1940 depending on the dictionary, so I cannot confirm 'the 1920s' from memory.",
-            "confidence": "likely"
-          },
-          "note": "Disputed: B left c2 uncertain for the same reason. It needs Tier A or B evidence on the earliest record (the OED's dating and Merriam-Webster's first known use). If the sources disagree, the claim, the 'the 1920s' display and the explanation's 'only in the 1920s' step down to what every source supports (§9.2, §9.5.2). The key is safe under every date I know of, each far more than 10 years after 1897 (C17)."
-        },
-        {
-          "claimId": "c3",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "textbook",
-            "restatement": "Japanese tsunami joins tsu, 'harbour', and nami, 'wave'.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed: A and B both confirmed it on knowledge. High-risk (etymology) with no external evidence in any check, so rule 3 still needs it. No search was possible in this run (see c1)."
-        }
-      ],
-      "issues": [
-        {
-          "type": "wording",
-          "severity": "note",
-          "note": "checker_doubt c2: the 1920s first record of teenager rests on knowledge in all three checks, and the dictionaries may date it differently. Settle it with web evidence in a re-run tiebreak, or bound the display and explanation to what every source supports."
-        }
-      ],
-      "searchesUsed": 0,
-      "verdict": "revise"
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp3t. A pass, B revise, T fail (§9.7). T's search (the OED, Merriam-Webster, Etymonline and Wikipedia, counted at Tier B) refuted c2: the OED and Merriam-Webster both date 'teenager' to 1913, printed as 'Teen Ager', and only Etymonline gives 1922, so 'first recorded in the 1920s, in the hyphenated form' is wrong, and so are label b's stored year and the explanation's 'only in the 1920s'. The key would survive the fix, but it changes a value, a claim and the explanation's facts, which needs two fresh checks, and T could tie Hearn's 1897 book to the word only through a Tier C page. Redraft under a new id.",
+      "decidedAt": "2026-11-04T14:12:12Z"
     }
   },
   "format": "comparison",

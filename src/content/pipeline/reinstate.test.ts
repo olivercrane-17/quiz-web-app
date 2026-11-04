@@ -414,6 +414,34 @@ describe("content:reinstate (decisions memo §18)", () => {
     ]);
   });
 
+  it("never reinstates a cut on the records of a checker an invalid_check incident voided", async () => {
+    // The incident leaves cut items' records in place as history, so the
+    // incident gate is what keeps them from counting.
+    const barred = await cutBank(
+      { "fx.p.geo.0103": {} },
+      fxFiles({
+        "batches.json": closedRegister((entry) =>
+          entry.batchId === "p.geo.b01"
+            ? {
+                ...entry,
+                incidents: [
+                  {
+                    date: "2026-11-04",
+                    kind: "invalid_check",
+                    note: "Pass A records were templated.",
+                    checkers: [CHECKER_A],
+                  },
+                ],
+              }
+            : entry,
+        ),
+      }),
+    );
+    expect(plan(barred).batches[0]?.kept).toEqual([
+      { itemId: "fx.p.geo.0103", reasons: ["incident"] },
+    ]);
+  });
+
   it("considers closed item batches only", async () => {
     const open = await cutBank(
       { "fx.p.geo.0103": {} },

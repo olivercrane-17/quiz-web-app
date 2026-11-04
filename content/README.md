@@ -88,9 +88,12 @@ npm run content:batch -- ids --batch p.geo.b01 --writer w-run42 --count 10     #
 npm run content:batch -- submit --batch p.geo.b01 --writer w-run42    # lint gate and writerNotes, then submitted
 npm run content:batch -- close --batch p.geo.b01                      # needs every item active or cut
 npm run content:batch -- incident --batch p.geo.b01 --kind fabricated_source --note "c3 cited a page nobody retrieved"
+npm run content:batch -- incident --batch m.geo.b01 --kind invalid_check --checker fc-run9 --note "pass B records were templated"
 ```
 
 A fabricated source fails the whole batch (§9.6). The `fabricated_source` incident voids the A, B and T records of every item not yet active (a voided checking item goes back to draft and keeps its estimate), stores every checker of the batch in the incident's `checkers`, and `content:record` refuses those checkers for the batch from then on, so fresh runs re-check every item. Items already active keep their checks; the command lists them for a §9.10 re-check.
+
+A checker whose records were not real checks (made by script: templated notes, restatements copied from the claims, every verdict pass) gets an `invalid_check` incident, which needs `--checker`. It voids that one checker's A, B and T records on every item of the batch, active ones included, stores the checker in the incident's `checkers`, and `content:record` refuses that checker for the batch from then on. An active item goes back to `checking` (or `draft`, if it is left without a check or an estimate) and loses `verification.editor`, since its accept rested on the voided record; a checking item left without a check goes back to draft; cut and retired items keep their history. Nothing else on an item changes: the estimate, the other pass, the lint, dedupe and myths records stay exactly as the file has them. A closed batch goes back to `checking` and keeps its `accepted` and `cut` counts until the next close. The register is written before the items, so a run that stops halfway has already barred the checker: run the command again to finish (it adds no second incident). An id with no record in the batch is refused, so a typo bars nobody. The command prints the voided records by pass and the reopened items, then the next steps: a fresh packet for each voided pass (`content:packet -- --pass <pass> --items <ids>`), records from a new checker id, and the editor's decisions on the reopened items before `close`. For a sealed batch, run `content:unseal` first and `content:seal` after.
 
 `content/batches.json` is the only place ids come from (§11.3). Only the registered writer can take ids, and ids above `lastSequence` fail C24. Practice, mystery and encore ids are `BB` (the batch number) plus `SS` (01 to 99); room questions are `r.<pack>.<NN>`, 01 to 89, numbered across the pack's batches. List batches issue no ids: entities use `x.<type>.<slug>` or a QID copied from a dataset that carries one.
 
@@ -165,14 +168,18 @@ npm run content:record -- --batch p.geo.b01 --pass A --file recheck-a.json --rep
 
 The file is a JSON array of CheckRecords (§9.8) with one extra field, `itemId`. Checkers never edit items: this command validates their records and merges them into `verification.checks` (passes A and B) or `verification.tiebreak` (pass T). It is all or nothing: one bad record and nothing is merged. A record is refused when:
 
-- the checker is the batch's writer, the item's editor, the other pass's checker or an estimator of the item (run ids compared), or a checker a fabricated-source incident barred from the batch;
+- the checker is the batch's writer, the item's editor, the other pass's checker or an estimator of the item (run ids compared), a checker a fabricated-source incident barred from the batch, or a checker an invalid_check incident barred;
 - `packetSha256` does not match the packet of the current item for that pass (the expected value is never printed);
 - the pass or brief is wrong, a claim has no result (A and B verify every claim; checker additions use `x1`, `x2`), or a result names a claim the item does not have;
 - the verdict breaks §9.4 (a refuted claim or a blocker means fail; an uncertain claim or a fixable issue means revise);
 - a knowledge check confirms without `certain`, or a web check confirms without a Tier A or B result or with a reported conflict;
 - dataset evidence names a dataset that is not in `content/datasets/manifest.json`, or not at its pinned commit or version;
 - the cold solve is not honest: `answerGiven` is not one of the packet's options, `matchedKey` is wrong, a miss has no issue explaining it, a mystery record (A or B) has no entries for clues 1 to 3, a mystery leaves rivals after clue 3 without an ambiguity or second_answer issue, or it lists such a rival and still confirms the uniqueness claim (the two contradict; refute or doubt the claim instead);
-- the item is not draft or checking, or already has a record for that pass (use `--replace`).
+- the item is not draft or checking, or already has a record for that pass (use `--replace`);
+- a knowledge result's `restatement` repeats the claim's wording (case and punctuation ignored): restate the fact in your own words, from your own check (§9.5);
+- a file of five or more records spans less time (from the earliest `startedAt` to the latest `finishedAt`) than its items take to check: 30 seconds per mystery and 8 seconds per other item at the very least.
+
+**Every record is your own work on that item.** Do the cold solve, read the reveal and verify each claim yourself, one item at a time. Never generate records with a script or a template, never copy a claim's text in as your restatement, and never set a verdict before you have checked. A batch of templated records is not a check: the editor treats it as missing and the orchestrator voids it and bars the checker from the batch (`content:batch -- incident --kind invalid_check`), active items included. A long batch is supposed to take a long time; if you run short of time, record fewer items honestly and say so in your final answer.
 
 Searches used are added up against the batch's WebSearch cap (§9.5.2, scaled to the batch size; see `content:batch -- status --batch <id>`), and going over it prints a warning.
 

@@ -15,7 +15,13 @@ import {
   removeTempDirs,
 } from "./__fixtures__/builders.ts";
 import type { Bank } from "./bank.ts";
-import { checkRecord, mergeRecord, searchUse } from "./records.ts";
+import {
+  barredCheckers,
+  checkRecord,
+  mergeRecord,
+  recordFileErrors,
+  searchUse,
+} from "./records.ts";
 import { requireBatch } from "./register.ts";
 import { saveItems } from "./store.ts";
 
@@ -320,6 +326,35 @@ describe("content:record validation", () => {
     ).toEqual([expect.stringContaining("fabricated-source incident")]);
   });
 
+  it("refuses the checker an invalid_check incident barred, and says which incident", async () => {
+    const bank = await loadFx();
+    const batch = requireBatch(bank, "p.geo.b01");
+    batch.incidents.push(
+      // Only fabricated_source and invalid_check incidents bar anyone.
+      {
+        date: "2026-11-01",
+        kind: "other",
+        note: "A late submission.",
+        checkers: [CHECKER_A],
+      },
+      {
+        date: "2026-11-04",
+        kind: "invalid_check",
+        note: "Pass B records were templated.",
+        checkers: [CHECKER_B],
+      },
+    );
+    expect(barredCheckers(batch)).toEqual([CHECKER_B]);
+    const record = itemOf(bank, "fx.p.geo.0101");
+    expect(
+      check(bank, record.id, "A", fxRecord(bank, record, "A")).errors,
+    ).toEqual([]);
+    const entry = fxRecord(bank, record, "B", { checker: "fc-FX-bravo" });
+    expect(check(bank, record.id, "B", entry).errors).toEqual([
+      "checker fc-FX-bravo is barred from this batch by its invalid_check incident of 2026-11-04, which voided their records; a new checker id records this pass",
+    ]);
+  });
+
   it("refuses records for active or cut items", async () => {
     const bank = await loadFx(
       fxFiles({
@@ -330,6 +365,66 @@ describe("content:record validation", () => {
     expect(check(bank, "fx.p.geo.0101", "A", entry).errors).toEqual([
       expect.stringContaining("is cut"),
     ]);
+  });
+
+  it("refuses a knowledge restatement that repeats the claim's wording", async () => {
+    const bank = await loadFx();
+    const item = itemOf(bank, "fx.p.geo.0101");
+    const honest = fxRecord(bank, item, "A");
+    const claim = item.item.claims[0];
+    const copied: RecordInputEntry = {
+      ...honest,
+      claimResults: honest.claimResults.map((result) =>
+        result.claimId === claim?.id && result.evidence.kind === "knowledge"
+          ? {
+              ...result,
+              evidence: {
+                ...result.evidence,
+                restatement: `${claim.text.toUpperCase()}!`,
+              },
+            }
+          : result,
+      ),
+    };
+    const knowledge = honest.claimResults.some(
+      (result) =>
+        result.claimId === claim?.id && result.evidence.kind === "knowledge",
+    );
+    expect(knowledge).toBe(true);
+    expect(check(bank, "fx.p.geo.0101", "A", copied).errors).toEqual([
+      expect.stringContaining("repeats the claim's wording"),
+    ]);
+  });
+
+  it("refuses a record file made faster than its items can be checked", async () => {
+    const bank = await loadFx();
+    const mystery = itemOf(bank, "fx.m.geo.0101");
+    const at = (start: string, end: string) =>
+      Array.from({ length: 5 }, () => ({
+        ...fxRecord(bank, mystery, "A"),
+        startedAt: start,
+        finishedAt: end,
+      }));
+    // Five mysteries need at least 150 s; one minute is a script.
+    expect(
+      recordFileErrors(
+        bank,
+        at("2026-11-02T10:00:00Z", "2026-11-02T10:01:00Z"),
+      ),
+    ).toEqual([expect.stringContaining("never from a script")]);
+    expect(
+      recordFileErrors(
+        bank,
+        at("2026-11-02T10:00:00Z", "2026-11-02T10:05:00Z"),
+      ),
+    ).toEqual([]);
+    // Fewer than five records (a tiebreak) are exempt.
+    expect(
+      recordFileErrors(
+        bank,
+        at("2026-11-02T10:00:00Z", "2026-11-02T10:00:10Z").slice(0, 4),
+      ),
+    ).toEqual([]);
   });
 });
 

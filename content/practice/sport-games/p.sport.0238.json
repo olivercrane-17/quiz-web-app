@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0238",
-  "status": "checking",
+  "status": "active",
   "category": "sport",
   "tags": ["backgammon", "board-games", "dice"],
   "region": "global",
@@ -219,18 +219,6 @@
         "verdict": "revise"
       }
     ],
-    "editor": {
-      "editor": "ed-psport02d",
-      "decision": "rewrite",
-      "reason": "Wording only (§9.7), before a tiebreak: checker B's revise (regional, fix), with A's matching note, is right that 'Draughts players get 12 pieces each' is false for international draughts (20 a side) and Canadian draughts (30). Claim c5 already says English draughts, which both checks confirmed, so the explanation now reads 'English draughts players get 12 pieces each' and no claim changes. B's revise verdict still stands and high-risk c1 to c5 rest on knowledge alone, so acceptance needs a passing tiebreak T with web evidence on c1 to c5. [wording-only rewrite by ed-psport02d at 2026-11-01T04:37:40Z of explanation; checks kept, packetSha256 re-stamped: pass A ea5f123f89baf67cacc72c98678692dd44af56a4ca144218e38342163315b272 -> 13be5186f4ac9aca8c3dc19c84b67e499f54a31ea98acbfc3c87a8daa0478c0f; pass B d0a7c1ffeb0d933a33d3c6fc043a08a5db066f433ecc6cfa6a4d8c13ab63134e -> c5657a30381e1bca74aecceefdb56c2bb414004f2120d96645f6e6471734c917]",
-      "decidedAt": "2026-11-01T04:37:40Z"
-    },
-    "estimates": [
-      {
-        "by": "es-psport02e",
-        "at": "2026-11-01T02:59:01Z"
-      }
-    ],
     "tiebreak": {
       "checker": "fc-psport02t",
       "pass": "T",
@@ -314,7 +302,35 @@
       ],
       "searchesUsed": 0,
       "verdict": "pass"
-    }
+    },
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Second pass. A pass, B revise, T pass (§9.7). The standing tiebreak is fc-psport02t's: fc-tbp3t built a packet for this item but recorded no T, because the shared search budget ran out. B's revise was regional (fix): 'Draughts players get 12 pieces each' is false for international (20) and Canadian (30) draughts. The first editor pass made the wording-only fix to 'English draughts', which matches c5 as both checks confirmed it, and T, a fresh run that saw the reworded explanation, passed and found the dispute resolved. Every claim, c1 to c5, is high-risk only for its number and was confirmed directly at certain by A and B, so memo §18 accepts them; none needed the tiebreak. The acceptance rule passes. (earlier, rewrite by ed-psport02d: Wording only (§9.7), before a tiebreak: checker B's revise (regional, fix), with A's matching note, is right that 'Draughts players get 12 pieces each' is false for international draughts (20 a side) and Canadian draughts (30). Claim c5 already says English draughts, which both checks confirmed, so the explanation now reads 'English draughts players get 12 pieces each' and no claim changes. B's revise verdict still stands and high-risk c1 to c5 rest on knowledge alone, so acceptance needs a passing tiebreak T with web evidence on c1 to c5. [wording-only rewrite by ed-psport02d at 2026-11-01T04:37:40Z of explanation; checks kept, packetSha256 re-stamped: pass A ea5f123f89baf67cacc72c98678692dd44af56a4ca144218e38342163315b272 -> 13be5186f4ac9aca8c3dc19c84b67e499f54a31ea98acbfc3c87a8daa0478c0f; pass B d0a7c1ffeb0d933a33d3c6fc043a08a5db066f433ecc6cfa6a4d8c13ab63134e -> c5657a30381e1bca74aecceefdb56c2bb414004f2120d96645f6e6471734c917])",
+      "decidedAt": "2026-11-04T14:14:21Z"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-04T14:14:21Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T14:14:21Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "How many checkers (playing pieces) does each player start with in backgammon?",

@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0124",
-  "status": "checking",
+  "status": "cut",
   "category": "sport",
   "tags": ["snooker", "cue-sports", "india", "game-origins"],
   "region": "global",
@@ -151,18 +151,98 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp2t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "22aa5a8ae978ca82c8219a20643b24b6fc9dfa3c3868bcb7b6e348e48885de4e",
+      "startedAt": "2026-11-04T13:03:23Z",
+      "finishedAt": "2026-11-04T13:27:22Z",
+      "coldSolve": {
+        "answerGiven": "True",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c3",
+          "verdict": "uncertain",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "origin of the word snooker slang first-year cadets Royal Military Academy Woolwich Neville Chamberlain Jubbulpore 1875",
+            "results": [
+              {
+                "title": "Neville Chamberlain (police officer)",
+                "url": "https://en.wikipedia.org/wiki/Neville_Chamberlain_(police_officer)"
+              },
+              {
+                "title": "Origins of snooker",
+                "url": "https://www.oed.com/discover/origins-of-snooker/"
+              },
+              {
+                "title": "Snooker - Etymology, Origin & Meaning",
+                "url": "https://www.etymonline.com/word/snooker"
+              },
+              {
+                "title": "Snooker",
+                "url": "https://en.wikipedia.org/wiki/Snooker"
+              },
+              {
+                "title": "Cue sports in India",
+                "url": "https://en.wikipedia.org/wiki/Cue_sports_in_India"
+              },
+              {
+                "title": "Jabalpur",
+                "url": "https://en.wikipedia.org/wiki/Jabalpur"
+              },
+              {
+                "title": "Talk:Snooker/Archive 1",
+                "url": "https://en.wikipedia.org/wiki/Talk:Snooker%2FArchive_1"
+              },
+              {
+                "title": "snooker, n.² meanings, etymology and more",
+                "url": "https://www.oed.com/dictionary/snooker_n2"
+              },
+              {
+                "title": "1875",
+                "url": "https://en.wikipedia.org/wiki/1875"
+              },
+              {
+                "title": "snooker, v. meanings, etymology and more",
+                "url": "https://www.oed.com/dictionary/snooker_v"
+              }
+            ],
+            "summaryExcerpt": "The slang: The OED says that from the mid-1800s, existing Royal Military Academy cadets teased first-year cadets as \"snookers,\" implying inexperience. It was this word that Chamberlain heard his Woolwich-trained companions use in their banter. Verification gap: The OED says it has not found evidence for the word snooker in this sense as early as 1875, but has traced it back to 1884. Its earliest examples come from South Asian newspapers, and in those the word refers to an older game, snooker pool. It still calls the military link plausible chronologically, and a 1889 Western Gazette find appears to strengthen this connection. Its verdict: it has not confirmed the origin story with certainty, but much of the evidence is broadly consistent with his account. Other sources: Etymonline calls the word's origin perhaps a reference to the cadet slang, and notes Chamberlain's dates inconsistently (1866–1944 there, versus 1856–1944 on Wikipedia).",
+            "tiers": ["A", "B", "C"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "The OED (Tier A for English etymology) confirms the first half: Woolwich cadets called first-year cadets 'snookers'. It leaves the second half open: it 'has not confirmed the origin story with certainty', and Etymonline (Tier C, not relied on) says 'perhaps'. So 'the game took its name from it', stated flat, is not confirmed, and pass B's doubt holds."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "Hedge the naming link in c3 and the explanation (pass B's fix), for example: 'Snooker was slang for a first-year cadet, and the game probably took its name from it.' The OED calls the story plausible but unconfirmed. c1 and c2 already carry 'traditionally' and 'around'. The changed claim needs fresh checks."
+        }
+      ],
+      "searchesUsed": 1,
+      "verdict": "revise"
+    },
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp2t. A pass, B revise, and T also revise, so no passing tiebreak stands in for B (§9.9 rule 2). T's search finds the OED confirming that Woolwich cadets called first-year cadets 'snookers' but leaving the link to the game's name unconfirmed, so c3, stated flat, is not confirmed and B's doubt holds. Hedging it changes claim c3, so no wording-only rewrite applies, as the earlier second-pass decision foresaw. c1 and c2 are not in dispute: redraft under a new id with a hedged etymology. (earlier, rewrite by ed-psport01d: Second pass, and still no tiebreak on file: pass T left only an unrecorded knowledge-only draft. A pass, B revise. B left c3 (the cadet-slang etymology) uncertain, asked for a hedge, and asked for one term. Applied the term part as a wording-only rewrite: the explanation said 'army slang for a raw recruit' while c3 says cadet, and it now says 'army slang for a new cadet', as c3 and both checks' restatements have it. No claim changes. The etymology stays with the tiebreak, which needs Tier A or B web evidence on c3. If c3 holds only as tradition, c3 and the explanation need a hedged rewrite and fresh checks. [wording-only rewrite by ed-psport01d at 2026-11-01T05:24:05Z of explanation; checks kept, packetSha256 re-stamped: pass A b28b65c39a06acd27a4a4bc5dee0e32c4e8694ff1c1b46b38f32764d1d0dd0a0 -> 5cf5b8df425d26b4167086ef7a22c6e6079f483ec7a214c14e3e000c2cafa983; pass B 142a13352225802c62f7c17416453577284bacaa9bfdbcb3d95636740111b179 -> eb4e6d401dcde206c537e768f8b027c15a509ef4b551d793448d8db72ce5982f])",
+      "decidedAt": "2026-11-04T13:59:04Z"
+    },
     "estimates": [
       {
         "by": "es-psport01e",
         "at": "2026-11-01T01:50:15Z"
       }
-    ],
-    "editor": {
-      "editor": "ed-psport01d",
-      "decision": "rewrite",
-      "reason": "Second pass, and still no tiebreak on file: pass T left only an unrecorded knowledge-only draft. A pass, B revise. B left c3 (the cadet-slang etymology) uncertain, asked for a hedge, and asked for one term. Applied the term part as a wording-only rewrite: the explanation said 'army slang for a raw recruit' while c3 says cadet, and it now says 'army slang for a new cadet', as c3 and both checks' restatements have it. No claim changes. The etymology stays with the tiebreak, which needs Tier A or B web evidence on c3. If c3 holds only as tradition, c3 and the explanation need a hedged rewrite and fresh checks. [wording-only rewrite by ed-psport01d at 2026-11-01T05:24:05Z of explanation; checks kept, packetSha256 re-stamped: pass A b28b65c39a06acd27a4a4bc5dee0e32c4e8694ff1c1b46b38f32764d1d0dd0a0 -> 5cf5b8df425d26b4167086ef7a22c6e6079f483ec7a214c14e3e000c2cafa983; pass B 142a13352225802c62f7c17416453577284bacaa9bfdbcb3d95636740111b179 -> eb4e6d401dcde206c537e768f8b027c15a509ef4b551d793448d8db72ce5982f]",
-      "decidedAt": "2026-11-01T05:24:05Z"
-    }
+    ]
   },
   "format": "tf",
   "stem": "Snooker was invented by British army officers stationed in India.",

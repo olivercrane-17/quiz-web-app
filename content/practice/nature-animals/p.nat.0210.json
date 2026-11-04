@@ -1,6 +1,6 @@
 {
   "id": "p.nat.0210",
-  "status": "checking",
+  "status": "active",
   "category": "nat",
   "tags": ["mammals", "giraffes", "africa", "rainforest"],
   "region": "global",
@@ -222,18 +222,170 @@
         "verdict": "pass"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp2t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "5dc8f78013d3830b27114a399b6d5c80012cf14ed22ff289681cf1217e0ce13a",
+      "startedAt": "2026-11-04T13:03:23Z",
+      "finishedAt": "2026-11-04T13:27:22Z",
+      "coldSolve": {
+        "answerGiven": "Giraffe",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "okapi family Giraffidae giraffe and okapi only living members",
+            "results": [
+              {
+                "title": "Okapi",
+                "url": "https://en.wikipedia.org/wiki/Okapi"
+              },
+              {
+                "title": "Okapi",
+                "url": "https://www.britannica.com/animal/okapi"
+              },
+              {
+                "title": "Giraffe",
+                "url": "https://en.wikipedia.org/wiki/Giraffe_(Giraffa)"
+              },
+              {
+                "title": "Okapi",
+                "url": "https://www.zsl.org/okapi-facts"
+              },
+              {
+                "title": "okapi - Kids",
+                "url": "https://kids.britannica.com/kids/article/okapi/543337"
+              },
+              {
+                "title": "Giraffoidea",
+                "url": "https://en.wikipedia.org/wiki/Giraffoidea"
+              },
+              {
+                "title": "Category:Giraffoidea",
+                "url": "https://en.wikipedia.org/wiki/Category:Giraffoidea"
+              },
+              {
+                "title": "Giraffomorpha",
+                "url": "https://en.wikipedia.org/wiki/Giraffomorpha"
+              },
+              {
+                "title": "Physical features of giraffes",
+                "url": "https://www.britannica.com/summary/giraffe"
+              },
+              {
+                "title": "Other Animals of the Reserve — Okapi Conservation Project",
+                "url": "https://www.okapiconservation.org/animals-of-the-reserve"
+              }
+            ],
+            "summaryExcerpt": "Yes, the okapi and the giraffe are the only living members of the family Giraffidae. Several sources agree on this: Britannica's okapi entry describes the okapi as the giraffe's only other living relative in that family (the only other living member of the family Giraffidae).",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "Sentences attributed to the named Wikipedia and Britannica okapi articles (Tier B); ZSL is also in the list. The summary says the sources are consistent."
+        },
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "okapi family Giraffidae giraffe and okapi only living members",
+            "results": [
+              {
+                "title": "Okapi",
+                "url": "https://en.wikipedia.org/wiki/Okapi"
+              },
+              {
+                "title": "Okapi",
+                "url": "https://www.britannica.com/animal/okapi"
+              },
+              {
+                "title": "Giraffe",
+                "url": "https://en.wikipedia.org/wiki/Giraffe_(Giraffa)"
+              },
+              {
+                "title": "Okapi",
+                "url": "https://www.zsl.org/okapi-facts"
+              },
+              {
+                "title": "okapi - Kids",
+                "url": "https://kids.britannica.com/kids/article/okapi/543337"
+              },
+              {
+                "title": "Giraffoidea",
+                "url": "https://en.wikipedia.org/wiki/Giraffoidea"
+              },
+              {
+                "title": "Category:Giraffoidea",
+                "url": "https://en.wikipedia.org/wiki/Category:Giraffoidea"
+              },
+              {
+                "title": "Giraffomorpha",
+                "url": "https://en.wikipedia.org/wiki/Giraffomorpha"
+              },
+              {
+                "title": "Physical features of giraffes",
+                "url": "https://www.britannica.com/summary/giraffe"
+              },
+              {
+                "title": "Other Animals of the Reserve — Okapi Conservation Project",
+                "url": "https://www.okapiconservation.org/animals-of-the-reserve"
+              }
+            ],
+            "summaryExcerpt": "Wikipedia's okapi article says the two species are the only surviving members of the family, and that the okapi is most closely related to the giraffe. Although the okapi has striped markings reminiscent of zebras, it is most closely related to the giraffe. The okapi and the giraffe are the only living members of the family Giraffidae.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "c3 as worded ('the only living members of the giraffe family') holds whether the giraffe is treated as one species or four, which was the point of the editor's wording-only rewrite after pass A's x1."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "Pass A's point (x1: 'the only two living members' depends on giraffe taxonomy) is settled by the editor's rewrite to 'the only living members of the giraffe family', which every source found states."
+        }
+      ],
+      "searchesUsed": 1,
+      "verdict": "pass"
+    },
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp2t. A revise, B pass, T pass (§9.7). A's revise rested only on its addition x1, the count in 'the only two living members', which the first-pass wording-only rewrite dropped, so the explanation now states claim c3 as both checks confirmed it. A and B confirmed c1 to c5 directly at certain, and T adds web evidence (the Wikipedia and Britannica okapi articles, Tier B) for high-risk c1 (the key) and c3, with no conflict. No open issue. The acceptance rule passes. (earlier, rewrite by ed-pnat02d: Wording only (§9.7), the fix A asks for: 'the only two living members of the giraffe family' becomes 'the only living members of the giraffe family', which is claim c3 exactly as both checks confirmed it, so the explanation no longer depends on whether the giraffe is one species or four (A's addition x1). No claim changes. A's revise verdict stands and high-risk c1 and c3 still lack external evidence, so the item waits for a tiebreak T with external evidence (§9.7, §9.9 rules 2 and 3). [wording-only rewrite by ed-pnat02d at 2026-11-01T04:21:42Z of explanation; checks kept, packetSha256 re-stamped: pass A 5f30c6e3c170c0247b1431deb02d76e578b2deef6437c70dab74aa6f17d73abe -> 21f6956c0d40c7ae56697e14b4128a30ce65be199f4cd7af0edfec84f4926a6d; pass B a3057d01953ede5b3e9006e9f167a945f433957adc580d1aac6b573c192780c3 -> ea00dd0d253c63cc13d28c71f8dca9cf2b01f39715b035d3ccbed05cd33c7216])",
+      "decidedAt": "2026-11-04T13:57:55Z"
+    },
     "estimates": [
       {
         "by": "es-pnat02e",
         "at": "2026-11-01T02:29:19Z"
       }
     ],
-    "editor": {
-      "editor": "ed-pnat02d",
-      "decision": "rewrite",
-      "reason": "Wording only (§9.7), the fix A asks for: 'the only two living members of the giraffe family' becomes 'the only living members of the giraffe family', which is claim c3 exactly as both checks confirmed it, so the explanation no longer depends on whether the giraffe is one species or four (A's addition x1). No claim changes. A's revise verdict stands and high-risk c1 and c3 still lack external evidence, so the item waits for a tiebreak T with external evidence (§9.7, §9.9 rules 2 and 3). [wording-only rewrite by ed-pnat02d at 2026-11-01T04:21:42Z of explanation; checks kept, packetSha256 re-stamped: pass A 5f30c6e3c170c0247b1431deb02d76e578b2deef6437c70dab74aa6f17d73abe -> 21f6956c0d40c7ae56697e14b4128a30ce65be199f4cd7af0edfec84f4926a6d; pass B a3057d01953ede5b3e9006e9f167a945f433957adc580d1aac6b573c192780c3 -> ea00dd0d253c63cc13d28c71f8dca9cf2b01f39715b035d3ccbed05cd33c7216]",
-      "decidedAt": "2026-11-01T04:21:42Z"
-    }
+    "dedupe": {
+      "checkedAt": "2026-11-04T13:57:55Z",
+      "nearestId": "p.food.0109",
+      "score": 0.32,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T13:57:55Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "The okapi of Central Africa has zebra-like stripes on its legs. Which animal's family does it belong to?",

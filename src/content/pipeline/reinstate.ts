@@ -22,8 +22,10 @@
  *   course, too);
  * - no stored dedupe verdict of duplicate, no stored failed lint, and no
  *   myth-screen hit (stored or current) without external evidence;
- * - the batch has no fabricated-source or audit-failure incident against
- *   these checks (§9.6, §9.10);
+ * - the batch has no fabricated-source, invalid_check or audit-failure
+ *   incident against these checks (§9.6, §9.10); an invalid_check incident
+ *   leaves cut items' records in place, so this gate is what keeps a cut
+ *   from coming back on the voided checker's word;
  * - under the rule before memo §18, the item did fail for missing external
  *   evidence: some high-risk claim had no dataset or web evidence, or the
  *   encore value no external source. Otherwise the cut was the editor's call
@@ -80,7 +82,10 @@ export const REINSTATE_REASON =
 export const KEEP_REASONS = [
   /** The batch's items name no single editor id. */
   "editor",
-  /** A fabricated-source or audit-failure incident covers the checks. */
+  /**
+   * A fabricated-source, invalid_check or audit-failure incident covers the
+   * checks.
+   */
   "incident",
   /** Pass A or pass B is missing. */
   "checks",
@@ -199,7 +204,10 @@ function openMythHits(bank: Bank, item: AnyItem): string[] {
 }
 
 interface IncidentScope {
-  /** Checkers a fabricated-source incident barred from the batch. */
+  /**
+   * Checkers a fabricated-source or invalid_check incident barred from the
+   * batch.
+   */
   barred: string[];
   /** An audit failure sends the whole batch back for a re-check. */
   auditFailure: boolean;

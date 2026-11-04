@@ -1,6 +1,6 @@
 {
   "id": "p.music.0145",
-  "status": "checking",
+  "status": "active",
   "category": "music",
   "tags": ["songs-albums", "scotland", "new-year"],
   "region": "global",
@@ -222,12 +222,108 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp2t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "53bbf71064d94b6561028d3b90ddce1dd668d9a4c5c8dfa74cc063a450dc16e1",
+      "startedAt": "2026-11-04T13:02:58Z",
+      "finishedAt": "2026-11-04T13:27:22Z",
+      "coldSolve": {
+        "answerGiven": "Days gone by",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "when did Burns send Auld Lang Syne to Johnson's Scots Musical Museum, letter to Mrs Dunlop December 1788, letter to George Thomson 1793",
+            "results": [
+              {
+                "title": "Auld Lang Syne",
+                "url": "https://robertburns.org/encyclopedia/auld_lang_syne_5.html"
+              },
+              {
+                "title": "Song by Robert Burns: 'Auld Lang Syne' - Burns Scotland",
+                "url": "http://www.burnsscotland.com/items/s/song-by-robert-burns-auld-lang-syne.aspx"
+              },
+              {
+                "title": "Scots Musical Museum",
+                "url": "https://en.wikipedia.org/wiki/Scots_Musical_Museum"
+              },
+              {
+                "title": "University of Glasgow - Schools - School of Critical Studies - Research - Research Centres and Networks - Centre for Robert Burns Studies - News - The first appearance of Auld Lang Syne is studied by UofG academics",
+                "url": "https://www.gla.ac.uk/schools/critical/research/researchcentresandnetworks/robertburnsstudies/news/headline_903553_en.html"
+              },
+              {
+                "title": "Robert Burns's Interleaved Scots Musical Museum",
+                "url": "https://en.wikipedia.org/wiki/Robert_Burns's_Interleaved_Scots_Musical_Museum"
+              },
+              {
+                "title": "The Scots Musical Museum",
+                "url": "https://wee-windaes.nls.uk/the-scots-musical-museum/"
+              },
+              {
+                "title": "A Red, Red Rose",
+                "url": "https://en.wikipedia.org/wiki/Red_Red_Rose"
+              },
+              {
+                "title": "Rare books by / about Robert Burns - National Library of Scotland",
+                "url": "https://digital.nls.uk/robert-burns/books/index.html"
+              },
+              {
+                "title": "Auld Lang Syne",
+                "url": "https://en.wikipedia.org/wiki/Ald_lang_syne"
+              },
+              {
+                "title": "Frances Dunlop",
+                "url": "https://en.wikipedia.org/wiki/Frances_Dunlop"
+              }
+            ],
+            "summaryExcerpt": "Johnson (1788): One source says Burns sent a copy of the original song to the Scots Musical Museum in 1788. Another says Johnson delayed publishing it, and put the song into the fifth volume of the Museum, which appeared about six months after Burns's death. No source gives an exact day for the Johnson submission.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "Results were limited to Burns institutions, the University of Glasgow, the National Library of Scotland, Wikipedia and the Burns Encyclopedia. The summary names its source only as 'one source', so the call counts at Tier B. The conflict it reports is the day of the Dunlop letter (7 or 17 December 1788), which c3 does not state, and no source disputes the 1788 submission. That settles pass B's doubt: the song went to the Museum in 1788 and was printed there in 1796 (search 5, Britannica: 'It was first published in volume five of James Johnson's Scots Musical Museum')."
+        }
+      ],
+      "issues": [],
+      "searchesUsed": 2,
+      "verdict": "pass"
+    },
     "estimates": [
       {
         "by": "es-pmusic01e",
         "at": "2026-11-01T02:04:12Z"
       }
-    ]
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp2t. A pass, B revise, T pass (§9.7). B's revise was its doubt that Burns sent the song to the Scots Musical Museum in 1788, rather than only mentioning it to Mrs Dunlop that December (c3 uncertain). T's search of Burns institutions, the University of Glasgow, the National Library of Scotland and Wikipedia (counted at Tier B) says he sent a copy to the Museum in 1788 and that it was printed in volume five after his death. The only conflict it reports is the day of the Dunlop letter, which c3 does not state, so B's fix is rejected on that evidence. A and B confirmed high-risk c1 directly at certain (memo §18), and A's addition x1 (the song is sung at New Year in many countries) is a standard stem premise that B's record does not dispute. The acceptance rule passes.",
+      "decidedAt": "2026-11-04T13:57:18Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-04T13:57:18Z",
+      "nearestId": "p.book.0127",
+      "score": 0.229,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T13:57:18Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "The Scots title 'Auld Lang Syne', sung at New Year around the world, means roughly what?",

@@ -1,6 +1,6 @@
 {
   "id": "p.geo.0208",
-  "status": "checking",
+  "status": "active",
   "category": "geo",
   "tags": ["canals", "shipping", "middle-east"],
   "region": "global",
@@ -178,19 +178,13 @@
         "verdict": "revise"
       }
     ],
-    "estimates": [
-      {
-        "by": "es-pgeo02e",
-        "at": "2026-11-01T02:33:41Z"
-      }
-    ],
     "tiebreak": {
-      "checker": "fc-pgeo02t",
+      "checker": "fc-tbp3t",
       "pass": "T",
       "brief": "tiebreak",
       "packetSha256": "23b64a5c8f8328b4b5525e9d1868e5b89c1c50b6faa946adeb512033e2c8dee0",
-      "startedAt": "2026-11-01T04:58:12Z",
-      "finishedAt": "2026-11-01T05:11:28Z",
+      "startedAt": "2026-11-04T13:31:57Z",
+      "finishedAt": "2026-11-04T13:55:32Z",
       "coldSolve": {
         "answerGiven": "Suez Canal",
         "confidence": "high",
@@ -200,70 +194,159 @@
         {
           "claimId": "c1",
           "verdict": "confirmed",
-          "method": "dataset",
+          "method": "web",
           "evidence": {
-            "kind": "dataset",
-            "dataset": "natural-earth",
-            "version": "ca96624a56bd078437bca8184e78163e5039ad19",
-            "file": "ne_50m_rivers_lake_centerlines.geojson",
-            "locator": "line 384: featurecla \"River\", name \"Suez Canal\" (its \"Lake Centerline\" companion on line 81 joins the two parts through the Bitter Lakes)",
-            "excerpt": "\"featurecla\": \"River\", \"name\": \"Suez Canal\" ... \"coordinates\": [ [ [ 32.560835, 30.181517 ], [ 32.565692, 29.973959 ] ], [ [ 32.359813, 30.423595 ], [ 32.303486, 30.593043 ], [ 32.334182, 30.688696 ], [ 32.336766, 30.858608 ], [ 32.323536, 31.256077 ] ] ]",
-            "retrievedAt": "2026-11-01"
+            "kind": "web",
+            "query": "Suez Canal shortest sea route between Europe and Asia Mediterranean Red Sea",
+            "results": [
+              {
+                "title": "Suez Canal",
+                "url": "https://www.britannica.com/topic/Suez-Canal"
+              },
+              {
+                "title": "SCA - About Suez Canal",
+                "url": "https://www.suezcanal.gov.eg/English/About/SuezCanal/Pages/AboutSuezCanal.aspx"
+              },
+              {
+                "title": "Red Sea",
+                "url": "https://www.britannica.com/place/Red-Sea"
+              },
+              {
+                "title": "Suez Canal - Students",
+                "url": "https://kids.britannica.com/students/article/Suez-Canal/277946"
+              },
+              {
+                "title": "Suez Canal - Scholars",
+                "url": "https://kids.britannica.com/scholars/article/Suez-Canal/108305"
+              },
+              {
+                "title": "SCA - Why Suez Canal?",
+                "url": "https://www.suezcanal.gov.eg/English/About/Pages/WhySuezCanal.aspx"
+              },
+              {
+                "title": "Suez Canal summary",
+                "url": "https://www.britannica.com/summary/Suez-Canal"
+              },
+              {
+                "title": "Isthmus of Suez",
+                "url": "https://www.britannica.com/place/Isthmus-of-Suez"
+              },
+              {
+                "title": "List of Important Canals",
+                "url": "https://www.britannica.com/topic/List-of-Important-Canals"
+              },
+              {
+                "title": "Mediterranean Sea",
+                "url": "https://en.wikipedia.org/wiki/Mediterranean_sea"
+              }
+            ],
+            "summaryExcerpt": "The search results agree that the Suez Canal is the shortest sea route between Europe and Asia, and they describe how it links the two seas. [...] The canal runs north to south across the Isthmus of Suez in Egypt, linking the Mediterranean and Red seas. [...] (It separates Africa from Asia, and it provides the shortest maritime route between Europe and the lands lying around the Indian and western Pacific oceans.) [...] Before the canal, ships bound for Asia had to sail around the southern tip of Africa, the Cape of Good Hope.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "The waterway runs from 31.256 N on the Mediterranean shore (GeoNames puts Port Said at 31.26531, 32.3019) to 29.974 N at the head of the Gulf of Suez, the Red Sea's northern arm (GeoNames: Suez at 29.97371, 32.52627). A sea link between those two seas is what spares a Europe to Asia voyage the trip round Africa: the dataset gives the geography, and that routing step is my own reasoning. Cold solve Suez Canal, high confidence."
+          "note": "Stated plainly. The summary names its sources only as a group (Britannica pages and the Suez Canal Authority's pages, Tier A and B), so the call counts at Tier B. It also fixes what 'without going around Africa' refers to: the Cape route that ships bound for Asia used before the canal."
         },
         {
           "claimId": "c2",
           "verdict": "confirmed",
-          "method": "knowledge",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "textbook",
-            "restatement": "The Panama Canal crosses the Isthmus of Panama between the Caribbean (Atlantic) and the Pacific; the Kiel Canal runs across Schleswig-Holstein from Brunsbüttel on the Elbe estuary to Kiel on the Baltic; the Corinth Canal cuts the Isthmus of Corinth between the Gulf of Corinth and the Saronic Gulf.",
-            "confidence": "certain"
+            "kind": "web",
+            "query": "Kiel Canal North Sea Baltic, Corinth Canal Isthmus of Corinth, Panama Canal Atlantic Pacific",
+            "results": [
+              {
+                "title": "List of canals",
+                "url": "https://www.britannica.com/technology/list-of-canals-2006147"
+              },
+              {
+                "title": "List of Important Canals",
+                "url": "https://www.britannica.com/topic/List-of-Important-Canals"
+              },
+              {
+                "title": "Kiel Canal",
+                "url": "https://www.britannica.com/topic/Kiel-Canal"
+              },
+              {
+                "title": "Corinth Canal",
+                "url": "https://www.britannica.com/topic/Corinth-Canal"
+              },
+              {
+                "title": "Panama Canal",
+                "url": "https://www.britannica.com/topic/Panama-Canal"
+              },
+              {
+                "title": "Canals and inland waterways - Engineering, Construction, Maintenance",
+                "url": "https://www.britannica.com/technology/canal-waterway/Modern-waterway-engineering"
+              },
+              {
+                "title": "Britannica",
+                "url": "https://kids.britannica.com/kids/article/Corinth-Canal/26299/related/main?page=1"
+              },
+              {
+                "title": "canal - Students",
+                "url": "https://kids.britannica.com/students/article/canal/273476"
+              },
+              {
+                "title": "Canals and inland waterways - Suez, Shipping, Egypt",
+                "url": "https://www.britannica.com/technology/canal-waterway/The-Suez-Canal"
+              },
+              {
+                "title": "Panama Canal summary",
+                "url": "https://www.britannica.com/summary/Panama-Canal"
+              }
+            ],
+            "summaryExcerpt": "The canal runs about 98 km across northern Germany, and it runs from Brunsbüttelkoog on the North Sea to Holtenau at Kiel Harbour on the Baltic Sea. [...] Corinth Canal (Isthmus of Corinth, Greece): It is a tidal waterway across the Isthmus of Corinth, joining the Gulf of Corinth in the northwest with the Saronic Gulf in the southeast. [...] The canal connects the Atlantic and Pacific oceans through the narrow Isthmus of Panama.",
+            "tiers": ["B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "No web search ran: the shared turn-wide WebSearch budget was exhausted (my one call was refused before it ran), so this rests on knowledge. Partial dataset support only: Natural Earth's Panama Canal line (ne_50m_rivers_lake_centerlines.geojson line 324) runs from 9.361315 N, 79.915091 W on the Caribbean side to 8.924443 N, 79.551676 W on the Pacific side, and GeoNames places Brunsbüttel and Kiel in Schleswig-Holstein (DE admin1 10); nothing pinned covers the Corinth Canal. None of the three shortens the sea route from Europe to the Indian Ocean, so each distractor is wrong."
-        },
-        {
-          "claimId": "c3",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "The Suez Canal is a sea-level cut with no locks: the Mediterranean and the Gulf of Suez stand at nearly the same mean level, so water flows freely along it. Napoleon's surveyors wrongly thought the Red Sea stood about 10 m higher, which would have meant locks; later levelling found the two seas nearly equal.",
-            "confidence": "certain"
-          },
-          "note": "No web search ran: the shared turn-wide WebSearch budget was exhausted (my one call was refused before it ran), so this rests on knowledge. Standard risk. The 'because' is the usual account: near-equal sea levels let the canal run without locks, with the low, flat isthmus making a sea-level cut practical."
-        },
-        {
-          "claimId": "c4",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "textbook",
-            "restatement": "The Panama Canal lifts ships about 26 m through lock flights (Gatun on the Atlantic side, Pedro Miguel and Miraflores on the Pacific side, plus the newer Agua Clara and Cocolí locks) up to Gatun Lake and lowers them again on the far side.",
-            "confidence": "certain"
-          },
-          "note": "No web search ran: the shared turn-wide WebSearch budget was exhausted (my one call was refused before it ran), so this rests on knowledge. Natural Earth holds Gatun Lake on the canal's line (ne_50m_lakes.geojson, \"Lago Gatun\", wikidataid Q313637) but no elevations, so it cannot show the locks."
+          "note": "All three parts of c2 stated plainly; every result is Britannica (Tier B). The only differences the summary reports are Panama's length and transit time, which c2 does not state. This is the claim B's Panama reading disputes: see the second_answer issue."
         }
       ],
       "issues": [
         {
           "type": "second_answer",
           "severity": "note",
-          "note": "Rival test on Panama: a ship can sail west from Europe through the Panama Canal to East Asia without passing Africa, but that canal saves the voyage round South America and is not known as a Europe to Asia link. With 'without going around Africa' in the stem, only Suez fits. Not a second answer."
+          "note": "Ruling on B's second_answer (fix) about Panama: not a second answer. With external evidence now on both sides, the stem's 'without going around Africa' names the voyage the Suez Canal replaced (ships bound for Asia had to round the Cape of Good Hope before it opened, and it is the shortest sea route from Europe to the Indian and western Pacific oceans). The Panama Canal joins the Atlantic and the Pacific, so the voyage it spares is the one round South America; a ship heading west to East Asia through it was never going round Africa. I rate B's concern a note. If the editor wants no room at all for the literal reading, 'Which canal joins the Mediterranean Sea to the Red Sea?' closes it, but that changes the stem and needs fresh checks (§9.7)."
         },
         {
           "type": "wording",
           "severity": "note",
-          "note": "Explanation: 'Unlike the Panama Canal, it needs no locks, because the seas at its two ends lie at almost the same level' invites the reading that Panama has locks because its oceans stand at different levels. Panama's locks lift ships over high ground to Gatun Lake (about 26 m up); the two oceans' mean levels differ only slightly. Optional rewording for the editor, under the re-check rule: 'It needs no locks, because the seas at its two ends lie at almost the same level. The Panama Canal uses locks to lift ships over the hills between its oceans.'"
+          "note": "Explanation, optional: 'Unlike the Panama Canal, it needs no locks, because the seas at its two ends lie at almost the same level' can be read as saying Panama has locks because its two oceans stand at different levels, whereas (my knowledge, not re-checked here) its locks lift ships over high ground between them. c3 and c4 were not in dispute and were not re-checked in this tiebreak."
         }
       ],
-      "searchesUsed": 0,
+      "searchesUsed": 2,
       "verdict": "pass"
-    }
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp3t. A pass, B revise, T pass (§9.7). B's revise was a second answer (fix): read literally, the Panama Canal also links Europe and Asia without rounding Africa. T's search (Britannica and the Suez Canal Authority, counted at Tier B) says the Suez Canal is the shortest sea route between Europe and Asia and that ships bound for Asia had to round the Cape of Good Hope before it opened, which fixes what 'without going around Africa' refers to; the Panama Canal spares the voyage round South America, so it was never the way round Africa. B's fix is rejected on that evidence. Every claim is standard risk and confirmed at certain by A and B. T's wording note on the explanation's Panama contrast is optional: c3 and c4 are both confirmed and nothing in it is false. The acceptance rule passes.",
+      "decidedAt": "2026-11-04T14:11:30Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-04T14:11:30Z",
+      "nearestId": "p.geo.0218",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T14:11:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "Which canal lets ships sail between Europe and Asia without going around Africa?",

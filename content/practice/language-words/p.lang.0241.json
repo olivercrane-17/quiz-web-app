@@ -1,6 +1,6 @@
 {
   "id": "p.lang.0241",
-  "status": "checking",
+  "status": "active",
   "category": "lang",
   "tags": ["dictionaries", "samuel-johnson", "quotations"],
   "region": "global",
@@ -241,19 +241,13 @@
         "verdict": "revise"
       }
     ],
-    "estimates": [
-      {
-        "by": "es-plang02e",
-        "at": "2026-11-01T03:03:38Z"
-      }
-    ],
     "tiebreak": {
-      "checker": "fc-plang02t",
+      "checker": "fc-tbp3t",
       "pass": "T",
       "brief": "tiebreak",
       "packetSha256": "79473d79a6f98c22991d747faa0002c1a7737539195a0d9a0585e3a99447efac",
-      "startedAt": "2026-11-01T05:04:45Z",
-      "finishedAt": "2026-11-01T05:10:48Z",
+      "startedAt": "2026-11-04T13:32:05Z",
+      "finishedAt": "2026-11-04T13:55:32Z",
       "coldSolve": {
         "answerGiven": "Quotations from books",
         "confidence": "high",
@@ -261,93 +255,156 @@
       },
       "claimResults": [
         {
-          "claimId": "c1",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "textbook",
-            "restatement": "Johnson's Dictionary of 1755 illustrated the senses of its words with quotations from English writers.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed: A and B both confirmed it on knowledge. It is high-risk and no check carries dataset or web evidence for it, so rule 3 still needs external evidence. This run's only WebSearch call was refused (the turn's shared search limit was used up) and no pinned dataset covers the topic. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
-        },
-        {
-          "claimId": "c2",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "The Dictionary had no pictures and no rhyming examples, and it showed usage through quoted passages rather than Latin translations.",
-            "confidence": "certain"
-          },
-          "note": "Standard risk, confirmed by A and B on knowledge, so nothing more is needed for rule 3."
-        },
-        {
           "claimId": "c3",
-          "verdict": "uncertain",
-          "method": "knowledge",
+          "verdict": "confirmed",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "I recall about 114,000 as the usual count of Johnson's illustrative quotations, but not with the certainty an exact figure needs.",
-            "confidence": "likely"
+            "kind": "web",
+            "query": "Samuel Johnson Dictionary of the English Language 1755 number of illustrative quotations 114,000 and 42,773 entries",
+            "results": [
+              {
+                "title": "A Dictionary of the English Language",
+                "url": "https://en.wikipedia.org/wiki/A_Dictionary_of_the_English_Language"
+              },
+              {
+                "title": "1755 - Johnson's Dictionary",
+                "url": "http://vll-minos.bl.uk/learning/langlit/dic/johnson/1755johnsonsdictionary.html"
+              },
+              {
+                "title": "Samuel Johnson",
+                "url": "https://en.wikipedia.org/wiki/Samuel_Johnson"
+              },
+              {
+                "title": "Guide to Dictionary",
+                "url": "https://johnsonsdictionaryonline.com/blog/guide-to-dictionary/"
+              },
+              {
+                "title": "About Johnson's Quotations - Johnson's Dictionary Online",
+                "url": "https://johnsonsdictionaryonline.com/blog/about-johnsons-quotations/"
+              },
+              {
+                "title": "About Johnson’s Dictionary",
+                "url": "https://johnsonsdictionaryonline.com/blog/about-johnsons-dictionary/"
+              },
+              {
+                "title": "The lexicographic history of Great Britain",
+                "url": "https://www.britannica.com/video/look-history-A-Dictionary-of-the-English/-206783"
+              },
+              {
+                "title": "Studies of Johnson's \"Dictionary\", 1995-2009: a bibliography Citation",
+                "url": "https://dash.harvard.edu/server/api/core/bitstreams/33896ef7-5733-4f11-8b96-13785300887a/content"
+              },
+              {
+                "title": "Samuel Johnson",
+                "url": "https://www.britannica.com/biography/Samuel-Johnson"
+              },
+              {
+                "title": "Passion makes tedious work enjoyable",
+                "url": "https://johnsonsdictionaryonline.com/blog/passion-makes-tedious-work-enjoyable/"
+              }
+            ],
+            "summaryExcerpt": "The figure of about 114,000 appears in Wikipedia and in the British Library's page, which says there are over 114,000. Johnson's Dictionary Online's guide says more than 110,000, while its blog and Jack Lynch's essay put the number near 115,000. [...] Overall, 42,773 entries and roughly 114,000 quotations is the most commonly cited pairing, with the other numbers being approximations or alternative counts.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "Disputed: B left c3 uncertain. It is a number stated in the explanation, so it needs a Tier A or B source. No external evidence could be gathered in this run (WebSearch refused, no dataset covers it). B's precision-ladder fallback ('more than 100,000') would still need a source."
+          "note": "Every count reported (more than 110,000, over 114,000, about 114,000, near 115,000) sits inside 'about 114,000'. The summary's 'sources differ on the exact counts' concerns exact figures that c3 does not state, so I record no conflict on the claim as written."
         },
         {
           "claimId": "c4",
           "verdict": "confirmed",
-          "method": "knowledge",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "The first edition is usually counted at 42,773 entries, so 'some 42,000' is a fair round figure.",
-            "confidence": "certain"
+            "kind": "web",
+            "query": "Samuel Johnson Dictionary of the English Language 1755 number of illustrative quotations 114,000 and 42,773 entries",
+            "results": [
+              {
+                "title": "A Dictionary of the English Language",
+                "url": "https://en.wikipedia.org/wiki/A_Dictionary_of_the_English_Language"
+              },
+              {
+                "title": "1755 - Johnson's Dictionary",
+                "url": "http://vll-minos.bl.uk/learning/langlit/dic/johnson/1755johnsonsdictionary.html"
+              },
+              {
+                "title": "Samuel Johnson",
+                "url": "https://en.wikipedia.org/wiki/Samuel_Johnson"
+              },
+              {
+                "title": "Guide to Dictionary",
+                "url": "https://johnsonsdictionaryonline.com/blog/guide-to-dictionary/"
+              },
+              {
+                "title": "About Johnson's Quotations - Johnson's Dictionary Online",
+                "url": "https://johnsonsdictionaryonline.com/blog/about-johnsons-quotations/"
+              },
+              {
+                "title": "About Johnson’s Dictionary",
+                "url": "https://johnsonsdictionaryonline.com/blog/about-johnsons-dictionary/"
+              },
+              {
+                "title": "The lexicographic history of Great Britain",
+                "url": "https://www.britannica.com/video/look-history-A-Dictionary-of-the-English/-206783"
+              },
+              {
+                "title": "Studies of Johnson's \"Dictionary\", 1995-2009: a bibliography Citation",
+                "url": "https://dash.harvard.edu/server/api/core/bitstreams/33896ef7-5733-4f11-8b96-13785300887a/content"
+              },
+              {
+                "title": "Samuel Johnson",
+                "url": "https://www.britannica.com/biography/Samuel-Johnson"
+              },
+              {
+                "title": "Passion makes tedious work enjoyable",
+                "url": "https://johnsonsdictionaryonline.com/blog/passion-makes-tedious-work-enjoyable/"
+              }
+            ],
+            "summaryExcerpt": "Wikipedia's article on the dictionary gives 42,773 words for the first edition, with only a few more added in later editions. [...] Johnson's Dictionary Online describes the total as roughly 42,000 and notes that one count yields 41,684, since it's unclear where one entry ends and another begins. The British Library's page gives 40,000.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "Not disputed: A and B both confirmed it on knowledge. High-risk (a number) with no external evidence in any check, so rule 3 still needs it. No search was possible in this run (see c1)."
-        },
-        {
-          "claimId": "c5",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "textbook",
-            "restatement": "Shakespeare, Milton and Dryden are among the writers Johnson quoted most often.",
-            "confidence": "certain"
-          },
-          "note": "Standard risk, confirmed by A and B on knowledge, so nothing more is needed for rule 3."
-        },
-        {
-          "claimId": "c6",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "The Oxford English Dictionary took up the same method of dated illustrative quotations, on a far larger scale.",
-            "confidence": "certain"
-          },
-          "note": "Standard risk, confirmed by A and B on knowledge, so nothing more is needed for rule 3."
+          "note": "Counts from 41,684 to 42,773 fit 'some 42,000'; the British Library's 40,000 is a coarser rounding of the same count, not a different count. c4 was not in dispute: this adds external evidence to a high-risk claim that had knowledge only in A and B."
         }
       ],
       "issues": [
         {
           "type": "wording",
           "severity": "note",
-          "note": "checker_doubt c3: the figure of about 114,000 quotations rests on knowledge in all three checks. Settle it with web evidence in a re-run tiebreak, or step the explanation down to a figure a source supports."
-        },
-        {
-          "type": "wording",
-          "severity": "note",
-          "note": "Optional: 'each word' in the stem reads as if every entry carried a quotation, which is broader than c1 ('how words were used'). 'Show the way words were used' would match c1 exactly. Not a reason to revise on its own."
+          "note": "Optional: the stem's 'the way each word was used' reads as if every entry carried a quotation, which no source here states; c1 says 'how words were used'. 'The way words were used' would match c1. Not a reason to revise."
         }
       ],
-      "searchesUsed": 0,
-      "verdict": "revise"
-    }
+      "searchesUsed": 1,
+      "verdict": "pass"
+    },
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp3t. A pass, B revise, T pass (§9.7). B's revise was its doubt on c3 (about 114,000 quotations). T's search (Wikipedia, the British Library's page and Johnson's Dictionary Online, counted at Tier B) reports counts from more than 110,000 to near 115,000 quotations, all inside 'about 114,000', and 41,684 to 42,773 entries for c4, with no conflict on either claim as written. So c3, which needed the tiebreak, has external evidence, and B's doubt is settled on it. A and B confirmed high-risk c1 directly at certain (memo §18). T's note on the stem's 'each word' is optional: the key is not in question and no option becomes defensible. The acceptance rule passes.",
+      "decidedAt": "2026-11-04T14:12:12Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-04T14:12:12Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T14:12:12Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "How did Samuel Johnson's 1755 dictionary show the way each word was used?",
