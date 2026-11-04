@@ -5,8 +5,10 @@
 -- re-applies it). It is one transaction that ends in rollback, so nothing
 -- persists, and it runs none of the statements 01-ENGINEERING-CONSTRAINTS.md
 -- keeps out of unattended SQL. A failed assert raises, so the call reports
--- the failure and never reaches the PASS lines; on success the last select
--- returns one PASS line per check.
+-- the failure and never reaches the PASS lines. On success it reaches one
+-- `select 'PASS ...';` line per check, the form supabase/README.md §5 sets:
+-- `npm run sql:bundle -- --area escrow` returns them all, while a call with
+-- this file alone shows only the last.
 --
 -- It never touches a real key. Check 5 inserts a throwaway key (the bytes 0 to
 -- 31, the same one src/content/pipeline/sealed-safety.test.ts restores) under
@@ -151,13 +153,10 @@ begin
     'the escrowed key is not 32 bytes';
 end $$;
 
-select result from (values
-  (1, 'PASS CNT-0 escrow table: private.key_escrow (kid text primary key, key bytea, created_at timestamptz), owned by postgres'),
-  (2, 'PASS CNT-0 escrow deny-all policy: row level security on and not forced, one restrictive policy key_escrow_deny_all for all to public using (false) with check (false)'),
-  (3, 'PASS CNT-0 escrow grants: anon, authenticated, service_role and public hold no privilege on schema private or the table, and nobody but postgres holds a grant'),
-  (4, 'PASS CNT-0 escrow refuses anon and authenticated: select, count, insert and update each raise insufficient_privilege'),
-  (5, 'PASS CNT-0 escrow recovery: postgres can escrow a key and the recovery query returns it as one 44-character base64 line')
-) as lines (n, result)
-order by n;
+select 'PASS CNT-0 escrow table: private.key_escrow (kid text primary key, key bytea, created_at timestamptz), owned by postgres';
+select 'PASS CNT-0 escrow deny-all policy: row level security on and not forced, one restrictive policy key_escrow_deny_all for all to public using (false) with check (false)';
+select 'PASS CNT-0 escrow grants: anon, authenticated, service_role and public hold no privilege on schema private or the table, and nobody but postgres holds a grant';
+select 'PASS CNT-0 escrow refuses anon and authenticated: select, count, insert and update each raise insufficient_privilege';
+select 'PASS CNT-0 escrow recovery: postgres can escrow a key and the recovery query returns it as one 44-character base64 line';
 
 rollback;
