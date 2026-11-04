@@ -92,6 +92,12 @@ export const PRACTICE_CLIENT_COPY = {
     answer: (text: string) => `Answer: ${text}`,
     /** On a miss, the pick, as it reads mid-sentence (D13, R1-25). */
     yourAnswer: (text: string) => `You chose ${text}`,
+    /**
+     * A row's second line as short sentences, the same for the eye and the
+     * ear: "Not quite. Answer: 4. You chose 15."
+     */
+    line: (parts: readonly string[]) =>
+      parts.map((part) => (/[.!?]$/.test(part) ? part : `${part}.`)).join(" "),
     /** The open-me hint at the end of each row's summary. */
     why: "Why",
     withdrawn: "This question is no longer in the pack.",

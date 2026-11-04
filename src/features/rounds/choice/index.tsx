@@ -358,7 +358,11 @@ function ChoiceRoundView({
     pressClaimedFocus.current = false;
     if (claimed || !focusIsElsewhere(rootRef.current)) {
       titleRef.current?.focus({ preventScroll: true });
-    } else if (choiceReveal !== null && !spokenAloud.current) {
+    } else if (
+      choiceReveal !== null &&
+      !spokenAloud.current &&
+      !startedRevealed
+    ) {
       spokenAloud.current = true;
       announce(verdictText(open, choiceReveal));
     }

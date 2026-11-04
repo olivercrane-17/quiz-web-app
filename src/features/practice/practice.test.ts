@@ -211,6 +211,17 @@ describe("R1-17 practice results rows", () => {
     expect(PRACTICE_CLIENT_COPY.results.numbered(6, guilds.stem)).toBe(
       `6. ${guilds.stem}`,
     );
+    // The second line, as sentences for the eye and the ear alike.
+    expect(
+      PRACTICE_CLIENT_COPY.results.line([
+        "Not quite",
+        "Answer: 4",
+        "You chose 15",
+      ]),
+    ).toBe("Not quite. Answer: 4. You chose 15.");
+    expect(
+      PRACTICE_CLIENT_COPY.results.line(["Right", "Answer: Washington, D.C."]),
+    ).toBe("Right. Answer: Washington, D.C.");
   });
 });
 

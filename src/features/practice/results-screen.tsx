@@ -17,7 +17,7 @@
  * join it with PRA-2.
  */
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { loadPracticePool } from "@/content/loaders/practice";
 import { track } from "@/features/analytics/track";
@@ -50,31 +50,12 @@ type Results =
     };
 
 /**
- * A period screen readers read and the eye doesn't see. It stays an inline
- * box: a hidden box taken out of the flow (`sr-only`) is a block to the
- * accessible-name computation, which pads it with spaces ("7 out of 10 .",
- * R1-34).
+ * The score's closing period, which screen readers read and the eye doesn't
+ * see. It stays an inline box: a hidden box taken out of the flow
+ * (`sr-only`) is a block to the accessible-name computation, which pads it
+ * with spaces ("7 out of 10 .", R1-34).
  */
 const HIDDEN_PERIOD = "[clip-path:inset(50%)]";
-
-/**
- * A row's second line, "Not quite · Answer: 4 · You chose 15", heard as
- * three short sentences: the dots are for the eye, the periods for the ear.
- */
-function Parts({ parts }: { parts: readonly string[] }) {
-  return parts.map((part, i) => (
-    <Fragment key={part}>
-      {i === 0 ? null : (
-        <>
-          {" "}
-          <span aria-hidden="true">·</span>{" "}
-        </>
-      )}
-      {part}
-      <span className={HIDDEN_PERIOD}>.</span>
-    </Fragment>
-  ));
-}
 
 /**
  * The row's lines (D13): the verdict's icon, then the question's number
@@ -106,7 +87,7 @@ function RowLines({ row, loaded }: { row: ResultRow; loaded: boolean }) {
           {first}
         </span>
         <span className="break-words text-muted-foreground">
-          <Parts parts={parts} />
+          {COPY.results.line(parts)}
         </span>
       </span>
     </>
