@@ -2,14 +2,29 @@
 
 /**
  * `/daily` (PRD §3.1.3, DESIGN §12.2), greybox: the focus-mode header (Leave,
- * the round pills, the stopwatch) and the round area. On mount it starts or
- * resumes today's attempt (ARCHITECTURE §1.4 item 11), so Play, a deep link
- * and Back all behave the same; a finished attempt goes to its results.
+ * the round pills, the stopwatch, More) and the round area. On mount it
+ * starts or resumes today's attempt (ARCHITECTURE §1.4 item 11), so Play, a
+ * deep link and Back all behave the same; a finished attempt goes to its
+ * results.
  *
  * The prerendered HTML is the frame and a skeleton: the controller only
  * starts in an effect, after the client boot, so server and client render
  * the same first snapshot. A hidden route (kept in `<Activity>`) stops the
- * controller and picks up from the server when it shows again.
+ * controller and picks up from the server when it shows again; the More
+ * menu and How to play close as it hides.
+ *
+ * What RITE round 1 added (FIX-DLY):
+ * - The More menu with How to play (PRD §3.1.3's five parts, logging
+ *   `how_to_play_open`) and Hide or Show stopwatch; the stopwatch itself
+ *   opens it at Hide stopwatch (R1-04, R1-05). The choice persists in the
+ *   settings store, everywhere.
+ * - In the player's first Daily, "Take your time. Time only breaks ties."
+ *   beside the stopwatch (R1-05), from the start's first-Daily flag, which
+ *   the round context also carries to the rounds (R1-04).
+ * - A header that fits 200% text on a phone (R1-03, `HeaderStatus`).
+ * - "Saved" as a toast once Leave has taken the player to Today (R1-38).
+ * - One `h1` on the route: this screen's own only while no round component
+ *   draws its heading (R1-34; `RoundArea` keeps the other half).
  *
  * A start that can't go through says why in words that say what still
  * works (PRD §3.0.2). A rate-limited one follows AC-IDN-04: the skeleton
@@ -19,8 +34,18 @@
 import type { Route } from "next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
+import { track } from "@/features/analytics/track";
 import type { PlaySettings } from "@/features/rounds";
 import { playSettingsFrom } from "@/features/rounds";
 import { PlayFrame } from "@/features/shell";
@@ -30,7 +55,6 @@ import { Button } from "@/ui/button";
 import { buttonClasses } from "@/ui/button-classes";
 import { Card } from "@/ui/card";
 import { UI_COPY } from "@/ui/copy";
-import { ProgressSegments } from "@/ui/progress-segments";
 import { Loading, Skeleton, SkeletonText } from "@/ui/skeleton";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
@@ -43,11 +67,17 @@ import {
   type StartProblem,
 } from "../model/controller";
 import { rememberFinished } from "../model/handoff";
-import { progressSegments, progressVariant } from "../model/labels";
-import { RoundArea } from "./round-area";
+import { openRoundNumber } from "../model/labels";
+import { showToastAfterLeaving } from "../toast";
+import { HeaderStatus } from "./header-status";
+import { HowToPlaySheet } from "./how-to-play-sheet";
+import { MoreMenu, type MoreMenuItem } from "./more-menu";
+import { RoundArea, screenTitle } from "./round-area";
 import { Stopwatch } from "./stopwatch";
 
 const COPY = DAILY_SCREEN_COPY;
+/** Where the Daily lives: Leave's toast waits until the address leaves it. */
+const DAILY_PATH = "/daily";
 
 function prefersReducedMotion(): boolean {
   try {
@@ -58,14 +88,26 @@ function prefersReducedMotion(): boolean {
 }
 
 /** The stored settings a round reads, resolved once per visit (client only). */
-function usePlaySettings(): { play: PlaySettings; stopwatchShown: boolean } {
-  return useMemo(() => {
-    const settings = getSettingsStore().get();
-    return {
-      play: playSettingsFrom(settings, prefersReducedMotion()),
-      stopwatchShown: settings.stopwatch !== "hidden",
-    };
-  }, []);
+function usePlaySettings(): PlaySettings {
+  return useMemo(
+    () => playSettingsFrom(getSettingsStore().get(), prefersReducedMotion()),
+    [],
+  );
+}
+
+function subscribeSettings(onChange: () => void): () => void {
+  return getSettingsStore().subscribe(() => {
+    onChange();
+  });
+}
+
+/** "Hide stopwatch", live: the More menu changes it, and it persists (AC-DLY-12). */
+function useStopwatchShown(): boolean {
+  return useSyncExternalStore(
+    subscribeSettings,
+    () => getSettingsStore().get().stopwatch !== "hidden",
+    () => true,
+  );
 }
 
 function StartSkeleton({ slow }: { slow: boolean }) {
@@ -167,6 +209,38 @@ export function StartProblemCard({
   );
 }
 
+/** The More menu, opened from the More button or the stopwatch. */
+interface MenuState {
+  at: MoreMenuItem;
+  from: "button" | "stopwatch";
+}
+
+/** The element that held the player's place: the clue, else the round's heading. */
+function placeInRound(): HTMLElement | null {
+  for (const target of ["clue_heading", "round_heading", "reveal_heading"]) {
+    const element = document.querySelector<HTMLElement>(
+      `[data-round-area] [data-focus-target="${target}"]`,
+    );
+    if (element !== null) return element;
+  }
+  return null;
+}
+
+/**
+ * "Take your time. Time only breaks ties.", beside the stopwatch in the
+ * player's first Daily (PRD §3.1.3, R1-05).
+ */
+function StopwatchHint() {
+  return (
+    <p
+      data-stopwatch-hint=""
+      className="self-end text-right text-sm font-semibold text-muted-foreground"
+    >
+      {COPY.stopwatchHint}
+    </p>
+  );
+}
+
 export function DailyScreen() {
   const [controller] = useState(() => createDailyController(browserDeps()));
   const snapshot = useSyncExternalStore(
@@ -175,6 +249,13 @@ export function DailyScreen() {
     controller.getSnapshot,
   );
   const router = useRouter();
+  const stopwatchShown = useStopwatchShown();
+  const [menu, setMenu] = useState<MenuState | null>(null);
+  const [howToPlay, setHowToPlay] = useState(false);
+  const opener = useRef<HTMLElement | null>(null);
+  const moreRef = useRef<HTMLButtonElement>(null);
+  const backToRound = useRef(false);
+  const menuId = useId();
 
   useEffect(() => {
     controller.start();
@@ -193,7 +274,17 @@ export function DailyScreen() {
     };
   }, [controller]);
 
-  const { status, daily, attemptId, movedOn } = snapshot;
+  // A hidden route keeps its state (<Activity>): a menu or sheet left open
+  // must not greet the player when they come back.
+  useLayoutEffect(
+    () => () => {
+      setMenu(null);
+      setHowToPlay(false);
+    },
+    [],
+  );
+
+  const { status, daily, attemptId, movedOn, run } = snapshot;
   useEffect(() => {
     if (status !== "finished" || daily === null || attemptId === null) return;
     rememberFinished(daily.dailyNumber, attemptId);
@@ -204,48 +295,122 @@ export function DailyScreen() {
     if (movedOn) announce(COPY.movedOn);
   }, [movedOn]);
 
+  // Closing How to play goes back to the clue the player was on (AC-DLY-30):
+  // after the sheet's own cleanup, since the menu item that opened it is gone.
+  useEffect(() => {
+    if (howToPlay || !backToRound.current) return;
+    backToRound.current = false;
+    (placeInRound() ?? moreRef.current)?.focus();
+  }, [howToPlay]);
+
+  const openMenu = useCallback(
+    (at: MoreMenuItem, from: MenuState["from"], element: HTMLElement) => {
+      opener.current = element;
+      setMenu({ at, from });
+    },
+    [],
+  );
+
+  const closeMenu = useCallback((restoreFocus: boolean) => {
+    setMenu(null);
+    if (restoreFocus) opener.current?.focus();
+  }, []);
+
+  const showHowToPlay = () => {
+    setMenu(null);
+    backToRound.current = true;
+    setHowToPlay(true);
+    track("how_to_play_open", {
+      round: openRoundNumber(run),
+      first_daily: snapshot.firstDaily,
+    });
+  };
+
+  const toggleStopwatch = () => {
+    const next = stopwatchShown ? "hidden" : "shown";
+    getSettingsStore().update({ stopwatch: next });
+    track("settings_change", { setting: "stopwatch", value: next });
+    setMenu(null);
+    // The stopwatch may be gone: the More button keeps the player's place.
+    moreRef.current?.focus();
+  };
+
+  const playing = status === "playing" && run !== null;
+
   return (
     <PlayFrame
       header={{
-        leave: { href: "/", label: COPY.leave },
+        leave: {
+          href: "/",
+          label: COPY.leave,
+          onLeave: () => {
+            if (playing) showToastAfterLeaving(COPY.saved, DAILY_PATH);
+          },
+        },
         progress:
-          snapshot.run === null ? undefined : (
-            <ProgressSegments
-              label={COPY.progress}
-              segments={progressSegments(snapshot.run)}
-              variant={progressVariant(snapshot.run)}
+          run === null ? undefined : (
+            <HeaderStatus
+              run={run}
+              stopwatch={
+                stopwatchShown ? (
+                  <Stopwatch
+                    run={run}
+                    offset={snapshot.timeOffset}
+                    expanded={menu?.from === "stopwatch"}
+                    menuId={menuId}
+                    onOpenMenu={(element) => {
+                      if (menu !== null) closeMenu(false);
+                      else openMenu("stopwatch", "stopwatch", element);
+                    }}
+                  />
+                ) : null
+              }
             />
           ),
-        end:
-          snapshot.run === null ? undefined : (
-            <StopwatchSlot snapshot={snapshot} />
-          ),
+        end: (
+          <MoreMenu
+            openAt={menu?.at ?? null}
+            fromButton={menu?.from === "button"}
+            onOpen={(at, element) => {
+              openMenu(at, "button", element);
+            }}
+            onClose={closeMenu}
+            stopwatchShown={stopwatchShown}
+            onHowToPlay={showHowToPlay}
+            onToggleStopwatch={toggleStopwatch}
+            menuId={menuId}
+            buttonRef={moreRef}
+          />
+        ),
       }}
     >
       <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 px-4 py-4">
-        <h1 className="sr-only">
-          {daily === null
-            ? COPY.title
-            : `${COPY.title}, Daily #${daily.dailyNumber}`}
-        </h1>
-        {status === "playing" ? (
-          <PlayingArea snapshot={snapshot} controller={controller} />
-        ) : retryingSilently(snapshot.problem) ? (
-          <StartSkeleton slow />
-        ) : status === "failed" || snapshot.problem !== null ? (
-          <StartProblemCard snapshot={snapshot} controller={controller} />
+        {playing ? (
+          <>
+            {snapshot.firstDaily && stopwatchShown ? <StopwatchHint /> : null}
+            <PlayingArea snapshot={snapshot} controller={controller} />
+          </>
         ) : (
-          <StartSkeleton slow={snapshot.slowStart} />
+          <>
+            <h1 className="sr-only">{screenTitle(snapshot)}</h1>
+            {retryingSilently(snapshot.problem) ? (
+              <StartSkeleton slow />
+            ) : status === "failed" || snapshot.problem !== null ? (
+              <StartProblemCard snapshot={snapshot} controller={controller} />
+            ) : (
+              <StartSkeleton slow={snapshot.slowStart} />
+            )}
+          </>
         )}
       </div>
+      <HowToPlaySheet
+        open={howToPlay}
+        onClose={() => {
+          setHowToPlay(false);
+        }}
+      />
     </PlayFrame>
   );
-}
-
-function StopwatchSlot({ snapshot }: { snapshot: DailySnapshot }) {
-  const { stopwatchShown } = usePlaySettings();
-  if (snapshot.run === null || !stopwatchShown) return null;
-  return <Stopwatch run={snapshot.run} />;
 }
 
 function PlayingArea({
@@ -255,7 +420,7 @@ function PlayingArea({
   snapshot: DailySnapshot;
   controller: DailyController;
 }) {
-  const { play } = usePlaySettings();
+  const play = usePlaySettings();
   return (
     <RoundArea snapshot={snapshot} controller={controller} settings={play} />
   );

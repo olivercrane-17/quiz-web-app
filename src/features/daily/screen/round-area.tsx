@@ -23,6 +23,10 @@
  *   a rate limit, which reached us and used up nothing), the offline line
  *   where the round component doesn't draw one, "Checking…" for a slow
  *   finish, and Try again for a begin_round or finish that failed for good.
+ * - The route's one `h1` (DESIGN §11, R1-34): a mounted round component
+ *   draws its own, so the area adds the screen's only where none is.
+ * - The round context carries the start's first-Daily flag, for the
+ *   rounds' first-Daily hints (PRD §3.1.4, R1-04).
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -271,6 +275,13 @@ function OpeningRound({
   );
 }
 
+/** "Today's Daily, Daily #42": the route's heading when no round draws one. */
+export function screenTitle(snapshot: DailySnapshot): string {
+  return snapshot.daily === null
+    ? COPY.title
+    : `${COPY.title}, Daily #${snapshot.daily.dailyNumber}`;
+}
+
 function PracticeLink() {
   return (
     <Link
@@ -384,8 +395,18 @@ export function RoundArea({
             list,
             itemRef: `daily:${snapshot.daily?.dailyNumber ?? 0}:${meta.index}`,
             settings,
+            // The start's first-Daily flag: the rounds' first-Daily hints
+            // (PRD §3.1.4, §3.1.5; R1-04).
+            firstDaily: snapshot.firstDaily,
           },
-    [meta, view?.mode, list, snapshot.daily?.dailyNumber, settings],
+    [
+      meta,
+      view?.mode,
+      list,
+      snapshot.daily?.dailyNumber,
+      settings,
+      snapshot.firstDaily,
+    ],
   );
   if (
     run === null ||
@@ -461,6 +482,11 @@ export function RoundArea({
       data-round-index={meta.index}
       className="flex flex-col gap-4"
     >
+      {mounted ? null : (
+        // One h1 per route (DESIGN §11, R1-34): a mounted round draws its
+        // own, so the screen names itself only where none is drawn.
+        <h1 className="sr-only">{screenTitle(snapshot)}</h1>
+      )}
       {snapshot.movedOn ? (
         <p className="rounded-xl bg-muted px-3 py-2 text-sm">{COPY.movedOn}</p>
       ) : null}

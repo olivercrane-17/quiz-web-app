@@ -33,6 +33,7 @@ import {
   type DailyControllerDeps,
   type DailySnapshot,
 } from "./controller";
+import { elapsedMs } from "./labels";
 
 const NOV_1 = Date.UTC(2026, 10, 1, 9);
 const UTC = parseTimeZone("UTC") as TimeZone;
@@ -826,5 +827,59 @@ describe("choice rounds", () => {
     await act(h, { family: "choice", kind: "answer", option: 0 });
     expect(h.state().view).toMatchObject({ phase: "revealed", index: 0 });
     expect(h.announced).toEqual([]);
+  });
+});
+
+describe("RITE round 1: what the start and a reload carry", () => {
+  it("R1-04 carries the start's first-Daily flag for a player who has never finished a Daily", async () => {
+    const h = harness();
+    expect(h.state().firstDaily).toBe(false);
+    expect((await started(h)).firstDaily).toBe(true);
+    // A reload in the middle of that first Daily keeps the hints.
+    h.reload();
+    expect((await started(h)).firstDaily).toBe(true);
+  });
+
+  it("R1-04 drops the flag once the player has finished a Daily", async () => {
+    const h = harness();
+    await h.mock.controls.seed("finished_today");
+    h.clock.advance(24 * 60 * 60 * 1000);
+    const state = await started(h);
+    expect(state.daily?.dailyNumber).toBe(43);
+    expect(state.firstDaily).toBe(false);
+  });
+
+  it("R1-06 keeps the elapsed time across a reload, while the judge reports the device's own measure", async () => {
+    const h = harness();
+    await started(h);
+    h.clock.advance(90_000);
+    await act(h, guess(ODILE));
+    await next(h);
+    h.clock.advance(30_000);
+    expect(elapsedMs(h.state().run!, h.clock.now())).toBe(120_000);
+
+    // The reload: a new controller over the same server and device.
+    h.reload();
+    const state = await started(h);
+    expect(state.view).toMatchObject({ phase: "active", index: 1 });
+    expect(state.timeOffset).toEqual({ index: 1, ms: 30_000 });
+    expect(state.run?.slots[0]?.activeMs).toBe(90_000);
+    expect(elapsedMs(state.run!, h.clock.now(), state.timeOffset)).toBe(
+      120_000,
+    );
+
+    const reported: number[] = [];
+    const send = h.backend.sealed.act;
+    h.backend.sealed.act = async (input) => {
+      reported.push(input.clientActiveMs);
+      return send(input);
+    };
+    h.clock.advance(5_000);
+    await act(h, guess(LIESL));
+    // PRD §4.3.3 compares the server's interval with the device's own.
+    expect(reported).toEqual([5_000]);
+    expect(elapsedMs(h.state().run!, h.clock.now(), h.state().timeOffset)).toBe(
+      125_000,
+    );
   });
 });

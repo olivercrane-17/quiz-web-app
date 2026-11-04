@@ -47,6 +47,7 @@ vi.mock(import("@/features/rounds/client"), async (importOriginal) => {
             props.open.family === "mystery" ? props.open.clue : undefined
           }
           data-reveal={props.reveal?.family ?? ""}
+          data-first-daily={String(props.context.firstDaily)}
         />
       );
     };
@@ -156,7 +157,7 @@ function setup(at = NOV_1) {
     controllers.push(controller);
     return controller;
   };
-  return { mock, backend, timers, make, controller: make() };
+  return { mock, backend, timers, clock, make, controller: make() };
 }
 
 function Screen({ controller }: { controller: DailyController }) {
@@ -419,5 +420,46 @@ describe("the Daily's round area", () => {
     expect(
       screen.getAllByRole("heading", { name: "Question 1 of 9 · Easy" }),
     ).toHaveLength(1);
+  });
+});
+
+describe("RITE round 1 in the round area", () => {
+  it("R1-04 hands the round the start's first-Daily flag in its context", async () => {
+    const t = setup();
+    renderWithUser(<Screen controller={t.controller} />);
+    await begin(t.controller);
+    expect(area().querySelector('[data-probe="mystery"]')).toHaveAttribute(
+      "data-first-daily",
+      "true",
+    );
+  });
+
+  it("R1-04 tells the round it isn't the player's first Daily once they have finished one", async () => {
+    const t = setup();
+    await t.mock.controls.seed("finished_today");
+    t.clock.advance(24 * 60 * 60 * 1000);
+    renderWithUser(<Screen controller={t.controller} />);
+    await begin(t.controller);
+    expect(t.controller.getSnapshot().daily?.dailyNumber).toBe(43);
+    expect(area().querySelector('[data-probe="mystery"]')).toHaveAttribute(
+      "data-first-daily",
+      "false",
+    );
+  });
+
+  it("R1-34 leaves the route's h1 to a mounted round, and names the screen in one where none is", async () => {
+    const t = setup();
+    await voidRound(t.mock.context, { dailyNumber: 42, round: 1 });
+    renderWithUser(<Screen controller={t.controller} />);
+    await begin(t.controller);
+    // The Mystery component draws its own h1 (the probe stands in for it).
+    expect(screen.queryAllByRole("heading", { level: 1 })).toEqual([]);
+
+    await run(() => t.controller.intent(guess(ODILE)));
+    await run(() => t.controller.continue());
+    // A withdrawn round's card is the area's own: one h1 names the screen.
+    expect(
+      screen.getAllByRole("heading", { level: 1 }).map((h) => h.textContent),
+    ).toEqual(["Today's Daily, Daily #42"]);
   });
 });
