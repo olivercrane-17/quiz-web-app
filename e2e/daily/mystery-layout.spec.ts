@@ -565,28 +565,51 @@ test.describe("the reveal under the sticky header (R1-12)", () => {
 });
 
 test.describe("the clue ladder at 200% text (R1-03)", () => {
-  test("R1-03 at 360 by 640 with 200% text a long word in clue 4 breaks inside its card, and the options keep to the screen", async ({
-    page,
-  }) => {
-    // "lighthouse's" ran past the card, and the options ran to x 363.
-    await openDaily(page, { width: 360, height: 640 }, true);
-    await toClue(page, 4);
-    const card = await boxOf(page.locator("[data-clue-card]"));
-    expect(card.right).toBeLessThanOrEqual(360);
-    const heading = page.locator("[data-clue-card] h2");
-    await expect(heading).toContainText("lighthouse");
-    expect(
-      await heading.evaluate(
-        (element) => element.scrollWidth - element.clientWidth,
-      ),
-    ).toBeLessThanOrEqual(0);
-    for (const option of await page.locator("[data-options] button").all()) {
-      expect((await boxOf(option)).right).toBeLessThanOrEqual(360);
-    }
-    expect(
-      await page.evaluate(() => document.documentElement.scrollWidth),
-    ).toBeLessThanOrEqual(360);
-  });
+  for (const { width, height } of [
+    { width: 360, height: 640 },
+    { width: 320, height: 568 },
+  ]) {
+    test(`R1-03 at ${String(width)} by ${String(height)} with 200% text no clue card runs off the screen, a long word in clue 4 breaks inside its card, and the options keep to the screen`, async ({
+      page,
+    }) => {
+      // "lighthouse's" ran past the card, and the options ran to x 363.
+      await openDaily(page, { width, height }, true);
+      for (let clue = 1; clue <= 4; clue += 1) {
+        if (clue > 1) {
+          await page.getByRole("button", { name: /^(Next|Last) clue/ }).click();
+          await expect(page.locator('[data-round="mystery"]')).toHaveAttribute(
+            "data-clue",
+            String(clue),
+          );
+        }
+        await settle(page);
+        for (const card of await page.locator("[data-clue-card]").all()) {
+          const box = await boxOf(card);
+          expect(box.left, `clue ${clue}`).toBeGreaterThanOrEqual(0);
+          expect(box.right, `clue ${clue}`).toBeLessThanOrEqual(width);
+          expect(
+            await card.evaluate(
+              (element) => element.scrollWidth - element.clientWidth,
+            ),
+            `clue ${clue}`,
+          ).toBeLessThanOrEqual(0);
+        }
+      }
+      const heading = page.locator("[data-clue-card] h2");
+      await expect(heading).toContainText("lighthouse");
+      expect(
+        await heading.evaluate(
+          (element) => element.scrollWidth - element.clientWidth,
+        ),
+      ).toBeLessThanOrEqual(0);
+      for (const option of await page.locator("[data-options] button").all()) {
+        expect((await boxOf(option)).right).toBeLessThanOrEqual(width);
+      }
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBeLessThanOrEqual(width);
+    });
+  }
 });
 
 test.describe("the Encore at 200% text", () => {

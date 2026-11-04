@@ -1439,6 +1439,12 @@ describe("MysteryRound after RITE round 1", () => {
     expect(
       screen.getByRole("group", { name: "Pick one of four" }),
     ).toHaveAccessibleDescription("Keys A to D pick.");
+    // Each option names its own key, and no digit while digits don't pick.
+    expect(
+      within(screen.getByRole("group", { name: "Pick one of four" }))
+        .getAllByRole("button")
+        .map((option) => option.getAttribute("aria-keyshortcuts")),
+    ).toEqual(["A", "B", "C", "D"]);
     first.unmount();
 
     const names = lastClue([
@@ -1464,12 +1470,15 @@ describe("MysteryRound after RITE round 1", () => {
     expect(
       screen.getByRole("group", { name: "Pick one of four" }),
     ).toHaveAccessibleDescription("Keys A to D, or 1 to 4, pick.");
-    // One key hint per option: the badge's letter, and no second key cap.
+    // One key hint per option, the badge's letter, with no key cap drawn
+    // beside it; the keys themselves are in aria-keyshortcuts (D6).
     const group = screen.getByRole("group", { name: "Pick one of four" });
     expect(group.querySelectorAll("kbd")).toHaveLength(0);
-    for (const option of within(group).getAllByRole("button")) {
-      expect(option).not.toHaveAttribute("aria-keyshortcuts");
-    }
+    expect(
+      within(group)
+        .getAllByRole("button")
+        .map((option) => option.getAttribute("aria-keyshortcuts")),
+    ).toEqual(["A 1", "B 2", "C 3", "D 4"]);
   });
 
   it("R1-13 leaves the keys alone with shortcuts off, and never picks an already-guessed option", async () => {
@@ -1665,6 +1674,11 @@ describe("MysteryRound after RITE round 1", () => {
     const chip = document.querySelector("[data-category-chip]");
     // Its own line under the title, not after it: the title's length can't move it.
     expect(chip).toHaveTextContent("History");
+    // The design system's flat label, not a pill that reads as a control (R1-27).
+    expect(chip?.querySelector(".kn-chip")).toHaveAttribute(
+      "data-tone",
+      "default",
+    );
     expect(chip?.contains(title)).toBe(false);
     expect(title.parentElement?.contains(chip)).toBe(true);
     expect(before(title, chip as Element)).toBe(true);

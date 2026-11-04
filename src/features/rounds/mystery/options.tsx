@@ -11,8 +11,9 @@
  * `optionForKey`): letters A to D, matching the badges, and digits 1 to 4
  * only when no option reads as a number, so "4" can never mean option D
  * when four is an answer (D6, R1-13). The badge is the one key hint per
- * option, so no separate key hint shows, and the options' description
- * names the keys for screen readers.
+ * option: each option names its keys in `aria-keyshortcuts` ("A 1", or
+ * "A"), which AnswerButton draws no second hint for since FIX-DS, and the
+ * options' description names them for screen readers too.
  */
 import { useId } from "react";
 
@@ -36,6 +37,19 @@ function readsAsNumber(label: string): boolean {
 /** Whether digits pick among these options (D6): only when none reads as a number. */
 export function digitsPick(options: readonly OptionView[]): boolean {
   return !options.some((option) => readsAsNumber(option.label));
+}
+
+/**
+ * The keys that pick the option at `position`, as `aria-keyshortcuts`
+ * lists them: "A 1", or "A" where digits don't pick (D6).
+ */
+export function keysFor(position: number, digits: boolean): string | null {
+  const letter = LETTER_KEYS[position];
+  if (letter === undefined) return null;
+  const digit = DIGIT_KEYS[position];
+  return digits && digit !== undefined
+    ? `${letter.toUpperCase()} ${digit}`
+    : letter.toUpperCase();
 }
 
 /**
@@ -82,13 +96,14 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   const leadId = useId();
   const keysId = useId();
   const { options, shortcuts, sound, haptics, onPick } = props;
+  const digits = digitsPick(options);
   return (
     <div
       role="group"
       aria-labelledby={leadId}
       aria-describedby={shortcuts ? keysId : undefined}
       data-options=""
-      data-digits={shortcuts && digitsPick(options) ? "" : undefined}
+      data-digits={shortcuts && digits ? "" : undefined}
     >
       <p
         id={leadId}
@@ -101,20 +116,21 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       </p>
       {shortcuts ? (
         <p id={keysId} className="sr-only">
-          {MYSTERY_COPY.options.keys(digitsPick(options))}
+          {MYSTERY_COPY.options.keys(digits)}
         </p>
       ) : null}
       {/* grid-cols-1 is minmax(0, 1fr): the longest word in a label can't
           widen the column past the screen, as "Ferryman" took it to 331 px
           of 296 at 200% text on a 360 px phone (R1-03); it breaks instead. */}
       <ol className="mt-2 grid grid-cols-1 gap-2.5">
-        {options.map((option) => (
+        {options.map((option, position) => (
           <li key={option.index} className="min-w-0">
             <AnswerButton
               index={option.index}
               state={stateOf(option, props)}
-              // The badge is the key hint (D6): no second one beside it.
-              shortcut={null}
+              // The badge is the key hint (D6); AnswerButton names the keys
+              // to assistive tech, only while the option is idle.
+              shortcut={shortcuts ? keysFor(position, digits) : null}
               onPressStart={() => {
                 if (sound) playEffect("tap");
               }}

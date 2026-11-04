@@ -58,6 +58,7 @@ import { HAPTICS, vibrate } from "@/platform/haptics";
 import { playEffect } from "@/platform/sound";
 import { announce } from "@/ui/announce";
 import { Button } from "@/ui/button";
+import { Chip } from "@/ui/chip";
 import { cx } from "@/ui/cx";
 
 import type { RoundComponentProps } from "../contracts";
@@ -328,17 +329,11 @@ function MysteryPlay({
           </h1>
           {category === null ? null : (
             // Its own line, at the left: the chip stays put whatever the
-            // title's length (R1-33).
+            // title's length (R1-33). The design system's flat label, not
+            // a pill that reads as a control (R1-27); a long name wraps
+            // inside it at 200% text rather than widen the page.
             <p className="mt-1.5 flex" data-category-chip="">
-              <span
-                className={cx(
-                  "inline-flex min-h-7 items-center rounded-full border-[1.5px] px-[11px] text-[0.8125rem] font-bold",
-                  TONE.strongBorder,
-                  TONE.surface,
-                )}
-              >
-                {category}
-              </span>
+              <Chip className="max-w-full whitespace-normal">{category}</Chip>
             </p>
           )}
         </div>
