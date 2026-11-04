@@ -39,6 +39,14 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
+      # Envelopes only in content/sealed/, no plaintext workspace, cache or key
+      # tracked, no key text in any file, and the QZ_CONTENT_KEY secret only
+      # where decisions memo §17 allows it (CNT-0, ARCHITECTURE §5.4 and
+      # §5.7). It needs only Node and git, so it runs first: a failing step
+      # further down can never skip it.
+      - name: Secret scan
+        run: npm run check:secrets
+
       - name: Install dependencies
         run: npm ci
 
@@ -65,11 +73,6 @@ jobs:
       # item text, but the key is only for the content-sealed job.
       - name: Content check
         run: npm run content:check
-
-      # Envelopes only in content/sealed/, and no plaintext workspace, cache or
-      # key tracked (SQL-3, ARCHITECTURE §5.4).
-      - name: Secret scan
-        run: npm run check:secrets
 
       # Same command Vercel runs, with the default (real) backend config.
       - name: Build
