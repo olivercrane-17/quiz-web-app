@@ -1,11 +1,12 @@
 /**
  * Guest identity and the backup cookie on the mock build (ARCHITECTURE §9,
  * IDN-1): the cookie `/api/identity` sets after registration (AC-CKE-01),
- * the silent restore of a wiped store (AC-CKE-02), the same-origin rule of
- * `/api/restore` (AC-CKE-03), the one cookie the app ever sets (AC-CKE-04),
- * a practice-only visit that registers nothing (AC-IDN-01), 30 new
- * identities from one browser (AC-IDN-05), and the registration copy for
- * both limit scopes (AC-IDN-04).
+ * the silent restore of a wiped store (AC-CKE-02), even when the first
+ * restore gets no answer and the tab registers meanwhile (§9.6), the
+ * same-origin rule of `/api/restore` (AC-CKE-03), the one cookie the app
+ * ever sets (AC-CKE-04), a practice-only visit that registers nothing
+ * (AC-IDN-01), 30 new identities from one browser (AC-IDN-05), and the
+ * registration copy for both limit scopes (AC-IDN-04).
  *
  * `__Host-` cookies need `Secure`, which Chromium accepts on
  * http://127.0.0.1 (§9.3's test note). "Clearing local storage" clears the
@@ -240,6 +241,88 @@ test.describe("the backup cookie (PRD §3.10.3)", () => {
     // One player on the server: nothing registered twice.
     const players = await mock.inspect<Record<string, unknown>>("players");
     expect(Object.keys(players)).toEqual([before?.playerId]);
+  });
+
+  test("a restore that gets no answer never lets the next registration overwrite the cookie: the wiped profile comes back (§9.6)", async ({
+    page,
+    context,
+    consoleErrors,
+  }) => {
+    await registerFromHome(page);
+    const lost = await storedIdentity(page);
+    expect(lost?.registered).toBe(true);
+
+    // WebKit wiped the store; the first /api/restore after it gets no
+    // answer (a cold function, a 5xx), the rest go through.
+    await wipeDeviceStorage(page);
+    let unanswered = 0;
+    await page.route("**/api/restore", async (route) => {
+      if (unanswered === 0) {
+        unanswered += 1;
+        await route.fulfill({
+          status: 503,
+          headers: { "cache-control": "no-store" },
+        });
+        return;
+      }
+      await route.fallback();
+    });
+    const posted: { playerId: string; secret: string }[] = [];
+    page.on("request", (request) => {
+      if (
+        new URL(request.url()).pathname === "/api/identity" &&
+        request.method() === "POST"
+      ) {
+        posted.push(request.postDataJSON() as (typeof posted)[number]);
+      }
+    });
+
+    // The tab plays as a new identity kept in memory, and registers it.
+    // (The card's round list is prerendered: wait for the boot's question.)
+    const firstRestore = page.waitForResponse(
+      (response) => new URL(response.url()).pathname === "/api/restore",
+    );
+    await openHome(page);
+    expect((await firstRestore).status()).toBe(503);
+    expect(unanswered).toBe(1);
+    await playButton(page).click();
+    await expect(clueHeading(page, 1)).toBeVisible();
+
+    // The cookie is read before anything is posted: the lost profile is
+    // back on the device, and only it was ever posted.
+    await expect
+      .poll(async () => (await storedIdentity(page))?.playerId)
+      .toBe(lost?.playerId);
+    expect(await storedIdentity(page)).toMatchObject({
+      playerId: lost?.playerId,
+      secret: lost?.secret,
+      source: "cookie",
+    });
+    await expect.poll(() => posted.length).toBeGreaterThan(0);
+    for (const credential of posted) {
+      expect(credential).toEqual({
+        playerId: lost?.playerId,
+        secret: lost?.secret,
+      });
+    }
+    const jar = await context.cookies();
+    expect(jar.map((cookie) => cookie.value)).toEqual([
+      `v1.${lost?.playerId}.${lost?.secret}`,
+    ]);
+    await expect
+      .poll(async () =>
+        (await trackLog(page))
+          .filter((event) => event.name === "identity_restored")
+          .map((event) => event.props),
+      )
+      .toEqual([{ source: "cookie" }]);
+
+    // The unanswered restore is the one error this test expects.
+    const index = consoleErrors.findIndex((error) =>
+      error.includes("status of 503"),
+    );
+    expect(index).toBeGreaterThanOrEqual(0);
+    consoleErrors.splice(index, 1);
   });
 
   test("AC-CKE-03 /api/restore returns 403 when Sec-Fetch-Site is cross-site or missing", async ({

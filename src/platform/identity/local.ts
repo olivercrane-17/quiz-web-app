@@ -11,13 +11,26 @@
  *   registers the identity (AC-IDN-01).
  * - `markRegistered()` runs after the first successful write: it records
  *   `registered` and posts the identity to the backup cookie, then records
- *   `cookieSavedAt` once the route stored it (§9.1 step 2). `replace()` (a
+ *   `cookieSavedAt` once the route answered (§9.1 step 2). `replace()` (a
  *   sync-code or claim restore) posts a registered identity the same way.
+ * - The first post of a minted identity waits for `confirmFirstBackup`
+ *   (the lifecycle reads the cookie first): an identity minted while
+ *   `/api/restore` had no answer must never overwrite the identity a wiped
+ *   store lost (§9.6). Until the cookie answers, a registered identity in
+ *   memory only stays there; the lifecycle stores it.
  * - `refreshBackup()` re-posts a registered identity whose cookie was never
  *   saved, or was saved 7 days ago or more, so its 400-day Max-Age keeps
- *   rolling (§9.1 step 3).
+ *   rolling (§9.1 step 3). A post the route refused (403) counts as saved
+ *   for that clock: asking again on every load would only be refused again.
  * - Every stored change is announced to the other tabs (§6.4), and
  *   `reload()` is how a tab takes in another tab's change.
+ * - `erase()` (Delete my data, Under 13, §9.7) forgets the identity: the
+ *   key goes, the other tabs hear it, and from then on the tab keeps a new
+ *   identity in memory only, storing and posting nothing. The same happens
+ *   in a tab that hears another tab forget, or that finds the Under 13
+ *   flag, and a write-back that raced the news is removed again, so a
+ *   forgotten secret doesn't come back. A tab never overwrites another
+ *   tab's different identity with its own: it takes the other one.
  * - A stored value that is not a valid identity is quarantined by the kv
  *   layer and a new one is minted; storage migrations never touch it (§6.1).
  *
@@ -31,14 +44,20 @@ import {
 } from "@/engine/types";
 import { getKv, type Kv } from "@/platform/storage";
 
-import type { BackupTransport } from "./backup";
+import type { BackupSaveOutcome, BackupTransport } from "./backup";
 import type { IdentityChannel } from "./broadcast";
 import { BACKUP_REFRESH_MS, type BackupCredential } from "./cookie";
+import { PROFILE_KEY } from "./profile";
 import type { IdentityProvider } from "./provider";
 
 export const IDENTITY_KEY = "qz:identity";
 /** The Web Lock under which a tab loads, restores or mints the identity. */
 export const IDENTITY_LOCK = "qz-identity";
+/**
+ * SET-1's flag after an Under 13 answer (§6.2, §9.7). While it exists the
+ * device keeps no identity: nothing is stored, posted or restored.
+ */
+export const UNDER13_KEY = "qz:under13";
 
 const SOURCES: readonly LocalIdentity["source"][] = [
   "minted",
@@ -176,6 +195,16 @@ export function sameCredential(
   return a.playerId === b.playerId && a.secret === b.secret;
 }
 
+/**
+ * A key for one credential, for in-memory bookkeeping only (it holds the
+ * secret: never store or log it).
+ */
+export function credentialKey(
+  credential: Pick<LocalIdentity, "playerId" | "secret">,
+): string {
+  return `${credential.playerId}.${credential.secret}`;
+}
+
 function sameIdentity(a: LocalIdentity, b: LocalIdentity): boolean {
   return (
     sameCredential(a, b) &&
@@ -192,6 +221,15 @@ export function backupDue(identity: LocalIdentity, now: EpochMs): boolean {
   const saved = identity.cookieSavedAt;
   // A save stamped in the future means the clock moved: refresh rather than wait.
   return saved === null || saved > now || now - saved >= BACKUP_REFRESH_MS;
+}
+
+/**
+ * True for an identity the cookie may never have seen: minted on this
+ * device and never posted. Its first post must not overwrite a cookie
+ * nobody has read (§9.6), so it waits for `confirmFirstBackup`.
+ */
+export function firstBackupPending(identity: LocalIdentity): boolean {
+  return identity.source === "minted" && identity.cookieSavedAt === null;
 }
 
 export interface LocalIdentityOptions {
@@ -212,6 +250,16 @@ export interface LocalIdentityOptions {
    * once, on first use.
    */
   initial?: { identity: LocalIdentity; stored: boolean };
+  /**
+   * Asked before the first post of a minted identity (`firstBackupPending`):
+   * resolves true when the cookie may take it. `lifecycle.ts` reads the
+   * cookie here and stores an identity that lives in memory. Without it, a
+   * registered identity is stored and posted at once (tests, device
+   * namespaces).
+   */
+  confirmFirstBackup?: ((target: LocalIdentity) => Promise<boolean>) | null;
+  /** True: start forgotten (Under 13, §9.7): nothing is ever stored or posted. */
+  forgotten?: boolean;
 }
 
 /** The tab's identity: what the backend uses, plus what the lifecycle needs. */
@@ -219,19 +267,38 @@ export interface LocalIdentityProvider extends IdentityProvider {
   /**
    * False while the identity lives in memory only: minted while the backup
    * cookie could not be asked (offline, a timeout), so a later answer can
-   * still bring the old identity back (§9.1, `lifecycle.ts`).
+   * still bring the old identity back (§9.1, `lifecycle.ts`). Also false
+   * once forgotten.
    */
   readonly stored: boolean;
-  /** Stores the in-memory identity as it stands. */
+  /**
+   * True once this tab forgot the identity (`erase()`, another tab's
+   * forget, or the Under 13 flag): its identity lives in memory only, and
+   * nothing is stored, posted or announced until the next load.
+   */
+  readonly forgotten: boolean;
+  /** Stores the in-memory identity as it stands, unless another tab stored one meanwhile. */
   persist(): void;
   /**
    * Takes in `qz:identity` as another tab left it (§6.4). Returns true when
    * the player or the credential changed. A missing or unreadable key
-   * changes nothing here: the other tab owns that problem.
+   * changes nothing here (the other tab owns that problem), unless the
+   * other tab said it forgot the identity or the Under 13 flag is set: then
+   * this tab forgets it too, and removes its own secret if a write-back of
+   * its own put it back.
    */
-  reload(): boolean;
+  reload(news?: { forgotten?: boolean }): boolean;
   /** Posts the backup now if it is due (§9.1 step 3); true once stored. */
   refreshBackup(): Promise<boolean>;
+  /**
+   * Forgets the identity on this device (§9.7, PRD §3.10.7): removes
+   * `qz:identity` and `qz:profile`, tells the other tabs, and keeps a new
+   * identity in memory only from then on. Expiring the cookie is the
+   * lifecycle's (`ManagedIdentity.forget()`), after `idle()`.
+   */
+  erase(): void;
+  /** Resolves once this tab has no backup post in flight. */
+  idle(): Promise<void>;
   /** Called with the new identity whenever the player or the credential changes. */
   subscribe(listener: (identity: LocalIdentity) => void): () => void;
 }
@@ -249,8 +316,10 @@ export function createLocalIdentityProvider(
   const random = options.random ?? systemRandom;
   const backup = options.backup ?? null;
   const channel = options.channel ?? null;
+  const confirmFirstBackup = options.confirmFirstBackup ?? null;
   let identity: LocalIdentity | null = options.initial?.identity ?? null;
-  let stored = options.initial?.stored ?? true;
+  let forgotten = options.forgotten === true;
+  let stored = forgotten ? false : (options.initial?.stored ?? true);
   const listeners = new Set<(identity: LocalIdentity) => void>();
   /** The backup post in flight, by credential, so two triggers share one request. */
   let saving: { key: string; done: Promise<boolean> } | null = null;
@@ -265,49 +334,164 @@ export function createLocalIdentityProvider(
     }
   };
 
-  /** Takes `next` as the tab's identity, stores it and tells the other tabs. */
-  const save = (next: LocalIdentity): LocalIdentity => {
+  /** True while SET-1's Under 13 flag is set: the device keeps no identity (§9.7). */
+  const deviceKeepsNone = (): boolean =>
+    kv.readRaw(UNDER13_KEY).state !== "missing";
+
+  /**
+   * Forgets the identity in this tab: `replacement`, or a new one, lives in
+   * memory from now on, and nothing is stored, posted or announced again.
+   */
+  const drop = (replacement?: LocalIdentity): void => {
+    if (forgotten) return;
+    forgotten = true;
+    stored = false;
+    let next = replacement ?? null;
+    if (next === null) {
+      try {
+        next = mintIdentity(now(), random);
+      } catch {
+        // Without randomness the old identity stays, in memory only.
+      }
+    }
+    if (next === null) return;
     const previous = identity;
     identity = next;
-    stored = true;
-    // A write storage refuses stays in memory for the tab (the kv layer).
-    kv.write(IDENTITY_KEY, next);
-    channel?.announce();
+    if (previous === null || !sameCredential(previous, next)) notify(next);
+  };
+
+  /** Takes `next` as the tab's identity, stores it and tells the other tabs. */
+  const save = (next: LocalIdentity): LocalIdentity => {
+    if (!forgotten && deviceKeepsNone()) {
+      drop(next);
+      return next;
+    }
+    const previous = identity;
+    identity = next;
+    if (!forgotten) {
+      stored = true;
+      // A write storage refuses stays in memory for the tab (the kv layer).
+      kv.write(IDENTITY_KEY, next);
+      channel?.announce();
+    }
     if (previous === null || !sameCredential(previous, next)) notify(next);
     return next;
   };
 
   const current = (): LocalIdentity => {
     if (identity !== null) return identity;
-    const found = kv.read(IDENTITY_KEY, decodeLocalIdentity);
-    if (found !== null) {
-      identity = found;
-      stored = true;
-      return found;
+    if (!forgotten) {
+      const found = kv.read(IDENTITY_KEY, decodeLocalIdentity);
+      if (found !== null) {
+        identity = found;
+        stored = true;
+        return found;
+      }
     }
     return save(mintIdentity(now(), random));
   };
 
-  /** Posts the current identity to the backup and records when it landed. */
-  const saveBackup = (): Promise<boolean> => {
-    if (backup === null) return Promise.resolve(false);
-    const target = current();
-    const key = `${target.playerId}.${target.secret}`;
-    if (saving !== null && saving.key === key) return saving.done;
-    const done = backup
-      .save({ playerId: target.playerId, secret: target.secret })
-      .catch(() => false)
-      .then((ok) => {
-        if (saving?.done === done) saving = null;
-        const latest = current();
-        // Only the identity that was posted gets the stamp: a restore or
-        // another tab may have replaced it while the request ran.
-        if (ok && sameCredential(latest, target)) {
-          save({ ...latest, cookieSavedAt: now() });
-        }
-        return ok;
+  const reload = (news: { forgotten?: boolean } = {}): boolean => {
+    if (forgotten) return false;
+    const keepsNone = deviceKeepsNone();
+    if (news.forgotten === true || keepsNone) {
+      // A write-back of this tab's may have raced the other tab's forget:
+      // the forgotten secret goes again. Another identity stored since (a
+      // fresh load's) stays, unless the device keeps none at all.
+      const onDisk = kv.read(IDENTITY_KEY, decodeLocalIdentity, {
+        quarantine: false,
       });
-    saving = { key, done };
+      if (
+        onDisk !== null &&
+        (keepsNone || (identity !== null && sameCredential(onDisk, identity)))
+      ) {
+        kv.remove(IDENTITY_KEY);
+      }
+      drop();
+      return true;
+    }
+    const found = kv.read(IDENTITY_KEY, decodeLocalIdentity, {
+      quarantine: false,
+    });
+    if (found === null) return false;
+    const previous = identity;
+    if (previous !== null && sameIdentity(previous, found)) {
+      stored = true;
+      return false;
+    }
+    identity = found;
+    stored = true;
+    const changed = previous === null || !sameCredential(previous, found);
+    if (changed) notify(found);
+    return changed;
+  };
+
+  /**
+   * Whether the tab may write `target` back over the stored identity
+   * (registration, the cookie stamp, a post). Never once forgotten, and
+   * never while the Under 13 flag is set, which forgets it here too. Not
+   * when another tab stored a different identity meanwhile: the tab takes
+   * that one. Another tab's newer copy of the same identity is taken in
+   * first, so the write starts from it.
+   *
+   * A key that is simply gone is written back: WebKit can wipe storage
+   * under an open tab, and a registration it lost would orphan the player.
+   * Deleting the identity is announced instead (`erase()`), and a tab that
+   * wrote back before the news arrived removes it again (`reload()`).
+   */
+  const mayWriteBack = (target: LocalIdentity): boolean => {
+    if (forgotten) return false;
+    if (deviceKeepsNone()) {
+      reload();
+      return false;
+    }
+    if (!stored) return true;
+    const onDisk = kv.read(IDENTITY_KEY, decodeLocalIdentity, {
+      quarantine: false,
+    });
+    if (onDisk === null) return true;
+    reload();
+    return sameCredential(onDisk, target);
+  };
+
+  /** Posts the current identity to the backup and records when the route answered. */
+  const saveBackup = (): Promise<boolean> => {
+    if (backup === null || forgotten) return Promise.resolve(false);
+    const target = current();
+    if (!target.registered) return Promise.resolve(false);
+    const key = credentialKey(target);
+    if (saving !== null && saving.key === key) return saving.done;
+    const done = (async (): Promise<boolean> => {
+      if (confirmFirstBackup !== null && firstBackupPending(target)) {
+        const go = await confirmFirstBackup(target).catch(() => false);
+        if (!go) return false;
+      }
+      // While the cookie was asked, the tab may have moved on, forgotten,
+      // or still hold the identity in memory only: then nothing is posted.
+      if (!stored || !sameCredential(current(), target)) return false;
+      if (!mayWriteBack(target)) return false;
+      const outcome: BackupSaveOutcome = await backup
+        .save({ playerId: target.playerId, secret: target.secret })
+        .catch(() => "failed" as const);
+      // Only the identity that was posted gets the stamp: a restore or
+      // another tab may have replaced it while the request ran, or a forget
+      // may have removed it. A refusal is stamped too, so the next post
+      // waits the usual 7 days instead of one load (§9.1 step 3).
+      if (
+        outcome !== "failed" &&
+        stored &&
+        sameCredential(current(), target) &&
+        mayWriteBack(target)
+      ) {
+        save({ ...current(), cookieSavedAt: now() });
+      }
+      return outcome === "saved";
+    })().catch(() => false);
+    const entry = { key, done };
+    saving = entry;
+    void done.then(() => {
+      if (saving === entry) saving = null;
+    });
     return done;
   };
 
@@ -316,40 +500,69 @@ export function createLocalIdentityProvider(
     get stored() {
       return stored;
     },
+    get forgotten() {
+      return forgotten;
+    },
     markRegistered(): void {
       const known = current();
       if (known.registered) return;
-      save({ ...known, registered: true });
+      if (forgotten) {
+        identity = { ...known, registered: true };
+        return;
+      }
+      if (
+        !stored &&
+        confirmFirstBackup !== null &&
+        backup !== null &&
+        firstBackupPending(known)
+      ) {
+        // Minted while the cookie had no answer: registered from now on,
+        // but stored (and posted) only once the lifecycle has read the
+        // cookie, which may hold the identity a wiped store lost (§9.6).
+        identity = { ...known, registered: true };
+        void saveBackup();
+        return;
+      }
+      if (!mayWriteBack(known)) return;
+      const latest = current();
+      if (latest.registered) return;
+      save({ ...latest, registered: true });
       void saveBackup();
     },
     replace(next: LocalIdentity): void {
       save(next);
-      if (next.registered) void saveBackup();
+      if (next.registered && !forgotten) void saveBackup();
     },
     persist(): void {
-      if (!stored) save(current());
-    },
-    reload(): boolean {
+      if (stored || forgotten) return;
+      const target = current();
+      // Another tab may have stored an identity meanwhile: take it, never overwrite it.
       const found = kv.read(IDENTITY_KEY, decodeLocalIdentity, {
         quarantine: false,
       });
-      if (found === null) return false;
-      const previous = identity;
-      if (previous !== null && sameIdentity(previous, found)) {
-        stored = true;
-        return false;
+      if (found !== null && !sameCredential(found, target)) {
+        reload();
+        return;
       }
-      identity = found;
-      stored = true;
-      const changed = previous === null || !sameCredential(previous, found);
-      if (changed) notify(found);
-      return changed;
+      save(target);
     },
+    reload,
     refreshBackup(): Promise<boolean> {
-      if (backup === null) return Promise.resolve(false);
+      if (backup === null || forgotten) return Promise.resolve(false);
       return backupDue(current(), now())
         ? saveBackup()
         : Promise.resolve(false);
+    },
+    erase(): void {
+      drop();
+      kv.remove(IDENTITY_KEY);
+      kv.remove(PROFILE_KEY);
+      channel?.announce({ forgotten: true });
+    },
+    idle(): Promise<void> {
+      return saving === null
+        ? Promise.resolve()
+        : saving.done.then(() => undefined);
     },
     subscribe(listener) {
       listeners.add(listener);

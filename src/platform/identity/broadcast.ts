@@ -6,6 +6,11 @@
  * `storage` event covers browsers without BroadcastChannel; a tab that
  * hears both just re-reads twice.
  *
+ * A tab that forgets the identity (Delete my data, Under 13: SET-1 through
+ * `forgetIdentity()`) says so in the message (`forgotten: true`), and every
+ * other tab drops its copy instead of writing it back. Over `storage`
+ * events the Under 13 flag (`qz:under13`) says the same.
+ *
  * The channel name and message follow §6.4, so the shared
  * `src/platform/broadcast.ts` it describes can carry this message later
  * without changing what tabs say to each other.
@@ -21,13 +26,21 @@ export interface IdentityChangedMessage {
   type: "identity_changed";
   /** The device namespace whose `qz:identity` changed, or null. */
   device: string | null;
+  /** True when the identity was forgotten: no tab may write it back. */
+  forgotten?: boolean;
+}
+
+/** What a tab heard about another tab's identity. */
+export interface IdentityNews {
+  /** The other tab forgot the identity (Delete my data, Under 13). */
+  forgotten: boolean;
 }
 
 export interface IdentityChannel {
-  /** Tells the other tabs this tab's identity changed. */
-  announce(): void;
+  /** Tells the other tabs this tab's identity changed, or was forgotten. */
+  announce(news?: { forgotten?: boolean }): void;
   /** Calls `onChange` when another tab's identity changed; returns the unsubscribe. */
-  listen(onChange: () => void): () => void;
+  listen(onChange: (news: IdentityNews) => void): () => void;
   close(): void;
 }
 
@@ -68,10 +81,11 @@ export interface IdentityChannelOptions {
 
 function isIdentityChanged(data: unknown): data is IdentityChangedMessage {
   if (typeof data !== "object" || data === null) return false;
-  const { type, device } = data as Record<string, unknown>;
+  const { type, device, forgotten } = data as Record<string, unknown>;
   return (
     type === "identity_changed" &&
-    (device === null || typeof device === "string")
+    (device === null || typeof device === "string") &&
+    (forgotten === undefined || typeof forgotten === "boolean")
   );
 }
 
@@ -95,9 +109,16 @@ function browserWindow(): StorageEventSource | null {
   }
 }
 
-/** True for a `storage` event that may have touched an identity key, or cleared storage. */
+/**
+ * True for a `storage` event that may have touched an identity key or the
+ * Under 13 flag (§9.7), in any namespace, or cleared storage.
+ */
 function touchesIdentity(key: string | null): boolean {
-  return key === null || (key.startsWith("qz:") && key.endsWith("identity"));
+  return (
+    key === null ||
+    (key.startsWith("qz:") &&
+      (key.endsWith(":identity") || key.endsWith(":under13")))
+  );
 }
 
 export function createIdentityChannel(
@@ -110,12 +131,12 @@ export function createIdentityChannel(
     options.storageEvents === undefined
       ? browserWindow()
       : options.storageEvents;
-  const listeners = new Set<() => void>();
+  const listeners = new Set<(news: IdentityNews) => void>();
 
-  const notify = () => {
+  const notify = (news: IdentityNews) => {
     for (const listener of [...listeners]) {
       try {
-        listener();
+        listener(news);
       } catch {
         // One listener's bug never stops the others.
       }
@@ -123,11 +144,12 @@ export function createIdentityChannel(
   };
   const onMessage = (event: { data: unknown }) => {
     if (isIdentityChanged(event.data) && event.data.device === device) {
-      notify();
+      notify({ forgotten: event.data.forgotten === true });
     }
   };
+  // The tab re-reads storage, where the Under 13 flag speaks for itself.
   const onStorage = (event: { key: string | null }) => {
-    if (touchesIdentity(event.key)) notify();
+    if (touchesIdentity(event.key)) notify({ forgotten: false });
   };
 
   try {
@@ -138,11 +160,12 @@ export function createIdentityChannel(
   }
 
   return {
-    announce() {
+    announce(news = {}) {
       try {
         channel?.postMessage({
           type: "identity_changed",
           device,
+          ...(news.forgotten === true ? { forgotten: true } : {}),
         } satisfies IdentityChangedMessage);
       } catch {
         // A closed channel: other tabs still get the storage event.

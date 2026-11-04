@@ -7,6 +7,7 @@ import { mintIdentity } from "@/platform/identity/local";
 
 import {
   bootClient,
+  forgetIdentity,
   onIdentityChange,
   recoverIdentity,
   resetBootForTests,
@@ -150,12 +151,17 @@ describe("after the boot", () => {
     const before = JSON.parse(localStorage.getItem("qz:identity") ?? "null");
     const heard: string[] = [];
     const stop = onIdentityChange((next) => heard.push(next.playerId));
-    await expect(recoverIdentity()).resolves.toBe("minted");
+    await expect(recoverIdentity(before)).resolves.toBe("minted");
     const after = JSON.parse(localStorage.getItem("qz:identity") ?? "null");
     expect(after.playerId).not.toBe(before.playerId);
     expect(heard).toEqual([after.playerId]);
     const backend = (await getBackend()) as MockBackend;
     expect(backend.context.identity().current().playerId).toBe(after.playerId);
+    // A second write that was sent with the old credential changes nothing.
+    await expect(recoverIdentity(before)).resolves.toBe("restored");
+    expect(
+      JSON.parse(localStorage.getItem("qz:identity") ?? "null").playerId,
+    ).toBe(after.playerId);
     stop();
   });
 
@@ -165,7 +171,53 @@ describe("after the boot", () => {
     const stop = onIdentityChange((next) => heard.push(next.playerId));
     stop();
     await bootClient();
-    await recoverIdentity();
+    const current = JSON.parse(localStorage.getItem("qz:identity") ?? "null");
+    await recoverIdentity(current);
     expect(heard).toEqual([]);
+  });
+
+  it("forgetIdentity() removes the identity and the profile, and expires the cookie (Delete my data)", async () => {
+    const calls = stubRoutes({ status: 204 });
+    await bootClient();
+    const before = JSON.parse(localStorage.getItem("qz:identity") ?? "null");
+    localStorage.setItem(
+      "qz:profile",
+      JSON.stringify({ playerId: before.playerId }),
+    );
+    const heard: string[] = [];
+    const stop = onIdentityChange((next) => heard.push(next.playerId));
+    await expect(forgetIdentity()).resolves.toBe(true);
+    expect(localStorage.getItem("qz:identity")).toBeNull();
+    expect(localStorage.getItem("qz:profile")).toBeNull();
+    expect(calls).toContainEqual({ url: "/api/identity", method: "DELETE" });
+    // The tab carries on with a new identity it never stores.
+    const backend = (await getBackend()) as MockBackend;
+    const now = backend.context.identity().current();
+    expect(now.playerId).not.toBe(before.playerId);
+    expect(heard).toEqual([now.playerId]);
+    backend.context.identity().markRegistered();
+    expect(localStorage.getItem("qz:identity")).toBeNull();
+    stop();
+  });
+
+  it("after an Under 13 answer, a load never reads or posts the cookie and stores no identity (§9.7)", async () => {
+    const child = { ...mintIdentity(NOW), registered: true };
+    const calls = stubRoutes({
+      status: 200,
+      body: { playerId: child.playerId, secret: child.secret },
+    });
+    localStorage.setItem("qz:under13", JSON.stringify({ since: NOW }));
+    await bootClient();
+    expect(localStorage.getItem("qz:identity")).toBeNull();
+    expect(calls).toEqual([]);
+    const backend = (await getBackend()) as MockBackend;
+    expect(backend.context.identity().current().playerId).not.toBe(
+      child.playerId,
+    );
+    expect(trackLog()).toEqual([]);
+    // Expiring the cookie again (an earlier expiry may have failed offline) still works.
+    await expect(forgetIdentity()).resolves.toBe(true);
+    expect(calls).toEqual([{ url: "/api/identity", method: "DELETE" }]);
+    expect(localStorage.getItem("qz:identity")).toBeNull();
   });
 });

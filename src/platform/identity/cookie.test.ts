@@ -104,6 +104,36 @@ describe("reading the Cookie header", () => {
       ),
     ).toEqual(CREDENTIAL);
   });
+
+  it("trims only ASCII spaces and tabs around the name and value (RFC 6265)", () => {
+    expect(
+      readBackupCookie(`a=1;  \t${BACKUP_COOKIE_NAME} = ${VALUE} `),
+    ).toEqual(CREDENTIAL);
+    expect(readBackupCookie(`a=1;\t${BACKUP_COOKIE_NAME}=\t${VALUE}`)).toEqual(
+      CREDENTIAL,
+    );
+  });
+
+  it("ignores look-alike names the browser never treated as __Host-", () => {
+    // String.prototype.trim would strip these and read the name as ours,
+    // though a same-site sibling could set such a cookie with Domain=.
+    for (const space of ["\u00a0", "\u2000", "\u200a", "\u3000", "\ufeff"]) {
+      const code = `U+${space.codePointAt(0)?.toString(16)}`;
+      expect(
+        readBackupCookie(`${space}${BACKUP_COOKIE_NAME}=${VALUE}`),
+        code,
+      ).toBeNull();
+      expect(
+        readBackupCookie(`a=1; ${BACKUP_COOKIE_NAME}${space}=${VALUE}`),
+        code,
+      ).toBeNull();
+      // Nor a value padded the same way.
+      expect(
+        readBackupCookie(`${BACKUP_COOKIE_NAME}=${space}${VALUE}`),
+        code,
+      ).toBeNull();
+    }
+  });
 });
 
 describe("the credential body", () => {

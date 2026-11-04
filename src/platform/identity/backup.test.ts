@@ -117,13 +117,54 @@ describe("restore (§9.1 step 1)", () => {
       vi.useRealTimers();
     }
   });
+
+  it("counts a body that stalls after the headers against the same deadline", async () => {
+    vi.useFakeTimers();
+    try {
+      let signal: AbortSignal | undefined;
+      const backup = createHttpBackup({
+        fetch: (_input, init) => {
+          signal = init.signal ?? undefined;
+          // The headers arrive at once; the body never does.
+          return Promise.resolve({
+            status: 200,
+            json: () => new Promise<unknown>(() => {}),
+          });
+        },
+        restoreTimeoutMs: 4000,
+      });
+      let settled = false;
+      const outcome = backup.restore().finally(() => {
+        settled = true;
+      });
+      await vi.advanceTimersByTimeAsync(3999);
+      expect(settled).toBe(false);
+      expect(signal?.aborted).toBe(false);
+      await vi.advanceTimersByTimeAsync(1);
+      await expect(outcome).resolves.toEqual({ kind: "failed" });
+      expect(signal?.aborted).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("fails when reading the body fails", async () => {
+    const backup = createHttpBackup({
+      fetch: () =>
+        Promise.resolve({
+          status: 200,
+          json: () => Promise.reject(new TypeError("network error")),
+        }),
+    });
+    await expect(backup.restore()).resolves.toEqual({ kind: "failed" });
+  });
 });
 
 describe("save and remove (§9.3)", () => {
-  it("posts { playerId, secret } as JSON and reports a 204", async () => {
+  it("posts { playerId, secret } as JSON and reports a 204 as saved", async () => {
     const { fetch, calls } = fakeFetch(204);
     await expect(createHttpBackup({ fetch }).save(CREDENTIAL)).resolves.toBe(
-      true,
+      "saved",
     );
     const [{ input, init }] = calls as [Call];
     expect(input).toBe("/api/identity");
@@ -140,17 +181,39 @@ describe("save and remove (§9.3)", () => {
     });
   });
 
-  it("reports anything but 204 as not saved", async () => {
-    for (const status of [400, 403, 500]) {
+  it("reports a 403 as refused, and anything else as failed", async () => {
+    // A browser that sends no Sec-Fetch-Site gets 403 every time.
+    await expect(
+      createHttpBackup({ fetch: fakeFetch(403).fetch }).save(CREDENTIAL),
+    ).resolves.toBe("refused");
+    for (const status of [400, 429, 500, 502]) {
       await expect(
         createHttpBackup({ fetch: fakeFetch(status).fetch }).save(CREDENTIAL),
-      ).resolves.toBe(false);
+        String(status),
+      ).resolves.toBe("failed");
     }
     await expect(
       createHttpBackup({
         fetch: () => Promise.reject(new TypeError("offline")),
       }).save(CREDENTIAL),
-    ).resolves.toBe(false);
+    ).resolves.toBe("failed");
+  });
+
+  it("gives up on a write after its timeout", async () => {
+    vi.useFakeTimers();
+    try {
+      const backup = createHttpBackup({
+        fetch: () => new Promise(() => {}),
+        saveTimeoutMs: 8000,
+      });
+      const saved = backup.save(CREDENTIAL);
+      const removed = backup.remove();
+      await vi.advanceTimersByTimeAsync(8000);
+      await expect(saved).resolves.toBe("failed");
+      await expect(removed).resolves.toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("expires the cookie with DELETE and no body", async () => {
@@ -165,7 +228,7 @@ describe("save and remove (§9.3)", () => {
   it("sends nothing while offline", async () => {
     const { fetch, calls } = fakeFetch(204);
     const backup = createHttpBackup({ fetch, isOnline: () => false });
-    await expect(backup.save(CREDENTIAL)).resolves.toBe(false);
+    await expect(backup.save(CREDENTIAL)).resolves.toBe("failed");
     await expect(backup.remove()).resolves.toBe(false);
     expect(calls).toHaveLength(0);
   });

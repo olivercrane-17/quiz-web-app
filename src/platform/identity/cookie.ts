@@ -8,7 +8,16 @@
  *   `Max-Age=34560000` (400 days, AC-CKE-01), `Secure`, `HttpOnly` and
  *   `SameSite=Lax`. The `__Host-` prefix makes the browser refuse it unless
  *   it is Secure, host-only and on `/`, so no subdomain or sibling path can
- *   plant or shadow it. It is the only cookie the app ever sets (AC-CKE-04).
+ *   plant or shadow it. Only that exact name counts when it is read back:
+ *   a look-alike such as `__Host-pid` with a U+00A0 in front got none of
+ *   the prefix's protection. It is the only cookie the app ever sets
+ *   (AC-CKE-04).
+ * - `Path=/` means every request to the origin carries the plaintext secret
+ *   in its `Cookie` header: pages, RSC fetches, static files, the share
+ *   routes. Server-side logging must never record that header
+ *   (`onRequestError` in `src/instrumentation.ts` receives every request
+ *   header, ANA-1; log drains, SEC-1): drop it, or log an allowlist of
+ *   headers (§8.5: the secret is never stored or logged).
  * - The body `POST /api/identity` takes and `GET /api/restore` answers:
  *   `{ playerId, secret }`, a v4 UUID and 32 bytes of unpadded base64url.
  * - The same-origin rules (§9.3): a request counts only when the browser
@@ -99,8 +108,19 @@ export function expiredBackupCookieHeader(): string {
 }
 
 /**
+ * Strips the optional whitespace RFC 6265 allows around a cookie's name and
+ * value: ASCII spaces and tabs only. `String.prototype.trim` would also eat
+ * U+00A0, U+2000 to U+200A, U+3000 and U+FEFF, and so accept a name the
+ * browser never treated as `__Host-`.
+ */
+function trimCookieSpace(text: string): string {
+  return text.replace(/^[ \t]+|[ \t]+$/g, "");
+}
+
+/**
  * The backup credential in a request's `Cookie` header, or null. The first
- * well-formed `__Host-pid` wins; other cookies are ignored.
+ * well-formed `__Host-pid` wins; other cookies, look-alike names included,
+ * are ignored.
  */
 export function readBackupCookie(
   cookieHeader: string | null,
@@ -108,10 +128,15 @@ export function readBackupCookie(
   if (cookieHeader === null) return null;
   for (const pair of cookieHeader.split(";")) {
     const at = pair.indexOf("=");
-    if (at === -1 || pair.slice(0, at).trim() !== BACKUP_COOKIE_NAME) {
+    if (
+      at === -1 ||
+      trimCookieSpace(pair.slice(0, at)) !== BACKUP_COOKIE_NAME
+    ) {
       continue;
     }
-    const credential = decodeBackupCookieValue(pair.slice(at + 1).trim());
+    const credential = decodeBackupCookieValue(
+      trimCookieSpace(pair.slice(at + 1)),
+    );
     if (credential !== null) return credential;
   }
   return null;

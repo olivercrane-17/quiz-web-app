@@ -110,6 +110,26 @@ describe("the identity channel (§6.4)", () => {
     expect([host_, phone_]).toEqual([0, 1]);
   });
 
+  it("says when the other tab forgot the identity (Delete my data, Under 13)", () => {
+    const hub = createHub();
+    const a = createIdentityChannel({
+      device: null,
+      channel: hub.join(),
+      storageEvents: null,
+    });
+    const b = createIdentityChannel({
+      device: null,
+      channel: hub.join(),
+      storageEvents: null,
+    });
+    const heard: boolean[] = [];
+    b.listen((news) => heard.push(news.forgotten));
+    a.announce();
+    a.announce({ forgotten: true });
+    a.announce({ forgotten: false });
+    expect(heard).toEqual([false, true, false]);
+  });
+
   it("ignores other messages on the shared channel", () => {
     const hub = createHub();
     const sender = hub.join();
@@ -123,6 +143,7 @@ describe("the identity channel (§6.4)", () => {
     for (const message of [
       { type: "settings_changed" },
       { type: "identity_changed", device: 3 },
+      { type: "identity_changed", device: null, forgotten: "yes" },
       "identity_changed",
       null,
     ]) {
@@ -131,24 +152,28 @@ describe("the identity channel (§6.4)", () => {
     expect(heard).toBe(0);
   });
 
-  it("falls back to storage events for identity keys and cleared storage", () => {
+  it("falls back to storage events for identity keys, the Under 13 flag and cleared storage", () => {
     const storage = storageSource();
     const tab = createIdentityChannel({
       device: null,
       channel: null,
       storageEvents: storage.source,
     });
-    let heard = 0;
-    tab.listen(() => (heard += 1));
+    const heard: boolean[] = [];
+    tab.listen((news) => heard.push(news.forgotten));
     storage.fire("qz:identity");
     storage.fire("qz:d:phone-1:identity");
     storage.fire(null);
+    // The tab re-reads storage, where the flag speaks for itself.
+    storage.fire("qz:under13");
+    storage.fire("qz:d:phone-1:under13");
     storage.fire("qz:settings");
+    storage.fire("qz:profile");
     storage.fire("qz-mock:db:v1");
-    expect(heard).toBe(3);
+    expect(heard).toEqual([false, false, false, false, false]);
     tab.close();
     storage.fire("qz:identity");
-    expect(heard).toBe(3);
+    expect(heard).toHaveLength(5);
   });
 
   it("survives a channel that throws", () => {
