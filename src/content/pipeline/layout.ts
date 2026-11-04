@@ -91,7 +91,13 @@ export function resolveLayout(options: LayoutOptions = {}): Layout {
     referenceDir: shared("reference"),
     manifestFile: join(shared("datasets"), "manifest.json"),
     cacheDir,
-    packetsDir: join(cacheDir, "packets"),
+    // A fixture tree is a throwaway of its own: its packets and their serve
+    // log stay inside it (git-ignored as .cache/ anywhere), so no fixture
+    // run writes into the repository's packet folder.
+    packetsDir:
+      kind === "fixtures"
+        ? join(root, ".cache", "packets")
+        : join(cacheDir, "packets"),
     datasetsCacheDir: join(cacheDir, "datasets"),
     guideFile: join(repoRoot, "docs", "CONTENT_GUIDE.md"),
   };

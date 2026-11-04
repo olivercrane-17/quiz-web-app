@@ -12,8 +12,11 @@
  *
  * With --sealed, sealed content is decrypted in memory and every line goes
  * through the redacting reporter (§5.4): ids, rule codes, field paths and
- * counts only. --launch makes QA-2's launch criteria (AC-CNT-01 to 04 and
- * 06) errors. Exit 1 on any error (or on any warning with --strict). See
+ * counts only. The content tree's audit records are checked too (the
+ * latest pre-launch one's AC-CNT-05 criteria, X32), and with sealed items
+ * loaded, the cross-pool dedupe (X29, AC-CNT-06). --launch makes QA-2's
+ * launch criteria (AC-CNT-01 to 06) and CNT-2's rules on active items
+ * errors. Exit 1 on any error (or on any warning with --strict). See
  * content/README.md.
  */
 import { existsSync, readFileSync } from "node:fs";
@@ -37,6 +40,7 @@ import { MANIFEST_PATH, buildOutputs } from "./lib/outputs.ts";
 import { printReport, runReported } from "./lib/report.ts";
 import { cnt1Findings } from "./lib/rules.ts";
 import { sealedExtras } from "./lib/sealed-files.ts";
+import { auditFindings, auditSources } from "./audit.ts";
 import { lintBank, type Finding } from "./lint.ts";
 
 const USAGE = `Usage: npm run content:check -- [options]
@@ -171,6 +175,8 @@ runReported(
         today,
         dedupe: values["skip-dedupe"] !== true,
         reveal,
+        // QA-2's launch check: CNT-2's rules are errors on active items too.
+        launch: values.launch === true,
         ...(str(values, "writer")
           ? { writer: str(values, "writer") as string }
           : {}),
@@ -193,12 +199,24 @@ runReported(
             epoch,
             compositions,
             histories,
+            dedupe: values["skip-dedupe"] !== true,
           },
           notes,
         ),
         ...(await sealedExtras(bank, { sealed: sealedRun, keys, compositions }))
           .findings,
       );
+      // The seeded audit's records (§5.7, AC-CNT-05, CONTENT_GUIDE §9.10):
+      // every record against its schema, and the latest pre-launch one's
+      // criteria, warnings before launch and errors with --launch. Sealed,
+      // so a --sealed run reads the envelopes and the reporter redacts.
+      if (target.standard && layout.kind === "content") {
+        findings.push(
+          ...auditFindings(auditSources(layout, { sealed: sealedRun, keys }), {
+            launch: values.launch === true,
+          }),
+        );
+      }
       findings.sort(order);
       const batchId = str(values, "batch");
       if (batchId)

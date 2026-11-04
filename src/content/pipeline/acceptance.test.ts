@@ -22,12 +22,17 @@ import {
   removeTempDirs,
   writeTree,
 } from "./__fixtures__/builders.ts";
-import { acceptanceFailures, checksOf, externalSources } from "./acceptance.ts";
+import {
+  acceptanceFailures,
+  checksOf,
+  externalSources,
+  mergedClaims,
+} from "./acceptance.ts";
 import { loadBank, type Bank } from "./bank.ts";
 import { applyDecisions, decideOne, nearestForItem } from "./decisions.ts";
 import { resolveLayout } from "./layout.ts";
 import { LINT_VERSION } from "./lint/index.ts";
-import { packetSha256 } from "./packets.ts";
+import { stageHashes } from "./packets.ts";
 import { mergeRecord } from "./records.ts";
 import { requireBatch } from "./register.ts";
 import { saveItems } from "./store.ts";
@@ -677,13 +682,13 @@ describe("content:decide", () => {
     const after = item?.verification?.checks.map((c) => c.packetSha256);
     expect(after).toEqual(
       (["A", "B"] as const).map((pass) =>
-        packetSha256(record.id, item as AnyItem, pass),
+        stageHashes(record.id, item as AnyItem, pass),
       ),
     );
     expect(after).not.toEqual(before);
     const reason = item?.verification?.editor?.reason ?? "";
     expect(reason).toContain(`wording-only rewrite by ${EDITOR}`);
-    for (const hash of before ?? []) expect(reason).toContain(hash);
+    for (const hash of (before ?? []).flat()) expect(reason).toContain(hash);
     // Accepting afterwards keeps the trail.
     await saveItems(bank, new Map([[record.id, item as AnyItem]]));
     const accepted = accept(bank, "fx.p.geo.0101");
@@ -796,5 +801,253 @@ describe("content:decide", () => {
     expect(accept(bank, "fx.e.0101").outcome.errors).toEqual(
       expect.arrayContaining([expect.stringContaining("predicted")]),
     );
+  });
+});
+
+describe("content:decide runs the whole lint", () => {
+  it("refuses an item that breaks one of CNT-2's rules, which content:check would fail it on once active", async () => {
+    // C27, the capital rule: Germany is in capitals-excluded.json.
+    const files = fxFiles({
+      "practice/geography/fx.p.geo.0101.json": fxMc({
+        stem: "Which instrument opens the spring festival in the capital of Germany?",
+      }),
+    });
+    const bank = await checkedBank("fx.p.geo.0101", { files });
+    expect(accept(bank, "fx.p.geo.0101").outcome.errors).toEqual(
+      expect.arrayContaining([expect.stringContaining("C27 stem")]),
+    );
+    // So is a claim with a URL in it (C11 on claims, §2.13).
+    const url = fxFiles({
+      "practice/geography/fx.p.geo.0101.json": fxMc({
+        claims: [
+          {
+            id: "c1",
+            role: "key",
+            risk: "standard",
+            text: "A bone flute opens the festival, as https://example.org/flute says.",
+          },
+          ...fxMc().claims.slice(1),
+        ],
+      }),
+    });
+    const noted = await checkedBank("fx.p.geo.0101", { files: url });
+    expect(accept(noted, "fx.p.geo.0101").outcome.errors).toEqual(
+      expect.arrayContaining([expect.stringContaining("C11 claims[0].text")]),
+    );
+    // The same item without either is accepted.
+    const clean = await checkedBank("fx.p.geo.0101");
+    expect(accept(clean, "fx.p.geo.0101").outcome.errors).toEqual([]);
+  });
+});
+
+describe("the merged list, follow-ups and counted web tiers", () => {
+  const web = (
+    tiers: ("A" | "B" | "C")[],
+    citedResult?: { title: string; url: string; tier: "A" | "B" | "C" } | null,
+  ) => ({
+    kind: "web" as const,
+    query: "fixture festival flute",
+    results: [
+      { title: "Festival office", url: "https://example.org/office" },
+      { title: "Listicle", url: "https://example.org/listicle" },
+    ],
+    summaryExcerpt: "A bone flute opens the festival.",
+    ...(citedResult === undefined ? {} : { citedResult }),
+    tiers,
+    conflictReported: false,
+    retrievedAt: "2026-10-31",
+  });
+  const office = {
+    title: "Festival office",
+    url: "https://example.org/office",
+    tier: "A" as const,
+  };
+
+  /** A splits from B, and T confirms every claim with one web call. */
+  const tiebreakOn = (evidence: unknown): Patch => {
+    return (pass, e) =>
+      pass === "B"
+        ? failFirst(e)
+        : pass === "T"
+          ? {
+              ...e,
+              claimResults: e.claimResults.map((r) => ({
+                claimId: r.claimId,
+                verdict: "confirmed" as const,
+                evidence: evidence as never,
+                note: "",
+              })),
+            }
+          : e;
+  };
+
+  it("counts a web call at its cited result's tier, or at the lowest it could have relied on: Tier C never counts (§9.5.2)", async () => {
+    // A tiebreak needs external evidence; a call over Tier A and C pages
+    // whose summary names no source counts at C, so it stands in for nothing.
+    const unattributed = await checkedBank("fx.p.geo.0101", {
+      tiebreak: true,
+      patch: tiebreakOn(web(["A", "C"])),
+    });
+    expect(accept(unattributed, "fx.p.geo.0101").outcome.errors).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("claim c1 is not confirmed in both checks"),
+      ]),
+    );
+    const cited = await checkedBank("fx.p.geo.0101", {
+      tiebreak: true,
+      patch: tiebreakOn([web(["A", "C"], office)]),
+    });
+    expect(accept(cited, "fx.p.geo.0101").outcome.errors).toEqual([]);
+    // The same predicate counts sources. c1 rests on A's knowledge and on
+    // T's one call: the unattributed call is no source, the cited one is.
+    const sources = (bank: Bank) =>
+      externalSources(checksOf(itemOf(bank, "fx.p.geo.0101").item), "c1");
+    expect(sources(unattributed)).toBe(0);
+    expect(sources(cited)).toBe(1);
+  });
+
+  /** B adds xB1 and confirms it; A never sees it; the editor merges it. */
+  async function withAddition(followUps: unknown[] = []): Promise<Bank> {
+    const bank = await checkedBank("fx.p.geo.0101", {
+      patch: (pass, e) =>
+        pass === "B"
+          ? {
+              ...e,
+              claimResults: [
+                ...e.claimResults,
+                {
+                  claimId: "xB1",
+                  verdict: "confirmed" as const,
+                  evidence: [
+                    {
+                      kind: "knowledge" as const,
+                      basis: "reference" as const,
+                      restatement: "Halvessa's festival begins in spring.",
+                      confidence: "certain" as const,
+                    },
+                  ],
+                  note: "",
+                  addedClaim: {
+                    role: "explanation" as const,
+                    text: "The Halvessa festival begins in spring.",
+                    risk: "standard" as const,
+                  },
+                },
+              ],
+            }
+          : e,
+    });
+    const record = itemOf(bank, "fx.p.geo.0101");
+    const item = record.item;
+    const next = {
+      ...item,
+      verification: {
+        ...item.verification,
+        checks: item.verification?.checks ?? [],
+        merge: {
+          mergedAt: "2026-11-03T08:00:00Z",
+          editor: EDITOR,
+          claims: [
+            ...item.claims.map((claim) => ({
+              id: claim.id,
+              addedBy: "writer" as const,
+            })),
+            { id: "xB1", addedBy: "B" as const },
+          ],
+          duplicates: [],
+          sentToFollowUp: ["xB1"],
+        },
+        followUps,
+      },
+    } as AnyItem;
+    await saveItems(bank, new Map([[record.id, next]]));
+    return bank;
+  }
+
+  const followUp = (checker: string, pass: "A" | "B" = "A") => ({
+    checker,
+    pass,
+    brief: pass === "A" ? "confirm" : "refute",
+    packetSha256: "f".repeat(64),
+    startedAt: "2026-11-03T08:10:00Z",
+    finishedAt: "2026-11-03T08:20:00Z",
+    coldSolve: null,
+    claimResults: [
+      {
+        claimId: "xB1",
+        verdict: "confirmed",
+        evidence: [
+          {
+            kind: "knowledge",
+            basis: "reference",
+            restatement: "The spring festival of Halvessa opens the year.",
+            confidence: "certain",
+          },
+        ],
+        note: "",
+      },
+    ],
+    issues: [],
+    searchesUsed: 0,
+    verdict: "pass",
+    followUpFor: ["xB1"],
+  });
+
+  it("AC-CNT-01 rule 3: every claim in the merged list is confirmed in both checks, a follow-up standing in for the missing one", async () => {
+    // xB1 is in the merged list and only B confirmed it.
+    const missing = await withAddition();
+    expect(accept(missing, "fx.p.geo.0101").outcome.errors).toEqual([
+      expect.stringContaining("claim xB1, added by pass B, is not confirmed"),
+    ]);
+    // A passing follow-up under A's brief, by a fresh run, stands in.
+    const followed = await withAddition([followUp("fc-fx-delta")]);
+    expect(accept(followed, "fx.p.geo.0101").outcome.errors).toEqual([]);
+    // A follow-up under the wrong brief stands in for nothing.
+    const wrongBrief = await withAddition([followUp("fc-fx-delta", "B")]);
+    expect(accept(wrongBrief, "fx.p.geo.0101").outcome.errors).toEqual([
+      expect.stringContaining("claim xB1, added by pass B, is not confirmed"),
+    ]);
+  });
+
+  it("AC-CNT-01 rule 1: a follow-up is never by the writer, the editor or the claim's author", async () => {
+    // The writer's own run (w-fx-writer) under a checker's prefix.
+    const writers = await withAddition([followUp(`fc-${WRITER.slice(2)}`)]);
+    expect(accept(writers, "fx.p.geo.0101").outcome.errors).toEqual([
+      expect.stringContaining("is the writer's run"),
+    ]);
+    const editors = await withAddition([followUp(`fc-${EDITOR.slice(3)}`)]);
+    expect(accept(editors, "fx.p.geo.0101").outcome.errors).toEqual(
+      expect.arrayContaining([expect.stringContaining("is the editor's run")]),
+    );
+    // Check B's run added xB1, so it can never follow it up.
+    const authors = await withAddition([followUp("fc-fx-bravo")]);
+    expect(accept(authors, "fx.p.geo.0101").outcome.errors).toEqual(
+      expect.arrayContaining([expect.stringContaining("added claim xB1")]),
+    );
+  });
+
+  it("the merge record's duplicates leave the list, and its writer claims always stay", async () => {
+    const bank = await withAddition();
+    const record = itemOf(bank, "fx.p.geo.0101");
+    const item = record.item;
+    const merge = item.verification?.merge;
+    if (!merge) throw new Error("no merge");
+    const next = {
+      ...item,
+      verification: {
+        ...item.verification,
+        merge: {
+          ...merge,
+          // A merge that drops c1 and marks xB1 as a duplicate of c2.
+          claims: merge.claims.filter((claim) => claim.id !== "c1"),
+          duplicates: [{ id: "xB1", sameAs: "c2" }],
+        },
+      },
+    } as AnyItem;
+    expect(mergedClaims(next).map((claim) => claim.id)).toEqual(
+      item.claims.map((claim) => claim.id),
+    );
+    await saveItems(bank, new Map([[record.id, next]]));
+    expect(accept(bank, "fx.p.geo.0101").outcome.errors).toEqual([]);
   });
 });

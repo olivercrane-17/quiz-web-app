@@ -10,8 +10,10 @@
  *   (the content workstream's lint, kept as working code);
  * - scripts/content/lint/ (CNT-2): the risk floor (C26), the capital rule
  *   (C27), option display parity (C28, superseding X02), C19 rebuilt on
- *   content/reference/superlatives.json, and the parts of C15, C17 and C22
- *   that read units.json, exactDates and example-denylist.json.
+ *   content/reference/superlatives.json, the parts of C15, C17 and C22
+ *   that read units.json, exactDates and example-denylist.json, C08 and C11
+ *   on claims and writerNotes, C12's suggestion probe, C12 and C13 split at
+ *   `optionsFromClue` (src/config/shared.json), and C14's list requests.
  *
  * This file runs both and drops the pipeline findings CNT-2's rules
  * replace. Each finding carries its own `sealed` flag, set from the file it
@@ -48,6 +50,11 @@ export const RULES: Record<string, { severity: string; summary: string }> = {
   ...PIPELINE_RULES,
   ...CNT2_RULES,
   C04: { severity: "error, warn", summary: joined("C04") },
+  C08: { severity: "error", summary: joined("C08") },
+  C11: { severity: "error, warn", summary: joined("C11") },
+  C12: { severity: "error, warn", summary: joined("C12") },
+  C13: { severity: "error", summary: joined("C13") },
+  C14: { severity: "error", summary: joined("C14") },
   C15: { severity: "error", summary: joined("C15") },
   C17: { severity: "error, warn", summary: joined("C17") },
   C22: { severity: "error, warn", summary: joined("C22") },

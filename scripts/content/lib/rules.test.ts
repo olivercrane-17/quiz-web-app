@@ -36,13 +36,16 @@ import { emptyReferences } from "../../../src/content/pipeline/references.ts";
 import { CATEGORY_TABLE } from "../../../src/content/schema/categories.ts";
 import { PracticeItemSchema } from "../../../src/content/schema/items.ts";
 import type { Finding } from "../lint.ts";
+import { RULES_LANDED_AT } from "../lint/cutoff.ts";
 import { listHistory } from "./git.ts";
 import {
   crossPoolRules,
   itemRules,
   listRules,
   poolRules,
+  scheduleDayRules,
   scheduleRules,
+  trackDays,
   type RuleOptions,
 } from "./rules.ts";
 
@@ -141,6 +144,108 @@ describe("status gating (ARCHITECTURE §5.1.1)", () => {
     };
     expect(rulesOf(errors(await tree(unconfirmed)))).toContain("error C01");
   });
+
+  it("AC-CNT-01 every claim of the merged list is confirmed in both checks, a follow-up standing in, never by the writer's run", async () => {
+    // The reviewers' probe on the real accepted p.geo.0101: check B adds
+    // xB1 and confirms it, A never sees it, and the editor merges it and
+    // sends it to a follow-up.
+    const item = readContent("practice/geography/p.geo.0101.json");
+    const verification = item.verification as {
+      checks: { pass: string; claimResults: Record<string, unknown>[] }[];
+    } & Record<string, unknown>;
+    const added = {
+      claimId: "xB1",
+      verdict: "confirmed",
+      evidence: [
+        {
+          kind: "knowledge",
+          basis: "textbook",
+          restatement: "Liechtenstein sits between Switzerland and Austria.",
+          confidence: "certain",
+        },
+      ],
+      note: "",
+      addedClaim: {
+        role: "explanation",
+        text: "Liechtenstein lies between Switzerland and Austria.",
+        risk: "standard",
+      },
+    };
+    const followUp = (checker: string) => ({
+      checker,
+      pass: "A",
+      brief: "confirm",
+      packetSha256: "e".repeat(64),
+      startedAt: "2026-11-01T05:00:00Z",
+      finishedAt: "2026-11-01T05:05:00Z",
+      coldSolve: null,
+      claimResults: [
+        {
+          ...added,
+          addedClaim: undefined,
+          evidence: [
+            {
+              kind: "knowledge",
+              basis: "reference",
+              restatement: "Its neighbours are Switzerland and Austria only.",
+              confidence: "certain",
+            },
+          ],
+        },
+      ],
+      issues: [],
+      searchesUsed: 0,
+      verdict: "pass",
+      followUpFor: ["xB1"],
+    });
+    const merged = (followUps: unknown[]) => ({
+      ...item,
+      verification: {
+        ...verification,
+        checks: verification.checks.map((check) =>
+          check.pass === "B"
+            ? { ...check, claimResults: [...check.claimResults, added] }
+            : check,
+        ),
+        merge: {
+          mergedAt: "2026-11-01T04:10:00Z",
+          editor: "ed-pgeo01d",
+          claims: [
+            ...(item.claims as { id: string }[]).map((claim) => ({
+              id: claim.id,
+              addedBy: "writer",
+            })),
+            { id: "xB1", addedBy: "B" },
+          ],
+          duplicates: [],
+          sentToFollowUp: ["xB1"],
+        },
+        followUps,
+      },
+    });
+    const tree = (value: unknown) =>
+      loadContentTree({
+        "batches.json": readContent("batches.json"),
+        "practice/geography/p.geo.0101.json": value,
+      });
+    const messages = async (value: unknown) =>
+      lintBank(await tree(value), { dedupe: false, today: "2026-11-04" })
+        .filter(
+          (f) =>
+            f.severity === "error" &&
+            f.file.endsWith("practice/geography/p.geo.0101.json"),
+        )
+        .map((f) => f.message);
+    expect(await messages(merged([]))).toEqual([
+      expect.stringContaining("claim xB1, added by pass B, is not confirmed"),
+    ]);
+    // A passing follow-up under A's brief, by a fresh run, stands in.
+    expect(await messages(merged([followUp("fc-pgeo01f")]))).toEqual([]);
+    // The writer's own run (w-pgeo01w) may never be the follow-up.
+    expect(await messages(merged([followUp("fc-pgeo01w")]))).toEqual([
+      expect.stringContaining("is the writer's run"),
+    ]);
+  });
 });
 
 describe("item rules", () => {
@@ -170,6 +275,33 @@ describe("item rules", () => {
       fxFiles({ [MC]: ascending(["three", "1 km", "2 km", "4 km"]) }),
     );
     expect(only(itemRules(words), "C18")).toEqual([]);
+    // Accepted before the rules landed: a warning, until --launch. Accepted
+    // since, with the rule in force: an error (scripts/content/lint/cutoff.ts).
+    const acceptedOn = (decidedAt: string): Bank => {
+      for (const record of bad.items) {
+        record.item = {
+          ...record.item,
+          status: "active",
+          verification: {
+            checks: [],
+            editor: {
+              editor: "ed-fx-editor",
+              decision: "accept",
+              reason: "Both checks pass.",
+              decidedAt,
+            },
+          },
+        } as BankItem["item"];
+      }
+      return bad;
+    };
+    const before = acceptedOn("2026-11-04T14:00:00Z");
+    expect(rulesOf(only(itemRules(before), "C18"))).toEqual(["warn C18"]);
+    expect(rulesOf(only(itemRules(before, true), "C18"))).toEqual([
+      "error C18",
+    ]);
+    const since = acceptedOn(RULES_LANDED_AT);
+    expect(rulesOf(only(itemRules(since), "C18"))).toEqual(["error C18"]);
   });
 
   it("C15 a quantity encore answers 21 or more unless its bands are overridden, and custom bands keep 4 decimals", async () => {
@@ -454,6 +586,28 @@ describe("answer-list rules", () => {
         { version: "2026-11-04", date: "2026-11-04" },
       ],
     });
+
+    // A later version that backdates an existing entry's addedIn (Alan,
+    // first published on 4 November, made to look as old as v1) would
+    // shorten its 30-day freeze (C14): an error, whichever version this is.
+    const v3 = structuredClone(v2);
+    v3.version = "2026-11-06";
+    (v3.entities[1] as { addedIn: string }).addedIn = "2026-10-30";
+    write(v3);
+    expect(await check("2026-11-06")).toEqual(["error X15"]);
+    execFileSync("git", ["commit", "-qam", "v3"], {
+      cwd: repo,
+      env: {
+        ...process.env,
+        GIT_AUTHOR_NAME: "fixture",
+        GIT_AUTHOR_EMAIL: "fixture@example.invalid",
+        GIT_COMMITTER_NAME: "fixture",
+        GIT_COMMITTER_EMAIL: "fixture@example.invalid",
+        GIT_AUTHOR_DATE: "2026-11-06T09:00:00Z",
+        GIT_COMMITTER_DATE: "2026-11-06T09:00:00Z",
+      },
+    });
+    expect(await check("2026-11-07")).toEqual(["error X15"]);
   });
 
   it("X15 says so instead of guessing outside git history", async () => {
@@ -573,12 +727,24 @@ describe("the practice pool", () => {
       ...files,
       "practice/geography/fx.p.geo.0101.json": twin,
     });
-    expect(crossPoolRules(shared, options())).toEqual([]);
-    const found = crossPoolRules(shared, options({ launch: true }));
-    expect(
-      found.map((f) => `${f.itemId ?? ""} ${f.rule} ${f.severity}`),
-    ).toEqual(["fx.m.geo.0101 X29 error"]);
-    expect(found[0]?.message).not.toContain("p.geo");
+    // A sealed run without --launch fails too: the content-sealed job runs
+    // the cross-pool dedupe on every build (ARCHITECTURE §5.2, §5.7).
+    for (const launch of [false, true]) {
+      const found = crossPoolRules(shared, options({ launch }));
+      expect(
+        found.map((f) => `${f.itemId ?? ""} ${f.rule} ${f.severity}`),
+      ).toEqual(["fx.m.geo.0101 X29 error"]);
+      expect(found[0]?.message).not.toContain("p.geo");
+    }
+    // --skip-dedupe skips it, and a plaintext run with no sealed items
+    // loaded has nothing to compare.
+    expect(crossPoolRules(shared, options({ dedupe: false }))).toEqual([]);
+    const plaintext = await loadContentTree({
+      "answer-lists/country.json": fxCountryList(),
+      "practice/geography/fx.p.geo.0101.json": twin,
+    });
+    expect(plaintext.sealedSource).toBe("none");
+    expect(crossPoolRules(plaintext, options({ launch: true }))).toEqual([]);
   });
 });
 
@@ -946,6 +1112,51 @@ describe("the schedule (CONTENT_GUIDE §10.1 to §10.7)", () => {
         only(scheduleFindings(built, { today: addDays(EPOCH, 71) }), "X26"),
       ),
     ).toEqual(["warn X26"]);
+  });
+
+  it("the e2e track: its own Dailies and spares meet the per-day rules, without the main track's coverage and runway", () => {
+    const built = scheduleBank(8, 2);
+    const e2e = (built: Built) => {
+      const bank = bankOf(built.items, built.dailies, built.spares);
+      const schedule = bank.schedules[0];
+      if (schedule) schedule.month.track = "e2e";
+      for (const { spare } of bank.spares) spare.track = "e2e";
+      return bank;
+    };
+    // A clean e2e week: no gap or runway finding although it starts late
+    // and holds only 8 days.
+    for (const daily of built.dailies)
+      daily.date = addDays(String(daily.date), 30);
+    expect(
+      scheduleRules(e2e(built), options({ track: "e2e", launch: true }), []),
+    ).toEqual([]);
+    // Break a window (X21) and share a tag within a Daily (X22).
+    const first = mysteryOf(built, 3, 1);
+    first.predicted = {
+      solveByClue: [0.1, 0.2, 0.3, 0.4],
+      spread: 0.1,
+      estimator: "v0",
+    };
+    const second = mysteryOf(built, 5, 2);
+    second.tags = [...(mysteryOf(built, 5, 1).tags as string[])];
+    const found = scheduleRules(e2e(built), options({ track: "e2e" }), []);
+    expect([...new Set(rulesOf(found))].sort()).toEqual([
+      "error X21",
+      "error X22",
+    ]);
+    // The main track's rules never read the e2e track.
+    expect(scheduleRules(e2e(built), options({ launch: false }), [])).toEqual(
+      [],
+    );
+    // The per-day rules run on any list of days in memory, as the
+    // scheduler checks a candidate (CNT-3).
+    const days = trackDays(e2e(built), "e2e").dailies;
+    const candidate = scheduleDayRules(e2e(built), days.slice(3, 4), options());
+    expect(candidate.length).toBeGreaterThan(0);
+    expect(new Set(rulesOf(candidate))).toEqual(new Set(["error X21"]));
+    expect(scheduleDayRules(e2e(built), days.slice(0, 3), options())).toEqual(
+      [],
+    );
   });
 
   it("X30 spare orders name main-track spare sets, and every Daily ranks them", () => {

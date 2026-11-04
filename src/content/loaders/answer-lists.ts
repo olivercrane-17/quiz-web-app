@@ -6,15 +6,15 @@
  * Each list is a hashed file of `[id, display, keys, popularity]` tuples
  * under public/content/lists/, named in the generated manifest and served
  * cache-first (§3.11.1). A mock build reads the fixture world's lists
- * instead, so its Dailies' entities are there (world.ts). A failed load is
- * not cached, so asking again retries it.
+ * instead, so its Dailies' entities are there (world.ts); their decoder
+ * loads with them, so no other build carries it. A failed load is not
+ * cached, so asking again retries it.
  */
 import type { EntityLookup } from "@/engine/rounds/types";
 import type { AnswerList, AnswerType } from "@/engine/types";
 
 import type { LoadResult } from "../types";
 import { bankList } from "./bank";
-import { fixtureWorldEntityLookup, fixtureWorldList } from "./fixture-world";
 import { contentWorld } from "./world";
 
 /** One answer type's list, as the client projection of §5.5. */
@@ -23,6 +23,9 @@ export async function loadAnswerList(
 ): Promise<LoadResult<AnswerList>> {
   try {
     if (contentWorld() === "fixtures") {
+      // Only a mock build plays the fixture world, so its decoder stays out
+      // of every other build's first load.
+      const { fixtureWorldList } = await import("./fixture-world");
       const list = await fixtureWorldList(type);
       return list === null
         ? { ok: false, error: "not_found" }
@@ -46,6 +49,7 @@ export async function loadEntityLookup(
 ): Promise<LoadResult<EntityLookup>> {
   try {
     if (contentWorld() !== "fixtures") return { ok: false, error: "not_found" };
+    const { fixtureWorldEntityLookup } = await import("./fixture-world");
     const lookup = await fixtureWorldEntityLookup(type);
     return lookup === null
       ? { ok: false, error: "not_found" }

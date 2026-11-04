@@ -18,9 +18,11 @@
  *   freezes or a spare is listed (X28), spare orders (X30), and every
  *   single-Daily rule for spare sets, which the lint leaves out.
  *
- * Launch-only criteria (AC-CNT-01 to 04 and 06, which pass on the real
- * bank at QA-2) are errors with `launch` and silent otherwise, except the
- * per-category minimum, which warns before launch (§5.2).
+ * Launch-only criteria (the counts of AC-CNT-02 to 04, which pass on the
+ * real bank at QA-2) are errors with `launch` and silent otherwise, except
+ * the per-category minimum, which warns before launch (§5.2). The
+ * cross-pool check (X29, AC-CNT-06) is an error whenever sealed items are
+ * loaded.
  *
  * Messages name ids, rule codes, fields and counts only; a redacting run
  * prints none of them anyway (report.ts).
@@ -57,6 +59,7 @@ import { normalizeName } from "../../../src/engine/suggest/normalize.ts";
 import { sortKeys } from "../../../src/engine/text/metrics.ts";
 import type { RoundType } from "../../../src/engine/types/rounds.ts";
 import type { Finding } from "../lint.ts";
+import { acceptedBeforeRules } from "../lint/cutoff.ts";
 import type { ListHistory } from "./git.ts";
 import { isShippedEntity } from "./project.ts";
 
@@ -71,7 +74,17 @@ export interface RuleOptions {
   compositions: unknown;
   /** Git history per list file (repository-relative path), content banks only. */
   histories: ReadonlyMap<string, ListHistory> | null;
+  /** Run the cross-pool dedupe, X29 (default true; `--skip-dedupe` turns it off). */
+  dedupe?: boolean;
+  /**
+   * The schedule track the schedule rules read (default main). The e2e
+   * track's cycle fills undated days from its spares, so X20 (no gaps from
+   * the epoch), X26 (the runway) and AC-CNT-02's counts are main-track rules.
+   */
+  track?: Track;
 }
+
+export type Track = "main" | "e2e";
 
 type Severity = Finding["severity"];
 
@@ -116,12 +129,13 @@ function fileFinding(
 
 /**
  * Rules the lint never ran before CNT-1 must not turn an accepted bank
- * red overnight: an item that is already active warns, so the editor
- * reworks it, while anything not yet active fails, and under --launch
- * everything fails (the bank must meet them by QA-2).
+ * red overnight: an item the editor accepted before they landed warns, so
+ * the editor reworks it, while anything accepted since, or not yet active,
+ * fails, and under --launch everything fails (the bank must meet them by
+ * QA-2). See scripts/content/lint/cutoff.ts.
  */
 function deltaSeverity(item: AnyItem, launch: boolean): Severity {
-  return launch || item.status !== "active" ? "error" : "warn";
+  return launch || !acceptedBeforeRules(item) ? "error" : "warn";
 }
 
 const optionPath = (index: number) =>
@@ -427,17 +441,41 @@ function publishRules(
     );
   }
   const entities = [...list.entities.values()];
+  const reported = new Set<number>();
   entities.forEach((entity, i) => {
     const added = published
       ? published.ids.has(entity.id) && !previousIds.has(entity.id)
       : !previousIds.has(entity.id);
     if (!added || entity.addedIn === expected) return;
+    reported.add(i);
     out.push(
       fileFinding(
         "X15",
         severity,
         list.file.rel,
         `${entity.id}: an entry version ${version} added carries addedIn ${expected}, the version's liveAt (§2.10 rule 5)`,
+        false,
+        `entities[${i}].addedIn`,
+      ),
+    );
+  });
+  // Every entry already published, whichever version this is: its addedIn
+  // is the liveAt of the first published version that held it. A backdated
+  // addedIn would shorten the 30-day freeze C14 reads from it.
+  const firstHeld = new Map<string, string>();
+  for (const held of history.versions)
+    for (const id of held.ids)
+      if (!firstHeld.has(id)) firstHeld.set(id, held.date);
+  entities.forEach((entity, i) => {
+    const first = firstHeld.get(entity.id);
+    if (first === undefined || reported.has(i) || entity.addedIn === first)
+      return;
+    out.push(
+      fileFinding(
+        "X15",
+        "error",
+        list.file.rel,
+        `${entity.id}: addedIn must be ${first}, the liveAt of the first published version that held the entry (§2.10 rule 5)`,
         false,
         `entities[${i}].addedIn`,
       ),
@@ -576,11 +614,19 @@ export function poolRules(bank: Bank, options: RuleOptions): Finding[] {
 
 /**
  * X29 (AC-CNT-06): no practice or room item shares a fact with a Daily
- * item. Reported on the sealed side only, never naming the public one, so
- * no line ties a public item to a sealed answer (§5.4).
+ * item (ARCHITECTURE §5.2's cross-pool level, CONTENT_GUIDE §10.5, §10.9).
+ * An error whenever the content bank has its sealed items loaded, from the
+ * workspace or decrypted in the content-sealed job (§5.7), launch or not.
+ * Reported on the sealed side only, never naming the public one, so no
+ * line ties a public item to a sealed answer (§5.4).
  */
 export function crossPoolRules(bank: Bank, options: RuleOptions): Finding[] {
-  if (!options.launch || bank.layout.kind !== "content") return [];
+  if (
+    bank.layout.kind !== "content" ||
+    bank.sealedSource === "none" ||
+    options.dedupe === false
+  )
+    return [];
   const daily = bank.items.filter(
     (record) =>
       (record.pool === "mystery" || record.pool === "encore") &&
@@ -655,7 +701,8 @@ function daysBetween(a: string, b: string): number {
   );
 }
 
-interface Day {
+/** One Daily of a schedule, or a spare set (`date` null), as the rules read it. */
+export interface ScheduleDay {
   /** The schedule file or spare file it came from. */
   file: string;
   /** Null for a spare set. */
@@ -668,14 +715,18 @@ interface Day {
   spareId: string | null;
 }
 
-interface Resolved {
+type Day = ScheduleDay;
+
+/** A day with its rounds' items looked up in the bank. */
+export interface ResolvedDay {
   day: Day;
   items: { round: RoundRecord; record: BankItem | undefined }[];
   mysteries: Mystery[];
   encores: Encore[];
 }
+type Resolved = ResolvedDay;
 
-function resolve(bank: Bank, day: Day): Resolved {
+export function resolveDay(bank: Bank, day: Day): Resolved {
   const items = day.rounds.map((round) => ({
     round,
     record: bank.itemsById.get(round.contentId),
@@ -748,7 +799,7 @@ function spareIntegrity(resolved: Resolved): Finding[] {
 }
 
 /** X21, X22, X25 and X27: the rules one Daily (or one spare set) obeys on its own. */
-function singleDailyRules(
+export function singleDailyRules(
   resolved: Resolved,
   layouts: ReadonlyMap<string, string> | null,
   dailyNumber: number | null,
@@ -873,7 +924,7 @@ function dailyChecksOf(item: AnyItem): readonly DailyCheckRecord[] {
  * X28: a passing pass D, for the date (or with forDate null for a spare
  * set), against the list versions that ship now (§9.9 rule 7).
  */
-function passD(
+export function passD(
   bank: Bank,
   resolved: Resolved,
   forDate: string | null,
@@ -913,7 +964,7 @@ function passD(
 }
 
 /** X23: the week rules of §10.4 over consecutive Dailies, mystery slots only for categories. */
-function weekRules(days: readonly Resolved[]): Finding[] {
+export function weekRules(days: readonly Resolved[]): Finding[] {
   const out: Finding[] = [];
   const add = (last: Resolved, message: string) =>
     out.push(
@@ -1034,7 +1085,7 @@ const CATEGORY_ORDER = [
 ];
 
 /** X24: an entity that was an answer in the last 7 days is no distractor (§10.5). */
-function recentAnswerRules(days: readonly Resolved[]): Finding[] {
+export function recentAnswerRules(days: readonly Resolved[]): Finding[] {
   const out: Finding[] = [];
   const answeredOn = new Map<string, string[]>();
   for (const day of days) {
@@ -1071,20 +1122,66 @@ function recentAnswerRules(days: readonly Resolved[]): Finding[] {
   return out;
 }
 
-export function scheduleRules(
-  bank: Bank,
-  options: RuleOptions,
-  notes: string[],
-): Finding[] {
-  const out: Finding[] = [];
-  let layouts: ReadonlyMap<string, string> | null = null;
+/** What the per-day schedule rules need besides the bank. */
+export interface DayRuleOptions {
+  /** src/config/shared.json dailyEpoch: Daily numbers, for the first week's window. */
+  epoch: string;
+  /** content/compositions.json, parsed (X25). */
+  compositions: unknown;
+}
+
+function shareLayouts(
+  compositions: unknown,
+): ReadonlyMap<string, string> | null {
   try {
-    layouts = parseShareLayouts(options.compositions).codeOf;
+    return parseShareLayouts(compositions).codeOf;
   } catch {
     // The build reports a broken compositions.json (X25) itself.
+    return null;
   }
-  const main = bank.schedules
-    .filter(({ month }) => month.track === "main")
+}
+
+/**
+ * The schedule rules over an explicit list of dated Dailies, held in
+ * memory: X21, X22, X25 and X27 on each Daily, pass D (X28) on a frozen or
+ * published one, and the week (X23) and recent-answer (X24) rules across
+ * them. The scheduler (CNT-3) checks a candidate day, or a 7-day window,
+ * with this before it writes anything; scheduleRules runs it over a track.
+ */
+export function scheduleDayRules(
+  bank: Bank,
+  days: readonly ScheduleDay[],
+  options: DayRuleOptions,
+): Finding[] {
+  const layouts = shareLayouts(options.compositions);
+  const sorted = [...days].sort((a, b) =>
+    (a.date ?? "") < (b.date ?? "") ? -1 : 1,
+  );
+  const resolvedDays = sorted.map((day) => resolveDay(bank, day));
+  const out: Finding[] = [];
+  for (const resolved of resolvedDays) {
+    const date = resolved.day.date ?? "";
+    out.push(
+      ...singleDailyRules(
+        resolved,
+        layouts,
+        daysBetween(options.epoch, date) + 1,
+      ),
+    );
+    if (resolved.day.status === "frozen" || resolved.day.status === "published")
+      out.push(...passD(bank, resolved, date, "Daily cannot freeze"));
+  }
+  out.push(...weekRules(resolvedDays), ...recentAnswerRules(resolvedDays));
+  return out;
+}
+
+/** The schedule's Dailies and spare sets on one track, as the rules read them. */
+export function trackDays(
+  bank: Bank,
+  track: Track,
+): { dailies: ScheduleDay[]; spares: ScheduleDay[] } {
+  const dailies = bank.schedules
+    .filter(({ month }) => month.track === track)
     .flatMap(({ file, month }) =>
       month.dailies.map((daily): Day => ({
         file: file.rel,
@@ -1099,7 +1196,7 @@ export function scheduleRules(
     )
     .sort((a, b) => ((a.date ?? "") < (b.date ?? "") ? -1 : 1));
   const spares = bank.spares
-    .filter(({ spare }) => spare.track === "main")
+    .filter(({ spare }) => spare.track === track)
     .map(({ file, spare }): Day => ({
       file: file.rel,
       date: null,
@@ -1111,13 +1208,24 @@ export function scheduleRules(
       spareId: spare.id,
     }))
     .sort((a, b) => (a.label < b.label ? -1 : 1));
+  return { dailies, spares };
+}
 
-  const resolvedDays = main.map((day) => resolve(bank, day));
-  const resolvedSpares = spares.map((day) => resolve(bank, day));
-  const numberOf = (date: string) => daysBetween(options.epoch, date) + 1;
+export function scheduleRules(
+  bank: Bank,
+  options: RuleOptions,
+  notes: string[],
+): Finding[] {
+  const out: Finding[] = [];
+  const track: Track = options.track ?? "main";
+  const layouts = shareLayouts(options.compositions);
+  const { dailies: main, spares } = trackDays(bank, track);
+  const resolvedSpares = spares.map((day) => resolveDay(bank, day));
 
-  // X20: one Daily per date with no gaps from the epoch (§10.7).
-  if (main.length > 0) {
+  // X20: one Daily per date with no gaps from the epoch, and X26: the
+  // runway (§10.7). Main track only: the e2e cycle fills undated days from
+  // its spares (ARCHITECTURE §8.17).
+  if (track === "main" && main.length > 0) {
     const first = main[0]?.date ?? options.epoch;
     const last = main.at(-1)?.date ?? options.epoch;
     if (first < options.epoch) {
@@ -1147,7 +1255,6 @@ export function scheduleRules(
         ),
       );
     }
-    // X26: the runway alarm (§10.7, PRD §3.18.2).
     const ahead = main.filter(
       (day) => (day.date ?? "") >= options.today,
     ).length;
@@ -1163,7 +1270,7 @@ export function scheduleRules(
       );
     }
   }
-  if (options.launch && bank.layout.kind === "content") {
+  if (track === "main" && options.launch && bank.layout.kind === "content") {
     const dates = new Set(main.map((day) => day.date));
     let run = 0;
     for (let date = options.epoch; dates.has(date); date = addDays(date, 1))
@@ -1181,20 +1288,14 @@ export function scheduleRules(
     }
   }
 
-  for (const resolved of resolvedDays) {
-    const date = resolved.day.date ?? "";
-    out.push(...singleDailyRules(resolved, layouts, numberOf(date)));
-    if (resolved.day.status === "frozen" || resolved.day.status === "published")
-      out.push(...passD(bank, resolved, date, "Daily cannot freeze"));
-  }
-  out.push(...weekRules(resolvedDays), ...recentAnswerRules(resolvedDays));
+  out.push(...scheduleDayRules(bank, main, options));
 
   // Spare sets: every single-Daily rule on their own (§10.7).
   const listed = new Set(main.flatMap((day) => day.spareOrder ?? []));
   const spareIds = new Set(spares.map((spare) => spare.label));
-  const e2eSpares = new Set(
+  const otherTrack = new Set(
     bank.spares
-      .filter(({ spare }) => spare.track !== "main")
+      .filter(({ spare }) => spare.track !== track)
       .map(({ spare }) => spare.id),
   );
   for (const resolved of resolvedSpares) {
@@ -1205,7 +1306,7 @@ export function scheduleRules(
     if (listed.has(resolved.day.label) || resolved.day.status === "frozen")
       out.push(...passD(bank, resolved, null, "spare set cannot be listed"));
   }
-  // X30: spare orders name main-track spare sets.
+  // X30: spare orders name spare sets of the same track.
   for (const day of main) {
     if (day.spareOrder === undefined) {
       if (spares.length > 0)
@@ -1227,13 +1328,14 @@ export function scheduleRules(
             "X30",
             "error",
             day.file,
-            `${day.date ?? ""}: spareOrder names ${id}, which is ${e2eSpares.has(id) ? "an e2e spare set" : "no main-track spare set"} (§10.7)`,
+            `${day.date ?? ""}: spareOrder names ${id}, which is ${otherTrack.has(id) ? "a spare set of another track" : `no ${track}-track spare set`} (§10.7)`,
             true,
           ),
         );
     }
   }
   if (
+    track === "main" &&
     main.length === 0 &&
     spares.length === 0 &&
     bank.layout.kind === "content"

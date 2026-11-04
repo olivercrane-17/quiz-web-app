@@ -11,7 +11,7 @@
  * except where a rule is about the real world: C27's countries come from
  * content/reference/capitals-excluded.json.
  */
-import { readFileSync } from "node:fs";
+import { cpSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { afterAll, describe, expect, it } from "vitest";
@@ -30,10 +30,19 @@ import {
   loadContentTree,
   loadFx,
   removeTempDirs,
+  tempDir,
+  writeTree,
   type FxFiles,
 } from "../../../src/content/pipeline/__fixtures__/builders.ts";
 import { rot13 } from "../../../src/content/pipeline/text.ts";
+import { SUGGESTION_COUNT } from "../../../src/config/tunables.ts";
+import { loadBank } from "../../../src/content/pipeline/bank.ts";
+import { resolveLayout } from "../../../src/content/pipeline/layout.ts";
 import { RULES, lintBank, type Finding } from "../lint.ts";
+import type { BankItem } from "../../../src/content/pipeline/bank.ts";
+import { RULES_LANDED_AT } from "./cutoff.ts";
+import { severityFor, type Cnt2Hit } from "./index.ts";
+import { PROBE_ROWS, optionsFromClue, probeQueries } from "./mysteries.ts";
 import { REFERENCE_FILES } from "./reference.ts";
 
 afterAll(removeTempDirs);
@@ -948,6 +957,55 @@ describe("severity by status for CNT-2's new rules", () => {
     expect(drawn(await lint(floorBreak("draft")), "C26", MC)).toEqual([]);
   });
 
+  it("spares only items accepted before the rules landed; an item accepted since keeps each rule's severity", () => {
+    const record = (status: string, decidedAt?: string) =>
+      ({
+        item: {
+          status,
+          ...(decidedAt === undefined
+            ? {}
+            : {
+                verification: {
+                  checks: [],
+                  editor: {
+                    editor: "ed-fx-editor",
+                    decision: "accept",
+                    reason: "r",
+                    decidedAt,
+                  },
+                },
+              }),
+        },
+      }) as unknown as BankItem;
+    const hit: Cnt2Hit = { rule: "C27", severity: "error", message: "m" };
+    const added: Cnt2Hit = { ...hit, rule: "C11", added: true };
+    for (const h of [hit, added]) {
+      expect(
+        severityFor(h, record("active", "2026-11-04T14:14:21Z"), false, false),
+      ).toBe("warn");
+      expect(
+        severityFor(h, record("active", "2026-11-04T14:14:21Z"), false, true),
+      ).toBe("error");
+      expect(
+        severityFor(h, record("active", RULES_LANDED_AT), false, false),
+      ).toBe("error");
+      expect(
+        severityFor(h, record("active", "2026-11-20T09:00:00Z"), false, false),
+      ).toBe("error");
+      expect(severityFor(h, record("active"), false, false)).toBe("error");
+      expect(severityFor(h, record("checking"), false, false)).toBe("error");
+    }
+    // A rule CNT-2 replaces rule for rule (C13) keeps its weight anyway.
+    expect(
+      severityFor(
+        { rule: "C13", severity: "error", message: "m" },
+        record("active", "2026-11-04T14:14:21Z"),
+        false,
+        false,
+      ),
+    ).toBe("error");
+  });
+
   it("C27 fails on drafts, and --launch keeps every new rule an error", async () => {
     const files = fxFiles({
       [MC]: fxMc({
@@ -1039,7 +1097,19 @@ describe("CONTENT_GUIDE §12's good examples under CNT-2's rules", () => {
     ).toBe(60);
     expect(ofExamples.filter((f) => f.rule === "C01")).toEqual([]);
     const cnt2 = ofExamples.filter((f) =>
-      ["C04", "C15", "C17", "C19", "C26", "C27", "C28"].includes(f.rule),
+      [
+        "C04",
+        "C08",
+        "C11",
+        "C12",
+        "C13",
+        "C15",
+        "C17",
+        "C19",
+        "C26",
+        "C27",
+        "C28",
+      ].includes(f.rule),
     );
     expect(cnt2.map((f) => `${f.itemId ?? f.file} ${f.rule}`)).toEqual([]);
     // The example denylist bars exactly the ten §12.7 answers (errors) and
@@ -1059,6 +1129,131 @@ describe("CONTENT_GUIDE §12's good examples under CNT-2's rules", () => {
         .map((e) => e.id)
         .sort(),
     );
+  });
+});
+
+describe("the suggestion probe, claims and notes, optionsFromClue and list requests", () => {
+  it("C12's suggestion probe fails a typed clue whose word or prefix brings up the answer", async () => {
+    const clean = await lint(fxFiles());
+    expect(drawn(clean, "C12", MYS)).toEqual([]);
+    // Typing "arv", the start of a clue word, lists Arvenna and nothing else.
+    const typed = fxMystery();
+    typed.clues[0] = "Salt traders on the old Arv road crossed it on foot.";
+    const findings = await lint(fxFiles({ [MYS]: typed }));
+    expect(
+      findings
+        .filter((f) => f.rule === "C12" && f.file.endsWith(MYS))
+        .map((f) => `${f.severity} ${f.path ?? ""}`),
+    ).toEqual(["error clues[0]"]);
+    // So does a word that begins with an alias's word ("Arven Republic").
+    const alias = fxMystery();
+    alias.clues[1] = "Its calendar was reported to have thirteen months.";
+    expect(drawn(await lint(fxFiles({ [MYS]: alias })), "C12", MYS)).toContain(
+      "error C12",
+    );
+    // The box shows SUGGESTION_COUNT rows, and so does the probe.
+    expect(PROBE_ROWS).toBe(SUGGESTION_COUNT);
+    expect(probeQueries("An old Arv road")).toEqual([
+      "old",
+      "arv",
+      "roa",
+      "road",
+    ]);
+  });
+
+  it("C08 and C11 read claims and writerNotes too", async () => {
+    const base = fxMc();
+    const item = fxMc({
+      claims: [
+        ...base.claims.slice(0, 2),
+        {
+          id: "c3",
+          role: "explanation",
+          risk: "high",
+          riskReason: "date",
+          text: "Halvessa dated the custom 2025-04-03 – see https://example.org/flute.",
+        },
+      ],
+      writerNotes: "Checked 03/04/2025 – **notes**",
+    });
+    const findings = await lint(fxFiles({ [MC]: item }));
+    const at = (rule: string) =>
+      findings
+        .filter((f) => f.rule === rule && f.file.endsWith(MC))
+        .map((f) => `${f.severity} ${f.path ?? ""}`)
+        .sort();
+    expect(at("C08")).toEqual(["error claims[2].text", "error writerNotes"]);
+    expect(at("C11")).toEqual([
+      "error claims[2].text",
+      "error claims[2].text",
+      "error writerNotes",
+      "error writerNotes",
+    ]);
+    // Clean claims and notes draw nothing, and a ratio is no date.
+    const clean = await lint(
+      fxFiles({
+        [MC]: fxMc({ writerNotes: "Split 75/25 between the towns." }),
+      }),
+    );
+    expect(drawn(clean, "C08", MC)).toEqual([]);
+    expect(drawn(clean, "C11", MC)).toEqual([]);
+  });
+
+  it("C12 and C13 split the clues at optionsFromClue, read from src/config/shared.json", async () => {
+    // Clue 3 names the answer's display form: a C12 giveaway while clue 3
+    // is typed against, a C13 display word once the options come with it.
+    const named = fxMystery();
+    named.clues[2] =
+      "The Vellum river runs through Arvenna's capital, Cindral.";
+    const at = (findings: Finding[], rule: string) =>
+      findings
+        .filter((f) => f.rule === rule && f.file.endsWith(MYS))
+        .map((f) => f.path ?? "");
+    const four = await lint(fxFiles({ [MYS]: named }));
+    expect(at(four, "C12")).toContain("clues[2]");
+    expect(at(four, "C13")).toEqual([]);
+
+    const repo = tempDir("qz-options-from-");
+    cpSync(join(REPO_ROOT, "content"), join(repo, "content"), {
+      recursive: true,
+      filter: (source) =>
+        !/content\/(practice|answer-lists|sealed|fixtures)(\/|$)/.test(source),
+    });
+    mkdirSync(join(repo, "src", "config"), { recursive: true });
+    const shared = JSON.parse(
+      readFileSync(join(REPO_ROOT, "src/config/shared.json"), "utf8"),
+    ) as Json;
+    writeFileSync(
+      join(repo, "src/config/shared.json"),
+      JSON.stringify({ ...shared, optionsFromClue: 3 }),
+    );
+    expect(optionsFromClue(repo)).toBe(3);
+    const root = await writeTree(fxFiles({ [MYS]: named }), join(repo, "tree"));
+    const three = lintBank(
+      await loadBank(resolveLayout({ repoRoot: repo, root, fixtures: true })),
+      { today: TODAY, dedupe: false },
+    );
+    expect(at(three, "C12")).not.toContain("clues[2]");
+    expect(at(three, "C13")).toEqual(["clues[2]"]);
+  });
+
+  it("C14: a draft may hold a list request's lr. id, and from checking on any lr. id fails", async () => {
+    const request = "fx.lr.m.geo.b01.01";
+    const draft = fxMystery({ answer: request });
+    const asDraft = await lint(fxFiles({ [MYS]: draft }));
+    expect(drawn(asDraft, "C01", MYS)).toEqual([]);
+    expect(drawn(asDraft, "C14", MYS)).toEqual([]);
+    const checking = {
+      ...draft,
+      status: "checking",
+      ...checkingStub(draft as unknown as Json),
+    };
+    const atChecking = await lint(fxFiles({ [MYS]: checking }));
+    expect(
+      atChecking
+        .filter((f) => f.rule === "C14" && f.file.endsWith(MYS))
+        .map((f) => `${f.severity} ${f.path ?? ""}`),
+    ).toEqual(["error answer"]);
   });
 });
 

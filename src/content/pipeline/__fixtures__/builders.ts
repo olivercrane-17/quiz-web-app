@@ -21,7 +21,11 @@ import type {
 import type { CheckRecord, Pass } from "../../schema/verification.ts";
 import { loadBank, type Bank, type BankItem } from "../bank.ts";
 import { resolveLayout } from "../layout.ts";
-import { packetSha256 } from "../packets.ts";
+import {
+  STAGED_PACKET_VERSION,
+  stageHashes,
+  type ServeLog,
+} from "../packets.ts";
 
 export const REPO_ROOT = resolve(import.meta.dirname, "../../../..");
 export const FIXTURE_BANK = resolve(import.meta.dirname, "bank");
@@ -553,6 +557,35 @@ export function fxRegister(
   };
 }
 
+/** The writer's self-check with every code true (§2.3, §9.3), as packets need. */
+export const FX_SELF_CHECK = {
+  lint: true,
+  claims: true,
+  datasets: true,
+  rivalTest: true,
+  volatility: true,
+  regional: true,
+  style: true,
+  myths: true,
+  mystery: true,
+  encore: true,
+  doubts: true,
+} as const;
+
+/** The usual fixture files, each item self-checked, as a submitted batch holds them. */
+export function fxCheckedFiles(extra: FxFiles = {}): FxFiles {
+  const files = fxFiles(extra);
+  const out: FxFiles = {};
+  for (const [path, value] of Object.entries(files)) {
+    const item = value as Record<string, unknown> | undefined;
+    out[path] =
+      item && typeof item === "object" && "claims" in item
+        ? { ...item, selfCheck: { ...FX_SELF_CHECK } }
+        : value;
+  }
+  return out;
+}
+
 export interface FxFiles {
   [path: string]: unknown;
 }
@@ -628,6 +661,50 @@ export function itemOf(bank: Bank, id: string): BankItem {
 const BRIEF = { A: "confirm", B: "refute", T: "tiebreak" } as const;
 const CHECKER = { A: CHECKER_A, B: CHECKER_B, T: CHECKER_T } as const;
 
+const STAGE_START = Date.parse("2026-11-02T10:00:00Z");
+const iso = (ms: number) =>
+  new Date(ms).toISOString().replace(/\.\d{3}Z$/, "Z");
+
+/** When a fixture packet's stages were served: one a minute from 10:00. */
+export function fxStageTimes(count: number): string[] {
+  return Array.from({ length: count }, (_, i) => iso(STAGE_START + i * 60_000));
+}
+
+/** When a fixture checker recorded stage k's cold solve: half a minute in. */
+const recordedAt = (stage: number) =>
+  iso(STAGE_START + (stage - 1) * 60_000 + 30_000);
+
+/**
+ * The serve log content:packets would hold after serving every stage of
+ * each item's pass packet at fxStageTimes, as fxRecord's records repeat it.
+ */
+export function fxServeLog(
+  batchId: string,
+  pass: Pass,
+  records: readonly BankItem[],
+): ServeLog {
+  const items: ServeLog["items"] = {};
+  for (const record of records) {
+    const hashes = stageHashes(record.id, record.item, pass);
+    const times = fxStageTimes(hashes.length);
+    items[record.id] = {
+      stages: hashes.length,
+      served: hashes.map((sha256, i) => ({
+        stage: i + 1,
+        sha256,
+        servedAt: times[i] ?? "",
+      })),
+      restarts: 0,
+    };
+  }
+  return {
+    batchId,
+    pass: pass as ServeLog["pass"],
+    packetVersion: STAGED_PACKET_VERSION,
+    items,
+  };
+}
+
 /**
  * A complete, honest check record for a fixture item: every claim confirmed,
  * high-risk ones and a mystery's clue claims with dataset evidence (A and B
@@ -652,12 +729,14 @@ export function fxRecord(
         clue,
         guess: item.answer,
         candidates: [item.answer],
+        recordedAt: recordedAt(clue),
       })),
     };
   } else if ("kind" in item && item.kind === "encore") {
     coldSolve = {
       estimate: item.answer * 0.8,
       reasoning: "Seven in the city and a few dozen upstream.",
+      recordedAt: recordedAt(1),
     };
   } else {
     const key =
@@ -670,14 +749,22 @@ export function fxRecord(
             ? item.a
             : item.b
           : (item as McItem).answer;
-    coldSolve = { answerGiven: key, confidence: "high", matchedKey: true };
+    coldSolve = {
+      answerGiven: key,
+      confidence: "high",
+      matchedKey: true,
+      recordedAt: recordedAt(1),
+    };
   }
+  // Every stage served at fxStageTimes, as fxServeLog logs it (§9.4).
+  const hashes = stageHashes(record.id, item, pass);
   return {
     itemId: record.id,
     checker: CHECKER[pass],
     pass,
     brief: BRIEF[pass],
-    packetSha256: packetSha256(record.id, item, pass),
+    packetSha256: hashes,
+    stagesServedAt: fxStageTimes(hashes.length),
     startedAt: "2026-11-02T10:00:00Z",
     finishedAt: "2026-11-02T10:05:00Z",
     coldSolve,

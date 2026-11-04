@@ -13,9 +13,14 @@ import { join } from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 
 import {
+  REPO_ROOT,
   removeTempDirs,
   tempDir,
+  writeTree,
 } from "../../../src/content/pipeline/__fixtures__/builders.ts";
+import { loadBank } from "../../../src/content/pipeline/bank.ts";
+import { resolveLayout } from "../../../src/content/pipeline/layout.ts";
+import { lintBank } from "../lint.ts";
 import type { AnswerEntity } from "../../../src/content/schema/answer-lists.ts";
 import type {
   DatasetEntry,
@@ -204,7 +209,7 @@ describe("the CLDR source", () => {
     },
   });
 
-  it("adds the forms an entry lacks with --write, under a new version, and lists the records no entry cites", () => {
+  it("adds the forms an entry lacks with --write, under a new version, and lists the records no entry cites", async () => {
     const { dir, manifest } = datasets({
       "cldr-territories": { "territories.json": territories },
     });
@@ -253,6 +258,26 @@ describe("the CLDR source", () => {
     expect(
       reimport(written, manifest, dir, { write: false, today: "2026-11-05" })
         .changes,
+    ).toEqual([]);
+    // The written list loads as content:check and content:build load it,
+    // liveAt and all, and lints clean of schema findings.
+    const tree = await writeTree({
+      "answer-lists/country.json": {
+        ...written,
+        entities: written.entities.map((e) => ({
+          ...e,
+          id: `fx.${e.id}`,
+        })),
+      },
+    });
+    const bank = await loadBank(
+      resolveLayout({ repoRoot: REPO_ROOT, root: tree, fixtures: true }),
+    );
+    expect(bank.lists.get("country")?.entities.size).toBe(2);
+    expect(
+      lintBank(bank, { dedupe: false, today: "2026-11-04" }).filter(
+        (f) => f.rule === "C01",
+      ),
     ).toEqual([]);
   });
 

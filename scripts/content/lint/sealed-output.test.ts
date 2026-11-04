@@ -18,6 +18,7 @@ import {
   REPO_ROOT,
   fxCountryList,
   fxEncore,
+  fxMc,
   fxMystery,
   removeTempDirs,
   tempDir,
@@ -185,6 +186,20 @@ describe("CNT-2's rules in a sealed run", () => {
       seal("encores", id, measured(id, value));
     });
     seal("audits", "audit-2026-11-04", audit);
+    // A public practice item that gives away the sealed mystery's flag
+    // clue: the cross-pool check (X29) catches it in any sealed run.
+    const twin = {
+      ...fxMc(),
+      id: "p.geo.0199",
+      stem: "Which fixture country flies a silver heron above three blue waves?",
+      answer: "Arvenna",
+      wrong: ["Belloria", "Cassova", "Dravenor"],
+    };
+    mkdirSync(join(repo, "content/practice/geography"), { recursive: true });
+    writeFileSync(
+      join(repo, "content/practice/geography/p.geo.0199.json"),
+      `${JSON.stringify(twin, null, 2)}\n`,
+    );
 
     const run = (script: string, ...args: string[]) => {
       const result = spawnSync(
@@ -213,8 +228,17 @@ describe("CNT-2's rules in a sealed run", () => {
       run("check.ts", "--sealed", "--today", "2026-11-04", "--json"),
       run("audit.ts", "check", "--sealed"),
       run("audit.ts", "check", "--sealed", "--launch", "--json"),
+      run("check.ts", "--sealed", "--today", "2026-11-04", "--launch"),
     ];
-    const [text = "", , auditText = ""] = outputs;
+    const [text = "", , auditText = "", , launchText = ""] = outputs;
+    // content:check itself reads the audit record (ARCHITECTURE §5.7): the
+    // pre-launch audit's AC-CNT-05 misses warn, and fail with --launch...
+    expect(text).toContain("warn  audit-2026-11-04 X32");
+    expect(launchText).toContain("error audit-2026-11-04 X32");
+    // ...and runs the cross-pool dedupe without --launch: the sealed side
+    // is named, the public one never.
+    expect(text).toContain("error m.geo.0101 X29");
+    expect(text).not.toContain("p.geo.0199 X29");
     // The planted failures were all found...
     expect(text).toContain("m.geo.0101 C26 claims[");
     expect(text).toContain("error m.geo.0101 C27 clues[1]");

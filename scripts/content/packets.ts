@@ -1,31 +1,43 @@
 /**
  * npm run content:packets -- --batch <id> --pass A|B|T|E
+ * npm run content:packets -- --batch <id> --pass A|B|T --next --record <draft.json>
  *
  * The packet builder (ARCHITECTURE §5.8, CONTENT_GUIDE §9.4), at the path
  * ARCHITECTURE §2.1 gives it. The content team's `npm run content:packet`
  * runs this same module through scripts/content/packet.ts, under its own
- * name, so every command and every line of output they rely on stays as it
- * was.
+ * name.
  *
- * Writes blind packets to .cache/packets/<batch>/<pass>/: cold.json (for
- * mysteries cold-1.json to cold-4.json, one clue per stage, the options with
- * the last) and reveal.json, prints each item's packetSha256, and moves the
- * batch to checking. Items move to checking once they carry both a check
- * record and the estimate (content:record, content:estimate). Pass E writes
- * the estimator's packet, estimate.json, and changes nothing.
+ * Packets are staged (§9.4). The first call serves each item's first stage
+ * only, into .cache/packets/<batch>/<pass>/<item>/stage-1.json, logs its
+ * hash and the time in served.json, and moves the batch to checking. Each
+ * `--next` serves an item its next stage, and only once the run's draft
+ * check record (`--record`) holds the cold-solve entry, with recordedAt,
+ * for the stage before: a mystery's next clue after its clue's entry, the
+ * final stage (the key and the claims) after the last cold one. The final
+ * stage gives the packetSha256 and stagesServedAt lists the record copies,
+ * and content:record holds the record to them. Running the first call
+ * again starts the items' packets over.
+ *
+ * Before building, it refuses an item with lint errors, or whose selfCheck
+ * lacks a code or holds a false (§2.3, §9.3). Pass E writes the estimator's
+ * packet, estimate.json, in one stage, and changes nothing else.
  *
  * Passes A, B and T need the content key: options are shuffled with a seed
- * derived from it, so cold packets never show where the key sits. Before it
+ * derived from it, so cold stages never show where the key sits. Before it
  * writes a packet with sealed items, the tool checks that .cache/packets/ is
  * git-ignored. See content/README.md.
  */
 import { createHash } from "node:crypto";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { readdir, rm } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { loadBank } from "../../src/content/pipeline/bank.ts";
+import {
+  loadBank,
+  type Bank,
+  type BankItem,
+} from "../../src/content/pipeline/bank.ts";
 import {
   nowUtc,
   parseCli,
@@ -36,6 +48,7 @@ import {
 } from "../../src/content/pipeline/cli.ts";
 import {
   formatJson,
+  parseJsonText,
   writeJsonFile,
   writeTextFile,
 } from "../../src/content/pipeline/json.ts";
@@ -47,12 +60,20 @@ import {
   findRepoRoot,
   repoRelative,
   resolveLayout,
+  type Layout,
 } from "../../src/content/pipeline/layout.ts";
 import {
+  SERVE_LOG,
+  STAGED_PACKET_VERSION,
+  ServeLogSchema,
   estimatorView,
-  packetEntry,
-  packetFiles,
+  nextStageBlocked,
+  packetDir,
+  packetStages,
+  stageFile,
+  stagedInstructions,
   type OrderKey,
+  type ServeLog,
 } from "../../src/content/pipeline/packets.ts";
 import {
   batchItems,
@@ -60,7 +81,15 @@ import {
 } from "../../src/content/pipeline/register.ts";
 import { assertPacketsIgnored } from "../../src/content/pipeline/store.ts";
 import { BatchRegisterSchema } from "../../src/content/schema/batches.ts";
-import type { Pass } from "../../src/content/schema/verification.ts";
+import {
+  SELF_CHECK_CODES,
+  type AnyItem,
+} from "../../src/content/schema/items.ts";
+import {
+  BRIEF_FOR_PASS,
+  ColdSolveSchema,
+  type Pass,
+} from "../../src/content/schema/verification.ts";
 import { lintBank } from "./lint.ts";
 
 const usage = (
@@ -69,13 +98,27 @@ const usage = (
 
   A and B are the two fact-checkers, T a tiebreak (§9.7), E the estimator (§8.5).
   A, B and T need the content key (QZ_CONTENT_KEY or ~/.config/quiz-web-app/content.key).
+  Without --next: serves each item's first stage (and starts it over).
 
-  --items <ids>    Comma-separated item ids (default: every draft or checking item;
-                   for pass T, the items whose A and B verdicts split)
+  --next           Serve each item its next stage, once --record holds the
+                   cold-solve entry, with recordedAt, for the stage before
+  --record <file>  The run's draft check record(s): a JSON array of entries
+                   with "itemId" and "coldSolve", as content:record takes them
+  --items <ids>    Comma-separated item ids (default: every draft or checking
+                   item; for pass T, the items whose A and B verdicts split;
+                   with --next, every item whose packet is not finished)
   --root <dir>     Bank root (default content/)
   --fixtures       Treat --root as a fixture tree
   --force          Build packets for a batch that is still open
-  --json           Print the hashes as JSON`;
+  --json           Machine-readable output`;
+
+/** Why an item may not get a packet: its selfCheck is missing or not all true (§2.3, §9.3). */
+export function selfCheckProblem(item: AnyItem): string | null {
+  const selfCheck = item.selfCheck;
+  if (selfCheck === undefined) return "no selfCheck";
+  const open = SELF_CHECK_CODES.filter((code) => selfCheck[code] !== true);
+  return open.length === 0 ? null : `selfCheck ${open.join(", ")} not true`;
+}
 
 /** Fixture trees are invented content, so their packets use a public order key. */
 const FIXTURE_ORDER_KEY = createHash("sha256")
@@ -99,6 +142,8 @@ export async function main(
       batch: { type: "string" },
       pass: { type: "string" },
       items: { type: "string" },
+      next: { type: "boolean" },
+      record: { type: "string" },
       root: { type: "string" },
       fixtures: { type: "boolean" },
       force: { type: "boolean" },
@@ -117,6 +162,25 @@ export async function main(
   });
   const bank = await loadBank(layout);
   const batch = requireBatch(bank, batchId);
+  const wanted = str(values, "items")
+    ?.split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
+  if (values.next === true) {
+    if (pass === "E")
+      throw new Error(
+        "the estimator's packet has one stage: --next is for A, B and T",
+      );
+    return serveNext(
+      bank,
+      name,
+      batchId,
+      pass,
+      wanted,
+      str(values, "record"),
+      values.json === true,
+    );
+  }
   if (
     batch.status !== "submitted" &&
     batch.status !== "checking" &&
@@ -127,10 +191,6 @@ export async function main(
     );
   }
 
-  const wanted = str(values, "items")
-    ?.split(",")
-    .map((id) => id.trim())
-    .filter(Boolean);
   let records = batchItems(bank, batchId).filter(
     (record) =>
       record.item.status === "draft" || record.item.status === "checking",
@@ -153,6 +213,17 @@ export async function main(
   }
   if (records.length === 0)
     throw new Error(`no items to build pass ${pass} packets for in ${batchId}`);
+
+  // Gate: the writer's selfCheck, every code true (§2.3, §9.3).
+  const unchecked = records.flatMap((record) => {
+    const problem = selfCheckProblem(record.item);
+    return problem === null ? [] : [`${record.id} (${problem})`];
+  });
+  if (unchecked.length > 0) {
+    throw new Error(
+      `the packet builder refuses an item whose selfCheck lacks a code or holds a false (CONTENT_GUIDE §2.3, §9.3): ${unchecked.join(", ")}`,
+    );
+  }
 
   // Gate: lint clean and claims listed (§0.3, step 1).
   const findings = lintBank(bank, { today: todayUtc(), dedupe: false });
@@ -196,29 +267,46 @@ export async function main(
     return 0;
   }
 
-  const key = await loadMasterKey(keySourceFromProcess());
-  let orderKey: OrderKey;
-  if (key) orderKey = key.keys.order;
-  else if (layout.kind === "fixtures") orderKey = FIXTURE_ORDER_KEY;
-  else
-    throw new Error(
-      "no content key: set QZ_CONTENT_KEY or run npm run content:keygen. Packets shuffle their options with a seed derived from the key, so a cold packet never shows where the key sits.",
-    );
-
-  const entries = records.map((record) =>
-    packetEntry(bank, record, pass as Pass, orderKey),
-  );
-  const files = packetFiles(batchId, pass, entries, nowUtc());
-  const dir = join(layout.packetsDir, batchId, pass);
-  // A stale stage from an earlier build must never sit beside the new ones.
+  const orderKey = await orderKeyFor(layout.kind);
+  const dir = packetDir(layout, batchId, pass);
+  // Unstaged files from before staging never sit beside staged ones.
   if (existsSync(dir)) {
-    for (const name of await readdir(dir)) {
-      if (/^(?:cold(?:-\d+)?|reveal)\.json$/.test(name))
-        await rm(join(dir, name), { force: true });
+    for (const file of await readdir(dir)) {
+      if (/^(?:cold(?:-\d+)?|reveal)\.json$/.test(file))
+        await rm(join(dir, file), { force: true });
     }
   }
-  for (const file of files)
-    await writeTextFile(join(dir, file.name), await formatJson(file.content));
+  const log = readLog(dir, batchId, pass as Pass);
+  // Served times keep their milliseconds: a cold-solve entry and the next
+  // stage can fall in the same second (§9.4's order is strict).
+  const now = new Date().toISOString();
+  const served: Served[] = [];
+  for (const record of records) {
+    const stages = packetStages(bank, record, pass as Pass, orderKey);
+    const first = stages[0];
+    if (!first) continue;
+    // Starting over: the item's earlier stages leave the folder and the log.
+    await rm(join(dir, record.id), { recursive: true, force: true });
+    const previous = log.items[record.id];
+    log.items[record.id] = {
+      stages: stages.length,
+      served: [{ stage: 1, sha256: first.sha256, servedAt: now }],
+      restarts: previous ? previous.restarts + 1 : 0,
+    };
+    served.push(
+      await serveStage(
+        dir,
+        batchId,
+        pass as Pass,
+        record,
+        stages,
+        1,
+        log,
+        name,
+      ),
+    );
+  }
+  await writeLog(dir, log);
 
   if (bank.register && batch.status !== "checking") {
     batch.status = "checking";
@@ -227,32 +315,241 @@ export async function main(
       BatchRegisterSchema.parse(bank.register),
     );
   }
+  report(name, layout, dir, pass, served, [], values.json === true);
+  return 0;
+}
 
-  if (values.json) {
+/** One served stage, as the command reports it. */
+interface Served {
+  itemId: string;
+  stage: number;
+  of: number;
+  packetSha256: string;
+  file: string;
+}
+
+function emptyLog(batchId: string, pass: Pass): ServeLog {
+  return {
+    batchId,
+    pass: pass as ServeLog["pass"],
+    packetVersion: STAGED_PACKET_VERSION,
+    items: {},
+  };
+}
+
+function readLog(dir: string, batchId: string, pass: Pass): ServeLog {
+  const path = join(dir, SERVE_LOG);
+  if (!existsSync(path)) return emptyLog(batchId, pass);
+  const parsed = ServeLogSchema.safeParse(
+    JSON.parse(readFileSync(path, "utf8")),
+  );
+  if (!parsed.success)
+    throw new Error(
+      `${path} is not a serve log; build the packets again (content:packets without --next)`,
+    );
+  return parsed.data;
+}
+
+async function writeLog(dir: string, log: ServeLog): Promise<void> {
+  await writeJsonFile(join(dir, SERVE_LOG), ServeLogSchema.parse(log));
+}
+
+/** Writes stage `stage` of an item's packet; the log already holds it. */
+async function serveStage(
+  dir: string,
+  batchId: string,
+  pass: Pass,
+  record: BankItem,
+  stages: { view: Record<string, unknown>; sha256: string }[],
+  stage: number,
+  log: ServeLog,
+  name: string,
+): Promise<Served> {
+  const entry = log.items[record.id];
+  const current = stages[stage - 1];
+  if (!entry || !current) throw new Error(`no stage ${stage} for ${record.id}`);
+  const final = stage === stages.length;
+  const file = stageFile(record.id, stage);
+  await writeTextFile(
+    join(dir, file),
+    await formatJson({
+      batchId,
+      pass,
+      brief: BRIEF_FOR_PASS[pass],
+      packetVersion: STAGED_PACKET_VERSION,
+      itemId: record.id,
+      stage,
+      of: stages.length,
+      final,
+      packetSha256: current.sha256,
+      servedAt: entry.served[stage - 1]?.servedAt,
+      instructions: stagedInstructions(batchId, pass, name),
+      item: current.view,
+      // What the record copies (§9.8), once every stage is served.
+      ...(final
+        ? {
+            record: {
+              packetSha256: entry.served.map((s) => s.sha256),
+              stagesServedAt: entry.served.map((s) => s.servedAt),
+            },
+          }
+        : {}),
+    }),
+  );
+  return {
+    itemId: record.id,
+    stage,
+    of: stages.length,
+    packetSha256: current.sha256,
+    file,
+  };
+}
+
+function report(
+  name: string,
+  layout: Layout,
+  dir: string,
+  pass: string,
+  served: Served[],
+  waiting: { itemId: string; reason: string }[],
+  json: boolean,
+): void {
+  const where = repoRelative(layout, dir);
+  if (json) {
     console.log(
       JSON.stringify(
         {
-          batchId,
           pass,
-          dir: repoRelative(layout, dir),
-          files: files.map((file) => file.name),
-          items: entries.map(({ itemId, packetSha256 }) => ({
+          dir: where,
+          items: served.map(({ itemId, stage, of, packetSha256, file }) => ({
             itemId,
+            stage,
+            of,
             packetSha256,
+            file: `${where}/${file}`,
           })),
+          waiting,
         },
         null,
         2,
       ),
     );
-  } else {
-    for (const entry of entries)
-      console.log(`${entry.itemId}  ${entry.packetSha256}`);
+    return;
+  }
+  for (const entry of served)
     console.log(
-      `${name}: ${entries.length} pass ${pass} packet(s) in ${repoRelative(layout, dir)}/ (${files.map((file) => file.name).join(", then ")}).`,
+      `${entry.itemId}  stage ${entry.stage} of ${entry.of}  ${entry.packetSha256}`,
+    );
+  for (const entry of waiting)
+    console.log(`waiting ${entry.itemId}: ${entry.reason}`);
+  console.log(
+    `${name}: served ${served.length} pass ${pass} stage(s) in ${where}/${waiting.length > 0 ? `; ${waiting.length} item(s) wait for their cold-solve entry` : ""}.`,
+  );
+}
+
+async function orderKeyFor(kind: "content" | "fixtures"): Promise<OrderKey> {
+  const key = await loadMasterKey(keySourceFromProcess());
+  if (key) return key.keys.order;
+  if (kind === "fixtures") return FIXTURE_ORDER_KEY;
+  throw new Error(
+    "no content key: set QZ_CONTENT_KEY or run npm run content:keygen. Packets shuffle their options with a seed derived from the key, so a cold stage never shows where the key sits.",
+  );
+}
+
+/** The cold solve the run's draft record holds for an item, if any. */
+function draftColdSolves(path: string): Map<string, unknown> {
+  const raw = parseJsonText(readFileSync(path, "utf8"), path);
+  const entries = Array.isArray(raw) ? raw : [raw];
+  const out = new Map<string, unknown>();
+  for (const entry of entries) {
+    if (typeof entry !== "object" || entry === null) continue;
+    const { itemId, coldSolve } = entry as Record<string, unknown>;
+    if (typeof itemId === "string") out.set(itemId, coldSolve);
+  }
+  return out;
+}
+
+/** `--next`: each item's next stage, once its draft record allows it. */
+async function serveNext(
+  bank: Bank,
+  name: string,
+  batchId: string,
+  pass: Pass,
+  wanted: string[] | undefined,
+  recordPath: string | undefined,
+  json: boolean,
+): Promise<number> {
+  if (recordPath === undefined)
+    throw new Error(
+      "--next needs --record <draft.json>: the run's draft check record, holding the cold-solve entry for the stage before (§9.4)",
+    );
+  const layout = bank.layout;
+  const dir = packetDir(layout, batchId, pass);
+  const log = readLog(dir, batchId, pass);
+  const ids =
+    wanted ??
+    Object.entries(log.items)
+      .filter(([, item]) => item.served.length < item.stages)
+      .map(([id]) => id);
+  if (ids.length === 0)
+    throw new Error(
+      `no unfinished pass ${pass} packet in ${batchId}; build one with content:packets -- --batch ${batchId} --pass ${pass}`,
+    );
+  // Later stages of sealed items hold their clues and keys in plaintext.
+  if (ids.some((id) => bank.itemsById.get(id)?.file.sealed === true))
+    assertPacketsIgnored(layout);
+  const drafts = draftColdSolves(recordPath);
+  const now = new Date().toISOString();
+  const orderKey = await orderKeyFor(layout.kind);
+  const served: Served[] = [];
+  const waiting: { itemId: string; reason: string }[] = [];
+  for (const id of ids) {
+    const entry = log.items[id];
+    const record = bank.itemsById.get(id);
+    if (!entry || !record) {
+      waiting.push({
+        itemId: id,
+        reason:
+          "no packet was built for it; run content:packets without --next first",
+      });
+      continue;
+    }
+    const cold = ColdSolveSchema.safeParse(drafts.get(id));
+    const blocked = nextStageBlocked(
+      entry,
+      cold.success ? cold.data : null,
+      now,
+    );
+    if (blocked !== null) {
+      waiting.push({ itemId: id, reason: blocked });
+      continue;
+    }
+    const stages = packetStages(bank, record, pass, orderKey);
+    const changed = entry.served.some(
+      (stage) => stages[stage.stage - 1]?.sha256 !== stage.sha256,
+    );
+    if (changed || stages.length !== entry.stages) {
+      waiting.push({
+        itemId: id,
+        reason:
+          "the item changed after its packet was started; start it over with content:packets without --next",
+      });
+      continue;
+    }
+    const next = entry.served.length + 1;
+    entry.served.push({
+      stage: next,
+      sha256: stages[next - 1]?.sha256 ?? "",
+      servedAt: now,
+    });
+    served.push(
+      await serveStage(dir, batchId, pass, record, stages, next, log, name),
     );
   }
-  return 0;
+  await writeLog(dir, log);
+  report(name, layout, dir, pass, served, waiting, json);
+  // Asked for by name and not served: the run must not go on as if it was.
+  return wanted !== undefined && waiting.length > 0 ? 1 : 0;
 }
 
 /** Runs the command under the name it was typed as. */

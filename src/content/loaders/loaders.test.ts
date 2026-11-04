@@ -10,7 +10,7 @@ import { loadAnswerList, loadEntityLookup } from "./answer-lists";
 import { resetBankForTests } from "./bank";
 import { categoryById, categoryBySlug, getCategories } from "./categories";
 import { loadFixtureDaily, loadFixtureRoundContent } from "./fixture-daily";
-import { loadPracticePack, loadPracticePool } from "./practice";
+import { MIXED_QUORUM, loadPracticePack, loadPracticePool } from "./practice";
 import {
   contentWorld,
   resetContentWorldForTests,
@@ -138,6 +138,46 @@ describe("content loaders on the bank", () => {
     expect(new Set(pool.value.map((item) => item.category)).size).toBe(
       Object.keys(PRACTICE_PACKS).length,
     );
+  });
+
+  it("starts Mixed once a quorum of packs has loaded, while the slow ones keep coming (PRD §3.3.1)", async () => {
+    selectContentWorld("bank");
+    const serve = servePublic();
+    // Four packs answer; the other eight never do.
+    const quick = new Set(CATEGORY_IDS.slice(0, MIXED_QUORUM));
+    const urls = new Map(
+      Object.entries(PRACTICE_PACKS).map(([id, entry]) => [entry.url, id]),
+    );
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((url: string) =>
+        quick.has(urls.get(url) as never)
+          ? serve(url)
+          : new Promise<Response>(() => {}),
+      ),
+    );
+    const started = Date.now();
+    const pool = await loadPracticePool("mixed");
+    if (!pool.ok) throw new Error(pool.error);
+    expect(Date.now() - started).toBeLessThan(2_000);
+    expect(new Set(pool.value.map((item) => item.category))).toEqual(quick);
+    const total = [...quick].reduce(
+      (sum, id) => sum + (PRACTICE_PACKS[id]?.items ?? 0),
+      0,
+    );
+    expect(pool.value).toHaveLength(total);
+  });
+
+  it("fails Mixed with the worst error only when no pack loads", async () => {
+    selectContentWorld("bank");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response("gone", { status: 404 })),
+    );
+    expect(await loadPracticePool("mixed")).toEqual({
+      ok: false,
+      error: "failed",
+    });
   });
 
   it("loads a list as the client projection, and leaves the judge's view to the server", async () => {
