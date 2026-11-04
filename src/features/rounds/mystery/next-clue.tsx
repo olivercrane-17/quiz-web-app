@@ -1,10 +1,9 @@
 "use client";
 
 /**
- * Next clue (PRD §3.1.4, DESIGN §6.3): a real button that sits in the slot
- * where the next clue will land, naming what that clue is worth. A wrong
- * guess costs exactly the same, so the label never steers anyone away
- * from having a go.
+ * Next clue (PRD §3.1.4, DESIGN §6.3): a real button that names what the
+ * next clue is worth. A wrong guess costs exactly the same, so the label
+ * never steers anyone away from having a go.
  *
  * - Clue 1: "Next clue · then worth 3"; clue 2: "Next clue · then worth 2";
  *   clue 3: "Last clue and options · then worth 1".
