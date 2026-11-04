@@ -24,9 +24,11 @@ import {
 import { uuidV4 } from "./ids";
 import {
   listStoredRuns,
+  openRun,
   readHistory,
   readStoredRun,
   runKey,
+  runProgress,
   type StoredPracticeRun,
 } from "./storage";
 
@@ -649,5 +651,75 @@ describe("the history's picks", () => {
     await again.controller.begin(null);
     play(again, 9);
     expect(readHistory(again.kv)[0]?.questions[0]?.chosen).toBeNull();
+  });
+
+  it("R1-36 keeps the last run's items out of the next run, Play again included", async () => {
+    const r = rig();
+    await r.controller.begin(QUICK_PLAY_INTENT);
+    const first = r.controller.getState().items.map((item) => item.id);
+    play(r, 10);
+    expect(r.controller.getState().status).toBe("finished");
+    // Play again leaves the same request: a new run, with none of those ten.
+    await r.controller.begin(QUICK_PLAY_INTENT);
+    const second = r.controller.getState();
+    expect(second.items).toHaveLength(10);
+    expect(second.items.filter((item) => first.includes(item.id))).toEqual([]);
+    // Fresh items were enough, so no repeats note either.
+    expect(second.notes).not.toContain("repeats_mixed_in");
+  });
+
+  it("R1-36 also keeps out what an unfinished run has shown so far", async () => {
+    const r = rig();
+    await r.controller.begin(QUICK_PLAY_INTENT);
+    play(r, 3);
+    const state = r.controller.getState();
+    // Questions 1 to 4 have been on screen; 5 to 10 never opened.
+    const shown = state.items.slice(0, 4).map((item) => item.id);
+    await r.controller.begin(QUICK_PLAY_INTENT);
+    const next = r.controller.getState().items.map((item) => item.id);
+    expect(next.filter((id) => shown.includes(id))).toEqual([]);
+  });
+
+  it("R1-36 still fills a run from the last one's items when nothing fresh is left, with the repeats note", async () => {
+    const small = POOL.filter((item) => item.category === "geo").slice(0, 12);
+    const r = rig({ pool: small });
+    await r.controller.begin({ ...QUICK_PLAY_INTENT, difficulty: "easy" });
+    const first = r.controller.getState();
+    expect(first.items.length).toBeGreaterThan(0);
+    play(r, first.items.length);
+    await r.controller.begin({ ...QUICK_PLAY_INTENT, difficulty: "easy" });
+    const second = r.controller.getState();
+    expect(second.items).toHaveLength(first.items.length);
+    expect(second.notes).toContain("repeats_mixed_in");
+  });
+
+  it("R1-36 finds the run Quick play carries on, and where it stands", async () => {
+    const r = rig();
+    await r.controller.begin(QUICK_PLAY_INTENT);
+    play(r, 2);
+    // This tab's run: question 3 of 10, the one on screen.
+    const mine = openRun(r.kv, r.tab.runId());
+    expect(mine?.snapshot.config.runId).toBe(r.controller.getState().runId);
+    expect(mine === null ? null : runProgress(mine)).toEqual({
+      question: 3,
+      total: 10,
+    });
+    // Answered but not continued: still question 3.
+    answer(r, true);
+    const revealed = openRun(r.kv, r.tab.runId());
+    expect(revealed === null ? null : runProgress(revealed)).toEqual({
+      question: 3,
+      total: 10,
+    });
+    // Another tab with no run of its own carries on the newest one.
+    expect(openRun(r.kv, null)?.snapshot.config.runId).toBe(
+      r.controller.getState().runId,
+    );
+    // Once the run is over, nothing is open.
+    r.clock.advance(3000);
+    r.controller.continue();
+    play(r, 7);
+    expect(r.controller.getState().status).toBe("finished");
+    expect(openRun(r.kv, r.tab.runId())).toBeNull();
   });
 });

@@ -2,9 +2,10 @@
 
 /**
  * Practice results, /practice/results (DESIGN §12.11, PRD §3.3.1): the
- * score, every question as a compact row with its verdict, the answer and
- * an expandable explanation, and Play again with the same settings. A
- * results screen is a safe point for app updates (§10.7). There is no
+ * score, Play again with the same settings, then every question as a
+ * compact row with a short stem, its verdict, the answer and, on a miss,
+ * what the player chose, opening to the explanation (decision D13, R1-17).
+ * A results screen is a safe point for app updates (§10.7). There is no
  * challenge action: practice is never issued as a challenge (AC-PRA-11).
  *
  * It shows the run that just finished in this tab, or after a reload the
@@ -16,7 +17,7 @@
  * join it with PRA-2.
  */
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 import { loadPracticePool } from "@/content/loaders/practice";
 import { track } from "@/features/analytics/track";
@@ -48,38 +49,77 @@ type Results =
       loaded: boolean;
     };
 
-/** The verdict, the question's number and, when known, the answer. */
-function RowLine({ row }: { row: ResultRow }) {
-  return (
-    <>
-      {/* Wraps between its words at 320 px and 200% text. */}
-      <span className="flex min-w-0 flex-wrap items-center gap-x-2 font-bold">
-        {row.correct ? <CheckIcon size={16} /> : <CrossIcon size={16} />}
-        <span>{COPY.results.question(row.number)}</span>
-        <span aria-hidden="true">·</span>
-        <span>{row.correct ? COPY.results.right : COPY.results.wrong}</span>
-      </span>
-      {row.answer === null ? null : (
+/**
+ * A period screen readers read and the eye doesn't see. It stays an inline
+ * box: a hidden box taken out of the flow (`sr-only`) is a block to the
+ * accessible-name computation, which pads it with spaces ("7 out of 10 .",
+ * R1-34).
+ */
+const HIDDEN_PERIOD = "[clip-path:inset(50%)]";
+
+/**
+ * A row's second line, "Not quite · Answer: 4 · You chose 15", heard as
+ * three short sentences: the dots are for the eye, the periods for the ear.
+ */
+function Parts({ parts }: { parts: readonly string[] }) {
+  return parts.map((part, i) => (
+    <Fragment key={part}>
+      {i === 0 ? null : (
         <>
           {" "}
-          <span className="min-w-0 break-words">
-            {COPY.results.answer(row.answer)}
-          </span>
+          <span aria-hidden="true">·</span>{" "}
         </>
       )}
+      {part}
+      <span className={HIDDEN_PERIOD}>.</span>
+    </Fragment>
+  ));
+}
+
+/**
+ * The row's lines (D13): the verdict's icon, then the question's number
+ * and a short stem (two lines at most until the row opens), over the
+ * verdict, the answer and, on a miss, what the player chose.
+ */
+function RowLines({ row, loaded }: { row: ResultRow; loaded: boolean }) {
+  const first =
+    row.item !== null
+      ? COPY.results.numbered(row.number, row.item.stem)
+      : loaded
+        ? COPY.results.numbered(row.number, COPY.results.withdrawn)
+        : COPY.results.question(row.number);
+  const parts = [
+    row.correct ? COPY.results.right : COPY.results.wrong,
+    ...(row.answer === null ? [] : [COPY.results.answer(row.answer)]),
+    ...(row.chosen === null ? [] : [COPY.results.yourAnswer(row.chosen)]),
+  ];
+  return (
+    <>
+      <span className="mt-1 shrink-0">
+        {row.correct ? <CheckIcon size={16} /> : <CrossIcon size={16} />}
+      </span>
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span
+          data-result-stem=""
+          className="line-clamp-2 font-semibold break-words group-open:line-clamp-none"
+        >
+          {first}
+        </span>
+        <span className="break-words text-muted-foreground">
+          <Parts parts={parts} />
+        </span>
+      </span>
     </>
   );
 }
 
-const LINE =
-  "flex min-h-11 flex-wrap items-center gap-x-2 gap-y-1 py-2 text-base";
+const ROW = "flex min-h-11 items-start gap-3 py-3 text-base";
 
 /**
- * One compact row per question (DESIGN §12.11): the line above, which opens
- * to the question, the pick and the explanation, so ten rows leave Play
- * again within the second screen. The summary holds the row's whole line,
- * so every disclosure has a name of its own. `loaded`: the packs came back,
- * so a missing item really left its pack.
+ * One compact row per question (DESIGN §12.11, D13): the lines above,
+ * which open to the whole stem and the explanation. The summary holds the
+ * row's whole text, so every disclosure has a name of its own. `loaded`:
+ * the packs came back, so a missing item really left its pack.
  */
 function QuestionRow({ row, loaded }: { row: ResultRow; loaded: boolean }) {
   return (
@@ -88,26 +128,19 @@ function QuestionRow({ row, loaded }: { row: ResultRow; loaded: boolean }) {
       className="border-b border-foreground/15 last:border-b-0"
     >
       {row.item === null ? (
-        <div className="flex flex-col pb-2">
-          <p className={LINE}>
-            <RowLine row={row} />
-          </p>
-          {loaded ? (
-            <p className="text-base text-muted-foreground">
-              {COPY.results.withdrawn}
-            </p>
-          ) : null}
-        </div>
+        <p className={ROW}>
+          <RowLines row={row} loaded={loaded} />
+        </p>
       ) : (
         <details className="group text-base">
           <summary
             className={cx(
-              LINE,
+              ROW,
               "cursor-pointer list-none [&::-webkit-details-marker]:hidden",
             )}
           >
-            <RowLine row={row} />{" "}
-            <span className="ms-auto inline-flex items-center gap-1 font-semibold text-muted-foreground">
+            <RowLines row={row} loaded={loaded} />{" "}
+            <span className="inline-flex shrink-0 items-center gap-1 font-semibold text-muted-foreground">
               {COPY.results.why}
               <span
                 aria-hidden="true"
@@ -117,15 +150,8 @@ function QuestionRow({ row, loaded }: { row: ResultRow; loaded: boolean }) {
               </span>
             </span>
           </summary>
-          <div className="flex flex-col gap-1 pb-3">
-            <p className="font-semibold">{row.item.stem}</p>
-            {row.chosen === null ? null : (
-              <p className="text-muted-foreground">
-                {COPY.results.yourAnswer(row.chosen)}
-              </p>
-            )}
-            <p>{row.item.explanation}</p>
-          </div>
+          {/* Under the text, past the icon's column. */}
+          <p className="ps-7 pb-3">{row.item.explanation}</p>
         </details>
       )}
     </li>
@@ -218,25 +244,11 @@ export function PracticeResultsScreen({
             <span className="text-6xl leading-none">{entry.score}</span>{" "}
             <span className="text-xl">
               {COPY.results.outOf(entry.maxPoints)}
+              <span className={HIDDEN_PERIOD}>.</span>
             </span>
-            <span className="sr-only">.</span>
           </h1>
         </div>
-        <section aria-labelledby="practice-results-questions">
-          <h2 id="practice-results-questions" className="text-lg font-bold">
-            {COPY.results.questions}
-          </h2>
-          {loaded ? null : (
-            <p className="text-base text-muted-foreground">
-              {COPY.results.failed}
-            </p>
-          )}
-          <ol role="list">
-            {rows.map((row) => (
-              <QuestionRow key={row.number} row={row} loaded={loaded} />
-            ))}
-          </ol>
-        </section>
+        {/* Above the list, so it is on the first screen (D13). */}
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button
             variant="primary"
@@ -256,6 +268,21 @@ export function PracticeResultsScreen({
             {COPY.results.playAgain}
           </Button>
         </div>
+        <section aria-labelledby="practice-results-questions">
+          <h2 id="practice-results-questions" className="text-lg font-bold">
+            {COPY.results.questions}
+          </h2>
+          {loaded ? null : (
+            <p className="text-base text-muted-foreground">
+              {COPY.results.failed}
+            </p>
+          )}
+          <ol role="list">
+            {rows.map((row) => (
+              <QuestionRow key={row.number} row={row} loaded={loaded} />
+            ))}
+          </ol>
+        </section>
       </>
     );
   }

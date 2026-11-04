@@ -24,11 +24,17 @@
  * Play again) starts a new run; with none, the run in memory carries on, or
  * this tab's unfinished run resumes (`deps.tab`, so two tabs never swap
  * runs), or failing that the newest unfinished run on the device, or Quick
- * play starts.
+ * play starts. Today's Quick play says so while a run is open ("Continue
+ * practice · 3 of 10") and then opens /practice/run with no request.
+ *
+ * A new run treats the run before it as just seen (`recentlyPlayed`), on
+ * top of `deps.seen()`, so it never repeats a question just answered while
+ * fresh ones remain (R1-36).
  */
 import type { Clock } from "@/engine/clock";
 import { compositionIdOf } from "@/engine/composition";
 import {
+  dayNumberOf,
   planPracticeRun,
   practiceJudgeContext,
   practiceRunConfig,
@@ -48,6 +54,7 @@ import {
   type RunView,
 } from "@/engine/run";
 import type { LoadError, LoadResult } from "@/content/types";
+import { utcDateOf } from "@/engine/time";
 import {
   parseIdempotencyKey,
   type CategoryId,
@@ -64,9 +71,9 @@ import { QUICK_PLAY_INTENT } from "../intent";
 import { PRACTICE_PLUGINS } from "./plugins";
 import {
   appendHistory,
-  newestStoredRun,
+  openRun,
   pruneRuns,
-  readStoredRun,
+  recentlyPlayed,
   removeRun,
   saveRun,
   type PracticeHistoryEntry,
@@ -124,7 +131,10 @@ export interface PracticeControllerDeps {
   newId(): string;
   /** The device's local date, for freshness. */
   today(): LocalDate;
-  /** Seen-tracking (PRA-2); empty until then. */
+  /**
+   * Seen-tracking (PRA-2); empty until then. The controller adds the run
+   * before the new one itself (`recentlyPlayed`).
+   */
   seen(): SeenIndex;
   /** Pulled items (PRA-2); empty until then. */
   denylist(): ReadonlySet<ItemId>;
@@ -457,6 +467,16 @@ export function createPracticeController(
     dispatch(run, { type: "finished", at, summary: null });
   }
 
+  /** `deps.seen()`, with the items of the run before this one as just seen (R1-36). */
+  function seenWithLastRun(): SeenIndex {
+    const seen = new Map(deps.seen());
+    for (const [id, at] of recentlyPlayed(deps.kv)) {
+      const day = dayNumberOf(utcDateOf(at));
+      if ((seen.get(id) ?? Number.NEGATIVE_INFINITY) < day) seen.set(id, day);
+    }
+    return seen;
+  }
+
   async function start(request: PracticeRunRequest): Promise<void> {
     generation += 1;
     const token = generation;
@@ -477,7 +497,7 @@ export function createPracticeController(
         length: PRACTICE_RUN_LENGTH,
         seed: runId,
         today: deps.today(),
-        seen: deps.seen(),
+        seen: seenWithLastRun(),
         denylist: deps.denylist(),
         ability: null,
         repeats: request.repeats,
@@ -598,13 +618,8 @@ export function createPracticeController(
     generation += 1;
     const token = generation;
     settle("loading", null);
-    // This tab's own run first. Storage is shared by every tab, so the
-    // newest run on the device may be another tab's; it is the fallback
-    // only for a tab with no run of its own (a new tab, a cleared session).
-    const mine = deps.tab?.runId() ?? null;
-    const saved =
-      (mine === null ? null : readStoredRun(deps.kv, mine)) ??
-      newestStoredRun(deps.kv);
+    // This tab's own run first, else the newest on the device (`openRun`).
+    const saved = openRun(deps.kv, deps.tab?.runId() ?? null);
     if (saved !== null && (await resume(saved, token))) return;
     if (token !== generation) return;
     await start(QUICK_PLAY_REQUEST);
