@@ -510,12 +510,27 @@ test.describe("RITE round 1: practice", () => {
     test("D12 a sheet body that scrolls takes keyboard focus with the app's 3 px ring @cdp", async ({
       page,
     }) => {
+      test.setTimeout(60_000);
       await textAt200(page);
       await startQuickPlay(page);
-      await page.keyboard.press("a");
-      await expect(sheet(page)).toBeVisible();
       const body = sheet(page).locator("[data-sheet-body]");
-      // 200% text on a phone: the body has to scroll inside the sheet.
+      // 200% text on a phone: a sheet whose body must give up height to keep
+      // the correct option or the pick in view scrolls inside itself. With
+      // DS-1's type that is most questions, not every one (a sheet that fits
+      // once the options are out of reach scrolls the page instead, DESIGN
+      // §6.10), and a run's questions are random: play on to the first.
+      let scrolls = false;
+      for (let n = 1; n <= 10 && !scrolls; n += 1) {
+        await expect(
+          round(page).getByText(`Question ${n} of 10`),
+        ).toBeVisible();
+        await page.keyboard.press("a");
+        await expect(sheet(page)).toBeVisible();
+        // The round fits the sheet in the commit that opens it.
+        scrolls = (await body.getAttribute("tabindex")) === "0";
+        if (!scrolls) await page.keyboard.press("Enter");
+      }
+      expect(scrolls).toBe(true);
       await expect(body).toHaveAttribute("tabindex", "0");
       // From the focused title, the first Tab reaches the body.
       await page.keyboard.press("Tab");
