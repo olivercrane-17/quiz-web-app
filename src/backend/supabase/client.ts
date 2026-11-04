@@ -2,7 +2,8 @@
  * The app's one Supabase client (ARCHITECTURE §7.5, §1.4 item 7).
  *
  * - `@supabase/supabase-js` loads with import() on the first call, so the
- *   SDK stays out of every first load; prefetchBackend() warms it at idle.
+ *   SDK stays out of every first load. A caller that wants it warm early
+ *   (prefetchBackend at idle, §10) only has to call getSupabaseClient().
  * - One client per tab: a memoized promise, so concurrent first calls share
  *   one client and one SDK download. A download that fails is forgotten,
  *   and the next call tries again.

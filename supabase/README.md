@@ -67,10 +67,10 @@ and function bodies too, and `scanForbidden()` enforces it:
 - top-level transaction control (`begin;`, `commit;`, `savepoint`) in a
   migration. `apply_migration` and the dry run supply the transaction.
 
-Write additive SQL instead: `create ... if not exists`, `create or replace
-function`, `insert ... on conflict do update`, and a new migration file in
-place of any edit to an old one. A function's signature cannot change without
-`DROP`, so choose it once.
+Write additive SQL instead: `create ... if not exists`,
+`create or replace function`, `insert ... on conflict do update`, and a new
+migration file in place of any edit to an old one. A function's signature
+cannot change without `DROP`, so choose it once.
 
 `20261031000000_key_escrow.sql` was applied before this rule existed, and its
 comments name some of these words. It is never sent again, so the repository
@@ -117,10 +117,11 @@ creates objects:
    they never trigger the advisor's definer lints (0028, 0029). Never make a
    function in `private` SECURITY DEFINER: the standing checks fail on one.
 3. **Every table calls `private.secure_table()`**, which enables RLS and adds
-   a restrictive `deny_all` policy (`for all to public using (false) with
-check (false)`). The advisor sees a policy (lint 0008), and a permissive
-   policy added by mistake still could not open a row. Nobody uses `FORCE ROW
-LEVEL SECURITY`, because the definer RPCs rely on the owner's bypass.
+   a restrictive policy, `deny_all`, for every command and role, with
+   `using (false)` and `with check (false)`. The advisor sees a policy (lint
+   0008), and a permissive policy added by mistake still could not open a
+   row. No table forces RLS, because the definer RPCs rely on the owner's
+   bypass.
 
    ```sql
    create table if not exists private.things (
@@ -273,9 +274,10 @@ rollback;
 ```
 
 - The first statement is `begin;` and the last is `rollback;`. In between
-  there is no transaction control and at least one `select 'PASS <AC id or
-ticket> <what it proves>';` line. Start it with the AC id when the test
-  proves an AC, so the AC coverage check (§11.9) finds it.
+  there is no transaction control and at least one PASS line:
+  `select 'PASS <id> <what it proves>';`. The id is the AC id when the test
+  proves an AC, so the AC coverage check (§11.9) finds it, and the ticket
+  otherwise.
 - A failing `assert` raises, so the whole dry run stops at the first failure
   and shows its message.
 - Helpers: `private.t_now(at)` moves the clock, which only `postgres`
