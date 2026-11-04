@@ -369,7 +369,9 @@ test.describe("one cookie only", () => {
     test.setTimeout(180_000);
     const setCookies: Promise<string | null>[] = [];
     context.on("response", (response) => {
-      setCookies.push(response.headerValue("set-cookie"));
+      // A response whose document has navigated away may no longer give up
+      // its raw headers; the cookie jar below still sees anything stored.
+      setCookies.push(response.headerValue("set-cookie").catch(() => null));
     });
 
     // Register first, so every later page runs with the backup cookie set.
