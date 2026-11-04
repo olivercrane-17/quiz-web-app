@@ -880,11 +880,17 @@
     opacity: var(--kn-grain-opacity);
     mix-blend-mode: var(--kn-grain-blend);
   }
+  /* A heading word wider than its line breaks rather than run off a 320 px
+   * screen at 200% text (DESIGN §10.5, §11 reflow), as "Accessibility" in
+   * display-2 would. `anywhere`, not `break-word`, because it also lowers
+   * the heading's min-content width, which sizes it as a flex item (a
+   * placeholder's `items-start` column). A word that fits never breaks. */
   h1,
   h2,
   h3,
   h4 {
     text-wrap: balance;
+    overflow-wrap: anywhere;
   }
   p,
   li,

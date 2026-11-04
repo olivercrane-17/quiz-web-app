@@ -9,19 +9,26 @@
  * - R1-12: keyboard focus never lands under the sticky header, the tab bar
  *   or the play header, at 200% zoom and 200% text.
  * - R1-09: one visible `main#main`; the status region holds nothing from
- *   the page before; the route announcer reads the new page's own title.
+ *   the page before; the route announcer reads the new page's own title
+ *   where the new page's prefetch has landed (two cases stay `fixme` for
+ *   FIX-PRA); keyboard focus survives a move between route groups.
  * - R1-20: Knewt in every title, the description and the link preview.
  * - R1-08, R1-27: pills, segments, chips and the stopwatch reading are
  *   flat marks; the current pill is marked by a bar, not a ring.
  * - R1-03: the Daily header never runs off a 320 px screen or 200% text.
- * - R1-36, R1-13, R1-40: an option's verdict words sit under its text, it
- *   shows one key hint, its name holds its letter once; the practice
- *   segments keep the right gutter; no sheet handle that doesn't drag.
- * - R1-35: Today opens at its top, is two columns from 1024 px, names the
- *   date once in its dateline, greets a newcomer with what the Daily asks,
- *   and says "Hello." from midnight to 4:59.
+ * - R1-36, R1-13, R1-40: an option's name sits centred on its badge and
+ *   never squeezes at the reveal; its verdict words sit beside a name that
+ *   leaves room, under one that doesn't, so nothing below a short option
+ *   moves more than 10 px (DESIGN §7.1); it shows one key hint and holds
+ *   its letter once; the practice segments keep the right gutter; no sheet
+ *   handle that doesn't drag.
+ * - R1-35: Today opens at its top, is two columns from 1024 px with Quick
+ *   play on one line, names the date once in its dateline, greets a
+ *   newcomer with what the Daily asks, and says "Hello." from midnight to
+ *   4:59.
  * - R1-34: one 3 px ring everywhere, `summary` included; the h1 stays the
- *   largest heading at 200% text; the tab labels stay apart.
+ *   largest heading at 200% text, and no page's heading runs off a 320 px
+ *   screen; the tab labels stay apart.
  */
 import type { CDPSession, Page } from "@playwright/test";
 
@@ -245,12 +252,24 @@ test.describe("R1-02 dead links", () => {
     await expect(page).toHaveURL("/");
   });
 
-  for (const { path, group } of [
-    // Beta shells, the not-found page while their flags are off.
-    { path: "/create/AB12CD34EF", group: "(tabs)" },
-    { path: "/room/0f8fad5b-d9cb-469f-a165-70867728950e", group: "(play)" },
-    { path: "/q/AB12CD34EF", group: "(landing)" },
-  ]) {
+  /** Beta shells, the not-found page while their flags are off. */
+  const GROUP_NOT_FOUND = [
+    { path: "/create/AB12CD34EF", group: "(tabs)", headers: 1 },
+    {
+      path: "/room/0f8fad5b-d9cb-469f-a165-70867728950e",
+      group: "(play)",
+      headers: 1,
+    },
+    { path: "/q/AB12CD34EF", group: "(landing)", headers: 1 },
+    // The big screen's frame draws no header.
+    {
+      path: "/host/0f8fad5b-d9cb-469f-a165-70867728950e",
+      group: "(host)",
+      headers: 0,
+    },
+  ];
+
+  for (const { path, group, headers } of GROUP_NOT_FOUND) {
     test(`R1-02 a notFound() inside the ${group} group shows the same page, in one frame`, async ({
       page,
       consoleErrors,
@@ -273,9 +292,117 @@ test.describe("R1-02 dead links", () => {
           mains: document.querySelectorAll("main").length,
           skipLinks: document.querySelectorAll(".kn-skip").length,
         })),
-      ).toEqual({ headers: 1, mains: 1, skipLinks: 1 });
+      ).toEqual({ headers, mains: 1, skipLinks: 1 });
+      // The skip link's target is the page on screen.
+      await expect(page.locator("main#main")).toBeVisible();
     });
   }
+
+  test("R1-02 in the (host) group the not-found page wins over the big screen's size note, on a phone and in a short window", async ({
+    page,
+    consoleErrors,
+  }) => {
+    for (const viewport of [
+      { width: 390, height: 844 },
+      { width: 1280, height: 500 },
+    ]) {
+      await page.setViewportSize(viewport);
+      const response = await page.goto(
+        "/host/0f8fad5b-d9cb-469f-a165-70867728950e",
+      );
+      expect(response?.status()).toBe(404);
+      await expect(
+        page.getByRole("heading", { level: 1, name: NOT_FOUND_HEADING }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("main").getByRole("link", { name: "Practice" }),
+      ).toBeVisible();
+      // "Open Knewt on your phone" is no answer to a phone on a dead link.
+      await expect(
+        page.getByText(/made for a TV or a big monitor/),
+      ).toBeHidden();
+    }
+    dropExpected(consoleErrors, NOT_FOUND_LOAD);
+  });
+
+  // FIX-DS follow-up for EDT-1, ROM-2, ROM-3 and EDT-3: their route
+  // modules export NOT_FOUND_METADATA (@/features/shell) while their
+  // flag is off. Next titles the page from the module that called
+  // notFound(), so the shell's not-found files can't.
+  test.fixme("R1-02 a notFound() inside a route group is titled Page not found, not Today's Knewt", async ({
+    page,
+    consoleErrors,
+  }) => {
+    for (const { path } of [
+      ...GROUP_NOT_FOUND,
+      { path: "/join/123456" },
+      { path: "/q/AB12CD34EF/play" },
+    ]) {
+      const response = await page.goto(path);
+      expect(response?.status(), path).toBe(404);
+      dropExpected(consoleErrors, NOT_FOUND_LOAD);
+      await expect(page).toHaveTitle("Page not found · Knewt");
+      // Next's noindex, once.
+      await expect(page.locator('meta[name="robots"]')).toHaveCount(1);
+    }
+  });
+
+  test("R1-02 a trust page wears the same top bar as Today: the bar keeps the page's column, only the text narrows", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    /** The shown top bar's row and the shown main, left and right. */
+    const frame = () =>
+      page.evaluate(() => {
+        const shown = (selector: string) => {
+          const element = [...document.querySelectorAll(selector)].find(
+            (candidate) => candidate.checkVisibility(),
+          );
+          if (element === undefined) throw new Error(selector);
+          const box = element.getBoundingClientRect();
+          return [Math.round(box.left), Math.round(box.right)];
+        };
+        return {
+          row: shown("header.kn-topbar .kn-topbar-row"),
+          tabs: shown("header.kn-topbar nav[aria-label='Main']"),
+          main: shown("main"),
+        };
+      });
+    await openToday(page);
+    const today = await frame();
+    await page.getByRole("link", { name: "Privacy" }).click();
+    await expect(page).toHaveURL("/privacy");
+    const privacy = await frame();
+    // Nothing in the bar moves when a footer link opens a trust page...
+    expect(privacy.row).toEqual(today.row);
+    expect(privacy.tabs).toEqual(today.tabs);
+    // ...while the page's text keeps DESIGN §12.40's 640 px reading column.
+    const [left = 0, right = 0] = privacy.main;
+    expect(right - left).toBe(640);
+  });
+
+  test("R1-02 at 200% text a trust page's top bar fits its row from 768 px, as a tab page's does", async ({
+    page,
+  }) => {
+    for (const width of [768, 1024]) {
+      await page.setViewportSize({ width, height: 600 });
+      for (const path of ["/privacy", "/g"]) {
+        await page.goto(path);
+        await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+        await page.evaluate(() => {
+          document.documentElement.style.fontSize = "200%";
+        });
+        const overflow = await page.evaluate(() => {
+          const row = [
+            ...document.querySelectorAll<HTMLElement>(".kn-topbar-row"),
+          ].find((candidate) => candidate.checkVisibility());
+          if (row === undefined) throw new Error("top bar row");
+          return row.scrollWidth - row.clientWidth;
+        });
+        expect(overflow, `${path} at ${width} px`).toBeLessThanOrEqual(0);
+      }
+    }
+  });
 
   test("R1-02 a dead link inside a page lands on the in-shell not-found page", async ({
     page,
@@ -480,6 +607,112 @@ test.describe("R1-09 text from the page you just left", () => {
     await expect(page).toHaveURL("/practice/run");
     await expect.poll(() => announcer(page)).toBe("Practice · Knewt");
   });
+
+  // FIX-PRA: the results page isn't prefetched, so its title lands after
+  // the announcer reads, and Next falls back to the first h1 in the
+  // document, the hidden run's stem. Call router.prefetch("/practice/
+  // results") when a run starts in src/features/practice/run-screen.tsx,
+  // before its router.replace; the results title already exists.
+  test.fixme("R1-09 after the last practice question, the route announcer reads the results page's title, not the question", async ({
+    page,
+  }) => {
+    test.setTimeout(90_000);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await startQuickPlay(page);
+    for (let question = 1; question <= 10; question += 1) {
+      await answerFirst(page);
+      await page
+        .getByRole("button", { name: /^(Next question|See your results)/ })
+        .click();
+      if (question < 10) {
+        await expect(
+          round(page).getByText(`Question ${question + 1} of 10`),
+        ).toBeVisible();
+      }
+    }
+    await expect(page).toHaveURL("/practice/results");
+    await expect.poll(() => announcer(page)).toBe("Practice results · Knewt");
+  });
+
+  // FIX-PRA: with no prefetch landed (slow 4G, or a press straight after
+  // Today renders) the title arrives after the announcer reads, and the
+  // run screen has no h1 in its first render, so Next's h1 fallback finds
+  // the hidden Today's "Good evening.". The run screen renders an h1 in
+  // its first render (a visually hidden "Practice" until the stem): it
+  // comes first in the document, so the fallback reads it.
+  test.fixme("R1-09 when Quick play is pressed before its prefetch lands, the route announcer never reads Today's greeting", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    // Every prefetch is held, never answered.
+    await page.route("**/*", async (route) => {
+      if (route.request().headers()["next-router-prefetch"] !== undefined) {
+        return;
+      }
+      await route.continue();
+    });
+    await page.goto("/");
+    const greeting = page.getByRole("heading", { level: 1 });
+    await expect(greeting).toBeVisible();
+    const words = (await greeting.textContent()) ?? "";
+    await page
+      .locator('[data-home-slot="practice"]')
+      .getByRole("link", { name: "Quick play" })
+      .click();
+    await expect(page).toHaveURL("/practice/run");
+    await expect(options(page).first()).toBeVisible();
+    await expect.poll(() => announcer(page)).not.toBe("");
+    expect(await announcer(page)).not.toBe(words);
+  });
+
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 800 },
+  ]) {
+    test(`R1-09 keyboard focus survives a footer link to another route group: the next Tab lands inside the new page, at ${viewport.width} px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport);
+      await openToday(page);
+      const privacy = page.locator("footer").getByRole("link", {
+        name: "Privacy",
+      });
+      // Keyboard only: Tab to the footer link, then Enter.
+      for (let step = 0; step < 60; step += 1) {
+        await page.keyboard.press("Tab");
+        if (await privacy.evaluate((link) => link === document.activeElement)) {
+          break;
+        }
+      }
+      await expect(privacy).toBeFocused();
+      await page.keyboard.press("Enter");
+      await expect(page).toHaveURL("/privacy");
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "Privacy",
+      );
+      // Focus never falls to the body, where the next Tab leaves the page.
+      expect(
+        await page.evaluate(() => document.activeElement === document.body),
+      ).toBe(false);
+      await page.keyboard.press("Tab");
+      const landed = await page.evaluate(() => {
+        const element = document.activeElement;
+        const main = [...document.querySelectorAll("main")].find((candidate) =>
+          candidate.checkVisibility(),
+        );
+        return {
+          inMain:
+            element !== null &&
+            element !== main &&
+            (main?.contains(element) ?? false),
+          shown: element instanceof HTMLElement && element.checkVisibility(),
+          name: element?.textContent?.trim() ?? "",
+        };
+      });
+      expect(landed.inMain, landed.name).toBe(true);
+      expect(landed.shown).toBe(true);
+    });
+  }
 });
 
 test.describe("R1-20 the brand", () => {
@@ -619,6 +852,43 @@ test.describe("R1-08 and R1-27 marks, not buttons", () => {
       });
     }
   });
+
+  // FIX-DLY follow-up: the Daily header renders `Stopwatch` from
+  // @/ui/stopwatch (time, label, and onClick with the More menu's ARIA
+  // and ref), in place of its own bordered, rem-sized pill.
+  test.fixme("R1-27 the Daily's stopwatch is the design system's: no edge unless it is a button, and 36 px tall at 200% text", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/daily");
+    await expect(
+      page.getByRole("button", { name: /^Next clue/ }),
+    ).toBeVisible();
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+    });
+    const watch = page.locator("header [data-stopwatch]");
+    await expect(watch).toHaveCount(1);
+    const look = await watch.evaluate((element) => {
+      const css = getComputedStyle(element);
+      return {
+        primitive: element.classList.contains("kn-watch"),
+        button: element.tagName === "BUTTON",
+        border: Number.parseFloat(css.borderTopWidth),
+        cursor: css.cursor,
+        height: element.getBoundingClientRect().height,
+      };
+    });
+    expect(look.primitive).toBe(true);
+    if (look.button) {
+      expect(look.border).toBeGreaterThan(0);
+      expect(look.cursor).toBe("pointer");
+    } else {
+      expect(look.border).toBe(0);
+      expect(look.cursor).not.toBe("pointer");
+    }
+    expect(look.height).toBeLessThanOrEqual(36);
+  });
 });
 
 test.describe("R1-03 the Daily header", () => {
@@ -689,42 +959,158 @@ test.describe("R1-03 the Daily header", () => {
 });
 
 test.describe("R1-36, R1-13 and R1-40 answer options", () => {
-  test("R1-36 a reveal puts Correct answer under the option's text, which keeps its whole line", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await startQuickPlay(page);
-    await answerFirst(page);
-    const correct = page.locator('main [data-state="correct"]');
-    const fit = await correct.evaluate((button) => {
-      const text = button.querySelector(".kn-answer-text");
-      const tag = button.querySelector(".kn-answer-tag");
-      const badge = button.querySelector(".kn-answer-badge");
-      if (text === null || tag === null || badge === null) {
-        throw new Error("option parts");
+  for (const width of [390, 1280]) {
+    test(`R1-36 an option's name sits centred on its letter badge, idle and dimmed, at ${width} px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await startQuickPlay(page);
+      /** How far each option's text centre sits from its badge's, in px. */
+      const offsets = () =>
+        options(page).evaluateAll((buttons) =>
+          buttons.map((button) => {
+            const text = button.querySelector(".kn-answer-text");
+            const badge = button.querySelector(".kn-answer-badge");
+            if (text === null || badge === null) {
+              throw new Error("option parts");
+            }
+            const centre = (box: DOMRect) => (box.top + box.bottom) / 2;
+            return {
+              state: button.getAttribute("data-state"),
+              off: Math.abs(
+                centre(text.getBoundingClientRect()) -
+                  centre(badge.getBoundingClientRect()),
+              ),
+            };
+          }),
+        );
+      for (const option of await offsets()) {
+        expect(option.state).toBe("idle");
+        expect(option.off).toBeLessThanOrEqual(1);
       }
-      const box = text.getBoundingClientRect();
-      const css = getComputedStyle(button);
-      const room =
-        button.getBoundingClientRect().right -
-        Number.parseFloat(css.paddingRight) -
-        Number.parseFloat(css.borderRightWidth) -
-        badge.getBoundingClientRect().right -
-        Number.parseFloat(css.columnGap);
-      return {
-        below: tag.getBoundingClientRect().top >= box.bottom - 1,
-        alignedWithText:
-          Math.abs(tag.getBoundingClientRect().left - box.left) < 1,
-        width: box.width,
-        room,
-        words: tag.textContent,
-      };
+      // After the reveal the dimmed ones, stretched to a 2 by 2 row or not.
+      await answerFirst(page);
+      const dimmed = (await offsets()).filter(
+        (option) => option.state === "dimmed",
+      );
+      expect(dimmed.length).toBeGreaterThan(0);
+      for (const option of dimmed) {
+        expect(option.off).toBeLessThanOrEqual(1);
+      }
     });
-    expect(fit.words).toBe("Correct answer");
-    expect(fit.below).toBe(true);
-    expect(fit.alignedWithText).toBe(true);
-    expect(fit.width).toBeGreaterThanOrEqual(fit.room - 1);
-  });
+
+    test(`R1-36 a reveal never squeezes a name: its words sit beside a name that leaves room for them, else under it, and nothing below a short option moves more than 10 px, at ${width} px`, async ({
+      page,
+    }) => {
+      test.setTimeout(90_000);
+      await page.setViewportSize({ width, height: 900 });
+      await startQuickPlay(page);
+      /** Each option's place in the list, its name's lines and one-line width. */
+      const measure = () =>
+        options(page).evaluateAll((buttons) => {
+          const list = buttons[0]?.closest("ol")?.getBoundingClientRect();
+          return buttons.map((button) => {
+            const text = button.querySelector(".kn-answer-text");
+            const tag = button.querySelector(".kn-answer-tag");
+            if (text === null) throw new Error("option text");
+            const range = document.createRange();
+            range.selectNodeContents(text);
+            const lines = new Set(
+              [...range.getClientRects()]
+                .filter((rect) => rect.width > 1)
+                .map((rect) => Math.round(rect.top)),
+            ).size;
+            const css = getComputedStyle(button);
+            const box = button.getBoundingClientRect();
+            const textBox = text.getBoundingClientRect();
+            const tagBox = tag?.getBoundingClientRect() ?? null;
+            return {
+              state: button.getAttribute("data-state") ?? "",
+              top: box.top - (list?.top ?? 0),
+              lines,
+              // The name's width on its one line (the whole box if it wraps).
+              nameWidth: range.getBoundingClientRect().width,
+              // The room beside the 36 px badge and its 12 px gap.
+              room:
+                box.width -
+                Number.parseFloat(css.paddingLeft) -
+                Number.parseFloat(css.paddingRight) -
+                Number.parseFloat(css.borderLeftWidth) -
+                Number.parseFloat(css.borderRightWidth) -
+                48,
+              tagWidth: tagBox?.width ?? 0,
+              tagBeside:
+                tagBox === null ? null : tagBox.top < textBox.bottom - 1,
+              tagInside:
+                tagBox === null ? null : tagBox.right <= box.right + 0.5,
+            };
+          });
+        });
+
+      let pinned = 0;
+      for (let question = 1; question <= 8; question += 1) {
+        await expect(
+          round(page).getByText(`Question ${question} of 10`),
+        ).toBeVisible();
+        const count = await options(page).count();
+        if (count === 4) {
+          const before = await measure();
+          await options(page).nth(1).click();
+          await expect(
+            round(page).locator('[data-state="correct"]'),
+          ).toHaveCount(1);
+          // The words have risen into place (DESIGN §7.3).
+          await page.waitForFunction(() =>
+            [...document.querySelectorAll("main .kn-answer-tag")].every((tag) =>
+              tag
+                .getAnimations()
+                .every((animation) => animation.playState === "finished"),
+            ),
+          );
+          const after = await measure();
+          let allBeside = true;
+          after.forEach((option, index) => {
+            const idle = before[index];
+            if (idle === undefined) throw new Error("option count");
+            // Never squeezed onto more lines than it had.
+            expect(option.lines, option.state).toBeLessThanOrEqual(idle.lines);
+            if (option.tagBeside === null) return;
+            expect(option.tagInside).toBe(true);
+            // Beside exactly when the one-line name leaves room (DS-1's rule).
+            const slack = option.room - (idle.nameWidth + 12 + option.tagWidth);
+            if (idle.lines === 1 && Math.abs(slack) > 2) {
+              expect(option.tagBeside, `${option.state} slack ${slack}`).toBe(
+                slack > 0,
+              );
+            }
+            if (!option.tagBeside) allBeside = false;
+          });
+          if (allBeside) {
+            const correct = after.findIndex(
+              (option) => option.state === "correct",
+            );
+            const correctTop = after[correct]?.top ?? 0;
+            after.forEach((option, index) => {
+              const idle = before[index];
+              if (idle === undefined || option.top <= correctTop + 1) return;
+              // DESIGN §7.1 rule 1: nothing but sheets travels over 10 px.
+              expect(Math.abs(option.top - idle.top)).toBeLessThanOrEqual(10);
+            });
+            pinned += 1;
+          }
+          await round(page).getByRole("heading", { level: 1 }).click();
+          await expect(round(page).getByRole("region")).toBeVisible();
+        } else {
+          await answerFirst(page);
+        }
+        await page
+          .getByRole("button", { name: /^(Next question|See your results)/ })
+          .click();
+      }
+      // Fixture names are short, so most reveals keep their words beside.
+      expect(pinned).toBeGreaterThan(0);
+    });
+  }
 
   test("R1-13 each option shows one key hint, its badge's letter, even where keys apply", async ({
     page,
@@ -893,8 +1279,8 @@ test.describe("R1-35 Today", () => {
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   });
 
-  for (const width of [1024, 1280]) {
-    test(`R1-35 from 1024 px Today is two columns, centred on the page, at ${width} px`, async ({
+  for (const width of [1024, 1280, 1440]) {
+    test(`R1-35 from 1024 px Today is two columns, centred on the page, with Quick play on one line, at ${width} px`, async ({
       page,
     }) => {
       await page.setViewportSize({ width, height: 800 });
@@ -925,6 +1311,27 @@ test.describe("R1-35 Today", () => {
       expect(layout.dailyShare).toBeLessThan(0.59);
       const [left = 0, right = 0] = layout.margins;
       expect(Math.abs(left - right)).toBeLessThan(2);
+
+      // In the 5/12 column the card's text gives way, never the button's
+      // label (DESIGN §6.1: labels never wrap).
+      const label = await page
+        .locator('[data-home-slot="practice"]')
+        .getByRole("link", { name: "Quick play" })
+        .evaluate((link) => {
+          const range = document.createRange();
+          range.selectNodeContents(link);
+          return {
+            lines: new Set(
+              [...range.getClientRects()]
+                .filter((rect) => rect.width > 1)
+                .map((rect) => Math.round(rect.top)),
+            ).size,
+            height: link.getBoundingClientRect().height,
+          };
+        });
+      expect(label.lines).toBe(1);
+      // The small button's 44 px, not a two-line 48.
+      expect(label.height).toBeLessThanOrEqual(44.5);
     });
   }
 
@@ -1093,6 +1500,56 @@ test.describe("R1-34 rings, headings and tab labels", () => {
       }
     });
   }
+
+  test("R1-34 at 320 px with 200% text no page the shell links runs sideways, /accessibility's display title included", async ({
+    page,
+    consoleErrors,
+  }) => {
+    test.setTimeout(60_000);
+    await page.setViewportSize({ width: 320, height: 640 });
+    await openToday(page);
+    const hrefs = (await shellLinks(page)).filter(
+      (href) => !BUILT_ELSEWHERE.has(href),
+    );
+    expect(hrefs).toContain("/accessibility");
+    for (const path of [...hrefs, "/no-such-page"]) {
+      await page.goto(path);
+      await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+      await page.evaluate(() => {
+        document.documentElement.style.fontSize = "200%";
+      });
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      );
+      expect(overflow, `${path} scrolls sideways`).toBeLessThanOrEqual(0);
+    }
+    dropExpected(consoleErrors, NOT_FOUND_LOAD);
+  });
+
+  test("R1-34 with WCAG 1.4.12's text spacing at 200% text, /accessibility never runs sideways", async ({
+    page,
+  }) => {
+    for (const width of [320, 360, 390]) {
+      await page.setViewportSize({ width, height: 640 });
+      await page.goto("/accessibility");
+      await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+      await page.evaluate(() => {
+        document.documentElement.style.fontSize = "200%";
+        const spacing = document.createElement("style");
+        spacing.textContent =
+          "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }";
+        document.head.append(spacing);
+      });
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      );
+      expect(overflow, `at ${width} px`).toBeLessThanOrEqual(0);
+    }
+  });
 
   test("R1-34 at 200% text the tab labels stay at least 12 px apart", async ({
     page,

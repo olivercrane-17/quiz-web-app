@@ -31,9 +31,10 @@
 
 /* The column a bar's row and the banners under it line up with (DESIGN
  * §10.1, read by .kn-banner in ui.css): from 768 px the page's 1,120 px,
- * or a landing's 720 px and a reading page's 640 px (`data-column`); below
- * that, 560 px of content. The play header keeps its 720 px column at
- * every width, as the play screens do. */
+ * or a landing's 720 px (`data-column`); below that, 560 px of content.
+ * The reading pages keep the page's column in their bar, the same bar as
+ * every tab page (§6.13), and narrow only their content. The play header
+ * keeps its 720 px column at every width, as the play screens do. */
 .kn-topbar {
   --kn-column: var(--kn-container-page);
   position: sticky;
@@ -43,9 +44,6 @@
 }
 .kn-topbar:where([data-column="play"]) {
   --kn-column: var(--kn-container-play);
-}
-.kn-topbar:where([data-column="reading"]) {
-  --kn-column: var(--kn-container-reading);
 }
 @media (max-width: 767px) {
   .kn-topbar {

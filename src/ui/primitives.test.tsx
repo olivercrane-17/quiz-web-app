@@ -1,5 +1,5 @@
 import { screen, within } from "@testing-library/react";
-import { useState } from "react";
+import { createRef, useState, type MouseEvent } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { renderWithUser } from "@/test/render";
@@ -50,6 +50,41 @@ describe("Stopwatch", () => {
     );
     await user.click(screen.getByRole("button", { name: "Time 0:07" }));
     expect(onClick).toHaveBeenCalledOnce();
+  });
+
+  it("R1-27 as the More menu's button, carries the menu's state and a ref for the Daily header", async () => {
+    const opener = createRef<HTMLButtonElement>();
+    // React clears `currentTarget` once the handler returns: note it there.
+    let openedFrom: EventTarget | null = null;
+    const onClick = vi.fn((event: MouseEvent<HTMLButtonElement>) => {
+      openedFrom = event.currentTarget;
+    });
+    const { user } = renderWithUser(
+      <>
+        <Stopwatch
+          ref={opener}
+          time="1:12"
+          label="Time so far"
+          onClick={onClick}
+          aria-haspopup="menu"
+          aria-expanded
+          aria-controls="more-menu"
+          aria-describedby="watch-hint"
+        />
+        <p id="watch-hint">Take your time. Time only breaks ties.</p>
+      </>,
+    );
+    const button = screen.getByRole("button", { name: "Time so far 1:12" });
+    expect(opener.current).toBe(button);
+    expect(button).toHaveAttribute("aria-haspopup", "menu");
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    expect(button).toHaveAttribute("aria-controls", "more-menu");
+    expect(button).toHaveAccessibleDescription(
+      "Take your time. Time only breaks ties.",
+    );
+    await user.click(button);
+    expect(onClick).toHaveBeenCalledOnce();
+    expect(openedFrom).toBe(button);
   });
 });
 

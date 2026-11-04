@@ -10,6 +10,7 @@ import { renderWithUser } from "@/test/render";
 
 import { SHELL_COPY } from "./copy";
 import { LEGAL_LINKS } from "./footer";
+import { NOT_FOUND_METADATA } from "./not-found-metadata";
 import { TABS } from "./tabs";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/no-such-page" }));
@@ -158,6 +159,12 @@ describe("the not-found page", () => {
     }
     expect(screen.getByRole("link", { name: "Skip to content" })).toBeVisible();
     expect(metadata?.title).toBe("Page not found");
+  });
+
+  it("R1-02 hands every notFound() the same title, and no second robots tag", () => {
+    // Next adds noindex to every not-found response, so the metadata that
+    // a route module exports for its notFound() case carries the title only.
+    expect(NOT_FOUND_METADATA).toEqual({ title: "Page not found" });
   });
 
   it.each(["(tabs)", "(info)", "(landing)", "(host)"])(

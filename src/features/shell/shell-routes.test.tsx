@@ -12,6 +12,7 @@ import type * as EnvModule from "@/lib/env";
 import { renderWithUser } from "@/test/render";
 
 import config from "../../../next.config";
+import { NOT_FOUND_METADATA } from "./not-found-metadata";
 import { SHELL_ROUTES, shellPath, shellRewrites } from "./shell-routes";
 
 /** The patterns ARCHITECTURE §10.1 rewrites, verbatim. */
@@ -126,7 +127,7 @@ describe("shell routes", () => {
   );
 
   it.each(SHELL_ROUTES.filter((route) => route.flag !== null))(
-    "$shell is the not-found page, with no title in its metadata, while its Beta flag ($flag) is off (AC-ROM-13)",
+    "$shell is the not-found page, with no Beta title in its metadata, while its Beta flag ($flag) is off (AC-ROM-13)",
     async ({ group, shell, flag }) => {
       if (flag === null) throw new Error("unreachable");
       const { default: Page, metadata } = await loadShellWithFlag(
@@ -135,8 +136,17 @@ describe("shell routes", () => {
         flag,
         false,
       );
-      // The title would sit in the 404's HTML and RSC payload otherwise.
-      expect(metadata).toEqual({ robots: { index: false } });
+      // A Beta title would sit in the 404's HTML and RSC payload. The stub
+      // has none; its owner gives it the not-found page's own title
+      // (`NOT_FOUND_METADATA`, R1-02), which names no Beta feature.
+      expect([undefined, NOT_FOUND_METADATA.title]).toContainEqual(
+        metadata.title,
+      );
+      expect(
+        Object.keys(metadata).filter(
+          (key) => key !== "title" && key !== "robots",
+        ),
+      ).toEqual([]);
       let thrown: unknown = null;
       try {
         renderWithUser(<Page />);

@@ -94,8 +94,14 @@
   letter-spacing: var(--kn-text-label--letter-spacing);
   text-align: center;
   text-decoration: none;
-  /* Labels fit on one line at normal sizes; at 200% text they wrap rather
-   * than run off the screen. */
+  /* Labels never wrap (DESIGN §6.1): in a flex row the button keeps its
+   * one-line width and the text beside it gives way, as on the Practice
+   * card in Today's 5/12 column. Only a label wider than the whole row, as
+   * at 200% text on a 320 px screen, wraps (balanced) inside the button
+   * rather than run off the screen (DESIGN §10.5), which `nowrap` would
+   * not allow. */
+  flex-shrink: 0;
+  max-width: 100%;
   text-wrap: balance;
   cursor: pointer;
   touch-action: manipulation;
@@ -237,10 +243,14 @@
  * the 400 ms reveal; the delays below count from that moment. The padding
  * makes up for the border width, so no state moves the text.
  *
- * A grid: the badge, then the option's text with the whole rest of the
- * width, and under the text a row for the state's words ("Correct
- * answer"), closed until a state has words and opening with the reveal,
- * so the pill never squeezes the answer (RITE round 1, R1-36). */
+ * One flex row: the badge, the option's text centred on it, and from the
+ * reveal the state's words ("Correct answer") at the right end, beside a
+ * name that leaves room for them, as the final screens show. Where the
+ * name leaves no room (a long name, or 200% text), the row wraps and the
+ * words go under it, at the right. The name never squeezes: the row breaks
+ * on its whole one-line width, so it keeps that line or the full width
+ * beside the badge, and a short option never grows at the reveal (RITE
+ * round 1, R1-36; DESIGN §7.1 rule 1). */
 .kn-answer {
   --opt-bg: var(--kn-surface);
   --opt-fg: var(--kn-ink);
@@ -249,11 +259,9 @@
   --opt-ledge: var(--kn-ledge);
   --opt-ledge-h: var(--kn-ledge-2);
   position: relative;
-  display: grid;
-  grid-template-columns: 36px minmax(0, 1fr);
-  grid-template-rows: auto 0fr;
+  display: flex;
   align-items: center;
-  column-gap: 12px;
+  gap: 6px 12px;
   width: 100%;
   padding: calc(11.5px - var(--opt-border-w)) calc(13.5px - var(--opt-border-w))
     calc(11.5px - var(--opt-border-w)) calc(12.5px - var(--opt-border-w));
@@ -278,15 +286,12 @@
     color var(--kn-dur-reveal) var(--kn-ease-out),
     border-color var(--kn-dur-lock) var(--kn-ease-out),
     box-shadow var(--kn-dur-press) var(--kn-ease-press),
-    transform var(--kn-dur-press) var(--kn-ease-press),
-    grid-template-rows var(--kn-dur-base) var(--kn-ease-out);
+    transform var(--kn-dur-press) var(--kn-ease-press);
 }
-/* The badge spans both rows, so it stays centred on the whole option. Its
- * letter is the option's one key hint (D6). */
+/* Its letter is the option's one key hint (D6). */
 .kn-answer-badge {
-  grid-row: 1 / -1;
-  grid-column: 1;
   display: inline-grid;
+  flex: none;
   place-items: center;
   width: 36px;
   height: 36px;
@@ -311,38 +316,31 @@
 .kn-answer-badge > svg {
   stroke-width: 3;
 }
-/* All the room beside the 36 px badge and its 12 px gap, which no tag
- * shares: the name never squeezes or breaks mid-word (DESIGN §3.3, §10.5). */
+/* At most the room beside the 36 px badge and its 12 px gap, so the name
+ * always shares the badge's line, and never breaks mid-word unless one
+ * word is wider than that room (DESIGN §3.3, §10.5). */
 .kn-answer-text {
-  grid-row: 1;
-  grid-column: 2;
+  flex: 1 1 auto;
   min-width: 0;
+  max-width: calc(100% - 48px);
   overflow-wrap: anywhere;
-}
-/* The state's words, under the name and lined up with it. The row is
- * closed (0fr) while the option is idle and opens with the state. */
-.kn-answer-tag-row {
-  grid-row: 2;
-  grid-column: 2;
-  display: flex;
-  min-height: 0;
-  overflow: hidden;
 }
 .kn-answer:is(
   [data-state="correct"],
   [data-state="your-answer"],
   [data-state="already-guessed"]
 ) {
-  grid-template-rows: auto 1fr;
+  flex-wrap: wrap;
 }
 /* One line wherever it fits; at 200% text on a 320 px screen its words
- * wrap inside the row rather than run past the option's edge. */
+ * wrap inside the option rather than run past its edge. */
 .kn-answer-tag {
   display: inline-flex;
+  flex: 0 1 auto;
   align-items: center;
   gap: 5px;
   max-width: 100%;
-  margin-top: 6px;
+  margin-inline-start: auto;
   font-size: 0.8125rem;
   font-weight: 800;
   letter-spacing: 0.01em;

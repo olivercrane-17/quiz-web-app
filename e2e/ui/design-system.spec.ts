@@ -589,8 +589,46 @@ test.describe("reflow at 320 px", () => {
     await expectNoHorizontalScroll(page, "a practice reveal");
   });
 
+  /** Buttons whose label runs past their own edge. */
+  async function spillingLabels(page: Page): Promise<string[]> {
+    return page.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>(".kn-btn")]
+        .filter((button) => button.checkVisibility())
+        .filter((button) => button.scrollWidth > button.clientWidth + 1)
+        .map((button) => button.textContent?.trim() ?? ""),
+    );
+  }
+
+  test("at 200% text Today never scrolls sideways: a label wider than its row wraps inside its button (DESIGN §6.1, §10.5)", async ({
+    page,
+  }) => {
+    await openToday(page);
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+    });
+    await expectNoHorizontalScroll(page, "Today at 200% text");
+    expect(await spillingLabels(page)).toEqual([]);
+  });
+
+  test("at 200% text the stop screen never scrolls sideways, its buttons' labels inside them", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as unknown as { __QZ_MOCK_INIT__: unknown }).__QZ_MOCK_INIT__ = {
+        scenario: "finished_today",
+      };
+    });
+    await page.goto("/daily/42/results");
+    await expect(page.locator("[data-score]")).toBeVisible();
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+    });
+    await expectNoHorizontalScroll(page, "the stop screen at 200% text");
+    expect(await spillingLabels(page)).toEqual([]);
+  });
+
   for (const width of [320, 390]) {
-    test(`at 200% text a reveal's tag goes under the answer's name, which keeps the line beside its badge, and nothing scrolls sideways, at ${width} px`, async ({
+    test(`at 200% text a reveal's tag goes under the answer's name when the name leaves it no room, the name keeping the line beside its badge, and nothing scrolls sideways, at ${width} px`, async ({
       page,
     }) => {
       await page.setViewportSize({ width, height: 640 });
@@ -631,29 +669,44 @@ test.describe("reflow at 320 px", () => {
           const tenCh = probe.getBoundingClientRect().width;
           probe.remove();
           const box = text.getBoundingClientRect();
+          const range = document.createRange();
+          range.selectNodeContents(text);
+          const room =
+            inner -
+            badge.getBoundingClientRect().width -
+            Number.parseFloat(css.columnGap);
+          const tagBox = tag.getBoundingClientRect();
           return {
             width: box.width,
             // All the room beside the badge, which the tag never squeezes.
-            room:
-              inner -
-              badge.getBoundingClientRect().width -
-              Number.parseFloat(css.columnGap),
+            room,
+            // Whether the one-line name leaves the tag room beside it.
+            leavesRoom:
+              range.getClientRects().length === 1 &&
+              range.getBoundingClientRect().width +
+                Number.parseFloat(css.columnGap) +
+                tagBox.width <=
+                room,
             tenCh,
             besideBadge:
               box.top < badge.getBoundingClientRect().bottom &&
               box.bottom > badge.getBoundingClientRect().top,
-            tagBelow: tag.getBoundingClientRect().top >= box.bottom - 1,
-            inside:
-              tag.getBoundingClientRect().right <=
-              button.getBoundingClientRect().right,
+            tagBelow: tagBox.top >= box.bottom - 1,
+            inside: tagBox.right <= button.getBoundingClientRect().right,
           };
         });
-        expect(fit.width).toBeGreaterThanOrEqual(fit.room - 1);
         expect(fit.besideBadge).toBe(true);
-        expect(fit.tagBelow).toBe(true);
         expect(fit.inside).toBe(true);
-        // From 390 px that is at least ten characters of 36 px text.
-        if (width >= 390) expect(fit.width).toBeGreaterThanOrEqual(fit.tenCh);
+        // At 200% text only a name of a character or two ("4") leaves the
+        // tag room; every other name keeps the whole line, the tag under it.
+        expect(fit.tagBelow).toBe(!fit.leavesRoom);
+        if (fit.tagBelow) {
+          expect(fit.width).toBeGreaterThanOrEqual(fit.room - 1);
+          // From 390 px that is at least ten characters of 36 px text.
+          if (width >= 390) {
+            expect(fit.width).toBeGreaterThanOrEqual(fit.tenCh);
+          }
+        }
       }
     });
   }

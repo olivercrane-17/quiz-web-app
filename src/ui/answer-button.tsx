@@ -22,9 +22,12 @@
  *   `ui.css` styles: the fills, the 400 ms reveal's stamp, shake and tag
  *   rise (DESIGN §7.3), and the forced-colours borders (double for correct,
  *   dashed for a wrong pick).
- * - The state's words sit in their own row under the option's text, never
- *   beside it, so a pill never squeezes the answer onto two or three lines
- *   (RITE round 1, R1-36); the row opens with the reveal.
+ * - The state's words sit at the right end of the option's line, beside a
+ *   name that leaves room for them, and go under it only where it doesn't
+ *   (a long name, 200% text). Either way the name keeps its whole line, so
+ *   a pill never squeezes the answer onto two or three lines (RITE round
+ *   1, R1-36), and a short option never grows at the reveal (`.kn-answer`
+ *   in `ui.css`).
  * - The letter is said once (R1-40 checked for a doubled one). Screen
  *   readers get "A." from one visually hidden element, so the accessible
  *   name contains the visible label once, "A. Venus Your answer" (WCAG
@@ -32,7 +35,7 @@
  *   and is hidden from them, so no reading of the button, its text content
  *   included, meets the letter twice. Where a check or an X replaces the
  *   letter, the hidden "A." stays. The `{" "}` text nodes between the
- *   parts keep the words of the name apart; the grid ignores them.
+ *   parts keep the words of the name apart; flex layout ignores them.
  * - The badge's letter is also the option's one key hint.
  * - Keys are the round's job (decision D6, R1-13: the letters A to D pick,
  *   matching the badges, and digits 1 to 4 only where no option is a
@@ -165,11 +168,9 @@ export function AnswerButton({
       <span className="sr-only">{letter}.</span>{" "}
       <span className="kn-answer-text">{children}</span>{" "}
       {tag === null ? null : (
-        <span className="kn-answer-tag-row">
-          <span className="kn-answer-tag">
-            {state === "correct" ? <CheckIcon size={14} /> : null}
-            {tag}
-          </span>
+        <span className="kn-answer-tag">
+          {state === "correct" ? <CheckIcon size={14} /> : null}
+          {tag}
         </span>
       )}
       {state === "locked" ? (

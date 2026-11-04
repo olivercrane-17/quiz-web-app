@@ -236,17 +236,19 @@ describe("AnswerButton", () => {
       },
     );
 
-    it("R1-36 puts the state's words in their own row under the text, never beside it", () => {
+    it("R1-36 puts the state's words after the text, as their own flex item, so they wrap under a name that leaves no room", () => {
       const { button, unmount } = renderOption("correct");
       const text = button.querySelector(".kn-answer-text");
-      const row = button.querySelector(".kn-answer-tag-row");
-      expect(row).toContainElement(screen.getByText("Correct answer"));
-      // After the text, its own element: the grid puts it on the next row.
-      expect(text?.nextElementSibling).toBe(row);
+      const tag = button.querySelector(".kn-answer-tag");
+      expect(tag).toContainElement(screen.getByText("Correct answer"));
+      // A child of the button, after the text: the row wraps before it,
+      // never inside the name (ui.css, e2e/ui/rite-1.spec.ts measures it).
+      expect(text?.nextElementSibling).toBe(tag);
+      expect(tag?.parentElement).toBe(button);
       unmount();
-      // An idle option has no row to open.
+      // An idle option has no words to show.
       const idle = renderOption("idle").button;
-      expect(idle.querySelector(".kn-answer-tag-row")).toBeNull();
+      expect(idle.querySelector(".kn-answer-tag")).toBeNull();
     });
 
     it("drops the pressed look when the option stops being idle mid-press", () => {

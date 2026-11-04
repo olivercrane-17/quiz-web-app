@@ -22,22 +22,20 @@ import { ScrollInset } from "./scroll-inset";
 import { TabBar } from "./tab-bar";
 import { Wordmark } from "./wordmark";
 
-/** The column the bar's row and banners line up with (`--kn-column`, shell.css). */
-export type HeaderColumn = "page" | "reading";
-
+/**
+ * One bar for every page that wears it (DESIGN §6.13): its row and the
+ * banners under it keep the page's column, 1,120 px from 768 px, on the
+ * reading pages too, which narrow only their content to 640 px (§10.1,
+ * §12.40). So opening a footer link moves no tab and no button sideways.
+ */
 export function AppHeader({
-  column = "page",
   markTab = true,
 }: {
-  column?: HeaderColumn;
   /** False on a page that belongs to no tab (`TabBar`'s `marked`). */
   markTab?: boolean;
 }) {
   return (
-    <header
-      className="kn-topbar kn-grain"
-      data-column={column === "page" ? undefined : column}
-    >
+    <header className="kn-topbar kn-grain">
       <ScrollInset edge="top" />
       <div className="kn-topbar-row">
         <Wordmark />

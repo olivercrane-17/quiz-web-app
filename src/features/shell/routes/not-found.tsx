@@ -11,18 +11,17 @@
  * Next prerenders this page once and serves it at every unknown address,
  * `/practice` among them until that page exists, so its tab bar marks no
  * tab: one it marked at `/practice` would not match the prerender. Static,
- * with its own title ("Page not found · Knewt"); Next adds the noindex
- * meta to every 404 response by itself, so the metadata leaves it out.
+ * with its own title ("Page not found · Knewt", `NOT_FOUND_METADATA`);
+ * Next adds the noindex meta to every 404 response by itself, so the
+ * metadata leaves it out.
  */
 import type { Metadata } from "next";
 
-import { SHELL_COPY } from "../copy";
 import { NotFoundContent } from "../not-found";
+import { NOT_FOUND_METADATA } from "../not-found-metadata";
 import { TabsFrame } from "./tabs-layout";
 
-export const metadata: Metadata = {
-  title: SHELL_COPY.notFound.title,
-};
+export const metadata: Metadata = NOT_FOUND_METADATA;
 
 export default function NotFoundRoute() {
   return (
