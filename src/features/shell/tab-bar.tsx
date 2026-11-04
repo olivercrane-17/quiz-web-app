@@ -5,6 +5,8 @@
  * `display: none` and out of the accessibility tree.
  *
  * The active marker sits inside `<Suspense>` (ARCHITECTURE §10.2 rule 2).
+ * The bottom bar is where toasts rise from (`data-toast-anchor`, DESIGN
+ * §6.9): 16 px above it, never over a tab.
  */
 import { Suspense } from "react";
 
@@ -23,6 +25,7 @@ export function TabBar({
     <nav
       aria-label={SHELL_COPY.mainNav}
       data-placement={placement}
+      data-toast-anchor={placement === "bottom" ? "" : undefined}
       className={className}
     >
       <Suspense fallback={<TabList active={null} placement={placement} />}>

@@ -29,7 +29,7 @@ export default function HostLayout({ children }: { children: ReactNode }) {
       >
         {children}
       </main>
-      <p className="m-auto hidden max-w-md p-6 text-center text-lg font-semibold max-lg:block [@media(max-height:575px)]:block">
+      <p className="m-auto hidden max-w-md p-6 text-center text-lead max-lg:block [@media(max-height:575px)]:block">
         {SHELL_COPY.hostTooSmall}
       </p>
       <LiveRegions />

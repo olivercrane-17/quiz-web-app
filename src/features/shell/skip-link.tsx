@@ -2,7 +2,8 @@
 
 /**
  * "Skip to content", first in every page and visible on focus (DESIGN
- * §6.13). It moves focus to the page's `<main>`.
+ * §6.13): an ink pill at the top left (`.kn-skip` in shell.css), parked
+ * above the viewport until then. It moves focus to the page's `<main>`.
  *
  * Every shell frame renders `<main id="main">`, and Next keeps up to three
  * visited routes mounted but hidden, so after a navigation between route
@@ -24,7 +25,7 @@ export function SkipLink() {
         event.preventDefault();
         main.focus();
       }}
-      className="sr-only rounded-xl bg-background px-4 py-3 font-bold text-foreground outline-offset-[3px] focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:outline-[3px] focus:outline-foreground"
+      className="kn-skip"
     >
       {SHELL_CLIENT_COPY.skipLink}
     </a>

@@ -32,13 +32,14 @@ describe("Loading and Skeleton", () => {
     );
     const shapes = () =>
       container.querySelector('[data-loading] > [aria-hidden="true"]');
-    expect(shapes()?.className).toContain("delay-300");
+    // The 300 ms grace is a CSS transition from @starting-style (ui.css).
+    expect(shapes()).toHaveClass("kn-loading-shapes");
     rerender(
       <Loading immediate>
         <Skeleton />
       </Loading>,
     );
-    expect(shapes()?.className).not.toContain("delay-300");
+    expect(shapes()).not.toHaveClass("kn-loading-shapes");
   });
 
   it("sizes a shape from its props", () => {

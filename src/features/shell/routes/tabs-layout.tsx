@@ -20,14 +20,11 @@ export default function TabsLayout({ children }: { children: ReactNode }) {
       <main
         id={MAIN_ID}
         tabIndex={-1}
-        className="mx-auto w-full max-w-[1120px] flex-1 px-4 pt-4 pb-[calc(5rem+env(safe-area-inset-bottom))] outline-none md:pb-10"
+        className="mx-auto w-full max-w-page flex-1 px-gutter pt-2 pb-[calc(5.5rem+env(safe-area-inset-bottom))] outline-none md:pt-4 md:pb-10"
       >
         {children}
       </main>
-      <TabBar
-        placement="bottom"
-        className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-background pb-[env(safe-area-inset-bottom)] md:hidden"
-      />
+      <TabBar placement="bottom" className="kn-tabbar md:hidden" />
       <LiveRegions />
     </div>
   );

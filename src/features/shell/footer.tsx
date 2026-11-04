@@ -21,16 +21,12 @@ export const LEGAL_LINKS: readonly { href: string; label: string }[] = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-10 border-t border-border pt-4">
+    <footer className="kn-footer">
       <nav aria-label={SHELL_COPY.footerNav}>
-        <ul className="flex flex-wrap gap-x-4">
+        <ul>
           {LEGAL_LINKS.map((link) => (
             <li key={link.href}>
-              <Link
-                href={link.href as Route}
-                prefetch={false}
-                className="inline-flex min-h-11 items-center rounded-md text-sm font-semibold text-foreground underline decoration-1 underline-offset-[3px] outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground"
-              >
+              <Link href={link.href as Route} prefetch={false}>
                 {link.label}
               </Link>
             </li>

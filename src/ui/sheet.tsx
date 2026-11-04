@@ -20,6 +20,12 @@
  *   until the player taps Continue. It is a labelled region; the round
  *   decides where focus goes (usually `titleRef`, the reveal heading).
  *
+ * The looks are `.kn-dialog` and `.kn-sheet` in `ui.css`: surface, a 28 px
+ * top radius, the 36 by 4 grab handle, the sheet shadow, a rise of 360 ms
+ * (a fade under reduced motion). A modal's title is set in `display-5`, the
+ * explanation sheet's in `display-3`. `Dialog` (./dialog) is the modal one
+ * by name.
+ *
  * The parent owns `open`. Children render only while open.
  */
 import {
@@ -31,6 +37,7 @@ import {
   type RefObject,
 } from "react";
 
+import { buttonClasses } from "./button-classes";
 import { UI_COPY } from "./copy";
 import { cx } from "./cx";
 import { CrossIcon } from "./icons";
@@ -91,35 +98,27 @@ function SheetBody({
   closeButton: ReactNode;
 }) {
   return (
-    <div className={cx("flex flex-col", compact ? "gap-2 p-4" : "gap-4 p-5")}>
-      <span
-        aria-hidden="true"
-        className="mx-auto h-1 w-9 rounded-full bg-foreground/25 md:hidden"
-      />
-      <div className="flex items-start justify-between gap-3">
+    <div className="kn-sheet-body" data-compact={compact ? "" : undefined}>
+      <span aria-hidden="true" className="kn-sheet-grab" />
+      <div className="kn-sheet-head">
         <Heading
           ref={titleRef}
           id={titleId}
           tabIndex={-1}
-          className={cx(
-            "text-xl font-bold outline-none",
-            hideTitle && "sr-only",
-          )}
+          className={cx("kn-sheet-title", hideTitle && "sr-only")}
         >
           {title}
         </Heading>
         {closeButton}
       </div>
       {description === undefined ? null : (
-        <div id={descriptionId} className="text-base">
+        <div id={descriptionId} className="kn-sheet-text">
           {description}
         </div>
       )}
       {children}
       {actions === undefined ? null : (
-        <div className="flex flex-col gap-3 md:flex-row-reverse md:justify-start">
-          {actions}
-        </div>
+        <div className="kn-sheet-actions">{actions}</div>
       )}
     </div>
   );
@@ -170,7 +169,7 @@ function ModalSheet({
         type="button"
         aria-label={closeLabel}
         onClick={onClose}
-        className="-m-2 inline-grid size-11 shrink-0 place-items-center rounded-xl outline-offset-[3px] hover:bg-foreground/5 focus-visible:outline-[3px] focus-visible:outline-foreground"
+        className={buttonClasses({ variant: "icon", className: "-m-2" })}
       >
         <CrossIcon />
       </button>
@@ -215,10 +214,7 @@ function ModalSheet({
           onClose?.();
         }
       }}
-      className={cx(
-        "mx-0 mt-auto mb-0 max-h-[85dvh] w-full max-w-none overflow-y-auto rounded-t-[28px] border-0 bg-background p-0 text-foreground shadow-[0_-8px_24px_0] shadow-foreground/15 backdrop:bg-foreground/40 md:m-auto md:w-[min(480px,calc(100%-2rem))] md:rounded-[28px]",
-        className,
-      )}
+      className={cx("kn-dialog", className)}
     >
       {open ? (
         <SheetBody
@@ -274,10 +270,7 @@ function InlineSheet({
       aria-labelledby={titleId}
       aria-describedby={description === undefined ? undefined : descriptionId}
       data-sheet="inline"
-      className={cx(
-        "rounded-t-[28px] border border-foreground/25 bg-background text-foreground shadow-[0_-8px_24px_0] shadow-foreground/10",
-        className,
-      )}
+      className={cx("kn-sheet", className)}
     >
       <SheetBody
         {...body}

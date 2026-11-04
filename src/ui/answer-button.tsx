@@ -17,8 +17,11 @@
  *   button focusable with `aria-disabled`, so focus never falls to the page
  *   after a verdict and a screen reader can still read the state's words.
  * - Never colour alone: the states differ by border, badge glyph and words
- *   ("Correct answer", "Your answer", "Already guessed"), and every state is
- *   exposed as `data-state` (plus `data-pressed`) for DS-1's styles.
+ *   ("Correct answer", "Your answer", "Already guessed"). Every state is
+ *   exposed as `data-state` (plus `data-pressed`), which `.kn-answer` in
+ *   `ui.css` styles: the fills, the 400 ms reveal's stamp, shake and tag
+ *   rise (DESIGN §7.3), and the forced-colours borders (double for correct,
+ *   dashed for a wrong pick).
  * - The letter badge reads "A." to screen readers, so the accessible name
  *   contains the visible label: "A. Venus Your answer" (WCAG 2.5.3). The
  *   `{" "}` text nodes between the parts keep the words of that name apart;
@@ -85,27 +88,6 @@ export interface AnswerButtonProps {
   ref?: Ref<HTMLButtonElement>;
 }
 
-const STATE_CLASSES: Record<AnswerState, string> = {
-  idle: "border-foreground/55 hover:border-foreground",
-  locked: "border-foreground ring-2 ring-inset ring-foreground",
-  correct:
-    "border-foreground bg-foreground/10 ring-2 ring-inset ring-foreground",
-  "your-answer": "border-dashed border-foreground",
-  dimmed: "translate-y-0.5 border-foreground/30 text-muted-foreground",
-  "already-guessed": "border-foreground/30 bg-muted text-muted-foreground",
-  disabled: "cursor-not-allowed border-foreground/55",
-};
-
-const BADGE_CLASSES: Record<AnswerState, string> = {
-  idle: "",
-  locked: "",
-  correct: "border-foreground bg-foreground text-background",
-  "your-answer": "border-dashed border-foreground",
-  dimmed: "border-foreground/40",
-  "already-guessed": "border-foreground/40",
-  disabled: "",
-};
-
 export function AnswerButton({
   index,
   children,
@@ -150,20 +132,9 @@ export function AnswerButton({
       }}
       {...pressHandlers}
       style={{ minHeight: TUNABLES.answers.buttonMinHeightPx }}
-      className={cx(
-        "relative flex w-full touch-manipulation items-center gap-3 rounded-2xl border-2 bg-background px-4 py-3 text-left text-lg font-semibold text-foreground outline-offset-[3px] transition-transform duration-75 select-none focus-visible:outline-[3px] focus-visible:outline-foreground",
-        STATE_CLASSES[state],
-        showPressed && "translate-y-0.5 border-foreground",
-        className,
-      )}
+      className={cx("kn-answer", className)}
     >
-      <span
-        aria-hidden="true"
-        className={cx(
-          "inline-grid size-9 shrink-0 place-items-center rounded-[11px] border-[1.5px] border-current text-lg font-bold",
-          BADGE_CLASSES[state],
-        )}
-      >
+      <span aria-hidden="true" className="kn-answer-badge">
         {state === "correct" ? (
           <CheckIcon />
         ) : state === "your-answer" ? (
@@ -173,15 +144,9 @@ export function AnswerButton({
         )}
       </span>
       <span className="sr-only">{letter}.</span>{" "}
-      <span className="min-w-0 flex-1 break-words">{children}</span>{" "}
+      <span className="kn-answer-text">{children}</span>{" "}
       {tag === null ? null : (
-        <span
-          className={cx(
-            "inline-flex shrink-0 items-center gap-1 text-sm font-extrabold whitespace-nowrap",
-            state === "correct" &&
-              "rounded-full border-[1.5px] border-current px-2.5 py-1",
-          )}
-        >
+        <span className="kn-answer-tag">
           {state === "correct" ? <CheckIcon size={14} /> : null}
           {tag}
         </span>
@@ -190,10 +155,7 @@ export function AnswerButton({
         <span className="sr-only">{words.lockedIn}</span>
       ) : null}
       {interactive && shortcut ? (
-        <kbd
-          aria-hidden="true"
-          className="hidden shrink-0 rounded-md border border-foreground/40 px-1.5 font-sans text-sm text-muted-foreground md:inline-block"
-        >
+        <kbd aria-hidden="true" className="kn-answer-kbd">
           {shortcut}
         </kbd>
       ) : null}

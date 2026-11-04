@@ -118,10 +118,43 @@ describe("Button", () => {
 
   it("styles links the same way through buttonClasses", () => {
     for (const variant of BUTTON_VARIANTS) {
-      expect(buttonClasses({ variant })).toMatch(/\S/);
+      expect(buttonClasses({ variant }).split(" ")).toEqual([
+        "kn-btn",
+        `kn-btn-${variant}`,
+      ]);
     }
-    expect(buttonClasses({ variant: "primary", block: true })).toContain(
-      "w-full",
+    expect(buttonClasses({ variant: "primary", block: true })).toBe(
+      "kn-btn kn-btn-primary kn-btn-block",
     );
+    expect(
+      buttonClasses({ variant: "secondary", className: "self-start" }),
+    ).toBe("kn-btn kn-btn-secondary self-start");
+  });
+
+  it("has a small size only where there is a ledge to shrink", () => {
+    for (const variant of [
+      "primary",
+      "secondary",
+      "ticket",
+      "danger",
+    ] as const) {
+      expect(buttonClasses({ variant, size: "small" })).toContain("kn-btn-sm");
+    }
+    for (const variant of ["ghost", "text", "icon"] as const) {
+      expect(buttonClasses({ variant, size: "small" })).not.toContain(
+        "kn-btn-sm",
+      );
+    }
+  });
+
+  it("names its variant and size on the element", () => {
+    renderWithUser(
+      <Button variant="ticket" size="small" block>
+        Play today&apos;s Daily
+      </Button>,
+    );
+    const button = screen.getByRole("button", { name: "Play today's Daily" });
+    expect(button).toHaveClass("kn-btn", "kn-btn-ticket", "kn-btn-sm");
+    expect(button).toHaveAttribute("data-size", "small");
   });
 });

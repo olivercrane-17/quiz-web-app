@@ -15,15 +15,15 @@ export default function InfoLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">
       <SkipLink />
-      <header className="border-b border-border bg-background pt-[env(safe-area-inset-top)]">
-        <div className="mx-auto flex min-h-14 w-full max-w-[640px] items-center px-4">
+      <header className="kn-topbar kn-grain">
+        <div className="kn-topbar-row max-w-reading">
           <Wordmark />
         </div>
       </header>
       <main
         id={MAIN_ID}
         tabIndex={-1}
-        className="mx-auto w-full max-w-[640px] flex-1 px-4 py-8 outline-none"
+        className="mx-auto w-full max-w-reading flex-1 px-gutter pt-4 pb-12 outline-none"
       >
         {children}
       </main>

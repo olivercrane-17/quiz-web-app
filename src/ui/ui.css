@@ -1,0 +1,1153 @@
+/*
+ * The design-system primitives (DESIGN §4 to §7), one block per component.
+ * globals.css imports this file into the components layer, so a utility
+ * class on the same element still wins. Colours come only from the --kn-*
+ * tokens; states are keyed off data attributes the components set
+ * (data-state, data-pressed, data-tone, data-status), so the markup stays
+ * small and the client bundles carry short class names.
+ *
+ * Every state also has a shape: a border style, an icon or a word, so
+ * nothing rests on colour, and forced colours keep each one (the last block).
+ */
+
+/* ------------------------------------------------------------ Type helpers */
+
+/* Data numerals are Fraunces lining figures (DESIGN §3.3). */
+.kn-num {
+  font-family: var(--kn-font-display);
+  font-variant-numeric: lining-nums;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+/* A date line filled before first paint (./date-slot.tsx): its prerendered
+ * placeholder holds the space and is never seen. */
+.kn-date-slot[data-pending] {
+  visibility: hidden;
+}
+
+/* Small-looking controls keep a 44 px hit area (DESIGN §4). */
+.kn-hit {
+  position: relative;
+}
+.kn-hit::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
+/* ------------------------------------------------------------- The mark */
+
+/* DESIGN §1.5 colourways: eft body, ink eyes and dot on paper; charcoal
+ * eyes and a cream dot on charcoal. */
+.kn-mark {
+  flex: none;
+  --kn-mark-body: var(--kn-accent);
+  --kn-mark-dot: var(--kn-ink);
+}
+.kn-mark-body {
+  fill: var(--kn-mark-body);
+}
+.kn-mark-legs {
+  fill: none;
+  stroke: var(--kn-mark-body);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.kn-mark-eye {
+  fill: var(--kn-mark-eye);
+}
+.kn-mark-dot {
+  fill: var(--kn-mark-dot);
+}
+
+/* ---------------------------------------------------------------- Buttons */
+
+/* DESIGN §6.1. The ledge is a solid band under the button; a press sinks the
+ * button 2 px and halves the ledge, so its bottom edge stays put. */
+.kn-btn {
+  --btn-bg: var(--kn-surface);
+  --btn-fg: var(--kn-ink);
+  --btn-border: var(--kn-rule-strong);
+  --btn-ledge: var(--kn-ledge);
+  --btn-ledge-h: var(--kn-ledge-2);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 8px 22px;
+  border: 1.5px solid var(--btn-border);
+  border-radius: var(--kn-radius-lg);
+  background-color: var(--btn-bg);
+  color: var(--btn-fg);
+  box-shadow: 0 var(--btn-ledge-h) 0 var(--btn-ledge);
+  font-family: var(--kn-font-text);
+  font-size: var(--kn-text-label);
+  font-weight: 700;
+  line-height: var(--kn-text-label--line-height);
+  letter-spacing: var(--kn-text-label--letter-spacing);
+  text-align: center;
+  text-decoration: none;
+  /* Labels fit on one line at normal sizes; at 200% text they wrap rather
+   * than run off the screen. */
+  text-wrap: balance;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    transform var(--kn-dur-press) var(--kn-ease-press),
+    box-shadow var(--kn-dur-press) var(--kn-ease-press),
+    background-color var(--kn-dur-quick) linear,
+    border-color var(--kn-dur-quick) linear;
+}
+.kn-btn:active:not(:disabled, [data-disabled], [aria-busy="true"]),
+.kn-btn[data-pressed] {
+  --btn-ledge-h: var(--kn-ledge-1);
+  transform: translateY(calc(var(--kn-ledge-2) - var(--kn-ledge-1)));
+}
+.kn-btn-primary {
+  --btn-bg: var(--kn-primary);
+  --btn-fg: var(--kn-on-primary);
+  --btn-border: var(--kn-primary);
+  --btn-ledge: var(--kn-primary-ledge);
+}
+/* The Daily's Play and the join ticket: ink on the eft ticket in light,
+ * cream in dark (DESIGN §6.1). */
+.kn-btn-ticket {
+  --btn-bg: var(--kn-ticket-btn);
+  --btn-fg: var(--kn-on-ticket-btn);
+  --btn-border: var(--kn-ticket-btn);
+  --btn-ledge: var(--kn-ticket-btn-ledge);
+}
+.kn-btn-ticket:focus-visible {
+  outline-color: var(--kn-focus-on-ticket);
+}
+.kn-btn-danger {
+  --btn-bg: var(--kn-incorrect);
+  --btn-fg: var(--kn-on-incorrect);
+  --btn-border: var(--kn-incorrect);
+  --btn-ledge: var(--kn-incorrect-ledge);
+}
+.kn-btn-ghost,
+.kn-btn-icon,
+.kn-btn-text {
+  --btn-bg: transparent;
+  --btn-border: transparent;
+  --btn-ledge-h: 0px;
+  box-shadow: none;
+}
+.kn-btn-ghost {
+  gap: 6px;
+  min-height: 44px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: var(--kn-text-label-sm);
+}
+.kn-btn-icon {
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 12px;
+  flex: none;
+}
+.kn-btn-text {
+  min-height: 44px;
+  padding: 0 2px;
+  border-width: 0;
+  border-radius: 6px;
+  color: var(--kn-link);
+  text-decoration: underline;
+  text-decoration-color: var(--kn-link-underline);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.kn-btn-ghost:active:not(:disabled, [data-disabled]),
+.kn-btn-icon:active:not(:disabled, [data-disabled]),
+.kn-btn-text:active:not(:disabled, [data-disabled]),
+.kn-btn-ghost[data-pressed],
+.kn-btn-icon[data-pressed],
+.kn-btn-text[data-pressed] {
+  transform: none;
+  background-color: var(--kn-sunken);
+}
+.kn-btn-text:active:not(:disabled, [data-disabled]),
+.kn-btn-text[data-pressed] {
+  background-color: transparent;
+  text-decoration-thickness: 3px;
+}
+.kn-btn-sm {
+  --btn-ledge-h: 3px;
+  min-height: 44px;
+  padding: 4px 16px;
+  border-radius: var(--kn-radius-md);
+  font-size: 1rem;
+}
+.kn-btn-block {
+  width: 100%;
+}
+@media (hover: hover) {
+  .kn-btn-secondary:hover:not(:disabled, [data-disabled]) {
+    --btn-bg: var(--kn-surface-2);
+  }
+  .kn-btn-ghost:hover:not(:disabled, [data-disabled]),
+  .kn-btn-icon:hover:not(:disabled, [data-disabled]) {
+    background-color: var(--kn-surface-2);
+  }
+  .kn-btn-text:hover:not(:disabled, [data-disabled]) {
+    text-decoration-thickness: 3px;
+  }
+}
+/* Disabled keys off the native attribute or data-disabled (a disabled
+ * control that stays focusable), never off aria-busy: busy keeps its look. */
+.kn-btn:disabled,
+.kn-btn[data-disabled] {
+  --btn-bg: var(--kn-sunken);
+  --btn-fg: var(--kn-ink-3);
+  --btn-border: var(--kn-rule);
+  --btn-ledge: var(--kn-rule);
+  cursor: not-allowed;
+}
+.kn-btn-ghost:disabled,
+.kn-btn-ghost[data-disabled],
+.kn-btn-icon:disabled,
+.kn-btn-icon[data-disabled],
+.kn-btn-text:disabled,
+.kn-btn-text[data-disabled] {
+  --btn-bg: transparent;
+  --btn-border: transparent;
+  --btn-fg: var(--kn-ink-3);
+}
+.kn-btn[aria-busy="true"] {
+  cursor: progress;
+}
+
+/* ---------------------------------------------------------- Answer options */
+
+/* DESIGN §6.2 and the reveal of §7.3. The component switches data-state at
+ * the 400 ms reveal; the delays below count from that moment. The padding
+ * makes up for the border width, so no state moves the text. */
+.kn-answer {
+  --opt-bg: var(--kn-surface);
+  --opt-fg: var(--kn-ink);
+  --opt-border: var(--kn-rule-strong);
+  --opt-border-w: 1.5px;
+  --opt-ledge: var(--kn-ledge);
+  --opt-ledge-h: var(--kn-ledge-2);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: calc(11.5px - var(--opt-border-w)) calc(13.5px - var(--opt-border-w))
+    calc(11.5px - var(--opt-border-w)) calc(12.5px - var(--opt-border-w));
+  border: var(--opt-border-w) solid var(--opt-border);
+  border-radius: var(--kn-radius-lg);
+  background-color: var(--opt-bg);
+  color: var(--opt-fg);
+  box-shadow: 0 var(--opt-ledge-h) 0 var(--opt-ledge);
+  font-family: var(--kn-font-text);
+  font-size: var(--kn-text-lead);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: var(--kn-text-lead--letter-spacing);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    background-color var(--kn-dur-reveal) var(--kn-ease-out),
+    color var(--kn-dur-reveal) var(--kn-ease-out),
+    border-color var(--kn-dur-lock) var(--kn-ease-out),
+    box-shadow var(--kn-dur-press) var(--kn-ease-press),
+    transform var(--kn-dur-press) var(--kn-ease-press);
+}
+.kn-answer-badge {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid transparent;
+  border-radius: 11px;
+  background-color: var(--kn-sunken);
+  color: var(--kn-ink);
+  font-family: var(--kn-font-display);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  transition:
+    background-color var(--kn-dur-reveal) var(--kn-ease-out),
+    color var(--kn-dur-reveal) var(--kn-ease-out);
+}
+.kn-answer-text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.kn-answer-tag {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  animation: kn-rise-sm var(--kn-dur-base) var(--kn-ease-out) 200ms both;
+}
+/* Keys 1 to 4, shown from 768 px, while the option is idle. */
+.kn-answer-kbd {
+  display: none;
+  flex: none;
+  min-width: 26px;
+  padding: 0 6px;
+  border: 1px solid var(--kn-rule-strong);
+  border-radius: 6px;
+  color: var(--kn-ink-3);
+  font-family: var(--kn-font-text);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .kn-answer-kbd {
+    display: inline-block;
+  }
+}
+@media (hover: hover) {
+  .kn-answer[data-state="idle"]:hover {
+    --opt-border: var(--kn-ink-2);
+  }
+}
+/* Pressed: the same frame as pointerdown. */
+.kn-answer[data-pressed] {
+  --opt-border: var(--kn-ink);
+  --opt-ledge-h: var(--kn-ledge-1);
+  transform: translateY(calc(var(--kn-ledge-2) - var(--kn-ledge-1)));
+}
+/* Locked in: by 150 ms. */
+.kn-answer[data-state="locked"] {
+  --opt-border: var(--kn-selected);
+  --opt-border-w: 2.5px;
+  cursor: progress;
+}
+.kn-answer[data-state="correct"] {
+  --opt-bg: var(--kn-correct);
+  --opt-fg: var(--kn-on-correct);
+  --opt-border: var(--kn-correct-line);
+  --opt-border-w: 2px;
+  --opt-ledge: var(--kn-correct-ledge);
+  cursor: default;
+}
+.kn-answer[data-state="correct"] .kn-answer-badge {
+  background-color: var(--kn-on-correct);
+  color: var(--kn-correct);
+}
+.kn-answer[data-state="correct"] .kn-answer-tag {
+  padding: 4px 10px 4px 8px;
+  border: 1.5px solid currentColor;
+  border-radius: var(--kn-radius-pill);
+}
+/* The player's wrong pick: never struck through, and a soft 6 px shake. */
+.kn-answer[data-state="your-answer"] {
+  --opt-bg: var(--kn-incorrect-tint);
+  --opt-border: var(--kn-incorrect-line);
+  --opt-border-w: 2px;
+  --opt-ledge: var(--kn-incorrect-ledge);
+  cursor: default;
+  animation: kn-shake 300ms var(--kn-ease-in-out) 20ms;
+}
+.kn-answer[data-state="your-answer"] .kn-answer-badge {
+  background-color: var(--kn-incorrect);
+  color: var(--kn-on-incorrect);
+}
+.kn-answer[data-state="your-answer"] .kn-answer-tag {
+  color: var(--kn-incorrect-text);
+}
+/* The check and the X stamp in, from 1.4 times and 10 degrees. */
+.kn-answer[data-state="correct"] .kn-answer-badge > svg,
+.kn-answer[data-state="your-answer"] .kn-answer-badge > svg {
+  animation: kn-stamp var(--kn-dur-base) var(--kn-ease-spring) 40ms both;
+}
+/* Every other option after the reveal: dimmed by colour, never by opacity,
+ * so its text keeps 8.98:1. */
+.kn-answer[data-state="dimmed"] {
+  --opt-fg: var(--kn-ink-2);
+  --opt-border: var(--kn-rule);
+  --opt-ledge-h: var(--kn-ledge-1);
+  cursor: default;
+  transform: translateY(calc(var(--kn-ledge-2) - var(--kn-ledge-1)));
+}
+.kn-answer[data-state="dimmed"] .kn-answer-badge,
+.kn-answer[data-state="already-guessed"] .kn-answer-badge {
+  border-color: var(--kn-rule-strong);
+  background-color: transparent;
+  color: inherit;
+}
+.kn-answer[data-state="already-guessed"] {
+  --opt-bg: var(--kn-sunken);
+  --opt-fg: var(--kn-ink-3);
+  --opt-border: var(--kn-rule);
+  --opt-ledge-h: 0px;
+  cursor: not-allowed;
+}
+.kn-answer[data-state="disabled"] {
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------ Cards */
+
+/* DESIGN §4 elevation and §6.14. */
+.kn-card {
+  position: relative;
+  border-radius: var(--kn-radius-xl);
+  color: var(--kn-ink);
+}
+.kn-card[data-tone="default"] {
+  border: 1px solid var(--kn-rule);
+  background-color: var(--kn-surface);
+  box-shadow:
+    0 3px 0 var(--kn-ledge),
+    var(--kn-shadow-soft);
+}
+.kn-card[data-tone="sunken"] {
+  border: 1px solid var(--kn-rule);
+  background-color: var(--kn-sunken);
+}
+.kn-card[data-tone="ticket"] {
+  background-color: var(--kn-ticket);
+  color: var(--kn-on-ticket);
+  box-shadow:
+    0 var(--kn-ledge-2) 0 var(--kn-ticket-ledge),
+    var(--kn-shadow-pop);
+}
+.kn-card-pad {
+  padding: 16px;
+}
+@media (min-width: 640px) {
+  .kn-card-pad {
+    padding: 20px;
+  }
+}
+
+/* The ticket (DESIGN §6.14): eft, punched notches at the tear line, a 2 px
+ * dashed tear in on-ticket at 42%, and a 4 px ledge that follows the cut. */
+.kn-ticket {
+  --notch: 12px;
+  position: relative;
+  color: var(--kn-on-ticket);
+  filter: drop-shadow(0 var(--kn-ledge-2) 0 var(--kn-ticket-ledge))
+    drop-shadow(0 16px 18px var(--kn-ticket-glow));
+}
+.kn-ticket :focus-visible,
+.kn-card[data-tone="ticket"] :focus-visible {
+  outline-color: var(--kn-focus-on-ticket);
+}
+.kn-ticket-body {
+  padding: 16px 18px;
+  border-radius: var(--kn-radius-xl) var(--kn-radius-xl) 0 0;
+  background:
+    radial-gradient(
+        circle at 0 100%,
+        #0000 var(--notch),
+        var(--kn-ticket) calc(var(--notch) + 0.5px)
+      )
+      left bottom / 51% 100% no-repeat,
+    radial-gradient(
+        circle at 100% 100%,
+        #0000 var(--notch),
+        var(--kn-ticket) calc(var(--notch) + 0.5px)
+      )
+      right bottom / 51% 100% no-repeat;
+}
+/* A ticket without a stub is one whole piece. */
+.kn-ticket-body:only-child {
+  border-radius: var(--kn-radius-xl);
+  background: var(--kn-ticket);
+}
+.kn-ticket-stub {
+  position: relative;
+  padding: 13px 18px 16px;
+  border-radius: 0 0 var(--kn-radius-xl) var(--kn-radius-xl);
+  background:
+    radial-gradient(
+        circle at 0 0,
+        #0000 var(--notch),
+        var(--kn-ticket) calc(var(--notch) + 0.5px)
+      )
+      left top / 51% 100% no-repeat,
+    radial-gradient(
+        circle at 100% 0,
+        #0000 var(--notch),
+        var(--kn-ticket) calc(var(--notch) + 0.5px)
+      )
+      right top / 51% 100% no-repeat;
+}
+.kn-ticket-stub::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: calc(var(--notch) + 8px);
+  right: calc(var(--notch) + 8px);
+  border-top: 2px dashed
+    color-mix(in oklab, var(--kn-on-ticket) 42%, transparent);
+}
+@media (max-height: 700px) {
+  .kn-ticket-body {
+    padding: 13px 16px;
+  }
+  .kn-ticket-stub {
+    padding: 11px 16px 13px;
+  }
+}
+
+/* ----------------------------------------------------------------- Chips */
+
+/* DESIGN §6.14 and the prototype's chips: the category chip, hint chips and
+ * the band chip. Every tone keeps a visible edge or a word. */
+.kn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 2px 11px;
+  border: 1.5px solid var(--kn-rule-strong);
+  border-radius: var(--kn-radius-pill);
+  background-color: var(--kn-surface);
+  color: var(--kn-ink);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.kn-chip[data-tone="sunken"] {
+  border-color: transparent;
+  background-color: var(--kn-sunken);
+  color: var(--kn-ink-2);
+}
+.kn-chip[data-tone="correct"] {
+  border-color: var(--kn-correct-line);
+  background-color: var(--kn-correct-tint);
+  color: var(--kn-ink);
+}
+.kn-chip[data-tone="accent"] {
+  border-color: var(--kn-accent-ledge);
+  background-color: var(--kn-accent);
+  color: var(--kn-on-accent);
+}
+/* The Beta label: outlined in ink-2, never orange (DESIGN §6.14). */
+.kn-chip[data-tone="beta"] {
+  min-height: 22px;
+  padding: 0 8px;
+  border-color: var(--kn-ink-2);
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--kn-ink-2);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+a.kn-chip,
+button.kn-chip {
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------- Progress */
+
+/* DESIGN §6.6: the Daily's four pills and practice's ten segments. They
+ * keep their size at 200% text (DESIGN §10.5), so their type is in px. */
+.kn-progress {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.kn-progress[data-variant="bar"] {
+  width: 100%;
+  gap: 4px;
+}
+.kn-step {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  border: 1.5px solid var(--kn-rule-strong);
+  color: var(--kn-ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.kn-progress[data-variant="pills"] .kn-step {
+  width: 38px;
+  height: 30px;
+  border-radius: var(--kn-radius-sm);
+  font-family: var(--kn-font-display);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+.kn-progress[data-variant="bar"] .kn-step {
+  flex: 1;
+  min-width: 0;
+  height: 20px;
+  border-width: 1px;
+  border-color: var(--kn-rule);
+  border-radius: var(--kn-radius-xs);
+  background-color: var(--kn-sunken);
+  font-size: 11px;
+  font-weight: 700;
+}
+.kn-step[data-italic] {
+  font-style: italic;
+  font-weight: 450;
+}
+.kn-step[data-current] {
+  border: 2px solid var(--kn-ink);
+  background-color: var(--kn-surface);
+  color: var(--kn-ink);
+  box-shadow: 0 2px 0 var(--kn-ledge);
+}
+.kn-step[data-status="correct"] {
+  border: 1.5px solid var(--kn-correct-line);
+  background-color: var(--kn-correct);
+  color: var(--kn-on-correct);
+  box-shadow: none;
+}
+.kn-step[data-status="wrong"] {
+  border: 1.5px dashed var(--kn-incorrect-line);
+  background-color: var(--kn-incorrect-tint);
+  color: var(--kn-incorrect-text);
+  box-shadow: none;
+}
+.kn-step[data-status="voided"] {
+  border: 1.5px dotted var(--kn-rule-strong);
+  background-color: transparent;
+  color: var(--kn-ink-2);
+  box-shadow: none;
+}
+.kn-step[data-status="done"] {
+  border: 1.5px solid var(--kn-ink-2);
+  background-color: var(--kn-sunken);
+  color: var(--kn-ink);
+  box-shadow: none;
+}
+/* Resolved and current: the fill plus a 2 px ink outline. */
+.kn-step[data-current]:not([data-status="upcoming"]) {
+  outline: 2px solid var(--kn-ink);
+  outline-offset: 2px;
+}
+.kn-progress[data-variant="bar"] .kn-step[data-current] {
+  outline: 2px solid var(--kn-ink);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+@media (max-width: 359px) {
+  .kn-progress[data-variant="pills"] .kn-step {
+    width: 32px;
+  }
+}
+
+/* -------------------------------------------------------------- Stopwatch */
+
+/* DESIGN §6.7: a 36 px pill with a 44 px hit area, tabular m:ss. */
+.kn-watch {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+  height: 36px;
+  padding: 0 10px 0 8px;
+  border: 1.5px solid var(--kn-rule);
+  border-radius: var(--kn-radius-pill);
+  background-color: transparent;
+  color: var(--kn-ink-2);
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+}
+.kn-watch::after {
+  content: "";
+  position: absolute;
+  inset: -4px 0;
+}
+button.kn-watch {
+  cursor: pointer;
+}
+@media (max-width: 359px) {
+  .kn-watch {
+    padding: 0 7px 0 6px;
+    font-size: 14px;
+  }
+  .kn-watch > svg {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------ Segmented control */
+
+/* A row of choices, one picked (the practice difficulty). Native radios
+ * underneath, so arrow keys and forms work; the picked segment is raised
+ * with an ink edge, so the choice never rests on colour. */
+.kn-segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+  padding: 4px;
+  border: 0;
+  border-radius: var(--kn-radius-lg);
+  background-color: var(--kn-sunken);
+}
+.kn-segment {
+  position: relative;
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 4px 12px;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  color: var(--kn-ink-2);
+  font-size: var(--kn-text-label-sm);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color var(--kn-dur-quick) linear,
+    border-color var(--kn-dur-quick) linear;
+}
+.kn-segment input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.kn-segment:has(input:checked) {
+  border-color: var(--kn-ink);
+  background-color: var(--kn-surface);
+  color: var(--kn-ink);
+  box-shadow: 0 2px 0 var(--kn-ledge);
+}
+.kn-segment:has(input:focus-visible) {
+  outline: 3px solid var(--kn-focus);
+  outline-offset: 2px;
+}
+.kn-segment:has(input:disabled) {
+  color: var(--kn-ink-3);
+  cursor: not-allowed;
+}
+@media (hover: hover) {
+  .kn-segment:not(:has(input:checked, input:disabled)):hover {
+    background-color: var(--kn-surface-2);
+  }
+}
+
+/* -------------------------------------------------------- Sheets, dialogs */
+
+/* DESIGN §6.10. A modal sheet is a native <dialog>: a bottom sheet on
+ * phones, centred (max 480 px) from 768 px, with the scrim behind. */
+.kn-dialog {
+  margin: auto 0 0;
+  width: 100%;
+  max-width: none;
+  max-height: 85dvh;
+  padding: 0 0 env(safe-area-inset-bottom);
+  border: 0;
+  border-radius: var(--kn-radius-sheet) var(--kn-radius-sheet) 0 0;
+  background-color: var(--kn-surface);
+  color: var(--kn-ink);
+  box-shadow:
+    0 -1px 0 var(--kn-rule),
+    var(--kn-shadow-sheet);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.kn-dialog::backdrop {
+  background-color: var(--kn-scrim);
+}
+.kn-dialog[open] {
+  transition:
+    translate var(--kn-dur-sheet) var(--kn-ease-out),
+    opacity var(--kn-dur-sheet) var(--kn-ease-out);
+}
+@starting-style {
+  .kn-dialog[open] {
+    translate: 0 calc(100% * var(--kn-motion-distance));
+    opacity: calc(1 - var(--kn-motion-distance));
+  }
+}
+@media (min-width: 768px) {
+  .kn-dialog {
+    margin: auto;
+    width: min(480px, calc(100% - 2rem));
+    border-radius: var(--kn-radius-sheet);
+    padding-bottom: 0;
+  }
+  @starting-style {
+    .kn-dialog[open] {
+      translate: 0 calc(16px * var(--kn-motion-distance));
+      opacity: 0;
+    }
+  }
+}
+/* The explanation sheet: inline, in space the layout reserved, rising in. */
+.kn-sheet {
+  position: relative;
+  border-radius: var(--kn-radius-sheet) var(--kn-radius-sheet) 0 0;
+  background-color: var(--kn-surface);
+  color: var(--kn-ink);
+  box-shadow:
+    0 -1px 0 var(--kn-rule),
+    var(--kn-shadow-sheet);
+  animation: kn-sheet-rise var(--kn-dur-sheet) var(--kn-ease-out) both;
+}
+/* From 768 px the sheet sits in a 720 px column, not against the screen's
+ * bottom edge, so it is rounded all round. */
+@media (min-width: 768px) {
+  .kn-sheet {
+    border-radius: var(--kn-radius-sheet);
+  }
+}
+.kn-sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px var(--kn-gutter) 24px;
+}
+.kn-sheet-body[data-compact] {
+  gap: 8px;
+  padding: 16px var(--kn-gutter);
+}
+.kn-sheet-grab {
+  align-self: center;
+  width: 36px;
+  height: 4px;
+  margin: -8px 0 -4px;
+  border-radius: 2px;
+  background-color: var(--kn-rule);
+}
+@media (min-width: 768px) {
+  .kn-dialog .kn-sheet-grab {
+    display: none;
+  }
+}
+.kn-sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.kn-sheet-title {
+  font-family: var(--kn-font-display);
+  font-size: var(--kn-text-display-3);
+  font-weight: var(--kn-text-display-3--font-weight);
+  line-height: var(--kn-text-display-3--line-height);
+  letter-spacing: var(--kn-text-display-3--letter-spacing);
+  outline: none;
+}
+.kn-dialog .kn-sheet-title {
+  font-size: var(--kn-text-display-5);
+  font-weight: var(--kn-text-display-5--font-weight);
+  line-height: var(--kn-text-display-5--line-height);
+  letter-spacing: var(--kn-text-display-5--letter-spacing);
+  padding-top: 8px;
+}
+.kn-sheet-text {
+  font-size: var(--kn-text-body);
+  line-height: var(--kn-text-body--line-height);
+  letter-spacing: var(--kn-text-body--letter-spacing);
+  max-width: 62ch;
+}
+/* Primary first on phones; right-aligned from 768 px. */
+.kn-sheet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .kn-sheet-actions {
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .kn-sheet .kn-sheet-actions {
+    flex-direction: column;
+  }
+}
+
+/* -------------------------------------------------------------- Skeletons */
+
+/* PRD §3.0.2: shaped like the final layout, after a 300 ms grace. */
+.kn-skel {
+  display: block;
+  background-color: var(--kn-sunken);
+}
+.kn-skel[data-skeleton="line"] {
+  width: 100%;
+  height: 1rem;
+  border-radius: var(--kn-radius-xs);
+}
+.kn-skel[data-skeleton="block"] {
+  width: 100%;
+  height: 6rem;
+  border-radius: var(--kn-radius-xl);
+}
+.kn-skel[data-skeleton="circle"] {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="reduce"]) .kn-skel {
+    animation: kn-pulse 1.6s var(--kn-ease-in-out) infinite;
+  }
+}
+[data-motion="full"] .kn-skel {
+  animation: kn-pulse 1.6s var(--kn-ease-in-out) infinite;
+}
+.kn-loading-shapes {
+  transition: opacity 1ms linear 300ms;
+}
+@starting-style {
+  .kn-loading-shapes {
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------- Banners */
+
+/* DESIGN §6.10: under the top bar. Neutral for degraded, offline and
+ * maintenance; caution, with its edge and the alert icon, for an outage
+ * and unreachable. A late banner slides in as an overlay, so nothing
+ * shifts (AC-INC-05). */
+.kn-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px var(--kn-gutter);
+  border-bottom: 1px solid var(--kn-rule);
+  background-color: var(--kn-sunken);
+  color: var(--kn-ink);
+  font-size: var(--kn-text-body-sm);
+  font-weight: 600;
+  line-height: 1.4;
+}
+.kn-banner[data-tone="caution"] {
+  border-bottom: 2px solid var(--kn-caution-line);
+  background-color: var(--kn-caution);
+  color: var(--kn-on-caution);
+}
+.kn-banner > svg {
+  margin-top: 1px;
+}
+.kn-banner[data-tone="caution"] > svg {
+  color: var(--kn-caution-line);
+}
+.kn-banner-text {
+  flex: 1;
+  min-width: 0;
+  align-self: center;
+}
+.kn-banner-text strong {
+  font-weight: 800;
+}
+.kn-banner .kn-btn-icon {
+  margin: -8px -10px -8px 0;
+}
+.kn-banner[data-overlay] {
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  z-index: var(--kn-z-banner);
+  box-shadow: var(--kn-shadow-pop);
+  animation: kn-banner-in var(--kn-dur-base) var(--kn-ease-out) both;
+}
+
+/* ----------------------------------------------------------------- Toasts */
+
+/* DESIGN §6.9: an ink pill above the tab bar or the dock, one at a time. */
+.kn-toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--kn-toast-bottom, calc(16px + env(safe-area-inset-bottom)));
+  z-index: var(--kn-z-toast);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: min(420px, calc(100vw - 2 * var(--kn-gutter)));
+  padding: 12px 18px 12px 14px;
+  border-radius: var(--kn-radius-pill);
+  background-color: var(--kn-primary);
+  color: var(--kn-on-primary);
+  box-shadow: var(--kn-shadow-pop);
+  font-size: var(--kn-text-label-sm);
+  font-weight: 700;
+  line-height: 1.3;
+  translate: -50% 0;
+  cursor: pointer;
+  transition:
+    opacity var(--kn-dur-quick) var(--kn-ease-exit),
+    translate var(--kn-dur-base) var(--kn-ease-out);
+}
+@starting-style {
+  .kn-toast {
+    opacity: 0;
+    translate: -50% calc(8px * var(--kn-motion-distance));
+  }
+}
+.kn-toast[data-leaving] {
+  opacity: 0;
+}
+.kn-toast button {
+  flex: none;
+  min-height: 44px;
+  margin: -12px -8px -12px 4px;
+  padding: 0 8px;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------- Motion */
+
+@keyframes kn-rise-sm {
+  from {
+    opacity: 0;
+    transform: translateY(calc(4px * var(--kn-motion-distance)));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes kn-sheet-rise {
+  from {
+    opacity: 0;
+    transform: translateY(calc(24px * var(--kn-motion-distance)));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes kn-banner-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-8px * var(--kn-motion-distance)));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes kn-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* ---------------------------------------- Forced colours (DESIGN §11) */
+
+/* The system palette takes over: borders, icons and words carry every
+ * state. Correct is a double border, a wrong pick dashed, others solid;
+ * tints, ledges and the ticket's fill drop out. */
+@media (forced-colors: active) {
+  .kn-btn {
+    border-color: ButtonText;
+  }
+  .kn-btn-ghost,
+  .kn-btn-icon,
+  .kn-btn-text {
+    border-color: transparent;
+  }
+  .kn-btn:disabled,
+  .kn-btn[data-disabled] {
+    border-color: GrayText;
+    color: GrayText;
+  }
+  .kn-answer {
+    --opt-border-w: 1px;
+    border-color: CanvasText;
+    color: CanvasText;
+  }
+  .kn-answer[data-pressed] {
+    border-color: Highlight;
+  }
+  .kn-answer[data-state="locked"] {
+    --opt-border-w: 3px;
+  }
+  .kn-answer[data-state="correct"] {
+    --opt-border-w: 4px;
+    border-style: double;
+  }
+  .kn-answer[data-state="your-answer"] {
+    --opt-border-w: 3px;
+    border-style: dashed;
+  }
+  .kn-answer-badge {
+    border-color: CanvasText;
+  }
+  .kn-card,
+  .kn-chip,
+  .kn-watch,
+  .kn-banner {
+    border-color: CanvasText;
+  }
+  .kn-card[data-tone="ticket"],
+  .kn-ticket-body,
+  .kn-ticket-stub {
+    border: 2px solid CanvasText;
+    background: Canvas;
+  }
+  .kn-ticket-stub::before {
+    border-color: CanvasText;
+  }
+  .kn-step {
+    border-color: CanvasText;
+  }
+  .kn-step[data-status="correct"] {
+    border: 3px double CanvasText;
+  }
+  .kn-step[data-status="wrong"] {
+    border: 2px dashed CanvasText;
+  }
+  .kn-step[data-current] {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  .kn-segment:has(input:checked) {
+    border: 2px solid Highlight;
+  }
+  .kn-dialog,
+  .kn-sheet {
+    border-top: 2px solid CanvasText;
+  }
+  .kn-dialog {
+    border: 2px solid CanvasText;
+  }
+  .kn-skel {
+    border: 1px dashed CanvasText;
+  }
+  .kn-toast {
+    border: 2px solid CanvasText;
+  }
+}

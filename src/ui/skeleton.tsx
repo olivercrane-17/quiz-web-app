@@ -7,7 +7,9 @@
  * after the 300 ms grace with a CSS transition from `@starting-style`, so
  * there is no timer and it works in a server component. Browsers without
  * `@starting-style` show the shapes at once. It marks itself `aria-busy`
- * and carries a visually hidden label; the shapes are decorative.
+ * and carries a visually hidden label; the shapes are decorative. The
+ * shapes are `sunken` and pulse gently, except under reduced motion
+ * (`.kn-skel` in `ui.css`).
  */
 import type { CSSProperties, ReactNode } from "react";
 
@@ -24,12 +26,6 @@ export interface SkeletonProps {
   className?: string;
 }
 
-const SHAPES: Record<SkeletonShape, string> = {
-  line: "h-4 w-full rounded-md",
-  block: "h-24 w-full rounded-3xl",
-  circle: "size-10 rounded-full",
-};
-
 /** One decorative placeholder shape. Put it inside `<Loading>`. */
 export function Skeleton({
   shape = "line",
@@ -44,11 +40,7 @@ export function Skeleton({
     <span
       aria-hidden="true"
       data-skeleton={shape}
-      className={cx(
-        "block bg-foreground/10 motion-safe:animate-pulse",
-        SHAPES[shape],
-        className,
-      )}
+      className={cx("kn-skel", className)}
       style={style}
     />
   );
@@ -95,10 +87,7 @@ export function Loading({
       <span className="sr-only">{label}</span>
       <div
         aria-hidden="true"
-        className={cx(
-          !immediate &&
-            "transition-opacity delay-300 duration-[1ms] starting:opacity-0",
-        )}
+        className={immediate ? undefined : "kn-loading-shapes"}
       >
         {children}
       </div>

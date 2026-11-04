@@ -1,20 +1,24 @@
+/**
+ * The wordmark, linking home (DESIGN §1.5): the newt mark at 36 px beside
+ * "knewt" in Fraunces 800 at 29 px, with a 3 px gap. The link is named
+ * "Knewt", which contains the lowercase word it shows (WCAG 2.5.3).
+ */
 import Link from "next/link";
 
 import { cx } from "@/ui/cx";
+import { NewtMark } from "@/ui/newt-mark";
 
 import { SHELL_COPY } from "./copy";
 
-/** The name, linking home. DS-1 swaps the text for the drawn wordmark (DESIGN §1.5). */
 export function Wordmark({ className }: { className?: string }) {
   return (
     <Link
       href="/"
-      className={cx(
-        "inline-flex min-h-11 items-center rounded-lg text-xl font-bold tracking-tight text-foreground outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground",
-        className,
-      )}
+      aria-label={SHELL_COPY.brand}
+      className={cx("kn-wordmark", className)}
     >
-      {SHELL_COPY.brand}
+      <NewtMark size={36} />
+      <span className="kn-wordmark-word">{SHELL_COPY.brand.toLowerCase()}</span>
     </Link>
   );
 }

@@ -17,8 +17,8 @@ export default function LandingLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">
       <SkipLink />
-      <header className="border-b border-border bg-background pt-[env(safe-area-inset-top)]">
-        <div className="mx-auto flex min-h-14 w-full max-w-[720px] items-center px-4">
+      <header className="kn-topbar kn-grain">
+        <div className="kn-topbar-row max-w-play">
           <Wordmark />
         </div>
         <IncidentBanner />
@@ -26,7 +26,7 @@ export default function LandingLayout({ children }: { children: ReactNode }) {
       <main
         id={MAIN_ID}
         tabIndex={-1}
-        className="mx-auto w-full max-w-[720px] flex-1 px-4 py-6 outline-none"
+        className="mx-auto w-full max-w-play flex-1 px-gutter pt-2 pb-10 outline-none"
       >
         {children}
       </main>

@@ -1,7 +1,8 @@
 /**
  * The top bar of the tab pages (DESIGN §6.13): the wordmark, the text tabs
- * from 768 px, the streak chip and settings, then the incident banner slot
- * under it.
+ * from 768 px, the streak chip and Settings at the right, then the incident
+ * banner slot under it. 56 px tall (50 on short phones), sticky, on the
+ * page's own paper and grain (`.kn-topbar` in shell.css).
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -9,6 +10,7 @@ import Link from "next/link";
 import { IncidentBanner } from "@/features/incidents/banner";
 import { StreakChip } from "@/features/streaks/chip";
 import { buttonClasses } from "@/ui/button-classes";
+import { SettingsIcon } from "@/ui/icons";
 
 import { SHELL_COPY } from "./copy";
 import { TabBar } from "./tab-bar";
@@ -16,11 +18,11 @@ import { Wordmark } from "./wordmark";
 
 export function AppHeader() {
   return (
-    <header className="sticky top-0 z-10 border-b border-border bg-background pt-[env(safe-area-inset-top)]">
-      <div className="mx-auto flex min-h-14 w-full max-w-[1120px] items-center gap-4 px-4">
+    <header className="kn-topbar kn-grain">
+      <div className="kn-topbar-row">
         <Wordmark />
-        <TabBar placement="top" className="hidden md:block" />
-        <div className="ml-auto flex items-center gap-1">
+        <TabBar placement="top" className="kn-toptabs ml-4 hidden md:block" />
+        <div className="kn-topbar-end">
           <StreakChip />
           <Link
             // /settings is built by SET-1. No prefetch until it exists: a
@@ -28,9 +30,10 @@ export function AppHeader() {
             // its page (a one-line Touch, §12.3); PERF-1 is the backstop.
             href={"/settings" as Route}
             prefetch={false}
-            className={buttonClasses({ variant: "ghost" })}
+            aria-label={SHELL_COPY.settings}
+            className={buttonClasses({ variant: "icon" })}
           >
-            {SHELL_COPY.settings}
+            <SettingsIcon size={24} />
           </Link>
         </div>
       </div>

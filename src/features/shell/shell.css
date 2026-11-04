@@ -1,0 +1,261 @@
+/*
+ * The shell (DESIGN §6.13, §1.5): the top bar, the play header, the tab
+ * bar, the wordmark, the skip link and the footer. globals.css imports
+ * this file into the components layer, after the primitives.
+ */
+
+/* Sticky bars carry the page's own paper and grain, aligned to the
+ * viewport like the page's (globals.css), so the bar and the page read as
+ * one sheet while the content scrolls under it. */
+.kn-grain {
+  isolation: isolate;
+  background-color: var(--kn-page);
+}
+.kn-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--kn-grain-image);
+  opacity: var(--kn-grain-opacity);
+  mix-blend-mode: var(--kn-grain-blend);
+}
+@media (forced-colors: active) {
+  .kn-grain::before {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- Top bar */
+
+.kn-topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--kn-z-sticky);
+  padding-top: env(safe-area-inset-top);
+}
+.kn-topbar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  max-width: var(--kn-container-page);
+  min-height: 56px;
+  margin-inline: auto;
+  padding-inline: max(6px, calc(var(--kn-gutter) - 10px));
+}
+.kn-topbar-end {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  margin-inline-start: auto;
+}
+@media (max-height: 700px) {
+  .kn-topbar-row {
+    min-height: 50px;
+  }
+}
+
+/* The play header: Leave, the run's progress, the stopwatch and More. */
+.kn-playbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--kn-z-sticky);
+  padding-top: env(safe-area-inset-top);
+}
+.kn-playbar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  max-width: var(--kn-container-play);
+  min-height: 56px;
+  margin-inline: auto;
+  padding-inline: max(6px, calc(var(--kn-gutter) - 10px));
+}
+/* Block, so a practice heading and its ten segments take the full width;
+ * the Daily's pills centre themselves. */
+.kn-playbar-progress {
+  flex: 1;
+  min-width: 0;
+}
+.kn-playbar-progress .kn-progress[data-variant="pills"] {
+  justify-content: center;
+}
+.kn-playbar-end {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+}
+
+/* --------------------------------------------------------------- Wordmark */
+
+/* DESIGN §1.5: the mark at 1.24 times the type size (36 px beside 29 px
+ * type) and a 3 px gap; "knewt" in Fraunces 800, tracking -0.03 em. */
+.kn-wordmark {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 3px;
+  min-height: 44px;
+  padding: 4px 6px 4px 4px;
+  border-radius: 12px;
+  color: var(--kn-ink);
+  text-decoration: none;
+}
+.kn-wordmark-word {
+  margin-top: -3px;
+  font-family: var(--kn-font-display);
+  font-size: 29px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+/* ---------------------------------------------------------------- Tab bar */
+
+/* Phones: a bottom bar on surface with a top hairline; 48 px targets, the
+ * active tab in ink with a 28 by 3 eft bar at its top edge. */
+.kn-tabbar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: var(--kn-z-sticky);
+  padding: 4px 8px env(safe-area-inset-bottom);
+  border-top: 1px solid var(--kn-rule);
+  background-color: var(--kn-surface);
+}
+.kn-tabs {
+  display: flex;
+}
+.kn-tabbar .kn-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.kn-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--kn-ink-3);
+  font-weight: 700;
+  text-decoration: none;
+}
+.kn-tabbar .kn-tab {
+  flex-direction: column;
+  gap: 3px;
+  min-height: 56px;
+  padding: 4px 2px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  text-align: center;
+}
+.kn-tab[data-active] {
+  color: var(--kn-ink);
+}
+.kn-tab-marker {
+  position: absolute;
+  width: 28px;
+  height: 3px;
+  background-color: var(--kn-accent);
+}
+.kn-tabbar .kn-tab-marker {
+  top: -5px;
+  border-radius: 0 0 3px 3px;
+}
+.kn-tab:focus-visible {
+  outline-offset: -3px;
+}
+
+/* From 768 px: text tabs in the top bar, the active one underlined in eft. */
+.kn-toptabs .kn-tabs {
+  align-items: center;
+  gap: 2px;
+}
+.kn-toptabs .kn-tab {
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 12px;
+  font-size: var(--kn-text-label-sm);
+}
+.kn-toptabs .kn-tab-marker {
+  bottom: 2px;
+  left: 12px;
+  right: 12px;
+  width: auto;
+  border-radius: 3px;
+}
+@media (hover: hover) {
+  .kn-tab:not([data-active]):hover {
+    color: var(--kn-ink);
+  }
+}
+@media (forced-colors: active) {
+  .kn-tabbar {
+    border-top-color: CanvasText;
+  }
+  .kn-tab-marker {
+    background-color: Highlight;
+    forced-color-adjust: none;
+  }
+}
+
+/* -------------------------------------------------------------- Skip link */
+
+/* First in every page, visible on focus (DESIGN §6.13). */
+.kn-skip {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: var(--kn-z-dialog);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--kn-radius-lg);
+  background-color: var(--kn-primary);
+  color: var(--kn-on-primary);
+  font-weight: 700;
+  text-decoration: none;
+  translate: 0 -200%;
+}
+.kn-skip:focus,
+.kn-skip:focus-visible {
+  position: fixed;
+  translate: none;
+}
+
+/* ----------------------------------------------------------------- Footer */
+
+/* On Today and Me: the seven legal and trust pages as 44 px links. */
+.kn-footer {
+  margin-top: 40px;
+  padding-block: 8px 18px;
+  border-top: 1px solid var(--kn-rule);
+}
+.kn-footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+}
+.kn-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--kn-ink-3);
+  font-size: var(--kn-text-meta);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--kn-rule-strong);
+  text-underline-offset: 3px;
+}
+@media (hover: hover) {
+  .kn-footer a:hover {
+    color: var(--kn-ink);
+    text-decoration-color: var(--kn-link-underline);
+  }
+}

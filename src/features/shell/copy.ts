@@ -11,6 +11,9 @@ export const SHELL_COPY = {
   ...SHELL_CLIENT_COPY,
   /** The product name (DESIGN §0.2). */
   brand: "Knewt",
+  /** The site's description for search results and link previews. */
+  description:
+    "A daily trivia game: three Mysteries and an Encore. How few clues do you need?",
   /** The tab bar's landmark name. */
   mainNav: "Main",
   settings: "Settings",

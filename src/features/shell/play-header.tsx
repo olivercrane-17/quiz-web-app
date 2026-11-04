@@ -7,6 +7,10 @@
  * before the screen's `<main>`, so it is the page's banner landmark and the
  * skip link jumps past it (WCAG 2.4.1). It shows the run's state, which only
  * the screen knows.
+ *
+ * 56 px tall over a 720 px column, sticky, on the page's own paper and
+ * grain (`.kn-playbar` in shell.css), with the progress centred between
+ * Leave and the end slot.
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -33,20 +37,18 @@ export interface PlayHeaderProps {
 
 export function PlayHeader({ leave, progress, end }: PlayHeaderProps) {
   return (
-    <header className="sticky top-0 z-10 border-b border-border bg-background pt-[env(safe-area-inset-top)]">
-      <div className="mx-auto flex min-h-14 w-full max-w-[720px] items-center gap-2 px-2">
+    <header className="kn-playbar kn-grain">
+      <div className="kn-playbar-row">
         <Link
           href={leave.href as Route}
           aria-label={leave.label}
           onClick={leave.onLeave}
           className={buttonClasses({ variant: "icon" })}
         >
-          <CrossIcon />
+          <CrossIcon size={24} />
         </Link>
-        <div className="min-w-0 flex-1">{progress}</div>
-        {end === undefined ? null : (
-          <div className="flex shrink-0 items-center gap-1">{end}</div>
-        )}
+        <div className="kn-playbar-progress">{progress}</div>
+        {end === undefined ? null : <div className="kn-playbar-end">{end}</div>}
       </div>
       <IncidentBanner />
     </header>
