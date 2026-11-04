@@ -99,43 +99,67 @@ function outcomeOf(round: RawRound): RoundOutcome {
   };
 }
 
-/** What decoding must give back from the outcomes that were encoded. */
+/** What decoding must give back for the outcomes that were encoded. */
+function expectedRounds(outcomes: readonly RoundOutcome[]): unknown[] {
+  return outcomes.map((outcome) => {
+    if (outcome.family === "mystery") {
+      return [
+        "mystery",
+        outcome.voided ? null : outcome.solvedOn,
+        outcome.voided,
+        outcome.category,
+        outcome.points,
+      ];
+    }
+    if (outcome.family === "choice") {
+      return [
+        "choice",
+        outcome.voided ? false : outcome.correct,
+        outcome.voided,
+      ];
+    }
+    const voided = outcome.voided || outcome.error === null;
+    return [
+      "encore",
+      voided,
+      voided ? null : (outcome.error?.display ?? null),
+      voided ? null : outcome.band,
+    ];
+  });
+}
+
+function decodedRounds(decoded: DecodedShare): unknown[] {
+  return decoded.rounds.map((round) => {
+    if (round.family === "mystery") {
+      return [
+        "mystery",
+        round.solvedOn,
+        round.voided,
+        round.category,
+        round.points,
+      ];
+    }
+    if (round.family === "choice")
+      return ["choice", round.correct, round.voided];
+    return ["encore", round.voided, round.display, round.band];
+  });
+}
+
 function expectMatches(
   decoded: DecodedShare,
   outcomes: readonly RoundOutcome[],
 ) {
   expect(decoded.rows).toEqual(shareRows(outcomes));
-  decoded.rounds.forEach((round, index) => {
-    const outcome = outcomes[index];
-    expect(round.family).toBe(outcome?.family);
-    if (round.family === "mystery" && outcome?.family === "mystery") {
-      expect([
-        round.solvedOn,
-        round.voided,
-        round.category,
-        round.points,
-      ]).toEqual([
-        outcome.voided ? null : outcome.solvedOn,
-        outcome.voided,
-        outcome.category,
-        outcome.points,
-      ]);
-    }
-    if (round.family === "choice" && outcome?.family === "choice") {
-      expect([round.correct, round.voided]).toEqual([
-        outcome.voided ? false : outcome.correct,
-        outcome.voided,
-      ]);
-    }
-    if (round.family === "encore" && outcome?.family === "encore") {
-      const voided = outcome.voided || outcome.error === null;
-      expect(round.voided).toBe(voided);
-      expect(round.display).toBe(
-        voided ? null : (outcome.error?.display ?? null),
-      );
-      expect(round.band).toBe(voided ? null : outcome.band);
-    }
-  });
+  expect(decodedRounds(decoded)).toEqual(expectedRounds(outcomes));
+}
+
+/** The same check without assertions, for the 10,000-result loop. */
+function matches(decoded: DecodedShare, outcomes: readonly RoundOutcome[]) {
+  return (
+    JSON.stringify(decoded.rows) === JSON.stringify(shareRows(outcomes)) &&
+    JSON.stringify(decodedRounds(decoded)) ===
+      JSON.stringify(expectedRounds(outcomes))
+  );
 }
 
 describe("share-codes.json round trips", () => {
@@ -251,6 +275,8 @@ describe("AC-SHR-03", () => {
     const rng = createRng("share-codes-ac-shr-03");
     const compositions = [...LAYOUTS.codeOf.keys()];
     const pattern = /^\/s\/\d+\/[0-9a-z]{1,8}$/;
+    const failures: string[] = [];
+    let checked = 0;
     for (let i = 0; i < 10_000; i += 1) {
       // Most results are v1 Dailies; the rest exercise the other layouts.
       const composition = i % 4 === 3 ? rng.pick(compositions) : "m3e1";
@@ -260,14 +286,20 @@ describe("AC-SHR-03", () => {
       const number = 1 + rng.int(9999);
       const code = encodeShareCode({ composition, archive, outcomes }, LAYOUTS);
       const path = sharePath(dailyNumber(number), code);
-      expect(path).toMatch(pattern);
-      expect(path).not.toMatch(/[?#]/);
       const decoded = decodeShareCode(number, code, LAYOUTS);
-      expect(decoded?.composition).toBe(composition);
-      expect(decoded?.archive).toBe(archive);
-      if (decoded !== null) expectMatches(decoded, outcomes);
+      const ok =
+        pattern.test(path) &&
+        !/[?#]/.test(path) &&
+        decoded !== null &&
+        decoded.composition === composition &&
+        decoded.archive === archive &&
+        matches(decoded, outcomes);
+      if (!ok) failures.push(path);
+      checked += 1;
     }
-  });
+    expect(failures).toEqual([]);
+    expect(checked).toBe(10_000);
+  }, 30_000);
 });
 
 describe("parseShareLayouts", () => {
