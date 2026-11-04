@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { spawnSync } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { afterAll, describe, expect, it } from "vitest";
@@ -101,6 +101,14 @@ describe("secret-scan", () => {
   });
 
   it("accepts an envelope in every folder of ARCHITECTURE §2.1, the list content:seal uses, and in no other", () => {
+    // The scan keeps its own copy of the list so it needs no TypeScript;
+    // this keeps the copy equal to crypto.ts's ENVELOPE_FOLDERS.
+    const source = readFileSync(SCAN, "utf8");
+    const copy = /const FOLDERS = new Set\(\[([^\]]*)\]\)/.exec(source)?.[1];
+    expect(copy, "the FOLDERS list in secret-scan.mjs").toBeDefined();
+    expect(
+      [...(copy ?? "").matchAll(/"([^"]+)"/g)].map((match) => match[1]),
+    ).toEqual([...ENVELOPE_FOLDERS]);
     const dir = repo();
     for (const folder of ENVELOPE_FOLDERS)
       write(dir, `content/sealed/${folder}/x.0001.json.enc`, envelope);
