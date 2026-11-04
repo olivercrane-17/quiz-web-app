@@ -17,7 +17,7 @@ import {
 import { createMockBackend } from "./mock";
 import { createOffBackend } from "./off";
 import { createSupabaseBackend } from "./supabase";
-import { BACKEND_AREAS, type GameBackend } from "./types";
+import { BACKEND_AREAS, type BackendArea, type GameBackend } from "./types";
 
 const identity: IdentityProvider = {
   current: () => ({}) as LocalIdentity,
@@ -29,9 +29,15 @@ const deps: BackendDeps = {
   serverClock: createServerClock({ base: createFakeClock(0) }),
 };
 
-async function everyCall(backend: GameBackend) {
+/** Areas whose SQL ticket has replaced the Supabase stub (§7.5). */
+const BUILT_SUPABASE_AREAS: readonly BackendArea[] = ["identity"];
+
+async function everyCall(
+  backend: GameBackend,
+  areas: readonly BackendArea[] = BACKEND_AREAS,
+) {
   const results: unknown[] = [];
-  for (const area of BACKEND_AREAS) {
+  for (const area of areas) {
     const impl = backend[area] as unknown as Record<
       string,
       (...args: unknown[]) => unknown
@@ -80,11 +86,24 @@ describe("backend implementations", () => {
   it("the Supabase stubs answer unavailable until their SQL tickets land", async () => {
     const backend = createSupabaseBackend(deps);
     expect(backend.mode).toBe("supabase");
-    for (const result of await everyCall(backend)) {
+    const stubs = BACKEND_AREAS.filter(
+      (area) => !BUILT_SUPABASE_AREAS.includes(area),
+    );
+    for (const result of await everyCall(backend, stubs)) {
       expect(result).toMatchObject({
         ok: false,
         error: { code: "unavailable" },
       });
+    }
+  });
+
+  it("a built Supabase area answers every call with a result, even with no project configured", async () => {
+    const backend = createSupabaseBackend(deps);
+    for (const result of await everyCall(backend, BUILT_SUPABASE_AREAS)) {
+      expect(result).toMatchObject({ ok: false });
+      expect(["unavailable", "invalid_input"]).toContain(
+        (result as { error: { code: string } }).error.code,
+      );
     }
   });
 });

@@ -106,6 +106,17 @@ a session where someone can answer the confirmation.
 - `sql:drift` lists an attended file that waits as an attended item, never
   as drift.
 
+Routine work never needs one: overwrite or upsert rows, blank columns or
+reuse fixed slots instead (one sync code and one claim row per player, a
+player's 11th device credential overwriting the least recently used one).
+Genuine deletions go in attended files, and nothing disguises a `DELETE`
+to pass the MCP's check. The attended files, with what each is for:
+
+| Migration                                   | Purpose                                                                                                                                             |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `20261104000200_platform_jobs_attended.sql` | SQL-1: the hourly and nightly platform steps prune salts, counters, write keys, error rows, heartbeats, cron history and zone names tzdata dropped. |
+| `20261104000500_identity_attended.sql`      | SQL-2: `delete_player` removes a player and everything kept under its id (AC-DAT-02), and `nightly_players` removes test players older than a day.  |
+
 ### Owner-only migrations (`*_owner_only.sql`)
 
 Some changes need `DROP` or `ALTER ROLE` on something that already exists.
@@ -273,6 +284,14 @@ template as `anon` and proves that its hits count when its writes fail.
   without counting what it allows, for code that must refuse before
   checking, and it locks the counter row too, but count-first is the shape
   to use.
+- **A project-wide bound on failures never refuses before the check.** One
+  client could spend it for everyone, and then a right code or a live token
+  would be refused too. So `sync_fail_all_1h` and `claim_fail_all_1h` only
+  count: after a failed lookup (or malformed input), call
+  `private.count_failure('<bucket>')`, which counts one failure and, past
+  the cap, leaves one `owner_queue` alert for the window. The per-address
+  buckets still refuse before the lookup (AC-SYN-04). Room joins slow down
+  past their project-wide bound instead of refusing (ARCHITECTURE §8.6).
 - **Write keys.** Call `private.write_key_claim(client_id, fn, player)` at
   the start of the block that catches, after validation. When it returns
   `null`, carry on. Otherwise return what it gave you: the first call's
@@ -310,11 +329,66 @@ template as `anon` and proves that its hits count when its writes fail.
   rule is one `client_ip()` does not recognize (`"Last"`, `"1"`, `1.5`, a
   missing key): one shared subject shows the mistake at once, where a
   fallback to the first hop would hide it.
+- A client may be able to write the hop the rule reads, until the client-ip
+  contract test shows a hop it cannot write and that rule is set with
+  `"verified": true` (ARCHITECTURE §8.6, CI-0). The flag changes no limit
+  and no trust, and until it is set nothing that weighs players (report
+  weight, SQL-9) may rely on `low_trust` or on distinct address subjects,
+  because while a client can forge the hop:
+  - it escapes every per-address bucket, so each has a project-wide bound
+    beside it: `identity_all_1h` and `identity_test_all_1h` refuse
+    registrations (one such client can trip them for everyone), past
+    `identity_soft_all_1h` every new identity is low trust (so forged hops
+    mint at most that many normal-trust identities an hour), and
+    `sync_fail_all_1h` and `claim_fail_all_1h` count failures and alert the
+    owner without refusing;
+  - low trust is set at registration only, and it still lifts at 24 hours or
+    after 2 finished Dailies (PRD §3.10.1), so it holds a forged identity
+    back by a day at most;
+  - it can write another player's address as the hop and spend that
+    address's per-address limits, so `identity_1m`, `sync_fail_15m`,
+    `sync_1d` and `claim_ip_1h` refuse the other player until their windows
+    end.
 - A counter keeps counting past its cap, so a window's refusals are
   `hits - cap`. `private.fold_refusals()` adds them to `daily_aggregates`
   (metric `rate_limited`, dims `bucket=<name>`) exactly once per ended
   window. It does the same for the growth of the pre-request hook's sequence
-  (`private.refused_general_ip_5m`, SQL-8).
+  (`private.refused_general_ip_5m`, SQL-8). For the two buckets that never
+  refuse (`sync_fail_all_1h`, `claim_fail_all_1h`) that excess counts
+  failures past the bound, not refusals.
+
+### Authenticating a player (SQL-2)
+
+```sql
+v_auth := private.authenticate(p_player, p_secret, false);                   -- (auth)
+v_auth := private.authenticate(p_player, p_secret, true, p_context, p_app);  -- (auth, registers)
+if v_auth.code is not null then
+  return private.auth_refusal(v_auth);         -- auth_failed, invalid_input or rate_limited
+end if;
+v_limit := private.hit_player('<bucket>', v_auth.player_id);
+if not v_limit.allowed then
+  return private.auth_limited(v_auth, v_limit); -- also gives back the general_player_5m hit
+end if;
+```
+
+- `private.auth_result` carries `player_id`, `code`, `retry_after_ms`,
+  `limit_scope`, `created` (this call registered the player) and
+  `prev_seen_at`, the player's `last_seen_at` before this call touched it:
+  the "previous call" of the zone-hop rule (ARCHITECTURE §8.7).
+- A wrong secret is always the same `auth_failed` and changes nothing
+  (AC-IDN-03). `tests/identity/auth.test.sql` holds every allowlisted RPC
+  whose first parameters are `p_player uuid, p_secret text` to that, with
+  every other argument null, so authenticate right after the size checks.
+  It sends an id the server has never seen too, and only the
+  "(auth, registers)" RPCs of ARCHITECTURE §8.4, which it lists by name,
+  skip that case: a new RPC that registers must be added there.
+- Hooks the identity RPCs call, each a stub its owner replaces:
+  `finished_dailies`, `identity_last_daily` and `export_attempts` (SQL-4),
+  `identity_streak` and `export_streak_days` (SQL-6), `export_challenges`
+  (SQL-11), `export_groups` and `purge_player_groups` (SQL-12),
+  `export_quizzes` (SQL-15), `purge_player_reports` (SQL-9) and
+  `purge_player_events` (SQL-10). A purge hook removes rows, so its body goes
+  in its owner's attended file.
 
 ## 4. Scheduled jobs and hooks
 
@@ -482,7 +556,9 @@ The bundle adds one generated check: `private.rpc_allowlist` names exactly
 
 ## 9. Owner items (launch report)
 
-| Item                                        | Why an agent cannot do it                      | How                                                                                                                                                                                                                                                  |
-| ------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `20261104000300_api_surface_owner_only.sql` | `DROP EXTENSION` and `ALTER ROLE` need a human | In the dashboard SQL editor, or MCP `execute_sql` with the owner confirming. Then re-run the `backend-contract` workflow, and record it with `apply_migration` only if it was applied that way.                                                      |
-| `20261104000200_platform_jobs_attended.sql` | The MCP asks to confirm its `DELETE`s          | In a session someone attends: `npm run sql:bundle -- --all --attended --applied list_migrations.json`, send it, then `apply_migration`. Until then the hourly step leaves a daily `owner_queue` alert, and counters, write keys and error rows grow. |
+| Item                                        | Why an agent cannot do it                      | How                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `20261104000300_api_surface_owner_only.sql` | `DROP EXTENSION` and `ALTER ROLE` need a human | In the dashboard SQL editor, or MCP `execute_sql` with the owner confirming. Then re-run the `backend-contract` workflow, and record it with `apply_migration` only if it was applied that way.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `20261104000200_platform_jobs_attended.sql` | The MCP asks to confirm its `DELETE`s          | In a session someone attends: `npm run sql:bundle -- --all --attended --applied list_migrations.json`, send it, then `apply_migration`. Until then the hourly step leaves a daily `owner_queue` alert, and counters, write keys and error rows grow.                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `20261104000500_identity_attended.sql`      | The MCP asks to confirm its `DELETE`s          | The same way, before launch. Until then `delete_player` answers `unavailable` (Delete my data and the Under 13 sequence wait), test players older than a day stay, and both leave a daily `owner_queue` alert.                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `"verified": true` in `config.client_ip`    | Only the client-ip contract test can verify it | When the `backend-contract` workflow's client-ip test passes (`chosen_forged` false and `chosen_kind` `"public"`: a hop the client cannot write that holds its own address, not a proxy's), set that rule with `"verified": true`. Until then a client that forges the hop can mint up to 1,000 normal-trust identities an hour (`identity_soft_all_1h`), trip the `identity_all_1h` ceiling for everyone, and spend another player's per-address limits (§3, "How the limiter keys its counters"), so report weight (SQL-9) must not rely on `low_trust` or on distinct address subjects. Once SQL-8 schedules the nightly job, a daily `owner_queue` alert says the rule is unverified. |

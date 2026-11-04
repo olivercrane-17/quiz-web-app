@@ -21,8 +21,20 @@
       "anon_security_definer_function_executable",
       "authenticated_security_definer_function_executable"
     ],
-    "functions": [],
-    "why": "Every RPC is a SECURITY DEFINER function in public that anon is meant to call; that is the whole API (§8.2 rule 2). Lint 0028 flags each one for anon and lint 0029 for authenticated, which keeps EXECUTE because migrations never take a grant away (decisions memo §14.4). Each RPC validates its input, caps payloads and rate-limits itself, so both findings are expected for exactly these names. The list mirrors private.rpc_allowlist: npm run sql:bundle checks that the two agree, and the ticket that adds an RPC adds its name to both. SQL-1 adds none."
+    "functions": [
+      "create_claim",
+      "create_sync_code",
+      "delete_player",
+      "export_my_data",
+      "get_profile",
+      "peek_claim",
+      "redeem_claim",
+      "redeem_sync_code",
+      "register_player",
+      "set_age_band",
+      "t_client_ip"
+    ],
+    "why": "Every RPC is a SECURITY DEFINER function in public that anon is meant to call; that is the whole API (§8.2 rule 2). Lint 0028 flags each one for anon and lint 0029 for authenticated, which keeps EXECUTE because migrations never take a grant away (decisions memo §14.4). Each RPC validates its input, caps payloads and rate-limits itself, so both findings are expected for exactly these names. The list mirrors private.rpc_allowlist: npm run sql:bundle checks that the two agree, and the ticket that adds an RPC adds its name to both. SQL-1 adds none; SQL-2 adds the eleven identity RPCs."
   },
   "accepted": [
     {
@@ -60,6 +72,15 @@
       "required": false,
       "ticket": "SQL-1",
       "why": "§8.3 indexes the error log by time for the owner's triage through MCP (an internal reply shows its reference, and the owner reads the errors logged around it) and for the attended hourly step, which prunes rows older than 30 days. Nothing reads the log before the first RPC that can fail (SQL-2) or before that step runs, so INFO 0005 reports the index as unused."
+    },
+    {
+      "lint": "unused_index",
+      "schema": "private",
+      "table": "players",
+      "index": "players_test_created_at_idx",
+      "required": false,
+      "ticket": "SQL-2",
+      "why": "nightly_players finds test players older than a day through this partial index. Until SQL-8 schedules the nightly job, and the table holds enough test players for a plan to choose it, nothing scans it, so INFO 0005 reports it as unused."
     }
   ]
 }

@@ -15,7 +15,11 @@ import {
   formatReport,
   main,
 } from "./drift-check.ts";
-import { parseMigrationName, type MigrationFile } from "./lib.ts";
+import {
+  listMigrations,
+  parseMigrationName,
+  type MigrationFile,
+} from "./lib.ts";
 
 const temps: string[] = [];
 afterAll(() => {
@@ -189,7 +193,14 @@ describe("main", () => {
     expect(main(["--applied", applied, "--strict"])).toBe(1);
     expect(main([])).toBe(1);
     const logged = log.mock.calls.flat().join("\n");
-    expect(logged).toContain("pending (2)");
+    // Every unattended migration after the escrow, however many tickets add.
+    const pending = listMigrations(process.cwd()).migrations.filter(
+      (migration) =>
+        !migration.ownerOnly &&
+        !migration.attended &&
+        migration.stem !== "20261031000000_key_escrow",
+    ).length;
+    expect(logged).toContain(`pending (${pending})`);
     expect(logged).toContain(
       "attended item: 20261104000200_platform_jobs_attended",
     );
