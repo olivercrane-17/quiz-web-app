@@ -1,8 +1,11 @@
 -- The limiter (ARCHITECTURE §8.6; SQL-1): aligned windows, retry-after and
 -- scope, counting past the cap, refusals folded into daily_aggregates once,
--- IPv6 /64 subjects, the salt chosen by window start, peek and unhit, and
--- every configured bucket. Production limits are tested with ordinary keys
--- inside the rolled-back transaction (§8.17).
+-- IPv6 /64 subjects, the salt chosen by window start, failure-only limits,
+-- peek and unhit, and every configured bucket. Production limits are tested
+-- with ordinary keys inside the rolled-back transaction (§8.17). Each block
+-- writes the caps it relies on and folds with its own sequence, so the
+-- file passes on a live database whose owner tuned config.limits or whose
+-- pre-request hook has refusals still to fold.
 begin;
 
 -- One window: allowed up to the cap, then refused with the time left in
@@ -51,9 +54,10 @@ end
 $$;
 select 'PASS SQL-1 limiter window, retry-after and scope';
 
--- Scopes and the config-driven forms: the 21st new identity inside a
--- minute from one address is refused with scope ip, a player's limit says
--- player, and a project-wide ceiling says project (§8.5, §8.6).
+-- Scopes and the config-driven forms: with the §8.6 numbers written into
+-- config.limits, the 21st new identity inside a minute from one address is
+-- refused with scope ip, a player's limit says player, a project-wide
+-- ceiling says project, and a byte cap counts amounts (§8.5, §8.6).
 do $$
 declare
   v private.limit_result;
@@ -61,7 +65,12 @@ declare
   v_index integer;
 begin
   perform private.t_now('2026-11-01T12:00:10Z');
-  assert private.limit('identity_1m') = 20 and private.limit_window('identity_1m') = 60, 'identity_1m is 20 a minute';
+  update private.config
+     set value = value || '{"identity_1m": {"cap": 20, "window_s": 60},
+                            "ugc_bytes_player_1d": {"cap": 524288, "window_s": 86400}}'
+   where key = 'limits';
+  assert private.limit('identity_1m') = 20 and private.limit_window('identity_1m') = 60,
+    'limit() and limit_window() read config.limits';
   for v_index in 1 .. 20 loop
     v := private.hit_ip('identity_1m', '203.0.113.50');
     assert v.allowed, format('registration %s was refused', v_index);
@@ -69,11 +78,9 @@ begin
   v := private.hit_ip('identity_1m', '203.0.113.50');
   assert not v.allowed and v.scope = 'ip' and v.retry_after_ms = 50000, format('the 21st: %s', v);
 
-  assert private.limit('general_player_5m') = 300, 'general_player_5m is 300';
   v := private.hit_player('t_player_1h', v_player, 3600, 0);
   assert not v.allowed and v.scope = 'player', format('player scope: %s', v);
 
-  assert private.limit('identity_all_1h') = 5000, 'identity_all_1h is 5,000 an hour';
   v := private.hit_global('t_project_1h', 3600, 1);
   assert v.allowed, 'first project-wide hit';
   v := private.hit_global('t_project_1h', 3600, 1);
@@ -84,6 +91,13 @@ begin
   assert v.allowed, '512 kB fits the daily byte cap';
   v := private.hit_player('ugc_bytes_player_1d', v_player, 1);
   assert not v.allowed and v.scope = 'player', 'one byte more does not';
+
+  -- A tuned cap applies from the next call.
+  update private.config
+     set value = value || '{"identity_1m": {"cap": 25, "window_s": 60}}'
+   where key = 'limits';
+  v := private.hit_ip('identity_1m', '203.0.113.50');
+  assert v.allowed, 'a raised cap was not read';
 
   begin
     perform private.limit('t_not_configured');
@@ -125,32 +139,36 @@ begin
     assert (v_env ->> 'retry_after_ms')::integer = v.retry_after_ms and v_env ->> 'limit_scope' = 'project',
       format('%s envelope %s', v_bucket.name, v_env);
   end loop;
-  assert (select count(*) from jsonb_object_keys(private.cfg('limits'))) >= 30, 'the §8.6 buckets are configured';
+  assert (select count(*) from jsonb_object_keys(private.cfg('limits'))) >= 31, 'the §8.6 buckets are configured';
+  assert private.cfg('limits') ? 'rpc_errors_1h', 'rpc_errors_1h is configured';
 end
 $$;
 select 'PASS SQL-1 every configured bucket refuses with a retry-after inside its window';
 
 -- Refusals are hits - cap per ended window, folded into daily_aggregates
--- exactly once, together with the pre-request hook's sequence.
+-- exactly once, together with the pre-request hook's sequence. Every fold
+-- here reads the test's own sequence: the real one may hold refusals that
+-- no job has folded yet.
 do $$
 declare
   v_count bigint;
 begin
+  create sequence private.t_hook_refusals;
+  insert into private.config (key, value) values ('hook_refusals_seen', '0')
+  on conflict (key) do update set value = '0';
+
   perform private.t_now('2026-11-01T10:02:30Z');
   perform private.hit_ip('t_fold_5m', '198.51.100.9', 300, 1);
   perform private.hit_ip('t_fold_5m', '198.51.100.9', 300, 1);
   perform private.hit_ip('t_fold_5m', '198.51.100.9', 300, 1);
   perform private.hit_ip('t_fold_5m', '198.51.100.10', 300, 1);
 
-  perform private.fold_refusals('2026-11-01T10:04:00Z');
+  perform private.fold_refusals('2026-11-01T10:04:00Z', 'private.t_hook_refusals');
   assert not exists (select 1 from private.daily_aggregates a where a.dims = 'bucket=t_fold_5m'),
     'a window still open was folded';
 
-  create sequence private.t_hook_refusals;
   perform nextval('private.t_hook_refusals');
   perform nextval('private.t_hook_refusals');
-  insert into private.config (key, value) values ('hook_refusals_seen', '0')
-  on conflict (key) do update set value = '0';
 
   perform private.fold_refusals('2026-11-01T10:05:00Z', 'private.t_hook_refusals');
   select a.value into v_count from private.daily_aggregates a
@@ -198,17 +216,38 @@ end
 $$;
 select 'PASS SQL-1 the salt is chosen by the day the window started';
 
--- peek counts nothing it allows and counts a refusal; unhit gives a hit
--- back, so a request refused by a later bucket consumes nothing else.
+-- Failure-only limits (sync codes, claims, wrong room codes) count the
+-- attempt before the check and give it back when the check passes
+-- (supabase/README.md §3), so attempts in flight can never pass the cap
+-- together. peek counts nothing it allows, creates and locks the counter
+-- row it read, and counts a refusal; unhit gives a hit back, so a request
+-- refused by a later bucket consumes nothing else.
 do $$
 declare
   v private.limit_result;
   v_player uuid := (select t.player_id from private.t_player('limiter-peek') t);
 begin
   perform private.t_now('2026-11-01T14:00:00Z');
+  update private.config
+     set value = value || '{"t_fail_15m": {"cap": 1, "window_s": 900},
+                            "sync_fail_15m": {"cap": 5, "window_s": 900},
+                            "general_player_5m": {"cap": 300, "window_s": 300}}'
+   where key = 'limits';
+
+  v := private.hit_ip('t_fail_15m', '198.51.100.14');
+  assert v.allowed, 'the first attempt is counted and allowed';
+  perform private.unhit_ip('t_fail_15m', '198.51.100.14');
+  assert (select r.hits from private.rate_counters r where r.bucket = 't_fail_15m') = 0,
+    'a passing check gave its attempt back';
+  v := private.hit_ip('t_fail_15m', '198.51.100.14');
+  assert v.allowed, 'the second attempt fails its check and keeps its count';
+  v := private.hit_ip('t_fail_15m', '198.51.100.14');
+  assert not v.allowed and v.scope = 'ip' and v.retry_after_ms = 900000, format('the third: %s', v);
+
   v := private.peek_ip('t_peek_15m', '198.51.100.12', 900, 1);
   assert v.allowed, 'peek under the cap';
-  assert not exists (select 1 from private.rate_counters r where r.bucket = 't_peek_15m'), 'an allowed peek counted';
+  assert (select r.hits from private.rate_counters r where r.bucket = 't_peek_15m') = 0,
+    'an allowed peek counted, or did not create the row it locks';
   perform private.hit_ip('t_peek_15m', '198.51.100.12', 900, 1);
   v := private.peek_ip('t_peek_15m', '198.51.100.12', 900, 1);
   assert not v.allowed and v.scope = 'ip' and v.retry_after_ms = 900000, format('peek at the cap: %s', v);
@@ -231,6 +270,6 @@ begin
            where r.bucket = 'general_player_5m' and r.window_start = '2026-11-01T14:00:00Z') = 0, 'unhit_player';
 end
 $$;
-select 'PASS SQL-1 peek and unhit';
+select 'PASS SQL-1 failure-only limits count first and give back, peek locks, unhit releases';
 
 rollback;

@@ -1,7 +1,8 @@
 /**
  * call(), the RPC wrapper (ARCHITECTURE §7.5): envelope mapping, 429 with
- * Retry-After, offline and unreachable, timeout, server-clock samples, the
- * credential, markRegistered and the reports. It drives the real
+ * Retry-After or the wait in its body, offline and unreachable, timeout
+ * (the SDK download included), server-clock samples, the credential,
+ * markRegistered and the reports. It drives the real
  * supabase-js client, with its fetch recording responses, over a stubbed
  * platform fetch.
  */
@@ -26,6 +27,7 @@ import {
   createRpcCaller,
   dispatchRpcEvent,
   parseRetryAfter,
+  parseRetryAfterDetails,
   type RpcClient,
   type RpcEvent,
   type RpcRuntime,
@@ -263,6 +265,45 @@ describe("call", () => {
     ).toBe(true);
   });
 
+  it("reads a 429's wait from the error body when the browser hides Retry-After", async () => {
+    // A cross-origin response shows Retry-After only when CORS exposes it,
+    // so the pre-request hook also sends retry_after_ms as the details text.
+    const t = setup();
+    const hook = {
+      code: "rate_limited",
+      message: "Too many requests",
+      details: "42000",
+      hint: null,
+    };
+    reply(429, hook);
+    expect(await t.call(t.ctx, "start_daily", {}, none)).toEqual({
+      ok: false,
+      error: {
+        code: "rate_limited",
+        retryable: true,
+        retryAfterMs: 42000,
+        limitScope: "ip",
+        refId: null,
+      },
+    });
+
+    reply(429, hook, { "Retry-After": "43" });
+    expect(await t.call(t.ctx, "start_daily", {}, none)).toMatchObject({
+      error: { retryAfterMs: 43000 },
+    });
+
+    for (const details of ["", "soon", "-5", "0", "1.5", "99999999999"]) {
+      reply(429, { ...hook, details });
+      expect(
+        await t.call(t.ctx, "start_daily", {}, none),
+        details,
+      ).toMatchObject({
+        error: { code: "rate_limited", retryAfterMs: DEFAULT_RETRY_AFTER_MS },
+      });
+    }
+    expect(t.observe).not.toHaveBeenCalled();
+  });
+
   it("is offline when a fetch fails while the device is offline, and unreachable otherwise", async () => {
     vi.stubGlobal(
       "fetch",
@@ -350,6 +391,46 @@ describe("call", () => {
       const short = t.call(t.ctx, "start_daily", {}, none, { timeoutMs: 50 });
       await vi.advanceTimersByTimeAsync(50);
       expect(await short).toMatchObject({ error: { code: "timeout" } });
+    });
+
+    it("counts the SDK download in the same budget, so a stalled download times out too", async () => {
+      const fetch = reply(200, okEnvelope);
+      const t = setup({
+        runtime: { getClient: () => new Promise<RpcClient | null>(() => {}) },
+      });
+      const pending = t.call(t.ctx, "start_daily", {}, none);
+      let settled = false;
+      void pending.then(() => {
+        settled = true;
+      });
+      await vi.advanceTimersByTimeAsync(RPC_TIMEOUT_MS - 1);
+      expect(settled).toBe(false);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(await pending).toMatchObject({
+        ok: false,
+        error: { code: "timeout", retryable: true },
+      });
+      expect(t.events).toEqual([
+        { type: "transport", fn: "start_daily", outcome: "timeout" },
+      ]);
+      expect(fetch).not.toHaveBeenCalled();
+      expect(vi.getTimerCount()).toBe(0);
+
+      // A slow download still leaves the request the rest of the budget.
+      let resolveClient: (value: RpcClient) => void = () => {};
+      const slow = setup({
+        runtime: {
+          getClient: () =>
+            new Promise<RpcClient | null>((resolve) => {
+              resolveClient = resolve;
+            }),
+        },
+      });
+      const late = slow.call(slow.ctx, "start_daily", {}, none);
+      await vi.advanceTimersByTimeAsync(RPC_TIMEOUT_MS - 100);
+      resolveClient(client);
+      expect(await late).toMatchObject({ ok: true });
+      expect(vi.getTimerCount()).toBe(0);
     });
   });
 
@@ -544,5 +625,26 @@ describe("parseRetryAfter", () => {
     expect(parseRetryAfter(new Date(now - 5_000).toUTCString(), now)).toBe(0);
     expect(parseRetryAfter("soon", now)).toBeNull();
     expect(parseRetryAfter(null, now)).toBeNull();
+  });
+});
+
+describe("parseRetryAfterDetails", () => {
+  it("reads a positive whole number of milliseconds, up to a day", () => {
+    expect(parseRetryAfterDetails("42000")).toBe(42000);
+    expect(parseRetryAfterDetails(" 300000 ")).toBe(300000);
+    expect(parseRetryAfterDetails("86400000")).toBe(86_400_000);
+    for (const details of [
+      null,
+      undefined,
+      "",
+      "0",
+      "-1",
+      "1.5",
+      "1e3",
+      "86400001",
+      "soon",
+    ]) {
+      expect(parseRetryAfterDetails(details), String(details)).toBeNull();
+    }
   });
 });

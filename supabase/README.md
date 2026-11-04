@@ -32,26 +32,31 @@ therefore pass without a confirmation.
 ### What the MCP stops for
 
 `@supabase/mcp-server-supabase` 0.15.0 runs one check before `execute_sql`
-and before `apply_migration`. It removes `--` and `/* */` comments, then
-splits the text on every `;`, ignoring quotes and dollar quotes. It asks for a
-confirmation when:
+and before `apply_migration`. It asks for a confirmation when:
 
-- a piece starts with `DROP`, `DELETE` or `TRUNCATE`. Because the split
-  ignores dollar quotes, this includes a `DELETE` inside a function body that
-  follows another statement, and a `DELETE` that has a narrow `WHERE`;
+- a piece starts with `DROP`, `DELETE` or `TRUNCATE`. For this rule it
+  removes `--` and `/* */` comments, then splits the text on every `;`,
+  ignoring quotes and dollar quotes. So a `DELETE` inside a function body
+  that follows another statement counts, and so does a `DELETE` with a
+  narrow `WHERE`;
 - a piece is `ALTER TABLE t DROP [COLUMN] c`, or any `ALTER TABLE` is
   followed later by `DROP COLUMN`;
 - `EXECUTE` runs a quoted or dollar-quoted string that starts with `DROP`,
   `DELETE`, `TRUNCATE` or `ALTER TABLE ... DROP COLUMN`, including through
   `format(...)` or `concat(...)`;
-- a top-level `UPDATE` has no `WHERE`. An `UPDATE` inside a `DO` block or a
-  function body is not checked.
+- a piece starts with `UPDATE <table> SET` and has no `WHERE`. For this rule
+  it splits on every `;` outside a quoted string, dollar quotes included,
+  and blanks quoted strings first. So an `UPDATE` inside a `DO` block or a
+  function body counts too, and a `where` inside a string literal is no
+  `WHERE`. Keep each `UPDATE`'s `WHERE` before its own `;`.
 
 The hosted server may differ from the published package. On 4 November 2026
 a dry run that held `DELETE ... WHERE` statements inside function bodies
 waited for a confirmation and timed out, which matches the package.
-`mcpConfirmationReasons()` in `scripts/sql/lib.ts` reimplements this check, and
-`sql:bundle` and `sql:drift` run it, so you find out before you send.
+`mcpWouldConfirm()` in `scripts/sql/lib.ts` is a port of the check, and
+`mcpConfirmationReasons()` gives a reason for everything it stops for, and
+for a little more (an `UPDATE` with an alias, or after a comment). `sql:bundle`
+and `sql:drift` print those reasons, so you find out before you send.
 
 ### What we never write
 
@@ -84,14 +89,22 @@ migration whose name ends `_attended.sql`. We apply it ourselves, but only in
 a session where someone can answer the confirmation.
 
 - An attended file holds only what needs the confirmation. Usually that is a
-  `create or replace` of a function whose placeholder an unattended migration
-  already created, so nothing depends on when the attended file lands.
+  `create or replace` of a function whose unattended version an earlier
+  migration created, so nothing depends on when the attended file lands. It
+  may wait while later migrations are applied.
 - `sql:bundle` leaves attended files out unless you pass `--attended`, and
-  then it prints each statement the MCP will ask about.
-- Tests that need an attended file live in their own area. The tests for
-  `20261104000200_platform_jobs_attended.sql` are in `tests/platform-jobs/`.
+  then it prints each statement the MCP will ask about. `--attended` takes
+  `--applied` with `list_migrations` output (never `--after` alone), because
+  a waiting attended file sorts before the newest applied migration.
+- Tests that need an attended file live in their own area and name it in a
+  header line, `-- requires: <migration stem>`. `sql:bundle` skips such a
+  test, with a message, unless that migration is in the bundle or applied.
+  The tests for `20261104000200_platform_jobs_attended.sql` are in
+  `tests/platform-jobs/`.
 - A repository test fails if an attended file holds nothing the MCP would
   stop for, so the label stays honest.
+- `sql:drift` lists an attended file that waits as an attended item, never
+  as drift.
 
 ### Owner-only migrations (`*_owner_only.sql`)
 
@@ -116,12 +129,17 @@ creates objects:
    `EXECUTE` for `PUBLIC`, which is harmless without `USAGE`. Being invokers,
    they never trigger the advisor's definer lints (0028, 0029). Never make a
    function in `private` SECURITY DEFINER: the standing checks fail on one.
-3. **Every table calls `private.secure_table()`**, which enables RLS and adds
-   a restrictive policy, `deny_all`, for every command and role, with
+3. **Every table calls `private.secure_table()`** and never writes a
+   `deny_all` policy of its own. `secure_table()` enables RLS and adds a
+   restrictive policy, `deny_all`, for every command and role, with
    `using (false)` and `with check (false)`. The advisor sees a policy (lint
    0008), and a permissive policy added by mistake still could not open a
-   row. No table forces RLS, because the definer RPCs rely on the owner's
-   bypass.
+   row, because PostgreSQL applies a restrictive policy on top of every
+   permissive one. A permissive policy of the same shape does not count:
+   permissive policies are OR-ed together, so a later one would open rows
+   past it. `has_deny_all()` and the standing checks therefore look for the
+   restrictive one only. No table forces RLS, because the definer RPCs rely
+   on the owner's bypass.
 
    ```sql
    create table if not exists private.things (
@@ -138,6 +156,12 @@ creates objects:
    checks fail on any of them.
 5. **`postgres` owns everything.** That is the role the MCP applies
    migrations as. The standing checks fail on any other owner.
+6. **Every extension is created `with schema extensions`.** Without a
+   schema, `create extension` installs into `public`, where Supabase's
+   default privileges would let `anon` call each of the extension's
+   functions as `/rest/v1/rpc/*` (`pgtap`'s `lives_ok` runs any SQL text it
+   is given). The standing checks fail on any extension in `public` or
+   `private`, and they hold extension functions to the same rules as ours.
 
 The API surface has two further settings, which need the owner:
 `drop extension pg_graphql` (not installed today, so a guard) and
@@ -157,25 +181,41 @@ set search_path = ''
 as $$
 declare
   v_limit private.limit_result;
+  v_name text;
   v_done jsonb;
+  v_id uuid;
 begin
-  if private.over_cap(p_name, 'default') then                       -- sizes first (rule 8)
+  -- 1. Sizes first (§8.6 payload caps).
+  if private.over_cap(p_name) then
     return private.err('invalid_input');
   end if;
-  v_limit := private.hit_ip('general_ip_5m', private.client_ip());   -- cap and window from config.limits
+  -- 2. Authenticate (SQL-2's private.authenticate, which also counts
+  --    general_player_5m and answers auth_failed), then this RPC's own
+  --    buckets from config.limits. An RPC without a player hits its IP
+  --    bucket here instead: private.hit_ip('<bucket>', private.client_ip()).
+  v_limit := private.hit_player('thing_save_1h', p_player);
   if not v_limit.allowed then
     return private.rate_limited(v_limit);
   end if;
-  -- authenticate (SQL-2), then validate everything before the first write
-  v_done := private.write_key_claim(p_client_id, 'save_thing', p_player);
-  if v_done is not null then
-    return v_done;                                                   -- a retry, or conflict
+  -- 3. Validate everything. Bad input returns an error; nothing here raises.
+  v_name := private.clean_text(p_name);
+  if p_client_id is null or v_name is null or char_length(v_name) not between 1 and 40 then
+    return private.err('invalid_input');
   end if;
-  -- the writes
-  return private.write_key_finish(p_client_id, jsonb_build_object('id', gen_random_uuid()));
-exception
-  when others then
-    return private.fail_internal('save_thing', sqlstate, sqlerrm);
+  -- 4. The writes, and only the writes, in a block that catches.
+  begin
+    v_done := private.write_key_claim(p_client_id, 'save_thing', p_player);
+    if v_done is not null then
+      return v_done;                                       -- a retry, or conflict
+    end if;
+    insert into private.things (id, player_id, name)
+    values (gen_random_uuid(), p_player, v_name)
+    returning id into v_id;
+    return private.write_key_finish(p_client_id, jsonb_build_object('id', v_id));
+  exception
+    when others then
+      return private.fail_internal('save_thing', sqlstate, sqlerrm);
+  end;
 end
 $$;
 
@@ -183,9 +223,11 @@ insert into private.rpc_allowlist (name) values ('save_thing') on conflict do no
 ```
 
 Then add `save_thing` to `rpc.functions` in `expected-advisors.json` in the
-same pull request. The bundle's generated check fails while the allowlist and
-that list differ, and the advisor diff expects lints 0028 and 0029 for every
-name on it.
+same pull request, and its own bucket (`thing_save_1h` above) to
+`config.limits` in the same migration. The bundle's generated check fails
+while the allowlist and that list differ, and the advisor diff expects lints
+0028 and 0029 for every name on it. `envelope.test.sql` calls a copy of this
+template as `anon` and proves that its hits count when its writes fail.
 
 - **Envelope.** Answer with `private.ok(data)` or `private.err(code, ...)`.
   `err` raises on a code that is not in §7.3, on `rate_limited` without a
@@ -193,29 +235,59 @@ name on it.
   failures return; they never raise, so the limiter's counts commit.
   `private.ok` also samples about 1% of response sizes into
   `egress_samples` (`config.egress_sample_rate`).
-- **Unexpected exceptions** end in
-  `return private.fail_internal('<rpc>', sqlstate, sqlerrm);`. The block's
-  work rolls back, and a redacted row in `rpc_errors` commits. The reply is
-  `internal`, with the row's 8-character reference.
+- **Unexpected exceptions.** Only the writes sit in a block that ends with
+  `exception when others then return private.fail_internal('<rpc>', sqlstate, sqlerrm);`.
+  A caught exception rolls back everything its block did: the writes and
+  the write key, as it should, but also any limiter hit made inside the
+  block. That is why sizes, limits, authentication and validation come
+  first, outside it, and why the function's outer block has no `exception`
+  clause. The redacted error row commits, and the reply is `internal` with
+  the row's 8-character reference. Past `rpc_errors_1h` (1,000 rows an
+  hour, project-wide) the reply still carries a reference and nothing is
+  stored, so a client that keeps finding an error cannot fill the database.
+  An exception before the block is a bug in the RPC, and PostgREST answers
+  it with an HTTP error, so validation compares and returns, it never casts
+  and fails. Room RPCs follow the same shape (ARCHITECTURE §8.11).
 - **Clock.** Use `private.now()`, never `now()`.
 - **Text.** Run free text through `private.clean_text()` before validating
   it. `private.payload_cap(kind)` and `private.over_cap(text, kind)` hold the
   size limits. `private.redact()` runs on everything stored in `rpc_errors`
   and `alerts`.
 - **Limits.** Every bucket of §8.6 is in `config.limits` as
-  `{cap, window_s}`, and an unconfigured bucket raises.
-  `hit_ip(bucket, ip)`, `hit_player(bucket, player)` and `hit_global(bucket)`
-  use those numbers and report scope `ip`, `player` or `project`. Pass
-  `private.client_ip()` as the address. The explicit forms add
-  `window_s, max` after the key, as the pre-request hook needs. A last
-  `amount` argument counts bytes for the byte caps. `peek_*` serves limits
-  that count only failures: call it before the check, and `hit_*` after a
-  failure. `unhit_*` gives back an earlier bucket's hit when a later bucket
+  `{cap, window_s}`, and an unconfigured bucket raises. Each RPC counts its
+  own buckets; it never calls `general_ip_5m`, which the pre-request hook
+  counts for every call (SQL-8). `hit_ip(bucket, ip)`,
+  `hit_player(bucket, player)` and `hit_global(bucket)` use those numbers
+  and report scope `ip`, `player` or `project`. Pass `private.client_ip()` as
+  the address. The explicit forms add `window_s, max` after the key, as the
+  pre-request hook needs. A last `amount` argument counts bytes for the byte
+  caps. `unhit_*` gives back an earlier bucket's hit when a later bucket
   refuses.
-- **Write keys.** Call `private.write_key_claim(client_id, fn, player)` after
-  validation, just before the first write. When it returns `null`, carry on.
-  Otherwise return what it gave you: the first call's reply on a retry, or
-  `conflict`. Finish with `private.write_key_finish(client_id, data)`.
+- **Failure-only limits** (sync codes, claims, wrong room codes) count the
+  attempt first with `hit_*` and give it back with `unhit_*` when the check
+  passes. The upsert in `hit_*` holds the counter row until the call's
+  transaction ends, so attempts in flight from one subject queue behind each
+  other and the cap holds: of six concurrent attempts against a cap of 2,
+  two get through. Never read the count, check, and record the failure
+  after: every attempt in flight would read the same count. `peek_*` reads
+  without counting what it allows, for code that must refuse before
+  checking, and it locks the counter row too, but count-first is the shape
+  to use.
+- **Write keys.** Call `private.write_key_claim(client_id, fn, player)` at
+  the start of the block that catches, after validation. When it returns
+  `null`, carry on. Otherwise return what it gave you: the first call's
+  reply on a retry, or `conflict`. Finish with
+  `private.write_key_finish(client_id, data)`. A call whose writes fail
+  leaves no key behind.
+- **The pre-request hook's 429 (SQL-8)** carries its wait twice: the
+  `Retry-After` header in seconds, and `retry_after_ms` as text in the error
+  body's `details`. A browser shows a cross-origin response header only
+  when CORS exposes it, and PostgREST's list of exposed headers leaves
+  `Retry-After` out. So the hook raises with
+  `message = json_build_object('code', 'rate_limited', 'message', 'Too many requests', 'details', v_limit.retry_after_ms::text)::text`
+  and the `detail` of ARCHITECTURE §8.6. `src/backend/supabase/rpc.ts` reads
+  the header first and the body after, and falls back to 1 s only when both
+  are missing.
 
 ### How the limiter keys its counters
 
@@ -225,14 +297,19 @@ name on it.
 - The subject of a counter is `sha256(bucket | key | salt)`. The salt is the
   one for the UTC day the window started, so a window that crosses midnight
   keeps one subject. Each day's salt is 32 random bytes in
-  `private.ip_salts`, and the attended hourly step drops salts for days
-  before yesterday. No raw address or player id is ever stored.
+  `private.ip_salts`. The hourly step retires salts for days before
+  yesterday: the unattended version replaces them with fresh bytes, and the
+  attended version deletes them. Either way a salt lives 48 hours. No raw
+  address or player id is ever stored.
 - IP keys go through `private.client_ip()`, which reads the
   `X-Forwarded-For` hop that `config.client_ip` names (`first`, `last`, or a
-  count from the right), then `private.ip_prefix()`. IPv4 addresses are used
-  whole, IPv4-mapped IPv6 addresses become their IPv4 form, and IPv6
-  addresses are cut to their /64 (AC-IDN-07). A missing or malformed address
-  becomes `none`.
+  whole number counted from the right), then `private.ip_prefix()`. IPv4
+  addresses are used whole, IPv4-mapped IPv6 addresses become their IPv4
+  form, and IPv6 addresses are cut to their /64 (AC-IDN-07). A missing or
+  malformed address becomes `none`, and so does every address while the
+  rule is one `client_ip()` does not recognize (`"Last"`, `"1"`, `1.5`, a
+  missing key): one shared subject shows the mistake at once, where a
+  fallback to the first hop would hide it.
 - A counter keeps counting past its cap, so a window's refusals are
   `hits - cap`. `private.fold_refusals()` adds them to `daily_aggregates`
   (metric `rate_limited`, dims `bucket=<name>`) exactly once per ended
@@ -247,13 +324,20 @@ are the job bodies of §8.15. Each runs its hooks through
 hook rolls back alone and leaves an alert (`job_step_failed`), and the job's
 other hooks still run.
 
-- Every hook already exists as a no-op that returns `void`, with its owning
-  ticket in a comment next to it. Fill only your own hook, with
-  `create or replace function`, and keep the signature.
+- Every hook another ticket fills already exists as a no-op that returns
+  `void`, with its owning ticket in a comment next to it. Fill only your own
+  hook, with `create or replace function`, and keep the signature.
 - A hook that deletes rows (most pruning does) cannot apply unattended. Put
-  it in an `_attended.sql` migration, as SQL-1 did with `hourly_platform` and
-  `nightly_platform`. Until that file is applied, the placeholder keeps the
-  job working.
+  the deleting body in an `_attended.sql` migration, and give the hook an
+  unattended version that does every part needing no `DELETE`, as SQL-1 did.
+- SQL-1's own steps: until `20261104000200_platform_jobs_attended.sql` is
+  applied, `hourly_platform` folds refusals, retires old salts by replacing
+  them, and leaves one `owner_queue` alert a day naming that migration,
+  because counters, write keys and error rows are not pruned yet; and
+  `nightly_platform` adds the zone names tzdata lists. The attended version
+  also deletes salts, counters older than 2 days, write keys older than 48
+  hours, error rows older than 30 days, heartbeats and cron history older
+  than 7 days, and zone names tzdata dropped.
 - SQL-8 schedules the jobs. Until then nothing calls them on a timer.
 
 ## 5. Tests
@@ -287,11 +371,21 @@ rollback;
   id.
 - Prove grants by switching roles: `set local role anon;` ...
   `reset role;`.
+- A header line `-- requires: <migration stem>` (before `begin;`) makes
+  `sql:bundle` skip the file unless that migration is in the bundle or
+  applied.
 - Test files obey the same unattended rules as migrations, with one
-  difference: they may contain their own `begin;` and `rollback;`. Never
-  advance a real sequence: `nextval` survives the rollback. Make your own
-  inside the test instead, as `jobs.test.sql` does. Measure changes as deltas
-  or within your own rows, so tests pass against a live database too.
+  difference: they may contain their own `begin;` and `rollback;`. They hold
+  no `DELETE` at all (the MCP stops for any); change a row with an `UPDATE`
+  and a `WHERE` instead, as the zone tests do.
+- Tests pass against a live database too, so each one writes the state it
+  reads, inside its own transaction: the caps it asserts (an owner may have
+  tuned `config.limits`), the `client_ip` rule (CI-0 may have moved it off
+  `first`), a sequence of its own for refusals (`nextval` survives the
+  rollback, and the real one may hold refusals no job has folded yet, as in
+  `limiter.test.sql`). Measure changes as deltas or within your own rows, and
+  expect a hook another ticket has filled to change rows (`jobs.test.sql`
+  holds only the hooks still at `begin null; end` to doing nothing).
 
 **Payload files** (`*.payloads.sql`) record replies for the TypeScript
 fixtures. Each `-- payload: <name>` line is followed by one
@@ -325,12 +419,14 @@ transaction that rolls back.
 3. Paste the result lines into the pull request.
 
 The integrator applies merged migrations with `apply_migration` in file
-order, using each file's stem as the name. Before that, a check with
-`npm run sql:bundle -- --all --after <newest applied>` confirms the order
-still holds. After applying, the integrator re-runs the tests, the drift
-check and the advisor diff. Attended files wait for an attended session:
-`npm run sql:bundle -- --all --attended --after <newest applied>` lists what
-the MCP will ask, and someone answers each confirmation.
+order, using each file's stem as the name. Before that,
+`npm run sql:bundle -- --all --applied list_migrations.json` confirms the
+order still holds; it leaves attended files and the tests that need them
+out. After applying, the integrator re-runs the tests, the drift check and
+the advisor diff. Attended files wait for an attended session:
+`npm run sql:bundle -- --all --attended --applied list_migrations.json`
+bundles every attended file still to apply with its tests, lists what the
+MCP will ask, and someone answers each confirmation.
 
 ## 7. Drift and advisors
 
@@ -342,13 +438,14 @@ npm run sql:advisors -- --security security.json --performance performance.json
 - **Drift** fails in these cases:
   - an applied migration has no file in the repository;
   - a file was never applied but sorts before the newest applied one, so it
-    would run out of order;
+    would run out of order (attended files excepted: they may wait);
   - a file name breaks `<14-digit version>_<snake_case>.sql`;
   - a migration still to apply holds a forbidden word, or, if it is not
     attended, anything the MCP would stop for.
 
   Pending files are listed. They count as errors only with `--strict`, at a
-  wave exit after everything was applied.
+  wave exit after everything was applied. Attended files still to apply are
+  listed as attended items and never count, `--strict` or not.
 
 - **Advisors.** Each finding must match an entry in
   `expected-advisors.json`, and each required entry must have a finding. The
@@ -362,11 +459,13 @@ npm run sql:advisors -- --security security.json --performance performance.json
 `tests/baseline/standing-checks.test.sql` runs at the end of every bundle.
 It fails if any of these stop holding:
 
-- RLS and a deny-all policy on every table in `private`;
+- RLS and a restrictive deny-all policy on every table in `private`;
 - no table with `FORCE ROW LEVEL SECURITY`;
 - no table, view or sequence in `public`;
-- `anon` executes nothing in `public` outside `private.rpc_allowlist`, and
-  the allowlist names no missing or overloaded function;
+- no extension in `public` or `private`;
+- `anon` executes nothing in `public` outside `private.rpc_allowlist`,
+  extension functions included, and the allowlist names no missing or
+  overloaded function;
 - nothing in `private` is executable by `anon` or `authenticated`
   (AC-INC-04, AC-UGS-05). This covers no `USAGE` and no grants or default
   privileges reaching the schema, and it is proved by probes that run as
@@ -375,14 +474,15 @@ It fails if any of these stop holding:
   DEFINER for every function in `public`, and none in `private`;
 - `postgres` owns every table, sequence, function and type in both schemas;
 - `pg_graphql` is not installed;
-- `private.key_escrow` keeps RLS, its deny-all policy and no grants.
+- `private.key_escrow` keeps RLS, its restrictive deny-all policy and no
+  grants.
 
 The bundle adds one generated check: `private.rpc_allowlist` names exactly
 `rpc.functions` from `expected-advisors.json`.
 
 ## 9. Owner items (launch report)
 
-| Item                                        | Why an agent cannot do it                      | How                                                                                                                                                                                             |
-| ------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `20261104000300_api_surface_owner_only.sql` | `DROP EXTENSION` and `ALTER ROLE` need a human | In the dashboard SQL editor, or MCP `execute_sql` with the owner confirming. Then re-run the `backend-contract` workflow, and record it with `apply_migration` only if it was applied that way. |
-| `20261104000200_platform_jobs_attended.sql` | The MCP asks to confirm its `DELETE`s          | In a session someone attends. Run the bundle with `--attended` first, then `apply_migration`. Until then the hourly and nightly jobs skip SQL-1's pruning.                                      |
+| Item                                        | Why an agent cannot do it                      | How                                                                                                                                                                                                                                                  |
+| ------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `20261104000300_api_surface_owner_only.sql` | `DROP EXTENSION` and `ALTER ROLE` need a human | In the dashboard SQL editor, or MCP `execute_sql` with the owner confirming. Then re-run the `backend-contract` workflow, and record it with `apply_migration` only if it was applied that way.                                                      |
+| `20261104000200_platform_jobs_attended.sql` | The MCP asks to confirm its `DELETE`s          | In a session someone attends: `npm run sql:bundle -- --all --attended --applied list_migrations.json`, send it, then `apply_migration`. Until then the hourly step leaves a daily `owner_queue` alert, and counters, write keys and error rows grow. |

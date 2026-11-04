@@ -96,6 +96,9 @@ declare
   v_row record;
 begin
   perform private.t_now('2026-11-01T11:00:00Z');
+  update private.config
+     set value = value || '{"rpc_errors_1h": {"cap": 1000, "window_s": 3600}}'
+   where key = 'limits';
   begin
     perform 1 / 0;
   exception
@@ -112,5 +115,90 @@ begin
 end
 $$;
 select 'PASS SQL-1 fail_internal logs a redacted error and answers internal with its ref';
+
+-- An RPC shaped like the template in supabase/README.md §3, called as anon
+-- the way PostgREST calls it: its writes fail every time. The limiter hits
+-- sit outside the block that catches, so they count, and from the fourth
+-- call on the RPC refuses before it reaches the writes. The caught errors
+-- roll back the writes and the write key, and log_error stops storing rows
+-- at the rpc_errors_1h cap while each reply still carries a reference.
+create function public.t_template_rpc(p_client_id uuid, p_name text)
+returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_limit private.limit_result;
+  v_name text;
+  v_done jsonb;
+begin
+  if private.over_cap(p_name) then
+    return private.err('invalid_input');
+  end if;
+  v_limit := private.hit_ip('t_template_1h', private.client_ip());
+  if not v_limit.allowed then
+    return private.rate_limited(v_limit);
+  end if;
+  v_name := private.clean_text(p_name);
+  if p_client_id is null or v_name is null or char_length(v_name) not between 1 and 40 then
+    return private.err('invalid_input');
+  end if;
+  begin
+    v_done := private.write_key_claim(p_client_id, 't_template_rpc');
+    if v_done is not null then
+      return v_done;
+    end if;
+    insert into private.alerts (kind, detail) values ('t_template_write', jsonb_build_object('name', v_name));
+    perform 1 / (char_length(v_name) - char_length(v_name));
+    return private.write_key_finish(p_client_id, '{}');
+  exception
+    when others then
+      return private.fail_internal('t_template_rpc', sqlstate, sqlerrm);
+  end;
+end
+$$;
+do $$
+begin
+  perform private.t_now('2026-11-01T16:20:00Z');
+  perform private.t_request('198.51.100.30');
+  update private.config
+     set value = value || '{"t_template_1h": {"cap": 3, "window_s": 3600},
+                            "rpc_errors_1h": {"cap": 2, "window_s": 3600}}'
+   where key = 'limits';
+end
+$$;
+set local role anon;
+do $$
+declare
+  v_reply jsonb;
+  v_codes text[] := '{}';
+  v_index integer;
+begin
+  for v_index in 1 .. 6 loop
+    v_reply := public.t_template_rpc(gen_random_uuid(), 'Plucky Otter');
+    v_codes := v_codes || (v_reply ->> 'code');
+    if v_reply ->> 'code' = 'internal' then
+      assert v_reply ->> 'ref' ~ '^[0-9A-HJKMNP-TV-Z]{8}$', format('call %s: %s', v_index, v_reply);
+    end if;
+  end loop;
+  assert v_codes = array['internal', 'internal', 'internal', 'rate_limited', 'rate_limited', 'rate_limited'],
+    format('replies: %s', v_codes);
+end
+$$;
+reset role;
+do $$
+begin
+  assert (select r.hits from private.rate_counters r where r.bucket = 't_template_1h') = 6,
+    format('the RPC counted %s hits for 6 calls', (select r.hits from private.rate_counters r where r.bucket = 't_template_1h'));
+  assert (select count(*) from private.rpc_errors e where e.fn = 't_template_rpc') = 2,
+    'rpc_errors stored rows past the rpc_errors_1h cap';
+  assert (select r.hits from private.rate_counters r where r.bucket = 'rpc_errors_1h'
+           and r.window_start = '2026-11-01T16:00:00Z') = 3, 'log_error did not count each error';
+  assert not exists (select 1 from private.alerts a where a.kind = 't_template_write'), 'a failed write stayed';
+  assert not exists (select 1 from private.write_keys k where k.fn = 't_template_rpc'), 'a failed call kept its write key';
+end
+$$;
+select 'PASS SQL-1 the RPC template keeps its limiter hits when its writes fail, and error rows stop at their cap';
 
 rollback;

@@ -6,12 +6,16 @@
  * - Identity: `auth: "player"` adds p_player and p_secret from the tab's
  *   identity; "optional" adds them once the identity is registered, since
  *   an unregistered secret means nothing to the server.
- * - Every call aborts after 8 s (`timeout`, §7.3). Nothing is retried here:
- *   callers retry, with the same key (§7.1).
+ * - Every call ends after 8 s (`timeout`, §7.3), counted from the start of
+ *   the call, so a first visit's SDK download shares the budget with the
+ *   request. Nothing is retried here: callers retry, with the same key (§7.1).
  * - Transport mapping: a fetch that fails while offline is `offline`,
  *   otherwise `unreachable`; HTTP 429 (the pre-request hook) is
- *   `rate_limited` with retryAfterMs from Retry-After and scope `ip`; HTTP
- *   5xx is `unreachable`; a 2xx envelope `{ ok: false, code }` is that code;
+ *   `rate_limited` with scope `ip` and retryAfterMs from Retry-After, or,
+ *   when the browser hides that header (CORS exposes it only if the gateway
+ *   lists it), from the error body's `details`, which the hook fills with
+ *   the wait in milliseconds (supabase/README.md §3); HTTP 5xx is
+ *   `unreachable`; a 2xx envelope `{ ok: false, code }` is that code;
  *   anything else is `internal`.
  * - Each envelope's server_time feeds the server clock, with the local send
  *   and receive times (§4.3).
@@ -85,7 +89,8 @@ export interface RpcRequest extends PromiseLike<RpcReply> {
 }
 export interface RpcReply {
   data: unknown;
-  error: { message?: string } | null;
+  /** postgrest-js's error: the JSON body of a failed request, when it has one. */
+  error: { message?: string; details?: string | null } | null;
   status: number;
 }
 
@@ -141,6 +146,25 @@ export function parseRetryAfter(
   if (/^\d+$/.test(text)) return Number(text) * 1000;
   const at = Date.parse(text);
   return Number.isNaN(at) ? null : Math.max(0, at - now);
+}
+
+/** The longest wait a 429's body may ask for: the longest window of §8.6. */
+const MAX_BODY_RETRY_AFTER_MS = 86_400_000;
+
+/**
+ * The wait a 429 carries in its body: the pre-request hook puts
+ * retry_after_ms in the error's `details`, as text, because a browser may not
+ * show the Retry-After header of a cross-origin response. Null unless it is
+ * a positive whole number of milliseconds within a day.
+ */
+export function parseRetryAfterDetails(
+  details: string | null | undefined,
+): number | null {
+  if (typeof details !== "string" || !/^\d{1,9}$/.test(details.trim())) {
+    return null;
+  }
+  const ms = Number(details.trim());
+  return ms > 0 && ms <= MAX_BODY_RETRY_AFTER_MS ? ms : null;
 }
 
 /** Codes that only transport mapping produces; SQL never returns them. */
@@ -211,36 +235,52 @@ export function createRpcCaller(overrides: Partial<RpcRuntime> = {}): RpcCall {
         }
       }
 
-      let client: RpcClient | null;
-      try {
-        client = await runtime.getClient();
-      } catch (error) {
-        if (error instanceof SupabaseSdkLoadError) {
-          return transportFailure(
-            fn,
-            runtime.isOnline() ? "unreachable" : "offline",
-          );
-        }
-        throw error;
-      }
-      if (client === null) return fail("unavailable");
-
+      // One budget for the whole call, started before the client: on a first
+      // visit getClient() downloads the SDK, and a stalled download must end
+      // in `timeout` like a stalled request (§7.3).
       const controller = new AbortController();
       let timedOut = false;
-      const timer = setTimeout(() => {
-        timedOut = true;
-        controller.abort();
-      }, options.timeoutMs ?? RPC_TIMEOUT_MS);
-      const sentAt = runtime.now();
-      let reply: RpcReply;
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const deadline = new Promise<null>((resolve) => {
+        timer = setTimeout(() => {
+          timedOut = true;
+          controller.abort();
+          resolve(null);
+        }, options.timeoutMs ?? RPC_TIMEOUT_MS);
+      });
+      let reply: RpcReply | null;
+      let sentAt: EpochMs;
+      let receivedAt: EpochMs;
       try {
-        reply = await client.rpc(fn, body).abortSignal(controller.signal);
+        let loaded: { client: RpcClient | null } | null;
+        try {
+          loaded = await Promise.race([
+            runtime.getClient().then((client) => ({ client })),
+            deadline,
+          ]);
+        } catch (error) {
+          if (error instanceof SupabaseSdkLoadError) {
+            return transportFailure(
+              fn,
+              runtime.isOnline() ? "unreachable" : "offline",
+            );
+          }
+          throw error;
+        }
+        if (loaded === null) return transportFailure(fn, "timeout");
+        if (loaded.client === null) return fail("unavailable");
+
+        sentAt = runtime.now();
+        reply = await Promise.race([
+          loaded.client.rpc(fn, body).abortSignal(controller.signal),
+          deadline,
+        ]);
+        receivedAt = runtime.now();
       } finally {
         clearTimeout(timer);
       }
-      const receivedAt = runtime.now();
 
-      if (timedOut) return transportFailure(fn, "timeout");
+      if (reply === null || timedOut) return transportFailure(fn, "timeout");
       if (reply.status === 0) {
         return transportFailure(
           fn,
@@ -254,7 +294,9 @@ export function createRpcCaller(overrides: Partial<RpcRuntime> = {}): RpcCall {
           responseMetaFor(controller.signal)?.retryAfter ?? null;
         return fail("rate_limited", {
           retryAfterMs:
-            parseRetryAfter(retryAfter, receivedAt) ?? DEFAULT_RETRY_AFTER_MS,
+            parseRetryAfter(retryAfter, receivedAt) ??
+            parseRetryAfterDetails(reply.error?.details) ??
+            DEFAULT_RETRY_AFTER_MS,
           limitScope: "ip",
         });
       }

@@ -71,9 +71,11 @@ $$;
 -- RLS and the deny-all policy, for this and every later migration
 -- ---------------------------------------------------------------------------
 
--- True when the table carries a policy that refuses every command to
--- everyone: FOR ALL, TO PUBLIC, USING (false) WITH CHECK (false). CNT-0's
--- key_escrow_deny_all qualifies as well as the deny_all policies below.
+-- True when the table carries a restrictive policy that refuses every
+-- command to everyone: AS RESTRICTIVE, FOR ALL, TO PUBLIC, USING (false)
+-- WITH CHECK (false). CNT-0's key_escrow_deny_all qualifies as well as the
+-- deny_all policies below. A permissive policy of that shape does not: any
+-- permissive policy added later would be OR-ed with it and open rows.
 create or replace function private.has_deny_all(p_table regclass)
 returns boolean
 language sql
@@ -84,6 +86,7 @@ as $$
     select 1
       from pg_catalog.pg_policy p
      where p.polrelid = p_table
+       and not p.polpermissive
        and p.polcmd = '*'
        and p.polroles = array[0::oid]
        and pg_catalog.pg_get_expr(p.polqual, p.polrelid) = 'false'
@@ -275,7 +278,9 @@ on conflict (key) do nothing;
 
 -- The rate limits of §8.6, PRD §8.4: bucket -> { cap, window_s }. A later
 -- migration merges its own buckets in the same way, and values already
--- stored (an owner's tuning) win over the defaults.
+-- stored (an owner's tuning) win over the defaults. rpc_errors_1h is SQL-1's
+-- own: the rows private.log_error stores in an hour, project-wide, so a
+-- client that keeps finding an unexpected error cannot fill the database.
 insert into private.config as c (key, value)
 values ('limits', '{
   "general_ip_5m":        {"cap": 1000,    "window_s": 300},
@@ -307,7 +312,8 @@ values ('limits', '{
   "practice_ip_1d":       {"cap": 2000,    "window_s": 86400},
   "practice_ids_ip_1d":   {"cap": 50,      "window_s": 86400},
   "calib_ip_item_1d":     {"cap": 3,       "window_s": 86400},
-  "landing_ip_1m":        {"cap": 300,     "window_s": 60}
+  "landing_ip_1m":        {"cap": 300,     "window_s": 60},
+  "rpc_errors_1h":        {"cap": 1000,    "window_s": 3600}
 }')
 on conflict (key) do update
   set value = excluded.value || c.value,

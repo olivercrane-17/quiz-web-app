@@ -35,7 +35,7 @@ const REPO = files(
 );
 
 describe("driftReport", () => {
-  it("sorts migrations into applied, pending and owner items", () => {
+  it("sorts migrations into applied, pending, attended and owner items", () => {
     const report = driftReport(
       REPO,
       [],
@@ -45,12 +45,9 @@ describe("driftReport", () => {
     expect(report).toEqual({
       applied: ["20261031000000_key_escrow"],
       missing: [],
-      pending: [
-        "20261104000000_baseline",
-        "20261104000100_helpers",
-        "20261104000200_platform_jobs_attended",
-      ],
+      pending: ["20261104000000_baseline", "20261104000100_helpers"],
       outOfOrder: [],
+      attendedPending: ["20261104000200_platform_jobs_attended"],
       ownerOnly: [
         { stem: "20261104000300_api_surface_owner_only", applied: false },
       ],
@@ -58,10 +55,65 @@ describe("driftReport", () => {
       forbidden: [],
     });
     expect(driftProblems(report, false)).toEqual([]);
-    expect(driftProblems(report, true)).toHaveLength(3);
+    expect(driftProblems(report, true)).toHaveLength(2);
+    expect(formatReport(report)).toContain(
+      "attended item: 20261104000200_platform_jobs_attended (waits for an attended session)",
+    );
     expect(formatReport(report)).toContain(
       "owner item: 20261104000300_api_surface_owner_only",
     );
+  });
+
+  it("passes --strict at the wave exit while the attended migration waits", () => {
+    const report = driftReport(
+      REPO,
+      [],
+      [
+        "20261031000000_key_escrow",
+        "20261104000000_baseline",
+        "20261104000100_helpers",
+      ],
+      () => "select 1;",
+    );
+    expect(report.pending).toEqual([]);
+    expect(report.attendedPending).toEqual([
+      "20261104000200_platform_jobs_attended",
+    ]);
+    expect(driftProblems(report, true)).toEqual([]);
+  });
+
+  it("never calls a waiting attended migration out of order once a later one is applied", () => {
+    const report = driftReport(
+      files(...REPO.map((file) => file.file), "20261105000000_identity.sql"),
+      [],
+      [
+        "20261031000000_key_escrow",
+        "20261104000000_baseline",
+        "20261104000100_helpers",
+        "20261105000000_identity",
+      ],
+      () => "select 1;",
+    );
+    expect(report.outOfOrder).toEqual([]);
+    expect(report.attendedPending).toEqual([
+      "20261104000200_platform_jobs_attended",
+    ]);
+    expect(driftProblems(report, false)).toEqual([]);
+    expect(driftProblems(report, true)).toEqual([]);
+  });
+
+  it("still scans a waiting attended migration for forbidden words", () => {
+    const report = driftReport(
+      REPO,
+      [],
+      ["20261031000000_key_escrow"],
+      (file) =>
+        file.attended
+          ? "select 1;\ndelete from private.t where id < 0;\ntruncate private.t;"
+          : "select 1;",
+    );
+    expect(report.forbidden).toHaveLength(1);
+    expect(report.forbidden[0]).toContain("TRUNCATE");
   });
 
   it("fails on an applied migration with no file, one applied out of order, and a bad name", () => {
@@ -77,7 +129,10 @@ describe("driftReport", () => {
     );
     expect(report.missing).toEqual(["20261103000000_hand_made"]);
     expect(report.outOfOrder).toEqual(["20261104000000_baseline"]);
-    expect(report.pending).toEqual(["20261104000200_platform_jobs_attended"]);
+    expect(report.pending).toEqual([]);
+    expect(report.attendedPending).toEqual([
+      "20261104000200_platform_jobs_attended",
+    ]);
     const problems = driftProblems(report, false).join("\n");
     expect(problems).toContain(
       "20261103000000_hand_made is applied but has no file",
@@ -133,9 +188,15 @@ describe("main", () => {
     expect(main(["--applied", applied])).toBe(0);
     expect(main(["--applied", applied, "--strict"])).toBe(1);
     expect(main([])).toBe(1);
-    expect(log.mock.calls.flat().join("\n")).toContain("pending (3)");
-    expect(error.mock.calls.flat().join("\n")).toContain(
-      "20261104000000_baseline is not applied yet",
+    const logged = log.mock.calls.flat().join("\n");
+    expect(logged).toContain("pending (2)");
+    expect(logged).toContain(
+      "attended item: 20261104000200_platform_jobs_attended",
     );
+    const errors = error.mock.calls.flat().join("\n");
+    expect(errors).toContain("20261104000000_baseline is not applied yet");
+    expect(errors).not.toContain("20261104000200_platform_jobs_attended");
+    log.mockRestore();
+    error.mockRestore();
   });
 });

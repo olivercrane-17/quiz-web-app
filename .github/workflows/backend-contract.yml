@@ -13,6 +13,9 @@ on:
       - "supabase/**"
       - "src/backend/**"
       - ".github/workflows/backend-contract.yml"
+  # For pull requests from forks only: a branch of this repository already
+  # runs on push, and a second run of the same commit would queue in the
+  # e2e-real group and could push a waiting run (the nightly one, say) out.
   pull_request:
     paths:
       - "supabase/**"
@@ -23,12 +26,6 @@ on:
     - cron: "41 4 * * *"
   workflow_dispatch:
 
-# The real-backend jobs run one at a time to stay clear of the rate limits
-# (ARCHITECTURE §11.7), and a running job is never cancelled midway.
-concurrency:
-  group: e2e-real
-  cancel-in-progress: false
-
 permissions:
   contents: read
 
@@ -38,6 +35,14 @@ env:
 jobs:
   contract:
     name: Contract suites against the real project
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    # The real-backend jobs run one at a time to stay clear of the rate
+    # limits (ARCHITECTURE §11.7), and a running job is never cancelled
+    # midway. The group sits on the job, so a skipped pull_request job never
+    # takes the group's one waiting place.
+    concurrency:
+      group: e2e-real
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

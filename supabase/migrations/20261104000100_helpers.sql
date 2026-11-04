@@ -12,8 +12,9 @@
 -- (client_ip, parse_ip, ip_prefix, salt_for, subject), the limiter (hit,
 -- peek, unhit and their ip, player and global forms, limit,
 -- limit_window), write keys, codes and tokens (crockford, random_code,
--- random_token), the scheduled-job bodies with every hook of §8.15 as a
--- no-op, and the SQL test helpers.
+-- random_token), the scheduled-job bodies with SQL-1's own steps in their
+-- unattended form and every other hook of §8.15 as a no-op, and the SQL
+-- test helpers.
 --
 -- Signatures are contracts: a later migration may replace a body with
 -- create or replace, but changing a return type or a parameter would need
@@ -176,25 +177,51 @@ $$;
 -- Replaces what could identify a player or open an account before error
 -- text is stored (AC-DAT-02): uuids with or without hyphens, bytea hex,
 -- e-mail addresses, long base64 and base64url runs (secrets and tokens),
--- shorter runs that mix letters and digits (sync codes, references), and
--- IPv4 and IPv6 addresses. Times such as 12:30:45 and snake_case names stay.
+-- the codes of §2.4 in the forms a player types or the server mints, other
+-- runs that mix letters and digits (references), and IPv4 and IPv6
+-- addresses, compressed ones included. Times such as 12:30:45, casts such as
+-- x::date, lower-case words and snake_case names stay.
 create or replace function private.redact(p_text text)
 returns text
-language sql
+language plpgsql
 immutable
 set search_path = ''
 as $$
-  select regexp_replace(regexp_replace(regexp_replace(regexp_replace(
-         regexp_replace(regexp_replace(regexp_replace(regexp_replace(
-    p_text,
-    '[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}', '<uuid>', 'gi'),
-    '\\x[0-9a-f]{8,}', '<bytes>', 'gi'),
-    '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}', '<email>', 'gi'),
-    '[A-Za-z0-9_-]{32,}={0,2}', '<token>', 'g'),
-    '[A-Za-z0-9+/]{32,}={0,2}', '<token>', 'g'),
-    '(?=[A-Za-z0-9]*[0-9])(?=[A-Za-z0-9]*[A-Za-z])[A-Za-z0-9]{12,31}', '<code>', 'g'),
-    '\m(?:[0-9]{1,3}\.){3}[0-9]{1,3}\M', '<ip>', 'g'),
-    '\m[0-9a-f]{1,4}(?::[0-9a-f]{0,4}){3,7}(?![0-9a-f:])', '<ip>', 'gi')
+declare
+  v_text text := p_text;
+begin
+  -- Player ids and other uuids, with or without hyphens; bytea hex.
+  v_text := regexp_replace(v_text, '[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}', '<uuid>', 'gi');
+  v_text := regexp_replace(v_text, '\\x[0-9a-f]{8,}', '<bytes>', 'gi');
+  v_text := regexp_replace(v_text, '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}', '<email>', 'gi');
+  -- Secrets and tokens: base64url and base64 runs of 32 or more.
+  v_text := regexp_replace(v_text, '[A-Za-z0-9_-]{32,}={0,2}', '<token>', 'g');
+  v_text := regexp_replace(v_text, '[A-Za-z0-9+/]{32,}={0,2}', '<token>', 'g');
+  -- Sync codes typed in four groups of four, split by spaces, hyphens or
+  -- dashes (crockford_normalize accepts them): any group of upper-case
+  -- letters and digits, or any case once the groups hold a letter and a
+  -- digit, so four short lower-case words stay.
+  v_text := regexp_replace(v_text,
+    '\m[0-9A-Z]{4}(?:[ \u2010-\u2015\u2212-][0-9A-Z]{4}){3}\M', '<code>', 'g');
+  v_text := regexp_replace(v_text,
+    '\m(?=.{0,18}[0-9])(?=.{0,18}[A-Za-z])[0-9A-Za-z]{4}(?:[ \u2010-\u2015\u2212-][0-9A-Za-z]{4}){3}\M', '<code>', 'g');
+  -- Codes as minted (§2.4): 8 (challenges), 10 (invites, quiz shares) or 16
+  -- (sync codes) Crockford characters with at least one letter, digits or
+  -- not, so an all-letter code goes too.
+  v_text := regexp_replace(v_text,
+    '\m(?=[0-9]*[A-HJKMNP-TV-Z])(?:[0-9A-HJKMNP-TV-Z]{16}|[0-9A-HJKMNP-TV-Z]{10}|[0-9A-HJKMNP-TV-Z]{8})\M', '<code>', 'g');
+  -- Any other run of 8 to 31 letters and digits that holds both: codes in
+  -- lower case, references.
+  v_text := regexp_replace(v_text, '(?=[A-Za-z0-9]*[0-9])(?=[A-Za-z0-9]*[A-Za-z])[A-Za-z0-9]{8,31}', '<code>', 'g');
+  -- IPv4; IPv6 written out; IPv6 compressed with ::, with at least one hex
+  -- digit and nothing word-like on either side, so casts stay.
+  v_text := regexp_replace(v_text, '\m(?:[0-9]{1,3}\.){3}[0-9]{1,3}\M', '<ip>', 'g');
+  v_text := regexp_replace(v_text, '\m[0-9a-f]{1,4}(?::[0-9a-f]{0,4}){3,7}(?![0-9a-f:])', '<ip>', 'gi');
+  v_text := regexp_replace(v_text,
+    '(?<![0-9A-Za-z_:])(?=[0-9a-f:]*[0-9a-f])(?:[0-9a-f]{1,4}(?::[0-9a-f]{1,4}){0,6})?::(?:[0-9a-f]{1,4}(?::[0-9a-f]{1,4}){0,6})?(?![0-9A-Za-z_:])',
+    '<ip>', 'gi');
+  return v_text;
+end
 $$;
 
 -- The byte caps of §8.6, checked before anything else is parsed.
@@ -290,9 +317,13 @@ end
 $$;
 
 -- The address the limiter keys on, by private.config.client_ip:
--- { "header": "x-forwarded-for", "hop": "first" | "last" | n }, where n
--- counts from the right and 0 is the last hop. A missing or malformed
--- header gives null, and every such request shares one subject.
+-- { "header": "x-forwarded-for", "hop": "first" | "last" | n }, where n is
+-- a whole number counting from the right and 0 is the last hop. A missing
+-- or malformed header gives null, and every such request shares one
+-- subject. So does a rule this function does not recognize ("Last", "1",
+-- 1.5, a missing key): falling back to the first hop, which a client may
+-- be able to forge, would hide the typo, while one shared subject shows it
+-- at once.
 create or replace function private.client_ip()
 returns inet
 language plpgsql
@@ -300,14 +331,27 @@ stable
 set search_path = ''
 as $$
 declare
-  v_rule jsonb := coalesce(private.cfg('client_ip'), '{}'::jsonb);
-  v_header text := lower(coalesce(v_rule ->> 'header', 'x-forwarded-for'));
-  v_hop jsonb := coalesce(v_rule -> 'hop', '"first"'::jsonb);
+  v_rule jsonb := private.cfg('client_ip');
+  v_header text;
+  v_hop jsonb;
+  v_back numeric;
   v_headers jsonb;
   v_hops text[];
   v_count integer;
   v_at integer;
 begin
+  if jsonb_typeof(v_rule) is distinct from 'object' then
+    return null;
+  end if;
+  v_header := v_rule ->> 'header';
+  v_hop := v_rule -> 'hop';
+  if jsonb_typeof(v_rule -> 'header') is distinct from 'string'
+     or v_header !~ '^[A-Za-z0-9_-]{1,64}$'
+     or v_hop is null
+     or (v_hop not in ('"first"'::jsonb, '"last"'::jsonb) and jsonb_typeof(v_hop) <> 'number') then
+    return null;
+  end if;
+  v_header := lower(v_header);
   begin
     v_headers := nullif(current_setting('request.headers', true), '')::jsonb;
   exception
@@ -322,15 +366,16 @@ begin
   if v_count = 0 then
     return null;
   end if;
-  if jsonb_typeof(v_hop) = 'number' then
-    v_at := v_count - (v_hop #>> '{}')::integer;
-  elsif v_hop #>> '{}' = 'last' then
+  if v_hop = '"first"'::jsonb then
+    v_at := 1;
+  elsif v_hop = '"last"'::jsonb then
     v_at := v_count;
   else
-    v_at := 1;
-  end if;
-  if v_at < 1 or v_at > v_count then
-    return null;
+    v_back := (v_hop #>> '{}')::numeric;
+    if v_back <> trunc(v_back) or v_back < 0 or v_back >= v_count then
+      return null;
+    end if;
+    v_at := v_count - v_back::integer;
   end if;
   return private.parse_ip(v_hops[v_at]);
 end
@@ -454,7 +499,12 @@ $$;
 
 -- For failure-only limits that refuse before checking (sync codes, claims,
 -- wrong room codes): counts nothing it allows. A refusal adds to the
--- window, so hits - cap counts refusals here too.
+-- window, so hits - cap counts refusals here too. It locks the counter row
+-- first, creating it at 0 if need be, and the lock lasts until the call's
+-- transaction ends. So a concurrent attempt on the same subject waits for
+-- this one to record its failure (or not) and then reads the new count;
+-- without the lock, every attempt in flight would read the same count and
+-- all of them could pass the cap.
 create or replace function private.peek(
   p_bucket text,
   p_key text,
@@ -481,16 +531,19 @@ begin
   v_start := private.window_start(v_now, p_window_s);
   v_end := v_start + make_interval(secs => p_window_s);
   v_subject := private.subject(p_bucket, p_key, v_start);
+  insert into private.rate_counters (bucket, subject, window_start, window_end, hits, cap)
+  values (p_bucket, v_subject, v_start, v_end, 0, p_max)
+  on conflict (bucket, subject, window_start) do nothing;
   select r.hits into v_hits
     from private.rate_counters r
-   where r.bucket = p_bucket and r.subject = v_subject and r.window_start = v_start;
-  if coalesce(v_hits, 0) + p_amount <= p_max then
+   where r.bucket = p_bucket and r.subject = v_subject and r.window_start = v_start
+     for update;
+  if v_hits + p_amount <= p_max then
     return row(true, null, p_scope)::private.limit_result;
   end if;
-  insert into private.rate_counters as r (bucket, subject, window_start, window_end, hits, cap)
-  values (p_bucket, v_subject, v_start, v_end, p_amount, p_max)
-  on conflict (bucket, subject, window_start) do update
-    set hits = r.hits + excluded.hits, cap = excluded.cap;
+  update private.rate_counters r
+     set hits = r.hits + p_amount, cap = p_max
+   where r.bucket = p_bucket and r.subject = v_subject and r.window_start = v_start;
   return row(false, private.retry_after_ms(v_now, v_end), p_scope)::private.limit_result;
 end
 $$;
@@ -851,6 +904,11 @@ $$;
 -- ---------------------------------------------------------------------------
 
 -- Stores a redacted error and returns its reference: 8 Crockford characters.
+-- The project bucket rpc_errors_1h caps the rows stored in an hour: past it,
+-- the reference is still returned and nothing is stored, so a client that
+-- keeps finding an unexpected error cannot fill the database (§8.1). Its
+-- refusals are folded like any bucket's, and the attended hourly step
+-- keeps 30 days of rows.
 create or replace function private.log_error(
   p_fn text,
   p_sqlstate text,
@@ -865,6 +923,9 @@ as $$
 declare
   v_ref text := private.random_code(5);
 begin
+  if not (private.hit_global('rpc_errors_1h')).allowed then
+    return v_ref;
+  end if;
   insert into private.rpc_errors (fn, sqlstate, ref, room_id, question_index, detail)
   values (
     left(coalesce(nullif(p_fn, ''), 'unknown'), 64),
@@ -877,10 +938,15 @@ begin
 end
 $$;
 
--- The answer to an unexpected exception. An RPC body ends with
+-- The answer to an unexpected exception. An RPC wraps only its writes in a
+-- block that ends with
 --   exception when others then
 --     return private.fail_internal('<rpc name>', sqlstate, sqlerrm);
--- so its work rolls back to the block while the error row commits.
+-- so the writes roll back while the error row commits. The size check, the
+-- limiter, authentication and validation run before that block, outside
+-- it: a caught exception rolls back everything its block did, and a
+-- limiter hit made inside the block would be undone with the writes
+-- (supabase/README.md §3).
 create or replace function private.fail_internal(
   p_fn text,
   p_sqlstate text,
@@ -972,16 +1038,64 @@ begin
 end
 $$;
 
--- SQL-1's own job steps. Their real bodies delete expired rows, and the
+-- SQL-1's own job steps. Their full bodies delete expired rows, and the
 -- Supabase MCP asks a human to confirm any SQL that holds a DELETE, even
--- with a WHERE and even inside a function body. So the bodies live in
+-- with a WHERE and even inside a function body. So the full bodies live in
 -- 20261104000200_platform_jobs_attended.sql, applied when someone can answer
--- that confirmation, and these placeholders keep every job body working
--- until then. Nothing runs them on a schedule before SQL-8 anyway.
-create or replace function private.hourly_platform() returns void        -- SQL-1, attended
-language plpgsql volatile set search_path = '' as $$ begin null; end $$;
-create or replace function private.nightly_platform() returns void       -- SQL-1, attended
-language plpgsql volatile set search_path = '' as $$ begin null; end $$;
+-- that confirmation. Until then these unattended versions do every part
+-- that needs no DELETE, and say once a day that the rest is waiting.
+
+-- Until the attended body lands: refusals folded into daily_aggregates
+-- (§8.6); each salt for a day before yesterday replaced with fresh random
+-- bytes, which ends its 48-hour life as surely as deleting it would (no
+-- window still open started that early, and the old subjects can no longer
+-- be tied to an address, PRD §8.3); and one owner_queue alert a day naming
+-- the attended migration, since counters, write keys and error rows are not
+-- pruned yet.
+create or replace function private.hourly_platform()
+returns void
+language plpgsql
+volatile
+set search_path = ''
+as $$
+declare
+  v_now timestamptz := private.now();
+  v_today date := (v_now at time zone 'UTC')::date;
+begin
+  perform private.fold_refusals(v_now);
+  update private.ip_salts s
+     set salt = extensions.gen_random_bytes(32)
+   where s.day < v_today - 1;
+  if not exists (
+    select 1
+      from private.alerts a
+     where a.kind = 'owner_queue'
+       and a.detail ->> 'item' = '20261104000200_platform_jobs_attended'
+       and a.at >= date_trunc('day', v_now, 'UTC')) then
+    insert into private.alerts (kind, detail)
+    values ('owner_queue', jsonb_build_object(
+      'item', '20261104000200_platform_jobs_attended',
+      'why', 'Rate counters, write keys and error rows are not pruned until this migration is applied '
+             || 'in a session someone attends (supabase/README.md, section 9).'));
+  end if;
+end
+$$;
+
+-- Until the attended body lands: zone names that tzdata adds reach
+-- time_zones (§8.7). Removing the names it no longer lists waits for the
+-- attended body.
+create or replace function private.nightly_platform()
+returns void
+language plpgsql
+volatile
+set search_path = ''
+as $$
+begin
+  insert into private.time_zones (name)
+  select z.name from pg_catalog.pg_timezone_names z
+  on conflict (name) do nothing;
+end
+$$;
 
 -- The hooks other tickets fill (§8.15). Each is a no-op until its owner
 -- replaces it.

@@ -57,13 +57,19 @@ $$;
 select 'PASS SQL-1 strip_links removes links and keeps the words';
 
 -- redact (the helper half of AC-DAT-02): no player id survives in text or
--- byte form, nor tokens, codes, e-mail or IP addresses; times and names stay.
+-- byte form, nor tokens, e-mail or IP addresses (compressed IPv6 included),
+-- nor a code of §2.4 as minted (8, 10 or 16 characters, letters only or
+-- not) or as a sync code typed in groups; times, casts, lower-case words
+-- and snake_case names stay.
 do $$
 declare
   v_case record;
   v_player uuid := '6f1d2c3b-4a5e-4f60-8a7b-9c8d7e6f5a4b';
   v_secret text := private.random_token(32);
   v_out text;
+  v_index integer;
+  v_bytes bytea;
+  v_code text;
 begin
   for v_case in
     select * from (values
@@ -73,14 +79,46 @@ begin
       ('digest \x0123456789abcdef', 'digest <bytes>'),
       ('mail bob.smith+quiz@example.co.uk now', 'mail <email> now'),
       ('code 7Q2K9M4XH3ZP8W1N used', 'code <code> used'),
+      ('sync code ABCD-EFGH-JKMN-PQR5 failed', 'sync code <code> failed'),
+      ('sync code ABCD EFGH JKMN PQR5 failed', 'sync code <code> failed'),
+      ('sync code 7Q2K-9M4X-H3ZP-8W1N failed', 'sync code <code> failed'),
+      ('typed 7q2k 9m4x h3zp 8w1n late', 'typed <code> late'),
+      ('code ABCDEFGHJKMNPQRS used', 'code <code> used'),
+      ('invite 7Q2K9M4XH3 used', 'invite <code> used'),
+      ('challenge AB12CD34 used', 'challenge <code> used'),
+      ('challenge ABCDEFGH used', 'challenge <code> used'),
       ('from 203.0.113.7 via 10.0.0.1', 'from <ip> via <ip>'),
       ('from 2001:db8:85a3:0:0:8a2e:370:7334 and 2001:db8::1:2', 'from <ip> and <ip>'),
+      ('from 2001::1 and fe80::1', 'from <ip> and <ip>'),
+      ('loopback ::1, then 2001:db8::', 'loopback <ip>, then <ip>'),
       ('at 2026-11-01 12:30:45.123+00 in on_attempt_finished_challenges', 'at 2026-11-01 12:30:45.123+00 in on_attempt_finished_challenges'),
-      ('relation "private.rate_counters" does not exist', 'relation "private.rate_counters" does not exist')
+      ('relation "private.rate_counters" does not exist', 'relation "private.rate_counters" does not exist'),
+      ('this test will fail at 12:30:45', 'this test will fail at 12:30:45'),
+      ('cast (x)::date, y::text and $1::uuid', 'cast (x)::date, y::text and $1::uuid'),
+      ('Postgres 17 runs pgcrypto and sha256', 'Postgres 17 runs pgcrypto and sha256')
     ) t(raw, want)
   loop
     assert private.redact(v_case.raw) = v_case.want,
       format('redact(%L) = %L, want %L', v_case.raw, private.redact(v_case.raw), v_case.want);
+  end loop;
+
+  -- 200 codes of each length, from fixed bytes so a run is repeatable. An
+  -- all-digit code (about 1 in 11,000 challenge codes) reads as a number
+  -- and stays; every other one goes, and every grouped sync code goes.
+  for v_index in 1 .. 200 loop
+    v_bytes := sha256(convert_to('qz-redact|' || v_index, 'UTF8'));
+    foreach v_code in array array[
+      private.crockford(substring(v_bytes from 1 for 5)),
+      left(private.crockford(substring(v_bytes from 6 for 7)), 10),
+      private.crockford(substring(v_bytes from 13 for 10))]
+    loop
+      continue when v_code ~ '^[0-9]+$';
+      v_out := private.redact(format('code %s used', v_code));
+      assert v_out = 'code <code> used', format('the code %s came out as %L', v_code, v_out);
+    end loop;
+    v_out := private.redact(format('code %s-%s-%s-%s used',
+      substr(v_code, 1, 4), substr(v_code, 5, 4), substr(v_code, 9, 4), substr(v_code, 13, 4)));
+    assert v_out = 'code <code> used', format('the grouped code %s came out as %L', v_code, v_out);
   end loop;
 
   v_out := private.redact(format('secret=%s sha=%s b64=%s player=%s',
@@ -127,8 +165,14 @@ begin
   assert private.valid_tz(null) is null, 'no zone';
   assert coalesce(private.valid_tz('Nowhere/Else'), private.valid_tz('Asia/Tokyo'), 'UTC') = 'Asia/Tokyo',
     'the documented fallback chain';
-  assert (select count(*) from private.time_zones) = (select count(*) from pg_catalog.pg_timezone_names),
-    'time_zones holds every zone name';
+  -- After the nightly refresh every zone tzdata lists is valid. Removing
+  -- names tzdata no longer lists waits for the attended migration, so only
+  -- this direction holds everywhere.
+  perform private.nightly_platform();
+  assert not exists (
+    select 1 from pg_catalog.pg_timezone_names z
+     where not exists (select 1 from private.time_zones t where t.name = z.name)),
+    'time_zones misses a zone that pg_timezone_names lists';
 
   assert not private.over_cap(repeat('x', 8192)), '8 kB is within the default cap';
   assert private.over_cap(repeat('x', 8193)), 'one byte more is over it';

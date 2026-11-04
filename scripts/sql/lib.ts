@@ -169,10 +169,10 @@ const DOLLAR_DESTRUCTIVE =
   /execute\s+\$\w*\$\s*(drop\b|delete\b|truncate\b|alter\s+table\b)/gi;
 const WORD_DESTRUCTIVE = /\b(drop|delete|truncate|alter\s+table)\b/gi;
 /** An identifier, quoted or not, as the MCP reads one. */
-const IDENT = String.raw`(?:"(?:[^"]|"")+"|[a-z_\u0080-￿][\w$\u0080-￿]*)`;
+const IDENT = String.raw`(?:"(?:[^"]|"")+"|[a-z_\u0080-\uffff][\w$\u0080-\uffff]*)`;
 /** A whole statement ALTER TABLE t DROP [COLUMN] c: a dropped column, with or without the word COLUMN. */
 const ALTER_DROP_COLUMN = new RegExp(
-  String.raw`^\s*alter\s+table\s+(?:if\s+exists\s+)?(?:only\s+)?${IDENT}(?:\s*\.\s*${IDENT})?\s+drop\s+(?!constraint(?![\w$\u0080-￿]))(?:column\s+)?(?:if\s+exists\s+)?${IDENT}(?:\s+(?:cascade|restrict))?\s*$`,
+  String.raw`^\s*alter\s+table\s+(?:if\s+exists\s+)?(?:only\s+)?${IDENT}(?:\s*\.\s*${IDENT})?\s+drop\s+(?!constraint(?![\w$\u0080-\uffff]))(?:column\s+)?(?:if\s+exists\s+)?${IDENT}(?:\s+(?:cascade|restrict))?\s*$`,
   "i",
 );
 
@@ -191,63 +191,209 @@ function destructiveMatch(text: string, pattern: RegExp): boolean {
   return firstAlter !== -1 && /\bdrop\s+column\b/i.test(text.slice(firstAlter));
 }
 
-/** Top-level statements, with quotes, dollar quotes and comments respected. */
-export function splitStatements(sql: string): string[] {
-  const out: string[] = [];
-  let current = "";
+/**
+ * Where the quote that opens at `index` closes, or -1: the MCP's scan, which
+ * reads '' and "" as escaped quotes and backslash escapes in E'...' strings.
+ */
+function closingQuote(text: string, index: number): number {
+  const quote = text[index];
+  const escapes =
+    quote === "'" &&
+    /e/i.test(text[index - 1] ?? "") &&
+    !/[\w$\u0080-\uffff]/.test(text[index - 2] ?? "");
+  let at = index + 1;
+  while (at < text.length) {
+    if (escapes && text[at] === "\\") at += 2;
+    else if (text[at] === quote) {
+      if (text[at + 1] !== quote) return at;
+      at += 2;
+    } else at += 1;
+  }
+  return -1;
+}
+
+/** The MCP's Vt(): quoted strings and identifiers blanked to '' and "". */
+function blankQuotes(text: string): string {
+  let out = "";
   let index = 0;
-  while (index < sql.length) {
-    const rest = sql.slice(index);
-    const dollar = /^\$[A-Za-z_]*\$/.exec(rest);
-    if (dollar) {
-      const end = sql.indexOf(dollar[0], index + dollar[0].length);
-      const stop = end === -1 ? sql.length : end + dollar[0].length;
-      current += sql.slice(index, stop);
-      index = stop;
-      continue;
-    }
-    const char = sql[index] as string;
+  while (index < text.length) {
+    const char = text[index] as string;
     if (char === "'" || char === '"') {
-      let end = index + 1;
-      while (end < sql.length) {
-        if (sql[end] === char && sql[end + 1] === char) end += 2;
-        else if (sql[end] === char) break;
-        else end += 1;
-      }
-      current += sql.slice(index, end + 1);
-      index = end + 1;
+      const close = closingQuote(text, index);
+      out += char === "'" ? "''" : '""';
+      index = close === -1 ? text.length : close + 1;
       continue;
     }
-    if (rest.startsWith("--")) {
-      const end = sql.indexOf("\n", index);
-      index = end === -1 ? sql.length : end;
-      continue;
-    }
-    if (char === ";") {
-      out.push(current);
-      current = "";
-      index += 1;
-      continue;
-    }
-    current += char;
+    out += char;
     index += 1;
   }
-  out.push(current);
-  return out
-    .map((statement) => statement.trim())
-    .filter((statement) => statement !== "");
+  return out;
+}
+
+/** A dollar-quote tag where one starts: $$ or $tag$ (the MCP's Xt). */
+const DOLLAR_TAG = /\$(?:[a-z_\u0080-\uffff][\w\u0080-\uffff]*)?\$/iy;
+
+export interface McpPiece {
+  /** The piece as the MCP reads it: quotes blanked outside dollar quotes, comment text dropped. */
+  text: string;
+  /** Where the piece starts and ends in the SQL given, for messages. */
+  start: number;
+  end: number;
+}
+
+/** The MCP's fallback for an unterminated quote: a plain split on `;`, quotes blanked. */
+function fallbackPieces(sql: string): McpPiece[] {
+  const pieces: McpPiece[] = [];
+  let start = 0;
+  for (const part of sql.split(";")) {
+    pieces.push({ text: blankQuotes(part), start, end: start + part.length });
+    start += part.length + 1;
+  }
+  return pieces;
 }
 
 /**
- * Why the Supabase MCP would stop this SQL to ask a human, mirroring the
- * destructive-SQL check of @supabase/mcp-server-supabase 0.15.0, which
- * execute_sql and apply_migration both run (the hosted server may differ).
- * It splits on every `;` without regard to dollar quotes, so a DELETE inside
- * a function body counts, WHERE or not; it also catches EXECUTE of a
- * destructive string, ALTER TABLE ... DROP COLUMN and UPDATE without WHERE.
- * Empty when the SQL can be sent unattended.
+ * The pieces the MCP's UPDATE rule reads: a port of In() in
+ * @supabase/mcp-server-supabase 0.15.0. It splits on every `;` outside a
+ * quoted string, so also inside dollar quotes (function bodies and DO
+ * blocks) and inside block comments. It blanks quoted strings outside
+ * dollar quotes, keeps the markers `--`, `/*` and `*\/` but drops comment
+ * text, and inside an UPDATE statement takes a dollar-quoted string whole.
+ * An unterminated quote makes it fall back to a plain split on `;`.
  */
-export function mcpConfirmationReasons(sql: string): string[] {
+export function mcpPieces(sql: string): McpPiece[] {
+  const pieces: McpPiece[] = [];
+  let text = "";
+  let start = 0;
+  let index = 0;
+  let dollar: string | undefined;
+  let blockDepth = 0;
+  let lineComment = false;
+  const cut = () => {
+    pieces.push({ text, start, end: index });
+    text = "";
+    start = index + 1;
+  };
+  while (index < sql.length) {
+    const char = sql[index] as string;
+    if (lineComment) {
+      if (char === "\n" || char === "\r") {
+        lineComment = false;
+        text += char;
+      }
+      index += 1;
+      continue;
+    }
+    if (blockDepth > 0) {
+      if (char === ";") {
+        cut();
+        index += 1;
+      } else if (char === "/" && sql[index + 1] === "*") {
+        text += "/*";
+        blockDepth += 1;
+        index += 2;
+      } else if (char === "*" && sql[index + 1] === "/") {
+        text += "*/";
+        blockDepth -= 1;
+        index += 2;
+      } else index += 1;
+      continue;
+    }
+    if (dollar !== undefined) {
+      if (char === ";") {
+        cut();
+        index += 1;
+      } else if (sql.startsWith(dollar, index)) {
+        text += dollar;
+        index += dollar.length;
+        dollar = undefined;
+      } else {
+        text += char;
+        index += 1;
+      }
+      continue;
+    }
+    if (char === ";") {
+      cut();
+      index += 1;
+      continue;
+    }
+    if (char === "$" && !/[\w$\u0080-\uffff]/.test(sql[index - 1] ?? "")) {
+      DOLLAR_TAG.lastIndex = index;
+      const tag = DOLLAR_TAG.exec(sql)?.[0];
+      if (tag !== undefined && /^\s*update\s/i.test(text)) {
+        const close = sql.indexOf(tag, index + tag.length);
+        if (close === -1) return fallbackPieces(sql);
+        text += tag + tag;
+        index = close + tag.length;
+        continue;
+      }
+      if (tag !== undefined) {
+        text += tag;
+        dollar = tag;
+        index += tag.length;
+        continue;
+      }
+    }
+    if (char === "-" && sql[index + 1] === "-") {
+      text += "--";
+      lineComment = true;
+      index += 2;
+      continue;
+    }
+    if (char === "/" && sql[index + 1] === "*") {
+      text += "/*";
+      blockDepth = 1;
+      index += 2;
+      continue;
+    }
+    if (char === "'" || char === '"') {
+      const close = closingQuote(sql, index);
+      if (close === -1) return fallbackPieces(sql);
+      text += char === "'" ? "''" : '""';
+      index = close + 1;
+      continue;
+    }
+    text += char;
+    index += 1;
+  }
+  cut();
+  return pieces;
+}
+
+/**
+ * The MCP's Dn: UPDATE <table> SET as it recognizes one (a table without an
+ * alias). The MCP's copy also carries the s flag, which changes nothing in a
+ * pattern without a dot.
+ */
+const MCP_UPDATE =
+  /(?:^|;)\s*update\s+(?:"(?:[^"]|"")*"|[\w]+)(?:\.(?:"(?:[^"]|"")*"|[\w]+))?\s+set\s+[\w\W]+?(?!\s*where\s)/i;
+
+/**
+ * Our UPDATE rule, a little wider than the MCP's: a piece that starts with
+ * UPDATE once the comment markers In() leaves are skipped (the MCP looks
+ * past nothing), with or without an alias (the MCP needs none), and with no
+ * WHERE as a word of its own.
+ */
+function updateWithoutWhere(text: string): boolean {
+  const body = text.replace(/^(?:\s|--|\/\*|\*\/)+/, "");
+  return /^update\s/i.test(body) && !/\bwhere\s/i.test(body);
+}
+
+/** A piece's first line of SQL, comments left out. */
+function excerpt(sql: string, piece: McpPiece): string {
+  return (
+    sql
+      .slice(piece.start, piece.end)
+      .replace(/--.*$/gm, "")
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .trim()
+      .split("\n")[0] ?? ""
+  ).trim();
+}
+
+/** The MCP's Rn(): DROP, DELETE and TRUNCATE pieces, dropped columns and destructive EXECUTE. */
+function destructiveReasons(sql: string): string[] {
   const reasons = new Set<string>();
   const text = withoutComments(sql);
   const alter = /(?:^|;)\s*alter\s+table\s+/i.exec(text);
@@ -294,9 +440,43 @@ export function mcpConfirmationReasons(sql: string): string[] {
       reasons.add(`EXECUTE ${match[1]}(...) of a destructive command`);
     }
   }
-  for (const statement of splitStatements(sql)) {
-    if (/^update\s/i.test(statement) && !/\bwhere\s/i.test(statement)) {
-      reasons.add(`UPDATE without WHERE (${statement.split("\n")[0]})`);
+  return [...reasons];
+}
+
+/**
+ * Exactly what @supabase/mcp-server-supabase 0.15.0 decides, a port of its
+ * Fe() = Rn() || Hn(), which execute_sql and apply_migration both run. Tests
+ * hold mcpConfirmationReasons to it; the scripts use the reasons.
+ */
+export function mcpWouldConfirm(sql: string): boolean {
+  return (
+    destructiveReasons(sql).length > 0 ||
+    mcpPieces(sql).some(
+      ({ text }) =>
+        text.trim().toLowerCase().startsWith("update") &&
+        MCP_UPDATE.test(text) &&
+        !/where\s/i.test(text),
+    )
+  );
+}
+
+/**
+ * Why the Supabase MCP would stop this SQL to ask a human, following the
+ * destructive-SQL check of @supabase/mcp-server-supabase 0.15.0 (the hosted
+ * server may differ). Its DROP, DELETE and TRUNCATE rule splits on every
+ * `;` without regard to quotes or dollar quotes, so a DELETE inside a
+ * function body counts, WHERE or not; it also catches EXECUTE of a
+ * destructive string and ALTER TABLE ... DROP COLUMN. Its UPDATE rule reads
+ * the pieces of mcpPieces(), which reach into DO blocks and function bodies
+ * too. Every SQL the MCP stops for gets a reason here (mcpWouldConfirm),
+ * and the UPDATE rule flags a little more. Empty when the SQL can be sent
+ * unattended.
+ */
+export function mcpConfirmationReasons(sql: string): string[] {
+  const reasons = new Set(destructiveReasons(sql));
+  for (const piece of mcpPieces(sql)) {
+    if (updateWithoutWhere(piece.text)) {
+      reasons.add(`UPDATE without WHERE (${excerpt(sql, piece)})`);
     }
   }
   return [...reasons];
@@ -329,9 +509,17 @@ export interface TestFile {
   body: string;
   /** The text of every `select 'PASS ...';` line, in order. */
   passLines: string[];
+  /**
+   * Migrations the file needs, from `-- requires: <migration stem>` lines in
+   * its header (before `begin;`). sql:bundle skips the file when one is
+   * neither in the bundle nor applied.
+   */
+  requires: string[];
 }
 
 const PASS_LINE = /^\s*select\s+'(PASS [^']+)'\s*;\s*$/i;
+const REQUIRES_LINE = /^\s*--\s*requires:\s*(\S+)\s*$/i;
+const MIGRATION_STEM = /^\d{14}_[a-z0-9]+(?:_[a-z0-9]+)*$/;
 const CODE_LINE = (line: string) => {
   const trimmed = line.trim();
   return trimmed !== "" && !trimmed.startsWith("--");
@@ -341,7 +529,8 @@ const NESTED_CONTROL =
 
 /**
  * A test file is one transaction: `begin;`, statements, one or more
- * `select 'PASS <AC id or ticket> <name>';` lines, `rollback;`. Throws with
+ * `select 'PASS <AC id or ticket> <name>';` lines, `rollback;`. Its header
+ * comments may name migrations it needs (`-- requires: <stem>`). Throws with
  * the reason when a file breaks the shape.
  */
 export function parseTestFile(path: string, text: string): TestFile {
@@ -353,6 +542,17 @@ export function parseTestFile(path: string, text: string): TestFile {
   const last = code[code.length - 1];
   if (first === undefined || !/^\s*begin\s*;\s*$/i.test(first.line)) {
     throw new Error(`${path}: the first statement must be "begin;"`);
+  }
+  const requires: string[] = [];
+  for (const line of lines.slice(0, first.index)) {
+    const required = REQUIRES_LINE.exec(line);
+    if (!required) continue;
+    if (!MIGRATION_STEM.test(required[1] as string)) {
+      throw new Error(
+        `${path}: "-- requires:" names a migration stem such as 20261104000200_platform_jobs_attended`,
+      );
+    }
+    requires.push(required[1] as string);
   }
   if (
     last === undefined ||
@@ -380,7 +580,7 @@ export function parseTestFile(path: string, text: string): TestFile {
   if (passLines.length === 0) {
     throw new Error(`${path}: no "select 'PASS ...';" line`);
   }
-  return { path, body: body.join("\n").trim(), passLines };
+  return { path, body: body.join("\n").trim(), passLines, requires };
 }
 
 const PAYLOAD_MARK = /^\s*--\s*payload:\s*([a-z0-9][a-z0-9._-]*)\s*$/i;

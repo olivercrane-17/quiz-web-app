@@ -4,7 +4,7 @@
  * unattended (the project's words and the Supabase MCP's own check), the
  * test and payload file shapes, and the repository's SQL held to all of it.
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -15,12 +15,13 @@ import {
   listMigrations,
   listTestFiles,
   mcpConfirmationReasons,
+  mcpPieces,
+  mcpWouldConfirm,
   parseAppliedMigrations,
   parseMigrationName,
   parsePayloadFile,
   parseTestFile,
   scanForbidden,
-  splitStatements,
   transactionControlLines,
 } from "./lib.ts";
 
@@ -138,6 +139,51 @@ end $$;`;
     ).toEqual(["UPDATE without WHERE (update private.config set value = '0')"]);
   });
 
+  it("stops for an UPDATE without WHERE inside a function body or a DO block, as the MCP does", () => {
+    const body = `create or replace function private.set_state(p_state text) returns void
+language plpgsql volatile set search_path = '' as $$
+begin
+  perform 1;
+  update private.service_state set state = p_state, updated_at = private.now();
+end $$;`;
+    const block = `do $$ begin perform private.t_now('2026-11-04T12:00:00Z'); update private.config set value = '1'; end $$;`;
+    expect(mcpWouldConfirm(body)).toBe(true);
+    expect(mcpWouldConfirm(block)).toBe(true);
+    expect(mcpConfirmationReasons(body)).toEqual([
+      "UPDATE without WHERE (update private.service_state set state = p_state, updated_at = private.now())",
+    ]);
+    expect(mcpConfirmationReasons(block)).toEqual([
+      "UPDATE without WHERE (update private.config set value = '1')",
+    ]);
+  });
+
+  it("lets an UPDATE through once its WHERE comes before the next semicolon", () => {
+    const sql = `create function f() returns void language plpgsql as $$
+begin
+  update private.ip_salts s
+     set salt = extensions.gen_random_bytes(32)
+   where s.day < current_date - 1;
+end $$;
+update t set note = $q$ a; b $q$ where id = 1;`;
+    expect(mcpWouldConfirm(sql)).toBe(false);
+    expect(mcpConfirmationReasons(sql)).toEqual([]);
+  });
+
+  it("flags a little more than the MCP, never less", () => {
+    // A WHERE inside a quoted string is no WHERE once quotes are blanked.
+    const quoted = "update t set note = 'where it was';";
+    expect(mcpWouldConfirm(quoted)).toBe(true);
+    expect(mcpConfirmationReasons(quoted)).toHaveLength(1);
+    // The MCP reads past no comment and needs a table without an alias; we do neither.
+    for (const sql of [
+      "select 1;\n-- reset\nupdate t set a = 1;",
+      "update private.config c set value = '1';",
+    ]) {
+      expect(mcpWouldConfirm(sql), sql).toBe(false);
+      expect(mcpConfirmationReasons(sql), sql).toHaveLength(1);
+    }
+  });
+
   it("lets through what SQL-1 sends unattended", () => {
     expect(
       mcpConfirmationReasons(`-- a comment that says delete from x;
@@ -151,16 +197,30 @@ rollback to savepoint qz_test;`),
     ).toEqual([]);
   });
 
-  it("splits statements around quotes and dollar quotes", () => {
-    expect(
-      splitStatements(
-        "select 'a;b'; do $$ begin null; end $$; -- c;\nselect \"x;y\" from t;",
-      ),
-    ).toEqual([
-      "select 'a;b'",
-      "do $$ begin null; end $$",
-      'select "x;y" from t',
+  it("splits as the MCP's In() does: on every semicolon outside a quote, dollar quotes included", () => {
+    const sql =
+      "select 'a;b'; do $$ begin null; end $$; -- c;\nselect \"x;y\" from t; /* d; */ select 2";
+    expect(mcpPieces(sql).map((piece) => piece.text)).toEqual([
+      "select ''",
+      " do $$ begin null",
+      " end $$",
+      ' --\nselect "" from t',
+      " /*",
+      "*/ select 2",
     ]);
+    // Inside an UPDATE a dollar-quoted string is taken whole.
+    expect(
+      mcpPieces("update t set v = $t$e;f$t$").map((piece) => piece.text),
+    ).toEqual(["update t set v = $t$$t$"]);
+    const pieces = mcpPieces("select 1;\nupdate x set y = 2");
+    expect(pieces.map(({ start, end }) => [start, end])).toEqual([
+      [0, 8],
+      [9, 28],
+    ]);
+    // An unterminated quote: a plain split on semicolons, quotes blanked.
+    expect(
+      mcpPieces("select 'a; update t set b = 1").map((p) => p.text),
+    ).toEqual(["select ''", " update t set b = 1"]);
   });
 });
 
@@ -182,7 +242,22 @@ describe("parseTestFile", () => {
       path: "t.test.sql",
       body: "do $$ begin assert true; end $$;",
       passLines: ["PASS AC-X-01 one", "PASS SQL-1 two"],
+      requires: [],
     });
+  });
+
+  it("reads the migrations a file requires from its header", () => {
+    const test = parseTestFile(
+      "t.test.sql",
+      "-- about\n-- requires: 20261104000200_platform_jobs_attended\nbegin;\nselect 1;\n-- requires: 20991231000000_ignored\nselect 'PASS SQL-1 x';\nrollback;\n",
+    );
+    expect(test.requires).toEqual(["20261104000200_platform_jobs_attended"]);
+    expect(() =>
+      parseTestFile(
+        "t.test.sql",
+        "-- requires: platform_jobs\nbegin;\nselect 'PASS SQL-1 x';\nrollback;\n",
+      ),
+    ).toThrow(/requires/);
   });
 
   it("refuses files that break the shape", () => {
@@ -258,25 +333,36 @@ describe("the repository's SQL", () => {
         expect(scanForbidden(migration.file, sql), migration.file).toEqual([]);
       }
       expect(transactionControlLines(sql), migration.file).toEqual([]);
-      if (!migration.attended)
+      if (!migration.attended) {
         expect(mcpConfirmationReasons(sql), migration.file).toEqual([]);
+        expect(mcpWouldConfirm(sql), migration.file).toBe(false);
+      }
     }
     for (const area of listAreas(ROOT)) {
-      for (const path of listTestFiles(ROOT, area)) {
+      const dir = join(ROOT, "supabase/tests", area);
+      const files = [
+        ...listTestFiles(ROOT, area),
+        ...readdirSync(dir)
+          .filter((file) => file.endsWith(".payloads.sql"))
+          .map((file) => `supabase/tests/${area}/${file}`),
+      ];
+      for (const path of files) {
         const sql = read(path);
         expect(scanForbidden(path, sql), path).toEqual([]);
         expect(mcpConfirmationReasons(sql), path).toEqual([]);
-        expect(() => parseTestFile(path, sql), path).not.toThrow();
+        expect(mcpWouldConfirm(sql), path).toBe(false);
+        if (path.endsWith(".test.sql")) {
+          expect(() => parseTestFile(path, sql), path).not.toThrow();
+        }
       }
     }
   });
 
-  it("marks attended only the migrations that need a confirmation", () => {
+  it("marks attended only the migrations the MCP itself stops for", () => {
     for (const migration of migrations.filter((m) => m.attended)) {
-      expect(
-        mcpConfirmationReasons(read(`${MIGRATIONS_DIR}/${migration.file}`)),
-        migration.file,
-      ).not.toEqual([]);
+      const sql = read(`${MIGRATIONS_DIR}/${migration.file}`);
+      expect(mcpConfirmationReasons(sql), migration.file).not.toEqual([]);
+      expect(mcpWouldConfirm(sql), migration.file).toBe(true);
     }
   });
 });

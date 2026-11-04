@@ -50,7 +50,7 @@
       "index": "rpc_errors_at_idx",
       "required": false,
       "ticket": "SQL-1",
-      "why": "§8.3 indexes the error log by time for the owner's triage through MCP: an internal reply shows its reference, and the owner reads the errors logged around it. Nothing reads the log before the first RPC that can fail (SQL-2), so INFO 0005 reports the index as unused."
+      "why": "§8.3 indexes the error log by time for the owner's triage through MCP (an internal reply shows its reference, and the owner reads the errors logged around it) and for the attended hourly step, which prunes rows older than 30 days. Nothing reads the log before the first RPC that can fail (SQL-2) or before that step runs, so INFO 0005 reports the index as unused."
     }
   ]
 }

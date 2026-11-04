@@ -12,7 +12,10 @@
  * are not scanned. Files after the newest applied one are pending: listed,
  * and an error only with --strict (the wave exit, after the integrator
  * applied everything). Owner-only migrations are listed as owner items and
- * never count as drift.
+ * never count as drift. So are attended migrations still to apply: they
+ * wait for a session someone attends, which may come after later
+ * migrations, and they only replace bodies an earlier migration of their
+ * own ticket created, so neither their order nor --strict counts them.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -33,7 +36,8 @@ import {
 const USAGE = `Usage: npm run sql:drift -- --applied <file> [--strict]
 
   --applied <file>   list_migrations output (JSON) from the Supabase MCP
-  --strict           Also fail while any migration is pending`;
+  --strict           Also fail while any migration is pending (attended
+                     ones wait for an attended session and never count)`;
 
 export interface DriftReport {
   /** In the repo and applied. */
@@ -44,6 +48,8 @@ export interface DriftReport {
   pending: string[];
   /** Not applied, but older than the newest applied migration. */
   outOfOrder: string[];
+  /** Attended migrations not applied yet: they wait for an attended session, in any order. */
+  attendedPending: string[];
   /** Owner-only migrations, and whether the project recorded them. */
   ownerOnly: { stem: string; applied: boolean }[];
   badNames: string[];
@@ -70,6 +76,7 @@ export function driftReport(
     missing: appliedNames.filter((name) => !stems.has(name)).sort(),
     pending: [],
     outOfOrder: [],
+    attendedPending: [],
     ownerOnly: files
       .filter((file) => file.ownerOnly)
       .map((file) => ({ stem: file.stem, applied: applied.has(file.stem) })),
@@ -81,7 +88,8 @@ export function driftReport(
       report.applied.push(file.stem);
       continue;
     }
-    if (newestApplied !== undefined && file.stem < newestApplied)
+    if (file.attended) report.attendedPending.push(file.stem);
+    else if (newestApplied !== undefined && file.stem < newestApplied)
       report.outOfOrder.push(file.stem);
     else report.pending.push(file.stem);
     const path = `${MIGRATIONS_DIR}/${file.file}`;
@@ -126,6 +134,9 @@ export function formatReport(report: DriftReport): string {
     `applied (${report.applied.length}): ${report.applied.join(", ") || "none"}`,
     `pending (${report.pending.length}): ${report.pending.join(", ") || "none"}`,
   ];
+  for (const stem of report.attendedPending) {
+    lines.push(`attended item: ${stem} (waits for an attended session)`);
+  }
   for (const item of report.ownerOnly) {
     lines.push(
       `owner item: ${item.stem} (${item.applied ? "recorded as applied" : "not applied; for the owner, see supabase/README.md"})`,

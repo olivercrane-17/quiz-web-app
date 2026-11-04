@@ -4,8 +4,10 @@
 -- and write nothing.
 begin;
 
--- RLS on, and a policy refusing every command to everyone, on every table
--- in private (lint 0008), CNT-0's key_escrow included.
+-- RLS on, and a restrictive policy refusing every command to everyone, on
+-- every table in private (lint 0008), CNT-0's key_escrow included. Only a
+-- restrictive one counts: a permissive policy is OR-ed with any other
+-- permissive policy, so a later mistake would open rows past it.
 do $$
 declare
   v_bad text;
@@ -21,14 +23,15 @@ begin
             select 1
               from pg_catalog.pg_policy p
              where p.polrelid = c.oid
+               and not p.polpermissive
                and p.polcmd = '*'
                and p.polroles = array[0::oid]
                and pg_catalog.pg_get_expr(p.polqual, p.polrelid) = 'false'
                and pg_catalog.pg_get_expr(p.polwithcheck, p.polrelid) = 'false'));
-  assert v_bad is null, format('tables in private without RLS and a deny-all policy: %s', v_bad);
+  assert v_bad is null, format('tables in private without RLS and a restrictive deny-all policy: %s', v_bad);
 end
 $$;
-select 'PASS SQL-1 standing: RLS and a deny-all policy on every table in private';
+select 'PASS SQL-1 standing: RLS and a restrictive deny-all policy on every table in private';
 
 -- No table forces RLS: the definer RPCs rely on the owner's bypass.
 do $$
@@ -64,19 +67,31 @@ select 'PASS SQL-1 standing: public holds no tables, views or sequences';
 
 -- The anon allowlist (§8.2 rule 4): every function anon can execute in
 -- public is named in private.rpc_allowlist, every row names one function,
--- and no name is overloaded (PostgREST resolves an RPC by name).
+-- and no name is overloaded (PostgREST resolves an RPC by name). Extension
+-- functions get no exemption, and no extension may live in public or
+-- private: create extension without a schema installs into public, where
+-- Supabase's default privileges would hand every one of its functions to
+-- anon as /rest/v1/rpc/*.
 do $$
 declare
   v_outside text;
   v_stale text;
   v_overloaded text;
+  v_extensions text;
 begin
+  select string_agg(e.extname || ' in ' || n.nspname, ', ' order by e.extname)
+    into v_extensions
+    from pg_catalog.pg_extension e
+    join pg_catalog.pg_namespace n on n.oid = e.extnamespace
+   where n.nspname in ('public', 'private');
+  assert v_extensions is null,
+    format('extensions in public or private: %s (create them with schema extensions)', v_extensions);
+
   select string_agg(p.oid::regprocedure::text, ', ' order by 1)
     into v_outside
     from pg_catalog.pg_proc p
     join pg_catalog.pg_namespace n on n.oid = p.pronamespace
    where n.nspname = 'public'
-     and not exists (select 1 from pg_catalog.pg_depend d where d.objid = p.oid and d.deptype = 'e')
      and has_function_privilege('anon', p.oid, 'EXECUTE')
      and not exists (select 1 from private.rpc_allowlist a where a.name = p.proname);
   assert v_outside is null, format('anon can execute functions outside private.rpc_allowlist: %s', v_outside);
@@ -221,6 +236,8 @@ select 'PASS SQL-1 standing: anon, authenticated and service_role are refused at
 -- Every function in public and private sets search_path to empty (lint
 -- 0011); every public function is SECURITY DEFINER, and no private one is,
 -- because PUBLIC keeps EXECUTE there and lints 0028 and 0029 would flag it.
+-- Extension functions are held to the same rules: none belongs in either
+-- schema (see the allowlist check above).
 do $$
 declare
   v_bad text;
@@ -231,7 +248,6 @@ begin
     join pg_catalog.pg_namespace n on n.oid = p.pronamespace
    where n.nspname in ('public', 'private')
      and p.prokind <> 'a'
-     and not exists (select 1 from pg_catalog.pg_depend d where d.objid = p.oid and d.deptype = 'e')
      and not ('search_path=""' = any(coalesce(p.proconfig, '{}'::text[])));
   assert v_bad is null, format('functions without search_path = '''': %s', v_bad);
 
@@ -240,7 +256,6 @@ begin
     from pg_catalog.pg_proc p
     join pg_catalog.pg_namespace n on n.oid = p.pronamespace
    where n.nspname = 'public'
-     and not exists (select 1 from pg_catalog.pg_depend d where d.objid = p.oid and d.deptype = 'e')
      and not p.prosecdef;
   assert v_bad is null, format('functions in public that are not SECURITY DEFINER: %s', v_bad);
 
@@ -274,7 +289,6 @@ begin
         from pg_catalog.pg_proc p
         join pg_catalog.pg_namespace n on n.oid = p.pronamespace
        where n.nspname in ('public', 'private')
-         and not exists (select 1 from pg_catalog.pg_depend d where d.objid = p.oid and d.deptype = 'e')
          and pg_catalog.pg_get_userbyid(p.proowner) <> 'postgres'
       union all
       select n.nspname || '.' || t.typname || ' owned by ' || pg_catalog.pg_get_userbyid(t.typowner)
@@ -318,10 +332,11 @@ begin
     select 1
       from pg_catalog.pg_policy p
      where p.polrelid = 'private.key_escrow'::regclass
+       and not p.polpermissive
        and p.polcmd = '*' and p.polroles = array[0::oid]
        and pg_catalog.pg_get_expr(p.polqual, p.polrelid) = 'false'
        and pg_catalog.pg_get_expr(p.polwithcheck, p.polrelid) = 'false'),
-    'private.key_escrow lost its deny-all policy';
+    'private.key_escrow lost its restrictive deny-all policy';
   foreach v_role in array array['anon', 'authenticated', 'service_role'] loop
     assert not has_table_privilege(v_role, 'private.key_escrow', 'SELECT, INSERT, UPDATE'),
       format('%s holds a privilege on private.key_escrow', v_role);
@@ -348,6 +363,6 @@ begin
 end
 $$;
 reset role;
-select 'PASS SQL-1 standing: private.key_escrow keeps RLS, its deny-all policy and no grants';
+select 'PASS SQL-1 standing: private.key_escrow keeps RLS, its restrictive deny-all policy and no grants';
 
 rollback;
