@@ -6,9 +6,9 @@
 -- persists, and it runs none of the statements 01-ENGINEERING-CONSTRAINTS.md
 -- keeps out of unattended SQL. A failed assert raises, so the call reports
 -- the failure and never reaches the PASS lines. On success it reaches one
--- `select 'PASS ...';` line per check, the form supabase/README.md §5 sets:
--- `npm run sql:bundle -- --area escrow` returns them all, while a call with
--- this file alone shows only the last.
+-- `select 'PASS ...';` line per check, the form supabase/README.md §5 sets,
+-- so a dry run built by `npm run sql:bundle` (README §6) returns them all,
+-- while a call with this file alone shows only the last.
 --
 -- It never touches a real key. Check 5 inserts a throwaway key (the bytes 0 to
 -- 31, the same one src/content/pipeline/sealed-safety.test.ts restores) under
