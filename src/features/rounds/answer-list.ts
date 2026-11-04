@@ -14,9 +14,10 @@
  *   Next clue and the options (PRD §4.1.3 step 8); `retry()` tries again.
  *
  * Beyond the contract, the handle offers `search` (the rows plus how many
- * entities match, for the count announcement) and `exactMatch` (Enter with
- * nothing highlighted, PRD §4.1.3 step 6). `isMysteryAnswerList` tells a
- * round whether a handle it was given has them.
+ * entities match, for the count announcement, each row saying whether only
+ * a typo matched it, so the combobox can mark it, R1-37) and `exactMatch`
+ * (Enter with nothing highlighted, PRD §4.1.3 step 6). `isMysteryAnswerList`
+ * tells a round whether a handle it was given has them.
  *
  * Nothing here is a "use client" module: the hook only ever runs in client
  * islands, and the rest is plain TypeScript.
@@ -35,9 +36,15 @@ import type { AnswerList, AnswerType, EntityId } from "@/engine/types";
 
 import type { AnswerListHandle, Suggestion } from "./contracts";
 
+/** A suggestion row as `search` returns it. */
+export interface SuggestionRow extends Suggestion {
+  /** Only a typo matched it (PRD §4.1.3 step 3): the last tier, marked in the list. */
+  typo: boolean;
+}
+
 export interface SuggestionSearch {
   /** At most SUGGESTION_COUNT rows, ranked. */
-  rows: Suggestion[];
+  rows: SuggestionRow[];
   /** Every matching entity, of which `rows` are the first. */
   total: number;
 }
@@ -100,11 +107,12 @@ function readyHandle(
     return {
       total,
       rows: rows.map(
-        ({ entityId, display, alreadyGuessed: guessed, match }) => ({
+        ({ entityId, display, alreadyGuessed: guessed, match, tier }) => ({
           entityId,
           display,
           alreadyGuessed: guessed,
           match,
+          typo: tier === "typo",
         }),
       ),
     };
@@ -113,8 +121,16 @@ function readyHandle(
     status: "ready" as const,
     type,
     search,
+    // The contract's rows: a Suggestion is exactly these four fields.
     suggest: (query: string, alreadyGuessed: ReadonlySet<EntityId>) =>
-      search(query, alreadyGuessed).rows,
+      search(query, alreadyGuessed).rows.map(
+        ({ entityId, display, alreadyGuessed: guessed, match }) => ({
+          entityId,
+          display,
+          alreadyGuessed: guessed,
+          match,
+        }),
+      ),
     exactMatch(query: string, alreadyGuessed: ReadonlySet<EntityId>) {
       const entity = exactMatch(index, query);
       if (entity === null) return null;

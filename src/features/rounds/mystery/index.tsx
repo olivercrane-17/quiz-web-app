@@ -6,21 +6,32 @@
  * ../registry.tsx.
  *
  * Top to bottom: the round's kicker, the answer type as the screen's
- * heading with its category chip, and the stake indicator at the right;
- * the clue ladder with its stamps and the Next clue slot; then the guess
- * combobox, or from clue `options_from_clue` the four options. When the
- * round resolves, the reveal card (or the withdrawn card) replaces it all.
+ * heading with its category chip under it (always in the same place, so it
+ * never moves between Mysteries, R1-33), and the stake indicator at the
+ * right; the clue ladder with its stamps; then the guess combobox, or from
+ * clue `options_from_clue` the four options; then Next clue, after the
+ * field in reading and focus order, so the first Tab reaches the field
+ * (D15). In the player's first Daily, Mystery 1's clue 1 carries the hint
+ * that a wrong guess costs the same as Next clue (PRD §3.1.4, R1-04), read
+ * with the field too. When the round resolves, the reveal card (or the
+ * withdrawn card) replaces it all.
  *
  * Focus (DESIGN §6.4, §11): the heading on arrival; after a wrong guess it
  * stays in the field, so the keyboard stays up and the status region reads
  * the new clue; after Next clue or a pick it moves to the new clue's
- * heading, because the button pressed is gone. Every focus target carries
- * `focusTargetProps` (`round_heading`, `clue_heading`, `reveal_heading`),
- * which is where the run machine's focus commands land: `clue_heading`
- * marks the field after a wrong guess and the clue otherwise. While the
- * on-screen keyboard is open, pressing any of the round's buttons keeps
- * focus in the field until the click lands, because a blur closes the
- * keyboard and reflows the compact layout under the finger.
+ * heading. Every focus target carries `focusTargetProps` (`round_heading`,
+ * `clue_heading`, `reveal_heading`), which is where the run machine's focus
+ * commands land: `clue_heading` marks the field after a wrong guess and the
+ * clue otherwise. While the on-screen keyboard is open, pressing any of the
+ * round's buttons keeps focus in the field until the click lands, because a
+ * blur closes the keyboard and reflows the compact layout under the finger.
+ * When the four options arrive, the page scrolls so they show under the
+ * last clue, as far as the clue's top allows (R1-33: C and D sat below the
+ * fold at 360 by 640).
+ *
+ * Keys, while focus is in the round and shortcuts are on: A to D pick an
+ * option (digits 1 to 4 too, unless an option reads as a number: D6), and
+ * "/" goes to the guess field (R1-32).
  *
  * The component renders what the run machine holds and sends intents back;
  * it never calls the backend. Announcements of verdicts come from the
@@ -56,12 +67,16 @@ import { focusTargetProps, keepFocusOnControls } from "./focus";
 import { categoryName, roundLabel, RoundKicker } from "./kicker";
 import { ClueLadder } from "./ladder";
 import { NextClueButton, nextClueLabel } from "./next-clue";
-import { MysteryOptions } from "./options";
+import { MysteryOptions, optionForKey } from "./options";
 import { MysteryRevealCard } from "./reveal";
 import { WithdrawnCard } from "./reveal-parts";
 import { StakeIndicator } from "./stake";
 import { DISPLAY_FONT, TONE } from "./tones";
-import { useOnScreenKeyboard } from "./use-keyboard";
+import {
+  keepBetween,
+  useOnScreenKeyboard,
+  viewportBottom,
+} from "./use-keyboard";
 
 export { mysteryAnnouncementText, MYSTERY_COPY } from "./copy";
 export { StakeIndicator } from "./stake";
@@ -111,6 +126,16 @@ export function MysteryRound(props: RoundComponentProps) {
   return <MysteryPlay {...props} open={open} />;
 }
 
+/** Keys the round leaves alone: typing in a field. */
+function typingIn(target: EventTarget): boolean {
+  return (
+    target instanceof HTMLElement &&
+    (target.tagName === "INPUT" ||
+      target.tagName === "TEXTAREA" ||
+      target.isContentEditable)
+  );
+}
+
 function MysteryPlay({
   meta,
   open,
@@ -122,9 +147,11 @@ function MysteryPlay({
   const { settings, list } = context;
   const optionsFromClue = TUNABLES.daily.optionsFromClue;
   const titleId = useId();
+  const hintId = useId();
   const titleRef = useRef<HTMLHeadingElement>(null);
   const clueHeadingRef = useRef<HTMLHeadingElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const optionsRef = useRef<HTMLDivElement>(null);
 
   // What the round looked like when it mounted: anything newer animates in.
   const [firstClue] = useState(open.clue);
@@ -143,6 +170,16 @@ function MysteryPlay({
     () => new Set(open.wrongGuesses.map((g) => g.entityId)),
     [open.wrongGuesses],
   );
+
+  // PRD §3.1.4: under Mystery 1's clue 1, in the player's first Daily only.
+  // With the keyboard up the player is typing: the space goes to the rows.
+  const firstDailyHint =
+    context.firstDaily === true &&
+    meta.ordinal === 1 &&
+    open.clue === 1 &&
+    !optionsShowing
+      ? { id: hintId, text: MYSTERY_COPY.ladder.firstDailyHint }
+      : null;
 
   function send(intent: MysteryIntent) {
     if (busy || offline) return;
@@ -165,6 +202,20 @@ function MysteryPlay({
     shownGuesses.current = open.wrongGuesses.length;
     if (lastIntent?.kind === "guess" && !optionsShowing) {
       inputRef.current?.focus();
+    } else if (optionsShowing) {
+      // The options just arrived under the clue: show them as well, as far
+      // as the clue's top allows, so C and D aren't left below the fold.
+      clueHeadingRef.current?.focus({ preventScroll: true });
+      const card = clueHeadingRef.current?.closest("[data-clue-card]");
+      const block = optionsRef.current?.getBoundingClientRect();
+      if (card instanceof HTMLElement && block !== undefined && block.height) {
+        keepBetween(
+          viewportBottom(),
+          block.bottom,
+          card.getBoundingClientRect().top,
+          "read",
+        );
+      }
     } else {
       clueHeadingRef.current?.focus();
     }
@@ -183,8 +234,8 @@ function MysteryPlay({
     settings,
   ]);
 
-  // With the keyboard up the combobox keeps the field, three whole rows and
-  // the top of the current clue's card in view.
+  // While the list is open or the keyboard is up, the combobox keeps the
+  // field, three whole rows and the top of the current clue's card in view.
   const currentClueCard = useCallback(
     () =>
       clueHeadingRef.current?.closest<HTMLElement>("[data-clue-card]") ?? null,
@@ -199,15 +250,20 @@ function MysteryPlay({
     if (spoken !== null) announce(spoken);
   }, [spoken, error]);
 
-  // Keys 1 to 4 pick an option while focus is inside the round (PRD §3.0.3).
+  // Keys, while focus is inside the round (PRD §3.0.3): A to D pick (digits
+  // too unless an option is a number, D6), and "/" reaches the field (R1-32).
   function onKeyDown(event: KeyboardEvent<HTMLElement>) {
-    if (!settings.shortcuts || open.options === null || busy || offline) return;
+    if (!settings.shortcuts || busy || offline) return;
     if (event.altKey || event.ctrlKey || event.metaKey) return;
-    if ((event.target as HTMLElement).tagName === "INPUT") return;
-    const n = Number(event.key);
-    if (!Number.isInteger(n) || n < 1 || n > 4) return;
-    const option = open.options[n - 1];
-    if (option === undefined || option.alreadyGuessed) return;
+    if (typingIn(event.target)) return;
+    if (open.options === null) {
+      if (event.key !== "/") return;
+      event.preventDefault();
+      inputRef.current?.focus();
+      return;
+    }
+    const option = optionForKey(event.key, open.options);
+    if (option === null) return;
     event.preventDefault();
     send({ family: "mystery", kind: "pick", option: option.index });
   }
@@ -241,35 +297,37 @@ function MysteryPlay({
     >
       {/* At large text sizes the worth scale drops under the title instead of
           squeezing it: 11rem is the title's share before anything wraps. */}
-      <div className="flex flex-wrap items-end justify-between gap-x-2.5 gap-y-2">
+      <div className="flex flex-wrap items-start justify-between gap-x-2.5 gap-y-2">
         <div className="min-w-0 flex-[1_1_11rem]">
           <RoundKicker meta={meta} />
-          <div className="mt-0.5 flex flex-wrap items-center gap-2">
-            <h1
-              id={titleId}
-              ref={titleRef}
-              tabIndex={-1}
-              {...focusTargetProps("round_heading")}
-              className={cx(
-                "text-[clamp(1.5rem,6.9vw,1.6875rem)] leading-[1.08] font-semibold tracking-[-0.01em] outline-none",
-                DISPLAY_FONT,
-              )}
-            >
-              <span className="sr-only">{MYSTERY_COPY.titlePrefix}</span>{" "}
-              {MYSTERY_COPY.title(meta.answerType)}
-            </h1>
-            {category === null ? null : (
+          <h1
+            id={titleId}
+            ref={titleRef}
+            tabIndex={-1}
+            {...focusTargetProps("round_heading")}
+            className={cx(
+              "mt-0.5 text-[clamp(1.5rem,6.9vw,1.6875rem)] leading-[1.08] font-semibold tracking-[-0.01em] outline-none",
+              DISPLAY_FONT,
+            )}
+          >
+            <span className="sr-only">{MYSTERY_COPY.titlePrefix}</span>{" "}
+            {MYSTERY_COPY.title(meta.answerType)}
+          </h1>
+          {category === null ? null : (
+            // Its own line, at the left: the chip stays put whatever the
+            // title's length (R1-33).
+            <p className="mt-1.5 flex" data-category-chip="">
               <span
                 className={cx(
-                  "inline-flex min-h-7 items-center rounded-full border-[1.5px] px-[11px] text-[0.8125rem] font-bold whitespace-nowrap",
+                  "inline-flex min-h-7 items-center rounded-full border-[1.5px] px-[11px] text-[0.8125rem] font-bold",
                   TONE.strongBorder,
                   TONE.surface,
                 )}
               >
                 {category}
               </span>
-            )}
-          </div>
+            </p>
+          )}
         </div>
         <StakeIndicator
           worth={worth}
@@ -287,11 +345,11 @@ function MysteryPlay({
         optionsShowing={optionsShowing}
         clueHeadingRef={clueHeadingRef}
         headingIsFocusTarget={!wrongGuessFocus || optionsShowing}
-        slot={keyboard.open ? null : nextClue}
+        note={keyboard.open ? null : firstDailyHint}
       />
 
       {optionsShowing && open.options !== null ? (
-        <>
+        <div ref={optionsRef} data-options-area="">
           <MysteryOptions
             options={open.options}
             picked={lastIntent?.kind === "pick" ? lastIntent.option : null}
@@ -305,11 +363,13 @@ function MysteryPlay({
             }}
           />
           {busy && status === "checking" ? (
-            <p className={cx("text-[0.9375rem] font-semibold", TONE.ink2)}>
+            <p className={cx("mt-2 text-[0.9375rem] font-semibold", TONE.ink2)}>
               {MYSTERY_COPY.checking}
             </p>
           ) : null}
-        </>
+          {/* With options from clue 3, the last clue is still to come (D15: after them). */}
+          {nextClue === null ? null : <div className="mt-3">{nextClue}</div>}
+        </div>
       ) : (
         <div className="mt-1">
           <GuessCombobox
@@ -317,13 +377,18 @@ function MysteryPlay({
             list={list}
             alreadyGuessed={alreadyGuessed}
             clue={open.clue}
+            resetKey={open.wrongGuesses.length}
             busy={busy && lastIntent?.kind === "guess"}
             disabled={offline || busy}
             sound={settings.sound}
             keyboard={keyboard}
             focusTarget={wrongGuessFocus}
-            beside={keyboard.open ? nextClue : undefined}
+            beside={keyboard.open ? (nextClue ?? undefined) : undefined}
             keepVisible={currentClueCard}
+            // The hint is read with the field while it shows.
+            {...(firstDailyHint === null || keyboard.open
+              ? {}
+              : { describedBy: hintId })}
             inputRef={inputRef}
             onGuess={(entityId) => {
               send({ family: "mystery", kind: "guess", entityId });
@@ -336,6 +401,10 @@ function MysteryPlay({
               {MYSTERY_COPY.checking}
             </p>
           ) : null}
+          {/* D15: Next clue comes after the field, in reading and focus order. */}
+          {keyboard.open || nextClue === null ? null : (
+            <div className="mt-3">{nextClue}</div>
+          )}
         </div>
       )}
 

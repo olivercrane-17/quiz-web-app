@@ -15,11 +15,17 @@
  * the visible text (WCAG 2.5.3). At large text sizes the worth wraps under
  * the action rather than running off the screen (PRD §3.12.4).
  *
+ * It sits after the guess field (or the options), in reading and focus
+ * order, so the first Tab from the heading reaches the field and not a
+ * button that costs a point (D15).
+ *
  * While the keyboard is open the button sits beside the field (`compact`):
- * one line, "Next clue" or "Last clue", with the rest of the label kept for
- * screen readers, so the field keeps room for the name. Pressing it then
- * keeps focus in the field until the click lands: a blur would close the
- * keyboard and move the button back to the ladder before the click.
+ * "Next clue" or "Last clue" over "then worth 2", two short lines, so the
+ * field keeps room for the name and the worth still shows (AC-DLY-29,
+ * R1-33). The words between them ("and options ·") are kept for screen
+ * readers, so the name stays whole. Pressing it then keeps focus in the
+ * field until the click lands: a blur would close the keyboard and move
+ * the button back under the field before the click.
  */
 import { Button } from "@/ui/button";
 import { cx } from "@/ui/cx";
@@ -75,12 +81,15 @@ export function NextClueButton({
   const copy = MYSTERY_COPY.nextClue;
   const thenWorth = copy.thenWorth(label.worth);
   if (compact) {
-    // "Next clue" or "Last clue" shows; the rest is read, so the name stays whole.
+    // "Next clue" or "Last clue" over the worth; the words between them are
+    // read, so the name stays whole: "Last clue and options · then worth 1".
     const short = label.action.startsWith(copy.last) ? copy.last : copy.next;
+    const between = `${label.action.slice(short.length)} ·`.trim();
     return (
       <Button
         variant="secondary"
         data-next-clue=""
+        data-compact=""
         disabled={disabled}
         focusableWhenDisabled
         busy={busy}
@@ -88,14 +97,14 @@ export function NextClueButton({
         onClick={onPress}
         // The marked utilities override the variant's own (cx doesn't merge them).
         className={cx(
-          "min-h-11! shrink-0 rounded-[14px]! px-3! text-sm",
+          "min-h-11! shrink-0 flex-col items-start! justify-center gap-0! rounded-[14px]! px-3! py-1 text-left text-sm leading-tight",
           TONE.surface,
           TONE.ledge,
         )}
       >
-        <span>{short}</span>{" "}
-        <span className="sr-only">
-          {`${label.action.slice(short.length)} · ${thenWorth}`.trim()}
+        <span>{short}</span> <span className="sr-only">{between}</span>{" "}
+        <span data-worth="" className={cx("text-xs font-semibold", TONE.ink2)}>
+          {thenWorth}
         </span>
       </Button>
     );

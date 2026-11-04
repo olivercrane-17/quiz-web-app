@@ -4,7 +4,14 @@
  * · History · a person" above the reveal. Difficulty pips go from sparse
  * to dense and are always followed by the word, so they read without
  * colour; the pips themselves are decorative.
+ *
+ * The parts wrap as whole pieces, and the dot between two parts sits in the
+ * gap before the second, so when a part starts a new line its dot falls
+ * outside the kicker's box, which clips it: no line starts or ends on a
+ * lone dot (R1-33). Screen readers hear commas instead.
  */
+import type { ReactNode } from "react";
+
 import { categoryById } from "@/content/loaders/categories";
 import type { DifficultyBand, RoundMeta } from "@/engine/types";
 import { cx } from "@/ui/cx";
@@ -47,6 +54,24 @@ export function Pips({ difficulty }: { difficulty: DifficultyBand }) {
   );
 }
 
+/** One part of the kicker after the first, with its dot in the gap before it. */
+function Part({ children }: { children: ReactNode }) {
+  return (
+    // A part that wraps inside itself starts its own line, at the box's edge.
+    <span data-kicker-part="" className="relative min-w-0">
+      <span className="sr-only">, </span>
+      <span
+        aria-hidden="true"
+        data-kicker-dot=""
+        className="absolute top-0 right-full mr-[0.42em]"
+      >
+        ·
+      </span>
+      {children}
+    </span>
+  );
+}
+
 export function RoundKicker({
   meta,
   withCategory = false,
@@ -60,24 +85,26 @@ export function RoundKicker({
   return (
     <p
       className={cx(
-        "flex flex-wrap items-center gap-x-1.5 text-[0.8125rem] leading-[1.3] font-bold tracking-[0.01em]",
+        // The clip keeps a wrapped part's dot out of sight (above).
+        "flex flex-wrap items-center gap-x-[1.15em] overflow-hidden text-[0.8125rem] leading-[1.3] font-bold tracking-[0.01em]",
         TONE.ink3,
       )}
     >
-      <span>{roundLabel(meta)}</span>
+      <span className="min-w-0">{roundLabel(meta)}</span>
       {withCategory ? (
         <>
-          {category === null ? null : <span>· {category}</span>}
-          {typeLine === null ? null : <span>· {typeLine}</span>}
+          {category === null ? null : <Part>{category}</Part>}
+          {typeLine === null ? null : <Part>{typeLine}</Part>}
         </>
       ) : meta.difficulty === null ? null : (
-        <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-          <span aria-hidden="true">·</span>
-          <span className={TONE.ink2}>
-            <Pips difficulty={meta.difficulty} />
+        <Part>
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+            <span className={TONE.ink2}>
+              <Pips difficulty={meta.difficulty} />
+            </span>
+            {MYSTERY_COPY.difficulty[meta.difficulty]}
           </span>
-          {MYSTERY_COPY.difficulty[meta.difficulty]}
-        </span>
+        </Part>
       )}
     </p>
   );

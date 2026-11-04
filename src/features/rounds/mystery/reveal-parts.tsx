@@ -55,12 +55,17 @@ export function SourcesLine({
 }
 
 /**
- * Counts up to `target` from 400 to 900 ms (PRD §3.0.3, DESIGN §7.4). Under
- * reduced motion, or for nothing to count, it is the final value at once.
+ * Counts up to `target` from 400 to 900 ms (PRD §3.0.3, DESIGN §7.4): null
+ * until the count starts, then 1 up to `target`, so a solve never reads
+ * "+0" (R1-33). Under reduced motion, or for nothing to count, it is the
+ * final value at once.
  */
-export function useCountUp(target: number, reducedMotion: boolean): number {
+export function useCountUp(
+  target: number,
+  reducedMotion: boolean,
+): number | null {
   const animate = !reducedMotion && target > 0;
-  const [shown, setShown] = useState(0);
+  const [shown, setShown] = useState<number | null>(null);
   useEffect(() => {
     if (!animate) return;
     const frame =
@@ -82,8 +87,9 @@ export function useCountUp(target: number, reducedMotion: boolean): number {
     let start: number | null = null;
     const tick = (now: number) => {
       start ??= now;
-      const progress = Math.min(1, Math.max(0, (now - start - 400) / 500));
-      setShown(Math.round(progress * target));
+      const elapsed = now - start - 400;
+      const progress = Math.min(1, Math.max(0, elapsed / 500));
+      setShown(elapsed < 0 ? null : Math.max(1, Math.round(progress * target)));
       if (progress < 1) handle = frame(tick);
     };
     handle = frame(tick);

@@ -4,11 +4,19 @@
  *
  * - Past clues sit small and quiet; a wrong guess made on one is stamped
  *   onto it ("× Not Mary Shelley"), rotated like a rubber stamp and never
- *   struck through, so the name stays readable.
+ *   struck through, so the name stays readable. The stamp turns about its
+ *   middle, with room above and below, so neither end runs into the clue
+ *   it sits under (R1-33).
  * - The current clue is a card with a "New" tag ("Last clue" on clue 4),
- *   and its heading takes focus after Next clue (DESIGN §6.4).
- * - The next rung holds the Next clue button, which the new clue replaces
- *   in place.
+ *   and its heading takes focus after Next clue (DESIGN §6.4). The focus
+ *   ring is the card's, rounded with it, rather than a square one inside
+ *   it (R1-33).
+ * - Under the current clue, `note` adds a line, such as the first-Daily
+ *   hint under clue 1 (PRD §3.1.4).
+ *
+ * Next clue sits after the guess field, in reading and focus order (D15),
+ * so the ladder holds clues only; the dashed rail below the current clue
+ * says another is to come.
  *
  * Clues and stamps that arrive while the round is on screen animate in
  * (DESIGN §7.4); the ones a reload brings back are simply there.
@@ -37,8 +45,8 @@ export interface ClueLadderProps {
   clueHeadingRef: Ref<HTMLHeadingElement>;
   /** Whether a `clue_heading` focus request should land on the clue (else on the field). */
   headingIsFocusTarget: boolean;
-  /** The next rung's content: the Next clue button. */
-  slot: ReactNode;
+  /** A line under the current clue's card, with the id the field's description points at. */
+  note?: { id: string; text: string } | null;
 }
 
 function Rung({
@@ -47,7 +55,7 @@ function Rung({
   children,
 }: {
   n: number;
-  state: "past" | "current" | "slot";
+  state: "past" | "current";
   children: ReactNode;
 }) {
   return (
@@ -55,18 +63,16 @@ function Rung({
       data-rung={state}
       className="relative grid grid-cols-[1.875rem_minmax(0,1fr)] items-start gap-x-2.5 py-1"
     >
-      {state === "slot" ? null : (
-        <span
-          aria-hidden="true"
-          className={cx(
-            "absolute top-[2.125rem] -bottom-1 left-[calc(0.9375rem-1px)] w-0.5",
-            // Forced colours drop fills and gradients: the rail becomes a border.
-            state === "past"
-              ? "bg-[color:var(--kn-ink,var(--foreground))] forced-colors:bg-[color:CanvasText] forced-colors:forced-color-adjust-none"
-              : "bg-[repeating-linear-gradient(var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_40%,transparent))_0_4px,transparent_4px_8px)] forced-colors:border-l-2 forced-colors:border-dashed forced-colors:border-[color:CanvasText]",
-          )}
-        />
-      )}
+      <span
+        aria-hidden="true"
+        className={cx(
+          "absolute top-[2.125rem] -bottom-1 left-[calc(0.9375rem-1px)] w-0.5",
+          // Forced colours drop fills and gradients: the rail becomes a border.
+          state === "past"
+            ? "bg-[color:var(--kn-ink,var(--foreground))] forced-colors:bg-[color:CanvasText] forced-colors:forced-color-adjust-none"
+            : "bg-[repeating-linear-gradient(var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_40%,transparent))_0_4px,transparent_4px_8px)] forced-colors:border-l-2 forced-colors:border-dashed forced-colors:border-[color:CanvasText]",
+        )}
+      />
       <span
         aria-hidden="true"
         className={cx(
@@ -84,8 +90,6 @@ function Rung({
               TONE.inkBorder,
               "forced-colors:bg-[color:CanvasText] forced-colors:text-[color:Canvas] forced-colors:forced-color-adjust-none",
             ),
-          state === "slot" &&
-            cx("border-dashed", TONE.strongBorder, TONE.surface, TONE.ink3),
         )}
       >
         {n}
@@ -104,7 +108,7 @@ export function ClueLadder({
   optionsShowing,
   clueHeadingRef,
   headingIsFocusTarget,
-  slot,
+  note = null,
 }: ClueLadderProps) {
   return (
     <ol aria-label={MYSTERY_COPY.ladder.label} className="flex flex-col">
@@ -121,7 +125,7 @@ export function ClueLadder({
               <div
                 data-clue-card=""
                 className={cx(
-                  "relative rounded-[14px] border-[1.5px]",
+                  "relative rounded-[14px] border-[1.5px] outline-offset-[3px] has-[h2:focus-visible]:outline-[3px] has-[h2:focus-visible]:outline-[color:var(--kn-focus,var(--foreground))]",
                   // With the keyboard up the card slims, so the field and
                   // three rows fit under it (AC-DLY-32).
                   compact ? "px-3 py-1.5" : "px-3.5 pt-3 pb-3",
@@ -152,7 +156,8 @@ export function ClueLadder({
                     headingIsFocusTarget ? "clue_heading" : null,
                   )}
                   className={cx(
-                    "font-semibold text-pretty outline-offset-4 focus-visible:outline-[3px] focus-visible:outline-[color:var(--kn-focus,var(--foreground))]",
+                    // The card draws the focus ring (above).
+                    "font-semibold text-pretty outline-none",
                     compact
                       ? "text-[0.9375rem] leading-snug"
                       : "text-lg leading-[1.38]",
@@ -179,12 +184,28 @@ export function ClueLadder({
                 {text}
               </p>
             )}
+            {current && note !== null ? (
+              <p
+                id={note.id}
+                data-clue-note=""
+                className={cx(
+                  "mt-2 rounded-xl px-3 py-2 text-[0.9375rem] leading-snug font-semibold text-pretty forced-colors:border forced-colors:border-[color:CanvasText]",
+                  TONE.accentTint,
+                  TONE.ink,
+                )}
+              >
+                {note.text}
+              </p>
+            ) : null}
             {stamps.map(({ guess, order }) => (
               <p
                 key={guess.entityId}
                 data-stamp={guess.entityId}
                 className={cx(
-                  "mt-1.5 inline-flex max-w-full origin-left -rotate-[2.5deg] items-center gap-1.5 rounded-[7px] border-2 px-2 py-0.5 text-[0.8125rem] leading-[1.3] font-extrabold",
+                  // Turned about its middle, each end moves under 7 px for a
+                  // 300 px stamp: the margins keep it clear of the clue
+                  // above and the rung below.
+                  "my-2 inline-flex max-w-full -rotate-[2.5deg] items-center gap-1.5 rounded-[7px] border-2 px-2 py-0.5 text-[0.8125rem] leading-[1.3] font-extrabold",
                   TONE.surface,
                   TONE.incorrectBorder,
                   TONE.incorrectText,
@@ -200,11 +221,6 @@ export function ClueLadder({
           </Rung>
         );
       })}
-      {open.clue < 4 && slot !== null ? (
-        <Rung n={open.clue + 1} state="slot">
-          {slot}
-        </Rung>
-      ) : null}
     </ol>
   );
 }

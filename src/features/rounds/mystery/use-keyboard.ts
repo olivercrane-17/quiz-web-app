@@ -19,6 +19,10 @@
  * keyboard, and the top of what should be read with it (the current clue)
  * below the top edge, which is the visual viewport's top or the bottom of
  * a sticky header pinned there. The block wins when both can't fit.
+ * `keepBetween` is the same step against any bottom edge, such as the
+ * visual viewport's own (`viewportBottom`) when no keyboard is up: zoom,
+ * a short window, or a keyboard the page can't see (R1-11). There the
+ * caller can let the read wins instead, for a block that may wait below.
  */
 import { useEffect, useState } from "react";
 
@@ -107,6 +111,47 @@ export function remPx(): number {
 }
 
 /**
+ * The visual viewport's bottom edge in layout coordinates: what a keyboard,
+ * a pinch zoom or a short window leaves. The layout viewport's without the
+ * API.
+ */
+export function viewportBottom(): number {
+  const viewport = window.visualViewport;
+  return viewport === null || viewport === undefined
+    ? window.innerHeight
+    : viewport.offsetTop + viewport.height;
+}
+
+/**
+ * Scrolls the least distance that puts `blockBottom` (layout coordinates)
+ * above `bottomEdge` and keeps `readTop` below the top edge. When both
+ * can't fit, `wins` decides: the block (the default: what the player is
+ * about to use), or the read, which then stays in view while the block
+ * comes as close as it can. Returns the distance scrolled.
+ */
+export function keepBetween(
+  bottomEdge: number,
+  blockBottom: number,
+  readTop: number,
+  wins: "block" | "read" = "block",
+): number {
+  const need = blockBottom - (bottomEdge - EDGE_GAP_PX);
+  const slack = readTop - (topEdge() + EDGE_GAP_PX);
+  let delta = 0;
+  if (wins === "block") {
+    if (need > 0) delta = need;
+    else if (slack < 0) delta = Math.max(slack, need);
+  } else if (slack < 0) {
+    delta = slack;
+  } else if (need > 0) {
+    delta = Math.min(need, slack);
+  }
+  if (Math.abs(delta) < 1) return 0;
+  window.scrollBy({ top: delta, behavior: "instant" });
+  return delta;
+}
+
+/**
  * Scrolls the least distance that puts `blockBottom` (layout coordinates)
  * above the keyboard and keeps `readTop` below the top edge; when both
  * can't fit, the block wins. Returns the distance scrolled.
@@ -117,12 +162,5 @@ export function keepInView(
   readTop: number,
 ): number {
   if (!keyboard.open) return 0;
-  const need = blockBottom - (keyboard.bottom - EDGE_GAP_PX);
-  const slack = readTop - (topEdge() + EDGE_GAP_PX);
-  let delta = 0;
-  if (need > 0) delta = need;
-  else if (slack < 0) delta = Math.max(slack, need);
-  if (Math.abs(delta) < 1) return 0;
-  window.scrollBy({ top: delta, behavior: "instant" });
-  return delta;
+  return keepBetween(keyboard.bottom, blockBottom, readTop);
 }

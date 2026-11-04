@@ -37,7 +37,7 @@ import {
 } from "../contracts";
 import { EncoreRound } from "../encore";
 import { encoreAnnouncementText } from "../encore/copy";
-import { mysteryAnnouncementText } from "./copy";
+import { mysteryAnnouncementText, mysteryMissed } from "./copy";
 import { MysteryRound } from ".";
 
 export const TEST_SETTINGS: PlaySettings = {
@@ -97,6 +97,8 @@ export interface HarnessProps {
   meta?: RoundMeta;
   optionsFromClue?: 3 | 4;
   settings?: PlaySettings;
+  /** The round context's first-Daily flag (PRD §3.1.4 hints). */
+  firstDaily?: boolean;
   onIntent?(intent: RoundIntent): void;
   onContinue?(): void;
   /** Sees the plugin's client state after every verdict, for its outcome. */
@@ -111,6 +113,7 @@ export function MysteryHarness({
   meta = mysteryMeta(),
   optionsFromClue = 4,
   settings = TEST_SETTINGS,
+  firstDaily,
   onIntent,
   onContinue,
   onClient,
@@ -143,6 +146,8 @@ export function MysteryHarness({
     const text = mysteryAnnouncementText(
       mysteryPlugin.announce(state.client, result.verdict),
       { optionsFromClue },
+      // What a controller knows: whether the round shows a miss so far.
+      { missed: mysteryMissed(state.client.open) },
     );
     if (text !== null) announce(text);
     const client: MysteryClient = mysteryPlugin.apply(
@@ -181,6 +186,7 @@ export function MysteryHarness({
         list,
         itemRef: "daily:42:1",
         settings,
+        ...(firstDaily === undefined ? {} : { firstDaily }),
       }}
     />
   );

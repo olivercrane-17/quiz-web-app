@@ -7,8 +7,12 @@
  * with "Already guessed"; the picked option holds its locked look while the
  * server judges it, and the others wait, disabled.
  *
- * Keys 1 to 4 pick while focus is inside the round (the round binds them),
- * so each button only shows its hint and sets `aria-keyshortcuts`.
+ * Keys pick while focus is inside the round (the round binds them, through
+ * `optionForKey`): letters A to D, matching the badges, and digits 1 to 4
+ * only when no option reads as a number, so "4" can never mean option D
+ * when four is an answer (D6, R1-13). The badge is the one key hint per
+ * option, so no separate key hint shows, and the options' description
+ * names the keys for screen readers.
  */
 import { useId } from "react";
 
@@ -20,6 +24,38 @@ import { cx } from "@/ui/cx";
 
 import { MYSTERY_COPY } from "./copy";
 import { TONE } from "./tones";
+
+const LETTER_KEYS = ["a", "b", "c", "d"] as const;
+const DIGIT_KEYS = ["1", "2", "3", "4"] as const;
+
+/** An option that reads as a number: its label starts with a digit ("15", "1,250 km", "1917"). */
+function readsAsNumber(label: string): boolean {
+  return /^\s*\p{Nd}/u.test(label);
+}
+
+/** Whether digits pick among these options (D6): only when none reads as a number. */
+export function digitsPick(options: readonly OptionView[]): boolean {
+  return !options.some((option) => readsAsNumber(option.label));
+}
+
+/**
+ * The option a key picks (D6), or null: A to D (either case) by position,
+ * and 1 to 4 by position only while `digitsPick`. Already-guessed options
+ * pick nothing.
+ */
+export function optionForKey(
+  key: string,
+  options: readonly OptionView[],
+): OptionView | null {
+  let position = LETTER_KEYS.indexOf(
+    key.toLowerCase() as (typeof LETTER_KEYS)[number],
+  );
+  if (position < 0 && digitsPick(options)) {
+    position = DIGIT_KEYS.indexOf(key as (typeof DIGIT_KEYS)[number]);
+  }
+  const option = position < 0 ? undefined : options[position];
+  return option === undefined || option.alreadyGuessed ? null : option;
+}
 
 export interface MysteryOptionsProps {
   options: readonly OptionView[];
@@ -44,9 +80,16 @@ function stateOf(
 
 export function MysteryOptions(props: MysteryOptionsProps) {
   const leadId = useId();
+  const keysId = useId();
   const { options, shortcuts, sound, haptics, onPick } = props;
   return (
-    <div role="group" aria-labelledby={leadId} data-options="">
+    <div
+      role="group"
+      aria-labelledby={leadId}
+      aria-describedby={shortcuts ? keysId : undefined}
+      data-options=""
+      data-digits={shortcuts && digitsPick(options) ? "" : undefined}
+    >
       <p
         id={leadId}
         className={cx(
@@ -56,13 +99,19 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       >
         {MYSTERY_COPY.options.lead}
       </p>
+      {shortcuts ? (
+        <p id={keysId} className="sr-only">
+          {MYSTERY_COPY.options.keys(digitsPick(options))}
+        </p>
+      ) : null}
       <ol className="mt-2 grid gap-2.5">
         {options.map((option) => (
           <li key={option.index}>
             <AnswerButton
               index={option.index}
               state={stateOf(option, props)}
-              shortcut={shortcuts ? String(option.index + 1) : null}
+              // The badge is the key hint (D6): no second one beside it.
+              shortcut={null}
               onPressStart={() => {
                 if (sound) playEffect("tap");
               }}
