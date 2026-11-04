@@ -199,6 +199,19 @@ describe("summarizeStreak", () => {
     );
   });
 
+  it("looks no further back than 7 days for a repairable date", () => {
+    const days = [
+      ...played("2026-10-30", "2026-11-01"),
+      { date: d("2026-11-02"), status: "missed" as const },
+      ...played("2026-11-03", "2026-11-10"),
+    ];
+    // A zone function that would hold every window open: only the bound
+    // keeps the 9-day-old Missed date out.
+    const open = summary(days, { dayStart: () => at("2100-01-01T00:00:00Z") });
+    expect(open.repair).toBeNull();
+    expect(open.current).toBe(8);
+  });
+
   it("offers no repair for a date before DAILY_EPOCH", () => {
     const days = [
       ...played("2026-09-17", "2026-09-18"),

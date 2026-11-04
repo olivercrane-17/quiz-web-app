@@ -99,7 +99,8 @@ export function evaluateStreak(input: StreakInput): StreakEvaluation {
   };
 
   // A stored candidate is decided by this request. The same zone protects
-  // it; any other leaves it undecided for the walk below.
+  // it; any other zone leaves it to the walk below, which decides it like
+  // any gap date.
   const stored = input.datelineCandidate;
   if (
     stored !== null &&

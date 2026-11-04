@@ -1,6 +1,6 @@
 {
   "$comment": [
-    "Timing parity table (ARCHITECTURE §4.13, §8.8; PRD §4.3.2, §4.3.3, §4.3.6): request counting for the latency allowance, AC-DLY-23, and the honest-play thresholds of AC-DLY-24 and AC-DLY-25.",
+    "Timing parity table (ARCHITECTURE §4.13, §8.8; PRD §4.3.2, §4.3.3, §4.3.6): request counting for the latency allowance, AC-DLY-23, and the honest-play thresholds of AC-DLY-25 with the missing-report flag.",
     "Replayed by Vitest against src/engine/scoring/ranking.ts (countRequests, effectiveRoundMs, totalRunMs) and percentile.ts (honestPlayFlags), and from SQL-5 by the generated timing tests.",
     "config holds the shared values the rows assume; the engine test checks them against src/config/shared.json (latencyAllowanceMs, roundCapMs, honestPlayHiddenMs, tooFastMs), so a change there fails until this table follows.",
     "requests: the calls one round made, as the server saw them. The round's opening call counts once (begin_round, or for round 0 the start call that opened it); every accepted state-changing action counts (a wrong guess, Next clue, a pick, an encore lock-in, a choice answer, and the resolving one); refused calls (invalid_entity, already_guessed, stale, rate_limited), replays of a known key and repeated begin_round calls never count.",
@@ -122,10 +122,26 @@
       "id": "four-rounds",
       "title": "four rounds add up their effective times",
       "rounds": [
-        { "serverMs": 10000, "clientMs": 9500, "requests": 2 },
-        { "serverMs": 20000, "clientMs": 15000, "requests": 3 },
-        { "serverMs": 30000, "clientMs": 29000, "requests": 4 },
-        { "serverMs": 8000, "clientMs": 7900, "requests": 2 }
+        {
+          "serverMs": 10000,
+          "clientMs": 9500,
+          "requests": 2
+        },
+        {
+          "serverMs": 20000,
+          "clientMs": 15000,
+          "requests": 3
+        },
+        {
+          "serverMs": 30000,
+          "clientMs": 29000,
+          "requests": 4
+        },
+        {
+          "serverMs": 8000,
+          "clientMs": 7900,
+          "requests": 2
+        }
       ],
       "totalMs": 65200
     },
@@ -133,9 +149,22 @@
       "id": "voided-round",
       "title": "a voided round adds no time",
       "rounds": [
-        { "serverMs": 10000, "clientMs": 9500, "requests": 2 },
-        { "serverMs": 0, "clientMs": 0, "requests": 0, "voided": true },
-        { "serverMs": 12000, "clientMs": 11000, "requests": 2 }
+        {
+          "serverMs": 10000,
+          "clientMs": 9500,
+          "requests": 2
+        },
+        {
+          "serverMs": 0,
+          "clientMs": 0,
+          "requests": 0,
+          "voided": true
+        },
+        {
+          "serverMs": 12000,
+          "clientMs": 11000,
+          "requests": 2
+        }
       ],
       "totalMs": 20700
     },
@@ -143,8 +172,16 @@
       "id": "capped-round",
       "title": "each round is capped before the sum",
       "rounds": [
-        { "serverMs": 1000000, "clientMs": 990000, "requests": 2 },
-        { "serverMs": 10000, "clientMs": 9500, "requests": 2 }
+        {
+          "serverMs": 1000000,
+          "clientMs": 990000,
+          "requests": 2
+        },
+        {
+          "serverMs": 10000,
+          "clientMs": 9500,
+          "requests": 2
+        }
       ],
       "totalMs": 909500
     }
@@ -156,10 +193,18 @@
       "title": "4.9 s of hidden play in each of two rounds flags nothing",
       "run": {
         "rounds": [
-          { "hiddenMs": 4900 },
-          { "hiddenMs": 4900 },
-          { "hiddenMs": 0 },
-          { "hiddenMs": 0 }
+          {
+            "hiddenMs": 4900
+          },
+          {
+            "hiddenMs": 4900
+          },
+          {
+            "hiddenMs": 0
+          },
+          {
+            "hiddenMs": 0
+          }
         ]
       },
       "flags": 0
@@ -170,10 +215,18 @@
       "title": "5.0 s of hidden play in one round flags the run",
       "run": {
         "rounds": [
-          { "hiddenMs": 0 },
-          { "hiddenMs": 5000 },
-          { "hiddenMs": 0 },
-          { "hiddenMs": 0 }
+          {
+            "hiddenMs": 0
+          },
+          {
+            "hiddenMs": 5000
+          },
+          {
+            "hiddenMs": 0
+          },
+          {
+            "hiddenMs": 0
+          }
         ]
       },
       "flags": 1
@@ -184,10 +237,22 @@
       "title": "a clue-4 option picked 0.8 s after the options appeared flags nothing",
       "run": {
         "rounds": [
-          { "hiddenMs": 0, "solve": { "by": "pick", "msAfterClue": 800 } },
-          { "hiddenMs": 0 },
-          { "hiddenMs": 0 },
-          { "hiddenMs": 0 }
+          {
+            "hiddenMs": 0,
+            "solve": {
+              "by": "pick",
+              "msAfterClue": 800
+            }
+          },
+          {
+            "hiddenMs": 0
+          },
+          {
+            "hiddenMs": 0
+          },
+          {
+            "hiddenMs": 0
+          }
         ]
       },
       "flags": 0
@@ -198,10 +263,22 @@
       "title": "a typed guess that solves 1.2 s after its clue was issued flags the run",
       "run": {
         "rounds": [
-          { "hiddenMs": 0 },
-          { "hiddenMs": 0, "solve": { "by": "typed", "msAfterClue": 1200 } },
-          { "hiddenMs": 0 },
-          { "hiddenMs": 0 }
+          {
+            "hiddenMs": 0
+          },
+          {
+            "hiddenMs": 0,
+            "solve": {
+              "by": "typed",
+              "msAfterClue": 1200
+            }
+          },
+          {
+            "hiddenMs": 0
+          },
+          {
+            "hiddenMs": 0
+          }
         ]
       },
       "flags": 4
@@ -211,7 +288,13 @@
       "title": "a typed solve at exactly 1.5 s is still within 1.5 s",
       "run": {
         "rounds": [
-          { "hiddenMs": 0, "solve": { "by": "typed", "msAfterClue": 1500 } }
+          {
+            "hiddenMs": 0,
+            "solve": {
+              "by": "typed",
+              "msAfterClue": 1500
+            }
+          }
         ]
       },
       "flags": 4
@@ -221,21 +304,34 @@
       "title": "a typed solve at 1.501 s flags nothing",
       "run": {
         "rounds": [
-          { "hiddenMs": 0, "solve": { "by": "typed", "msAfterClue": 1501 } }
+          {
+            "hiddenMs": 0,
+            "solve": {
+              "by": "typed",
+              "msAfterClue": 1501
+            }
+          }
         ]
       },
       "flags": 0
     },
     {
       "id": "missing-report",
-      "ac": "AC-DLY-24",
       "title": "a round action with no visibility report flags the run",
       "run": {
         "rounds": [
-          { "hiddenMs": null },
-          { "hiddenMs": 0 },
-          { "hiddenMs": 0 },
-          { "hiddenMs": 0 }
+          {
+            "hiddenMs": null
+          },
+          {
+            "hiddenMs": 0
+          },
+          {
+            "hiddenMs": 0
+          },
+          {
+            "hiddenMs": 0
+          }
         ]
       },
       "flags": 8
@@ -244,7 +340,14 @@
       "id": "missing-and-hidden",
       "title": "flags combine",
       "run": {
-        "rounds": [{ "hiddenMs": null }, { "hiddenMs": 6000 }],
+        "rounds": [
+          {
+            "hiddenMs": null
+          },
+          {
+            "hiddenMs": 6000
+          }
+        ],
         "zoneChanged": true
       },
       "flags": 25
@@ -253,8 +356,16 @@
       "id": "expert-fallback",
       "title": "before 50 such solves, a Mystery 3 clue-1 solve after more than 120 s flags the run",
       "run": {
-        "rounds": [{ "hiddenMs": 0 }],
-        "expertSlot": { "dwellMs": 120001, "medianDwellMs": null, "solves": 12 }
+        "rounds": [
+          {
+            "hiddenMs": 0
+          }
+        ],
+        "expertSlot": {
+          "dwellMs": 120001,
+          "medianDwellMs": null,
+          "solves": 12
+        }
       },
       "flags": 2
     },
@@ -262,8 +373,16 @@
       "id": "expert-fallback-edge",
       "title": "a dwell of exactly 120 s flags nothing",
       "run": {
-        "rounds": [{ "hiddenMs": 0 }],
-        "expertSlot": { "dwellMs": 120000, "medianDwellMs": null, "solves": 12 }
+        "rounds": [
+          {
+            "hiddenMs": 0
+          }
+        ],
+        "expertSlot": {
+          "dwellMs": 120000,
+          "medianDwellMs": null,
+          "solves": 12
+        }
       },
       "flags": 0
     },
@@ -271,8 +390,16 @@
       "id": "expert-median",
       "title": "from 50 such solves, a dwell over 3 times the median flags the run",
       "run": {
-        "rounds": [{ "hiddenMs": 0 }],
-        "expertSlot": { "dwellMs": 60001, "medianDwellMs": 20000, "solves": 50 }
+        "rounds": [
+          {
+            "hiddenMs": 0
+          }
+        ],
+        "expertSlot": {
+          "dwellMs": 60001,
+          "medianDwellMs": 20000,
+          "solves": 50
+        }
       },
       "flags": 2
     },
@@ -280,8 +407,16 @@
       "id": "expert-median-edge",
       "title": "exactly 3 times the median flags nothing",
       "run": {
-        "rounds": [{ "hiddenMs": 0 }],
-        "expertSlot": { "dwellMs": 60000, "medianDwellMs": 20000, "solves": 50 }
+        "rounds": [
+          {
+            "hiddenMs": 0
+          }
+        ],
+        "expertSlot": {
+          "dwellMs": 60000,
+          "medianDwellMs": 20000,
+          "solves": 50
+        }
       },
       "flags": 0
     },
@@ -289,8 +424,16 @@
       "id": "expert-not-yet",
       "title": "with 49 such solves the median isn't used yet",
       "run": {
-        "rounds": [{ "hiddenMs": 0 }],
-        "expertSlot": { "dwellMs": 5000, "medianDwellMs": 1000, "solves": 49 }
+        "rounds": [
+          {
+            "hiddenMs": 0
+          }
+        ],
+        "expertSlot": {
+          "dwellMs": 5000,
+          "medianDwellMs": 1000,
+          "solves": 49
+        }
       },
       "flags": 0
     },
@@ -298,13 +441,27 @@
       "id": "zone-change",
       "ac": "AC-STK-09",
       "title": "a run whose device zone changed since the previous Daily stays out of the crowd's numbers",
-      "run": { "rounds": [{ "hiddenMs": 0 }], "zoneChanged": true },
+      "run": {
+        "rounds": [
+          {
+            "hiddenMs": 0
+          }
+        ],
+        "zoneChanged": true
+      },
       "flags": 16
     },
     {
       "id": "low-trust",
       "title": "a low-trust identity's finish stays out of the crowd's numbers",
-      "run": { "rounds": [{ "hiddenMs": 0 }], "lowTrust": true },
+      "run": {
+        "rounds": [
+          {
+            "hiddenMs": 0
+          }
+        ],
+        "lowTrust": true
+      },
       "flags": 32
     },
     {
@@ -312,10 +469,26 @@
       "title": "an ordinary run is eligible",
       "run": {
         "rounds": [
-          { "hiddenMs": 1200, "solve": { "by": "typed", "msAfterClue": 9000 } },
-          { "hiddenMs": 0, "solve": { "by": "pick", "msAfterClue": 300 } },
-          { "hiddenMs": 4999 },
-          { "hiddenMs": 0 }
+          {
+            "hiddenMs": 1200,
+            "solve": {
+              "by": "typed",
+              "msAfterClue": 9000
+            }
+          },
+          {
+            "hiddenMs": 0,
+            "solve": {
+              "by": "pick",
+              "msAfterClue": 300
+            }
+          },
+          {
+            "hiddenMs": 4999
+          },
+          {
+            "hiddenMs": 0
+          }
         ]
       },
       "flags": 0

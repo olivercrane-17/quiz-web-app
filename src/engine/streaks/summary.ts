@@ -30,7 +30,7 @@
  *   date would have had: it says why there is no offer now, and stops once
  *   the window would have closed anyway.
  */
-import { addDays, dailyNumberFor } from "../time/calendar.ts";
+import { addDays, dailyNumberFor, daysBetween } from "../time/calendar.ts";
 import type { EpochMs, LocalDate } from "../types/ids.ts";
 import type { RepairOffer } from "../types/streaks.ts";
 import {
@@ -178,12 +178,21 @@ export function repairCapUntil(
   return now < until ? until : null;
 }
 
+/**
+ * Older dates can never be inside a repair window: the request zone's
+ * local date trails the effective today by at most 2 days (UTC+14 against
+ * UTC-12), so a window that closes at `M + 3` 00:00 reaches back to
+ * today - 4 at most. The bound keeps long histories cheap.
+ */
+const REPAIR_LOOKBACK_DAYS = 7;
+
 function repairableIn(
   input: StreakSummaryInput,
   statuses: StatusMap,
   date: LocalDate,
 ): boolean {
   if (statuses.get(date) !== "missed" || date >= input.today) return false;
+  if (daysBetween(date, input.today) > REPAIR_LOOKBACK_DAYS) return false;
   if (latestCredited(statuses, date) === null) return false;
   if (missedInSpan(statuses, date, input.today) !== 1) return false;
   if (input.now >= repairDeadline(input, date)) return false;

@@ -2,8 +2,8 @@
 /**
  * Replays src/engine/fixtures/percentile.json (AC-DLY-20's pools, the
  * offset bands, the crowd shares) and the honest-play rows of timing.json
- * (AC-DLY-24, AC-DLY-25), with the thresholds read from the shared config
- * SQL reads.
+ * (AC-DLY-25 and the missing-report flag), with the thresholds read from
+ * the shared config SQL reads.
  */
 import { readFileSync } from "node:fs";
 
@@ -58,7 +58,7 @@ const titleOf = (row: { ac?: string; title: string }) =>
   row.ac === undefined ? row.title : `${row.ac} ${row.title}`;
 
 describe("percentile.json", () => {
-  it("AC-DLY-15 reads percentile_min_n from the shared config", () => {
+  it("reads percentile_min_n from the shared config", () => {
     expect(table.minN).toBe(SHARED.percentileMinN);
   });
 
