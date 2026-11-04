@@ -512,6 +512,9 @@ test.describe("registration refused by a limit (AC-IDN-04)", () => {
     windowMs: HOUR,
   };
 
+  const problemCard = (page: Page) =>
+    page.locator('[data-daily-problem="rate_limited"]');
+
   async function refusedStart(page: Page, at: number) {
     await page.clock.install({ time: at });
     await openHome(page);
@@ -550,9 +553,9 @@ test.describe("registration refused by a limit (AC-IDN-04)", () => {
     await refusedStart(page, at);
     await page.clock.runFor(4_000);
     await expect(
-      page.getByText(
-        /^Lots of new players on your network right now\. Trying again/,
-      ),
+      problemCard(page).getByRole("heading", {
+        name: /^Lots of new players on your network right now\. Trying again/,
+      }),
     ).toBeVisible();
     await acceptedRetry(page);
   });
@@ -565,9 +568,11 @@ test.describe("registration refused by a limit (AC-IDN-04)", () => {
     await refusedStart(page, at);
     await page.clock.runFor(4_000);
     await expect(
-      page.getByText(/^Lots of new players right now\. Trying again/),
+      problemCard(page).getByRole("heading", {
+        name: /^Lots of new players right now\. Trying again/,
+      }),
     ).toBeVisible();
-    await expect(page.getByText(/on your network/)).toHaveCount(0);
+    await expect(problemCard(page)).not.toContainText("on your network");
     await acceptedRetry(page);
   });
 });

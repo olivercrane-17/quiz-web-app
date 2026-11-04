@@ -450,7 +450,10 @@ describe("tabs and locks", () => {
   it("rejects when no identity can be minted (§9.1 step 5), closing the channel it opened", async () => {
     const closed: string[] = [];
     class FakeChannel {
-      constructor(readonly name: string) {}
+      readonly name: string;
+      constructor(name: string) {
+        this.name = name;
+      }
       postMessage() {}
       addEventListener() {}
       removeEventListener() {}
