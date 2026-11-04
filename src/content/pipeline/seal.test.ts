@@ -158,11 +158,12 @@ describe("the content key", () => {
 });
 
 describe("content:seal and content:unseal", () => {
+  /** The fixture mystery under its own id, as content:unseal requires. */
   async function workspace() {
     const root = tempDir("qz-sealed-");
     await mkdir(join(root, ".sealed-plain", "mysteries"), { recursive: true });
     await writeFile(
-      join(root, ".sealed-plain", "mysteries", "m.geo.0101.json"),
+      join(root, ".sealed-plain", "mysteries", "fx.m.geo.0101.json"),
       plaintext,
     );
     return resolveLayout({ repoRoot: REPO_ROOT, root });
@@ -176,7 +177,7 @@ describe("content:seal and content:unseal", () => {
       layout.root,
       "sealed",
       "mysteries",
-      "m.geo.0101.json.enc",
+      "fx.m.geo.0101.json.enc",
     );
     const text = await readFile(envelopePath, "utf8");
     expect(text).not.toContain("Arvenna");
@@ -190,7 +191,7 @@ describe("content:seal and content:unseal", () => {
     });
     await mkdir(join(fresh.root, "sealed", "mysteries"), { recursive: true });
     await writeFile(
-      join(fresh.root, "sealed", "mysteries", "m.geo.0101.json.enc"),
+      join(fresh.root, "sealed", "mysteries", "fx.m.geo.0101.json.enc"),
       text,
     );
     const unsealed = await unsealEnvelopes(fresh, keys, { skipGuard: true });
@@ -198,7 +199,7 @@ describe("content:seal and content:unseal", () => {
     expect(
       (
         await readFile(
-          join(fresh.root, ".sealed-plain", "mysteries", "m.geo.0101.json"),
+          join(fresh.root, ".sealed-plain", "mysteries", "fx.m.geo.0101.json"),
         )
       ).equals(plaintext),
     ).toBe(true);
@@ -207,7 +208,11 @@ describe("content:seal and content:unseal", () => {
   it("keeps a changed workspace file unless forced, and reports unreadable envelopes", async () => {
     const layout = await workspace();
     await sealWorkspace(layout, keys, { skipGuard: true });
-    const plainPath = join(layout.workspaceDir, "mysteries", "m.geo.0101.json");
+    const plainPath = join(
+      layout.workspaceDir,
+      "mysteries",
+      "fx.m.geo.0101.json",
+    );
     await writeFile(plainPath, '{"edited": true}\n');
     const kept = await unsealEnvelopes(layout, keys, { skipGuard: true });
     expect(kept.conflicts).toHaveLength(1);

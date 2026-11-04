@@ -57,6 +57,10 @@ run("content:seal", async () => {
       console.log(
         `error ${file}: not valid JSON (sealed anyway so the work is kept; fix it)`,
       );
+    for (const file of report.misplaced)
+      console.log(
+        `error ${file}: its id does not match the file name, or a date is not in the month its name gives (sealed anyway so the work is kept; content:unseal refuses the envelope until it is fixed)`,
+      );
     for (const file of report.skipped)
       console.log(`skipped ${file}: unsafe file name`);
     if (report.orphans.length > 0)
@@ -67,5 +71,5 @@ run("content:seal", async () => {
       `content:seal: ${report.written.length} written, ${report.unchanged} unchanged (key ${key.fingerprint}).`,
     );
   }
-  return report.invalidJson.length > 0 ? 1 : 0;
+  return report.invalidJson.length > 0 || report.misplaced.length > 0 ? 1 : 0;
 });

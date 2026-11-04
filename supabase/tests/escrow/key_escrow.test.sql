@@ -96,11 +96,15 @@ end $$;
 
 -- 4. anon and authenticated are refused, whatever they try. Each attempt runs
 --    in its own block: the role switch and the refused statement roll back
---    together, so the next attempt starts as postgres again.
+--    together, so the next attempt starts as postgres again. A refused role
+--    switch raises insufficient_privilege too, so a refusal counts only once
+--    the switch is known to have happened: `became` is a plpgsql variable,
+--    which keeps its value through the block's rollback.
 do $$
 declare
   r text;
   stmt text;
+  became text;
   refused integer := 0;
 begin
   foreach r in array array['anon', 'authenticated'] loop
@@ -110,11 +114,15 @@ begin
       $q$insert into private.key_escrow (kid, key) values ('probe-cnt0', '\x00'::bytea)$q$,
       $q$update private.key_escrow set created_at = created_at where kid = 'probe-cnt0'$q$
     ] loop
+      became := null;
       begin
         execute format('set local role %I', r);
+        became := current_user;
         execute stmt;
         raise exception 'CNT-0: % was allowed to run: %', r, stmt;
       exception when insufficient_privilege then
+        assert became = r,
+          format('could not switch to role %s, so nothing was tested as %s', r, r);
         refused := refused + 1;
       end;
     end loop;

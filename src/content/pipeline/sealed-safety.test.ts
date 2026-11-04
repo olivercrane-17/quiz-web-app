@@ -10,11 +10,14 @@
  * temporary folder and an environment without QZ_CONTENT_KEY unless a test
  * passes a throwaway one, so the machine's own key file is never read.
  */
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import {
+  chmodSync,
+  copyFileSync,
   existsSync,
   mkdirSync,
   readFileSync,
+  renameSync,
   statSync,
   writeFileSync,
 } from "node:fs";
@@ -24,12 +27,17 @@ import { afterAll, describe, expect, it } from "vitest";
 
 import {
   ENVELOPE_FOLDERS,
+  HKDF_INFO_ENC,
+  HKDF_INFO_IV,
+  HKDF_INFO_ORDER,
+  KEY_ID,
   deriveSealKeys,
   envelopeText,
   isEnvelope,
   keyFingerprint,
   keyMatchesEnvelopes,
   openEnvelope,
+  placementProblem,
   sealBytes,
   type Envelope,
 } from "../../../scripts/content/crypto.ts";
@@ -54,8 +62,16 @@ const RECOVERY_KEY_TEXT = "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=";
 const OTHER_KEY = Buffer.alloc(32, 0x5a);
 
 const keys = deriveSealKeys(RECOVERY_KEY);
-const mystery = Buffer.from(`${JSON.stringify(fxMystery(), null, 2)}\n`);
-const encore = Buffer.from(`${JSON.stringify(fxEncore(), null, 2)}\n`);
+/**
+ * Fixture items stored under the names the tests give them, so the id
+ * inside matches the file name as content:unseal requires.
+ */
+const mystery = Buffer.from(
+  `${JSON.stringify({ ...fxMystery(), id: "m.geo.0101" }, null, 2)}\n`,
+);
+const encore = Buffer.from(
+  `${JSON.stringify({ ...fxEncore(), id: "e.0101" }, null, 2)}\n`,
+);
 
 /** Every string value of a JSON value, for "no plaintext in the output". */
 function strings(value: unknown): string[] {
@@ -218,6 +234,24 @@ describe("CNT-0 envelopes (scripts/content/crypto.ts)", () => {
     expect(() => openEnvelope(deriveSealKeys(OTHER_KEY), envelope)).toThrow(
       /decryption failed/,
     );
+    // A cut tag weakens GCM's check, and a 4-byte one opened before; it no
+    // longer does, and neither does an IV of the wrong size.
+    const tag = Buffer.from(envelope.tag, "base64");
+    expect(() =>
+      openEnvelope(keys, {
+        ...envelope,
+        tag: tag.subarray(0, 4).toString("base64"),
+      }),
+    ).toThrow("the envelope tag is 4 bytes, expected 16");
+    expect(() =>
+      openEnvelope(keys, {
+        ...envelope,
+        iv: Buffer.concat([
+          Buffer.from(envelope.iv, "base64"),
+          Buffer.alloc(4),
+        ]).toString("base64"),
+      }),
+    ).toThrow("the envelope IV is 16 bytes, expected 12");
   });
 
   it("derives k_enc, k_iv and k_order with HKDF-SHA256 from the documented strings", () => {
@@ -234,6 +268,15 @@ describe("CNT-0 envelopes (scripts/content/crypto.ts)", () => {
       tag: "BeR06I2xogNeBOY6F8Ilfg==",
     });
     expect(keyFingerprint(RECOVERY_KEY)).toBe("aa1df5ea9a367b2d");
+    // The info strings are built from KEY_ID, so the re-key of
+    // content/sealed/README.md changes them with it; under k1 they are the
+    // documented ones.
+    expect(KEY_ID).toBe("k1");
+    expect([HKDF_INFO_ENC, HKDF_INFO_IV, HKDF_INFO_ORDER]).toEqual([
+      "qz-content k1 aes-256-gcm key",
+      "qz-content k1 iv hmac-sha256 key",
+      "qz-content k1 packet order key",
+    ]);
     const derived = [keys.enc, keys.iv, keys.order].map((key) =>
       key.toString("hex"),
     );
@@ -397,7 +440,11 @@ describe("CNT-0 one key per project", () => {
       envelopePath(repo, "mysteries/m.geo.0101.json"),
     );
     writePlain(repo, "mysteries/m.geo.0101.json", mystery);
-    writePlain(repo, "mysteries/m.geo.0102.json", encore);
+    writePlain(
+      repo,
+      "mysteries/m.geo.0102.json",
+      Buffer.from(`${JSON.stringify({ ...fxMystery(), id: "m.geo.0102" })}\n`),
+    );
     const wrong = cli(repo, home, "seal", [], { key: OTHER_KEY });
     expect(wrong.status).toBe(1);
     expect(wrong.out).toContain(
@@ -459,9 +506,12 @@ describe("CNT-0 content:seal, content:unseal and --verify", () => {
   it("moves every folder of ARCHITECTURE §2.1, list requests and audits included", () => {
     const repo = makeRepo();
     const home = tempDir("qz-cnt0-home-");
-    const body = Buffer.from('{ "id": "placeholder" }\n');
     for (const folder of ENVELOPE_FOLDERS)
-      writePlain(repo, `${folder}/${folder}.json`, body);
+      writePlain(
+        repo,
+        `${folder}/${folder}.json`,
+        Buffer.from(`{ "id": "${folder}" }\n`),
+      );
     const sealed = cli(repo, home, "seal", [], { key: RECOVERY_KEY });
     expect(sealed.stdout).toContain(
       `content:seal: ${ENVELOPE_FOLDERS.length} written`,
@@ -510,4 +560,336 @@ describe("CNT-0 content:seal, content:unseal and --verify", () => {
     expect(empty.status).toBe(1);
     expect(empty.stdout).toContain("nothing to check the key against");
   });
+});
+
+describe("CNT-0 envelopes stay under their own name", () => {
+  const json = (value: unknown) => Buffer.from(JSON.stringify(value));
+
+  it("placementProblem: the id inside is the file name, and a schedule month's dates fall in its month", () => {
+    expect(
+      placementProblem("mysteries", "m.geo.0101", json({ id: "m.geo.0101" })),
+    ).toBeNull();
+    expect(
+      placementProblem("mysteries", "m.geo.0101", json({ id: "m.geo.0102" })),
+    ).toBe("its id does not match the file name (moved or copied envelope)");
+    const month = (...dates: string[]) =>
+      json({ track: "main", dailies: dates.map((date) => ({ date })) });
+    expect(
+      placementProblem(
+        "schedule",
+        "2026-11",
+        month("2026-11-01", "2026-11-30"),
+      ),
+    ).toBeNull();
+    expect(placementProblem("schedule", "2026-12", month("2026-11-01"))).toBe(
+      "a date in it is not in the month its file name gives (moved or copied envelope)",
+    );
+    // Work in progress that is not JSON yet, and a record without an id,
+    // have nothing to check, so they still unseal.
+    expect(
+      placementProblem("mysteries", "m.geo.0101", Buffer.from("{ half-done")),
+    ).toBeNull();
+    expect(
+      placementProblem("audits", "audit-01", json({ auditId: "x" })),
+    ).toBeNull();
+  });
+
+  it("CNT-0 content:unseal and --verify refuse swapped and copied envelopes, and so does keygen --restore", () => {
+    const repo = makeRepo();
+    const home = tempDir("qz-cnt0-home-");
+    const request = (id: string) =>
+      Buffer.from(
+        `${JSON.stringify({ id, name: "Placeholder Name", qualifier: "fixture", evidence: "fixture" }, null, 2)}\n`,
+      );
+    writePlain(
+      repo,
+      "list-requests/lr.m.fx.b01.01.json",
+      request("lr.m.fx.b01.01"),
+    );
+    writePlain(
+      repo,
+      "list-requests/lr.m.fx.b01.02.json",
+      request("lr.m.fx.b01.02"),
+    );
+    writePlain(
+      repo,
+      "schedule/2026-11.json",
+      json({ track: "e2e", dailies: [{ date: "2026-11-02" }] }),
+    );
+    expect(cli(repo, home, "seal", [], { key: RECOVERY_KEY }).status).toBe(0);
+    spawnSync("rm", ["-rf", join(repo, "content", ".sealed-plain")]);
+
+    // Swap the two requests, copy one to a third name, copy the month.
+    const sealed = join(repo, "content", "sealed");
+    const one = join(sealed, "list-requests", "lr.m.fx.b01.01.json.enc");
+    const two = join(sealed, "list-requests", "lr.m.fx.b01.02.json.enc");
+    renameSync(one, `${one}.swap`);
+    renameSync(two, one);
+    renameSync(`${one}.swap`, two);
+    copyFileSync(one, join(sealed, "list-requests", "lr.m.fx.b01.03.json.enc"));
+    copyFileSync(
+      join(sealed, "schedule", "2026-11.json.enc"),
+      join(sealed, "schedule", "2026-12.json.enc"),
+    );
+
+    const verify = cli(repo, home, "unseal", ["--verify"], {
+      key: RECOVERY_KEY,
+    });
+    expect(verify.status).toBe(1);
+    for (const stem of ["lr.m.fx.b01.01", "lr.m.fx.b01.02", "lr.m.fx.b01.03"])
+      expect(verify.stdout).toContain(
+        `error content/sealed/list-requests/${stem}.json.enc: its id does not match the file name (moved or copied envelope)`,
+      );
+    expect(verify.stdout).toContain(
+      "error content/sealed/schedule/2026-12.json.enc: a date in it is not in the month its file name gives",
+    );
+    expect(verify.stdout).toContain(
+      `content:unseal: 1 envelope(s) decrypt with key ${keyFingerprint(RECOVERY_KEY)}, 4 failed.`,
+    );
+    expect(verify.stdout).not.toContain("opens none of the envelopes");
+
+    const unsealed = cli(repo, home, "unseal", [], { key: RECOVERY_KEY });
+    expect(unsealed.status).toBe(1);
+    expect(unsealed.stdout).toContain(
+      "content:unseal: 1 written, 0 unchanged, 0 kept, 4 failed.",
+    );
+    const workspace = join(repo, "content", ".sealed-plain");
+    expect(existsSync(join(workspace, "list-requests"))).toBe(false);
+    expect(existsSync(join(workspace, "schedule", "2026-12.json"))).toBe(false);
+
+    const restored = cli(repo, home, "keygen", ["--restore"], {
+      input: `${RECOVERY_KEY_TEXT}\n`,
+    });
+    expect(restored.status).toBe(1);
+    expect(restored.stdout).toContain(
+      "It opens 1 of 5 envelope(s). Run npm run content:unseal -- --verify to list the others.",
+    );
+    for (const output of [verify.out, unsealed.out, restored.out])
+      expect(output).not.toContain("Placeholder Name");
+  });
+
+  it("content:seal reports a workspace file whose id is not its name, and seals it anyway so the work is kept", () => {
+    const repo = makeRepo();
+    const home = tempDir("qz-cnt0-home-");
+    writePlain(
+      repo,
+      "mysteries/m.geo.0101.json",
+      Buffer.from('{ "id": "m.geo.0199" }\n'),
+    );
+    const sealed = cli(repo, home, "seal", [], { key: RECOVERY_KEY });
+    expect(sealed.status).toBe(1);
+    expect(sealed.stdout).toContain(
+      "error content/.sealed-plain/mysteries/m.geo.0101.json: its id does not match the file name",
+    );
+    expect(existsSync(envelopePath(repo, "mysteries/m.geo.0101.json"))).toBe(
+      true,
+    );
+  });
+});
+
+describe("CNT-0 the key and the plaintext stay private", () => {
+  const mode = (path: string) => statSync(path).mode & 0o777;
+
+  it("CNT-0 a wrong key already on the machine: --check names it, --restore says to move it aside, and once it is moved the restore works", () => {
+    const { repo, home } = sealedRepo();
+    const keyFile = join(home, ".config", "quiz-web-app", "content.key");
+    mkdirSync(join(keyFile, ".."), { recursive: true });
+    writeFileSync(keyFile, `${OTHER_KEY.toString("base64")}\n`);
+
+    const check = cli(repo, home, "keygen", ["--check"]);
+    expect(check.status).toBe(1);
+    expect(check.stdout).toContain(`fingerprint ${keyFingerprint(OTHER_KEY)}`);
+    expect(check.stdout).toContain(
+      "It opens none of the 2 envelope(s) in content/sealed/, so it is not the project's key: move that file aside (never delete it)",
+    );
+    const verify = cli(repo, home, "unseal", ["--verify"]);
+    expect(verify.stdout).toContain('"Recovering the key"');
+
+    const refused = cli(repo, home, "keygen", ["--restore"], {
+      input: `${RECOVERY_KEY_TEXT}\n`,
+    });
+    expect(refused.status).toBe(1);
+    expect(refused.out).toContain(
+      "already exists. Refusing to overwrite the content key. If its fingerprint (npm run content:keygen -- --check) is not the one in content/sealed/README.md, move the file aside (never delete it) and run --restore again",
+    );
+
+    // The README's step 2, then step 3 and step 4.
+    renameSync(keyFile, `${keyFile}.wrong`);
+    const restored = cli(repo, home, "keygen", ["--restore"], {
+      input: `${RECOVERY_KEY_TEXT}\n`,
+    });
+    expect(restored.status, restored.out).toBe(0);
+    const good = cli(repo, home, "keygen", ["--check"]);
+    expect(good.status).toBe(0);
+    expect(good.stdout).toContain(
+      `fingerprint ${keyFingerprint(RECOVERY_KEY)}`,
+    );
+    expect(good.stdout).toContain("It opens the envelopes in content/sealed/.");
+
+    // A wrong QZ_CONTENT_KEY gets the same treatment.
+    const env = cli(repo, tempDir("qz-cnt0-home-"), "keygen", ["--check"], {
+      key: OTHER_KEY,
+    });
+    expect(env.status).toBe(1);
+    expect(env.stdout).toContain("not the project's key: unset QZ_CONTENT_KEY");
+    const envRestore = cli(
+      repo,
+      tempDir("qz-cnt0-home-"),
+      "keygen",
+      ["--restore"],
+      { key: OTHER_KEY, input: `${RECOVERY_KEY_TEXT}\n` },
+    );
+    expect(envRestore.status).toBe(1);
+    expect(envRestore.out).toContain(
+      "If it holds the wrong key, unset QZ_CONTENT_KEY and run --restore again.",
+    );
+  });
+
+  it("restoring sets the key's folder to mode 0700 even when it already exists", () => {
+    const { repo, home } = sealedRepo();
+    const folder = join(home, ".config", "quiz-web-app");
+    mkdirSync(folder, { recursive: true });
+    chmodSync(folder, 0o755);
+    const restored = cli(repo, home, "keygen", ["--restore"], {
+      input: `${RECOVERY_KEY_TEXT}\n`,
+    });
+    expect(restored.status, restored.out).toBe(0);
+    expect(mode(folder)).toBe(0o700);
+    expect(mode(join(folder, "content.key"))).toBe(0o600);
+  });
+
+  it("CNT-0 content:unseal keeps the plaintext workspace private (folders 0700, files 0600) and tightens one an older unseal left open", () => {
+    const { repo, home } = sealedRepo();
+    const workspace = join(repo, "content", ".sealed-plain");
+    const file = join(workspace, "mysteries", "m.geo.0101.json");
+    const unsealed = cli(repo, home, "unseal", [], { key: RECOVERY_KEY });
+    expect(unsealed.status, unsealed.out).toBe(0);
+    expect([
+      mode(workspace),
+      mode(join(workspace, "mysteries")),
+      mode(join(workspace, "encores")),
+      mode(file),
+      mode(join(workspace, "encores", "e.0101.json")),
+    ]).toEqual([0o700, 0o700, 0o700, 0o600, 0o600]);
+
+    chmodSync(workspace, 0o755);
+    chmodSync(join(workspace, "mysteries"), 0o755);
+    chmodSync(file, 0o644);
+    const again = cli(repo, home, "unseal", [], { key: RECOVERY_KEY });
+    expect(again.stdout).toContain("content:unseal: 0 written, 2 unchanged");
+    expect([
+      mode(workspace),
+      mode(join(workspace, "mysteries")),
+      mode(file),
+    ]).toEqual([0o700, 0o700, 0o600]);
+  });
+
+  /** util-linux script(1), which runs a command on a pseudo-terminal; Ubuntu runners have it. */
+  const hasScript = /util-linux/.test(
+    spawnSync("script", ["--version"], { encoding: "utf8" }).stdout ?? "",
+  );
+  const quote = (word: string) => `'${word.replace(/'/g, "'\\''")}'`;
+
+  /**
+   * Runs a shell command on a pseudo-terminal and types `input` once
+   * `ready` shows. Resolves with everything the terminal displayed: what
+   * the program printed and whatever the terminal echoed of the typing.
+   */
+  function onTerminal(
+    command: string,
+    options: { cwd: string; home: string; ready: string; input: string },
+  ): Promise<{ status: number | null; output: string }> {
+    return new Promise((resolve, reject) => {
+      const child = spawn("script", ["-q", "-e", "-c", command, "/dev/null"], {
+        cwd: options.cwd,
+        env: {
+          PATH: process.env.PATH ?? "",
+          HOME: options.home,
+          SHELL: "/bin/sh",
+          TERM: "dumb",
+          NODE_ENV: "test",
+        },
+        stdio: ["pipe", "pipe", "pipe"],
+      });
+      let output = "";
+      let typed = false;
+      const timer = setTimeout(() => {
+        child.kill("SIGKILL");
+        reject(new Error(`timed out waiting for: ${command}`));
+      }, 20_000);
+      const onOutput = (chunk: Buffer) => {
+        output += chunk.toString("latin1");
+        if (!typed && output.includes(options.ready)) {
+          typed = true;
+          setTimeout(() => child.stdin.write(options.input), 50);
+        }
+      };
+      child.stdout.on("data", onOutput);
+      child.stderr.on("data", onOutput);
+      child.on("exit", (status) => {
+        clearTimeout(timer);
+        child.stdin.end();
+        resolve({ status, output });
+      });
+    });
+  }
+
+  it.skipIf(!hasScript)(
+    "CNT-0 keygen --restore reads a pasted key with echo off: on a terminal the key never shows",
+    async () => {
+      const { repo, home } = sealedRepo();
+      const keyFile = join(home, ".config", "quiz-web-app", "content.key");
+      const keygen = [
+        process.execPath,
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        join(REPO_ROOT, "scripts", "content", "keygen.ts"),
+        "--restore",
+      ]
+        .map(quote)
+        .join(" ");
+      const terminal = { cwd: repo, home, ready: "Paste the content key" };
+      const forms = [
+        RECOVERY_KEY_TEXT.slice(0, 12),
+        RECOVERY_KEY_TEXT.slice(-14, -2),
+        RECOVERY_KEY.toString("hex").slice(0, 12),
+      ];
+
+      // The harness sees an echo: a program reading in the terminal's
+      // normal mode shows the typed key.
+      const control = await onTerminal(
+        "printf 'ready\\n'; head -n 1 >/dev/null",
+        {
+          ...terminal,
+          ready: "ready",
+          input: `${RECOVERY_KEY_TEXT}\r`,
+        },
+      );
+      expect(control.output).toContain(RECOVERY_KEY_TEXT);
+
+      // Ctrl-C cancels: nothing written, nothing shown.
+      const cancelled = await onTerminal(keygen, {
+        ...terminal,
+        input: `${RECOVERY_KEY_TEXT.slice(0, 20)}\u0003`,
+      });
+      expect(cancelled.status).toBe(1);
+      expect(cancelled.output).toContain("cancelled. Nothing was written.");
+      for (const form of forms.slice(0, 1))
+        expect(cancelled.output).not.toContain(form);
+      expect(existsSync(keyFile)).toBe(false);
+
+      // Pasted after a typo that Backspace removes, then Enter.
+      const pasted = await onTerminal(keygen, {
+        ...terminal,
+        input: `Z\u007f${RECOVERY_KEY_TEXT}\r`,
+      });
+      expect(pasted.status).toBe(0);
+      expect(pasted.output).toContain(
+        `content:keygen: restored ${keyFile} (mode 0600), fingerprint ${keyFingerprint(RECOVERY_KEY)}.`,
+      );
+      expect(pasted.output).toContain("It opens 2 of 2 envelope(s).");
+      for (const form of forms) expect(pasted.output).not.toContain(form);
+      expect(readFileSync(keyFile, "utf8")).toBe(`${RECOVERY_KEY_TEXT}\n`);
+    },
+    60_000,
+  );
 });

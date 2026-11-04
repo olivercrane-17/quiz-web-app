@@ -9,11 +9,15 @@
  * restored instead. Prints the fingerprint, never the key. ARCHITECTURE §5.4,
  * content/sealed/README.md.
  *
- * --check     Reports whether a key is available here, and its fingerprint.
+ * --check     Reports whether a key is available here, its fingerprint, and
+ *             whether it opens the envelopes in content/sealed/ (exit 1 when
+ *             there is no key or it opens none of them).
  * --restore   The recovery step: reads a recovered key (base64) from stdin,
  *             refuses it unless it opens the envelopes in content/sealed/,
  *             and writes it to the key file (mode 0600, directory 0700) under
- *             the same guards as creating one. Then run
+ *             the same guards as creating one. From a pipe it reads to the
+ *             end; on a terminal it reads one line with echo off, so a
+ *             pasted key never shows on screen or in a session log. Then run
  *             npm run content:unseal -- --verify.
  */
 import { existsSync } from "node:fs";
@@ -29,6 +33,7 @@ import {
   decodeMasterKey,
   deriveSealKeys,
   generateKeyFile,
+  keyMatchesEnvelopes,
   keySourceFromProcess,
   listEnvelopeFiles,
   loadMasterKey,
@@ -40,20 +45,18 @@ import {
 const USAGE = `Usage: npm run content:keygen [-- --check | -- --restore]
 
   Creates ~/.config/quiz-web-app/content.key once. Never overwrites a key.
-  --check          Only report whether a key is available, and its fingerprint
+  --check          Only report whether a key is available, its fingerprint,
+                   and whether it opens the envelopes in content/sealed/
   --restore        Read a recovered key (base64) from stdin, check it against
-                   content/sealed/, and write it to the key file (mode 0600)`;
+                   content/sealed/, and write it to the key file (mode 0600,
+                   directory 0700). Pipe the key file in, or paste the key at
+                   the prompt, which does not show it`;
 
 /** More than any key file could hold; stdin past this is refused unread. */
 const STDIN_LIMIT = 4096;
 
-/** The whole of stdin, prompting first when it is a terminal. */
-async function readKeyFromStdin(): Promise<string> {
-  if (process.stdin.isTTY) {
-    process.stderr.write(
-      "Paste the content key (base64), then press Enter and Ctrl-D:\n",
-    );
-  }
+/** The whole of a piped stdin. */
+async function readKeyFromPipe(): Promise<string> {
   const chunks: Buffer[] = [];
   let size = 0;
   for await (const chunk of process.stdin) {
@@ -69,6 +72,89 @@ async function readKeyFromStdin(): Promise<string> {
     chunks.push(bytes);
   }
   return Buffer.concat(chunks).toString("utf8");
+}
+
+/**
+ * One line from a terminal, read in raw mode so the terminal echoes
+ * nothing: a pasted key never reaches the screen, scrollback, a tmux log or
+ * a `script` recording. Enter or Ctrl-D ends it, Ctrl-C cancels, Backspace
+ * and Ctrl-U edit, and escape sequences (bracketed-paste markers, arrow
+ * keys) are dropped. The terminal goes back to normal afterwards, and Node
+ * restores it on exit even if this throws.
+ */
+async function readKeyFromTerminal(): Promise<string> {
+  const stdin = process.stdin;
+  try {
+    // Echo goes off before the prompt shows, so nothing typed after it echoes.
+    stdin.setRawMode(true);
+    process.stderr.write(
+      "Paste the content key (base64) and press Enter. It is not shown as you paste or type.\n",
+    );
+    return await new Promise<string>((resolve, reject) => {
+      let text = "";
+      /** 0 outside an escape sequence, 1 after ESC, 2 inside ESC [ ... */
+      let escape = 0;
+      const finish = (error: Error | null) => {
+        stdin.off("data", onData);
+        stdin.off("end", onEnd);
+        stdin.pause();
+        if (error) reject(error);
+        else resolve(text);
+      };
+      const onEnd = () => finish(null);
+      const onData = (chunk: Buffer | string) => {
+        const bytes =
+          typeof chunk === "string" ? Buffer.from(chunk, "utf8") : chunk;
+        for (const byte of bytes) {
+          if (escape === 1) {
+            escape = byte === 0x5b ? 2 : 0;
+            continue;
+          }
+          if (escape === 2) {
+            if (byte >= 0x40 && byte <= 0x7e) escape = 0;
+            continue;
+          }
+          if (byte === 0x1b) escape = 1;
+          else if (byte === 0x03) {
+            finish(new Error("cancelled. Nothing was written."));
+            return;
+          } else if (byte === 0x0d || byte === 0x0a || byte === 0x04) {
+            finish(null);
+            return;
+          } else if (byte === 0x7f || byte === 0x08) text = text.slice(0, -1);
+          else if (byte === 0x15) text = "";
+          else if (byte >= 0x20) {
+            text += String.fromCharCode(byte);
+            if (text.length > STDIN_LIMIT) {
+              finish(
+                new Error(
+                  `more than ${STDIN_LIMIT} characters, which is not one key`,
+                ),
+              );
+              return;
+            }
+          }
+        }
+      };
+      stdin.on("data", onData);
+      stdin.once("end", onEnd);
+      stdin.resume();
+    });
+  } finally {
+    stdin.setRawMode(false);
+    // Enter was not echoed, so end the prompt's line here.
+    process.stderr.write("\n");
+  }
+}
+
+function readKeyFromStdin(): Promise<string> {
+  if (!process.stdin.isTTY) return readKeyFromPipe();
+  if (typeof process.stdin.setRawMode !== "function") {
+    throw new Error(
+      "this terminal cannot turn echo off, so a pasted key would show. Pipe the key file in instead: npm run content:keygen -- --restore < /path/to/content.key",
+    );
+  }
+  return readKeyFromTerminal();
 }
 
 run("content:keygen", async () => {
@@ -92,17 +178,36 @@ run("content:keygen", async () => {
 
   if (values.check) {
     const loaded = await loadMasterKey(source);
+    if (!loaded) {
+      console.log(missingKeyMessage(envelopes));
+      return 1;
+    }
+    const where =
+      loaded.source === "env" ? "QZ_CONTENT_KEY" : (loaded.path ?? "");
     console.log(
-      loaded
-        ? `content key found (${loaded.source === "env" ? "QZ_CONTENT_KEY" : (loaded.path ?? "")}), fingerprint ${loaded.fingerprint}`
-        : missingKeyMessage(envelopes),
+      `content key found (${where}), fingerprint ${loaded.fingerprint}`,
     );
-    return loaded ? 0 : 1;
+    if (layout.envelopeDir && envelopes > 0) {
+      const { matches } = await keyMatchesEnvelopes(
+        loaded.keys,
+        layout.envelopeDir,
+      );
+      if (!matches) {
+        console.log(
+          `It opens none of the ${envelopes} envelope(s) in content/sealed/, so it is not the project's key: ${loaded.source === "env" ? "unset QZ_CONTENT_KEY" : "move that file aside (never delete it)"} and restore the right one (content/sealed/README.md, "Recovering the key").`,
+        );
+        return 1;
+      }
+      console.log("It opens the envelopes in content/sealed/.");
+    }
+    return 0;
   }
 
   if (values.restore) {
     // Before reading anything, so nobody pastes a key for nothing.
-    assertKeyFileFree(source, "restore a key file it would not use");
+    assertKeyFileFree(source, "restore a key file it would not use", {
+      restoring: true,
+    });
     const master = decodeMasterKey(
       // A pasted key may carry line breaks; base64 never has inner spaces.
       (await readKeyFromStdin()).replace(/\s+/g, ""),
@@ -110,8 +215,8 @@ run("content:keygen", async () => {
     );
     const check: EnvelopeCheck = layout.envelopeDir
       ? await checkEnvelopes(deriveSealKeys(master), layout.envelopeDir)
-      : { total: 0, opened: 0, failures: [] };
-    if (check.total > 0 && check.opened === 0) {
+      : { total: 0, opened: 0, decrypted: 0, failures: [] };
+    if (check.total > 0 && check.decrypted === 0) {
       throw new Error(
         `the key on stdin opens none of the ${check.total} envelope(s) in content/sealed/, so it is not the key they were sealed with. Nothing was written.`,
       );

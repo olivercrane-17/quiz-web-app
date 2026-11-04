@@ -23,12 +23,23 @@
  *   shuffle and read the key's position off cold.json.
  * - IV: the first 12 bytes of HMAC-SHA256(k_iv, plaintext). Unchanged
  *   plaintext gives an unchanged envelope, so diffs stay clean; an IV repeats
- *   only for identical messages, which GCM tolerates. There is no additional
- *   authenticated data, because the IV covers the plaintext alone, and opening
- *   an envelope checks that its IV belongs to the plaintext it decrypts to.
+ *   only for identical messages, which GCM tolerates. Opening an envelope
+ *   checks that its IV belongs to the plaintext it decrypts to, and takes
+ *   only a 12-byte IV and a 16-byte tag.
+ * - Placement: k1 envelopes carry no additional authenticated data, so the
+ *   ciphertext alone does not say which file it belongs in. The path is
+ *   checked after decryption instead (placementProblem): the id inside must
+ *   be the file name, and a schedule month's dates must fall in the month
+ *   its name gives. checkEnvelopes (content:unseal -- --verify,
+ *   content:keygen -- --restore) and content:unseal fail an envelope that
+ *   was moved or copied to another name.
  *
  * Changing any of these strings changes every envelope, so they never change
- * under kid k1: a new derivation needs a new kid and a full re-seal.
+ * under kid k1. A new derivation, or a new master key after a lost one,
+ * needs a new kid and a full re-seal (content/sealed/README.md, "If the key
+ * is lost"): the info strings carry KEY_ID, and the next kid must also bind
+ * each envelope to its place by passing `${kid}/${folder}/${stem}` to
+ * cipher.setAAD, with a pinned test vector of its own.
  *
  * The master key is never printed. Only keyFingerprint() is, which is an
  * HMAC of a fixed label under the key and reveals nothing about it.
@@ -46,11 +57,14 @@ import { chmod, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 
-export const HKDF_SALT = "quiz-web-app/content-seal/v1";
-export const HKDF_INFO_ENC = "qz-content k1 aes-256-gcm key";
-export const HKDF_INFO_IV = "qz-content k1 iv hmac-sha256 key";
-export const HKDF_INFO_ORDER = "qz-content k1 packet order key";
+/** The key id every envelope carries. A re-key changes it (see above). */
 export const KEY_ID = "k1";
+export const HKDF_SALT = "quiz-web-app/content-seal/v1";
+export const HKDF_INFO_ENC = `qz-content ${KEY_ID} aes-256-gcm key`;
+export const HKDF_INFO_IV = `qz-content ${KEY_ID} iv hmac-sha256 key`;
+export const HKDF_INFO_ORDER = `qz-content ${KEY_ID} packet order key`;
+const IV_BYTES = 12;
+const TAG_BYTES = 16;
 export const ENVELOPE_VERSION = 1;
 export const ENVELOPE_ALG = "A256GCM";
 export const ENVELOPE_SUFFIX = ".json.enc";
@@ -119,7 +133,9 @@ export function deriveIv(keys: SealKeys, plaintext: Uint8Array): Buffer {
 
 export function sealBytes(keys: SealKeys, plaintext: Uint8Array): Envelope {
   const iv = deriveIv(keys, plaintext);
-  const cipher = createCipheriv("aes-256-gcm", keys.enc, iv);
+  const cipher = createCipheriv("aes-256-gcm", keys.enc, iv, {
+    authTagLength: TAG_BYTES,
+  });
   const data = Buffer.concat([cipher.update(plaintext), cipher.final()]);
   return {
     v: ENVELOPE_VERSION,
@@ -180,8 +196,9 @@ export function isEnvelope(value: unknown): value is Envelope {
 }
 
 /**
- * Decrypts an envelope. Throws on a wrong key, tampering, or an IV that does
- * not belong to the plaintext.
+ * Decrypts an envelope. Throws on a wrong key, tampering, an IV or tag of the
+ * wrong size (a cut tag would weaken the GCM check), or an IV that does not
+ * belong to the plaintext.
  */
 export function openEnvelope(keys: SealKeys, envelope: Envelope): Buffer {
   if (envelope.kid !== keys.kid) {
@@ -190,8 +207,19 @@ export function openEnvelope(keys: SealKeys, envelope: Envelope): Buffer {
     );
   }
   const iv = Buffer.from(envelope.iv, "base64");
-  const decipher = createDecipheriv("aes-256-gcm", keys.enc, iv);
-  decipher.setAuthTag(Buffer.from(envelope.tag, "base64"));
+  const tag = Buffer.from(envelope.tag, "base64");
+  if (iv.length !== IV_BYTES)
+    throw new Error(
+      `the envelope IV is ${iv.length} bytes, expected ${IV_BYTES}`,
+    );
+  if (tag.length !== TAG_BYTES)
+    throw new Error(
+      `the envelope tag is ${tag.length} bytes, expected ${TAG_BYTES}`,
+    );
+  const decipher = createDecipheriv("aes-256-gcm", keys.enc, iv, {
+    authTagLength: TAG_BYTES,
+  });
+  decipher.setAuthTag(tag);
   let plaintext: Buffer;
   try {
     plaintext = Buffer.concat([
@@ -273,31 +301,88 @@ export async function openEnvelopeFile(
   return openEnvelope(keys, value as Envelope);
 }
 
+/**
+ * Why a decrypted envelope is not where it belongs, or null. The id inside
+ * (a top-level string `id`) must be the file name, and every date of a
+ * schedule month must fall in the month its name gives, so an envelope
+ * moved or copied to another name never opens as that name. Plaintext that
+ * is not JSON (work in progress, sealed so it is kept) has nothing to check.
+ * The reason never quotes the plaintext.
+ */
+export function placementProblem(
+  folder: EnvelopeFolder,
+  stem: string,
+  plaintext: Uint8Array,
+): string | null {
+  let value: unknown;
+  try {
+    value = JSON.parse(
+      Buffer.from(plaintext)
+        .toString("utf8")
+        .replace(/^\uFEFF/, ""),
+    );
+  } catch {
+    return null;
+  }
+  if (typeof value !== "object" || value === null || Array.isArray(value))
+    return null;
+  const record = value as Record<string, unknown>;
+  if (typeof record.id === "string" && record.id !== stem)
+    return "its id does not match the file name (moved or copied envelope)";
+  if (folder === "schedule" && Array.isArray(record.dailies)) {
+    for (const daily of record.dailies as unknown[]) {
+      const date =
+        typeof daily === "object" && daily !== null
+          ? (daily as Record<string, unknown>).date
+          : undefined;
+      if (typeof date === "string" && !date.startsWith(`${stem}-`))
+        return "a date in it is not in the month its file name gives (moved or copied envelope)";
+    }
+  }
+  return null;
+}
+
 export interface EnvelopeCheck {
   /** Envelope files found. */
   total: number;
-  /** Envelopes that decrypt with the key. */
+  /** Envelopes that decrypt with the key and sit under their own name. */
   opened: number;
+  /**
+   * Envelopes the key decrypts, misplaced ones included: one is enough to
+   * prove the key (a GCM tag cannot be forged by accident).
+   */
+  decrypted: number;
   failures: { abs: string; reason: string }[];
 }
 
 /**
- * Decrypts every envelope in memory and counts the results, writing nothing
- * and keeping no plaintext (the recovery check of ARCHITECTURE §5.4).
+ * Decrypts every envelope in memory and checks where it sits, writing
+ * nothing and keeping no plaintext (the recovery check of ARCHITECTURE
+ * §5.4).
  */
 export async function checkEnvelopes(
   keys: SealKeys,
   envelopeDir: string,
 ): Promise<EnvelopeCheck> {
   const files = await listEnvelopeFiles(envelopeDir);
-  const check: EnvelopeCheck = { total: files.length, opened: 0, failures: [] };
-  for (const { abs } of files) {
+  const check: EnvelopeCheck = {
+    total: files.length,
+    opened: 0,
+    decrypted: 0,
+    failures: [],
+  };
+  for (const { folder, stem, abs } of files) {
+    let plaintext: Buffer;
     try {
-      await openEnvelopeFile(keys, abs);
-      check.opened += 1;
+      plaintext = await openEnvelopeFile(keys, abs);
     } catch (error) {
       check.failures.push({ abs, reason: (error as Error).message });
+      continue;
     }
+    check.decrypted += 1;
+    const misplaced = placementProblem(folder, stem, plaintext);
+    if (misplaced) check.failures.push({ abs, reason: misplaced });
+    else check.opened += 1;
   }
   return check;
 }
@@ -408,23 +493,36 @@ export function missingKeyMessage(envelopes: number): string {
     : `no content key: set ${KEY_ENV} or run npm run content:keygen`;
 }
 
-/** Throws unless a key file may be written: never beside QZ_CONTENT_KEY, never over a file. */
-export function assertKeyFileFree(source: KeySource, action: string): void {
+/**
+ * Throws unless a key file may be written: never beside QZ_CONTENT_KEY,
+ * never over a file. When restoring, the refusal says how to get a wrong key
+ * out of the way, since a wrong key is a common reason to restore.
+ */
+export function assertKeyFileFree(
+  source: KeySource,
+  action: string,
+  options: { restoring?: boolean } = {},
+): void {
   if (source.envValue?.trim()) {
     throw new Error(
-      `${KEY_ENV} is already set in this environment. Refusing to ${action}.`,
+      `${KEY_ENV} is already set in this environment. Refusing to ${action}.${options.restoring ? ` If it holds the wrong key, unset ${KEY_ENV} and run --restore again.` : ""}`,
     );
   }
   if (existsSync(source.keyPath)) {
     throw new Error(
-      `${source.keyPath} already exists. Refusing to overwrite the content key.`,
+      `${source.keyPath} already exists. Refusing to overwrite the content key.${options.restoring ? ' If its fingerprint (npm run content:keygen -- --check) is not the one in content/sealed/README.md, move the file aside (never delete it) and run --restore again (content/sealed/README.md, "Recovering the key").' : ""}`,
     );
   }
 }
 
-/** Writes the key as base64 (mode 0600 in a 0700 directory), never over a file. */
+/**
+ * Writes the key as base64, mode 0600, in its own directory at mode 0700
+ * (tightened when the directory already exists), never over a file.
+ */
 async function writeKeyFile(path: string, master: Buffer): Promise<void> {
   await mkdir(dirname(path), { recursive: true, mode: 0o700 });
+  // mkdir sets the mode only on a folder it creates, filtered by the umask.
+  await chmod(dirname(path), 0o700);
   // "wx" fails if the file appeared in the meantime.
   await writeFile(path, `${master.toString("base64")}\n`, {
     flag: "wx",
@@ -461,7 +559,9 @@ export async function restoreKeyFile(
   if (master.length !== 32) {
     throw new Error(`the content key must be 32 bytes, got ${master.length}`);
   }
-  assertKeyFileFree(source, "restore a key file it would not use");
+  assertKeyFileFree(source, "restore a key file it would not use", {
+    restoring: true,
+  });
   await writeKeyFile(source.keyPath, master);
   return { path: source.keyPath, fingerprint: keyFingerprint(master) };
 }

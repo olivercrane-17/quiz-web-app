@@ -4,10 +4,22 @@
  * envelopes in content/sealed/ (committed), for every folder of ARCHITECTURE
  * §2.1. The format and the key live in scripts/content/crypto.ts, which the
  * CLIs share with this module.
+ *
+ * The workspace is private to its owner, like the key that decrypts it:
+ * content:unseal keeps the workspace and its folders at mode 0700 and
+ * writes each plaintext file at mode 0600, so on a shared machine no other
+ * account can read a decrypted Daily.
  */
 import { existsSync } from "node:fs";
-import { readFile, readdir } from "node:fs/promises";
-import { join } from "node:path";
+import {
+  chmod,
+  mkdir,
+  readFile,
+  readdir,
+  rename,
+  writeFile,
+} from "node:fs/promises";
+import { dirname, join } from "node:path";
 
 import {
   ENVELOPE_FOLDERS,
@@ -16,6 +28,7 @@ import {
   keyMatchesEnvelopes,
   listEnvelopeFiles,
   openEnvelopeFile,
+  placementProblem,
   sealBytes,
   type SealKeys,
 } from "../../../scripts/content/crypto.ts";
@@ -25,10 +38,32 @@ import { assertWorkspaceIgnored } from "./store.ts";
 
 const SAFE_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]*\.json$/;
 
+/** Creates a workspace folder, or tightens an existing one, to mode 0700. */
+async function privateDir(dir: string): Promise<void> {
+  await mkdir(dir, { recursive: true, mode: 0o700 });
+  // mkdir sets the mode only on a folder it creates, filtered by the umask.
+  await chmod(dir, 0o700);
+}
+
+/** Writes a plaintext file at mode 0600: temp file, then rename. */
+async function writePrivateFile(path: string, bytes: Buffer): Promise<void> {
+  const temp = `${path}.${process.pid}.tmp`;
+  await writeFile(temp, bytes, { mode: 0o600 });
+  // The mode above is filtered by the umask; set it exactly.
+  await chmod(temp, 0o600);
+  await rename(temp, path);
+}
+
 export interface SealReport {
   written: string[];
   unchanged: number;
   invalidJson: string[];
+  /**
+   * Files whose id is not their file name (or, for a schedule month, whose
+   * dates are not in its month): sealed anyway, so work is never lost, but
+   * content:unseal and --verify refuse the envelope until it is fixed.
+   */
+  misplaced: string[];
   skipped: string[];
   /** Envelopes with no plaintext in the workspace (left alone). */
   orphans: string[];
@@ -67,6 +102,7 @@ export async function sealWorkspace(
     written: [],
     unchanged: 0,
     invalidJson: [],
+    misplaced: [],
     skipped: [],
     orphans: [],
   };
@@ -85,13 +121,16 @@ export async function sealWorkspace(
         continue;
       }
       const bytes = await readFile(source);
+      const stem = name.slice(0, -5);
       try {
         JSON.parse(bytes.toString("utf8"));
       } catch {
         // Sealed anyway, so work in progress is never lost; reported as an error.
         report.invalidJson.push(repoRelative(layout, source));
       }
-      plainStems.add(`${folder}/${name.slice(0, -5)}`);
+      if (placementProblem(folder, stem, bytes))
+        report.misplaced.push(repoRelative(layout, source));
+      plainStems.add(`${folder}/${stem}`);
       const target = join(layout.envelopeDir, folder, `${name}.enc`);
       const text = envelopeText(sealBytes(keys, bytes));
       const current = existsSync(target)
@@ -125,7 +164,11 @@ export interface UnsealOptions extends SealOptions {
   force?: boolean;
 }
 
-/** Decrypts every envelope into the workspace. */
+/**
+ * Decrypts every envelope into the workspace. An envelope that does not
+ * belong under its name (moved or copied, placementProblem) fails and is
+ * not written.
+ */
 export async function unsealEnvelopes(
   layout: Layout,
   keys: SealKeys,
@@ -140,6 +183,14 @@ export async function unsealEnvelopes(
     conflicts: [],
     failed: [],
   };
+  // Tighten a workspace an older unseal left readable to everyone.
+  if (existsSync(layout.workspaceDir)) {
+    await chmod(layout.workspaceDir, 0o700);
+    for (const folder of ENVELOPE_FOLDERS) {
+      const dir = join(layout.workspaceDir, folder);
+      if (existsSync(dir)) await chmod(dir, 0o700);
+    }
+  }
   for (const { folder, stem, abs } of await listEnvelopeFiles(
     layout.envelopeDir,
   )) {
@@ -155,8 +206,14 @@ export async function unsealEnvelopes(
       report.failed.push({ file: rel, reason: (error as Error).message });
       continue;
     }
+    const misplaced = placementProblem(folder, stem, plaintext);
+    if (misplaced) {
+      report.failed.push({ file: rel, reason: misplaced });
+      continue;
+    }
     const target = join(layout.workspaceDir, folder, `${stem}.json`);
     if (existsSync(target)) {
+      await chmod(target, 0o600);
       const current = await readFile(target);
       if (current.equals(plaintext)) {
         report.unchanged += 1;
@@ -167,7 +224,9 @@ export async function unsealEnvelopes(
         continue;
       }
     }
-    await writeTextFile(target, plaintext);
+    await privateDir(layout.workspaceDir);
+    await privateDir(dirname(target));
+    await writePrivateFile(target, plaintext);
     report.written.push(repoRelative(layout, target));
   }
   return report;
