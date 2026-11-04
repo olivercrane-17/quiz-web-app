@@ -2,21 +2,24 @@
  * npm run content:seal
  *
  * Encrypts every changed file in content/.sealed-plain/ into an AES-256-GCM
- * envelope in content/sealed/ (ARCHITECTURE §5.4). Unchanged plaintext gives
- * byte-identical envelopes, so only real changes show in git. Run it at
- * every checkpoint: the workspace dies with the sandbox. See
- * content/README.md.
+ * envelope in content/sealed/ (ARCHITECTURE §5.4, format in ./crypto.ts).
+ * Unchanged plaintext gives byte-identical envelopes, so only real changes
+ * show in git. Refuses, writing nothing, when the key opens none of the
+ * envelopes already there. Run it at every checkpoint: the workspace dies
+ * with the sandbox. See content/sealed/README.md.
  */
 import { parseCli, run } from "../../src/content/pipeline/cli.ts";
-import {
-  keySourceFromProcess,
-  loadMasterKey,
-} from "../../src/content/pipeline/keys.ts";
 import {
   findRepoRoot,
   resolveLayout,
 } from "../../src/content/pipeline/layout.ts";
 import { sealWorkspace } from "../../src/content/pipeline/sealing.ts";
+import {
+  keySourceFromProcess,
+  listEnvelopeFiles,
+  loadMasterKey,
+  missingKeyMessage,
+} from "./crypto.ts";
 
 const USAGE = `Usage: npm run content:seal [-- --json]
 
@@ -35,15 +38,15 @@ run("content:seal", async () => {
     );
     return 0;
   }
+  const layout = resolveLayout({ repoRoot: findRepoRoot() });
   const key = await loadMasterKey(keySourceFromProcess());
-  if (!key)
-    throw new Error(
-      "no content key: set QZ_CONTENT_KEY or run npm run content:keygen",
-    );
-  const report = await sealWorkspace(
-    resolveLayout({ repoRoot: findRepoRoot() }),
-    key.keys,
-  );
+  if (!key) {
+    const envelopes = layout.envelopeDir
+      ? (await listEnvelopeFiles(layout.envelopeDir)).length
+      : 0;
+    throw new Error(missingKeyMessage(envelopes));
+  }
+  const report = await sealWorkspace(layout, key.keys);
   if (values.json) {
     console.log(
       JSON.stringify({ fingerprint: key.fingerprint, ...report }, null, 2),
