@@ -476,7 +476,9 @@ export function knownContentPath(rel: string): boolean {
     default:
       return (
         parts.length === 1 &&
-        (name === "categories.json" || name === "batches.json")
+        (name === "categories.json" ||
+          name === "batches.json" ||
+          name === "compositions.json")
       );
   }
 }
