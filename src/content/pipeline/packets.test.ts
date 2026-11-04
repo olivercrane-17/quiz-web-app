@@ -18,12 +18,18 @@ import { createHash } from "node:crypto";
 import {
   coldStages,
   coldView,
+  nextStageBlocked,
   orderSeed,
   packetEntry,
-  packetFiles,
+  packetMatches,
   packetSha256,
+  packetStages,
   revealView,
+  servedMismatch,
   shuffleFor,
+  stageContents,
+  stageHashes,
+  type ServedItem,
 } from "./packets.ts";
 import { deriveSealKeys } from "./seal.ts";
 
@@ -294,53 +300,128 @@ describe("packetSha256", () => {
     );
   });
 
-  it("is written into every file of a batch packet: cold.json or the four mystery stages, and reveal.json", async () => {
+  it("is one hash per stage for staged packets: key-neutral cold stages, then the final stage with the key and claims (§9.4)", async () => {
     const bank = await loadFx();
-    const entries = [
-      itemOf(bank, "fx.p.geo.0101"),
-      itemOf(bank, "fx.p.geo.0103"),
-    ].map((record) => packetEntry(bank, record, "A", ORDER));
-    const files = packetFiles(
-      "p.geo.b01",
-      "A",
-      entries,
-      "2026-11-02T10:00:00Z",
+    const mc = itemOf(bank, "fx.p.geo.0101");
+    const mystery = itemOf(bank, "fx.m.geo.0101");
+    const encore = itemOf(bank, "fx.e.0101");
+    expect(stageHashes(mc.id, mc.item, "A")).toHaveLength(2);
+    expect(stageHashes(encore.id, encore.item, "A")).toHaveLength(2);
+    const staged = stageHashes(mystery.id, mystery.item, "B");
+    expect(staged).toHaveLength(5);
+    expect(new Set(staged).size).toBe(5);
+    // Stable across calls, and per pass.
+    expect(stageHashes(mystery.id, mystery.item, "B")).toEqual(staged);
+    expect(stageHashes(mystery.id, mystery.item, "A")[0]).not.toBe(staged[0]);
+    // A cold stage's hash says nothing about the key: with the key swapped
+    // for a wrong option, stage 1 hashes the same and the final stage not.
+    const item = mc.item as ReturnType<typeof fxMc>;
+    const swapped = {
+      ...item,
+      answer: item.wrong[0] ?? "",
+      wrong: [item.answer, ...item.wrong.slice(1)],
+    } as typeof mc.item;
+    const [cold, final] = stageHashes(mc.id, mc.item, "A");
+    const [coldSwapped, finalSwapped] = stageHashes(mc.id, swapped, "A");
+    expect(coldSwapped).toBe(cold);
+    expect(finalSwapped).not.toBe(final);
+    // A mystery's earlier stages hold only the clues served so far.
+    const contents = stageContents(mystery.item);
+    expect(contents[0]).toMatchObject({ clues: [fxMystery().clues[0]] });
+    expect(keys(contents.slice(0, 3))).not.toContain("options");
+    expect(strings(contents.slice(0, 4))).not.toContain(
+      (mystery.item as ReturnType<typeof fxMystery>).claims[0]?.text,
     );
-    expect(files.map((file) => file.name)).toEqual([
-      "cold.json",
-      "reveal.json",
-    ]);
-    type Packet = {
-      brief: string;
-      stage: string;
-      items: { packetSha256: string }[];
+    // The staged views follow the same stages: clue k at stage k, the key
+    // and claims only in the last.
+    const views = packetStages(bank, mystery, "B", ORDER);
+    expect(views.map((stage) => stage.sha256)).toEqual(staged);
+    expect(keys(views.slice(0, 4).map((stage) => stage.view))).not.toContain(
+      "claims",
+    );
+    expect(views[0]?.view).toMatchObject({
+      answerList: "content/answer-lists/country.json",
+      answerListVersion: "2026-09-01",
+    });
+    expect(keys(views[4]?.view)).toEqual(
+      expect.arrayContaining(["claims", "key"]),
+    );
+  });
+
+  it("serves a stage only after the cold-solve entry for the one before, and records must repeat what was served", async () => {
+    const bank = await loadFx();
+    const record = itemOf(bank, "fx.m.geo.0101");
+    const hashes = stageHashes(record.id, record.item, "A");
+    const served: ServedItem = {
+      stages: hashes.length,
+      served: [
+        {
+          stage: 1,
+          sha256: hashes[0] ?? "",
+          servedAt: "2026-11-02T10:00:00Z",
+        },
+      ],
+      restarts: 0,
     };
-    const [cold, reveal] = files.map((file) => file.content as Packet);
-    expect(cold?.brief).toBe("confirm");
-    expect(cold?.stage).toBe("cold");
-    expect(cold?.items.map((i) => i.packetSha256)).toEqual(
-      reveal?.items.map((i) => i.packetSha256),
+    const now = "2026-11-02T10:05:00Z";
+    const perClue = (clue: number, recordedAt?: string) => ({
+      perClue: [
+        {
+          clue,
+          guess: null,
+          candidates: [],
+          ...(recordedAt === undefined ? {} : { recordedAt }),
+        },
+      ],
+    });
+    expect(nextStageBlocked(served, null, now)).toContain(
+      "no cold-solve entry for stage 1",
     );
-    expect(keys(cold)).not.toContain("claims");
-    const staged = packetFiles(
-      "m.geo.b01",
-      "B",
-      [packetEntry(bank, itemOf(bank, "fx.m.geo.0101"), "B", ORDER)],
-      "2026-11-02T10:00:00Z",
+    expect(nextStageBlocked(served, perClue(1), now)).toContain(
+      "no cold-solve entry for stage 1",
     );
-    expect(staged.map((file) => file.name)).toEqual([
-      "cold-1.json",
-      "cold-2.json",
-      "cold-3.json",
-      "cold-4.json",
-      "reveal.json",
-    ]);
-    const first = staged[0]?.content as { items: Record<string, unknown>[] };
-    expect(strings(first)).not.toContain(fxMystery().clues[1]);
-    expect(keys(first)).not.toContain("clue4Options");
     expect(
-      (staged[0]?.content as { instructions: string[] }).instructions.join(" "),
-    ).toContain("cold-1.json");
+      nextStageBlocked(served, perClue(1, "2026-11-02T09:59:00Z"), now),
+    ).toContain("recorded before stage 1 was served");
+    expect(
+      nextStageBlocked(served, perClue(1, "2026-11-02T10:06:00Z"), now),
+    ).toContain("in the future");
+    expect(
+      nextStageBlocked(served, perClue(1, "2026-11-02T10:01:00Z"), now),
+    ).toBeNull();
+    // A finished packet serves nothing more.
+    const done: ServedItem = {
+      ...served,
+      served: hashes.map((sha256, i) => ({
+        stage: i + 1,
+        sha256,
+        servedAt: `2026-11-02T10:0${i}:00Z`,
+      })),
+    };
+    expect(nextStageBlocked(done, perClue(4, now), now)).toBe(
+      "every stage has been served",
+    );
+    // A record that repeats the log, for the item as it stands, matches.
+    const times = done.served.map((stage) => stage.servedAt);
+    expect(
+      servedMismatch(
+        record.id,
+        record.item,
+        "A",
+        { packetSha256: hashes, stagesServedAt: times },
+        done,
+      ),
+    ).toEqual([]);
+    expect(packetMatches(record.id, record.item, "A", hashes)).toBe(true);
+    // Records from before staging keep their one hash, still verifiable.
+    expect(
+      packetMatches(
+        record.id,
+        record.item,
+        "A",
+        packetSha256(record.id, record.item, "A"),
+      ),
+    ).toBe(true);
   });
 
   it("covers what the item shows, not the order, display names or what no packet shows", async () => {

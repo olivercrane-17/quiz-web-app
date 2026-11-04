@@ -11,12 +11,20 @@
  *   minting, then IDN-1's full lifecycle) hands the backend the tab's
  *   identity, which it adds to every call that needs one (§7.1, §9.1).
  */
+import { selectContentWorld } from "@/content/loaders/world";
 import { getBackendMode, type BackendMode } from "@/lib/env";
 import type { IdentityProvider } from "@/platform/identity/provider";
 import { getServerClock } from "@/platform/server-clock";
 
 import type { BackendDeps } from "./deps";
 import type { GameBackend } from "./types";
+
+// The content world follows the backend (§5.6, §7.4): a mock build plays
+// the fixture realm end to end, packs and answer lists included, and every
+// other build the real bank. This runs as the module loads, before any
+// island reaches a content loader (each awaits bootClient(), which imports
+// this module).
+selectContentWorld(getBackendMode() === "mock" ? "fixtures" : "bank");
 
 let identityProvider: IdentityProvider | null = null;
 let instance: Promise<GameBackend> | null = null;

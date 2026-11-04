@@ -396,10 +396,9 @@ describe("fixture Dailies", () => {
   });
 
   it("cycles the six spares by Daily number: set A on odd numbers, set B on even", () => {
-    // spare-NN today, spare.NN once CNT-1 renames the ids (§2.4): either
-    // spelling passes, so the rename touches content files only.
+    // Ids are spare.NN, as ARCHITECTURE §2.4 names them.
     const spareNumber = (id: string | undefined) =>
-      /^spare[.-](\d{2})$/.exec(id ?? "")?.[1] ?? null;
+      /^spare\.(\d{2})$/.exec(id ?? "")?.[1] ?? null;
     expect(FIXTURE_SPARES.map((spare) => spareNumber(spare.id))).toEqual([
       "01",
       "02",

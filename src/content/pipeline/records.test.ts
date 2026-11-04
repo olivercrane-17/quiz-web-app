@@ -1,7 +1,10 @@
 // @vitest-environment node
 import { afterAll, describe, expect, it } from "vitest";
 
-import type { RecordInputEntry } from "../schema/inputs.ts";
+import {
+  RecordInputEntrySchema,
+  type RecordInputEntry,
+} from "../schema/inputs.ts";
 import {
   CHECKER_A,
   CHECKER_B,
@@ -10,11 +13,13 @@ import {
   fxFiles,
   fxMc,
   fxRecord,
+  fxServeLog,
   itemOf,
   loadFx,
   removeTempDirs,
 } from "./__fixtures__/builders.ts";
 import type { Bank } from "./bank.ts";
+import type { ServeLog } from "./packets.ts";
 import {
   barredCheckers,
   checkRecord,
@@ -32,6 +37,7 @@ function check(
   id: string,
   pass: "A" | "B" | "T",
   entry: RecordInputEntry,
+  served?: ServeLog | null,
 ) {
   const batchId = id.startsWith("fx.m.")
     ? "m.geo.b01"
@@ -44,8 +50,14 @@ function check(
     pass,
     itemOf(bank, id),
     entry,
+    served === undefined
+      ? fxServeLog(batchId, pass, [itemOf(bank, id)])
+      : served,
   );
 }
+
+/** When fxRecord's checker recorded stage k's cold solve. */
+const recordedAt = (stage: number) => `2026-11-02T10:0${stage - 1}:30Z`;
 
 describe("content:record validation", () => {
   it("accepts an honest record for every kind and pass", async () => {
@@ -76,27 +88,97 @@ describe("content:record validation", () => {
     ]);
   });
 
-  it("rejects a packetSha256 that does not match the current packet", async () => {
+  it("holds packetSha256 and stagesServedAt to what content:packets served, stage by stage (§9.4)", async () => {
     const bank = await loadFx();
-    const entry = fxRecord(bank, itemOf(bank, "fx.p.geo.0101"), "A", {
-      packetSha256: "0".repeat(64),
-    });
-    const errors = check(bank, "fx.p.geo.0101", "A", entry).errors;
+    const record = itemOf(bank, "fx.p.geo.0101");
+    const real = fxRecord(bank, record, "A");
+    const wrong = { ...real, packetSha256: ["0".repeat(64), "1".repeat(64)] };
+    const errors = check(bank, record.id, "A", wrong).errors;
     expect(errors).toEqual([
-      expect.stringContaining("packetSha256 does not match"),
+      expect.stringContaining(
+        "packetSha256 is not the list of hashes content:packets served",
+      ),
     ]);
-    // The expected value is never printed, so it cannot be copied in.
-    const real = fxRecord(bank, itemOf(bank, "fx.p.geo.0101"), "A");
-    expect(errors.join(" ")).not.toContain(real.packetSha256);
-    const otherPass = fxRecord(bank, itemOf(bank, "fx.p.geo.0101"), "B");
+    // The expected values are never printed, so they cannot be copied in.
+    for (const hash of real.packetSha256)
+      expect(errors.join(" ")).not.toContain(hash);
+    // Another pass's packet, relabelled.
+    const otherPass = fxRecord(bank, record, "B");
     expect(
-      check(bank, "fx.p.geo.0101", "A", {
+      check(bank, record.id, "A", {
         ...otherPass,
         pass: "A",
         brief: "confirm",
         checker: CHECKER_A,
       }).errors,
-    ).toEqual([expect.stringContaining("packetSha256 does not match")]);
+    ).toEqual([
+      expect.stringContaining(
+        "packetSha256 is not the list of hashes content:packets served",
+      ),
+    ]);
+    // Served times copied wrong.
+    expect(
+      check(bank, record.id, "A", {
+        ...real,
+        stagesServedAt: ["2026-11-02T10:00:00Z", "2026-11-02T10:02:00Z"],
+      }).errors,
+    ).toEqual([expect.stringContaining("stagesServedAt is not the list")]);
+    // One hash for the whole packet is the older form, and no longer taken.
+    expect(
+      check(bank, record.id, "A", {
+        ...real,
+        packetSha256: "0".repeat(64),
+        stagesServedAt: undefined,
+      } as never).errors,
+    ).toEqual([expect.stringContaining("one hash per stage served")]);
+    // No packet served, or not all of it.
+    expect(check(bank, record.id, "A", real, null).errors).toEqual([
+      expect.stringContaining("no packet of pass A was served"),
+    ]);
+    const partial = fxServeLog("p.geo.b01", "A", [record]);
+    const entry = partial.items[record.id];
+    if (!entry) throw new Error("no served entry");
+    entry.served = entry.served.slice(0, 1);
+    expect(check(bank, record.id, "A", real, partial).errors).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("1 of the packet's 2 stages were served"),
+      ]),
+    );
+    // Served for an item that has changed since.
+    const edited = await loadFx(
+      fxFiles({
+        "practice/geography/fx.p.geo.0101.json": fxMc({
+          stem: "Which instrument opens the fixture festival in Halvessa?",
+        }),
+      }),
+    );
+    expect(
+      check(
+        edited,
+        record.id,
+        "A",
+        real,
+        fxServeLog("p.geo.b01", "A", [record]),
+      ).errors,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("the item changed after its pass A packet"),
+      ]),
+    );
+    // A cold-solve entry without its recordedAt, or written after the next
+    // stage was served, makes the record invalid.
+    const cold = real.coldSolve as Record<string, unknown>;
+    const { recordedAt: _at, ...untimed } = cold;
+    expect(
+      check(bank, record.id, "A", { ...real, coldSolve: untimed as never })
+        .errors,
+    ).toEqual([expect.stringContaining("no recordedAt for stage(s) 1")]);
+    expect(
+      RecordInputEntrySchema.safeParse({
+        ...real,
+        coldSolve: { ...cold, recordedAt: "2026-11-02T10:01:10Z" },
+      }).success,
+    ).toBe(false);
   });
 
   it("rejects the same checker on both passes", async () => {
@@ -161,7 +243,7 @@ describe("content:record validation", () => {
     const withEvidence = (dataset: string, version: string) => ({
       ...full,
       claimResults: full.claimResults.map((result) =>
-        result.evidence.kind === "dataset"
+        !Array.isArray(result.evidence) && result.evidence.kind === "dataset"
           ? { ...result, evidence: { ...result.evidence, dataset, version } }
           : result,
       ),
@@ -203,6 +285,7 @@ describe("content:record validation", () => {
         answerGiven: "Hand drum",
         confidence: "low" as const,
         matchedKey: false,
+        recordedAt: recordedAt(1),
       },
     };
     expect(check(bank, record.id, "A", miss).errors).toEqual([
@@ -225,6 +308,7 @@ describe("content:record validation", () => {
         answerGiven: "Kazoo",
         confidence: "low" as const,
         matchedKey: false,
+        recordedAt: recordedAt(1),
       },
     };
     expect(check(bank, record.id, "A", made).errors).toEqual(
@@ -245,6 +329,7 @@ describe("content:record validation", () => {
         clue === 3
           ? ["fx.x.country.arvenna", "fx.x.country.belloria"]
           : ["fx.x.country.arvenna"],
+      recordedAt: recordedAt(clue),
     }));
     expect(
       check(bank, record.id, "A", { ...full, coldSolve: { perClue } }).errors,
@@ -284,13 +369,15 @@ describe("content:record validation", () => {
         ...full,
         coldSolve: { perClue: perClue.slice(0, 2) },
       }).errors,
-    ).toEqual([expect.stringContaining("needs clues 1 to 3")]);
+    ).toEqual(
+      expect.arrayContaining([expect.stringContaining("needs clues 1 to 3")]),
+    );
     expect(
       check(bank, record.id, "A", {
         ...full,
         coldSolve: { estimate: 3, reasoning: "x" },
       }).errors,
-    ).toEqual([expect.stringContaining("perClue")]);
+    ).toEqual(expect.arrayContaining([expect.stringContaining("perClue")]));
   });
 
   it("refuses a checker who estimated the item, or one a fabricated-source incident barred", async () => {
@@ -319,10 +406,17 @@ describe("content:record validation", () => {
       note: "c3 cited a page nobody retrieved",
       checkers: [CHECKER_B.toUpperCase()],
     });
-    const entry = fxRecord(barred, itemOf(barred, "fx.p.geo.0101"), "B");
+    const barredItem = itemOf(barred, "fx.p.geo.0101");
+    const entry = fxRecord(barred, barredItem, "B");
     expect(
-      checkRecord(barred, batch, "B", itemOf(barred, "fx.p.geo.0101"), entry)
-        .errors,
+      checkRecord(
+        barred,
+        batch,
+        "B",
+        barredItem,
+        entry,
+        fxServeLog("p.geo.b01", "B", [barredItem]),
+      ).errors,
     ).toEqual([expect.stringContaining("fabricated-source incident")]);
   });
 
@@ -375,7 +469,9 @@ describe("content:record validation", () => {
     const copied: RecordInputEntry = {
       ...honest,
       claimResults: honest.claimResults.map((result) =>
-        result.claimId === claim?.id && result.evidence.kind === "knowledge"
+        result.claimId === claim?.id &&
+        !Array.isArray(result.evidence) &&
+        result.evidence.kind === "knowledge"
           ? {
               ...result,
               evidence: {
@@ -388,7 +484,9 @@ describe("content:record validation", () => {
     };
     const knowledge = honest.claimResults.some(
       (result) =>
-        result.claimId === claim?.id && result.evidence.kind === "knowledge",
+        result.claimId === claim?.id &&
+        !Array.isArray(result.evidence) &&
+        result.evidence.kind === "knowledge",
     );
     expect(knowledge).toBe(true);
     expect(check(bank, "fx.p.geo.0101", "A", copied).errors).toEqual([

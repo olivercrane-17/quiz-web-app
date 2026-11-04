@@ -1,27 +1,26 @@
 /**
- * The 12 categories (ARCHITECTURE §2.3, §3.2), from content/categories.json.
- * Final signature; CNT-1 switches it to the generated categories module.
+ * The 12 categories (ARCHITECTURE §2.3, §3.2), from the generated module
+ * the content build writes from content/categories.json. Final
+ * signatures. Both content worlds share them: the fixture tree has no
+ * categories of its own.
  */
 import type { Category, CategoryId } from "@/engine/types";
 
-import raw from "../../../content/categories.json";
-import { decodeCategories } from "./fixtures/decode";
+import { CATEGORIES } from "../generated/categories";
 
-const CATEGORIES: readonly Category[] = Object.freeze(
-  decodeCategories(raw, "content/categories.json").sort(
-    (a, b) => a.order - b.order,
-  ),
+const SORTED: readonly Category[] = Object.freeze(
+  [...CATEGORIES].sort((a, b) => a.order - b.order),
 );
 
 /** Every category, in display order. */
 export function getCategories(): readonly Category[] {
-  return CATEGORIES;
+  return SORTED;
 }
 
 export function categoryById(id: CategoryId): Category | null {
-  return CATEGORIES.find((category) => category.id === id) ?? null;
+  return SORTED.find((category) => category.id === id) ?? null;
 }
 
 export function categoryBySlug(slug: string): Category | null {
-  return CATEGORIES.find((category) => category.slug === slug) ?? null;
+  return SORTED.find((category) => category.slug === slug) ?? null;
 }

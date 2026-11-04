@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { spawnSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 
 import { afterAll, describe, expect, it } from "vitest";
 
@@ -15,6 +15,7 @@ import {
   REPO_ROOT,
   fxFiles,
   fxRecord,
+  fxServeLog,
   fxRegister,
   itemOf,
   loadFx,
@@ -157,11 +158,14 @@ describe("a fabricated-source incident (§9.6)", () => {
     });
     const record = itemOf(bank, "fx.p.geo.0101");
     const stale = fxRecord(bank, record, "A");
-    expect(checkRecord(bank, batch, "A", record, stale).errors).toEqual([
-      expect.stringContaining("fabricated-source incident"),
-    ]);
+    const served = fxServeLog("p.geo.b01", "A", [record]);
+    expect(checkRecord(bank, batch, "A", record, stale, served).errors).toEqual(
+      [expect.stringContaining("fabricated-source incident")],
+    );
     const fresh = fxRecord(bank, record, "A", { checker: "fc-fx-fresh" });
-    expect(checkRecord(bank, batch, "A", record, fresh).errors).toEqual([]);
+    expect(checkRecord(bank, batch, "A", record, fresh, served).errors).toEqual(
+      [],
+    );
   });
 });
 
@@ -336,6 +340,7 @@ describe("an invalid_check incident: one checker's records voided", () => {
           "B",
           record,
           fxRecord(bank, record, "B", { checker }),
+          fxServeLog("p.geo.b01", "B", [record]),
         ).errors,
         checker,
       ).toEqual([
@@ -345,7 +350,16 @@ describe("an invalid_check incident: one checker's records voided", () => {
       ]);
     }
     const fresh = fxRecord(bank, record, "B", { checker: FRESH });
-    expect(checkRecord(bank, batch, "B", record, fresh).errors).toEqual([]);
+    expect(
+      checkRecord(
+        bank,
+        batch,
+        "B",
+        record,
+        fresh,
+        fxServeLog("p.geo.b01", "B", [record]),
+      ).errors,
+    ).toEqual([]);
 
     const merged = mergeRecord(record.item, fresh, "B", false).item;
     expect(merged.status).toBe("checking");
@@ -491,7 +505,21 @@ describe("content:batch -- incident --kind invalid_check", () => {
       ).toHaveLength(1);
 
       // The way back: the barred checker is refused, a new checker id
-      // records pass B, the editor accepts again and the batch closes.
+      // records pass B, the editor accepts again and the batch closes. The
+      // new run took its packet's stages as content:packets serves them.
+      const servedLog = join(
+        reloaded.layout.packetsDir,
+        "p.geo.b01",
+        "B",
+        "served.json",
+      );
+      mkdirSync(dirname(servedLog), { recursive: true });
+      writeFileSync(
+        servedLog,
+        JSON.stringify(
+          fxServeLog("p.geo.b01", "B", [itemOf(reloaded, "fx.p.geo.0101")]),
+        ),
+      );
       const recordFile = (name: string, checker: string) => {
         const path = join(root, name);
         const record = itemOf(reloaded, "fx.p.geo.0101");

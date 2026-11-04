@@ -2,8 +2,9 @@
  * npm run content:record -- --batch <id> --pass A|B|T --file <records.json>
  *
  * Validates fact-checker CheckRecords and merges them into the items'
- * verification. All or nothing: one bad record and nothing is merged.
- * See content/README.md.
+ * verification. All or nothing: one bad record and nothing is merged. Each
+ * record's packetSha256 and stagesServedAt must be what content:packets
+ * served the item, stage by stage (§9.4, §9.8). See content/README.md.
  */
 import { readFile } from "node:fs/promises";
 
@@ -16,6 +17,7 @@ import {
   str,
 } from "../../src/content/pipeline/cli.ts";
 import { parseJsonText } from "../../src/content/pipeline/json.ts";
+import { readServeLog } from "../../src/content/pipeline/packets.ts";
 import {
   findRepoRoot,
   resolveLayout,
@@ -73,6 +75,8 @@ run("content:record", async () => {
   });
   const bank = await loadBank(layout);
   const batch = requireBatch(bank, batchId);
+  // What content:packets served this pass, stage by stage (§9.4).
+  const served = readServeLog(layout, batchId, pass);
 
   const parsed = RecordInputSchema.safeParse(
     parseJsonText(await readFile(file, "utf8"), file),
@@ -110,7 +114,7 @@ run("content:record", async () => {
         continue;
       }
       seen.add(entry.itemId);
-      report.push(checkRecord(bank, batch, pass, record, entry));
+      report.push(checkRecord(bank, batch, pass, record, entry, served));
     }
     const fileErrors = recordFileErrors(bank, parsed.data);
     if (fileErrors.length > 0)

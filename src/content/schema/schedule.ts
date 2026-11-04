@@ -5,7 +5,13 @@
  */
 import { z } from "zod";
 
-import { DIFFICULTY_BANDS, agentId, isoDate, text } from "./primitives.ts";
+import {
+  DIFFICULTY_BANDS,
+  agentId,
+  isoDate,
+  spareId,
+  text,
+} from "./primitives.ts";
 import { ISSUE_SEVERITIES, RECORD_VERDICTS } from "./verification.ts";
 
 /**
@@ -59,6 +65,19 @@ export const DayCheckSchema = z.union([
 
 export const DAILY_STATUSES = ["assembled", "frozen", "published"] as const;
 
+/** + The spare sets ranked for a date (§10.7), each named once. */
+export const SpareOrderSchema = z.array(spareId).superRefine((order, ctx) => {
+  order.forEach((id, index) => {
+    if (order.indexOf(id) !== index) {
+      ctx.addIssue({
+        code: "custom",
+        path: [index],
+        message: `${id} is ranked twice`,
+      });
+    }
+  });
+});
+
 export const DailyRecordSchema = z.strictObject({
   date: isoDate,
   rounds: z.array(RoundRecordSchema).min(1),
@@ -68,6 +87,14 @@ export const DailyRecordSchema = z.strictObject({
   predictedPoints: z.number().min(0),
   /** + Null until the day check has run. */
   dayCheck: DayCheckSchema.nullable(),
+  /**
+   * + The spare sets for this date, fewest broken week and date rules
+   * first (§2.11, §10.7). The release loads it into dailies.spare_order.
+   * Optional in the file, so schedules written before the field existed
+   * still parse; content:check warns on a main-track Daily without one
+   * while spare sets exist (X30).
+   */
+  spareOrder: SpareOrderSchema.optional(),
 });
 export type DailyRecord = z.infer<typeof DailyRecordSchema>;
 
@@ -96,9 +123,8 @@ export type ScheduleMonth = z.infer<typeof ScheduleMonthSchema>;
  * (ARCHITECTURE §5.1.1).
  */
 export const SpareSetSchema = z.strictObject({
-  id: z
-    .string()
-    .regex(/^spare-[0-9]{2}$/, "spare set ids are spare-01 to spare-99"),
+  /** `spare.<NN>` (ARCHITECTURE §2.4); the file is spares/spare.<NN>.json. */
+  id: spareId,
   track: z.enum(["main", "e2e"]),
   rounds: z.array(RoundRecordSchema).min(1),
   status: z.enum(["assembled", "frozen"]),

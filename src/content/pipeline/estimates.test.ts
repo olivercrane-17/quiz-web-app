@@ -68,6 +68,15 @@ describe("estimator v0 (§8.5)", () => {
     expect(shares.every((s, i) => i === 0 || s >= (shares[i - 1] ?? 0))).toBe(
       true,
     );
+    // §8.5: a mystery's spread is the standard deviation of the five
+    // estimators' expected points, each one's s1 + s2 + s3 + s4.
+    const points = [2.82, 2.93, 3.06, 2.83, 2.71];
+    expect(
+      (mystery.outcome.predicted as { spread: number }).spread,
+    ).toBeCloseTo(stdev(points), 3);
+    expect((mystery.outcome.predicted as { spread: number }).spread).toBe(
+      Math.round(stdev(points) * 1000) / 1000,
+    );
     const encore = applyEstimate(
       itemOf(bank, "fx.e.0101"),
       requireBatch(bank, "e.b01"),

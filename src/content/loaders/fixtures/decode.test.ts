@@ -139,10 +139,13 @@ describe("source decoders", () => {
     expect(() => decodeCategories({})).toThrow(/must be an array/);
   });
 
-  it("accepts spare ids as §2.4 names them and as the content schema spells them today", () => {
-    for (const id of ["spare.07", "spare-07"]) {
-      expect(decodeSpareSet({ id, track: "e2e", rounds: [] }).id).toBe(id);
-    }
+  it("accepts spare ids as §2.4 names them, and no other spelling", () => {
+    expect(
+      decodeSpareSet({ id: "spare.07", track: "e2e", rounds: [] }).id,
+    ).toBe("spare.07");
+    expect(() =>
+      decodeSpareSet({ id: "spare-07", track: "e2e", rounds: [] }),
+    ).toThrow(/spare\.NN/);
   });
 
   it("projects only active, unreplaced list entries", () => {
