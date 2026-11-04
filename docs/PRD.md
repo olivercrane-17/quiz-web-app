@@ -1683,7 +1683,7 @@ A Mystery has one answer entity from a closed list (§3.18.4), an answer type sh
 
 All matching runs on the device against the cached list. Nothing is sent per keystroke.
 
-1. **Normalize** the query and every name and alias: Unicode NFKD, strip diacritics, lowercase, replace `&` with "and", remove punctuation, collapse whitespace, and drop a leading "the", "a" or "an".
+1. **Normalize** the query and every name and alias: Unicode NFKD, strip diacritics, lowercase, replace `&` with "and", delete apostrophes and periods ("O'Brien" reads "obrien", "R.E.M." reads "rem", "U.S." reads "us"), turn every other run of punctuation or symbols into one space (hyphens and slashes split words, so "guinea bissau" finds Guinea-Bissau and "AC/DC" reads "ac dc"), collapse whitespace, and drop a leading "the", "a" or "an".
 2. **Match** an entity when the query is a prefix of its canonical name, of any alias, or of any word in either.
 3. **Typo tolerance:** for queries of 5 characters or more, also match entities whose name or alias starts with a string within one edit (insertion, deletion, substitution or adjacent swap) of the query.
 4. **Rank:** exact match of name or alias, then canonical-name prefix, then alias prefix, then word prefix, then typo matches. Ties break by the entity's popularity (its Wikidata sitelink count once the enrichment job fills it, 0 until then), then alphabetically. Popularity is global and the same every day, so ranking reveals nothing about the day's answer.

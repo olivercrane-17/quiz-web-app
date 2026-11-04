@@ -145,3 +145,27 @@ The shared web-search budget cannot supply two independent external sources for 
 The 30-day "addedIn" freeze exists so a small list diff can never hint at an upcoming answer. The first published
 version of each list (the launch baseline, thousands of entries added at once) cannot narrow anything, so its entries
 are eligible as answers immediately. The freeze applies to every entry added after the baseline version.
+
+## 17. Owner answers (31 October 2026)
+- Supabase: use project `zcodouduyvxwefxebvmv`. The owner will remove the old `NEXT_PUBLIC_SUPABASE_*` variables
+  (project `wjyrysepifthbgbimqzw`) from the cloud environment and point Vercel at the new project.
+- Vercel: not confirmed as connected. Treat it as not connected; the launch report carries the import and env steps.
+- Content key: delivered to the owner as a file to keep in a password manager and add as the `QZ_CONTENT_KEY` GitHub
+  secret. The database escrow table exists (migration applied) but holds no key, because session policy blocks reading
+  the key into the transcript. Sealed content released to the database is the second copy.
+- `QZ_CONTENT_KEY` is a GitHub **repository** secret (set by the owner). Only the `content-sealed` CI job may reference
+  it, it must not declare an `environment:`, and nothing may print or export the key. Fork pull requests never receive
+  it.
+
+## 18. Evidence for high-risk claims when web search is unavailable (1 November 2026)
+The first production pass cut 1,451 items, and 1,417 of those had passed BOTH independent checks: they were cut only
+because their high-risk claims had no dataset or web evidence while the shared search budget was exhausted. That
+contradicts this memo's original rule (section 10: two independent checkers, datasets where possible, WebSearch only
+for genuinely uncertain items). So:
+- A high-risk claim, and an encore value, is accepted when checks A and B (different agent runs; B on a different
+  model) both confirmed it directly. Knowledge confirms only at "certain" confidence.
+- External evidence is still required for any claim that needed the tiebreak, and for every myth-screen hit.
+- Items cut only for missing external evidence are reinstated through the normal acceptance path.
+- Compensating controls: a seeded blind audit with web evidence on a random sample before launch (target error rate
+  under 1%), the "Report a problem" button on every reveal with automatic pull on weighted reports, and pass D before
+  any Daily is frozen.
