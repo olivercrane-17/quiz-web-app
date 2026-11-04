@@ -12,15 +12,15 @@ The files follow the content source formats (`src/content/schema/`), so
 reads them through `src/content/loaders/fixtures/`, which decodes them into
 the built shapes of ARCHITECTURE §3.2.
 
-| Folder             | What it holds                                                                                                                                                                                                                                      |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `practice/<slug>/` | 40 practice items in four categories, true/false and comparisons included. Geography holds exactly 3 Hard and 7 Medium items (AC-PRA-14)                                                                                                           |
-| `answer-lists/`    | Invented countries (120, with aliases), films (60), people (40, one shared name) and music artists (32), and the 118 real elements                                                                                                                 |
-| `mysteries/`       | Six mysteries: set A (film, element, country) and set B (person, country, element), one per slot each                                                                                                                                              |
-| `encores/`         | Three encores: a count, a year and a quantity with one decimal                                                                                                                                                                                     |
-| `room-packs/`      | `fx-party`, the 15-question room pack, and `dly`, the sealed choice rounds of the Daily compositions below. `dly` is not hostable: the loader exports it as `FIXTURE_DAILY_CHOICES`, apart from `FIXTURE_ROOM_PACKS`                               |
-| `schedule/`        | The `e2e` track's fixed dates: `[mc ×9, encore]` on 15 November 2026 and `[mc ×5, mystery, encore]` on 16 November 2026 (AC-DLY-09)                                                                                                                |
-| `spares/`          | Six spare sets on the `e2e` track, which the cycle below plays. Their ids are `spare-NN`, as the content schema spells them today; CNT-1 renames them to `spare.NN` (ARCHITECTURE §2.4) when it reconciles the schema, and the loader accepts both |
+| Folder             | What it holds                                                                                                                                                                                                        |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `practice/<slug>/` | 40 practice items in four categories, true/false and comparisons included. Geography holds exactly 3 Hard and 7 Medium items (AC-PRA-14)                                                                             |
+| `answer-lists/`    | Invented countries (120, with aliases), films (60), people (40, one shared name) and music artists (32), and the 118 real elements                                                                                   |
+| `mysteries/`       | Six mysteries: set A (film, element, country) and set B (person, country, element), one per slot each                                                                                                                |
+| `encores/`         | Three encores: a count, a year and a quantity with one decimal                                                                                                                                                       |
+| `room-packs/`      | `fx-party`, the 15-question room pack, and `dly`, the sealed choice rounds of the Daily compositions below. `dly` is not hostable: the loader exports it as `FIXTURE_DAILY_CHOICES`, apart from `FIXTURE_ROOM_PACKS` |
+| `schedule/`        | The `e2e` track's fixed dates: `[mc ×9, encore]` on 15 November 2026 and `[mc ×5, mystery, encore]` on 16 November 2026 (AC-DLY-09)                                                                                  |
+| `spares/`          | Six spare sets on the `e2e` track, `spare.01` to `spare.06` (ARCHITECTURE §2.4), which the cycle below plays                                                                                                         |
 
 **The e2e cycle.** A date with a row in `schedule/` plays that row. Every
 other date on or after `dailyEpoch` (`src/config/shared.json`) plays spare

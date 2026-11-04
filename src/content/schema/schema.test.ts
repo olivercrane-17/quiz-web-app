@@ -659,11 +659,28 @@ describe("answer lists, schedules and the register", () => {
       status: "assembled",
       predictedPoints: 3.3,
       dayCheck: null,
+      spareOrder: ["spare.07", "spare.02"],
     };
     expect(
       ScheduleMonthSchema.safeParse({ track: "main", dailies: [daily] })
         .success,
     ).toBe(true);
+    // spareOrder (§2.11) holds spare.NN ids, each ranked once. A daily
+    // written before the field existed still parses (X30 warns instead).
+    const { spareOrder: _order, ...noOrder } = daily;
+    expect(
+      ScheduleMonthSchema.safeParse({ track: "main", dailies: [noOrder] })
+        .success,
+    ).toBe(true);
+    for (const spareOrder of [["spare-07"], ["spare.07", "spare.07"]]) {
+      expect(
+        ScheduleMonthSchema.safeParse({
+          track: "main",
+          dailies: [{ ...daily, spareOrder }],
+        }).success,
+        spareOrder.join(","),
+      ).toBe(false);
+    }
     expect(
       ScheduleMonthSchema.safeParse({ track: "main", dailies: [daily, daily] })
         .success,
@@ -675,7 +692,7 @@ describe("answer lists, schedules and the register", () => {
       }).success,
     ).toBe(false);
     const spare = {
-      id: "spare-01",
+      id: "spare.01",
       track: "main",
       rounds: daily.rounds,
       status: "assembled",
@@ -685,6 +702,10 @@ describe("answer lists, schedules and the register", () => {
     expect(SpareSetSchema.safeParse(spare).success).toBe(true);
     const { track: _track, ...noTrack } = spare;
     expect(SpareSetSchema.safeParse(noTrack).success).toBe(false);
+    // Ids are spare.NN as ARCHITECTURE §2.4 names them.
+    expect(SpareSetSchema.safeParse({ ...spare, id: "spare-01" }).success).toBe(
+      false,
+    );
   });
 
   it("types rounds as ARCHITECTURE §3.3 does: mc, tf, comparison, mystery, encore", () => {
@@ -697,6 +718,7 @@ describe("answer lists, schedules and the register", () => {
           status: "assembled",
           predictedPoints: 0,
           dayCheck: null,
+          spareOrder: [],
         },
       ],
     });

@@ -35,12 +35,12 @@ import mHist0101 from "../../../../content/fixtures/mysteries/fx.m.hist.0101.jso
 import mSci0101 from "../../../../content/fixtures/mysteries/fx.m.sci.0101.json";
 import mSci0102 from "../../../../content/fixtures/mysteries/fx.m.sci.0102.json";
 import schedule202611 from "../../../../content/fixtures/schedule/2026-11.json";
-import spare01 from "../../../../content/fixtures/spares/spare-01.json";
-import spare02 from "../../../../content/fixtures/spares/spare-02.json";
-import spare03 from "../../../../content/fixtures/spares/spare-03.json";
-import spare04 from "../../../../content/fixtures/spares/spare-04.json";
-import spare05 from "../../../../content/fixtures/spares/spare-05.json";
-import spare06 from "../../../../content/fixtures/spares/spare-06.json";
+import spare01 from "../../../../content/fixtures/spares/spare.01.json";
+import spare02 from "../../../../content/fixtures/spares/spare.02.json";
+import spare03 from "../../../../content/fixtures/spares/spare.03.json";
+import spare04 from "../../../../content/fixtures/spares/spare.04.json";
+import spare05 from "../../../../content/fixtures/spares/spare.05.json";
+import spare06 from "../../../../content/fixtures/spares/spare.06.json";
 import {
   decodeEncore,
   decodeMystery,
@@ -76,12 +76,12 @@ const SCHEDULE_SOURCES: readonly Source[] = [
   ["schedule/2026-11.json", schedule202611],
 ];
 const SPARE_SOURCES: readonly Source[] = [
-  ["spares/spare-01.json", spare01],
-  ["spares/spare-02.json", spare02],
-  ["spares/spare-03.json", spare03],
-  ["spares/spare-04.json", spare04],
-  ["spares/spare-05.json", spare05],
-  ["spares/spare-06.json", spare06],
+  ["spares/spare.01.json", spare01],
+  ["spares/spare.02.json", spare02],
+  ["spares/spare.03.json", spare03],
+  ["spares/spare.04.json", spare04],
+  ["spares/spare.05.json", spare05],
+  ["spares/spare.06.json", spare06],
 ];
 
 /** The files this module bundles, relative to content/fixtures/. */

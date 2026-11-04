@@ -6,10 +6,12 @@ import { z } from "zod";
 
 import { CLAIM_ID_PATTERN } from "./claims.ts";
 import {
+  ANSWER_TYPES,
   agentId,
   isoDate,
   isoDateTime,
   sha256Hex,
+  spareId,
   text,
 } from "./primitives.ts";
 
@@ -154,6 +156,8 @@ export const ChoiceColdSolveSchema = z.strictObject({
   answerGiven: text,
   confidence: z.enum(["low", "medium", "high"]),
   matchedKey: z.boolean(),
+  /** + When the answer was recorded, before the next stage was served (§9.8). */
+  recordedAt: isoDateTime.optional(),
 });
 
 /** Mystery: one entry per clue revealed, hardest first. */
@@ -164,6 +168,7 @@ export const MysteryColdSolveSchema = z.strictObject({
         clue: z.int().min(1).max(4),
         guess: z.string().nullable(),
         candidates: z.array(z.string()),
+        recordedAt: isoDateTime.optional(),
       }),
     )
     .min(1)
@@ -173,6 +178,7 @@ export const MysteryColdSolveSchema = z.strictObject({
 export const EncoreColdSolveSchema = z.strictObject({
   estimate: z.number(),
   reasoning: text,
+  recordedAt: isoDateTime.optional(),
 });
 
 export const ColdSolveSchema = z.union([
@@ -185,9 +191,13 @@ export type ColdSolve = z.infer<typeof ColdSolveSchema>;
 /** The CheckRecord fields (§9.8), shared by records, rechecks and inputs. */
 export const checkRecordShape = {
   checker: agentId("fc"),
+  /** + The model the run used, so an audit can confirm §0.2's model-family rule. */
+  model: text.optional(),
   pass: z.enum(PASSES),
   brief: z.enum(BRIEFS),
   packetSha256: sha256Hex,
+  /** + When each packet stage was served, in order (§9.4, §9.8). */
+  stagesServedAt: z.array(isoDateTime).min(1).optional(),
   startedAt: isoDateTime,
   finishedAt: isoDateTime,
   coldSolve: ColdSolveSchema,
@@ -207,18 +217,16 @@ interface RecordLike {
   verdict: RecordVerdict;
 }
 
-/** The verdict definitions of §9.4, step 4, applied to one record. */
-export function refineCheckRecord(
-  record: RecordLike,
-  ctx: z.RefinementCtx,
-): void {
-  if (BRIEF_FOR_PASS[record.pass] !== record.brief) {
-    ctx.addIssue({
-      code: "custom",
-      path: ["brief"],
-      message: `pass ${record.pass} has brief ${BRIEF_FOR_PASS[record.pass]}`,
-    });
-  }
+interface VerdictLike {
+  startedAt: string;
+  finishedAt: string;
+  claimResults: { claimId: string; verdict: string }[];
+  issues: { severity: string }[];
+  verdict: RecordVerdict;
+}
+
+/** The timing and verdict rules every record follows, whatever its pass. */
+function refineVerdict(record: VerdictLike, ctx: z.RefinementCtx): void {
   if (Date.parse(record.finishedAt) < Date.parse(record.startedAt)) {
     ctx.addIssue({
       code: "custom",
@@ -258,6 +266,21 @@ export function refineCheckRecord(
       message: `verdict must be ${expected}: ${why} (§9.4)`,
     });
   }
+}
+
+/** The verdict definitions of §9.4, step 4, applied to one record. */
+export function refineCheckRecord(
+  record: RecordLike,
+  ctx: z.RefinementCtx,
+): void {
+  if (BRIEF_FOR_PASS[record.pass] !== record.brief) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["brief"],
+      message: `pass ${record.pass} has brief ${BRIEF_FOR_PASS[record.pass]}`,
+    });
+  }
+  refineVerdict(record, ctx);
 }
 
 export const CheckRecordSchema = z
@@ -348,6 +371,77 @@ export const EstimateRecordSchema = z.strictObject({
   at: isoDateTime,
 });
 
+/**
+ * + A follow-up run (§9.7): a check under pass A's or B's brief, by a run
+ * that is none of the claim's author, the writer or the editor, on the
+ * claims only one check confirmed. Its verdict stands in for the missing
+ * check on those claims.
+ */
+export const FollowUpRecordSchema = z
+  .strictObject({
+    ...checkRecordShape,
+    followUpFor: z.array(z.string().regex(CLAIM_ID_PATTERN)).min(1),
+    coldSolve: z.null(),
+  })
+  .superRefine((record, ctx) => {
+    if (record.pass === "T") {
+      ctx.addIssue({
+        code: "custom",
+        path: ["pass"],
+        message: "a follow-up runs under pass A's or pass B's brief",
+      });
+    }
+    refineCheckRecord(record, ctx);
+  });
+export type FollowUpRecord = z.infer<typeof FollowUpRecordSchema>;
+
+/**
+ * + Pass D (§9.9 rule 7): the re-check of a scheduled sealed item before
+ * its Daily freezes, for one date (`forDate`) or for a spare set (null),
+ * against the answer-list versions that ship then (`listVersions`).
+ */
+export const DailyCheckRecordSchema = z
+  .strictObject({
+    ...checkRecordShape,
+    pass: z.literal("D"),
+    brief: z.literal("daily"),
+    coldSolve: ColdSolveSchema.nullable(),
+    forDate: isoDate.nullable(),
+    /** The spare set a null-date check cleared, when it names one. */
+    spareId: spareId.optional(),
+    listVersions: z.partialRecord(z.enum(ANSWER_TYPES), isoDate),
+  })
+  .superRefine(refineVerdict);
+export type DailyCheckRecord = z.infer<typeof DailyCheckRecordSchema>;
+
+/** + The editor's merge of the claim lists (§9.7, §9.8). */
+export const MergeRecordSchema = z.strictObject({
+  mergedAt: isoDateTime,
+  editor: agentId("ed"),
+  claims: z.array(
+    z.strictObject({
+      id: z.string().regex(CLAIM_ID_PATTERN),
+      addedBy: z.enum(["writer", "A", "B", "T", "D"]),
+    }),
+  ),
+  duplicates: z.array(
+    z.strictObject({
+      id: z.string().regex(CLAIM_ID_PATTERN),
+      sameAs: z.string().regex(CLAIM_ID_PATTERN),
+    }),
+  ),
+  sentToFollowUp: z.array(z.string().regex(CLAIM_ID_PATTERN)),
+});
+
+/** + Every change after acceptance (§9.8, §2.12). */
+export const CorrectionSchema = z.strictObject({
+  date: isoDate,
+  change: text,
+  reason: text,
+  /** Indexes into `rechecks` or `followUps` that cleared the change. */
+  rechecks: z.array(z.int().min(0)),
+});
+
 export const VerificationSchema = z
   .strictObject({
     /** Passes A and B, at most one of each. */
@@ -359,6 +453,11 @@ export const VerificationSchema = z
     lint: LintRecordSchema.optional(),
     rechecks: z.array(RecheckSchema).optional(),
     estimates: z.array(EstimateRecordSchema).optional(),
+    /** + §9.7's merge, follow-ups and §9.9 rule 7's pass D records. */
+    merge: MergeRecordSchema.optional(),
+    followUps: z.array(FollowUpRecordSchema).optional(),
+    dailyChecks: z.array(DailyCheckRecordSchema).optional(),
+    corrections: z.array(CorrectionSchema).optional(),
   })
   .superRefine((verification, ctx) => {
     const passes = verification.checks.map((check) => check.pass);
