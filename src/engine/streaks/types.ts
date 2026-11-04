@@ -2,11 +2,12 @@
  * Streak evaluation contracts (ARCHITECTURE §4.11, PRD §4.4).
  *
  * `StreakInput`, `StreakEvaluation` and the `applyFinish` finish follow
- * §4.11. Four fields go beyond its listing, each because the result
- * cannot be computed without it: `epoch` (a repair offer names its Daily
- * number), `best` (the stored best, which a pruned history alone could
- * undercount), `datelineCooldownDays` (tunable, PRD §4.4.7) and
- * `StreakCounters`, which §4.11 names but does not spell out.
+ * §4.11. Three input fields go beyond its listing: `epoch` (a repair offer
+ * names its Daily number), `best` (the stored best, which a pruned history
+ * alone could undercount) and `datelineCooldownDays` (tunable, PRD §4.4.7,
+ * since the engine can't read the config). `StreakEvaluation` has exactly
+ * §4.11's fields, the summary ones factored out as `StreakSummary`, and
+ * `StreakCounters`, which §4.11 names without spelling out, is defined here.
  */
 import type { EpochMs, LocalDate, TimeZone } from "../types/ids.ts";
 import type { DayStatus, RepairOffer } from "../types/streaks.ts";
