@@ -91,7 +91,7 @@ function goodTree(): string {
   };
   for (const section of GOOD_ITEMS) {
     for (const example of examples(section)) {
-      const item = { ...example, selfCheck: SELF_CHECK };
+      const item: Json = { ...example, selfCheck: SELF_CHECK };
       const id = String(item.id);
       if (item.kind === "mystery") write(`mysteries/${id}.json`, item);
       else if (item.kind === "encore") write(`encores/${id}.json`, item);
@@ -121,7 +121,7 @@ describe("CONTENT_GUIDE §12's good examples", () => {
     let count = 0;
     for (const section of GOOD_ITEMS) {
       for (const example of examples(section)) {
-        const item = { ...example, selfCheck: SELF_CHECK };
+        const item: Json = { ...example, selfCheck: SELF_CHECK };
         expect(
           issues(schemaFor(item).safeParse(item)),
           String(item.id),
