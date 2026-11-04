@@ -2,8 +2,10 @@
 
 /**
  * Practice results, /practice/results (DESIGN §12.11, PRD §3.3.1): the
- * score, every question as a compact row with its verdict, the answer and
- * an expandable explanation, and Play again with the same settings. A
+ * score, Play again with the same settings and Share (PRD §3.5.4's text,
+ * through the share feature's button), then every question as a compact
+ * row with a short stem, its verdict, the answer and, on a miss, what the
+ * player chose, opening to the explanation (decision D13, R1-17). A
  * results screen is a safe point for app updates (§10.7). There is no
  * challenge action: practice is never issued as a challenge (AC-PRA-11).
  *
@@ -12,17 +14,19 @@
  * The score is the page's heading and takes focus when the results arrive,
  * since the Continue that brought the player here is gone. Play again
  * replaces this page, as the finish replaced the run, so one Back from any
- * results reaches Today. The best-moment line, Change category and Share
- * join it with PRA-2.
+ * results reaches Today. The best-moment line and Change category join it
+ * with PRA-2.
  */
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { loadPracticePool } from "@/content/loaders/practice";
 import { track } from "@/features/analytics/track";
 import { bootClient } from "@/features/identity";
 import { useSafePoint } from "@/features/pwa/safe-point";
+import { ShareButton } from "@/features/share/share-button";
 import { PlayFrame } from "@/features/shell";
+import { getSiteUrl } from "@/lib/env";
 import { getKv } from "@/platform/storage";
 import { Button } from "@/ui/button";
 import { buttonClasses } from "@/ui/button-classes";
@@ -37,6 +41,7 @@ import { lastFinishedRunId } from "./model/last-run";
 import { findHistoryEntry, type PracticeHistoryEntry } from "./model/storage";
 import { resultRows, type ResultRow } from "./model/summary";
 import { QuickPlayLink } from "./quick-play-link";
+import { practiceSharePayload } from "./share";
 
 type Results =
   | { kind: "loading" }
@@ -48,38 +53,69 @@ type Results =
       loaded: boolean;
     };
 
-/** The verdict, the question's number and, when known, the answer. */
-function RowLine({ row }: { row: ResultRow }) {
+/**
+ * The score's closing period, which screen readers read and the eye doesn't
+ * see. It stays an inline box: a hidden box taken out of the flow
+ * (`sr-only`) is a block to the accessible-name computation, which pads it
+ * with spaces ("7 out of 10 .", R1-34).
+ */
+const HIDDEN_PERIOD = "[clip-path:inset(50%)]";
+
+/**
+ * The row's lines (D13): the verdict's icon, then the question's number
+ * and a short stem (two lines at most until the row opens), over the
+ * verdict, the answer and, on a miss, what the player chose, with `hint`
+ * last. Only the icon sits beside the text, so at 200% text the lines keep
+ * the row's width instead of reading a word a line.
+ */
+function RowLines({
+  row,
+  loaded,
+  hint = null,
+}: {
+  row: ResultRow;
+  loaded: boolean;
+  hint?: ReactNode;
+}) {
+  const first =
+    row.item !== null
+      ? COPY.results.numbered(row.number, row.item.stem)
+      : loaded
+        ? COPY.results.numbered(row.number, COPY.results.withdrawn)
+        : COPY.results.question(row.number);
+  const parts = [
+    row.correct ? COPY.results.right : COPY.results.wrong,
+    ...(row.answer === null ? [] : [COPY.results.answer(row.answer)]),
+    ...(row.chosen === null ? [] : [COPY.results.yourAnswer(row.chosen)]),
+  ];
   return (
     <>
-      {/* Wraps between its words at 320 px and 200% text. */}
-      <span className="flex min-w-0 flex-wrap items-center gap-x-2 font-bold">
+      <span className="mt-1 shrink-0">
         {row.correct ? <CheckIcon size={16} /> : <CrossIcon size={16} />}
-        <span>{COPY.results.question(row.number)}</span>
-        <span aria-hidden="true">·</span>
-        <span>{row.correct ? COPY.results.right : COPY.results.wrong}</span>
       </span>
-      {row.answer === null ? null : (
-        <>
-          {" "}
-          <span className="min-w-0 break-words">
-            {COPY.results.answer(row.answer)}
-          </span>
-        </>
-      )}
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span
+          data-result-stem=""
+          className="line-clamp-2 font-semibold break-words group-open:line-clamp-none"
+        >
+          {first}
+        </span>
+        <span className="break-words text-muted-foreground">
+          {COPY.results.line(parts)}
+        </span>
+        {hint}
+      </span>
     </>
   );
 }
 
-const LINE =
-  "flex min-h-11 flex-wrap items-center gap-x-2 gap-y-1 py-2 text-base";
+const ROW = "flex min-h-11 items-start gap-3 py-3 text-base";
 
 /**
- * One compact row per question (DESIGN §12.11): the line above, which opens
- * to the question, the pick and the explanation, so ten rows leave Play
- * again within the second screen. The summary holds the row's whole line,
- * so every disclosure has a name of its own. `loaded`: the packs came back,
- * so a missing item really left its pack.
+ * One compact row per question (DESIGN §12.11, D13): the lines above,
+ * which open to the whole stem and the explanation. The summary holds the
+ * row's whole text, so every disclosure has a name of its own. `loaded`:
+ * the packs came back, so a missing item really left its pack.
  */
 function QuestionRow({ row, loaded }: { row: ResultRow; loaded: boolean }) {
   return (
@@ -88,44 +124,40 @@ function QuestionRow({ row, loaded }: { row: ResultRow; loaded: boolean }) {
       className="border-b border-foreground/15 last:border-b-0"
     >
       {row.item === null ? (
-        <div className="flex flex-col pb-2">
-          <p className={LINE}>
-            <RowLine row={row} />
-          </p>
-          {loaded ? (
-            <p className="text-base text-muted-foreground">
-              {COPY.results.withdrawn}
-            </p>
-          ) : null}
-        </div>
+        <p className={ROW}>
+          <RowLines row={row} loaded={loaded} />
+        </p>
       ) : (
         <details className="group text-base">
           <summary
             className={cx(
-              LINE,
+              ROW,
               "cursor-pointer list-none [&::-webkit-details-marker]:hidden",
             )}
           >
-            <RowLine row={row} />{" "}
-            <span className="ms-auto inline-flex items-center gap-1 font-semibold text-muted-foreground">
-              {COPY.results.why}
-              <span
-                aria-hidden="true"
-                className="inline-block group-open:rotate-180"
-              >
-                ▾
-              </span>
-            </span>
+            <RowLines
+              row={row}
+              loaded={loaded}
+              hint={
+                // Under the lines, so the summary still reads "… You chose
+                // Sorrel. Why".
+                <span
+                  data-result-why=""
+                  className="inline-flex items-center gap-1 self-start font-semibold text-muted-foreground"
+                >
+                  {COPY.results.why}
+                  <span
+                    aria-hidden="true"
+                    className="inline-block group-open:rotate-180"
+                  >
+                    ▾
+                  </span>
+                </span>
+              }
+            />
           </summary>
-          <div className="flex flex-col gap-1 pb-3">
-            <p className="font-semibold">{row.item.stem}</p>
-            {row.chosen === null ? null : (
-              <p className="text-muted-foreground">
-                {COPY.results.yourAnswer(row.chosen)}
-              </p>
-            )}
-            <p>{row.item.explanation}</p>
-          </div>
+          {/* Under the text, past the icon's column. */}
+          <p className="ps-7 pb-3">{row.item.explanation}</p>
         </details>
       )}
     </li>
@@ -218,26 +250,13 @@ export function PracticeResultsScreen({
             <span className="text-6xl leading-none">{entry.score}</span>{" "}
             <span className="text-xl">
               {COPY.results.outOf(entry.maxPoints)}
+              <span className={HIDDEN_PERIOD}>.</span>
             </span>
-            <span className="sr-only">.</span>
           </h1>
         </div>
-        <section aria-labelledby="practice-results-questions">
-          <h2 id="practice-results-questions" className="text-lg font-bold">
-            {COPY.results.questions}
-          </h2>
-          {loaded ? null : (
-            <p className="text-base text-muted-foreground">
-              {COPY.results.failed}
-            </p>
-          )}
-          <ol role="list">
-            {rows.map((row) => (
-              <QuestionRow key={row.number} row={row} loaded={loaded} />
-            ))}
-          </ol>
-        </section>
-        <div className="flex flex-col gap-3 sm:flex-row">
+        {/* Above the list, so they are on the first screen (D13): Play
+            again, then Share, secondary (DESIGN §12.11). */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
           <Button
             variant="primary"
             onClick={() => {
@@ -255,7 +274,29 @@ export function PracticeResultsScreen({
           >
             {COPY.results.playAgain}
           </Button>
+          <ShareButton
+            surface="practice"
+            payload={practiceSharePayload(entry, {
+              category,
+              siteUrl: getSiteUrl(),
+            })}
+          />
         </div>
+        <section aria-labelledby="practice-results-questions">
+          <h2 id="practice-results-questions" className="text-lg font-bold">
+            {COPY.results.questions}
+          </h2>
+          {loaded ? null : (
+            <p className="text-base text-muted-foreground">
+              {COPY.results.failed}
+            </p>
+          )}
+          <ol role="list">
+            {rows.map((row) => (
+              <QuestionRow key={row.number} row={row} loaded={loaded} />
+            ))}
+          </ol>
+        </section>
       </>
     );
   }

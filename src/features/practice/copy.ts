@@ -9,13 +9,31 @@ import { PRACTICE_CLIENT_COPY } from "./client-copy";
 
 export const PRACTICE_COPY = {
   ...PRACTICE_CLIENT_COPY,
-  /** Today's Practice card (DESIGN §12.1). */
+  /**
+   * Today's Practice card (DESIGN §12.1). "Works offline." waits for PWA-1,
+   * whose E2E proves a cold open offline (R1-15).
+   */
   card: {
     title: "Practice",
-    line: "Ten questions on anything. Works offline.",
+    line: "Ten questions on anything.",
   },
+  /**
+   * The greybox hub at /practice (R1-02): its title, and the Quick play
+   * card until PRA-2 builds the category grid and the difficulty control.
+   */
+  hub: {
+    title: "Practice",
+    quickPlayLine: "Ten questions on anything, at every level. Untimed.",
+    later: "Choosing a category and a difficulty comes next.",
+  },
+  /**
+   * Page titles, one per page (DESIGN §11): the hub matches its tab, and a
+   * run in progress reads apart from it in history and tab lists.
+   */
   meta: {
-    run: "Practice",
+    hub: "Practice",
+    hubDescription: "Ten quick questions on anything, untimed.",
+    run: "Practice round",
     results: "Practice results",
   },
 } as const;

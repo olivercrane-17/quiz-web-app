@@ -349,6 +349,56 @@ export function readStoredRun(kv: Kv, runId: string): StoredPracticeRun | null {
   return run !== null && run.snapshot.config.runId === runId ? run : null;
 }
 
+/**
+ * The unfinished run that /practice/run carries on when it opens without a
+ * new request: this tab's own run (`tabRunId`, from session storage), else
+ * the newest on the device. Storage is shared by every tab, so the newest
+ * run may be another tab's; it is the fallback only for a tab with no run
+ * of its own (a new tab, a cleared session). Null when no run is open.
+ */
+export function openRun(
+  kv: Kv,
+  tabRunId: string | null,
+): StoredPracticeRun | null {
+  return (
+    (tabRunId === null ? null : readStoredRun(kv, tabRunId)) ??
+    newestStoredRun(kv)
+  );
+}
+
+/** Where an open run stands: question 3 of 10 is the one on screen, answered or not. */
+export function runProgress(run: StoredPracticeRun): {
+  question: number;
+  total: number;
+} {
+  const total = run.snapshot.slots.length;
+  return { question: Math.min(run.snapshot.index + 1, total), total };
+}
+
+/**
+ * The items a new run should treat as just played (R1-36), with when: every
+ * item of the newest finished run, and every item an unfinished run has
+ * shown. Play again then never repeats a question just answered while
+ * fresh ones remain. PRA-2's seen index covers every run from then on.
+ */
+export function recentlyPlayed(kv: Kv): Map<ItemId, EpochMs> {
+  const played = new Map<ItemId, EpochMs>();
+  const note = (id: ItemId | undefined, at: EpochMs) => {
+    if (id !== undefined) played.set(id, Math.max(played.get(id) ?? at, at));
+  };
+  const last = readHistory(kv)[0];
+  if (last !== undefined) {
+    for (const question of last.questions)
+      note(question.itemId, last.finishedAt);
+  }
+  for (const run of listStoredRuns(kv)) {
+    for (const [index, slot] of run.snapshot.slots.entries()) {
+      if (slot.open !== null) note(run.itemIds[index], run.savedAt);
+    }
+  }
+  return played;
+}
+
 /** As stored: questions as [itemId, 1 or 0 for right, chosen source index or null]. */
 type StoredQuestion = [string, 0 | 1, number | null];
 interface StoredEntry extends Omit<PracticeHistoryEntry, "questions"> {

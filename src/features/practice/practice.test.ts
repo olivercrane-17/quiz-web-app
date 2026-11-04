@@ -150,6 +150,81 @@ describe("practice results", () => {
   });
 });
 
+describe("R1-17 practice results rows", () => {
+  it("R1-17 carry the stem and, on a miss, what the player chose, as it reads mid-sentence", async () => {
+    const pool = await loadPracticePool("mixed");
+    if (!pool.ok) throw new Error("no packs");
+    const byId = (id: string) => {
+      const item = pool.value.find((candidate) => candidate.id === id);
+      if (item === undefined) throw new Error(id);
+      return item;
+    };
+    const guilds = byId("fx.p.hist.0104");
+    const wall = byId("fx.p.geo.0109");
+    const fruit = byId("fx.p.food.0101");
+    const rows = resultRows(
+      {
+        runId: "r",
+        mode: "practice",
+        request: {
+          mode: "quick",
+          category: "mixed",
+          difficulty: "mixed",
+          repeats: false,
+        },
+        score: 1,
+        maxPoints: 3,
+        startedAt: 0,
+        finishedAt: 1,
+        questions: [
+          {
+            itemId: guilds.id,
+            correct: false,
+            chosen: guilds.options.indexOf("The Masons' Guild"),
+          },
+          {
+            itemId: wall.id,
+            correct: false,
+            chosen: wall.options.indexOf("45"),
+          },
+          { itemId: fruit.id, correct: true, chosen: fruit.correct },
+        ],
+      },
+      pool.value,
+    );
+    expect(rows.map((row) => row.item?.stem)).toEqual([
+      guilds.stem,
+      wall.stem,
+      fruit.stem,
+    ]);
+    // The pick reads mid-sentence ("You chose the Masons' Guild"), and a
+    // bare year beside BC carries its era, as the round showed it.
+    expect(rows[0]).toMatchObject({
+      answer: "The Glaziers' Guild",
+      chosen: "the Masons' Guild",
+    });
+    expect(rows[1]).toMatchObject({ answer: "120 BC", chosen: "AD 45" });
+    expect(rows[2]).toMatchObject({ answer: "Red quince", chosen: null });
+    expect(PRACTICE_CLIENT_COPY.results.yourAnswer("AD 45")).toBe(
+      "You chose AD 45",
+    );
+    expect(PRACTICE_CLIENT_COPY.results.numbered(6, guilds.stem)).toBe(
+      `6. ${guilds.stem}`,
+    );
+    // The second line, as sentences for the eye and the ear alike.
+    expect(
+      PRACTICE_CLIENT_COPY.results.line([
+        "Not quite",
+        "Answer: 4",
+        "You chose 15",
+      ]),
+    ).toBe("Not quite. Answer: 4. You chose 15.");
+    expect(
+      PRACTICE_CLIENT_COPY.results.line(["Right", "Answer: Washington, D.C."]),
+    ).toBe("Right. Answer: Washington, D.C.");
+  });
+});
+
 describe("practice over the fixture packs", () => {
   it("loads one category, or every pack for Mixed", async () => {
     const geo = await loadPracticePool("geo");

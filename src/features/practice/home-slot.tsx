@@ -1,9 +1,11 @@
 /**
  * Extension point (ARCHITECTURE §2.3): Today's practice slot, composed by
  * src/features/home/sections.tsx. It holds the Practice card: "Ten questions
- * on anything. Works offline." and Quick play (DESIGN §12.1, AC-PRA-01).
- * "Choose a category" joins it with PRA-2, together with the /practice
- * setup it opens.
+ * on anything." and Quick play (DESIGN §12.1, AC-PRA-01), which reads
+ * "Continue practice · 3 of 10" while a run is open. DESIGN's "Works
+ * offline." waits for PWA-1's proof (R1-15). "Choose a category" joins it
+ * with PRA-2, together with the /practice setup it opens; until then
+ * /practice is a greybox holding Quick play (R1-02).
  *
  * Today renders it twice and CSS shows one copy: `placement="regular"`
  * after the Daily and its notices, and `placement="promoted"` before the

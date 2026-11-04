@@ -233,7 +233,8 @@ test.describe("practice greybox", () => {
     await expect(rows).toHaveCount(10);
     await expect(page.locator('[data-result-row="right"]')).toHaveCount(score);
     for (let n = 1; n <= 10; n += 1) {
-      await expect(rows.nth(n - 1)).toContainText(`Question ${n}`);
+      // D13: each row's number and stem, its verdict and the answer.
+      await expect(rows.nth(n - 1)).toContainText(`${n}. `);
       await expect(rows.nth(n - 1)).toContainText(/Right|Not quite/);
       await expect(rows.nth(n - 1)).toContainText("Answer:");
     }
@@ -278,7 +279,7 @@ test.describe("practice greybox", () => {
     expect(summaries).toHaveLength(10);
     expect(new Set(summaries).size).toBe(10);
     for (const [i, text] of summaries.entries()) {
-      expect(text).toContain(`Question ${i + 1}`);
+      expect(text.startsWith(`${i + 1}. `)).toBe(true);
     }
     // A row opens to its question and explanation.
     const first = page.locator("[data-result-row] details").first();
@@ -365,10 +366,12 @@ test.describe("practice greybox", () => {
     await expect(round(page).getByText("Question 5 of 10")).toBeVisible();
   });
 
-  test("keys 1 to 4 answer while the question has focus", async ({ page }) => {
+  test("keys A to D answer while the question has focus", async ({ page }) => {
     await startQuickPlay(page);
     await expect(stem(page)).toBeFocused();
-    await page.keyboard.press("2");
+    // The letters always pick (D6); the digits only when no option is a
+    // number, which e2e/practice/rite-1.spec.ts covers.
+    await page.keyboard.press("b");
     await expect(options(page).nth(1)).toHaveAttribute(
       "data-state",
       /^(locked|correct|your-answer)$/,
