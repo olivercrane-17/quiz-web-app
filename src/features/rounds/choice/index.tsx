@@ -641,7 +641,9 @@ function ChoiceRoundView({
                 {CHOICE_COPY.crowd(crowdShare)}
               </p>
             )}
-            <p className="text-base">{choiceReveal.explanation}</p>
+            <p data-explanation="" className="text-base">
+              {choiceReveal.explanation}
+            </p>
             <div className="-mx-3 flex flex-wrap items-center gap-1">
               <a
                 href={learnMoreUrl(choiceReveal.learnMore)}
