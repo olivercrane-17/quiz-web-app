@@ -651,7 +651,7 @@ test.describe("RITE round 1", () => {
   test.describe("the Daily header on a phone (R1-03)", () => {
     test.use({ viewport: { width: 390, height: 844 } });
 
-    test("R1-03 at 200% text the header fits: the pills give way to words, the stopwatch drops its icon, nothing scrolls sideways", async ({
+    test("R1-03 at 200% text the header fits on one row: DS-1's pills and stopwatch keep their size, the words stay out of sight, nothing scrolls sideways", async ({
       page,
     }) => {
       await page.goto("/daily");
@@ -659,24 +659,28 @@ test.describe("RITE round 1", () => {
         page.getByRole("heading", { name: /clue 1/i }),
       ).toBeVisible();
       await page.addStyleTag({ content: BIG_TEXT });
+      // The pills' type is in px (DESIGN §10.5), so 200% text leaves them
+      // room: the words, for the eye alone, stay out of sight.
       const words = page.locator("[data-progress-text]");
-      await expect(words).toHaveText("Mystery 1 of 3");
-      // The words are for the eye: screen readers keep the pills' list,
-      // which is only out of sight.
       await expect(words).toHaveAttribute("aria-hidden", "true");
+      await expect(words).toBeHidden();
       const list = page.getByRole("list", { name: "Daily progress" });
+      await expect(list).toBeVisible();
       await expect(list.getByRole("listitem")).toHaveCount(4);
-      // Out of sight in an sr-only box of 1 px.
-      expect(
-        await list.evaluate((el) => {
-          const box = el.parentElement?.getBoundingClientRect();
-          return box !== undefined && box.width <= 1 && box.height <= 1;
-        }),
-      ).toBe(true);
       const watch = page.locator("[data-stopwatch]");
-      await expect(watch).toHaveText("0:00");
-      await expect(watch.locator("svg")).toBeHidden();
+      // After "Time so far", which only screen readers hear.
+      await expect(watch).toHaveText(/\b0:00$/);
+      const pills = await list.boundingBox();
       const box = await watch.boundingBox();
+      // Beside the pills, on their row, and 36 px tall as at ordinary text.
+      expect(
+        Math.abs(
+          (box?.y ?? 0) +
+            (box?.height ?? 0) / 2 -
+            ((pills?.y ?? 0) + (pills?.height ?? 0) / 2),
+        ),
+      ).toBeLessThan(4);
+      expect(box?.height ?? Infinity).toBeLessThanOrEqual(36.5);
       expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(390);
       expect(
         await watch.evaluate((el) => el.scrollWidth <= el.clientWidth),
@@ -688,11 +692,35 @@ test.describe("RITE round 1", () => {
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth),
       ).toBeLessThanOrEqual(390);
+    });
+
+    test("R1-03 where the header can't hold even the narrowest pills, the words take their place, wrapping by word", async ({
+      page,
+    }) => {
+      await page.goto("/daily");
+      await expect(
+        page.getByRole("heading", { name: /clue 1/i }),
+      ).toBeVisible();
+      await page.addStyleTag({ content: BIG_TEXT });
+      // Under the pills' 127 px (four at 28 px with their gaps).
+      await page.addStyleTag({
+        content: "[data-header-status] { width: 120px !important; }",
+      });
+      const words = page.locator("[data-progress-text]");
+      await expect(words).toBeVisible();
+      await expect(words).toHaveText("Mystery 1 of 3");
+      // Screen readers keep the pills' list, only out of sight.
+      const list = page.getByRole("list", { name: "Daily progress" });
+      await expect(list.getByRole("listitem")).toHaveCount(4);
+      expect(
+        await list.evaluate((el) => {
+          const box = el.parentElement?.getBoundingClientRect();
+          return box !== undefined && box.width <= 1 && box.height <= 1;
+        }),
+      ).toBe(true);
       // The words wrap by word on their own line, never letter by letter.
       expect(
-        await page
-          .locator("[data-progress-text]")
-          .evaluate((el) => el.getBoundingClientRect().height),
+        await words.evaluate((el) => el.getBoundingClientRect().height),
       ).toBeLessThan(150);
     });
 
@@ -707,7 +735,7 @@ test.describe("RITE round 1", () => {
       await expect(page.locator("[data-stopwatch] svg")).toBeVisible();
     });
 
-    test("R1-03 at 200% text the words say only where the run is, and the list still names a finished Mystery's 3 points", async ({
+    test("R1-03 at 200% text the words (out of sight while the pills fit) say only where the run is, and the list still names a finished Mystery's 3 points", async ({
       page,
     }) => {
       await mockInit(page, { scenario: "in_progress_mystery_2" });
@@ -732,7 +760,7 @@ test.describe("RITE round 1", () => {
       ).toBeLessThanOrEqual(390);
     });
 
-    test("R1-03 at 320 px the pills keep a row of their own, with '+3', and the stopwatch drops under them", async ({
+    test("R1-03 at 320 px the pills keep one row with '+3', the stopwatch beside them, and nothing runs off", async ({
       page,
     }) => {
       await page.setViewportSize({ width: 320, height: 568 });
@@ -742,10 +770,17 @@ test.describe("RITE round 1", () => {
       await expect(list).toBeVisible();
       await expect(list.getByRole("listitem").first()).toContainText("+3");
       await expect(page.locator("[data-progress-text]")).toBeHidden();
+      // DS-1's flat pills give up width (never under 28 px) rather than wrap.
+      const tops = await list
+        .getByRole("listitem")
+        .evaluateAll((items) =>
+          items.map((item) => Math.round(item.getBoundingClientRect().top)),
+        );
+      expect(new Set(tops).size).toBe(1);
       const pills = await list.boundingBox();
       const watch = await page.locator("[data-stopwatch]").boundingBox();
-      expect(watch?.y ?? 0).toBeGreaterThanOrEqual(
-        (pills?.y ?? 0) + (pills?.height ?? 0) - 1,
+      expect(watch?.x ?? 0).toBeGreaterThanOrEqual(
+        (pills?.x ?? 0) + (pills?.width ?? 0),
       );
       expect((watch?.x ?? 0) + (watch?.width ?? 0)).toBeLessThanOrEqual(320);
       expect(
@@ -792,12 +827,9 @@ test.describe("RITE round 1", () => {
       ).toHaveCount(4);
     });
 
-    // At 200% text from 768 px the header has room for the pills, but
-    // their 30 px box (src/ui/progress-segments.tsx, DS-1's) doesn't grow
-    // with their text-sm marks, which spill out of it. Follow-up filed for
-    // FIX-DS: set the mark in px or let the pill grow (DESIGN §10.5); this
-    // goes green with it.
-    test.fixme("R1-03 at 200% text on a tablet each pill still holds its mark", async ({
+    // DS-1 sets the pills' marks in px (DESIGN §10.5), so at 200% text
+    // they stay inside their 38 by 30 box.
+    test("R1-03 at 200% text on a tablet each pill still holds its mark", async ({
       page,
     }) => {
       await page.setViewportSize({ width: 768, height: 1024 });

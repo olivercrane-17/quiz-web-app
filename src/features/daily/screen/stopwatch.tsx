@@ -2,26 +2,28 @@
 
 /**
  * The Daily's stopwatch (PRD §3.1.3, DESIGN §6.7): total active time as
- * `m:ss` in tabular figures, `aria-live="off"` so it never interrupts. It
- * runs only while a round is open and freezes on reveals and between
- * rounds, because that is what breaks ties, and after a reload it picks up
- * from the server's figure (R1-06, `offset`).
+ * `m:ss`, drawn by the design system's `Stopwatch` (`@/ui/stopwatch`), so
+ * it never speaks as it ticks (`aria-live="off"`), keeps its 36 px and its
+ * type at 200% text, and drops its icon under 360 px. It runs only while a
+ * round is open and freezes on reveals and between rounds, because that is
+ * what breaks ties, and after a reload it picks up from the server's figure
+ * (R1-06, `offset`).
  *
  * It is a button: tapping it opens the More menu at "Hide stopwatch"
  * (DESIGN §6.7, R1-05), so the way to hide it is where the eye already is.
- * In a first Daily the screen's hint, "Take your time. Time only breaks
- * ties.", is its accessible description (`describedBy`), so a screen reader
- * hears the hint on the stopwatch itself (R1-05).
- * The timer icon shows only while the header has room for it, measured in
- * `rem` by the header's container query, so at 200% text or under 360 px
- * the digits keep their room (DESIGN §10.2, R1-03). The screen hides the
- * whole stopwatch when the player chose "Hide stopwatch".
+ * As a button the primitive draws its pill on a `rule` border; a plain
+ * reading would have no edge (R1-27). In a first Daily the screen's hint,
+ * "Take your time. Time only breaks ties.", is its accessible description
+ * (`describedBy`), so a screen reader hears the hint on the stopwatch
+ * itself (R1-05). Its name holds the visible time (WCAG 2.5.3): "Time so
+ * far 1:12". The screen hides the whole stopwatch when the player chose
+ * "Hide stopwatch".
  */
 import { useSyncExternalStore, type Ref } from "react";
 
 import type { RunState } from "@/engine/run";
 import { systemClock } from "@/platform/clock";
-import { cx } from "@/ui/cx";
+import { Stopwatch as Watch } from "@/ui/stopwatch";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
 import { elapsedMs, formatStopwatch, type TimeOffset } from "../model/labels";
@@ -39,29 +41,6 @@ function never(): () => void {
 
 /** The current second: the same value until it turns, so renders stay put. */
 const second = () => Math.floor(systemClock.now() / 1000) * 1000;
-
-/** Lucide's `timer` (ISC licence), drawn inline so the header loads no icon set. */
-function TimerIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      viewBox="0 0 24 24"
-      width="16"
-      height="16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <line x1="10" x2="14" y1="2" y2="2" />
-      <line x1="12" x2="15" y1="14" y2="11" />
-      <circle cx="12" cy="14" r="8" />
-    </svg>
-  );
-}
 
 export interface StopwatchProps {
   run: RunState;
@@ -92,29 +71,17 @@ export function Stopwatch({
     elapsedMs(run, Math.max(now, run.updatedAt), offset),
   );
   return (
-    <button
+    <Watch
       ref={buttonRef}
-      type="button"
-      // The name holds the visible time (WCAG 2.5.3): "Time so far 1:12".
-      aria-label={`${DAILY_SCREEN_COPY.stopwatch} ${time}`}
-      aria-live="off"
+      time={time}
+      label={DAILY_SCREEN_COPY.stopwatch}
       aria-haspopup="menu"
       aria-expanded={expanded}
       aria-controls={expanded ? menuId : undefined}
       aria-describedby={describedBy}
-      data-stopwatch=""
       onClick={(event) => {
         onOpenMenu(event.currentTarget);
       }}
-      className={cx(
-        // A 44 px target in px, so 200% text grows the digits, not the
-        // box around them: the header stays as short as it can (R1-03).
-        "inline-flex min-h-[44px] shrink-0 items-center gap-1 rounded-full border border-border px-[12px] text-sm font-semibold text-muted-foreground tabular-nums",
-        "outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground",
-      )}
-    >
-      <TimerIcon className="hidden shrink-0 @min-[16rem]/status:block" />
-      {time}
-    </button>
+    />
   );
 }

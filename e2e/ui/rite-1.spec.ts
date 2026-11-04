@@ -873,10 +873,9 @@ test.describe("R1-08 and R1-27 marks, not buttons", () => {
     }
   });
 
-  // FIX-DLY follow-up: the Daily header renders `Stopwatch` from
-  // @/ui/stopwatch (time, label, and onClick with the More menu's ARIA
-  // and ref), in place of its own bordered, rem-sized pill.
-  test.fixme("R1-27 the Daily's stopwatch is the design system's: no edge unless it is a button, and 36 px tall at 200% text", async ({
+  // The Daily header renders `Stopwatch` from @/ui/stopwatch (time,
+  // label, and onClick with the More menu's ARIA and ref).
+  test("R1-27 the Daily's stopwatch is the design system's: no edge unless it is a button, and 36 px tall at 200% text", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });

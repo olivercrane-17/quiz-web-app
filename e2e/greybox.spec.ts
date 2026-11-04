@@ -275,13 +275,14 @@ test.describe("RITE round 1 across the whole Daily", () => {
     await expect(round.getByText(/^Mystery 2 of 3/)).toBeVisible();
     await expect(round.getByRole("heading", { name: /clue 1/i })).toBeVisible();
     await page.clock.fastForward(30_000);
+    // DS-1's stopwatch reads "Time so far" to screen readers before the time.
     const watch = page.locator("[data-stopwatch]");
-    await expect(watch).toHaveText(/^2:0[0-2]$/);
+    await expect(watch).toHaveText(/\b2:0[0-2]$/);
 
     await page.reload();
     await expect(round.getByText(/^Mystery 2 of 3/)).toBeVisible();
     // Not 0:00: the server's figure for both rounds came back with the page.
-    await expect(watch).toHaveText(/^2:0[0-3]$/);
+    await expect(watch).toHaveText(/\b2:0[0-3]$/);
   });
 
   test("R1-34 every screen of the Daily has one h1, and the results open on their heading", async ({
