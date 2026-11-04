@@ -244,9 +244,10 @@ begin
                     where r.bucket = 'identity_1m' and r.window_start = v_window
                       and r.subject = private.subject('identity_1m', 'ip:198.51.100.65', v_window)), 0) = 0,
     'the loser kept its identity_1m hit';
+  v_window := private.window_start(private.now(), 3600);
   assert coalesce((select r.hits from private.rate_counters r
-                    where r.bucket = 'identity_all_1h' and r.subject = private.subject('identity_all_1h', 'project',
-                          private.window_start(private.now(), 3600))), 0) = 0,
+                    where r.bucket = 'identity_all_1h' and r.window_start = v_window
+                      and r.subject = private.subject('identity_all_1h', 'project', v_window)), 0) = 0,
     'the loser kept its identity_all_1h hit';
 end
 $$;

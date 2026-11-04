@@ -138,7 +138,9 @@ export function createIdentityArea(
       rpc(
         ctx,
         "register_player",
-        { p_context: browser.context, p_app: browser.app },
+        // A caller that passes nothing gets the server's invalid_input,
+        // never a thrown TypeError (§7.1).
+        { p_context: browser?.context ?? null, p_app: browser?.app ?? null },
         decodeProfile,
         { auth: "player", write: true },
       ),

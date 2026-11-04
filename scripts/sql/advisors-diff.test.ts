@@ -142,10 +142,27 @@ describe("main", () => {
     return path;
   }
 
+  /** The definer lints the repository's RPCs bring, one per lint and function. */
+  function rpcFindings(): Lint[] {
+    const file = parseExpected(
+      JSON.parse(readFileSync("supabase/expected-advisors.json", "utf8")),
+    );
+    return file.rpc.lints.flatMap((lint) =>
+      file.rpc.functions.map((name) => ({
+        ...RPC,
+        name: lint,
+        detail: `Function \`public.${name}\` can be executed`,
+        metadata: { name, type: "function", schema: "public" },
+      })),
+    );
+  }
+
   it("accepts the live project's advisors and the findings SQL-1 adds", () => {
     const log = vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
-    const security = write("security.json", { result: { lints: [] } });
+    const security = write("security.json", {
+      result: { lints: rpcFindings() },
+    });
     const performance = write("performance.json", {
       result: { lints: [UNUSED] },
     });
@@ -160,7 +177,14 @@ describe("main", () => {
   it("fails on a finding nobody explained", () => {
     vi.spyOn(console, "log").mockImplementation(() => {});
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
-    const security = write("security.json", { result: { lints: [RPC] } });
+    const unexplained: Lint = {
+      ...RPC,
+      detail: "Function `public.t_unexplained` can be executed by anon",
+      metadata: { name: "t_unexplained", type: "function", schema: "public" },
+    };
+    const security = write("security.json", {
+      result: { lints: [...rpcFindings(), unexplained] },
+    });
     expect(main(["--security", security])).toBe(1);
     expect(error.mock.calls.flat().join("\n")).toContain("1 unexpected");
     expect(main([])).toBe(1);
@@ -170,7 +194,10 @@ describe("main", () => {
     const file = parseExpected(
       JSON.parse(readFileSync("supabase/expected-advisors.json", "utf8")),
     );
-    expect(file.rpc.functions).toEqual([]);
+    expect(file.rpc.functions).toEqual([...new Set(file.rpc.functions)].sort());
+    expect(
+      file.rpc.functions.every((name) => /^[a-z][a-z0-9_]{0,62}$/.test(name)),
+    ).toBe(true);
     expect(file.accepted.every((entry) => entry.why.length > 20)).toBe(true);
   });
 });

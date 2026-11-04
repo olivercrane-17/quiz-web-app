@@ -106,6 +106,17 @@ a session where someone can answer the confirmation.
 - `sql:drift` lists an attended file that waits as an attended item, never
   as drift.
 
+Routine work never needs one: overwrite or upsert rows, blank columns or
+reuse fixed slots instead (one sync code and one claim row per player, a
+player's 11th device credential overwriting the least recently used one).
+Genuine deletions go in attended files, and nothing disguises a `DELETE`
+to pass the MCP's check. The attended files, with what each is for:
+
+| Migration                                   | Purpose                                                                                                                                             |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `20261104000200_platform_jobs_attended.sql` | SQL-1: the hourly and nightly platform steps prune salts, counters, write keys, error rows, heartbeats, cron history and zone names tzdata dropped. |
+| `20261104000500_identity_attended.sql`      | SQL-2: `delete_player` removes a player and everything kept under its id (AC-DAT-02), and `nightly_players` removes test players older than a day.  |
+
 ### Owner-only migrations (`*_owner_only.sql`)
 
 Some changes need `DROP` or `ALTER ROLE` on something that already exists.
@@ -303,7 +314,12 @@ template as `anon` and proves that its hits count when its writes fail.
   address or player id is ever stored.
 - IP keys go through `private.client_ip()`, which reads the
   `X-Forwarded-For` hop that `config.client_ip` names (`first`, `last`, or a
-  whole number counted from the right), then `private.ip_prefix()`. IPv4
+  whole number counted from the right), then `private.ip_prefix()`. A
+  client may be able to write the first hop, so nothing trusts an address
+  for anything a forged hop could abuse: every address bucket has a
+  project-wide bound beside it, and a new identity gets normal trust only
+  while the rule carries `"verified": true`, which whoever records the
+  client-ip contract test's result sets (ARCHITECTURE §8.6, CI-0). IPv4
   addresses are used whole, IPv4-mapped IPv6 addresses become their IPv4
   form, and IPv6 addresses are cut to their /64 (AC-IDN-07). A missing or
   malformed address becomes `none`, and so does every address while the
@@ -315,6 +331,36 @@ template as `anon` and proves that its hits count when its writes fail.
   (metric `rate_limited`, dims `bucket=<name>`) exactly once per ended
   window. It does the same for the growth of the pre-request hook's sequence
   (`private.refused_general_ip_5m`, SQL-8).
+
+### Authenticating a player (SQL-2)
+
+```sql
+v_auth := private.authenticate(p_player, p_secret, false);                   -- (auth)
+v_auth := private.authenticate(p_player, p_secret, true, p_context, p_app);  -- (auth, registers)
+if v_auth.code is not null then
+  return private.auth_refusal(v_auth);         -- auth_failed, invalid_input or rate_limited
+end if;
+v_limit := private.hit_player('<bucket>', v_auth.player_id);
+if not v_limit.allowed then
+  return private.auth_limited(v_auth, v_limit); -- also gives back the general_player_5m hit
+end if;
+```
+
+- `private.auth_result` carries `player_id`, `code`, `retry_after_ms`,
+  `limit_scope`, `created` (this call registered the player) and
+  `prev_seen_at`, the player's `last_seen_at` before this call touched it:
+  the "previous call" of the zone-hop rule (ARCHITECTURE §8.7).
+- A wrong secret is always the same `auth_failed` and changes nothing
+  (AC-IDN-03). `tests/identity/auth.test.sql` holds every allowlisted RPC
+  whose first parameters are `p_player uuid, p_secret text` to that, with
+  every other argument null, so authenticate right after the size checks.
+- Hooks the identity RPCs call, each a stub its owner replaces:
+  `finished_dailies`, `identity_last_daily` and `export_attempts` (SQL-4),
+  `identity_streak` and `export_streak_days` (SQL-6), `export_challenges`
+  (SQL-11), `export_groups` and `purge_player_groups` (SQL-12),
+  `export_quizzes` (SQL-15), `purge_player_reports` (SQL-9) and
+  `purge_player_events` (SQL-10). A purge hook removes rows, so its body goes
+  in its owner's attended file.
 
 ## 4. Scheduled jobs and hooks
 
@@ -486,3 +532,5 @@ The bundle adds one generated check: `private.rpc_allowlist` names exactly
 | ------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `20261104000300_api_surface_owner_only.sql` | `DROP EXTENSION` and `ALTER ROLE` need a human | In the dashboard SQL editor, or MCP `execute_sql` with the owner confirming. Then re-run the `backend-contract` workflow, and record it with `apply_migration` only if it was applied that way.                                                      |
 | `20261104000200_platform_jobs_attended.sql` | The MCP asks to confirm its `DELETE`s          | In a session someone attends: `npm run sql:bundle -- --all --attended --applied list_migrations.json`, send it, then `apply_migration`. Until then the hourly step leaves a daily `owner_queue` alert, and counters, write keys and error rows grow. |
+| `20261104000500_identity_attended.sql`      | The MCP asks to confirm its `DELETE`s          | The same way, before launch. Until then `delete_player` answers `unavailable` (Delete my data and the Under 13 sequence wait), test players older than a day stay, and both leave a daily `owner_queue` alert.                                       |
+| `"verified": true` in `config.client_ip`    | Only the client-ip contract test can verify it | When the `backend-contract` workflow shows a hop the client cannot write, set that rule with `"verified": true`. Until then every new identity registers as low trust and a daily `owner_queue` alert says so.                                       |
