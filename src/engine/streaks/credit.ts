@@ -17,12 +17,21 @@
  *   whose device zone changed since the player's previous Daily stays out
  *   of the crowd's numbers (honest-play flag 16, `scoring/percentile.ts`)
  *   but still earns credit. There is no 20-hour rule.
+ * - **One zone, two names.** Zones compare by `sameZone`, so a device that
+ *   reports `Asia/Calcutta` one day and `Asia/Kolkata` the next has not
+ *   changed zone (`zone-links.ts`).
  */
 import { addDays, daysBetween } from "../time/calendar.ts";
 import { startOfLocalDay } from "../time/zone.ts";
 import type { EpochMs, LocalDate, TimeZone } from "../types/ids.ts";
 import { isCredited } from "./summary.ts";
 import type { StoredDay } from "./types.ts";
+import { canonicalZone } from "./zone-links.ts";
+
+/** True when two zone names denote one zone, aliases included (`zone-links.ts`). */
+export function sameZone(a: TimeZone, b: TimeZone): boolean {
+  return a === b || canonicalZone(a) === canonicalZone(b);
+}
 
 /** The later of the request's local date and the latest date already served. */
 export function effectiveToday(
@@ -68,7 +77,7 @@ export interface DailyCredit {
   accepted: boolean;
   /** Accepted, and D is later than the last credited date. */
   streakCredit: boolean;
-  /** The zone differs from the previous Daily's: kept out of the crowd's numbers. */
+  /** The zone differs from the previous Daily's (an alias is no change): kept out of the crowd's numbers. */
   zoneChanged: boolean;
 }
 
@@ -83,6 +92,6 @@ export function dailyCredit(input: DailyCreditInput): DailyCredit {
       (input.lastCredited === null || input.date > input.lastCredited),
     zoneChanged:
       input.previousDailyZone !== null &&
-      input.zone !== input.previousDailyZone,
+      !sameZone(input.zone, input.previousDailyZone),
   };
 }

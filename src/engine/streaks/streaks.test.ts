@@ -2,7 +2,8 @@
 /**
  * Unit tests for the streak engine's edges that the fixture table leaves
  * implicit: the date-line thresholds, a stored candidate that no longer
- * applies, incident boundaries, the epoch, DST and the ledger's guards.
+ * applies, zone aliases, incident boundaries, the epoch, DST, the stored
+ * best and the ledger's guards.
  */
 import { describe, expect, it } from "vitest";
 
@@ -16,8 +17,11 @@ import {
 } from "../types/ids.ts";
 import {
   EMPTY_LEDGER,
+  ZONE_LINKS,
   applyFinish,
+  canonicalZone,
   chainCount,
+  dailyCredit,
   datelineAllowed,
   effectiveToday,
   evaluateStreak,
@@ -27,6 +31,7 @@ import {
   nextDailyAt,
   readLedger,
   repairCapUntil,
+  sameZone,
   summarizeStreak,
   type StoredDay,
   type StreakInput,
@@ -151,6 +156,65 @@ describe("the date-line rule's thresholds (PRD §4.4.7)", () => {
   });
 });
 
+describe("one zone under two names (zone-links.ts)", () => {
+  it("compares zones by the tz database's links, not by spelling", () => {
+    const same = [
+      ["Asia/Calcutta", "Asia/Kolkata"],
+      ["Europe/Kiev", "Europe/Kyiv"],
+      ["America/Buenos_Aires", "America/Argentina/Buenos_Aires"],
+      ["Pacific/Enderbury", "Pacific/Kanton"],
+      ["UTC", "Etc/UTC"],
+      ["Etc/GMT", "UTC"],
+      ["US/Eastern", "America/New_York"],
+      ["Europe/London", "Europe/London"],
+    ];
+    for (const [a = "", b = ""] of same) {
+      expect(sameZone(tz(a), tz(b)), `${a} ${b}`).toBe(true);
+      expect(sameZone(tz(b), tz(a)), `${b} ${a}`).toBe(true);
+    }
+    // Distinct places, even where the clocks agree today.
+    expect(sameZone(tz("Europe/London"), tz("Europe/Dublin"))).toBe(false);
+    expect(sameZone(tz("Europe/Bratislava"), tz("Europe/Prague"))).toBe(false);
+    expect(sameZone(LONDON, KIRITIMATI)).toBe(false);
+  });
+
+  it("links only names the zone database knows, each to a zone that is no link itself", () => {
+    expect(ZONE_LINKS.size).toBeGreaterThan(100);
+    for (const [name, zone] of ZONE_LINKS) {
+      expect(parseTimeZone(name), name).not.toBeNull();
+      expect(parseTimeZone(zone), zone).not.toBeNull();
+      expect(ZONE_LINKS.has(zone), zone).toBe(false);
+      expect(canonicalZone(tz(name))).toBe(zone);
+    }
+    expect(canonicalZone(LONDON)).toBe(LONDON);
+  });
+
+  it("lets an alias neither set flag 16 nor count as a new zone name for the date-line rule", () => {
+    const credit = dailyCredit({
+      date: d("2026-11-11"),
+      utcToday: d("2026-11-11"),
+      lastCredited: d("2026-11-10"),
+      zone: tz("Asia/Calcutta"),
+      previousDailyZone: tz("Asia/Kolkata"),
+    });
+    expect(credit).toEqual({
+      accepted: true,
+      streakCredit: true,
+      zoneChanged: false,
+    });
+    expect(
+      datelineAllowed(
+        input({
+          zone: tz("Asia/Calcutta"),
+          offsetMinutes: 1050,
+          lastFinishZone: tz("Asia/Kolkata"),
+          lastFinishOffsetMinutes: 330,
+        }),
+      ),
+    ).toBe(false);
+  });
+});
+
 describe("incident windows", () => {
   const day = (text: string) => startOfLocalDay(d(text), LONDON);
 
@@ -185,12 +249,34 @@ describe("summarizeStreak", () => {
     expect(summary([], { best: 5 })).toEqual({
       current: 0,
       best: 5,
+      storedBest: 5,
       repair: null,
       repairBlockedUntil: null,
       paused: null,
       display: "active",
       breakTooLong: false,
     });
+  });
+
+  it("stores a best only from decided dates, while the current chain runs through an undecided one", () => {
+    // 11-10's attempt is still open: it links the current chain, but the
+    // best to store waits until it is decided.
+    const days = [
+      ...played("2026-11-04", "2026-11-09"),
+      ...played("2026-11-11", "2026-11-11"),
+    ];
+    const open = summary(days, { today: d("2026-11-12") });
+    expect([open.current, open.best, open.storedBest]).toEqual([7, 7, 6]);
+    const missed = summary(
+      [...days, { date: d("2026-11-10"), status: "missed" as const }],
+      { today: d("2026-11-12") },
+    );
+    expect([missed.current, missed.best, missed.storedBest]).toEqual([1, 6, 6]);
+    const freeze = summary(
+      [...days, { date: d("2026-11-10"), status: "freeze" as const }],
+      { today: d("2026-11-12") },
+    );
+    expect([freeze.current, freeze.best, freeze.storedBest]).toEqual([7, 7, 7]);
   });
 
   it("never reports a best below the stored one", () => {
@@ -315,9 +401,56 @@ describe("the ledger's guards", () => {
       ...request,
       date: d("2026-11-11"),
       play: "on_time",
+      streakCredit: true,
     });
     expect(finish.kind).toBe("other");
     expect(finish.ledger.dailiesFinished).toBe(0);
+  });
+
+  it("takes an on-time finish's credit from its start, never from the dates played since", () => {
+    // D = 11-10 started at 23:58 (credit at its start: 11-10 is later than
+    // 11-09), left open while 11-11 was played to the end, then finished
+    // inside D's window.
+    const ledger = {
+      ...EMPTY_LEDGER,
+      days: played("2026-11-04", "2026-11-09"),
+      maxServed: d("2026-11-10"),
+    };
+    const nextDay = finishLedger(ledger, {
+      at: at("2026-11-11T09:00:00Z"),
+      zone: LONDON,
+      epoch: EPOCH,
+      pending: [d("2026-11-10")],
+      date: d("2026-11-11"),
+      play: "on_time",
+      streakCredit: true,
+    });
+    const late = {
+      at: at("2026-11-11T10:00:00Z"),
+      zone: LONDON,
+      epoch: EPOCH,
+      date: d("2026-11-10"),
+      play: "on_time" as const,
+    };
+    const credited = finishLedger(nextDay.ledger, {
+      ...late,
+      streakCredit: true,
+    });
+    expect([
+      credited.kind,
+      credited.outcome.status,
+      credited.after.current,
+    ]).toEqual(["on_time", "played", 8]);
+    // Without credit at its start (a date not later than the last credited
+    // one, memo §14.1) the same finish changes nothing.
+    const uncredited = finishLedger(nextDay.ledger, {
+      ...late,
+      streakCredit: false,
+    });
+    expect([uncredited.kind, uncredited.outcome.status]).toEqual([
+      "other",
+      null,
+    ]);
   });
 
   it("serves the effective today and remembers it", () => {

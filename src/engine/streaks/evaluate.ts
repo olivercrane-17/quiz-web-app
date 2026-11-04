@@ -23,7 +23,9 @@
  *    and spends nothing. The next request decides it: the same zone
  *    protects it (no notice, since the only protected copy names an outage
  *    of ours), another zone walks it like any other gap date. A request
- *    that decides a stored candidate starts no new one.
+ *    that decides a stored candidate starts no new one. Zones compare by
+ *    `sameZone`, so an alias of a zone (`Asia/Calcutta` for
+ *    `Asia/Kolkata`) is that zone, never a new name.
  * 4. **Freeze** while a streak is alive and one is held, with a
  *    `freeze_spent` notice.
  * 5. Otherwise **Missed**, after which no freeze is spent until the next
@@ -34,6 +36,7 @@
  */
 import { DAY_MS, addDays } from "../time/calendar.ts";
 import type { LocalDate } from "../types/ids.ts";
+import { sameZone } from "./credit.ts";
 import {
   firstCredited,
   isCredited,
@@ -65,7 +68,7 @@ export function datelineAllowed(input: StreakInput): boolean {
   ) {
     return false;
   }
-  if (input.zone === input.lastFinishZone) return false;
+  if (sameZone(input.zone, input.lastFinishZone)) return false;
   const cooldownMs =
     (input.datelineCooldownDays ?? DATELINE_COOLDOWN_DAYS) * DAY_MS;
   return (
@@ -104,7 +107,7 @@ export function evaluateStreak(input: StreakInput): StreakEvaluation {
   const stored = input.datelineCandidate;
   if (
     stored !== null &&
-    stored.zone === input.zone &&
+    sameZone(stored.zone, input.zone) &&
     stored.date < input.today &&
     !statuses.has(stored.date) &&
     !pending.has(stored.date)

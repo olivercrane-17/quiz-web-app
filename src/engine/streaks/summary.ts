@@ -12,7 +12,11 @@
  *   lowers it, as today never does.
  * - **Current.** The chain ending at the latest Played or Repaired date
  *   `L`, or 0 when a date between `L` and today is Missed.
- * - **Best.** The largest chain in the history, never below the stored best.
+ * - **Best.** `storedBest` is the largest chain of decided dates, never
+ *   below the stored best: an undecided date breaks it, because it may
+ *   still turn Missed, so what is stored never counts a chain that didn't
+ *   happen. `best` also takes the current chain, which an undecided date
+ *   links, so it never reads below the current streak.
  * - **Repair** (§4.4.4). A Missed date `M` is repairable when it is the only
  *   Missed date between the Played or Repaired dates around it (or today),
  *   a chain ended before it, the request's local time is before `M + 3`
@@ -126,8 +130,12 @@ export function chainCount(statuses: StatusMap, end: LocalDate): number {
   return count;
 }
 
-/** The largest chain anywhere in the history. */
-function longestChain(statuses: StatusMap): number {
+/**
+ * The largest chain of decided dates anywhere in the history: a Missed date
+ * and an undecided one (a pending attempt's date, a date-line candidate)
+ * both end it.
+ */
+function longestDecidedChain(statuses: StatusMap): number {
   const first = firstCredited(statuses);
   if (first === null) return 0;
   let last = first;
@@ -136,7 +144,7 @@ function longestChain(statuses: StatusMap): number {
   let run = 0;
   for (let date = first; date <= last; date = addDays(date, 1)) {
     const status = statuses.get(date);
-    if (status === "missed") run = 0;
+    if (status === undefined || status === "missed") run = 0;
     else if (isCredited(status)) run += 1;
     if (run > best) best = run;
   }
@@ -217,6 +225,7 @@ export function summarizeStreak(input: StreakSummaryInput): StreakSummary {
     return {
       current: 0,
       best: floor,
+      storedBest: floor,
       repair: null,
       repairBlockedUntil,
       paused: null,
@@ -232,7 +241,8 @@ export function summarizeStreak(input: StreakSummaryInput): StreakSummary {
       break;
     }
   }
-  const best = Math.max(floor, longestChain(statuses), current);
+  const storedBest = Math.max(floor, longestDecidedChain(statuses));
+  const best = Math.max(storedBest, current);
 
   const missed = [...statuses.entries()]
     .filter(([, status]) => status === "missed")
@@ -266,6 +276,7 @@ export function summarizeStreak(input: StreakSummaryInput): StreakSummary {
   return {
     current,
     best,
+    storedBest,
     repair,
     repairBlockedUntil,
     paused,

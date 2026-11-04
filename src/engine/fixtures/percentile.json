@@ -1,10 +1,10 @@
 {
   "$comment": [
-    "Percentile parity table (ARCHITECTURE §4.13, PRD §4.3.4, AC-DLY-20): pools at 49 and 50, ties, a tied top, P = 100 and under 5, flagged and low-trust players, bands and the all-bands fallback; the offset bands; and the largest-remainder shares of the crowd stats (PRD §4.1.5).",
+    "Percentile parity table (ARCHITECTURE §4.13, PRD §4.3.4, AC-DLY-20): pools at 49 and 50, ties, a tied top, P = 100 and under 5, flagged and low-trust players, bands and the all-bands fallback, and archive plays at 49 and 50 eligible finishers; the offset bands; and the largest-remainder shares of the crowd stats (PRD §4.1.5).",
     "Replayed by Vitest against src/engine/scoring/percentile.ts, and from SQL-7 by generated tests against get_daily_numbers (§8.9), which expand each pool into daily_results rows.",
     "minN is percentile_min_n; the engine test checks it against src/config/shared.json, so a change there fails until this table follows.",
     "pools: me is the player's run (its offset band, and whether it is eligible: a flagged, low-trust or archive run is not). others are other players' eligible runs, each group by band and by how it ranks against the player (worse, tied or better; generated rows take the player's rank key minus 1, the same key, or plus 1). ranked is false for an archive or challenge-only play; windowOpen says the date is still open somewhere.",
-    "The band scope applies when the player's band holds minN eligible runs, the player's own counted only when eligible; otherwise every band. N counts the player once, P = floor(100 × (B + 0.5 × T) / (N - 1)). headline: nobody_better when nothing ranks strictly better (B + T = N - 1), tough when P is under 5, else beat; null when no ranked number shows.",
+    "The band scope applies when the player's band holds minN eligible runs, the player's own counted only when eligible; otherwise every band. N counts the player once, P = floor(100 × (B + 0.5 × T) / (N - 1)). headline: nobody_better when nothing ranks strictly better (B + T = N - 1), tough when P is under 5, else beat; null when no ranked number shows. An unranked play (ranked false) shows wouldHaveBeaten once the pool holds minN eligible runs without the player, who is none of them (PRD §3.2.1, §8.9); N in the formula still counts the player once.",
     "shares: whole percentages that sum to 100 by largest remainder; equal remainders go to the earlier bucket (clue 1, clue 2, clue 3, clue 4, missed)."
   ],
   "minN": 50,
@@ -351,6 +351,49 @@
           "windowOpen": false
         },
         "headline": null
+      }
+    },
+    {
+      "id": "archive-49",
+      "title": "an archive play with 49 eligible finishers shows no number, because the player isn't one of them",
+      "me": { "band": 1, "eligible": false },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 30 },
+        { "band": 0, "vs": "better", "count": 19 }
+      ],
+      "ranked": false,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "unranked",
+          "wouldHaveBeaten": null,
+          "windowOpen": true
+        },
+        "headline": null,
+        "scope": "all",
+        "pool": 50
+      }
+    },
+    {
+      "id": "archive-50",
+      "title": "the 50th eligible finisher brings an archive play's number: 31 worse of 50 is 62%",
+      "me": { "band": 1, "eligible": false },
+      "others": [
+        { "band": 1, "vs": "worse", "count": 30 },
+        { "band": 0, "vs": "better", "count": 19 },
+        { "band": 2, "vs": "worse", "count": 1 }
+      ],
+      "ranked": false,
+      "windowOpen": true,
+      "expect": {
+        "view": {
+          "status": "unranked",
+          "wouldHaveBeaten": 62,
+          "windowOpen": true
+        },
+        "headline": null,
+        "scope": "all",
+        "pool": 51
       }
     },
     {

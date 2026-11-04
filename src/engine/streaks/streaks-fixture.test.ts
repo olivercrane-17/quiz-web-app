@@ -54,6 +54,8 @@ interface RawStep {
   zone: string;
   date?: string;
   play?: string;
+  /** An on-time finish's `attempts.streak_credit`, decided as it started; true unless given. */
+  streakCredit?: boolean;
   pending?: string[];
   incidents?: { start: string; end: string }[];
   expect?: Record<string, unknown>;
@@ -157,6 +159,7 @@ function summaryView(summary: StreakSummary): Record<string, unknown> {
   return {
     current: summary.current,
     best: summary.best,
+    storedBest: summary.storedBest,
     display: summary.display,
     repair: summary.repair && {
       date: summary.repair.date,
@@ -277,11 +280,18 @@ function replay(row: RawScenario): void {
     if (step.do !== "finish" || step.date === undefined) {
       throw new Error(`${where}: unknown step`);
     }
-    const finish = finishLedger(ledger, {
-      ...request,
-      date: localDate(step.date),
-      play: step.play === "unranked" ? "unranked" : "on_time",
-    });
+    const date = localDate(step.date);
+    const finish = finishLedger(
+      ledger,
+      step.play === "unranked"
+        ? { ...request, date, play: "unranked" }
+        : {
+            ...request,
+            date,
+            play: "on_time",
+            streakCredit: step.streakCredit ?? true,
+          },
+    );
     expectFields(finishStepView(finish, expected), expected, where);
     ledger = finish.ledger;
   });

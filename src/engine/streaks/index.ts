@@ -7,6 +7,7 @@ export {
   effectiveToday,
   lastCreditedDate,
   nextDailyAt,
+  sameZone,
   type DailyCredit,
   type DailyCreditInput,
 } from "./credit.ts";
@@ -50,3 +51,4 @@ export {
   type StreakInput,
   type StreakSummary,
 } from "./types.ts";
+export { ZONE_LINKS, canonicalZone } from "./zone-links.ts";

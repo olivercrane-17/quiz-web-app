@@ -5,9 +5,11 @@
  * §4.11. Three input fields go beyond its listing: `epoch` (a repair offer
  * names its Daily number), `best` (the stored best, which a pruned history
  * alone could undercount) and `datelineCooldownDays` (tunable, PRD §4.4.7,
- * since the engine can't read the config). `StreakEvaluation` has exactly
- * §4.11's fields, the summary ones factored out as `StreakSummary`, and
- * `StreakCounters`, which §4.11 names without spelling out, is defined here.
+ * since the engine can't read the config). `StreakEvaluation` has §4.11's
+ * fields, the summary ones factored out as `StreakSummary`, plus
+ * `storedBest`, the best to store, which an undecided date can't inflate.
+ * `StreakCounters`, which §4.11 names without spelling out, is defined
+ * here.
  */
 import type { EpochMs, LocalDate, TimeZone } from "../types/ids.ts";
 import type { DayStatus, RepairOffer } from "../types/streaks.ts";
@@ -92,7 +94,15 @@ export type StreakDisplay = "active" | "paused" | "broken";
 export interface StreakSummary {
   /** The chain ending at the latest Played or Repaired date, or 0 once a gap date is Missed. */
   current: number;
+  /** The best streak to show: `storedBest`, or the current streak when that is higher. */
   best: number;
+  /**
+   * The best to store: the largest chain of decided dates, never below the
+   * stored best. An undecided date (a pending attempt's, a date-line
+   * candidate) breaks it, because it may still turn Missed, while the
+   * current chain runs through it.
+   */
+  storedBest: number;
   repair: RepairOffer | null;
   /** The 168-hour cap's end while it blocks repairs, else null. */
   repairBlockedUntil: EpochMs | null;

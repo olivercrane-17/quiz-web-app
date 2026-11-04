@@ -8,6 +8,7 @@ import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
+import { compositionIdOf } from "../composition.ts";
 import table from "../fixtures/share-codes.json";
 import { createRng, type Rng } from "../rng.ts";
 import type { CategoryId } from "../types/content.ts";
@@ -166,6 +167,11 @@ describe("share-codes.json round trips", () => {
   it.each(table.roundTrips.map((row) => [row.title, row] as const))(
     "%s",
     (_, row) => {
+      // The rounds must be a Daily of that composition (§4.9), or SQL could
+      // never store this code for them.
+      expect(
+        compositionIdOf(row.rounds.map((round) => round.type as RoundType)),
+      ).toBe(row.composition);
       const outcomes = row.rounds.map((round) => outcomeOf(round as RawRound));
       const code = encodeShareCode(
         { composition: row.composition, archive: row.archive, outcomes },

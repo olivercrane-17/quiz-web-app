@@ -12,7 +12,11 @@
  *   strictly worse and `T` those tied (the player excluded):
  *   `P = floor(100 × (B + 0.5 × T) / (N - 1))`, computed in integers. Shown
  *   only when `N >= percentile_min_n`; below it the cold-start state names
- *   `N` finishers.
+ *   `N` finishers. An unranked play (archive, challenge-only) isn't one of
+ *   the date's eligible finishers, so "You'd have beaten N%" waits until
+ *   the pool holds `percentile_min_n` of them without the player (PRD
+ *   §3.2.1, ARCHITECTURE §8.9), while `N` in the formula still counts the
+ *   player once.
  * - **Copy.** "Nobody has beaten you so far today." whenever nothing in the
  *   pool ranks strictly better (`B + T = N - 1`), which covers a tied top
  *   whose `P` is under 100; "This one was tough." when `P` is under 5 and
@@ -117,7 +121,9 @@ export function percentileView(input: PercentileInput): PercentileResult {
     else if (run.key === input.me.key) tied += 1;
   }
   const n = pool.length + 1;
-  const shown = n >= input.minN && n >= 2;
+  const shown = input.ranked
+    ? n >= input.minN && n >= 2
+    : pool.length >= Math.max(input.minN, 1);
   const value = shown ? percentile(worse, tied, n) : null;
 
   if (!input.ranked) {

@@ -3,7 +3,7 @@
     "Share-code parity table (ARCHITECTURE §4.10, §4.13; PRD §3.5): round trips, the largest payloads and malformed codes.",
     "Replayed by Vitest against src/engine/share/code.ts with the layouts of content/compositions.json. The expected codes come from an independent implementation of the format; SQL-4's finish_attempt_internal stores the same code for each finished attempt.",
     "code = layout + payload. The payload is a mixed-radix integer in lowercase base36 (no leading zero), least significant digit first: the archive flag (radix 2); then per round in layout order a Mystery's outcome (radix 6: 0 missed, 1 to 4 the solving clue, 5 voided) and category (radix 12, in the order geo, hist, sci, nat, film, music, art, book, sport, food, lang, soc), a choice round's outcome (radix 3: wrong, correct, voided), or the Encore's token (radix 11,001: 0 spot on, 1 under 1% off, n + 1 for n% off up to 998%, 1,000 over 999% off, 1,000 + n for n years off, 11,000 voided) and band (radix 3: none, close, bullseye).",
-    "roundTrips: rounds name each round's type and its result as the share text shows it (an Encore by its display). points and maxPoints are what the decoded code reports (a voided Mystery scores 4, a voided choice round 1).",
+    "roundTrips: rounds name each round's type and its result as the share text shows it (an Encore by its display). The types must derive the row's composition id by ARCHITECTURE §4.9 (the test checks it), so every row is a Daily SQL could finish. points and maxPoints are what the decoded code reports (a voided Mystery scores 4, a voided choice round 1).",
     "capacities: how many distinct payloads a composition has, the largest payload in base36 and whether it fits in 7 characters.",
     "malformed: codes and Daily numbers decodeShareCode turns down, including combinations no result produces (a voided Encore with a band, a spot-on Encore outside the bullseye)."
   ],
@@ -433,7 +433,7 @@
     },
     {
       "id": "c5m1e1",
-      "title": "[mc ×5, mystery, encore] with true/false and comparison rounds among the five, 9,999 years off",
+      "title": "[mc ×5, mystery, encore] from the archive, 9,999 years off",
       "number": 57,
       "composition": "c5m1e1",
       "archive": true,
@@ -444,12 +444,12 @@
           "voided": false
         },
         {
-          "type": "tf",
+          "type": "mc",
           "correct": false,
           "voided": false
         },
         {
-          "type": "comparison",
+          "type": "mc",
           "correct": true,
           "voided": false
         },

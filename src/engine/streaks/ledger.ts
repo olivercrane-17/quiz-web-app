@@ -7,8 +7,8 @@
  *
  * - **A read** (`get_streak`): the effective today from the request's zone
  *   and the latest date served, then `evaluateStreak`, then the decided gap
- *   statuses, the freezes, the best, the date-line candidate and its use
- *   are stored.
+ *   statuses, the freezes, the best (`storedBest`, which counts decided
+ *   dates only), the date-line candidate and its use are stored.
  * - **A finish** (the streak hook of `finish_attempt_internal`): the same
  *   evaluation first, with an on-time attempt's own date held pending,
  *   since it is still open at that moment; then the finish kind; then
@@ -16,11 +16,17 @@
  *   last finish's zone and offset (every finish). The figures after it come
  *   from `summarizeStreak`, so the request never decides anything twice.
  *
- * The kind of a finish: an on-time ranked finish is `on_time` when its date
- * is later than the last credited date (memo §14.1), otherwise `other`. An
- * unranked play (archive, a challenge of that date, or a resumed abandoned
- * attempt) is `repair` when its date is repairable at that moment, the
- * 168-hour cap included, otherwise `other`.
+ * The kind of a finish: an on-time ranked finish is `on_time` when its
+ * attempt earned streak credit as it started (memo §14.1's rule, which
+ * `dailyCredit` applies at `start_daily` and SQL stores as
+ * `attempts.streak_credit`), unless its date is already Played or
+ * Repaired; otherwise `other`. Credit is never decided again at the
+ * finish: a Daily started on D, left open while D + 1 was played to the
+ * end and then finished inside D's window was later than the last
+ * credited date when it started, so it plays D (PRD §4.4.2). An unranked
+ * play (archive, a challenge of that date, or a resumed abandoned attempt)
+ * is `repair` when its date is repairable at that moment, the 168-hour cap
+ * included, otherwise `other`.
  */
 import {
   localDateOf,
@@ -28,7 +34,7 @@ import {
   zoneOffsetMinutes,
 } from "../time/zone.ts";
 import type { EpochMs, LocalDate, TimeZone } from "../types/ids.ts";
-import { effectiveToday, lastCreditedDate } from "./credit.ts";
+import { effectiveToday } from "./credit.ts";
 import { evaluateStreak } from "./evaluate.ts";
 import { finishOutcome, type FinishOutcome } from "./finish.ts";
 import {
@@ -97,12 +103,22 @@ export interface LedgerRead {
   evaluation: StreakEvaluation;
 }
 
-export interface LedgerFinishRequest extends StreakRequest {
+interface LedgerFinishOf extends StreakRequest {
   /** The attempt's local date. */
   date: LocalDate;
-  /** `on_time`: a ranked attempt finished inside its window. `unranked`: anything else. */
-  play: "on_time" | "unranked";
 }
+
+/** A finished attempt: `on_time` for a ranked attempt finished inside its window, `unranked` for anything else. */
+export type LedgerFinishRequest =
+  | (LedgerFinishOf & {
+      play: "on_time";
+      /**
+       * The attempt's streak credit, decided as it started:
+       * `dailyCredit(...).streakCredit`, stored as `attempts.streak_credit`.
+       */
+      streakCredit: boolean;
+    })
+  | (LedgerFinishOf & { play: "unranked" });
 
 export interface LedgerFinish {
   ledger: StreakLedger;
@@ -169,7 +185,7 @@ export function readLedger(
       ...ledger,
       days: withStatus(ledger.days, evaluation.written),
       freezesHeld: evaluation.freezesHeld,
-      best: evaluation.best,
+      best: evaluation.storedBest,
       datelineCandidate: evaluation.datelineCandidate,
       datelineUsedAt: evaluation.datelineUsed
         ? request.at
@@ -206,8 +222,7 @@ export function finishLedger(
   let kind: FinishKind = "other";
   if (!isCredited(existingStatus)) {
     if (request.play === "on_time") {
-      const last = lastCreditedDate(stored.days);
-      if (last === null || request.date > last) kind = "on_time";
+      if (request.streakCredit) kind = "on_time";
     } else if (isRepairable(summaryInput(stored.days), request.date)) {
       kind = "repair";
     }
@@ -248,7 +263,7 @@ export function finishLedger(
       ...stored,
       ...outcome.counters,
       days,
-      best: after.best,
+      best: after.storedBest,
       lastRepairAt,
       lastFinish: {
         zone: request.zone,
