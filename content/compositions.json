@@ -1,0 +1,13 @@
+{
+  "$comment": [
+    "Share-link layouts (ARCHITECTURE §4.9, §4.10): each Daily composition id maps to the one base36 character that starts its share codes, so /s/42/a7joyr02 decodes as three Mysteries and an Encore.",
+    "A composition id names each run of identical round types by a letter and a count: mystery m, encore e, mc c, tf t, comparison p. Ordering (o) has no share alphabet in v1.",
+    "Layout codes are forever: published links decode by them, so an entry is only ever added, never changed, reused or removed. A scheduled composition needs an entry here, and its results must fit in 7 base36 characters; src/engine/share/code.ts (parseShareLayouts, fitsShareCode) refuses anything else, so m4e1, for one, can't take a layout.",
+    "a: v1's Daily. b and c: the two AC-DLY-09 compositions, c being synthesis arm B (five multiple choice, one Mystery, the Encore)."
+  ],
+  "layouts": {
+    "m3e1": "a",
+    "c9e1": "b",
+    "c5m1e1": "c"
+  }
+}
