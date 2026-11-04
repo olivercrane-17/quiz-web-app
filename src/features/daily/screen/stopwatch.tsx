@@ -104,7 +104,7 @@ export function Stopwatch({
         "outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground",
       )}
     >
-      <TimerIcon className="hidden shrink-0 @min-[17rem]/status:block" />
+      <TimerIcon className="hidden shrink-0 @min-[16rem]/status:block" />
       {time}
     </button>
   );

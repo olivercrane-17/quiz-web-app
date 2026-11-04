@@ -12,6 +12,7 @@
 import type { Page } from "@playwright/test";
 
 import { expect, test } from "./fixtures";
+import { setClock } from "./support/clock";
 
 test.describe("the greybox shell", () => {
   test("Home shows the four tab-bar destinations by name", async ({ page }) => {
@@ -187,13 +188,13 @@ test.describe("Wave 1 exit", () => {
     await expect(page).toHaveURL("/daily/42/results");
     await expect(page.locator("[data-score]")).toHaveText("2/12");
     const text = (
-      await page.locator("[data-share-text]").innerText()
-    ).replaceAll(" ", " ");
+      await page.locator("[data-share-text]").inputValue()
+    ).replaceAll("\u00a0", " ");
     expect(text.split("\n")).toEqual([
-      "Knewt Daily #42 · 2/12 · Encore 4% off 🎯",
-      "History 🟥🟥🟥✅",
-      "Geography 🟥🟥🟥🟥",
-      "Science & Tech 🟥🟥🟥✅",
+      "Knewt Daily #42 · 2/12 · Encore off by 4% 🎯",
+      "History 🟧🟧🟧✅",
+      "Geography 🟧🟧🟧🟧",
+      "Science & Tech 🟧🟧🟧✅",
       expect.stringMatching(/^http:\/\/127\.0\.0\.1:\d+\/daily$/),
     ]);
     await expect(
@@ -240,5 +241,76 @@ test.describe("Wave 1 exit", () => {
     );
     await expect(round.getByText(/Not Ostravia/)).toHaveCount(1);
     expect(await actions()).toEqual(before);
+  });
+});
+
+/** RITE round 1's fixes that need a whole Daily, or a clock that moves. */
+test.describe("RITE round 1 across the whole Daily", () => {
+  test.use({ timezoneId: "Europe/London" });
+
+  /** Next clue to the last clue, then the option named `option`. */
+  async function toOptionsAndPick(page: Page, option: RegExp) {
+    for (let clue = 1; clue < 4; clue += 1) {
+      await page
+        .getByRole("button", { name: /^(Next clue|Last clue)/ })
+        .click();
+    }
+    await page.getByRole("button", { name: option }).click();
+  }
+
+  test("R1-06 the stopwatch picks up after a reload: 90 s on Mystery 1, 30 s on Mystery 2, then 2:00", async ({
+    page,
+  }) => {
+    // A clock that runs, so the mock server and the page move together.
+    await setClock(page, "2026-11-01T09:00:00", "Europe/London");
+    await page.goto("/daily");
+    const round = page.locator("[data-round-area]");
+    await expect(round.getByRole("heading", { name: /clue 1/i })).toBeVisible();
+    await page.clock.fastForward(90_000);
+    // Mystery 1 solved on clue 1 by a typed guess: Odile Marsh.
+    await round.getByRole("combobox").fill("Odile");
+    await page.getByRole("option", { name: /Odile Marsh/ }).click();
+    await round.getByRole("button", { name: "Guess", exact: true }).click();
+    await page.getByRole("button", { name: "Next mystery" }).click();
+    await expect(round.getByText(/^Mystery 2 of 3/)).toBeVisible();
+    await expect(round.getByRole("heading", { name: /clue 1/i })).toBeVisible();
+    await page.clock.fastForward(30_000);
+    const watch = page.locator("[data-stopwatch]");
+    await expect(watch).toHaveText(/^2:0[0-2]$/);
+
+    await page.reload();
+    await expect(round.getByText(/^Mystery 2 of 3/)).toBeVisible();
+    // Not 0:00: the server's figure for both rounds came back with the page.
+    await expect(watch).toHaveText(/^2:0[0-3]$/);
+  });
+
+  test("R1-34 every screen of the Daily has one h1, and the results open on their heading", async ({
+    page,
+  }) => {
+    await page.clock.setFixedTime(new Date("2026-11-01T09:00:00Z"));
+    await page.goto("/daily");
+    const visibleH1 = page.locator("h1:visible");
+    for (const [answer, next] of [
+      [/Odile Marsh/, "Next mystery"],
+      [/Ostravia/, "Next mystery"],
+      [/Bismuth/, "On to the Encore"],
+    ] as const) {
+      await expect(
+        page.getByRole("heading", { name: /clue 1/i }),
+      ).toBeVisible();
+      await expect(visibleH1).toHaveCount(1);
+      await toOptionsAndPick(page, answer);
+      // The reveal's heading is the h1 now.
+      await expect(visibleH1).toHaveCount(1);
+      await page.getByRole("button", { name: next }).click();
+    }
+    await page.getByLabel(/your number/i).fill("90");
+    await expect(visibleH1).toHaveCount(1);
+    await page.getByRole("button", { name: "Lock in" }).click();
+    await page.getByRole("button", { name: "See your results" }).click();
+    await expect(page).toHaveURL("/daily/42/results");
+    const heading = page.getByRole("heading", { level: 1, name: "Daily #42" });
+    await expect(heading).toBeFocused();
+    await expect(visibleH1).toHaveCount(1);
   });
 });

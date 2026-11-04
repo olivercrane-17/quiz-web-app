@@ -6,13 +6,16 @@
  * `rem`, so it follows the player's text size as well as the screen.
  *
  * - Wide enough: the pills, then the stopwatch with its icon.
- * - Narrower (under 360 px, or 200% text on a phone, RITE round 1 R1-03):
- *   the stopwatch drops its icon, then the pills give way to the same
- *   facts in words ("Mystery 1 of 3"), which wrap rather than overflow.
- *   The row wraps too, so nothing ever scrolls sideways.
+ * - Narrower (from 360 px down, or large text on a phone, RITE round 1
+ *   R1-03): the stopwatch drops its icon, then the pills give way to the
+ *   same facts in words ("Mystery 1 of 3"). The words keep their natural
+ *   width, so at 200% text they wrap by word on a line of their own and the
+ *   stopwatch drops under them, rather than being squeezed letter by
+ *   letter. Nothing ever scrolls sideways.
  *
- * The thresholds are greybox values measured against the greybox header;
- * DS-1's restyled pills and bar bring their own (a FIX-DS follow-up).
+ * The thresholds were measured against the greybox header: four 38 px
+ * pills need 14.5rem beside the stopwatch, and 16rem with its icon. DS-1's
+ * restyled pills and bar bring their own (a FIX-DS follow-up).
  */
 import type { ReactNode } from "react";
 
@@ -37,7 +40,7 @@ export function HeaderStatus({
   return (
     <div className="@container/status w-full" data-header-status="">
       <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
-        <div className="hidden min-w-0 flex-1 @min-[15.5rem]/status:block">
+        <div className="hidden min-w-0 flex-auto @min-[14.5rem]/status:block">
           <ProgressSegments
             label={DAILY_SCREEN_COPY.progress}
             segments={progressSegments(run)}
@@ -46,7 +49,7 @@ export function HeaderStatus({
         </div>
         <p
           data-progress-text=""
-          className="min-w-0 flex-1 text-sm font-semibold break-words @min-[15.5rem]/status:hidden"
+          className="min-w-0 flex-auto text-sm font-semibold @min-[14.5rem]/status:hidden"
         >
           {progressText(run)}
         </p>

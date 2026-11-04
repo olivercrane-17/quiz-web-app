@@ -78,9 +78,6 @@ test.describe("Today's Daily card", () => {
     await expect(
       card.getByRole("link", { name: "Play today's Daily" }),
     ).toHaveAttribute("href", "/daily");
-    await expect(
-      card.getByRole("link", { name: "Past 7 days" }),
-    ).toHaveAttribute("href", "/archive");
   });
 
   test("mints the guest identity on the device and registers nothing until a write (§9.1)", async ({
@@ -164,14 +161,17 @@ test.describe("the stop screen's routing", () => {
     ).toHaveAttribute("href", "/daily");
   });
 
-  test("for another date, points to the archive", async ({ page }) => {
+  test("R1-02 for another date, says the results moved and offers Today, never the archive's missing route", async ({
+    page,
+  }) => {
     await page.goto("/daily/30/results");
     await expect(
       page.getByText("These results have moved to the archive."),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Past 7 days" }),
-    ).toHaveAttribute("href", "/archive");
+      page.getByRole("link", { name: "Go to Today", exact: true }),
+    ).toHaveAttribute("href", "/");
+    await expect(page.locator('a[href="/archive"]')).toHaveCount(0);
   });
 
   test("for an address with no Daily number, says the page can't be found", async ({
@@ -273,7 +273,7 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
     await page.getByRole("button", { name: "See your results" }).click();
     await expect(page).toHaveURL("/daily/56/results");
     await expect(page.locator("[data-score]")).toHaveText("9/9");
-    const lines = (await page.locator("[data-share-text]").innerText()).split(
+    const lines = (await page.locator("[data-share-text]").inputValue()).split(
       "\n",
     );
     expect(lines[0]).toMatch(/^Knewt Daily.#56 · 9\/9 · Encore/);
@@ -307,12 +307,12 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
     await page.getByRole("button", { name: "Lock in" }).click();
     await page.getByRole("button", { name: "See your results" }).click();
     await expect(page.locator("[data-score]")).toHaveText("6/9");
-    const lines = (await page.locator("[data-share-text]").innerText()).split(
+    const lines = (await page.locator("[data-share-text]").inputValue()).split(
       "\n",
     );
     expect(lines.slice(1, -1)).toEqual([
       `Questions ${"✅".repeat(5)}`,
-      "Film & TV 🟥🟥🟥✅",
+      "Film & TV 🟧🟧🟧✅",
     ]);
   });
 
@@ -340,5 +340,486 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
       card.getByRole("link", { name: "See results" }),
     ).toHaveAttribute("href", "/daily/42/results");
     await expect(card).toContainText("Next Daily in 15h 0m");
+  });
+});
+
+/** One analytics event as the mock build records it (`window.__qzTrackLog`). */
+interface Tracked {
+  name: string;
+  props: Record<string, unknown>;
+}
+
+/** The props of every `name` event this page has tracked so far. */
+async function tracked(page: Page, name: string): Promise<unknown[]> {
+  const log = await page.evaluate(
+    () =>
+      (window as unknown as { __qzTrackLog?: Tracked[] }).__qzTrackLog ?? [],
+  );
+  return log.filter((event) => event.name === name).map((e) => e.props);
+}
+
+/** The page's polite status region (src/ui/announce.ts). */
+const statusRegion = (page: Page) => page.locator("#qz-live-polite");
+
+/** No Web Share, as in desktop Chromium on Linux and the in-app browsers round 1 met. */
+async function withoutWebShare(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    const proto = Navigator.prototype as unknown as Record<string, unknown>;
+    delete proto.share;
+    delete proto.canShare;
+  });
+}
+
+/** RITE round 1's findings for the Daily (docs/playtests/rite-1.md, FIX-DLY). */
+test.describe("RITE round 1", () => {
+  test.describe("Share (R1-01, PRD §3.5.2)", () => {
+    test.use({ permissions: ["clipboard-read", "clipboard-write"] });
+
+    test("AC-SHR-05 with navigator.share absent, the stop screen's Share copies its text and logs share_complete with method clipboard", async ({
+      page,
+    }) => {
+      await withoutWebShare(page);
+      await mockInit(page, { scenario: "finished_today" });
+      await page.goto("/daily/42/results");
+      const box = page.locator("[data-share-text]");
+      await expect(box).toHaveValue(/^Knewt Daily/);
+      await page.getByRole("button", { name: "Share", exact: true }).click();
+      await expect(statusRegion(page)).toHaveText(
+        "Copied. Paste it into your group chat.",
+      );
+      await expect(
+        page
+          .locator("[data-share-button]")
+          .getByText("Copied. Paste it into your group chat."),
+      ).toBeVisible();
+      expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+        await box.inputValue(),
+      );
+      expect(await tracked(page, "share_open")).toEqual([
+        { mode: "daily", surface: "stop" },
+      ]);
+      expect(await tracked(page, "share_complete")).toEqual([
+        { method: "clipboard", mode: "daily", surface: "stop" },
+      ]);
+    });
+
+    test("R1-01 a keyboard alone selects just the share text, then reaches Share and copies with Enter", async ({
+      page,
+    }) => {
+      await withoutWebShare(page);
+      await mockInit(page, { scenario: "finished_today" });
+      await page.goto("/daily/42/results");
+      // The results open on their heading (R1-34); the share box is next.
+      await expect(
+        page.getByRole("heading", { level: 1, name: "Daily #42" }),
+      ).toBeFocused();
+      await page.keyboard.press("Tab");
+      const box = page.getByRole("textbox", { name: "Your share text" });
+      await expect(box).toBeFocused();
+      await page.keyboard.press("ControlOrMeta+a");
+      const text = await box.inputValue();
+      // Select-all in the box takes the share alone, never the answers around it.
+      expect(
+        await box.evaluate((el: HTMLTextAreaElement) => [
+          el.selectionStart,
+          el.selectionEnd,
+        ]),
+      ).toEqual([0, text.length]);
+      await page.keyboard.press("Tab");
+      await expect(
+        page.getByRole("button", { name: "Share", exact: true }),
+      ).toBeFocused();
+      await page.keyboard.press("Enter");
+      await expect(statusRegion(page)).toHaveText(
+        "Copied. Paste it into your group chat.",
+      );
+      expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+        text,
+      );
+    });
+
+    test("R1-01 shows the text selected in a box with 'Copy this text' when neither Web Share nor the clipboard works", async ({
+      page,
+    }) => {
+      await withoutWebShare(page);
+      await page.addInitScript(() => {
+        Clipboard.prototype.writeText = () =>
+          Promise.reject(new DOMException("Denied", "NotAllowedError"));
+      });
+      await mockInit(page, { scenario: "finished_today" });
+      await page.goto("/daily/42/results");
+      await page.getByRole("button", { name: "Share", exact: true }).click();
+      const fallback = page.getByRole("textbox", { name: "Copy this text" });
+      await expect(fallback).toBeFocused();
+      const text = await page.locator("[data-share-text]").inputValue();
+      await expect(fallback).toHaveValue(text);
+      expect(
+        await fallback.evaluate((el: HTMLTextAreaElement) => [
+          el.selectionStart,
+          el.selectionEnd,
+        ]),
+      ).toEqual([0, text.length]);
+      expect(await tracked(page, "share_complete")).toEqual([]);
+      await page.keyboard.press("ControlOrMeta+c");
+      await expect
+        .poll(() => tracked(page, "share_complete"))
+        .toEqual([{ method: "manual", mode: "daily", surface: "stop" }]);
+    });
+
+    test("AC-SHR-04 counts one share_complete when Web Share resolves, and a share_cancel and nothing more when it is dismissed", async ({
+      page,
+    }) => {
+      await page.addInitScript(() => {
+        const page = window as unknown as {
+          __shared: unknown[];
+          __shareAnswer?: "abort";
+        };
+        page.__shared = [];
+        Object.defineProperty(Navigator.prototype, "share", {
+          configurable: true,
+          value(data: unknown) {
+            page.__shared.push(data);
+            return page.__shareAnswer === "abort"
+              ? Promise.reject(new DOMException("Share canceled", "AbortError"))
+              : Promise.resolve();
+          },
+        });
+      });
+      await mockInit(page, { scenario: "finished_today" });
+      await page.goto("/daily/42/results");
+      const share = page.getByRole("button", { name: "Share", exact: true });
+      await share.click();
+      await expect
+        .poll(() => tracked(page, "share_complete"))
+        .toEqual([{ method: "native", mode: "daily", surface: "stop" }]);
+      // The text alone, with the link as its last line.
+      expect(
+        await page.evaluate(
+          () => (window as unknown as { __shared: unknown[] }).__shared,
+        ),
+      ).toEqual([
+        { text: await page.locator("[data-share-text]").inputValue() },
+      ]);
+
+      await page.evaluate(() => {
+        (window as unknown as { __shareAnswer: string }).__shareAnswer =
+          "abort";
+      });
+      await share.click();
+      await expect
+        .poll(() => tracked(page, "share_cancel"))
+        .toEqual([{ mode: "daily", surface: "stop" }]);
+      expect(await tracked(page, "share_complete")).toHaveLength(1);
+      expect(await tracked(page, "share_open")).toHaveLength(2);
+    });
+
+    test("AC-SHR-11 the finished home card's Share copies the stop screen's own text and logs share_open with surface home", async ({
+      page,
+    }) => {
+      await withoutWebShare(page);
+      await mockInit(page, { scenario: "finished_today" });
+      await page.goto("/");
+      const card = page.locator('[data-daily-card="finished"]');
+      await card.getByRole("button", { name: "Share", exact: true }).click();
+      await expect(statusRegion(page)).toHaveText(
+        "Copied. Paste it into your group chat.",
+      );
+      const fromHome = await page.evaluate(() =>
+        navigator.clipboard.readText(),
+      );
+      expect(await tracked(page, "share_open")).toEqual([
+        { mode: "daily", surface: "home" },
+      ]);
+      expect(await tracked(page, "share_complete")).toEqual([
+        { method: "clipboard", mode: "daily", surface: "home" },
+      ]);
+      await page.goto("/daily/42/results");
+      expect(await page.locator("[data-share-text]").inputValue()).toBe(
+        fromHome,
+      );
+    });
+  });
+
+  test("R1-02 Today's Daily card shows no Past 7 days link while the archive has no route", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const card = page.locator("[data-daily-card]");
+    await expect(card.locator("li").first()).toHaveText("A person · Easy");
+    await expect(card.getByRole("link", { name: "Past 7 days" })).toHaveCount(
+      0,
+    );
+    await expect(page.locator('a[href="/archive"]')).toHaveCount(0);
+  });
+
+  test.describe("the Daily header on a phone (R1-03)", () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+
+    test("R1-03 at 200% text the header fits: the pills give way to words, the stopwatch drops its icon, nothing scrolls sideways", async ({
+      page,
+    }) => {
+      await page.goto("/daily");
+      await expect(
+        page.getByRole("heading", { name: /clue 1/i }),
+      ).toBeVisible();
+      await page.addStyleTag({
+        content: "html { font-size: 200% !important; }",
+      });
+      await expect(page.locator("[data-progress-text]")).toHaveText(
+        "Mystery 1 of 3",
+      );
+      await expect(
+        page.getByRole("list", { name: "Daily progress" }),
+      ).toBeHidden();
+      const watch = page.locator("[data-stopwatch]");
+      await expect(watch).toHaveText("0:00");
+      await expect(watch.locator("svg")).toBeHidden();
+      const box = await watch.boundingBox();
+      expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(390);
+      expect(
+        await watch.evaluate((el) => el.scrollWidth <= el.clientWidth),
+      ).toBe(true);
+      const header = page.locator("header").first();
+      expect(
+        await header.evaluate((el) => el.scrollWidth <= el.clientWidth),
+      ).toBe(true);
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBeLessThanOrEqual(390);
+      // The words wrap by word on their own line, never letter by letter.
+      expect(
+        await page
+          .locator("[data-progress-text]")
+          .evaluate((el) => el.getBoundingClientRect().height),
+      ).toBeLessThan(150);
+    });
+
+    test("R1-03 with ordinary text the same phone keeps the pills and the stopwatch's icon", async ({
+      page,
+    }) => {
+      await page.goto("/daily");
+      await expect(
+        page.getByRole("list", { name: "Daily progress" }),
+      ).toBeVisible();
+      await expect(page.locator("[data-progress-text]")).toBeHidden();
+      await expect(page.locator("[data-stopwatch] svg")).toBeVisible();
+    });
+  });
+
+  test.describe("the More menu, How to play and the stopwatch (R1-04, R1-05)", () => {
+    test("R1-05 a first Daily says 'Take your time. Time only breaks ties.' beside the stopwatch, which opens More at Hide stopwatch", async ({
+      page,
+    }) => {
+      await page.goto("/daily");
+      await expect(
+        page.getByText("Take your time. Time only breaks ties."),
+      ).toBeVisible();
+      const watch = page.locator("[data-stopwatch]");
+      await watch.click();
+      const menu = page.getByRole("menu", { name: "More" });
+      await expect(menu).toBeVisible();
+      await expect(
+        menu.getByRole("menuitem", { name: "Hide stopwatch" }),
+      ).toBeFocused();
+      await expect(watch).toHaveAttribute("aria-expanded", "true");
+      await page.keyboard.press("Escape");
+      await expect(menu).toBeHidden();
+      await expect(watch).toBeFocused();
+    });
+
+    test("R1-04 the next date's Daily, once one is finished, shows no first-Daily hint", async ({
+      page,
+    }) => {
+      await mockInit(page, { scenario: "finished_today" });
+      await page.goto("/");
+      await expect(page.locator('[data-daily-card="finished"]')).toBeVisible();
+      // Monday 2 November: Daily #43, after a finished #42.
+      await page.clock.setFixedTime(new Date("2026-11-02T09:00:00Z"));
+      await page.goto("/daily");
+      await expect(
+        page.getByRole("heading", { name: /clue 1/i }),
+      ).toBeVisible();
+      await expect(page.locator("[data-stopwatch]")).toBeVisible();
+      await expect(
+        page.getByText("Take your time. Time only breaks ties."),
+      ).toHaveCount(0);
+      await page.getByRole("button", { name: "More" }).click();
+      await page.getByRole("menuitem", { name: "How to play" }).click();
+      expect(await tracked(page, "how_to_play_open")).toEqual([
+        { round: 1, first_daily: false },
+      ]);
+    });
+
+    test("AC-DLY-30 More opens How to play: the five parts in order, focus back on the clue when it closes, one how_to_play_open", async ({
+      page,
+    }) => {
+      await page.goto("/daily");
+      const clue = page.getByRole("heading", { name: /clue 1/i });
+      await expect(clue).toBeVisible();
+      await page.getByRole("button", { name: "More" }).click();
+      await page.getByRole("menuitem", { name: "How to play" }).click();
+      const sheet = page.getByRole("dialog", { name: "How to play" });
+      await expect(sheet).toBeVisible();
+      await expect(sheet.getByRole("heading", { level: 3 })).toHaveText([
+        "The clue ladder",
+        "The points",
+        "Clue 4",
+        "The Encore",
+        "The ranking",
+      ]);
+      await expect(sheet).toContainText(
+        "A wrong guess costs exactly what Next clue costs",
+      );
+      await page.keyboard.press("Escape");
+      await expect(sheet).toBeHidden();
+      await expect(clue).toBeFocused();
+      expect(await tracked(page, "how_to_play_open")).toEqual([
+        { round: 1, first_daily: true },
+      ]);
+    });
+
+    test("AC-DLY-12 the stopwatch hides from More and stays hidden after a reload, comes back from More, and never speaks", async ({
+      page,
+    }) => {
+      await page.goto("/daily");
+      const watch = page.locator("[data-stopwatch]");
+      await expect(watch).toHaveAttribute("aria-live", "off");
+      await page.getByRole("button", { name: "More" }).click();
+      await page.getByRole("menuitem", { name: "Hide stopwatch" }).click();
+      await expect(watch).toHaveCount(0);
+      // Its hint goes with it.
+      await expect(
+        page.getByText("Take your time. Time only breaks ties."),
+      ).toHaveCount(0);
+      expect(await tracked(page, "settings_change")).toEqual([
+        { setting: "stopwatch", value: "hidden" },
+      ]);
+      await page.reload();
+      await expect(
+        page.getByRole("heading", { name: /clue 1/i }),
+      ).toBeVisible();
+      await expect(watch).toHaveCount(0);
+      await page.getByRole("button", { name: "More" }).click();
+      await page.getByRole("menuitem", { name: "Show stopwatch" }).click();
+      await expect(watch).toBeVisible();
+      await expect(watch).toHaveAttribute("aria-live", "off");
+    });
+  });
+
+  test.describe("the stop screen (R1-07, R1-16, R1-19, D7, R1-34)", () => {
+    test.beforeEach(async ({ page }) => {
+      await mockInit(page, { scenario: "finished_today" });
+      await page.goto("/daily/42/results");
+      await expect(page.locator("[data-score]")).toHaveText("9/12");
+    });
+
+    test("R1-07 the Encore row says the Encore breaks ties and scores no points", async ({
+      page,
+    }) => {
+      const row = page.locator('[data-round-row="encore"]');
+      await expect(row).toContainText("Breaks ties. Scores no points.");
+    });
+
+    test("R1-16 the grid paints every clue used before the solve 🟧, never red, and explains itself in one line", async ({
+      page,
+    }) => {
+      const rows = page.locator("[data-score-rows]");
+      await expect(rows).toContainText("History ✅⬜⬜⬜");
+      await expect(rows).toContainText("Geography 🟧✅⬜⬜");
+      await expect(rows).toContainText("Science & Tech 🟧🟧✅⬜");
+      await expect(rows).not.toContainText("🟥");
+      await expect(page.locator("[data-legend]")).toHaveText(
+        "🟧 clue used · ✅ solved · ⬜ not needed",
+      );
+    });
+
+    test("R1-19 the share's first line says 'Encore off by 4%', while the Encore row keeps '4% off'", async ({
+      page,
+    }) => {
+      const text = await page.locator("[data-share-text]").inputValue();
+      expect(text.split("\n")[0]?.replaceAll(" ", " ")).toBe(
+        "Knewt Daily #42 · 9/12 · Encore off by 4% 🎯",
+      );
+      await expect(page.locator('[data-round-row="encore"]')).toContainText(
+        ": 4% off",
+      );
+    });
+
+    test("R1-05 D7 the score card shows the total time, which only breaks ties, and the share never carries a time", async ({
+      page,
+    }) => {
+      await expect(page.locator("[data-time]")).toHaveText(
+        /^Time \d+:\d\d · only breaks ties$/,
+      );
+      // Every line but the link, whose port would read as a time.
+      const lines = (await page.locator("[data-share-text]").inputValue())
+        .split("\n")
+        .slice(0, -1);
+      expect(lines.join("\n")).not.toMatch(/\d+:\d\d/);
+    });
+
+    test("R1-34 the results open on their heading, the route's one h1", async ({
+      page,
+    }) => {
+      const heading = page.getByRole("heading", { level: 1 });
+      await expect(heading).toHaveText("Daily #42");
+      await expect(heading).toBeFocused();
+    });
+  });
+
+  test("R1-08 a solved Mystery's pill shows +3 and names its points, and no pill acts like a button", async ({
+    page,
+  }) => {
+    await mockInit(page, { scenario: "in_progress_mystery_2" });
+    await page.goto("/daily");
+    const list = page.getByRole("list", { name: "Daily progress" });
+    const pills = list.getByRole("listitem");
+    await expect(pills).toHaveCount(4);
+    await expect(pills.first()).toContainText("+3");
+    await expect(pills.first()).toContainText(
+      "Mystery 1, solved on clue 2, 3 points",
+    );
+    await expect(list.getByRole("button")).toHaveCount(0);
+    for (const pill of await pills.all()) {
+      expect(await pill.evaluate((el) => getComputedStyle(el).cursor)).not.toBe(
+        "pointer",
+      );
+    }
+  });
+
+  test("R1-34 the Daily screen has one h1 while a round shows: the round's own", async ({
+    page,
+  }) => {
+    await page.goto("/daily");
+    await expect(page.getByRole("heading", { name: /clue 1/i })).toBeVisible();
+    await expect(page.locator("h1")).toHaveCount(1);
+  });
+
+  test.describe("Leave (R1-38)", () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+
+    test("R1-38 Leave shows 'Saved' on Today, above the tab bar, and says it in the status region", async ({
+      page,
+    }) => {
+      await page.goto("/daily");
+      await expect(
+        page.getByRole("heading", { name: /clue 1/i }),
+      ).toBeVisible();
+      await page
+        .getByRole("link", { name: "Leave the Daily. Your progress is saved." })
+        .click();
+      await expect(page).toHaveURL("/");
+      const toast = page.locator("[data-toast]");
+      await expect(toast).toHaveText("Saved");
+      await expect(toast).toBeVisible();
+      await expect(statusRegion(page)).toHaveText("Saved");
+      const bar = await page
+        .locator('nav[data-placement="bottom"]')
+        .boundingBox();
+      const pill = await toast.boundingBox();
+      expect((pill?.y ?? 0) + (pill?.height ?? 0)).toBeLessThanOrEqual(
+        (bar?.y ?? 0) - 16 + 1,
+      );
+    });
   });
 });
