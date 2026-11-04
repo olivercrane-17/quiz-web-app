@@ -6,7 +6,7 @@
 select private.t_now('2026-11-04T12:00:00Z');
 update private.config set value = '0' where key = 'egress_sample_rate';
 update private.config
-   set value = '{"header": "x-forwarded-for", "hop": "first", "verified": true}'
+   set value = '{"header": "x-forwarded-for", "hop": "first", "verified": false}'
  where key = 'client_ip';
 update private.config
    set value = value || '{"identity_all_1h": {"cap": 5000, "window_s": 3600},

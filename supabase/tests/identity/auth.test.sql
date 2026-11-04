@@ -30,7 +30,7 @@ begin
   perform private.t_now('2026-10-27T09:00:00Z');
   update private.config set value = '0' where key = 'egress_sample_rate';
   insert into private.config (key, value)
-  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": true}')
+  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": false}')
   on conflict (key) do update set value = excluded.value;
   update private.config
      set value = value || '{"identity_all_1h": {"cap": 5000, "window_s": 3600},
@@ -67,11 +67,13 @@ begin
         (v_unknown, v_secret, 'an id the server has never seen')
       ) c(player, secret, what)
     loop
-      -- An unknown id registers through register_player (and the other
-      -- "(auth, registers)" RPCs of later tickets); every other RPC refuses it.
+      -- An unknown id registers through the "(auth, registers)" RPCs of
+      -- ARCHITECTURE §8.4, so only they skip this case; every other RPC,
+      -- including each one a later ticket adds, must refuse it.
       continue when v_case.player = v_unknown
-                and v_fn.proname not in ('get_profile', 'set_age_band', 'create_sync_code', 'create_claim',
-                                         'export_my_data', 'delete_player', 't_client_ip');
+                and v_fn.proname in ('register_player', 'start_daily', 'start_archive', 'start_challenge_run',
+                                     'start_pack_run', 'start_quiz_run', 'create_group', 'join_group',
+                                     'create_room', 'save_quiz', 'submit_report', 'set_heart');
       v_args := format('%L::uuid, %L::text', v_case.player, v_case.secret);
       for v_index in 3 .. v_fn.pronargs loop
         v_args := v_args || format(', %I => null::%s', v_fn.names[v_index], v_fn.types[v_index]);

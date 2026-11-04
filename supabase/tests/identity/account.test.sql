@@ -12,7 +12,7 @@ as $$
 begin
   update private.config set value = '0' where key = 'egress_sample_rate';
   insert into private.config (key, value)
-  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": true}')
+  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": false}')
   on conflict (key) do update set value = excluded.value;
   update private.config
      set value = value || '{"identity_all_1h": {"cap": 5000, "window_s": 3600},
@@ -153,8 +153,11 @@ $$;
 select 'PASS SQL-2 delete_player answers unavailable until its attended body is applied';
 
 -- t_client_ip (§8.6): test identities only; it says whether the address
--- the limiter keys on is the forged 203.0.113.7, with booleans, hop kinds
--- and header names, never an address.
+-- the limiter keys on is the forged 203.0.113.7, and what kind of address
+-- it is, with booleans, kinds and header names, never an address. Only
+-- chosen_kind "public" names a client: a rule that keys on no address
+-- ("none") or on a proxy's hop every client shares ("reserved") must not
+-- pass the contract test either.
 do $$
 declare
   v_id uuid;
@@ -162,6 +165,8 @@ declare
   v_main uuid;
   v_main_secret text;
   v_reply jsonb;
+  v_case record;
+  v_calls integer := 0;
   v_index integer;
 begin
   perform private.t_account_limits();
@@ -176,8 +181,10 @@ begin
   perform private.t_request('203.0.113.7, 93.184.216.34, 10.1.2.3',
                             '{"x-real-ip": "93.184.216.34", "apikey": "sb_publishable_x"}');
   v_reply := public.t_client_ip(v_id, v_secret);
+  v_calls := v_calls + 1;
   assert v_reply ->> 'ok' = 'true', format('t_client_ip: %s', v_reply);
-  assert (v_reply -> 'data' ->> 'chosen_forged')::boolean and (v_reply -> 'data' ->> 'first_hop_forged')::boolean
+  assert (v_reply -> 'data' ->> 'chosen_forged')::boolean and v_reply -> 'data' ->> 'chosen_kind' = 'forged'
+     and (v_reply -> 'data' ->> 'first_hop_forged')::boolean
      and not (v_reply -> 'data' ->> 'last_hop_forged')::boolean and (v_reply -> 'data' ->> 'hops')::integer = 3,
     format('with the first-hop rule: %s', v_reply);
   assert v_reply -> 'data' -> 'hop_kinds' = '["forged", "public", "reserved"]', format('hop kinds: %s', v_reply);
@@ -187,22 +194,40 @@ begin
   assert v_reply::text !~ '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' and strpos(v_reply::text, 'sb_publishable_x') = 0,
     format('the reply holds an address or a header value: %s', v_reply);
 
-  update private.config set value = '{"header": "x-forwarded-for", "hop": 1, "verified": true}' where key = 'client_ip';
-  v_reply := public.t_client_ip(v_id, v_secret);
-  assert not (v_reply -> 'data' ->> 'chosen_forged')::boolean, format('one hop from the right: %s', v_reply);
-  perform private.t_request(null, '{"x-real-ip": "203.0.113.7"}');
-  v_reply := public.t_client_ip(v_id, v_secret);
+  -- The kind of address each rule keys on, the forged hop first. Only the
+  -- public one would pass the contract test.
+  for v_case in
+    select * from (values
+      ('{"header": "x-forwarded-for", "hop": 1}'::jsonb, '203.0.113.7, 93.184.216.34, 10.1.2.3', '{}'::jsonb,
+       'public', 'one hop from the right, a client'),
+      ('{"header": "x-forwarded-for", "hop": "last"}', '203.0.113.7, 93.184.216.34, 10.1.2.3', '{}',
+       'reserved', 'the last hop, a proxy every client shares'),
+      ('{"header": "x-real-ip", "hop": "first"}', '203.0.113.7, 10.0.3.17', '{}',
+       'none', 'a header the gateway does not send'),
+      ('{"header": "x-forwarded-for", "hop": "Last"}', '203.0.113.7, 93.184.216.34', '{}',
+       'none', 'a rule client_ip() does not recognize'),
+      ('{"header": "x-forwarded-for", "hop": "first"}', null, '{"x-real-ip": "203.0.113.7"}',
+       'none', 'no X-Forwarded-For at all')
+    ) c(rule, xff, headers, kind, what)
+  loop
+    update private.config set value = v_case.rule where key = 'client_ip';
+    perform private.t_request(v_case.xff, v_case.headers);
+    v_reply := public.t_client_ip(v_id, v_secret);
+    v_calls := v_calls + 1;
+    assert v_reply -> 'data' ->> 'chosen_kind' = v_case.kind and not (v_reply -> 'data' ->> 'chosen_forged')::boolean,
+      format('%s: want chosen_kind %s, got %s', v_case.what, v_case.kind, v_reply);
+  end loop;
   assert (v_reply -> 'data' ->> 'hops')::integer = 0 and v_reply -> 'data' -> 'forged_headers' = '["x-real-ip"]'
      and not (v_reply -> 'data' ->> 'first_hop_forged')::boolean, format('no X-Forwarded-For: %s', v_reply);
 
-  for v_index in 4 .. 30 loop
+  for v_index in v_calls + 1 .. 30 loop
     perform public.t_client_ip(v_id, v_secret);
   end loop;
   v_reply := public.t_client_ip(v_id, v_secret);
   assert v_reply ->> 'code' = 'rate_limited' and v_reply ->> 'limit_scope' = 'player', format('the 31st call: %s', v_reply);
 end
 $$;
-select 'PASS SQL-2 t_client_ip reports where a forged first hop lands, for test identities, with no address';
+select 'PASS SQL-2 t_client_ip reports where a forged first hop lands and the kind of address chosen, for test identities, with no address';
 
 -- nightly_players runs as a job step. Until its attended body lands it
 -- removes nothing and alerts the owner once a day while test players

@@ -21,17 +21,30 @@
 -- delete_player answers unavailable and nightly_players leaves a daily
 -- owner_queue alert, both naming that migration.
 --
--- The client address is not trusted for anything a forged hop could abuse.
--- private.client_ip() reads the first X-Forwarded-For hop until the
--- client-ip contract test (CI-0) shows which hop a client cannot write, so
--- every address-keyed limit here has a project-wide bound beside it:
--- identity_all_1h refuses registrations, identity_test_all_1h test
--- registrations, sync_fail_all_1h and claim_fail_all_1h failed sync-code
--- and claim attempts. Normal trust needs all three of: the address under
--- identity_soft_1h, the project under identity_soft_all_1h, and a client
--- address rule marked "verified": true in private.config.client_ip. So
--- while the hop is unverified, every new identity registers as low trust,
--- which nobody sees (§8.5), and forged hops mint no trusted sock puppets.
+-- The client address is only as good as the hop private.client_ip() reads:
+-- the first X-Forwarded-For hop, until the client-ip contract test (CI-0)
+-- shows a hop a client cannot write and that rule is set with
+-- "verified": true. While a client can forge the hop the rule reads:
+--   * It escapes every per-address limit, so each has a project-wide bound
+--     beside it. identity_all_1h refuses registrations past its cap (PRD
+--     §3.10.1), which one such client can also trip for everyone, and
+--     identity_test_all_1h test registrations. Past identity_soft_all_1h
+--     every new identity is low trust, so forged hops mint at most that
+--     many normal-trust identities an hour. sync_fail_all_1h and
+--     claim_fail_all_1h count failed sync-code and claim attempts and alert
+--     the owner past their caps, but never refuse: refusing would let one
+--     client lock every player out of restores and claims, and 80-bit codes
+--     and 256-bit tokens need no such bound against guessing.
+--   * Low trust is set at registration only. It lifts at 24 hours or after
+--     2 finished Dailies whatever the rule says (PRD §3.10.1), so it holds a
+--     forged identity's weight back by a day at most.
+--   * A client can write another player's address as the hop and spend that
+--     address's limits: identity_1m, sync_fail_15m, sync_1d and claim_ip_1h
+--     then refuse the other player until their windows end.
+-- So nothing that weighs players (report weight, SQL-9) may rely on
+-- low_trust or on distinct address subjects until the rule is verified.
+-- The flag itself changes no limit and no trust: an unverified rule only
+-- leaves a daily owner_queue alert (nightly_players).
 --
 -- Data that later tickets own is read through hooks created here, each a
 -- stub that its owner replaces with create or replace (§8.15):
@@ -159,6 +172,10 @@ on conflict (kind, word) do nothing;
 -- The identity buckets §8.6 does not list. The project-wide ones bound what
 -- a forged client address could otherwise escape (see the header). Values
 -- already stored (an owner's tuning) win over these defaults.
+-- sync_fail_all_1h and claim_fail_all_1h never refuse (private.count_failure):
+-- past the cap they alert the owner once a window, and the hourly fold adds
+-- their excess to daily_aggregates under rate_limited like any bucket's, where
+-- for these two it counts failures past the bound, since nothing was refused.
 insert into private.config as c (key, value)
 values ('limits', '{
   "identity_soft_all_1h": {"cap": 1000, "window_s": 3600},
@@ -181,7 +198,8 @@ values ('low_trust', '{"lift_after_s": 86400, "lift_after_finishes": 2}')
 on conflict (key) do nothing;
 
 -- The client-address rule starts unverified. Whoever records CI-0's
--- verified rule sets "verified": true with it (§8.6).
+-- verified rule sets "verified": true with it (§8.6). The flag changes no
+-- limit and no trust; until it is set, nightly_players says so once a day.
 update private.config c
    set value = c.value || '{"verified": false}', updated_at = private.now()
  where c.key = 'client_ip' and c.value -> 'verified' is null;
@@ -200,15 +218,17 @@ as $$
   select coalesce(octet_length(p_text) = 43 and p_text ~ '^[A-Za-z0-9_-]{43}$', false)
 $$;
 
--- sha256 of text: secrets, claim tokens and normalized sync codes are
--- stored only this way.
+-- sha256 of text through pgcrypto's digest (ARCHITECTURE §8.5): secrets,
+-- claim tokens and normalized sync codes are stored only this way. The
+-- text goes in as its UTF-8 bytes, so the hash is the same bytes as core
+-- sha256(convert_to(text, 'UTF8')), which the tests compare against.
 create or replace function private.sha256_text(p_text text)
 returns bytea
 language sql
 immutable
 set search_path = ''
 as $$
-  select sha256(convert_to(p_text, 'UTF8'))
+  select extensions.digest(convert_to(p_text, 'UTF8'), 'sha256')
 $$;
 
 -- A v4 UUID in the form the device mints, so every stored id decodes on
@@ -278,7 +298,10 @@ as $$
     false)
 $$;
 
--- An owner alert of one kind and item, once per period (since p_since).
+-- An owner alert of one kind and item, once per period: none is written
+-- when one exists from p_since up to the clock. The upper bound matters to
+-- tests, which move the clock back and must not see a real alert written
+-- later (supabase/README.md §5: tests pass on a live database too).
 -- Details hold no player id or address.
 create or replace function private.alert_once(p_kind text, p_item text, p_detail jsonb, p_since timestamptz)
 returns boolean
@@ -289,12 +312,36 @@ as $$
 begin
   if exists (
     select 1 from private.alerts a
-     where a.kind = p_kind and a.detail ->> 'item' = p_item and a.at >= p_since) then
+     where a.kind = p_kind and a.detail ->> 'item' = p_item
+       and a.at >= p_since and a.at <= private.now()) then
     return false;
   end if;
   insert into private.alerts (kind, detail)
   values (p_kind, coalesce(p_detail, '{}'::jsonb) || jsonb_build_object('item', p_item));
   return true;
+end
+$$;
+
+-- A project-wide failure bound (sync_fail_all_1h, claim_fail_all_1h). It
+-- counts one failed attempt after the code or token was looked up and
+-- never refuses; past the cap it leaves one owner_queue alert per window.
+-- Refusing before the lookup would let one client spend the bound for
+-- everyone, a right code or a live token included (see the header).
+create or replace function private.count_failure(p_bucket text)
+returns void
+language plpgsql
+volatile
+set search_path = ''
+as $$
+begin
+  if not (private.hit_global(p_bucket)).allowed then
+    perform private.alert_once('owner_queue', p_bucket,
+      jsonb_build_object(
+        'cap', private.limit(p_bucket),
+        'why', 'More failed attempts than the cap in one window, project-wide: someone may be guessing. '
+          || 'Nothing was refused for it, and the per-address limits still hold (supabase/README.md, section 3).'),
+      private.window_start(private.now(), private.limit_window(p_bucket)));
+  end if;
 end
 $$;
 
@@ -524,10 +571,13 @@ $$;
 --    each refusing with rate_limited, its wait and scope, and giving back
 --    the hit the other counted (a tripped ceiling alerts the owner once an
 --    hour); test ids count only in their own buckets and are never low
---    trust. Low trust past either soft threshold or while the client
---    address is unverified. The player is inserted with on conflict do
---    nothing: the loser of a race between two first writes of one id gives
---    its hits back and goes back to step 3, so one player is created.
+--    trust. Low trust past either soft threshold: the address's
+--    (identity_soft_1h, PRD §3.10.1) or the project's
+--    (identity_soft_all_1h, which bounds what forged hops can mint at
+--    normal trust). Whether the client address rule is verified plays no
+--    part. The player is inserted with on conflict do nothing: the loser of
+--    a race between two first writes of one id gives its hits back and
+--    goes back to step 3, so one player is created.
 create or replace function private.authenticate(
   p_player uuid,
   p_secret text,
@@ -626,7 +676,7 @@ begin
     if not v_test then
       v_soft_ip := private.hit_ip('identity_soft_1h', v_ip);
       v_soft_all := private.hit_global('identity_soft_all_1h');
-      v_low := not v_soft_ip.allowed or not v_soft_all.allowed or not private.client_ip_verified();
+      v_low := not v_soft_ip.allowed or not v_soft_all.allowed;
     end if;
 
     v_created := private.create_player(p_player, v_hash, v_low, p_context, p_app);
@@ -859,10 +909,12 @@ end
 $$;
 
 -- Restores a player from its sync code onto a device, which sends the new
--- secret it minted. The failure counters come before the code is looked
--- at (AC-SYN-04): every attempt counts first and is given back when the
--- code is right (supabase/README.md §3). Typed forms are normalized
--- (AC-SYN-02). { player_id, profile, streak, last_daily }.
+-- secret it minted. The address's failure counters come before the code
+-- is looked at (AC-SYN-04): every attempt counts first and is given back
+-- when the code is right (supabase/README.md §3). The project-wide count
+-- of failures comes after the lookup and never refuses
+-- (private.count_failure). Typed forms are normalized (AC-SYN-02).
+-- { player_id, profile, streak, last_daily }.
 create or replace function public.redeem_sync_code(p_code text, p_new_secret text)
 returns jsonb
 language plpgsql
@@ -873,7 +925,6 @@ declare
   v_ip inet := private.client_ip();
   v_fail private.limit_result;
   v_day private.limit_result;
-  v_all private.limit_result;
   v_code text;
   v_player uuid;
 begin
@@ -892,23 +943,18 @@ begin
     perform private.unhit_ip('sync_fail_15m', v_ip);
     return private.rate_limited(v_day);
   end if;
-  v_all := private.hit_global('sync_fail_all_1h');
-  if not v_all.allowed then
-    perform private.unhit_ip('sync_fail_15m', v_ip);
-    perform private.unhit_ip('sync_1d', v_ip);
-    return private.rate_limited(v_all);
-  end if;
   v_code := private.crockford_normalize(p_code);
   if v_code is null or v_code !~ '^[0-9A-HJKMNP-TV-Z]{16}$' then
+    perform private.count_failure('sync_fail_all_1h');
     return private.err('invalid_input');
   end if;
   select s.player_id into v_player from private.sync_codes s where s.code_hash = private.sha256_text(v_code);
   if v_player is null then
+    perform private.count_failure('sync_fail_all_1h');
     return private.err('not_found');
   end if;
   perform private.unhit_ip('sync_fail_15m', v_ip);
   perform private.unhit_ip('sync_1d', v_ip);
-  perform private.unhit_global('sync_fail_all_1h');
   begin
     perform private.add_credential(v_player, private.sha256_text(p_new_secret), 'sync');
     return private.ok(private.restored_json(v_player));
@@ -977,7 +1023,9 @@ $$;
 -- The claim a token names, for the confirm step: ClaimPreview. A used or
 -- expired claim is expired, with current {"used": true | false} so the
 -- client can tell them apart (claim_link_used). Every call counts in
--- claim_ip_1h; only a token that names no claim counts as a failure.
+-- claim_ip_1h, which refuses before the token is looked at. A token that
+-- names no claim, or is malformed, counts as a failure project-wide after
+-- the lookup, which never refuses (private.count_failure).
 create or replace function public.peek_claim(p_token text)
 returns jsonb
 language plpgsql
@@ -987,7 +1035,6 @@ as $$
 declare
   v_ip inet := private.client_ip();
   v_limit private.limit_result;
-  v_fail private.limit_result;
   v_claim record;
 begin
   if private.over_cap(p_token) then
@@ -997,12 +1044,8 @@ begin
   if not v_limit.allowed then
     return private.rate_limited(v_limit);
   end if;
-  v_fail := private.hit_global('claim_fail_all_1h');
-  if not v_fail.allowed then
-    perform private.unhit_ip('claim_ip_1h', v_ip);
-    return private.rate_limited(v_fail);
-  end if;
   if not private.valid_token(p_token) then
+    perform private.count_failure('claim_fail_all_1h');
     return private.err('not_found');
   end if;
   select k.player_id, k.expires_at, k.redeemed_at, p.friendly_name, p.nickname
@@ -1011,9 +1054,9 @@ begin
     join private.players p on p.id = k.player_id
    where k.token_hash = private.sha256_text(p_token);
   if not found then
+    perform private.count_failure('claim_fail_all_1h');
     return private.err('not_found');
   end if;
-  perform private.unhit_global('claim_fail_all_1h');
   if v_claim.redeemed_at is not null then
     return private.err('expired', p_current => '{"used": true}');
   end if;
@@ -1032,8 +1075,8 @@ $$;
 -- Redeems a claim on this device with the new secret it minted: a claim
 -- credential for the same player, so the in-app copy keeps working. The
 -- update that sets redeemed_at makes it single use, also between two
--- concurrent redemptions (AC-IAB-04). { player_id, profile, streak,
--- last_daily }.
+-- concurrent redemptions (AC-IAB-04). Limits as peek_claim's.
+-- { player_id, profile, streak, last_daily }.
 create or replace function public.redeem_claim(p_token text, p_new_secret text)
 returns jsonb
 language plpgsql
@@ -1043,7 +1086,6 @@ as $$
 declare
   v_ip inet := private.client_ip();
   v_limit private.limit_result;
-  v_fail private.limit_result;
   v_hash bytea;
   v_claim record;
   v_player uuid;
@@ -1058,20 +1100,16 @@ begin
   if not v_limit.allowed then
     return private.rate_limited(v_limit);
   end if;
-  v_fail := private.hit_global('claim_fail_all_1h');
-  if not v_fail.allowed then
-    perform private.unhit_ip('claim_ip_1h', v_ip);
-    return private.rate_limited(v_fail);
-  end if;
   if not private.valid_token(p_token) then
+    perform private.count_failure('claim_fail_all_1h');
     return private.err('not_found');
   end if;
   v_hash := private.sha256_text(p_token);
   select k.expires_at, k.redeemed_at into v_claim from private.claims k where k.token_hash = v_hash;
   if not found then
+    perform private.count_failure('claim_fail_all_1h');
     return private.err('not_found');
   end if;
-  perform private.unhit_global('claim_fail_all_1h');
   if v_claim.redeemed_at is not null then
     return private.err('expired', p_current => '{"used": true}');
   end if;
@@ -1150,12 +1188,16 @@ end
 $$;
 
 -- For the client-ip contract test (§8.6), test identities only (others
--- are not_found). It reports, as booleans and header names and never as
--- addresses, where the forged X-Forwarded-For value 203.0.113.7 the test
--- sends ends up: whether private.client_ip() chose it, whether it is the
--- first or the last hop, the kind of each hop from left to right
--- ("forged", "reserved", "public" or "invalid"), the request's header
--- names, the headers that carry it, and the rule in force.
+-- are not_found). It reports, as booleans, kinds and header names and
+-- never as addresses, where the forged X-Forwarded-For value 203.0.113.7
+-- the test sends ends up: whether private.client_ip() chose it, the kind
+-- of address it chose (chosen_kind: "none" when it chose none, as with a
+-- header the gateway does not send or a rule it does not recognize, then
+-- "forged", "reserved" for a proxy's hop every client shares, or
+-- "public"), whether the forged value is the first or the last hop, the
+-- kind of each hop from left to right ("forged", "reserved", "public" or
+-- "invalid"), the request's header names, the headers that carry it, and
+-- the rule in force. Only chosen_kind "public" names a client.
 create or replace function public.t_client_ip(p_player uuid, p_secret text)
 returns jsonb
 language plpgsql
@@ -1166,6 +1208,7 @@ declare
   c_forged constant inet := '203.0.113.7';
   v_auth private.auth_result;
   v_limit private.limit_result;
+  v_chosen inet;
   v_headers jsonb;
   v_hops text[];
   v_count integer;
@@ -1213,8 +1256,14 @@ begin
     from jsonb_each_text(v_headers) h
    where exists (
      select 1 from unnest(string_to_array(h.value, ',')) v(hop) where private.parse_ip(v.hop) = c_forged);
+  v_chosen := private.client_ip();
   return private.ok(jsonb_build_object(
-    'chosen_forged', coalesce(private.client_ip() = c_forged, false),
+    'chosen_forged', coalesce(v_chosen = c_forged, false),
+    'chosen_kind', case
+      when v_chosen is null then 'none'
+      when v_chosen = c_forged then 'forged'
+      when private.is_reserved_ip(v_chosen) then 'reserved'
+      else 'public' end,
     'first_hop_forged', coalesce(private.parse_ip(v_hops[1]) = c_forged, false),
     'last_hop_forged', coalesce(private.parse_ip(v_hops[v_count]) = c_forged, false),
     'hops', v_count,
@@ -1239,7 +1288,8 @@ on conflict (name) do nothing;
 -- need nothing (each player's one claim row is overwritten), and test
 -- players older than a day stay, so one owner_queue alert a day names that
 -- migration while any exist. While the client-address rule is unverified,
--- one more alert a day says that new identities register as low trust.
+-- one more alert a day says so, and what a forged hop can still do (see
+-- the header); the flag itself changes no limit.
 create or replace function private.nightly_players()
 returns void
 language plpgsql
@@ -1257,8 +1307,10 @@ begin
   end if;
   if not private.client_ip_verified() then
     perform private.alert_once('owner_queue', 'client_ip_unverified',
-      jsonb_build_object('why', 'New identities register as low trust until the client-ip contract test '
-        || 'verifies the hop rule in private.config.client_ip and "verified": true is set (ARCHITECTURE §8.6, CI-0).'),
+      jsonb_build_object('why', 'The client-ip contract test has not verified the hop rule in private.config.client_ip. '
+        || 'Until it does and "verified": true is set, a client that forges the hop escapes the per-address limits '
+        || 'up to the project-wide bounds and can spend another address''s, so nothing may weigh players by '
+        || 'low trust or by distinct addresses (ARCHITECTURE §8.6, CI-0, supabase/README.md section 9).'),
       date_trunc('day', v_now, 'UTC'));
   end if;
 end

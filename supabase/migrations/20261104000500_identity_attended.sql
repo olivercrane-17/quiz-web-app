@@ -70,8 +70,8 @@ $$;
 -- Removes test players older than a day, at most 2,000 a night so the job
 -- stays short; any left over go the next night. Expired claims need
 -- nothing (each player's one claim row is overwritten). While the
--- client-address rule is unverified, one owner_queue alert a day says
--- that new identities register as low trust.
+-- client-address rule is unverified, one owner_queue alert a day says so,
+-- and what a forged hop can still do; the flag itself changes no limit.
 create or replace function private.nightly_players()
 returns void
 language plpgsql
@@ -94,8 +94,10 @@ begin
   end loop;
   if not private.client_ip_verified() then
     perform private.alert_once('owner_queue', 'client_ip_unverified',
-      jsonb_build_object('why', 'New identities register as low trust until the client-ip contract test '
-        || 'verifies the hop rule in private.config.client_ip and "verified": true is set (ARCHITECTURE §8.6, CI-0).'),
+      jsonb_build_object('why', 'The client-ip contract test has not verified the hop rule in private.config.client_ip. '
+        || 'Until it does and "verified": true is set, a client that forges the hop escapes the per-address limits '
+        || 'up to the project-wide bounds and can spend another address''s, so nothing may weigh players by '
+        || 'low trust or by distinct addresses (ARCHITECTURE §8.6, CI-0, supabase/README.md section 9).'),
       date_trunc('day', v_now, 'UTC'));
   end if;
 end

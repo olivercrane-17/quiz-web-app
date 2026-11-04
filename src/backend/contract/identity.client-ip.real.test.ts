@@ -4,11 +4,15 @@
  * first X-Forwarded-For hop, and Supabase does not say whether a client can
  * write that hop itself. This test sends a forged first hop, 203.0.113.7,
  * and asks t_client_ip where it landed. It fails while the address the
- * limiter keys on is the forged one, and it prints the report (booleans,
- * hop kinds and header names, never an address), so CI-0 can move the rule
- * to a hop the client cannot write, mark it "verified": true, and run this
- * again. Until the rule is verified, new identities register as low trust
- * (supabase/migrations/20261104000400_identity.sql).
+ * limiter keys on is the forged one, and also while it is no client's
+ * address at all: none (a header the gateway does not send, or a rule
+ * client_ip() does not recognize) or a reserved proxy hop every client
+ * shares, since either would put every player behind one subject. It prints
+ * the report (booleans, kinds and header names, never an address), so CI-0
+ * can move the rule to a hop the client cannot write, mark it
+ * "verified": true, and run this again. Until the rule is verified, a client
+ * that forges the hop escapes the per-address limits up to the project-wide
+ * bounds and can spend another address's (supabase/README.md §9).
  *
  * Runs only in the backend-contract workflow (QZ_REAL_BACKEND=1), with a
  * test identity; it skips itself in the sandbox.
@@ -27,6 +31,8 @@ const FORGED_HOP = "203.0.113.7";
 
 interface ClientIpReport {
   chosen_forged: boolean;
+  /** "none", "forged", "reserved" or "public": only "public" names a client. */
+  chosen_kind: string;
   first_hop_forged: boolean;
   last_hop_forged: boolean;
   hops: number;
@@ -67,7 +73,7 @@ async function clientIpReport(): Promise<{
 
 describe.skipIf(!REAL_BACKEND)("the client-ip contract", () => {
   it(
-    "SQL-2 the address the limiter keys on is not a hop the client wrote",
+    "SQL-2 the address the limiter keys on is a client's public address and not a hop the client wrote",
     async () => {
       const { body, report } = await clientIpReport();
       // The report is what CI-0 reads to choose the hop; it holds no address.
@@ -80,6 +86,14 @@ describe.skipIf(!REAL_BACKEND)("the client-ip contract", () => {
           "private.config.client_ip to a hop the client cannot write and set " +
           `"verified": true (ARCHITECTURE §8.6). Report: ${JSON.stringify(report)}`,
       ).toBe(false);
+      expect(
+        report.chosen_kind,
+        'private.client_ip() keys on no client\'s address: "none" when the rule names a ' +
+          "header the gateway does not send or a hop it does not recognize, " +
+          '"reserved" for a proxy hop every client shares. Either puts every ' +
+          "player behind one subject. Move private.config.client_ip to the hop " +
+          `that holds the client's public address (ARCHITECTURE §8.6). Report: ${JSON.stringify(report)}`,
+      ).toBe("public");
     },
     REAL_TIMEOUT_MS,
   );

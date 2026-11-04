@@ -8,8 +8,8 @@
 begin;
 
 -- The state every block starts from: the documented caps, the first-hop
--- rule marked verified (or not), and the low-trust lift.
-create or replace function private.t_identity_limits(p_verified boolean default true)
+-- rule unverified as shipped, and the low-trust lift.
+create or replace function private.t_identity_limits()
 returns void
 language plpgsql
 volatile
@@ -18,7 +18,7 @@ as $$
 begin
   update private.config set value = '0' where key = 'egress_sample_rate';
   insert into private.config (key, value)
-  values ('client_ip', jsonb_build_object('header', 'x-forwarded-for', 'hop', 'first', 'verified', p_verified))
+  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": false}')
   on conflict (key) do update set value = excluded.value;
   insert into private.config (key, value)
   values ('low_trust', '{"lift_after_s": 86400, "lift_after_finishes": 2}')
@@ -35,11 +35,11 @@ begin
 end
 $$;
 
--- AC-IDN-04, server half: 30 registrations from one address in 10 minutes
--- all pass at normal trust; a 21st inside one minute is refused with the
--- time left in the minute and scope ip, consuming nothing but the burst
--- counter; and the project ceiling refuses with scope project and alerts
--- the owner once.
+-- AC-IDN-04, server half, with the address rule as shipped: 30
+-- registrations from one address in 10 minutes all pass at normal trust; a
+-- 21st inside one minute is refused with the time left in the minute and
+-- scope ip, consuming nothing but the burst counter; and the project
+-- ceiling refuses with scope project and alerts the owner once.
 do $$
 declare
   v_index integer;
@@ -188,13 +188,16 @@ end
 $$;
 select 'PASS AC-IDN-07 two IPv6 addresses in one /64 share the identity counter and two /64s do not';
 
--- Normal trust also needs the project under its soft threshold and a
--- verified client-address rule; test identities are never low trust.
+-- Normal trust needs the address under identity_soft_1h and the project
+-- under identity_soft_all_1h, and nothing else: with the address rule
+-- unverified, without the flag or verified, a registration under both is
+-- normal (PRD §3.10.1). Test identities are never low trust.
 do $$
 declare
   v_index integer;
   v_id uuid;
   v_secret text;
+  v_rule jsonb;
 begin
   perform private.t_identity_limits();
   perform private.t_now('2026-10-25T07:00:00Z');
@@ -210,28 +213,31 @@ begin
   end loop;
 
   perform private.t_now('2026-10-25T08:00:00Z');
+  v_index := 0;
+  foreach v_rule in array array['{"header": "x-forwarded-for", "hop": "first", "verified": false}',
+                                '{"header": "x-forwarded-for", "hop": "first"}',
+                                '{"header": "x-forwarded-for", "hop": "first", "verified": true}']::jsonb[] loop
+    v_index := v_index + 1;
+    update private.config set value = v_rule where key = 'client_ip';
+    perform private.t_request('198.51.100.' || (110 + v_index));
+    select t.player_id, t.secret into v_id, v_secret from private.t_player('limits-rule-' || v_index) t;
+    assert public.register_player(v_id, v_secret, 'browser', 'none') ->> 'ok' = 'true', format('registration under %s', v_rule);
+    assert not (select p.low_trust from private.players p where p.id = v_id), format('low trust under %s', v_rule);
+  end loop;
   update private.config
      set value = '{"header": "x-forwarded-for", "hop": "first", "verified": false}'
    where key = 'client_ip';
-  perform private.t_request('198.51.100.110');
-  select t.player_id, t.secret into v_id, v_secret from private.t_player('limits-unverified') t;
-  assert public.register_player(v_id, v_secret, 'browser', 'none') ->> 'ok' = 'true', 'registration while unverified';
-  assert (select p.low_trust from private.players p where p.id = v_id), 'normal trust from an unverified address rule';
-  update private.config set value = '{"header": "x-forwarded-for", "hop": "first"}' where key = 'client_ip';
-  select t.player_id, t.secret into v_id, v_secret from private.t_player('limits-no-flag') t;
-  assert public.register_player(v_id, v_secret, 'browser', 'none') ->> 'ok' = 'true', 'registration without the flag';
-  assert (select p.low_trust from private.players p where p.id = v_id), 'a rule without "verified" counted as verified';
   select t.player_id, t.secret into v_id, v_secret from private.t_player('limits-unverified-test', true) t;
   assert public.register_player(v_id, v_secret, 'browser', 'none') ->> 'ok' = 'true', 'a test registration';
   assert not (select p.low_trust from private.players p where p.id = v_id), 'a test identity is low trust';
 end
 $$;
-select 'PASS SQL-2 normal trust needs the project under its soft threshold and a verified address rule';
+select 'PASS SQL-2 normal trust needs only the address and the project under their soft thresholds, verified address rule or not';
 
 -- A forged first hop escapes the per-address counters while the rule
--- reads it, so the project-wide bounds hold: forged registrations stay
--- low trust while the rule is unverified and stop at the project ceiling.
--- Test identities stop at their own project bound.
+-- reads it, so the project-wide bounds hold: forged registrations keep
+-- normal trust only up to identity_soft_all_1h, and stop at the project
+-- ceiling. Test identities stop at their own project bound.
 do $$
 declare
   v_index integer;
@@ -239,11 +245,13 @@ declare
   v_secret text;
   v_reply jsonb;
 begin
-  perform private.t_identity_limits(false);
+  perform private.t_identity_limits();
   perform private.t_now('2026-10-26T06:00:00Z');
   update private.config
      set value = value || '{"identity_all_1h": {"cap": 4, "window_s": 3600},
                             "identity_1m": {"cap": 1, "window_s": 60},
+                            "identity_soft_1h": {"cap": 1, "window_s": 3600},
+                            "identity_soft_all_1h": {"cap": 2, "window_s": 3600},
                             "identity_test_1h": {"cap": 1, "window_s": 3600},
                             "identity_test_all_1h": {"cap": 2, "window_s": 3600}}'
    where key = 'limits';
@@ -253,7 +261,8 @@ begin
     v_reply := public.register_player(v_id, v_secret, 'browser', 'none');
     if v_index <= 4 then
       assert v_reply ->> 'ok' = 'true', format('forged registration %s: %s', v_index, v_reply);
-      assert (select p.low_trust from private.players p where p.id = v_id), format('forged registration %s has normal trust', v_index);
+      assert (select p.low_trust from private.players p where p.id = v_id) = (v_index > 2),
+        format('forged registration %s: low trust %s', v_index, (select p.low_trust from private.players p where p.id = v_id));
     else
       assert v_reply ->> 'code' = 'rate_limited' and v_reply ->> 'limit_scope' = 'project',
         format('the project ceiling did not hold against forged hops: %s', v_reply);
@@ -274,6 +283,6 @@ begin
     format('a second test registration from one address: %s', v_reply);
 end
 $$;
-select 'PASS SQL-2 forged first hops stay low trust and stop at the project-wide bounds';
+select 'PASS SQL-2 forged first hops keep normal trust only up to the project soft threshold, and stop at the project-wide bounds';
 
 rollback;

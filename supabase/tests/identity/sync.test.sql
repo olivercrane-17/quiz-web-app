@@ -1,8 +1,9 @@
 -- Sync codes (ARCHITECTURE §8.4, §9.2; SQL-2): a code is 16 Crockford
 -- characters kept only as a hash, a new code ends the old one, typed forms
--- redeem the same code, failed attempts are counted before the code is
--- looked at, a redemption adds a device credential, and the 11th device
--- overwrites the least recently used one.
+-- redeem the same code, failed attempts are counted per address before the
+-- code is looked at (and project-wide after, never refusing), a
+-- redemption adds a device credential, and the 11th device overwrites the
+-- least recently used one.
 begin;
 
 create or replace function private.t_sync_limits()
@@ -14,7 +15,7 @@ as $$
 begin
   update private.config set value = '0' where key = 'egress_sample_rate';
   insert into private.config (key, value)
-  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": true}')
+  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": false}')
   on conflict (key) do update set value = excluded.value;
   update private.config
      set value = value || '{"identity_all_1h": {"cap": 5000, "window_s": 3600},
@@ -179,10 +180,15 @@ end
 $$;
 select 'PASS AC-SYN-04 the sixth failed sync-code attempt in 15 minutes from one address is refused without checking the code';
 
--- 20 failures a day per address, and a project-wide bound on failures
--- that a forged address cannot escape.
+-- 20 failures a day per address. Failures also count project-wide, but
+-- that bound never refuses: past it, guesses from forged addresses still
+-- get not_found, the right code still redeems from anywhere, and the owner
+-- hears once that hour.
 do $$
 declare
+  v_id uuid;
+  v_secret text;
+  v_code text;
   v_index integer;
   v_reply jsonb;
   v_device text := (select t.secret from private.t_player('sync-daily-device') t);
@@ -199,20 +205,41 @@ begin
   assert v_reply ->> 'code' = 'rate_limited' and v_reply ->> 'limit_scope' = 'ip'
      and (v_reply ->> 'retry_after_ms')::integer = 39600000, format('the 21st failure of the day: %s', v_reply);
 
+  perform private.t_now('2026-10-28T15:00:00Z');
+  perform private.t_request('198.51.100.147');
+  select t.player_id, t.secret into v_id, v_secret from private.t_player('sync-project-bound') t;
+  assert public.register_player(v_id, v_secret, 'browser', 'none') ->> 'ok' = 'true', 'setup: register';
+  v_code := public.create_sync_code(v_id, v_secret) -> 'data' ->> 'code';
   update private.config
      set value = value || '{"sync_fail_all_1h": {"cap": 3, "window_s": 3600}}'
    where key = 'limits';
-  perform private.t_now('2026-10-28T15:00:00Z');
-  for v_index in 1 .. 4 loop
+  for v_index in 1 .. 6 loop
     perform private.t_request('192.0.2.' || v_index || ', 198.51.100.147');
-    v_reply := public.redeem_sync_code('XXXXXXXXXXXXXXX' || v_index, v_device);
-    assert v_reply ->> 'code' = case when v_index <= 3 then 'not_found' else 'rate_limited' end,
+    v_reply := public.redeem_sync_code(case when v_index = 6 then 'not a code' else 'XXXXXXXXXXXXXXX' || v_index end, v_device);
+    assert v_reply ->> 'code' = case when v_index = 6 then 'invalid_input' else 'not_found' end,
       format('failure %s from a forged address: %s', v_index, v_reply);
   end loop;
-  assert v_reply ->> 'limit_scope' = 'project', format('the bound that refused: %s', v_reply);
+  assert (select r.hits from private.rate_counters r
+           where r.bucket = 'sync_fail_all_1h' and r.window_start = '2026-10-28T15:00:00Z'
+             and r.subject = private.subject('sync_fail_all_1h', 'project', '2026-10-28T15:00:00Z')) = 6,
+    'the failures were not all counted project-wide';
+
+  perform private.t_request('203.0.113.200');
+  v_reply := public.redeem_sync_code(v_code, (select t.secret from private.t_player('sync-project-bound-device') t));
+  assert v_reply ->> 'ok' = 'true' and v_reply -> 'data' ->> 'player_id' = v_id::text,
+    format('the right code past the project-wide bound: %s', v_reply);
+  assert (select r.hits from private.rate_counters r
+           where r.bucket = 'sync_fail_all_1h' and r.window_start = '2026-10-28T15:00:00Z'
+             and r.subject = private.subject('sync_fail_all_1h', 'project', '2026-10-28T15:00:00Z')) = 6,
+    'a redemption counted as a failure';
+  assert (select count(*) from private.alerts a
+           where a.kind = 'owner_queue' and a.detail ->> 'item' = 'sync_fail_all_1h'
+             and (a.detail ->> 'cap')::integer = 3
+             and a.at >= '2026-10-28T15:00:00Z' and a.at < '2026-10-28T16:00:00Z') = 1,
+    'the owner was not alerted exactly once that hour';
 end
 $$;
-select 'PASS SQL-2 sync-code failures are capped per day and project-wide';
+select 'PASS SQL-2 sync-code failures are capped per address a day, and past the project-wide bound the right code still redeems';
 
 -- 5 new codes a player a day; the refusal gives back the general hit.
 do $$

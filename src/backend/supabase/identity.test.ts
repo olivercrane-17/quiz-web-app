@@ -354,10 +354,11 @@ describe("export and deletion", () => {
 });
 
 describe("the recorded client-ip report", () => {
-  it("holds booleans, hop kinds and header names, and no address", () => {
+  it("holds booleans, kinds and header names, and no address", () => {
     expect(clientIp.ok).toBe(true);
     expect(Object.keys(clientIp.data).sort()).toEqual([
       "chosen_forged",
+      "chosen_kind",
       "first_hop_forged",
       "forged_headers",
       "header_names",

@@ -15,7 +15,7 @@ begin
     'private.nightly_players is still the unattended version: apply 20261104000500_identity_attended.sql';
   update private.config set value = '0' where key = 'egress_sample_rate';
   insert into private.config (key, value)
-  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": true}')
+  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": false}')
   on conflict (key) do update set value = excluded.value;
   update private.config
      set value = value || '{"identity_all_1h": {"cap": 5000, "window_s": 3600},

@@ -2,7 +2,7 @@
 -- token and the server keeps its hash for 10 minutes; a retry with the
 -- same token is the same claim; redeeming adds a credential for the same
 -- player, once; peeks and redemptions are limited per address, and failed
--- ones project-wide.
+-- ones are counted project-wide, a bound that alerts and never refuses.
 begin;
 
 create or replace function private.t_claim_limits()
@@ -14,7 +14,7 @@ as $$
 begin
   update private.config set value = '0' where key = 'egress_sample_rate';
   insert into private.config (key, value)
-  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": true}')
+  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": false}')
   on conflict (key) do update set value = excluded.value;
   update private.config
      set value = value || '{"identity_all_1h": {"cap": 5000, "window_s": 3600},
@@ -174,9 +174,11 @@ end
 $$;
 select 'PASS SQL-2 peek_claim previews a valid claim and tells an expired one from a used one';
 
--- 10 peeks and redemptions an address an hour, shared; tokens that name no
--- claim count against a project-wide bound that forged addresses cannot
--- escape, and a known token gives its failure back.
+-- 10 peeks and redemptions an address an hour, shared. Tokens that name no
+-- claim, and malformed ones, count project-wide, and a known token never
+-- does; that bound never refuses: past it, guesses from forged addresses
+-- still get not_found, a live token still peeks and redeems from anywhere,
+-- and the owner hears once that hour.
 do $$
 declare
   v_id uuid;
@@ -208,15 +210,40 @@ begin
   update private.config
      set value = value || '{"claim_fail_all_1h": {"cap": 2, "window_s": 3600}}'
    where key = 'limits';
-  for v_index in 1 .. 3 loop
+  for v_index in 1 .. 5 loop
     perform private.t_request('192.0.2.' || (10 + v_index) || ', 198.51.100.158');
-    v_reply := public.peek_claim((select t.secret from private.t_player('claims-guess-' || v_index) t));
-    assert v_reply ->> 'code' = case when v_index <= 2 then 'not_found' else 'rate_limited' end,
-      format('guess %s: %s', v_index, v_reply);
+    if v_index = 5 then
+      v_reply := public.redeem_claim('not a token', (select t.secret from private.t_player('claims-guess-browser') t));
+    else
+      v_reply := public.peek_claim((select t.secret from private.t_player('claims-guess-' || v_index) t));
+    end if;
+    assert v_reply ->> 'code' = 'not_found', format('guess %s from a forged address: %s', v_index, v_reply);
   end loop;
-  assert v_reply ->> 'limit_scope' = 'project', format('the bound that refused: %s', v_reply);
+  assert (select r.hits from private.rate_counters r
+           where r.bucket = 'claim_fail_all_1h' and r.window_start = '2026-10-29T14:00:00Z'
+             and r.subject = private.subject('claim_fail_all_1h', 'project', '2026-10-29T14:00:00Z')) = 5,
+    'the guesses were not all counted project-wide';
+
+  perform private.t_request('198.51.100.156');
+  v_token := (select t.secret from private.t_player('claims-limit-token-2') t);
+  assert public.create_claim(v_id, v_secret, v_token) ->> 'ok' = 'true', 'setup: a second claim';
+  perform private.t_request('203.0.113.200');
+  v_reply := public.peek_claim(v_token);
+  assert v_reply ->> 'ok' = 'true', format('a live token''s peek past the project-wide bound: %s', v_reply);
+  v_reply := public.redeem_claim(v_token, (select t.secret from private.t_player('claims-limit-browser-2') t));
+  assert v_reply ->> 'ok' = 'true' and v_reply -> 'data' ->> 'player_id' = v_id::text,
+    format('a live token''s redemption past the project-wide bound: %s', v_reply);
+  assert (select r.hits from private.rate_counters r
+           where r.bucket = 'claim_fail_all_1h' and r.window_start = '2026-10-29T14:00:00Z'
+             and r.subject = private.subject('claim_fail_all_1h', 'project', '2026-10-29T14:00:00Z')) = 5,
+    'a live token counted as a failure';
+  assert (select count(*) from private.alerts a
+           where a.kind = 'owner_queue' and a.detail ->> 'item' = 'claim_fail_all_1h'
+             and (a.detail ->> 'cap')::integer = 2
+             and a.at >= '2026-10-29T14:00:00Z' and a.at < '2026-10-29T15:00:00Z') = 1,
+    'the owner was not alerted exactly once that hour';
 end
 $$;
-select 'PASS SQL-2 claim peeks and redemptions are capped per address, and failed ones project-wide';
+select 'PASS SQL-2 claim peeks and redemptions are capped per address, and past the project-wide failure bound a live token still redeems';
 
 rollback;

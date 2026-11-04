@@ -3,14 +3,15 @@
 -- generated friendly name and a mint credential, test ids play the e2e
 -- track, input is validated, and two first writes racing on one id create
 -- one player. Each block writes the caps and the client-address rule it
--- relies on, so the file passes on a live database an owner has tuned.
+-- relies on (the first hop, unverified as shipped), so the file passes on a
+-- live database an owner has tuned.
 begin;
 
 do $$
 begin
   update private.config set value = '0' where key = 'egress_sample_rate';
   insert into private.config (key, value)
-  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": true}')
+  values ('client_ip', '{"header": "x-forwarded-for", "hop": "first", "verified": false}')
   on conflict (key) do update set value = excluded.value;
   update private.config
      set value = value || '{"identity_all_1h": {"cap": 5000, "window_s": 3600},
@@ -180,9 +181,6 @@ declare
 begin
   perform private.t_now('2026-10-20T11:00:00Z');
   perform private.t_request('198.51.100.64');
-  update private.config
-     set value = '{"header": "x-forwarded-for", "hop": "first", "verified": false}'
-   where key = 'client_ip';
   select t.player_id, t.secret into v_id, v_secret from private.t_player('register-test-id', true) t;
   v_reply := public.register_player(v_id, v_secret, 'browser', 'none');
   assert v_reply ->> 'ok' = 'true', format('a test registration: %s', v_reply);
