@@ -180,13 +180,21 @@ describe("item schemas", () => {
   });
 
   it("ties reviewBy to volatility and refuses fast", () => {
+    // The editor sets a slow item's reviewBy at acceptance (CONTENT_GUIDE
+    // §2.3): a draft or a checking item may hold null, an active one not.
+    expect(
+      PracticeItemSchema.safeParse(fxMc({ volatility: "slow", reviewBy: null }))
+        .success,
+    ).toBe(true);
     expect(
       messages(
         PracticeItemSchema.safeParse(
-          fxMc({ volatility: "slow", reviewBy: null }),
+          fxMc({ volatility: "slow", reviewBy: null, status: "retired" }),
         ),
       ),
-    ).toEqual([expect.stringContaining("needs a reviewBy")]);
+    ).toEqual(
+      expect.arrayContaining([expect.stringContaining("needs a reviewBy")]),
+    );
     expect(
       PracticeItemSchema.safeParse(
         fxMc({ volatility: "slow", reviewBy: "2028-11-01" }),

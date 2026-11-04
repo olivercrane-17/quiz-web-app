@@ -518,6 +518,9 @@ export function poolRules(bank: Bank, options: RuleOptions): Finding[] {
     list.push(record.item);
     byCategory.set(record.item.category, list);
   }
+  // A bank with no active practice yet (a new tree, a test) has nothing
+  // to warn about before launch.
+  if (byCategory.size === 0 && !options.launch) return [];
   for (const category of bank.categories) {
     const items = byCategory.get(category.id) ?? [];
     const file = `content/practice/${category.slug}`;
