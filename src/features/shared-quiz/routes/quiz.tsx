@@ -13,18 +13,19 @@
  * key the island by it. At /shell/quiz itself the param is null, and it
  * shows the invalid-link copy. The stub's <ShellParam> marker goes with it.
  * Beta: with the editor flag off it is the not-found page, and its metadata
- * carries no title.
+ * is the not-found page's own (`NOT_FOUND_METADATA`, R1-02), which names no
+ * Beta feature.
  */
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { PagePlaceholder } from "@/features/shell";
+import { NOT_FOUND_METADATA, PagePlaceholder } from "@/features/shell";
 import { ShellParam } from "@/features/shell/client";
 import { isFeatureEnabled } from "@/lib/env";
 
 export const metadata: Metadata = isFeatureEnabled("editor")
   ? { title: "Shared quiz", robots: { index: false } }
-  : { robots: { index: false } };
+  : NOT_FOUND_METADATA;
 
 export default function SharedQuizRoute() {
   if (!isFeatureEnabled("editor")) notFound();

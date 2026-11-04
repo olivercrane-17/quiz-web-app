@@ -10,9 +10,8 @@
  * module that called `notFound()`, and reads no metadata here. A route
  * module that can call it exports `NOT_FOUND_METADATA` (from
  * `@/features/shell`) for that case, so the page is "Page not found ·
- * Knewt". Until the Beta stubs (the editor, rooms and shared quizzes) do,
- * theirs carry no title and the page shows Today's, "Knewt": a gap, not
- * the intent (FIX-DS follow-up for EDT-1, ROM-2, ROM-3 and EDT-3).
+ * Knewt", as the Beta stubs (the editor, rooms and shared quizzes) do while
+ * their flag is off; EDT-1, ROM-2, ROM-3 and EDT-3 keep it.
  */
 import { NotFoundContent } from "../not-found";
 

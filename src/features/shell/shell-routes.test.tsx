@@ -111,9 +111,14 @@ describe("shell routes", () => {
         /^export \{ default, metadata,? \} from "@\/features\/[a-z/-]+\/routes\/[a-z-]+";$/,
       );
       const page = await loadShell(group, shell);
-      expect(page.metadata.robots).toEqual({ index: false });
-      // Beta shells name themselves only while their flag is on (below).
-      if (flag === null) expect(page.metadata.title).toMatch(/\S/);
+      // Beta shells name themselves only while their flag is on (below);
+      // off, they are the not-found page, whose noindex Next adds itself.
+      if (flag === null) {
+        expect(page.metadata.robots).toEqual({ index: false });
+        expect(page.metadata.title).toMatch(/\S/);
+      } else {
+        expect(page.metadata).toEqual(NOT_FOUND_METADATA);
+      }
     },
   );
 
@@ -136,17 +141,11 @@ describe("shell routes", () => {
         flag,
         false,
       );
-      // A Beta title would sit in the 404's HTML and RSC payload. The stub
-      // has none; its owner gives it the not-found page's own title
-      // (`NOT_FOUND_METADATA`, R1-02), which names no Beta feature.
-      expect([undefined, NOT_FOUND_METADATA.title]).toContainEqual(
-        metadata.title,
-      );
-      expect(
-        Object.keys(metadata).filter(
-          (key) => key !== "title" && key !== "robots",
-        ),
-      ).toEqual([]);
+      // A Beta title would sit in the 404's HTML and RSC payload. The
+      // module gives the not-found page's own title instead (R1-02), which
+      // names no Beta feature, and no robots of its own: Next adds the
+      // not-found page's noindex, once.
+      expect(metadata).toEqual(NOT_FOUND_METADATA);
       let thrown: unknown = null;
       try {
         renderWithUser(<Page />);

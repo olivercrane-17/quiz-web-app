@@ -11,20 +11,21 @@
  * shell for every code, and keeps it mounted while hidden, so the param
  * changes under a mounted island (§10.2 rule 8). Reset per-code state when
  * it changes, or key the island by it. At /shell/quiz-result itself the
- * param is null, and it shows the invalid-link copy. The stub's
- * <ShellParam> marker goes with it. Beta: with the editor flag off it is
- * the not-found page, and its metadata carries no title.
+ * param is null, and it shows the invalid-link copy. The stub's <ShellParam>
+ * marker goes with it. Beta: with the editor flag off it is the not-found
+ * page, and its metadata is the not-found page's own (`NOT_FOUND_METADATA`,
+ * R1-02), which names no Beta feature.
  */
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { PagePlaceholder } from "@/features/shell";
+import { NOT_FOUND_METADATA, PagePlaceholder } from "@/features/shell";
 import { ShellParam } from "@/features/shell/client";
 import { isFeatureEnabled } from "@/lib/env";
 
 export const metadata: Metadata = isFeatureEnabled("editor")
   ? { title: "Shared quiz result", robots: { index: false } }
-  : { robots: { index: false } };
+  : NOT_FOUND_METADATA;
 
 export default function SharedQuizResultRoute() {
   if (!isFeatureEnabled("editor")) notFound();

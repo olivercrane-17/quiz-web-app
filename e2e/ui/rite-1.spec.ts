@@ -315,11 +315,10 @@ test.describe("R1-02 dead links", () => {
     dropExpected(consoleErrors, NOT_FOUND_LOAD);
   });
 
-  // FIX-DS follow-up for EDT-1, ROM-2, ROM-3 and EDT-3: their route
-  // modules export NOT_FOUND_METADATA (@/features/shell) while their
-  // flag is off. Next titles the page from the module that called
-  // notFound(), so the shell's not-found files can't.
-  test.fixme("R1-02 a notFound() inside a route group is titled Page not found, not Today's Knewt", async ({
+  // Next titles the page from the module that called notFound(), so the
+  // Beta route modules (the editor, rooms and shared quizzes) export
+  // NOT_FOUND_METADATA (@/features/shell) while their flag is off.
+  test("R1-02 a notFound() inside a route group is titled Page not found, not Today's Knewt", async ({
     page,
     consoleErrors,
   }) => {

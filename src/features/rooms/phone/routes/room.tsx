@@ -17,18 +17,24 @@
  * it changes, or key the island by it. At /shell/room itself the param is
  * null, and it shows the invalid-link copy. The stub's <ShellParam> marker
  * goes with it. Beta: with the rooms flag off it is the not-found page, and
- * its metadata carries no title, so no HTML mentions rooms (AC-ROM-13).
+ * its metadata is the not-found page's own (`NOT_FOUND_METADATA`, R1-02),
+ * which names no Beta feature (AC-ROM-13).
  */
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { PagePlaceholder, PlayFrame, SHELL_COPY } from "@/features/shell";
+import {
+  NOT_FOUND_METADATA,
+  PagePlaceholder,
+  PlayFrame,
+  SHELL_COPY,
+} from "@/features/shell";
 import { ShellParam } from "@/features/shell/client";
 import { isFeatureEnabled } from "@/lib/env";
 
 export const metadata: Metadata = isFeatureEnabled("rooms")
   ? { title: "Room", robots: { index: false } }
-  : { robots: { index: false } };
+  : NOT_FOUND_METADATA;
 
 export default function RoomPhoneRoute() {
   if (!isFeatureEnabled("rooms")) notFound();
