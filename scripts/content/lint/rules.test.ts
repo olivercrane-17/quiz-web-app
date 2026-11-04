@@ -785,6 +785,37 @@ describe("CNT-2's additions to older rules", () => {
     expect(drawn(answered, "C22", MYS)).toEqual(["error C22"]);
   });
 
+  it("C22 replaces the pipeline's near-copy warning only when it is about the same guide example", async () => {
+    const guide = readFileSync(
+      join(REPO_ROOT, "docs/CONTENT_GUIDE.md"),
+      "utf8",
+    );
+    const shogi = /"question": "(Counting every size[^"]+)"/.exec(guide)?.[1];
+    // Not a §12.9 value, so the denylist stays out of it.
+    const copy = (id: string) =>
+      fxEncore({
+        id,
+        question: shogi,
+        answer: 290,
+        unit: "squares",
+        unitShort: "squares",
+        unitLabel: "squares",
+      });
+    const alone = await lint(fxFiles({ [ENC]: copy("fx.e.0101") }), {
+      dedupe: true,
+    });
+    expect(drawn(alone, "C22", ENC)).toEqual(["error C22"]);
+    // With a sealed twin, the pipeline's warning names the twin, and stays.
+    const twins = await lint(
+      fxFiles({
+        [ENC]: copy("fx.e.0101"),
+        "encores/fx.e.0102.json": copy("fx.e.0102"),
+      }),
+      { dedupe: true },
+    );
+    expect(drawn(twins, "C22", ENC).sort()).toEqual(["error C22", "warn C22"]);
+  });
+
   it("C27 refuses 'capital' in any clue when the mystery's answer is a listed country", async () => {
     const capitals = {
       version: "2026-11-04",

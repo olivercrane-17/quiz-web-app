@@ -28,9 +28,20 @@ import type { LintReferences } from "./reference.ts";
 
 const isGuide = (entry: { id: string }) => entry.id.startsWith("guide:");
 
+/** A sealed item's guide near-copy, and whether it is also its nearest item overall. */
+export interface GuideCopy {
+  hit: RuleHit;
+  /**
+   * True when the guide example is the item's nearest entry of all, so the
+   * pipeline's C22 warning is about the same pair and this error replaces
+   * it; otherwise that warning names another pair and stays.
+   */
+  samePair: boolean;
+}
+
 /** Sealed items that are near-copies of a guide example, with the example's id. */
-export function guideCopies(bank: Bank): Map<string, RuleHit> {
-  const out = new Map<string, RuleHit>();
+export function guideCopies(bank: Bank): Map<string, GuideCopy> {
+  const out = new Map<string, GuideCopy>();
   if (!bank.items.some((record) => record.file.sealed)) return out;
   const { index, positions } = bankDedupeIndex(bank, true);
   for (const record of bank.items) {
@@ -39,12 +50,16 @@ export function guideCopies(bank: Bank): Map<string, RuleHit> {
     if (position === undefined) continue;
     const match = nearestTo(index, position, isGuide);
     if (match.nearestId === null || match.score < DEDUPE_FLAG) continue;
+    const overall = nearestTo(index, position);
     out.set(record.id, {
-      rule: "C22",
-      severity: "error",
-      message:
-        "a sealed item may not be a near-copy of a CONTENT_GUIDE §12 example, which is public (§12.0); content:dedupe -- --item <id> --reveal shows which, in your own terminal",
-      excerpt: match.nearestId.replace(/^guide:/, ""),
+      hit: {
+        rule: "C22",
+        severity: "error",
+        message:
+          "a sealed item may not be a near-copy of a CONTENT_GUIDE §12 example, which is public (§12.0); content:dedupe -- --item <id> --reveal shows which, in your own terminal",
+        excerpt: match.nearestId.replace(/^guide:/, ""),
+      },
+      samePair: overall.nearestId === match.nearestId,
     });
   }
   return out;

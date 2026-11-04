@@ -40,7 +40,7 @@ import type {
 import { excludedCountries, ruleC27 } from "./capitals.ts";
 import { nearTieDates } from "./comparisons.ts";
 import { measuredEncoreHits } from "./encores.ts";
-import { deniedExampleHits, guideCopies } from "./examples.ts";
+import { deniedExampleHits, guideCopies, type GuideCopy } from "./examples.ts";
 import { optionAtGridLimit } from "./lengths.ts";
 import { ruleC28 } from "./options.ts";
 import { loadLintReferences, type LintReferences } from "./reference.ts";
@@ -174,7 +174,7 @@ export function cnt2ItemHits(
   context: {
     countries: ReturnType<typeof excludedCountries>;
     measured: Map<string, RuleHit[]>;
-    copies: Map<string, RuleHit>;
+    copies: Map<string, GuideCopy>;
   },
 ): { hits: Cnt2Hit[]; nearTiePasses: boolean } {
   const item: AnyItem = record.item;
@@ -192,7 +192,7 @@ export function cnt2ItemHits(
   if (record.file.sealed) {
     hits.push(...mark(deniedExampleHits(item, refs)));
     const copy = context.copies.get(record.id);
-    if (copy) hits.push({ ...copy, added: true });
+    if (copy) hits.push({ ...copy.hit, added: true });
   }
   return { hits, nearTiePasses: nearTie?.passes === true };
 }
@@ -225,7 +225,7 @@ export function cnt2Findings(
     measured: measuredEncoreHits(bank, refs.measured),
     copies:
       options.dedupe === false || options.guide === false
-        ? new Map<string, RuleHit>()
+        ? new Map<string, GuideCopy>()
         : guideCopies(bank),
   };
   for (const record of bank.items) {
@@ -249,7 +249,8 @@ export function cnt2Findings(
           f.path?.endsWith("values") === true &&
           f.message.startsWith(NEAR_TIE_REFUSAL)
         );
-      if (f.rule === "C22") return copies.has(id) && f.severity === "warn";
+      if (f.rule === "C22")
+        return copies.get(id)?.samePair === true && f.severity === "warn";
       return false;
     },
   };
