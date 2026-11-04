@@ -545,13 +545,9 @@ test.describe("the Encore at 200% text", () => {
 });
 
 test.describe("the first-Daily hint (R1-04)", () => {
-  // The Daily passes the start's first-Daily flag to the rounds in FIX-DLY's
-  // round area (src/features/daily/screen/round-area.tsx); until that
-  // lands, the hint never shows in the app, and these wait for it.
-  test.fixme(
-    true,
-    "needs FIX-DLY's firstDaily flag in the round context (R1-04)",
-  );
+  // The flag's whole path: the mock's start says whether the player has
+  // finished a Daily, the Daily's controller keeps it, its round area puts
+  // it in the round context (FIX-DLY), and the Mystery draws the hint.
 
   const HINT =
     "Get it from this clue for 4 points. A wrong guess costs the same as Next clue, so have a go.";

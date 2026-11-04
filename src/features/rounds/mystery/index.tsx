@@ -128,12 +128,11 @@ export function MysteryRound(props: RoundComponentProps) {
 
 /**
  * The round context's first-Daily flag (PRD §3.1.4, R1-04): the player has
- * never finished a Daily. The Daily sets it (FIX-DLY), and the field joins
- * the contract in `../contracts.ts` with that change, which isn't this
- * ticket's file; a context without it counts as a returning player.
+ * never finished a Daily, as the Daily's start said. A context without it
+ * (practice, a challenge) counts as a returning player.
  */
 function firstDailyOf(context: RoundComponentProps["context"]): boolean {
-  return "firstDaily" in context && context.firstDaily === true;
+  return context.firstDaily === true;
 }
 
 /** Keys the round leaves alone: typing in a field. */
