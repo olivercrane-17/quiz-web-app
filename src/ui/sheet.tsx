@@ -19,18 +19,26 @@
  *   sits in space the layout reserved, so nothing above it moves, and stays
  *   until the player taps Continue. It is a labelled region; the round
  *   decides where focus goes (usually `titleRef`, the reveal heading).
+ *   Opening by itself (the reveal's 1.2 s beat), it rises from below into
+ *   that space (DESIGN §7.3): unseen for its first frame, so the round's
+ *   scroll to Continue measures the final box, then 360 ms up, and a tap or
+ *   key anywhere completes the rise at once. Opened by the player's own
+ *   press (a pointerdown or keydown handler, as the tap that completes the
+ *   automatic part at once), or open from the start (a reload), it is
+ *   simply there. Its `data-arrival` says which.
  *
  * The looks are `.kn-dialog` and `.kn-sheet` in `ui.css`: surface, a 28 px
  * top radius, the 36 by 4 grab handle, the sheet shadow, a rise of 360 ms
- * (a fade under reduced motion). A modal's title is set in `display-5`, the
- * explanation sheet's in `display-3`. `Dialog` (./dialog) is the modal one
- * by name.
+ * while a modal's scrim fades in (a fade under reduced motion). A modal's
+ * title is set in `display-5`, the explanation sheet's in `display-3`.
+ * `Dialog` (./dialog) is the modal one by name.
  *
  * The parent owns `open`. Children render only while open.
  */
 import {
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   type ReactNode,
   type Ref,
@@ -69,6 +77,28 @@ export interface SheetProps {
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/**
+ * True for the rest of the task in which the player pressed (a pointerdown
+ * or keydown anywhere), so an inline sheet that opens in that task knows the
+ * press opened it. Watched from the first inline sheet's mount; these
+ * listeners run before React's own, which sit on the document.
+ */
+let pressing = false;
+let watchingPresses = false;
+
+function watchPresses(): void {
+  if (watchingPresses || typeof window === "undefined") return;
+  watchingPresses = true;
+  const mark = () => {
+    pressing = true;
+    setTimeout(() => {
+      pressing = false;
+    }, 0);
+  };
+  window.addEventListener("pointerdown", mark, true);
+  window.addEventListener("keydown", mark, true);
+}
 
 function SheetBody({
   title,
@@ -171,7 +201,7 @@ function ModalSheet({
         onClick={onClose}
         className={buttonClasses({ variant: "icon", className: "-m-2" })}
       >
-        <CrossIcon />
+        <CrossIcon size={24} />
       </button>
     );
 
@@ -258,14 +288,58 @@ function InlineSheet({
 }: SheetProps) {
   const titleId = useId();
   const descriptionId = useId();
+  const sectionRef = useRef<HTMLElement>(null);
+  /** False while the sheet has been open since it mounted (a reload). */
+  const closedSinceMount = useRef(!open);
+
+  useEffect(() => {
+    watchPresses();
+  }, []);
 
   useEffect(() => {
     if (open) initialFocusRef?.current?.focus();
   }, [open, initialFocusRef]);
 
+  // Before paint, and before the round's own layout effects (a child's
+  // effects run first): there at once, or unseen until it rises.
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!open || section === null) {
+      closedSinceMount.current = true;
+      return;
+    }
+    if (section.dataset.arrival !== undefined) return;
+    section.dataset.arrival =
+      !closedSinceMount.current || pressing ? "instant" : "pending";
+  }, [open]);
+
+  // After every layout effect of the commit (the round's scroll to Continue
+  // among them), the rise starts; a tap or key anywhere completes it.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!open || section === null) return;
+    if (section.dataset.arrival === "pending") section.dataset.arrival = "rise";
+    if (
+      section.dataset.arrival !== "rise" ||
+      typeof section.getAnimations !== "function"
+    ) {
+      return;
+    }
+    const complete = () => {
+      for (const animation of section.getAnimations()) animation.finish();
+    };
+    window.addEventListener("pointerdown", complete, true);
+    window.addEventListener("keydown", complete, true);
+    return () => {
+      window.removeEventListener("pointerdown", complete, true);
+      window.removeEventListener("keydown", complete, true);
+    };
+  }, [open]);
+
   if (!open) return null;
   return (
     <section
+      ref={sectionRef}
       id={id}
       aria-labelledby={titleId}
       aria-describedby={description === undefined ? undefined : descriptionId}

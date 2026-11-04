@@ -37,7 +37,7 @@ describe("showToast", () => {
     expect(toasts().map((toast) => toast.textContent)).toEqual(["Report sent"]);
   });
 
-  it("leaves after 4 s, or 10 s with an action", () => {
+  it("leaves after 4 s", () => {
     showToast("Saved");
     vi.advanceTimersByTime(3_999);
     expect(toasts()).toHaveLength(1);
@@ -45,14 +45,47 @@ describe("showToast", () => {
     expect(toasts()[0]).toHaveAttribute("data-leaving");
     vi.advanceTimersByTime(250);
     expect(toasts()).toHaveLength(0);
+  });
 
+  it("with an action, has no time limit and says the action is there (WCAG 2.2.1)", () => {
     showToast("Quiz deleted", {
       action: { label: "Undo", onAction: () => {} },
     });
-    vi.advanceTimersByTime(9_999);
+    expect(document.getElementById(LIVE_REGION_IDS.polite)).toHaveTextContent(
+      "Quiz deleted. Undo is available.",
+    );
+    vi.advanceTimersByTime(60_000);
+    expect(toasts()).toHaveLength(1);
     expect(toasts()[0]).not.toHaveAttribute("data-leaving");
-    vi.advanceTimersByTime(1);
+
+    // Escape dismisses it, as does the next toast.
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
     expect(toasts()[0]).toHaveAttribute("data-leaving");
+    vi.advanceTimersByTime(250);
+    showToast("Quiz deleted.", {
+      action: { label: "Undo", onAction: () => {} },
+    });
+    expect(document.getElementById(LIVE_REGION_IDS.polite)).toHaveTextContent(
+      "Quiz deleted. Undo is available.",
+    );
+    showToast("Saved");
+    vi.advanceTimersByTime(250);
+    expect(toasts().map((toast) => toast.textContent)).toEqual(["Saved"]);
+  });
+
+  it("shows a check by default, the offline icon for something queued, or none", () => {
+    showToast("Saved");
+    expect(toasts()[0]?.querySelector("svg")).toHaveAttribute(
+      "data-icon",
+      "check",
+    );
+    showToast("We'll send this when you're back online.", { icon: "offline" });
+    expect(toasts().at(-1)?.querySelector("svg")).toHaveAttribute(
+      "data-icon",
+      "offline",
+    );
+    showToast("Copied", { icon: "none" });
+    expect(toasts().at(-1)?.querySelector("svg")).toBeNull();
   });
 
   it("goes on a tap, and its action runs once", () => {

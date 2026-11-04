@@ -28,7 +28,8 @@ export const ROOT_METADATA: Metadata = {
 
 export const ROOT_VIEWPORT: Viewport = {
   // The browser's chrome takes the page colour of each theme (DESIGN
-  // §12.43); a forced theme repoints both (applyDisplaySettings).
+  // §12.43); a chosen theme switches their media (the boot script, then
+  // applyDisplaySettings), never their colours.
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: THEME_COLORS.light },
     { media: "(prefers-color-scheme: dark)", color: THEME_COLORS.dark },

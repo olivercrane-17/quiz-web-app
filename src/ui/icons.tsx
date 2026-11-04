@@ -3,8 +3,8 @@
  * joins, drawn here as tiny components so only the icons a screen uses
  * ship with it and no icon package is needed. Lucide is ISC licensed (some
  * shapes derive from Feather, MIT); the notice is in ./LICENSE-lucide.txt
- * and belongs on /credits. The tally glyph is our own, drawn on Lucide's
- * rules.
+ * and belongs on /credits. The tally and the difficulty pips are our own
+ * glyphs, drawn on Lucide's rules.
  *
  * Every icon is decorative: the word beside it carries the meaning, so it
  * is hidden from assistive technology, and an icon-only button names itself
@@ -350,6 +350,49 @@ export function TallyIcon(props: IconProps) {
       <path d="M6.5 5v14M10.5 5v14M14.5 5v14M18.5 5v14" />
       <path d="M3.5 16.5l17.5-9" />
     </Icon>
+  );
+}
+
+/** The dots' centres: 7 px dots, 3 px apart. */
+const PIP_CENTRES = [3.5, 13.5, 23.5] as const;
+
+/**
+ * The difficulty pips (DESIGN §5, our glyph): three 7 px dots 3 px apart,
+ * each a 1.5 px ring, the first `level` of them inked (●○○ easy, ●●○
+ * medium, ●●● hard). The word always follows and carries the meaning, so
+ * the glyph is hidden from assistive technology. Drawn in `currentColor`,
+ * so forced colours keep it. For the ticket, the round kickers, results
+ * rows, the room setup and the difficulty segments.
+ */
+export function Pips({
+  level,
+  className,
+}: {
+  level: 1 | 2 | 3;
+  className?: string;
+}) {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      viewBox="0 0 27 7"
+      width={27}
+      height={7}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      className={cx("shrink-0", className)}
+    >
+      {PIP_CENTRES.map((x, index) => (
+        <circle
+          key={x}
+          cx={x}
+          cy={3.5}
+          r={2.75}
+          fill={index < level ? "currentColor" : "none"}
+        />
+      ))}
+    </svg>
   );
 }
 

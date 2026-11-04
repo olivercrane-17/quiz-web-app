@@ -7,8 +7,13 @@
  * choice, forms work, and screen readers say "Medium, radio button, 2 of 4,
  * checked". The picked segment is raised on surface with an ink edge, and
  * forced colours give it a Highlight border, so the choice never rests on
- * colour alone. Segments wrap onto a second row rather than squeeze at 320
- * px or at 200% text.
+ * colour alone.
+ *
+ * A segment stacks the parts of its label, so pips go on their own line
+ * under the word: pass them as two children, `<>Medium<Pips level={2}
+ * /></>` (`Pips` from ./icons). Stacked, DESIGN §12.6's four choices need
+ * about 275 px and share one row from 320 px; at 200% text the segments
+ * wrap onto a second row rather than squeeze.
  */
 import type { ReactNode } from "react";
 
@@ -16,7 +21,11 @@ import { cx } from "./cx";
 
 export interface SegmentedOption<V extends string> {
   value: V;
-  /** What the segment shows; its text is the radio's name. */
+  /**
+   * What the segment shows, stacked: the word, then any pips. Its text is
+   * the radio's name, so the pips (hidden from screen readers) add nothing
+   * to it.
+   */
   label: ReactNode;
   disabled?: boolean;
 }

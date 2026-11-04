@@ -3,6 +3,10 @@
  * from 768 px, the streak chip and Settings at the right, then the incident
  * banner slot under it. 56 px tall (50 on short phones), sticky, on the
  * page's own paper and grain (`.kn-topbar` in shell.css).
+ *
+ * Beside the wordmark sits the slot for a page's own title: on phones,
+ * every tab page but Today shows its title there in place of the wordmark,
+ * through `TopBarTitle` (from `@/features/shell/client`).
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -21,6 +25,8 @@ export function AppHeader() {
     <header className="kn-topbar kn-grain">
       <div className="kn-topbar-row">
         <Wordmark />
+        {/* TOP_BAR_TITLE_SLOT (./landmarks): TopBarTitle portals into it. */}
+        <div data-topbar-title="" className="kn-topbar-title" />
         <TabBar placement="top" className="kn-toptabs ml-4 hidden md:block" />
         <div className="kn-topbar-end">
           <StreakChip />

@@ -8,6 +8,7 @@ import { Banner } from "./banner";
 import { Card, Ticket } from "./card";
 import { Chip, chipClasses } from "./chip";
 import { Dialog } from "./dialog";
+import { Pips } from "./icons";
 import { NewtMark } from "./newt-mark";
 import { Num } from "./num";
 import { ProgressSegments } from "./progress-segments";
@@ -61,13 +62,52 @@ function Difficulty() {
       value={value}
       onChange={setValue}
       options={[
-        { value: "easy", label: "Easy" },
-        { value: "medium", label: "Medium" },
+        {
+          value: "easy",
+          label: (
+            <>
+              Easy
+              <Pips level={1} />
+            </>
+          ),
+        },
+        {
+          value: "medium",
+          label: (
+            <>
+              Medium
+              <Pips level={2} />
+            </>
+          ),
+        },
         { value: "mixed", label: "Mixed" },
       ]}
     />
   );
 }
+
+describe("Pips", () => {
+  it("inks the first dots of three for the level, hidden from screen readers", () => {
+    const { container } = renderWithUser(
+      <>
+        <Pips level={1} />
+        <Pips level={3} />
+      </>,
+    );
+    const [easy, hard] = container.querySelectorAll("svg");
+    expect(easy).toHaveAttribute("aria-hidden", "true");
+    const fills = (svg: Element | undefined) =>
+      [...(svg?.querySelectorAll("circle") ?? [])].map((dot) =>
+        dot.getAttribute("fill"),
+      );
+    expect(fills(easy)).toEqual(["currentColor", "none", "none"]);
+    expect(fills(hard)).toEqual([
+      "currentColor",
+      "currentColor",
+      "currentColor",
+    ]);
+  });
+});
 
 describe("SegmentedControl", () => {
   it("is a named group of radios with one checked", () => {

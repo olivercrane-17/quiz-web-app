@@ -157,6 +157,8 @@
   --kn-container-play: 720px;
   --kn-container-reading: 640px;
   --kn-container-page: 1120px;
+  /* 480 to 767 px: one column of 560 px content, centred (DESIGN §10.1). */
+  --kn-container-narrow: calc(560px + 2 * var(--kn-gutter));
   /* Multiply every translate by this; 0 under reduced motion. */
   --kn-motion-distance: 1;
   --kn-reading-tracking: 0em;
@@ -774,6 +776,7 @@
   --container-play: var(--kn-container-play);
   --container-reading: var(--kn-container-reading);
   --container-page: var(--kn-container-page);
+  --container-narrow: var(--kn-container-narrow);
 
   --animate-stamp: kn-stamp var(--kn-dur-base) var(--kn-ease-spring) both;
   --animate-rise: kn-rise var(--kn-dur-reveal) var(--kn-ease-out) both;
@@ -833,6 +836,13 @@
     /* Every frame has a sticky bar on top: what focus scrolls to lands
      * below it, never under it (WCAG 2.4.11). */
     scroll-padding-top: calc(64px + env(safe-area-inset-top));
+  }
+  /* On phones the tab pages have the fixed tab bar at the bottom too: the
+   * same 5.5rem their <main> keeps clear under it. */
+  @media (max-width: 767px) {
+    html:has(.kn-tabbar) {
+      scroll-padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+    }
   }
   body {
     /* A stacking context, so the grain (z-index -1) paints over the page
@@ -916,7 +926,8 @@
 @media (prefers-reduced-motion: reduce) {
   :root:not([data-motion="full"]) *,
   :root:not([data-motion="full"]) *::before,
-  :root:not([data-motion="full"]) *::after {
+  :root:not([data-motion="full"]) *::after,
+  :root:not([data-motion="full"]) *::backdrop {
     animation-duration: var(--kn-dur-fade) !important;
     animation-iteration-count: 1 !important;
     transition-duration: var(--kn-dur-fade) !important;
@@ -925,7 +936,8 @@
 }
 [data-motion="reduce"] *,
 [data-motion="reduce"] *::before,
-[data-motion="reduce"] *::after {
+[data-motion="reduce"] *::after,
+[data-motion="reduce"] *::backdrop {
   animation-duration: var(--kn-dur-fade) !important;
   animation-iteration-count: 1 !important;
   transition-duration: var(--kn-dur-fade) !important;

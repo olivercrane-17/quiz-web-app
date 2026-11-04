@@ -246,7 +246,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px 12px;
   width: 100%;
   padding: calc(11.5px - var(--opt-border-w)) calc(13.5px - var(--opt-border-w))
     calc(11.5px - var(--opt-border-w)) calc(12.5px - var(--opt-border-w));
@@ -291,16 +291,35 @@
     background-color var(--kn-dur-reveal) var(--kn-ease-out),
     color var(--kn-dur-reveal) var(--kn-ease-out);
 }
+/* The stamped check and X, as heavy as the prototype's beside 18 px text. */
+.kn-answer-badge > svg {
+  stroke-width: 3;
+}
+/* At most the room beside the 36 px badge and its 12 px gap, so the name
+ * always shares the badge's line. */
 .kn-answer-text {
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0;
+  max-width: calc(100% - 48px);
   overflow-wrap: anywhere;
+}
+/* With its verdict tag: when a long name or 200% text leaves the tag no
+ * room beside it, the tag goes under the name, at the right, and the name
+ * keeps the line's width, never squeezed to a sliver or broken mid-word
+ * (DESIGN §3.3, §10.5). A short name keeps its tag on its line. */
+.kn-answer:is(
+  [data-state="correct"],
+  [data-state="your-answer"],
+  [data-state="already-guessed"]
+) {
+  flex-wrap: wrap;
 }
 .kn-answer-tag {
   display: inline-flex;
   flex: none;
   align-items: center;
   gap: 5px;
+  margin-inline-start: auto;
   font-size: 0.8125rem;
   font-weight: 800;
   letter-spacing: 0.01em;
@@ -586,6 +605,8 @@ button.kn-chip {
   border: 1.5px solid var(--kn-rule-strong);
   color: var(--kn-ink-3);
   font-variant-numeric: tabular-nums;
+  /* A step fills with its verdict at the 400 ms reveal (DESIGN §7.3). */
+  transition: background-color 200ms var(--kn-ease-out);
 }
 .kn-progress[data-variant="pills"] .kn-step {
   width: 38px;
@@ -596,16 +617,27 @@ button.kn-chip {
   font-weight: 700;
   line-height: 1;
 }
+/* Geometry only: the status rules below colour an answered segment, so
+ * only an unanswered one is the empty well. */
 .kn-progress[data-variant="bar"] .kn-step {
   flex: 1;
   min-width: 0;
   height: 20px;
-  border-width: 1px;
-  border-color: var(--kn-rule);
   border-radius: var(--kn-radius-xs);
-  background-color: var(--kn-sunken);
   font-size: 11px;
   font-weight: 700;
+}
+.kn-progress[data-variant="bar"] .kn-step[data-status="upcoming"] {
+  border-width: 1px;
+  border-color: var(--kn-rule);
+  background-color: var(--kn-sunken);
+}
+/* The verdict glyphs, drawn as heavily as the prototype's (DESIGN §6.6). */
+.kn-progress[data-variant="pills"] .kn-step svg {
+  stroke-width: 2.8;
+}
+.kn-progress[data-variant="bar"] .kn-step svg {
+  stroke-width: 3.2;
 }
 .kn-step[data-italic] {
   font-style: italic;
@@ -700,7 +732,9 @@ button.kn-watch {
 
 /* A row of choices, one picked (the practice difficulty). Native radios
  * underneath, so arrow keys and forms work; the picked segment is raised
- * with an ink edge, so the choice never rests on colour. */
+ * with an ink edge, so the choice never rests on colour. A segment stacks
+ * its parts (the word over its pips), so DESIGN §12.6's four choices share
+ * one row from 320 px; the row still wraps at 200% text. */
 .kn-segmented {
   display: flex;
   flex-wrap: wrap;
@@ -716,11 +750,12 @@ button.kn-watch {
   position: relative;
   display: inline-flex;
   flex: 1 1 auto;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 2px;
   min-height: 44px;
-  padding: 4px 12px;
+  padding: 4px 8px;
   border: 1.5px solid transparent;
   border-radius: 12px;
   color: var(--kn-ink-2);
@@ -783,15 +818,23 @@ button.kn-watch {
 .kn-dialog::backdrop {
   background-color: var(--kn-scrim);
 }
+/* Opening, the sheet rises 360 ms while the scrim fades in; under reduced
+ * motion the rise is 0 px, so both are a fade (DESIGN §7.7). */
 .kn-dialog[open] {
   transition:
     translate var(--kn-dur-sheet) var(--kn-ease-out),
     opacity var(--kn-dur-sheet) var(--kn-ease-out);
 }
+.kn-dialog[open]::backdrop {
+  transition: background-color var(--kn-dur-sheet) var(--kn-ease-out);
+}
 @starting-style {
   .kn-dialog[open] {
     translate: 0 calc(100% * var(--kn-motion-distance));
-    opacity: calc(1 - var(--kn-motion-distance));
+    opacity: 0;
+  }
+  .kn-dialog[open]::backdrop {
+    background-color: transparent;
   }
 }
 @media (min-width: 768px) {
@@ -808,9 +851,12 @@ button.kn-watch {
     }
   }
 }
-/* The explanation sheet: inline, in space the layout reserved. It rises
- * into that space as a reveal from its bottom edge, so its box (and
- * Continue in it) never moves: a tap aimed at Continue lands on it. */
+/* The explanation sheet: inline, in space the layout reserved
+ * (./sheet.tsx sets data-arrival). Opening by itself, it is unseen for the
+ * frame in which the round scrolls Continue into view on its final box
+ * ("pending"), then rises from below into that space, rounded top first
+ * ("rise", DESIGN §7.3). Opened by the player's own tap or key, which
+ * completes the automatic part at once, it is simply there. */
 .kn-sheet {
   position: relative;
   border-radius: var(--kn-radius-sheet) var(--kn-radius-sheet) 0 0;
@@ -819,7 +865,12 @@ button.kn-watch {
   box-shadow:
     0 -1px 0 var(--kn-rule),
     var(--kn-shadow-sheet);
-  animation: kn-sheet-rise var(--kn-dur-sheet) var(--kn-ease-out) backwards;
+}
+.kn-sheet[data-arrival="pending"] {
+  opacity: 0;
+}
+.kn-sheet[data-arrival="rise"] {
+  animation: kn-sheet-rise var(--kn-dur-sheet) var(--kn-ease-out) both;
 }
 /* From 768 px the sheet sits in a 720 px column, not against the screen's
  * bottom edge, so it is rounded all round. */
@@ -939,12 +990,20 @@ button.kn-watch {
 /* DESIGN §6.10: under the top bar. Neutral for degraded, offline and
  * maintenance; caution, with its edge and the alert icon, for an outage
  * and unreachable. A late banner slides in as an overlay, so nothing
- * shifts (AC-INC-05). */
+ * shifts (AC-INC-05). The band runs the full width while its contents
+ * line up with the page's column: the bar it sits in names that column
+ * as --kn-column (shell.css), the page's 1,120 px by default. */
 .kn-banner {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding: 10px var(--kn-gutter);
+  padding-block: 10px;
+  padding-inline: max(
+    var(--kn-gutter),
+    calc(
+      (100% - var(--kn-column, var(--kn-container-page))) / 2 + var(--kn-gutter)
+    )
+  );
   border-bottom: 1px solid var(--kn-rule);
   background-color: var(--kn-sunken);
   color: var(--kn-ink);
@@ -1032,6 +1091,28 @@ button.kn-watch {
   cursor: pointer;
 }
 
+/* --------------------------------------------------------- Readable text */
+
+/* DESIGN §3.3: 0.05 em tracking and a 1.6 line height on everything set
+ * in Atkinson. The text tokens carry it (globals.css); these primitives
+ * set their own compact line heights or tracking, so they get it here.
+ * At 0,3,0 this beats `.kn-tabbar .kn-tab` in shell.css, which shares the
+ * components layer. */
+:root[data-readable="on"]
+  :is(
+    .kn-answer,
+    .kn-answer-tag,
+    .kn-chip,
+    .kn-segment,
+    .kn-banner,
+    .kn-toast,
+    .kn-watch,
+    .kn-tab
+  ) {
+  line-height: var(--kn-reading-leading);
+  letter-spacing: var(--kn-reading-tracking);
+}
+
 /* --------------------------------------------------------------- Motion */
 
 @keyframes kn-rise-sm {
@@ -1044,15 +1125,11 @@ button.kn-watch {
     transform: none;
   }
 }
-/* The negative insets leave room for the sheet's shadow. */
+/* From its own height below; a motion distance of 0 leaves the fade. */
 @keyframes kn-sheet-rise {
   from {
     opacity: 0;
-    clip-path: inset(calc(100% * var(--kn-motion-distance)) -64px 0 -64px);
-  }
-  to {
-    opacity: 1;
-    clip-path: inset(-64px -64px 0 -64px);
+    translate: 0 calc(100% * var(--kn-motion-distance));
   }
 }
 @keyframes kn-banner-in {
@@ -1080,10 +1157,12 @@ button.kn-watch {
   .kn-btn {
     border-color: ButtonText;
   }
+  /* Borderless, as in checks/forced-colors-practice-*.png: the system
+   * colour would otherwise paint their transparent edges into a box. */
   .kn-btn-ghost,
   .kn-btn-icon,
   .kn-btn-text {
-    border-color: transparent;
+    border-style: none;
   }
   .kn-btn:disabled,
   .kn-btn[data-disabled] {
@@ -1118,6 +1197,10 @@ button.kn-watch {
   .kn-banner {
     border-color: CanvasText;
   }
+  /* The ledge's drop shadow would show as a band under the outline. */
+  .kn-ticket {
+    filter: none;
+  }
   .kn-card[data-tone="ticket"],
   .kn-ticket-body,
   .kn-ticket-stub {
@@ -1136,7 +1219,8 @@ button.kn-watch {
   .kn-step[data-status="wrong"] {
     border: 2px dashed CanvasText;
   }
-  .kn-step[data-current] {
+  /* As specific as the bar's own current rule, so both variants get it. */
+  .kn-progress[data-variant] .kn-step[data-current] {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }

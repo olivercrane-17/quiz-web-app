@@ -29,18 +29,35 @@
 
 /* ---------------------------------------------------------------- Top bar */
 
+/* The column a bar's row and the banners under it line up with (DESIGN
+ * §10.1, read by .kn-banner in ui.css): from 768 px the page's 1,120 px,
+ * or a landing's 720 px and a reading page's 640 px (`data-column`); below
+ * that, 560 px of content. The play header keeps its 720 px column at
+ * every width, as the play screens do. */
 .kn-topbar {
+  --kn-column: var(--kn-container-page);
   position: sticky;
   top: 0;
   z-index: var(--kn-z-sticky);
   padding-top: env(safe-area-inset-top);
+}
+.kn-topbar:where([data-column="play"]) {
+  --kn-column: var(--kn-container-play);
+}
+.kn-topbar:where([data-column="reading"]) {
+  --kn-column: var(--kn-container-reading);
+}
+@media (max-width: 767px) {
+  .kn-topbar {
+    --kn-column: var(--kn-container-narrow);
+  }
 }
 .kn-topbar-row {
   display: flex;
   align-items: center;
   gap: 6px;
   width: 100%;
-  max-width: var(--kn-container-page);
+  max-width: var(--kn-column);
   min-height: 56px;
   margin-inline: auto;
   padding-inline: max(6px, calc(var(--kn-gutter) - 10px));
@@ -58,8 +75,78 @@
   }
 }
 
-/* The play header: Leave, the run's progress, the stopwatch and More. */
+/* A tab page's own title (./top-bar-title.tsx), on phones only (DESIGN
+ * §6.13): in place of the wordmark, a centred display-6 title over a meta
+ * line between the page's icon buttons. The row becomes three columns so
+ * the title stays centred while the sides differ; the page's `end`, when
+ * it has one, replaces the streak chip and Settings. From 768 px the bar
+ * keeps the wordmark and the text tabs. */
+.kn-topbar-title {
+  display: none;
+}
+@media (max-width: 767px) {
+  .kn-topbar[data-titled] .kn-topbar-row {
+    display: grid;
+    grid-template-columns:
+      minmax(max-content, 1fr) minmax(0, auto)
+      minmax(max-content, 1fr);
+  }
+  .kn-topbar[data-titled] .kn-wordmark,
+  .kn-topbar[data-titled="own-end"] .kn-topbar-end {
+    display: none;
+  }
+  .kn-topbar[data-titled] .kn-topbar-title {
+    display: contents;
+  }
+  .kn-topbar-title-start,
+  .kn-topbar-title-end,
+  .kn-topbar[data-titled] .kn-topbar-end {
+    display: flex;
+    grid-row: 1;
+    align-items: center;
+    gap: 2px;
+  }
+  .kn-topbar-title-start {
+    grid-column: 1;
+    justify-self: start;
+  }
+  .kn-topbar-title-end,
+  .kn-topbar[data-titled] .kn-topbar-end {
+    grid-column: 3;
+    justify-self: end;
+  }
+}
+.kn-topbar-heading {
+  display: flex;
+  grid-row: 1;
+  grid-column: 2;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding-block: 6px;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+.kn-topbar-heading-title {
+  font-family: var(--kn-font-display);
+  font-size: var(--kn-text-display-6);
+  font-weight: var(--kn-text-display-6--font-weight);
+  line-height: var(--kn-text-display-6--line-height);
+  letter-spacing: var(--kn-text-display-6--letter-spacing);
+  text-wrap: balance;
+}
+.kn-topbar-heading-meta {
+  color: var(--kn-ink-3);
+  font-size: var(--kn-text-meta);
+  font-weight: var(--kn-text-meta--font-weight);
+  line-height: var(--kn-text-meta--line-height);
+  letter-spacing: var(--kn-text-meta--letter-spacing);
+}
+
+/* The play header: Leave, the run's progress, the stopwatch and More, and
+ * the row under them (practice's ten segments). */
 .kn-playbar {
+  --kn-column: var(--kn-container-play);
   position: sticky;
   top: 0;
   z-index: var(--kn-z-sticky);
@@ -70,10 +157,18 @@
   align-items: center;
   gap: 6px;
   width: 100%;
-  max-width: var(--kn-container-play);
+  max-width: var(--kn-column);
   min-height: 56px;
   margin-inline: auto;
   padding-inline: max(6px, calc(var(--kn-gutter) - 10px));
+}
+/* At the gutters, not the row's icon-button insets, so the segments run
+ * as wide as the screen's content. */
+.kn-playbar-below {
+  width: 100%;
+  max-width: var(--kn-column);
+  margin-inline: auto;
+  padding: 0 var(--kn-gutter) 8px;
 }
 /* Block, so a practice heading and its ten segments take the full width;
  * the Daily's pills centre themselves. */
@@ -151,13 +246,15 @@
   min-height: 56px;
   padding: 4px 2px;
   border-radius: 12px;
-  font-size: 0.75rem;
+  /* 12 px, growing with the reader's text size only as far as the tab's
+   * width allows (about 18 px at 390 and 15 px at 320 at 200% text), so
+   * "Practice" and "Groups" stay whole words: Chromium has no hyphenation
+   * dictionary on Linux or Windows, and "Groups" has no break point. */
+  font-size: min(0.75rem, 4.6vw);
   line-height: 1.2;
   text-align: center;
-  /* At 200% text a label breaks onto a second line, hyphenated, rather
-   * than run into the next tab's. */
-  overflow-wrap: anywhere;
-  hyphens: auto;
+  overflow-wrap: normal;
+  hyphens: manual;
 }
 .kn-tab[data-active] {
   color: var(--kn-ink);

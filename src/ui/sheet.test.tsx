@@ -1,4 +1,4 @@
-import { screen, within } from "@testing-library/react";
+import { act, screen, within } from "@testing-library/react";
 import { useRef, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -180,6 +180,39 @@ describe("Sheet (inline)", () => {
     expect(
       screen.getByRole("button", { name: "Continue" }),
     ).toBeInTheDocument();
+  });
+
+  it("rises when it opens by itself, and is there at once when the player's press opens it", async () => {
+    const sheet = (open: boolean) => (
+      <Sheet modal={false} open={open} title="It's Uranus." />
+    );
+    // Opening by itself, as the reveal's 1.2 s beat opens it.
+    const first = renderWithUser(sheet(false));
+    first.rerender(sheet(true));
+    expect(screen.getByRole("region")).toHaveAttribute("data-arrival", "rise");
+    first.unmount();
+
+    // Opened from a press's own handler: the tap that completes the
+    // automatic part at once (DESIGN §7.3).
+    const second = renderWithUser(sheet(false));
+    act(() => {
+      window.dispatchEvent(new Event("pointerdown"));
+      second.rerender(sheet(true));
+    });
+    expect(screen.getByRole("region")).toHaveAttribute(
+      "data-arrival",
+      "instant",
+    );
+    second.unmount();
+    // The press is over once its task is.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Open from the start (a reload): simply there.
+    renderWithUser(sheet(true));
+    expect(screen.getByRole("region")).toHaveAttribute(
+      "data-arrival",
+      "instant",
+    );
   });
 
   it("hands its title to titleRef for focus moves", () => {

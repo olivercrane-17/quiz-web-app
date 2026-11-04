@@ -33,6 +33,27 @@ function clearHtml(): void {
   for (const name of DISPLAY_ATTRIBUTES) html().removeAttribute(name);
 }
 
+/** The theme-colour pair as Next renders it from the root viewport. */
+const SYSTEM_METAS = `<meta name="theme-color" media="(prefers-color-scheme: light)" content="${THEME_COLORS.light}"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="${THEME_COLORS.dark}">`;
+
+const themeMetas = () => [
+  ...document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]'),
+];
+
+const metaColours = () => themeMetas().map((meta) => meta.content);
+
+/** The colour a browser paints its chrome for `scheme`: the first meta whose media applies. */
+function chromeColour(scheme: "light" | "dark"): string | undefined {
+  return themeMetas().find((meta) => {
+    const media = meta.getAttribute("media") ?? "";
+    return (
+      media === "" ||
+      media === "all" ||
+      media === `(prefers-color-scheme: ${scheme})`
+    );
+  })?.content;
+}
+
 beforeEach(() => {
   localStorage.clear();
   clearHtml();
@@ -113,11 +134,27 @@ describe("the boot script", () => {
     );
   });
 
-  it("stays under 600 bytes", () => {
-    for (const devices of [false, true]) {
-      expect(
-        new TextEncoder().encode(bootScript({ devices })).length,
-      ).toBeLessThan(600);
+  it("stays under 600 bytes in the builds that ship", () => {
+    const bytes = (devices: boolean) =>
+      new TextEncoder().encode(bootScript({ devices })).length;
+    expect(bytes(false)).toBeLessThan(600);
+    // Mock builds (tests and local development, never deployed) add the
+    // device lookup on top.
+    expect(bytes(true)).toBeLessThan(700);
+  });
+
+  it("points the browser's chrome at a stored theme through the metas' media, never their colours", () => {
+    for (const [stored, expected] of [
+      ['{"v":1,"theme":"dark"}', [THEME_COLORS.dark, THEME_COLORS.dark]],
+      ['{"v":1,"theme":"light"}', [THEME_COLORS.light, THEME_COLORS.light]],
+      ['{"v":1,"theme":"system"}', [THEME_COLORS.light, THEME_COLORS.dark]],
+    ] as const) {
+      document.head.innerHTML = SYSTEM_METAS;
+      localStorage.setItem("qz:settings", stored);
+      runBootScript();
+      expect([chromeColour("light"), chromeColour("dark")]).toEqual(expected);
+      // React finds its metas by colour when it hydrates them.
+      expect(metaColours()).toEqual([THEME_COLORS.light, THEME_COLORS.dark]);
     }
   });
 
@@ -177,20 +214,24 @@ describe("applyDisplaySettings", () => {
     });
   });
 
-  it("points the browser's theme colour at a chosen theme, and back", () => {
-    document.head.innerHTML = `<meta name="theme-color" media="(prefers-color-scheme: light)" content="${THEME_COLORS.light}"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="${THEME_COLORS.dark}">`;
-    const contents = () =>
-      [
-        ...document.querySelectorAll<HTMLMetaElement>(
-          'meta[name="theme-color"]',
-        ),
-      ].map((meta) => meta.content);
+  it("points the browser's theme colour at a chosen theme, and back, leaving the metas' colours alone", () => {
+    document.head.innerHTML = SYSTEM_METAS;
+    const chrome = () => [chromeColour("light"), chromeColour("dark")];
     applyDisplaySettings(settings({ theme: "dark" }));
-    expect(contents()).toEqual([THEME_COLORS.dark, THEME_COLORS.dark]);
+    expect(chrome()).toEqual([THEME_COLORS.dark, THEME_COLORS.dark]);
     applyDisplaySettings(settings({ theme: "light" }));
-    expect(contents()).toEqual([THEME_COLORS.light, THEME_COLORS.light]);
+    expect(chrome()).toEqual([THEME_COLORS.light, THEME_COLORS.light]);
     applyDisplaySettings(settings({ theme: "system" }));
-    expect(contents()).toEqual([THEME_COLORS.light, THEME_COLORS.dark]);
+    expect(chrome()).toEqual([THEME_COLORS.light, THEME_COLORS.dark]);
+    expect(
+      [...document.querySelectorAll<HTMLMetaElement>("meta")].map((meta) =>
+        meta.getAttribute("media"),
+      ),
+    ).toEqual([
+      "(prefers-color-scheme: light)",
+      "(prefers-color-scheme: dark)",
+    ]);
+    expect(metaColours()).toEqual([THEME_COLORS.light, THEME_COLORS.dark]);
   });
 });
 

@@ -27,6 +27,34 @@ async function withoutOurScripts(page: Page): Promise<void> {
   );
 }
 
+/**
+ * The browser's chrome colour under each system scheme (the first
+ * theme-colour meta whose media applies), and how many such metas there
+ * are: a meta whose colour changed would leave React a duplicate.
+ */
+async function browserChrome(page: Page) {
+  return page.evaluate(() => {
+    const metas = [
+      ...document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]'),
+    ];
+    const colour = (scheme: string) =>
+      metas.find(
+        (meta) =>
+          (meta.getAttribute("media") ?? "") === "" ||
+          meta.getAttribute("media") === "all" ||
+          meta.getAttribute("media") === `(prefers-color-scheme: ${scheme})`,
+      )?.content ?? null;
+    return {
+      light: colour("light"),
+      dark: colour("dark"),
+      metas: metas.length,
+    };
+  });
+}
+
+/** A chosen dark theme's chrome, whatever the system's scheme. */
+const DARK_CHROME = { light: "#1a1714", dark: "#1a1714", metas: 2 };
+
 async function htmlAttributes(page: Page) {
   return page.evaluate(() => {
     const html = document.documentElement;
@@ -97,6 +125,8 @@ test.describe("the boot script", () => {
       "background-color",
       "rgb(33, 29, 25)",
     );
+    // The browser's chrome follows from first paint too (DESIGN §12.43).
+    expect(await browserChrome(page)).toEqual(DARK_CHROME);
   });
 
   test("first paint is dark when dark is stored, and light otherwise (screenshot)", async ({
@@ -143,7 +173,7 @@ test.describe("the boot script", () => {
     );
   });
 
-  test("hydration keeps what the script set, with no errors, and the browser chrome follows a chosen theme", async ({
+  test("hydration keeps what the script set, with no errors, and the browser chrome follows a chosen theme through client navigations", async ({
     page,
   }) => {
     await storeSettings(page, { v: 1, theme: "dark", highContrast: true });
@@ -156,12 +186,22 @@ test.describe("the boot script", () => {
       readable: null,
       contrast: "on",
     });
-    const themeColours = await page
-      .locator('meta[name="theme-color"]')
-      .evaluateAll((metas) =>
-        metas.map((meta) => (meta as HTMLMetaElement).content),
-      );
-    expect(themeColours).toEqual(["#1a1714", "#1a1714"]);
+    expect(await browserChrome(page)).toEqual(DARK_CHROME);
+    // A client navigation renders the viewport's metas again, with the
+    // system pair; the chosen theme's colour holds, and after Back too.
+    await page
+      .locator('[data-home-slot="practice"]')
+      .getByRole("link", { name: "Quick play" })
+      .first()
+      .click();
+    await expect(page).toHaveURL("/practice/run");
+    await expect(
+      page.locator('main [data-state="idle"]').first(),
+    ).toBeVisible();
+    expect(await browserChrome(page)).toEqual(DARK_CHROME);
+    await page.goBack();
+    await expect(page.locator("[data-daily-card] li").first()).toBeVisible();
+    expect(await browserChrome(page)).toEqual(DARK_CHROME);
     // e2e/fixtures.ts fails the test on any console error (hydration included).
   });
 

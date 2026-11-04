@@ -7,4 +7,5 @@
  * import from here, and unused exports are dropped from their chunks.
  */
 export { ShellParam } from "./shell-param";
+export { TopBarTitle, type TopBarTitleProps } from "./top-bar-title";
 export { usePathParam } from "./use-path-param";

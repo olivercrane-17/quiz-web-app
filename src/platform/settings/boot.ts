@@ -12,12 +12,14 @@
  * Three writers, one rule:
  * - `bootScript()` is the inline script the root layout puts in `<head>`.
  *   It runs while the HTML parses, before first paint, so a stored dark
- *   theme is dark from the first frame. Under 600 bytes, and it never
- *   throws.
+ *   theme is dark from the first frame, the browser's chrome included.
+ *   Under 600 bytes in the builds that ship (mock builds add the device
+ *   lookup), and it never throws.
  * - `applyDisplaySettings()` does the same from code: the root layout's
  *   sync component calls it after React's development remount (which
- *   resets `<html>` attributes) and when another tab changes the settings;
- *   the settings page calls it when the player changes one (SET-1).
+ *   resets `<html>` attributes), when another tab changes the settings and
+ *   when a navigation re-renders the theme-colour metas; the settings page
+ *   calls it when the player changes one (SET-1).
  * - `readDisplaySettings()` reads `qz:settings` the way the script does,
  *   field by field like `decodeSettings` (./store), so all three agree
  *   with the store. The unit tests run the script against the same cases.
@@ -69,6 +71,23 @@ export function displayAttributes(
 }
 
 /**
+ * The `media` a theme-colour meta needs so the browser's chrome matches
+ * the page: its own scheme while the page follows the system, otherwise
+ * `all` for the meta that carries the chosen theme's colour and `not all`
+ * for the other. Switching `media`, never `content`, matters: React finds
+ * the metas it rendered by their `content` when it hydrates or remounts
+ * them, so a changed colour would leave a duplicate meta behind.
+ */
+export function themeColorMedia(
+  content: string,
+  theme: DisplaySettings["theme"],
+): string {
+  const paints = content === THEME_COLORS.dark ? "dark" : "light";
+  if (theme === "system") return `(prefers-color-scheme: ${paints})`;
+  return theme === paints ? "all" : "not all";
+}
+
+/**
  * Sets the four attributes on `root` (the document's `<html>` by default)
  * and points the theme-colour metas at a forced theme, so the browser's
  * chrome matches the page. A no-op without a DOM.
@@ -86,15 +105,12 @@ export function applyDisplaySettings(
     else if (element.getAttribute(name) !== value)
       element.setAttribute(name, value);
   }
+  // The attribute, not the `media` property, which not every engine has.
   for (const meta of document.querySelectorAll<HTMLMetaElement>(
     'meta[name="theme-color"]',
   )) {
-    const own = (meta.getAttribute("media") ?? "").includes("dark")
-      ? THEME_COLORS.dark
-      : THEME_COLORS.light;
-    const content =
-      settings.theme === "system" ? own : THEME_COLORS[settings.theme];
-    if (meta.content !== content) meta.content = content;
+    const media = themeColorMedia(meta.content, settings.theme);
+    if (meta.getAttribute("media") !== media) meta.setAttribute("media", media);
   }
 }
 
@@ -164,7 +180,12 @@ export function browserStorage(): SettingsSource | null {
 /**
  * The inline boot script. `devices` (mock builds only) makes it read the
  * device namespace a test set on `window.__QZ_DEVICE__` before load. It
- * only ever adds attributes: the prerendered `<html>` has none.
+ * only ever adds attributes: the prerendered `<html>` has none. A chosen
+ * theme also switches the theme-colour metas, which Next puts before the
+ * script in `<head>`, as `themeColorMedia` does (their `media` attribute,
+ * never their `content`), so the browser's chrome matches from first paint
+ * too, not only once `applyDisplaySettings` runs after hydration. `a`
+ * names `setAttribute` once, to stay under 600 bytes.
  */
 export function bootScript({ devices }: { devices: boolean }): string {
   const key = devices
@@ -172,13 +193,15 @@ export function bootScript({ devices }: { devices: boolean }): string {
     : `var k="qz:settings";`;
   return (
     `(function(){try{${key}` +
-    `var r=document.documentElement,s=JSON.parse(localStorage.getItem(k));` +
+    `var r=document.documentElement,a="setAttribute",s=JSON.parse(localStorage.getItem(k));` +
     `if(!s||typeof s!="object"||s.v!==void 0&&s.v!==1)return;` +
     `var t=s.theme,m=s.motion;` +
-    `if(t=="light"||t=="dark")r.setAttribute("data-theme",t);` +
-    `if(m=="on"||m=="off")r.setAttribute("data-motion",m=="on"?"reduce":"full");` +
-    `if(s.readableText===true)r.setAttribute("data-readable","on");` +
-    `if(s.highContrast===true)r.setAttribute("data-contrast","on")` +
+    `if(t=="light"||t=="dark"){r[a]("data-theme",t);` +
+    `for(var q=document.getElementsByName("theme-color"),i=q.length,x=t=="dark";i--;)` +
+    `q[i][a]("media",(q[i].content=="${THEME_COLORS.dark}")==x?"all":"not all")}` +
+    `if(m=="on"||m=="off")r[a]("data-motion",m=="on"?"reduce":"full");` +
+    `if(s.readableText===true)r[a]("data-readable","on");` +
+    `if(s.highContrast===true)r[a]("data-contrast","on")` +
     `}catch(e){}})()`
   );
 }

@@ -13,8 +13,10 @@
  * caller passes a mark), wrong an X and a dashed edge, voided a dash and a
  * dotted edge. The looks are `.kn-progress` and `.kn-step` in `ui.css`:
  * pills of 38 by 30 in Fraunces (32 wide under 360 px), the current one
- * with an ink border and a ledge; slim 20 px segments for practice, the
- * current one outlined in ink. Both keep their size at 200% text.
+ * with an ink border and a ledge; slim 20 px segments for practice, empty
+ * wells until answered, then the correct fill or the incorrect tint with
+ * its edge, the current one outlined in ink. Both fill with their verdict
+ * over 200 ms, and both keep their size at 200% text.
  */
 import { cx } from "./cx";
 import { CheckIcon, CrossIcon, DashIcon } from "./icons";

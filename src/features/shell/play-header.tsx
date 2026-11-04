@@ -1,7 +1,8 @@
 /**
  * The focus-mode header of every play screen (PRD §6.1, DESIGN §6.13):
  * Leave, the run's progress, and the end slot for the stopwatch and the
- * More menu. No tab bar. The incident banner slot sits under it.
+ * More menu, then an optional full-width row under them. No tab bar. The
+ * incident banner slot sits under it all.
  *
  * Play screens don't render it directly: `<PlayFrame header={...}>` puts it
  * before the screen's `<main>`, so it is the page's banner landmark and the
@@ -10,7 +11,10 @@
  *
  * 56 px tall over a 720 px column, sticky, on the page's own paper and
  * grain (`.kn-playbar` in shell.css), with the progress centred between
- * Leave and the end slot.
+ * Leave and the end slot. A practice round (DESIGN §12.7) passes its
+ * two-line title ("Practice" over the category) as `progress`, the sound
+ * toggle as `end` and its ten segments as `below`, which runs them the
+ * width of the column, at the page's gutters.
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -29,13 +33,15 @@ export interface PlayHeaderProps {
     /** Runs before the navigation, such as a save. Client components only. */
     onLeave?: () => void;
   };
-  /** The run's progress, usually `<ProgressSegments>`. */
+  /** The middle of the row: the Daily's pills, or a title. */
   progress?: ReactNode;
-  /** The right end: the stopwatch and the More menu. */
+  /** The right end: the stopwatch and the More menu, or the sound toggle. */
   end?: ReactNode;
+  /** A row under the bar, the column's full width: practice's ten segments. */
+  below?: ReactNode;
 }
 
-export function PlayHeader({ leave, progress, end }: PlayHeaderProps) {
+export function PlayHeader({ leave, progress, end, below }: PlayHeaderProps) {
   return (
     <header className="kn-playbar kn-grain">
       <div className="kn-playbar-row">
@@ -50,6 +56,9 @@ export function PlayHeader({ leave, progress, end }: PlayHeaderProps) {
         <div className="kn-playbar-progress">{progress}</div>
         {end === undefined ? null : <div className="kn-playbar-end">{end}</div>}
       </div>
+      {below === undefined ? null : (
+        <div className="kn-playbar-below">{below}</div>
+      )}
       <IncidentBanner />
     </header>
   );
