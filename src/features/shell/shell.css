@@ -147,12 +147,17 @@
 .kn-tabbar .kn-tab {
   flex-direction: column;
   gap: 3px;
+  min-width: 0;
   min-height: 56px;
   padding: 4px 2px;
   border-radius: 12px;
   font-size: 0.75rem;
   line-height: 1.2;
   text-align: center;
+  /* At 200% text a label breaks onto a second line, hyphenated, rather
+   * than run into the next tab's. */
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 .kn-tab[data-active] {
   color: var(--kn-ink);
