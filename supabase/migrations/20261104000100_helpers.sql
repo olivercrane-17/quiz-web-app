@@ -972,58 +972,16 @@ begin
 end
 $$;
 
--- SQL-1's hourly step: refusals folded first, then salts for days before
--- yesterday, counters older than 2 days and write keys older than 48 hours
--- pruned, and cron.job_run_details and heartbeats (once SQL-8 creates them)
--- kept to 7 days.
-create or replace function private.hourly_platform()
-returns void
-language plpgsql
-volatile
-set search_path = ''
-as $$
-declare
-  v_now timestamptz := private.now();
-  v_today date := (v_now at time zone 'UTC')::date;
-begin
-  perform private.fold_refusals(v_now);
-  delete from private.ip_salts s where s.day < v_today - 1;
-  delete from private.rate_counters r where r.window_start < v_now - interval '2 days';
-  delete from private.write_keys k where k.created_at < v_now - interval '48 hours';
-  if to_regclass('private.heartbeats') is not null then
-    delete from private.heartbeats h where h.ts < v_now - interval '7 days';
-  end if;
-  if to_regclass('cron.job_run_details') is not null then
-    begin
-      delete from cron.job_run_details d where d.end_time < v_now - interval '7 days';
-    exception
-      when insufficient_privilege then
-        -- SQL-8's grant on cron's tables has not been made yet.
-        null;
-    end;
-  end if;
-end
-$$;
-
--- SQL-1's nightly step: time_zones follows pg_timezone_names (§8.7). A
--- catalog that comes back nearly empty is ignored rather than copied.
-create or replace function private.nightly_platform()
-returns void
-language plpgsql
-volatile
-set search_path = ''
-as $$
-begin
-  if (select count(*) from pg_catalog.pg_timezone_names) < 100 then
-    raise exception 'nightly_platform: pg_timezone_names looks broken';
-  end if;
-  insert into private.time_zones (name)
-  select z.name from pg_catalog.pg_timezone_names z
-  on conflict (name) do nothing;
-  delete from private.time_zones t
-   where not exists (select 1 from pg_catalog.pg_timezone_names z where z.name = t.name);
-end
-$$;
+-- SQL-1's own job steps. Their real bodies delete expired rows, and the
+-- Supabase MCP asks a human to confirm any SQL that holds a DELETE, even
+-- with a WHERE and even inside a function body. So the bodies live in
+-- 20261104000200_platform_jobs_attended.sql, applied when someone can answer
+-- that confirmation, and these placeholders keep every job body working
+-- until then. Nothing runs them on a schedule before SQL-8 anyway.
+create or replace function private.hourly_platform() returns void        -- SQL-1, attended
+language plpgsql volatile set search_path = '' as $$ begin null; end $$;
+create or replace function private.nightly_platform() returns void       -- SQL-1, attended
+language plpgsql volatile set search_path = '' as $$ begin null; end $$;
 
 -- The hooks other tickets fill (§8.15). Each is a no-op until its owner
 -- replaces it.

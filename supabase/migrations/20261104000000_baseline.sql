@@ -26,7 +26,7 @@
 --     backend-contract workflow probes both endpoints over HTTP.
 --
 -- The two settings §8.2 makes through role and extension changes need the
--- project owner, so they sit in 20261104000200_api_surface_owner_only.sql,
+-- project owner, so they sit in 20261104000300_api_surface_owner_only.sql,
 -- which we never apply ourselves (launch report item).
 --
 -- private.now() is defined here rather than in the helpers migration,

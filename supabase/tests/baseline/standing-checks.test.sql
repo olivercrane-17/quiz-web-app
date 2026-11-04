@@ -296,7 +296,7 @@ select 'PASS SQL-1 standing: postgres owns every table, sequence, function and t
 
 -- pg_graphql stays out: installed, it would expose every anon-executable
 -- RPC at /graphql/v1 (§8.2). Turning it back off is an owner step
--- (20261104000200_api_surface_owner_only.sql).
+-- (20261104000300_api_surface_owner_only.sql).
 do $$
 begin
   assert not exists (select 1 from pg_catalog.pg_extension e where e.extname = 'pg_graphql'),
