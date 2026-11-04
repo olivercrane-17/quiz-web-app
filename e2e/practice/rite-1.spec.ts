@@ -790,11 +790,9 @@ test.describe("RITE round 1: practice", () => {
   test.describe("Share on the results (R1-01, PRD §3.5.4)", () => {
     test.use({ permissions: ["clipboard-read", "clipboard-write"] });
 
-    // The results hand the share feature's button the practice text
-    // already, but that button (src/features/share/share-button.tsx)
-    // renders nothing in this lane: FIX-DLY builds it on lane/r4-fixdly.
-    // Un-fixme this once that lane has merged.
-    test.fixme("R1-01 AC-SHR-05 AC-SHR-08 Share copies the run's line and a path-only /practice link, never a challenge", async ({
+    // The results hand the practice text to the share feature's button
+    // (src/features/share/share-button.tsx, built by FIX-DLY).
+    test("R1-01 AC-SHR-05 AC-SHR-08 Share copies the run's line and a path-only /practice link, never a challenge", async ({
       page,
     }) => {
       // No Web Share, as in desktop Chromium on Linux.
