@@ -47,7 +47,10 @@ const SHELL_LINKS = [
   ...LEGAL_LINKS.map((link) => link.href),
 ];
 
-/** Where ARCHITECTURE §10.1 puts each placeholder. */
+/** Pages past their placeholder, each with a test of its own below. */
+const BUILT = new Set(["/how-scoring-works"]);
+
+/** Where ARCHITECTURE §10.1 puts each destination. */
 const GROUP_OF: Record<string, string> = {
   "/": "(tabs)",
   "/g": "(tabs)",
@@ -80,7 +83,7 @@ describe("every destination the shell draws", () => {
 
   it.each(
     Object.keys(GROUP_OF)
-      .filter((href) => href !== "/")
+      .filter((href) => href !== "/" && !BUILT.has(href))
       .map((href) => [href]),
   )(
     "R1-02 %s shows its title as the one h1, says it isn't ready and offers Go to Today",
@@ -101,7 +104,32 @@ describe("every destination the shell draws", () => {
     },
   );
 
-  it("R1-09 gives each placeholder a title of its own, for the route announcer", async () => {
+  it("PRD §3.1.3 /how-scoring-works carries How to play, its five parts one level under the page's h1, and offers Go to Today", async () => {
+    const page = routes.get("/how-scoring-works");
+    if (page === undefined) throw new Error("no page for /how-scoring-works");
+    const { default: Page, metadata } = await loadPage(page.file);
+    renderWithUser(<Page />);
+    const [title, ...others] = screen.getAllByRole("heading", { level: 1 });
+    expect(others).toEqual([]);
+    expect(title).toHaveTextContent(String(metadata?.title));
+    expect(
+      screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent),
+    ).toEqual([
+      "The clue ladder",
+      "The points",
+      "Clue 4",
+      "The Encore",
+      "The ranking",
+    ]);
+    expect(screen.queryByText(SHELL_COPY.notReady)).toBeNull();
+    expect(
+      screen.getByRole("link", { name: SHELL_COPY.goToToday }),
+    ).toHaveAttribute("href", "/");
+    // LGL-1 decides when the trust pages are indexed.
+    expect(metadata?.robots).toEqual({ index: false });
+  });
+
+  it("R1-09 gives each destination a title of its own, for the route announcer", async () => {
     const titles = await Promise.all(
       Object.keys(GROUP_OF)
         .filter((href) => href !== "/")

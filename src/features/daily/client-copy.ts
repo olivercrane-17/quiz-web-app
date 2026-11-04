@@ -30,6 +30,8 @@ export const DAILY_SCREEN_COPY = {
     hideStopwatch: "Hide stopwatch",
     showStopwatch: "Show stopwatch",
   },
+  /** How to play's way to the page with the same text and the rest of the rules. */
+  howScoringWorks: "How scoring works",
   roundLabel: {
     mystery: (ordinal: number, ofType: number) =>
       ofType > 1 ? `Mystery ${ordinal} of ${ofType}` : "Mystery",

@@ -1,15 +1,20 @@
 /**
  * Route module (ARCHITECTURE §10.1): one of the seven trust pages (PRD
  * §3.14, DESIGN §12.40), in the (info) group's reading layout:
- * `/how-scoring-works`. A placeholder until LGL-1 writes its text and keeps the
- * default export and the metadata (RITE round 1, R1-02: every footer link
- * opened a bare 404).
- * Once FIX-DLY's How to play text merges, the page shows it (a follow-up).
- * `src/app/(info)/how-scoring-works/page.tsx` re-exports it.
+ * `/how-scoring-works`. It carries the Daily's How to play text (PRD
+ * §3.1.3), its five parts as `h2`s under the page's `h1`, from the Daily's
+ * index (a server component, so nothing reaches the client). LGL-1 adds the
+ * rest of the page (Encore bands and "% off", the percentile, the
+ * honest-play disclosure, time zones, practice scoring and voids) and keeps
+ * the default export and the metadata. The Daily's How to play sheet links
+ * here. `src/app/(info)/how-scoring-works/page.tsx` re-exports it.
  */
 import type { Metadata } from "next";
+import Link from "next/link";
 
-import { PagePlaceholder, SHELL_COPY } from "@/features/shell";
+import { HowToPlayText } from "@/features/daily";
+import { SHELL_COPY } from "@/features/shell";
+import { buttonClasses } from "@/ui/button-classes";
 
 export const metadata: Metadata = {
   title: SHELL_COPY.legal.howScoringWorks,
@@ -17,5 +22,15 @@ export const metadata: Metadata = {
 };
 
 export default function HowScoringWorksRoute() {
-  return <PagePlaceholder title={SHELL_COPY.legal.howScoringWorks} />;
+  return (
+    <div className="flex flex-col items-start gap-6 py-6">
+      <h1 className="font-display text-display-2">
+        {SHELL_COPY.legal.howScoringWorks}
+      </h1>
+      <HowToPlayText headingLevel={2} />
+      <Link href="/" className={buttonClasses({ variant: "secondary" })}>
+        {SHELL_COPY.goToToday}
+      </Link>
+    </div>
+  );
 }
