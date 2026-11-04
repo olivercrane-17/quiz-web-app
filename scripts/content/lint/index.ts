@@ -5,6 +5,7 @@
  *
  * | Rule | What this adds                                                      |
  * | ---- | ------------------------------------------------------------------- |
+ * | C04  | The warning at exactly 24 characters (the pipeline starts at 25)    |
  * | C15  | Measured encores: 1 in 10 per batch, 12 in the bank (units.json)    |
  * | C17  | `exactDates`: a near-tie of years passes when both exact days are   |
  * |      | 365 or more apart and each label claim states its day               |
@@ -40,6 +41,7 @@ import { excludedCountries, ruleC27 } from "./capitals.ts";
 import { nearTieDates } from "./comparisons.ts";
 import { measuredEncoreHits } from "./encores.ts";
 import { deniedExampleHits, guideCopies } from "./examples.ts";
+import { optionAtGridLimit } from "./lengths.ts";
 import { ruleC28 } from "./options.ts";
 import { loadLintReferences, type LintReferences } from "./reference.ts";
 import { ruleC26 } from "./risk-floor.ts";
@@ -50,6 +52,11 @@ export { loadLintReferences, type LintReferences } from "./reference.ts";
 /** The rules CNT-2 adds or extends, for documentation and tests. */
 export const CNT2_RULES: Record<string, { severity: string; summary: string }> =
   {
+    C04: {
+      severity: "warn",
+      summary:
+        "An option of exactly 24 characters warns too: the desktop grid needs every option under 24",
+    },
     C15: {
       severity: "error",
       summary:
@@ -172,6 +179,7 @@ export function cnt2ItemHits(
 ): { hits: Cnt2Hit[]; nearTiePasses: boolean } {
   const item: AnyItem = record.item;
   const hits: Cnt2Hit[] = [
+    ...optionAtGridLimit(item),
     ...ruleC19(item, refs.superlatives),
     ...ruleC26(item, refs.superlatives),
     ...ruleC27(item, context.countries),

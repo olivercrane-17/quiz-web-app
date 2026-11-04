@@ -47,6 +47,7 @@ const joined = (rule: string) =>
 export const RULES: Record<string, { severity: string; summary: string }> = {
   ...PIPELINE_RULES,
   ...CNT2_RULES,
+  C04: { severity: "error, warn", summary: joined("C04") },
   C15: { severity: "error", summary: joined("C15") },
   C17: { severity: "error, warn", summary: joined("C17") },
   C22: { severity: "error, warn", summary: joined("C22") },
