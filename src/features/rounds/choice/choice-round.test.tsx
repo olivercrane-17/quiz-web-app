@@ -242,6 +242,17 @@ afterEach(() => {
 });
 
 describe("ChoiceRound", () => {
+  it("D6 draws one key hint per option, its badge's letter, with no hiding class for a second one", () => {
+    setup();
+    const list = screen.getByRole("list", { name: PLANETS.stem });
+    // AnswerButton draws no key cap since FIX-DS, so nothing needs hiding;
+    // the keys stay in aria-keyshortcuts (the next test).
+    expect(list.querySelectorAll("kbd")).toHaveLength(0);
+    for (const option of within(list).getAllByRole("button")) {
+      expect(option.className).not.toMatch(/\[&_kbd\]/);
+    }
+  });
+
   it("shows the kicker, the stem as the page heading and the options by letter", () => {
     setup();
     expect(screen.getByText(/Question 4 of 10/)).toHaveTextContent(

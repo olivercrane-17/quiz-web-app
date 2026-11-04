@@ -575,10 +575,10 @@ function ChoiceRoundView({
                 onPressStart={
                   settings.sound ? () => playEffect("tap") : undefined
                 }
-                // D6: one key hint per option, the badge's letter. The
-                // `kbd` beside it repeats the keys that `aria-keyshortcuts`
-                // already names; FIX-DS removes it from AnswerButton.
-                className="h-full [&_kbd]:hidden"
+                // D6: one key hint per option, the badge's letter; the keys
+                // themselves are in `aria-keyshortcuts`, and AnswerButton
+                // draws no second hint since FIX-DS.
+                className="h-full"
               >
                 {labelIn(labels, option.index)}
                 {values === null ? null : (
