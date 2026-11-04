@@ -12,7 +12,7 @@
  * `/practice` among them until that page exists, so its tab bar marks no
  * tab: one it marked at `/practice` would not match the prerender. Static,
  * with its own title ("Page not found · Knewt"); Next adds the noindex
- * meta to every 404 response by itself.
+ * meta to every 404 response by itself, so the metadata leaves it out.
  */
 import type { Metadata } from "next";
 
@@ -22,7 +22,6 @@ import { TabsFrame } from "./tabs-layout";
 
 export const metadata: Metadata = {
   title: SHELL_COPY.notFound.title,
-  robots: { index: false },
 };
 
 export default function NotFoundRoute() {

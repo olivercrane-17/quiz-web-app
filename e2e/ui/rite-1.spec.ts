@@ -213,6 +213,12 @@ test.describe("R1-02 dead links", () => {
     expect(response?.status()).toBe(404);
     dropExpected(consoleErrors, NOT_FOUND_LOAD);
     await expect(page).toHaveTitle("Page not found · Knewt");
+    // Kept out of search, once.
+    await expect(page.locator('meta[name="robots"]')).toHaveCount(1);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "noindex",
+    );
     await expect(
       page.getByRole("heading", { level: 1, name: NOT_FOUND_HEADING }),
     ).toBeVisible();
