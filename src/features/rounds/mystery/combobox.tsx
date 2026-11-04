@@ -332,30 +332,61 @@ export function GuessCombobox({
   // reserved (below), so the scroll is the same before and after the list
   // opens and is never cut short by the page ending.
   const fieldRef = useRef<HTMLDivElement>(null);
-  const [maxRows, setMaxRows] = useState<number | null>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  /** The list's height cap: the whole rows that fit above the bottom edge. */
+  const [listMax, setListMax] = useState<string | null>(null);
   useLayoutEffect(() => {
     const field = fieldRef.current;
     const before = field?.getBoundingClientRect();
     // Nothing laid out (a hidden route, or no layout engine): nothing to keep in view.
     if ((!keyboard.open && !listOpen) || field === null || !before?.height) {
-      setMaxRows(null);
+      setListMax(null);
       return;
     }
+    // A row is 48 px (3rem) until names wrap, as they do at large text
+    // sizes (R1-03): then its drawn height counts.
     const rowPx = ROW_HEIGHT_REM * remPx();
+    const drawn = listOpen
+      ? [
+          ...(listRef.current?.querySelectorAll<HTMLElement>(
+            '[role="option"]',
+          ) ?? []),
+        ].map((row) => row.getBoundingClientRect().height)
+      : [];
+    const rowHeight = (index: number) => drawn[index] || rowPx;
     const bottom = keyboard.open ? keyboard.bottom : viewportBottom();
     const shownRows = keyboard.open
       ? MIN_VISIBLE_ROWS
       : Math.min(MIN_VISIBLE_ROWS, rows.length);
+    let block = 0;
+    for (let index = 0; index < shownRows; index += 1) {
+      block += rowHeight(index);
+    }
     keepBetween(
       bottom,
-      before.bottom + shownRows * rowPx + LIST_CHROME_PX,
+      before.bottom + block + LIST_CHROME_PX,
       keepVisible?.()?.getBoundingClientRect().top ?? before.top,
     );
     // Whole rows down to the edge itself: the scroll above keeps a small
     // gap where it can, and a sub-pixel short scroll mustn't cost a row.
     const room = bottom - field.getBoundingClientRect().bottom - LIST_CHROME_PX;
-    setMaxRows(Math.max(1, Math.floor(room / rowPx)));
-  }, [keyboard, listOpen, rows.length, clue, keepVisible]);
+    if (!drawn.some((height) => height > 0)) {
+      const whole = Math.max(1, Math.floor(room / rowPx));
+      setListMax(
+        `calc(${String(whole * ROW_HEIGHT_REM)}rem + ${String(LIST_CHROME_PX)}px)`,
+      );
+      return;
+    }
+    let fit = rowHeight(0);
+    for (
+      let index = 1;
+      index < drawn.length && fit + rowHeight(index) <= room + 0.5;
+      index += 1
+    ) {
+      fit += rowHeight(index);
+    }
+    setListMax(`${String(Math.ceil(fit + LIST_CHROME_PX))}px`);
+  }, [keyboard, listOpen, rows, clue, keepVisible]);
 
   // A chosen name leaves the caret at its end, so Backspace edits it; the
   // whole name shows under the field (R1-28), wherever the field scrolls.
@@ -498,16 +529,17 @@ export function GuessCombobox({
         One grid for both layouts. Wide: the field's frame spans the field
         and Guess, which sits inside its right edge, with Next clue beside
         while the keyboard is up; the list hangs from the frame, then the
-        notes. Narrow (R1-03): the field takes the row, the list and the
-        notes follow, and Guess (with Next clue beside it, when it is there)
-        takes the last row. Focus order stays field, Guess, Next clue.
+        notes. Narrow (R1-03): one column, so the field takes the row, the
+        list and the notes follow, then Guess on a row of its own, and Next
+        clue on the next one when it is there: two buttons that can't share
+        a row stack (DESIGN §10.2). Focus order stays field, Guess, Next clue.
       */}
       <div
         className={cx(
-          "group/field grid items-center gap-x-2",
+          "group/field grid items-center gap-x-2 @max-[18em]/guess:grid-cols-[minmax(0,1fr)]",
           beside === undefined
-            ? "grid-cols-[minmax(0,1fr)_auto] @max-[18em]/guess:grid-cols-[minmax(0,1fr)]"
-            : "grid-cols-[minmax(0,1fr)_auto_auto] @max-[18em]/guess:grid-cols-[minmax(0,1fr)_auto]",
+            ? "grid-cols-[minmax(0,1fr)_auto]"
+            : "grid-cols-[minmax(0,1fr)_auto_auto]",
         )}
       >
         {/* The field's frame: border, fill and focus ring, behind the field and Guess. */}
@@ -583,7 +615,9 @@ export function GuessCombobox({
                 onFocusChange?.(false);
               }}
               className={cx(
-                "absolute inset-0 w-full truncate rounded-none border-0 bg-transparent pt-[1.375rem] pr-1 pb-1 pl-2.5 text-[1.1875rem] font-bold outline-none placeholder:font-semibold placeholder:opacity-60",
+                // The placeholder is set smaller than the typed name, so the
+                // longest short noun (D14) fits beside Guess at 360 px.
+                "absolute inset-0 w-full truncate rounded-none border-0 bg-transparent pt-[1.375rem] pr-1 pb-1 pl-2.5 text-[1.1875rem] font-bold outline-none placeholder:text-[0.9375rem] placeholder:font-semibold placeholder:opacity-60",
                 TONE.ink,
               )}
             />
@@ -622,31 +656,26 @@ export function GuessCombobox({
           // The marked utilities override the variant's own (cx doesn't
           // merge them), so Guess stays small inside the field, and takes
           // a whole row of its own when the field is narrow.
-          className={cx(
-            "col-start-2 row-start-1 mr-1.5 min-h-11! shrink-0 rounded-[11px]! px-3.5! text-base! @max-[18em]/guess:col-start-1 @max-[18em]/guess:row-start-4 @max-[18em]/guess:mt-2 @max-[18em]/guess:mr-0 @max-[18em]/guess:min-h-12! @max-[18em]/guess:w-full",
-            beside === undefined && "@max-[18em]/guess:col-end-[-1]",
-          )}
+          className="col-start-2 row-start-1 mr-1.5 min-h-11! shrink-0 rounded-[11px]! px-3.5! text-base! @max-[18em]/guess:col-start-1 @max-[18em]/guess:col-end-[-1] @max-[18em]/guess:row-start-4 @max-[18em]/guess:mt-2 @max-[18em]/guess:mr-0 @max-[18em]/guess:min-h-12! @max-[18em]/guess:w-full"
         >
           {words.button}
         </Button>
         {beside === undefined ? null : (
-          <div className="col-start-3 row-start-1 flex self-stretch @max-[18em]/guess:col-start-2 @max-[18em]/guess:row-start-4 @max-[18em]/guess:mt-2">
+          <div
+            data-beside=""
+            className="col-start-3 row-start-1 flex self-stretch @max-[18em]/guess:col-start-1 @max-[18em]/guess:col-end-[-1] @max-[18em]/guess:row-start-5 @max-[18em]/guess:mt-2 @max-[18em]/guess:*:flex-1"
+          >
             {beside}
           </div>
         )}
 
         <ul
+          ref={listRef}
           id={listId}
           role="listbox"
           aria-label={plural}
           hidden={!listOpen}
-          style={
-            maxRows === null
-              ? undefined
-              : {
-                  maxHeight: `calc(${String(maxRows * ROW_HEIGHT_REM)}rem + ${String(LIST_CHROME_PX)}px)`,
-                }
-          }
+          style={listMax === null ? undefined : { maxHeight: listMax }}
           className={cx(
             "z-[3] col-start-1 col-end-3 row-start-2 overflow-y-auto rounded-b-2xl border-2 border-t-0 p-1 @max-[18em]/guess:col-end-[-1]",
             TONE.surface,

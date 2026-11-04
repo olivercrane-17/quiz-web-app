@@ -265,6 +265,8 @@ function MysteryPlay({
     const option = optionForKey(event.key, open.options);
     if (option === null) return;
     event.preventDefault();
+    // A held key repeats: the first press is the pick.
+    if (event.repeat) return;
     send({ family: "mystery", kind: "pick", option: option.index });
   }
 

@@ -88,26 +88,19 @@ const fail = (error: EncoreParseError): EncoreParseResult => ({
   error,
 });
 
-const THREE_DIGITS = /^\d{3}$/;
-const TWO_DIGITS = /^\d{2}$/;
-
 /**
- * True when the commas of `body` (digits and commas) group thousands (D1):
- * each one followed by exactly three digits, or Indian grouping (two-digit
- * groups ending in a three-digit one), after a leading group that is a
- * positive number. "0,500" and ",500" aren't grouping: a grouped number is
- * 1,000 or more, so they keep the comma as the point.
+ * D1's thousands groups, after a leading group that is a positive number
+ * (the lookahead): "0,500" and ",500" aren't grouping, since a grouped
+ * number is 1,000 or more, so they keep the comma as the point.
+ * Each comma followed by exactly three digits: "1,200", "12,345,678".
  */
+const WESTERN_GROUPS = /^(?=\d*[1-9])\d+(?:,\d{3})+$/;
+/** Indian grouping: two-digit groups ending in a three-digit one, "1,20,000". */
+const INDIAN_GROUPS = /^(?=\d*[1-9])\d+(?:,\d{2})+,\d{3}$/;
+
+/** True when the commas of `body` (digits and commas only) group thousands (D1). */
 function commasGroupThousands(body: string): boolean {
-  const [lead, ...groups] = body.split(",");
-  const last = groups.at(-1);
-  if (lead === undefined || last === undefined) return false;
-  if (!/^\d*[1-9]\d*$/.test(lead) || !THREE_DIGITS.test(last)) return false;
-  const middle = groups.slice(0, -1);
-  return (
-    middle.every((group) => THREE_DIGITS.test(group)) ||
-    middle.every((group) => TWO_DIGITS.test(group))
-  );
+  return WESTERN_GROUPS.test(body) || INDIAN_GROUPS.test(body);
 }
 
 /** Splits the digits into the integer part and the fraction by PRD §4.2.1's separator rules, as D1 amends them. */

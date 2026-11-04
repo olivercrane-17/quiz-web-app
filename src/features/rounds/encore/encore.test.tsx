@@ -581,6 +581,11 @@ describe("EncoreRound, the result", () => {
     expect(document.querySelector('[data-label="guess"]')?.className).toMatch(
       /-translate-x-full/,
     );
+    // The pinned dot's arrow is drawn in ink on the card, not in the dot's
+    // on-accent colour, which left it white on white.
+    expect(
+      document.querySelector("[data-edge-arrow]")?.getAttribute("class"),
+    ).toContain("--kn-ink");
     unmount();
 
     renderWithUser(<EncoreRound {...ostry(20, null)} />);

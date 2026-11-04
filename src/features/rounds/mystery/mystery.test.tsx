@@ -958,6 +958,24 @@ describe("MysteryRound with the keyboard open", () => {
     expect(beside).toHaveAccessibleName("Last clue and options · then worth 1");
   });
 
+  it("R1-03 stacks Guess and the compact Next clue on rows of their own when the field is narrow", async () => {
+    const { combobox } = await withKeyboardOpen();
+    const narrow = `@max-[${String(NARROW_FIELD_EM)}em]/guess:`;
+    const beside = combobox.querySelector("[data-beside]");
+    if (!(beside instanceof HTMLElement)) throw new Error("nothing beside");
+    // Wide: beside the field. Narrow: its own full-width row, under Guess.
+    expect(beside.className).toContain("col-start-3");
+    for (const placement of ["row-start-5", "col-start-1", "*:flex-1"]) {
+      expect(beside.className.split(/\s+/)).toContain(`${narrow}${placement}`);
+    }
+    expect(guessButton().className.split(/\s+/)).toContain(
+      `${narrow}row-start-4`,
+    );
+    expect(before(guessButton(), within(beside).getByRole("button"))).toBe(
+      true,
+    );
+  });
+
   it("fires Next clue from beside the field, keeping the keyboard up until the press lands", async () => {
     const { user, combobox, onIntent } = await withKeyboardOpen();
     onIntent.mockClear();

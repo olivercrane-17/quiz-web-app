@@ -58,8 +58,11 @@ function Arrow({ edge }: { edge: "low" | "high" }) {
       viewBox="0 0 10 10"
       width={10}
       height={10}
+      data-edge-arrow=""
       className={cx(
-        "absolute top-1/2 -translate-y-1/2 fill-current",
+        // Ink: it sits on the card beside the dot, not on the dot's fill.
+        "absolute top-1/2 -translate-y-1/2 fill-current forced-colors:text-[color:CanvasText]",
+        TONE.ink,
         edge === "high" ? "left-full ml-0.5" : "right-full mr-0.5 rotate-180",
       )}
     >
