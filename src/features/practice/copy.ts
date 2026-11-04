@@ -26,10 +26,14 @@ export const PRACTICE_COPY = {
     quickPlayLine: "Ten questions on anything, at every level. Untimed.",
     later: "Choosing a category and a difficulty comes next.",
   },
+  /**
+   * Page titles, one per page (DESIGN §11): the hub matches its tab, and a
+   * run in progress reads apart from it in history and tab lists.
+   */
   meta: {
     hub: "Practice",
     hubDescription: "Ten quick questions on anything, untimed.",
-    run: "Practice",
+    run: "Practice round",
     results: "Practice results",
   },
 } as const;

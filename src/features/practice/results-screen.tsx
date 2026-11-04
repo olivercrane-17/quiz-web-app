@@ -2,10 +2,11 @@
 
 /**
  * Practice results, /practice/results (DESIGN §12.11, PRD §3.3.1): the
- * score, Play again with the same settings, then every question as a
- * compact row with a short stem, its verdict, the answer and, on a miss,
- * what the player chose, opening to the explanation (decision D13, R1-17).
- * A results screen is a safe point for app updates (§10.7). There is no
+ * score, Play again with the same settings and Share (PRD §3.5.4's text,
+ * through the share feature's button), then every question as a compact
+ * row with a short stem, its verdict, the answer and, on a miss, what the
+ * player chose, opening to the explanation (decision D13, R1-17). A
+ * results screen is a safe point for app updates (§10.7). There is no
  * challenge action: practice is never issued as a challenge (AC-PRA-11).
  *
  * It shows the run that just finished in this tab, or after a reload the
@@ -13,17 +14,19 @@
  * The score is the page's heading and takes focus when the results arrive,
  * since the Continue that brought the player here is gone. Play again
  * replaces this page, as the finish replaced the run, so one Back from any
- * results reaches Today. The best-moment line, Change category and Share
- * join it with PRA-2.
+ * results reaches Today. The best-moment line and Change category join it
+ * with PRA-2.
  */
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { loadPracticePool } from "@/content/loaders/practice";
 import { track } from "@/features/analytics/track";
 import { bootClient } from "@/features/identity";
 import { useSafePoint } from "@/features/pwa/safe-point";
+import { ShareButton } from "@/features/share/share-button";
 import { PlayFrame } from "@/features/shell";
+import { getSiteUrl } from "@/lib/env";
 import { getKv } from "@/platform/storage";
 import { Button } from "@/ui/button";
 import { buttonClasses } from "@/ui/button-classes";
@@ -38,6 +41,7 @@ import { lastFinishedRunId } from "./model/last-run";
 import { findHistoryEntry, type PracticeHistoryEntry } from "./model/storage";
 import { resultRows, type ResultRow } from "./model/summary";
 import { QuickPlayLink } from "./quick-play-link";
+import { practiceSharePayload } from "./share";
 
 type Results =
   | { kind: "loading" }
@@ -60,9 +64,19 @@ const HIDDEN_PERIOD = "[clip-path:inset(50%)]";
 /**
  * The row's lines (D13): the verdict's icon, then the question's number
  * and a short stem (two lines at most until the row opens), over the
- * verdict, the answer and, on a miss, what the player chose.
+ * verdict, the answer and, on a miss, what the player chose, with `hint`
+ * last. Only the icon sits beside the text, so at 200% text the lines keep
+ * the row's width instead of reading a word a line.
  */
-function RowLines({ row, loaded }: { row: ResultRow; loaded: boolean }) {
+function RowLines({
+  row,
+  loaded,
+  hint = null,
+}: {
+  row: ResultRow;
+  loaded: boolean;
+  hint?: ReactNode;
+}) {
   const first =
     row.item !== null
       ? COPY.results.numbered(row.number, row.item.stem)
@@ -89,6 +103,7 @@ function RowLines({ row, loaded }: { row: ResultRow; loaded: boolean }) {
         <span className="break-words text-muted-foreground">
           {COPY.results.line(parts)}
         </span>
+        {hint}
       </span>
     </>
   );
@@ -120,16 +135,26 @@ function QuestionRow({ row, loaded }: { row: ResultRow; loaded: boolean }) {
               "cursor-pointer list-none [&::-webkit-details-marker]:hidden",
             )}
           >
-            <RowLines row={row} loaded={loaded} />{" "}
-            <span className="inline-flex shrink-0 items-center gap-1 font-semibold text-muted-foreground">
-              {COPY.results.why}
-              <span
-                aria-hidden="true"
-                className="inline-block group-open:rotate-180"
-              >
-                ▾
-              </span>
-            </span>
+            <RowLines
+              row={row}
+              loaded={loaded}
+              hint={
+                // Under the lines, so the summary still reads "… You chose
+                // Sorrel. Why".
+                <span
+                  data-result-why=""
+                  className="inline-flex items-center gap-1 self-start font-semibold text-muted-foreground"
+                >
+                  {COPY.results.why}
+                  <span
+                    aria-hidden="true"
+                    className="inline-block group-open:rotate-180"
+                  >
+                    ▾
+                  </span>
+                </span>
+              }
+            />
           </summary>
           {/* Under the text, past the icon's column. */}
           <p className="ps-7 pb-3">{row.item.explanation}</p>
@@ -229,8 +254,9 @@ export function PracticeResultsScreen({
             </span>
           </h1>
         </div>
-        {/* Above the list, so it is on the first screen (D13). */}
-        <div className="flex flex-col gap-3 sm:flex-row">
+        {/* Above the list, so they are on the first screen (D13): Play
+            again, then Share, secondary (DESIGN §12.11). */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
           <Button
             variant="primary"
             onClick={() => {
@@ -248,6 +274,13 @@ export function PracticeResultsScreen({
           >
             {COPY.results.playAgain}
           </Button>
+          <ShareButton
+            surface="practice"
+            payload={practiceSharePayload(entry, {
+              category,
+              siteUrl: getSiteUrl(),
+            })}
+          />
         </div>
         <section aria-labelledby="practice-results-questions">
           <h2 id="practice-results-questions" className="text-lg font-bold">

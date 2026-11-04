@@ -11,7 +11,10 @@
  * practice · 3 of 10", and a click leaves no request, so the run screen
  * resumes it (R1-36: Quick play used to resume an old run silently). The
  * label is the server's ("Quick play") until the open run is known, after
- * first paint, so hydration never differs.
+ * first paint, so hydration never differs. The label wraps inside the
+ * button: a button doesn't (`whitespace-nowrap`), and at 200% text or with
+ * text spacing "Continue practice · 3 of 10" is wider than a phone, which
+ * pushed Today's tab bar off the screen (DESIGN §11 Reflow).
  *
  * Size: one of Home's eager islands, with a 1 kB gzipped target (§10.9 item
  * 2). The label and the class names come from the server component around
@@ -70,7 +73,9 @@ export function QuickPlayLink({
         if (resume === null) writePracticeIntent(QUICK_PLAY_INTENT);
       }}
     >
-      {resume ?? children}
+      <span className="min-w-0 text-center whitespace-normal">
+        {resume ?? children}
+      </span>
     </Link>
   );
 }

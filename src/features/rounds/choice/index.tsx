@@ -24,7 +24,10 @@
  *   holds a number, so "4" meant as four bridges never locks in option D.
  *   Pressed on keydown and committed on keyup, only while focus is inside
  *   the question region and never with shortcuts off (WCAG 2.1.4). Each
- *   option names the keys that pick it in `aria-keyshortcuts` ("A 1").
+ *   option names the keys that pick it in `aria-keyshortcuts` ("A 1"), and
+ *   the badge's letter is its one visible hint: the round hides the second
+ *   hint this lane's AnswerButton still draws from `shortcut` (FIX-DS drops
+ *   it from src/ui).
  * - The beat: the pick locks at once and the verdict shows 400 ms
  *   (TUNABLES.answers.revealMs) after the commit, even when it came back
  *   sooner. A slower verdict shows when it lands, with "Checking…" past
@@ -35,12 +38,16 @@
  *   whole explanation, Learn more, the reveal actions and Continue. On a
  *   short phone, under 740 px tall, it opens compact (DESIGN §6.10), which
  *   is tighter but still whole (D12, R1-31). When it can't fit below the
- *   options, the page scrolls just enough to show all of it; when it is
- *   taller than the screen under the header, its body scrolls inside it, so
- *   Continue stays in view. A tap anywhere, or a fresh Enter, first
- *   completes the automatic part at once; Enter on the sheet continues. A
- *   held key's repeats do neither. With auto-advance on, Continue fires by
- *   itself after 2 s plus 0.25 s a word, and any tap or key cancels it.
+ *   options, the page scrolls just enough to show all of it, down to
+ *   Continue. When that scroll would take the correct option or the pick
+ *   under the header, the sheet's body scrolls inside it instead, so both
+ *   options, the title and Continue stay in view (`keepSheetInView`, DESIGN
+ *   §6.10). Continue is brought into the visual viewport too, which a page
+ *   wider than a phone's screen leaves shorter than the layout viewport. A
+ *   tap anywhere, or a fresh Enter, first completes the automatic part at
+ *   once; Enter on the sheet continues. A held key's repeats do neither.
+ *   With auto-advance on, Continue fires by itself after 2 s plus 0.25 s a
+ *   word, and any tap or key cancels it.
  * - Speech: the verdict goes to the polite status region as it shows at
  *   400 ms, from here, so it lands with what the eye sees ("Not quite. You
  *   chose Lyon. The answer is Paris."). Controllers drop the run machine's
@@ -246,6 +253,7 @@ function ChoiceRoundView({
   const stemRef = useRef<HTMLHeadingElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const sheetBodyRef = useRef<HTMLDivElement>(null);
+  const continueRef = useRef<HTMLButtonElement>(null);
   const autoLineRef = useRef<HTMLSpanElement>(null);
   const stemId = useId();
 
@@ -352,7 +360,8 @@ function ChoiceRoundView({
   // focus is still where the answer left it (R1-14); otherwise the verdict
   // reaches the player through the status region. Then the sheet fits the
   // screen: as it is, or with the page scrolled just enough to show all of
-  // it, down to Continue.
+  // it, down to Continue, and its body scrolling inside it before the page
+  // takes the correct option or the pick under the header.
   const sheetOpened = useEffectEvent(() => {
     const claimed = pressClaimedFocus.current;
     pressClaimedFocus.current = false;
@@ -369,7 +378,15 @@ function ChoiceRoundView({
     keepSheetInView(
       rootRef.current?.querySelector<HTMLElement>('[data-sheet="inline"]') ??
         null,
-      sheetBodyRef.current,
+      {
+        body: sheetBodyRef.current,
+        keep: [
+          ...(questionRef.current?.querySelectorAll(
+            '[data-state="correct"], [data-state="your-answer"]',
+          ) ?? []),
+        ],
+        action: continueRef.current,
+      },
     );
   });
   useLayoutEffect(() => {
@@ -559,7 +576,10 @@ function ChoiceRoundView({
                 onPressStart={
                   settings.sound ? () => playEffect("tap") : undefined
                 }
-                className="h-full"
+                // D6: one key hint per option, the badge's letter. The
+                // `kbd` beside it repeats the keys that `aria-keyshortcuts`
+                // already names; FIX-DS removes it from AnswerButton.
+                className="h-full [&_kbd]:hidden"
               >
                 {labelIn(labels, option.index)}
                 {values === null ? null : (
@@ -612,6 +632,7 @@ function ChoiceRoundView({
         titleRef={titleRef}
         actions={
           <Button
+            ref={continueRef}
             variant="primary"
             block
             onClick={onContinue}
@@ -629,14 +650,16 @@ function ChoiceRoundView({
         }
       >
         {choiceReveal === null ? null : (
-          // The sheet's body. When the whole sheet is taller than the
-          // screen under the header, it scrolls inside the sheet, and the
-          // padding keeps the focus rings of its links inside that box.
+          // The sheet's body. When the sheet can't fit as it is, this part
+          // scrolls inside the sheet (`keepSheetInView`). Its side padding
+          // (1rem, the compact sheet's own) keeps the 6 px focus rings of
+          // its links inside that box; focused by keyboard to scroll it, it
+          // draws the same 3 px ring just inside its own edge.
           <div
             ref={sheetBodyRef}
             data-sheet-body=""
             className={cx(
-              "-mx-3 -my-1.5 flex flex-col px-3 py-1.5",
+              "-mx-4 -my-2 flex flex-col px-4 py-2 outline-offset-[-3px] focus-visible:outline-[3px] focus-visible:outline-foreground",
               compact ? "gap-2" : "gap-4",
             )}
           >
@@ -648,7 +671,9 @@ function ChoiceRoundView({
             <p data-explanation="" className="text-base">
               {choiceReveal.explanation}
             </p>
-            <div className="-mx-3 flex flex-wrap items-center gap-1">
+            {/* Learn more's text sits within a few pixels of the
+                explanation's edge, and its ring 2 px inside the body's. */}
+            <div className="-mx-2 flex flex-wrap items-center gap-1">
               <a
                 href={learnMoreUrl(choiceReveal.learnMore)}
                 target="_blank"

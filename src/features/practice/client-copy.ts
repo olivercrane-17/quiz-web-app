@@ -98,7 +98,7 @@ export const PRACTICE_CLIENT_COPY = {
      */
     line: (parts: readonly string[]) =>
       parts.map((part) => (/[.!?]$/.test(part) ? part : `${part}.`)).join(" "),
-    /** The open-me hint at the end of each row's summary. */
+    /** The open-me hint under each row's lines. */
     why: "Why",
     withdrawn: "This question is no longer in the pack.",
     playAgain: "Play again",
@@ -109,5 +109,31 @@ export const PRACTICE_CLIENT_COPY = {
       body: "Ten questions on anything.",
     },
     failed: "We couldn't load the questions for these results.",
+  },
+  share: {
+    /**
+     * The share text's first line (PRD §3.5.4): "Knewt Practice · Geography
+     * · Hard · 8/10". `difficulty` is null for Mixed, the default, which
+     * the line leaves out: "Knewt Practice · Mixed · 7/10".
+     */
+    line: ({
+      brand,
+      category,
+      difficulty,
+      score,
+      max,
+    }: {
+      brand: string;
+      category: string;
+      difficulty: string | null;
+      score: number;
+      max: number;
+    }) =>
+      [
+        `${brand} Practice`,
+        category,
+        ...(difficulty === null ? [] : [difficulty]),
+        `${score}/${max}`,
+      ].join(" · "),
   },
 } as const;

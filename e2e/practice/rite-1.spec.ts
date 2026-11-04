@@ -3,8 +3,9 @@
  * its id (docs/playtests/rite-1.md, sections 4 and 5; decisions D6, D12
  * and D13 in docs/02-PRODUCT-DECISIONS.md §19). Mock build, fixture packs.
  */
-import type { Locator, Page } from "@playwright/test";
+import { devices, type Locator, type Page } from "@playwright/test";
 
+import { MIN_SHEET_BODY_PX } from "../../src/features/rounds/choice/viewport";
 import { expect, test } from "../fixtures";
 
 const round = (page: Page) => page.locator('[data-round="choice"]');
@@ -129,6 +130,91 @@ async function expectContinueOnScreen(page: Page) {
   if (box === null || viewport === null) return;
   expect(box.y).toBeGreaterThanOrEqual(0);
   expect(box.y + box.height).toBeLessThanOrEqual(viewport.height);
+}
+
+/**
+ * DESIGN §6.10, R1-21: with the sheet open, the correct option and the pick
+ * lie whole between the header and the bottom of the screen, whenever the
+ * screen holds them both above the sheet with its body at its floor. Four
+ * two-line options on a 640 px screen can't, and then only Continue and the
+ * title are sure to show.
+ */
+async function expectMarkedOptionsOnScreen(page: Page, label: string) {
+  const view = await page.evaluate((floor) => {
+    const header = [...document.querySelectorAll("header")].find(
+      (h) => h.getBoundingClientRect().height > 0,
+    );
+    const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
+    const root = document.querySelector('[data-round="choice"]');
+    const marked = [
+      ...(root?.querySelectorAll(
+        '[data-question] [data-state="correct"], [data-question] [data-state="your-answer"]',
+      ) ?? []),
+    ].map((option) => {
+      const box = option.getBoundingClientRect();
+      return { top: box.top, bottom: box.bottom };
+    });
+    const sheet = root
+      ?.querySelector('[data-sheet="inline"]')
+      ?.getBoundingClientRect();
+    const body = root?.querySelector("[data-sheet-body]");
+    // How much shorter the sheet could still get: its body down to the floor.
+    const give = Math.max(0, (body?.clientHeight ?? 0) - floor);
+    const highest = Math.min(...marked.map((box) => box.top));
+    return {
+      headerBottom,
+      innerHeight,
+      marked,
+      roomForBoth:
+        sheet !== undefined &&
+        sheet.bottom - give - highest <= innerHeight - headerBottom,
+    };
+  }, MIN_SHEET_BODY_PX);
+  expect(view.marked.length, label).toBeGreaterThan(0);
+  if (!view.roomForBoth) return;
+  for (const box of view.marked) {
+    expect(box.top, label).toBeGreaterThanOrEqual(view.headerBottom - 0.5);
+    expect(box.bottom, label).toBeLessThanOrEqual(view.innerHeight + 0.5);
+  }
+}
+
+/** 200% text, as a phone's text size setting gives it (Chromium only: tag the test @cdp). */
+async function textAt200(page: Page) {
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send("Page.setFontSizes", {
+    fontSizes: { standard: 32, fixed: 26 },
+  });
+}
+
+/** Answers with a letter key, then continues from the sheet with Enter: a keyboard works at any size. */
+async function answerByKey(page: Page, key: string) {
+  await page.keyboard.press(key);
+  await expect(sheet(page)).toBeVisible();
+  await page.keyboard.press("Enter");
+}
+
+/** Plays two questions and leaves, so a run is open at question 3. */
+async function openRunAtQuestion3(page: Page) {
+  await startQuickPlay(page);
+  for (let n = 1; n <= 2; n += 1) {
+    await expect(round(page).getByText(`Question ${n} of 10`)).toBeVisible();
+    await answerByKey(page, "a");
+  }
+  await expect(round(page).getByText("Question 3 of 10")).toBeVisible();
+  await leave(page).click();
+  await expect(page).toHaveURL("/");
+}
+
+/** No sideways scroll: nothing wider than the screen (WCAG 1.4.10, DESIGN §11 Reflow). */
+async function expectNoSidewaysScroll(
+  page: Page,
+  width: number,
+  where: string,
+) {
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+    where,
+  ).toBeLessThanOrEqual(width);
 }
 
 test.describe("RITE round 1: practice", () => {
@@ -272,6 +358,12 @@ test.describe("RITE round 1: practice", () => {
       }
       // The sheet rises by itself; Enter on its title continues.
       await expect(sheet(page)).toBeVisible();
+      if (onBridges) {
+        // R1-34 with a one-character answer, every time rather than by luck.
+        await expect(sheet(page).getByRole("heading")).toHaveAccessibleName(
+          "Right. It's 4.",
+        );
+      }
       await page.keyboard.press("Enter");
     }
     expect(bridges).toBe(true);
@@ -355,12 +447,83 @@ test.describe("RITE round 1: practice", () => {
               withSheet.headerBottom,
             );
           }
+          // The sheet's body scrolls before the header takes the correct
+          // option or the pick (DESIGN §6.10, D12).
+          await expectMarkedOptionsOnScreen(page, `question ${n}`);
           await expectContinueOnScreen(page);
           await continueButton(page).click();
         }
       });
     });
   }
+
+  test.describe("on a Pixel 7 at 200% text", () => {
+    // The mobile-chromium project's phone, whichever project runs this.
+    const pixel7 = devices["Pixel 7"];
+    test.use({
+      viewport: pixel7.viewport,
+      userAgent: pixel7.userAgent,
+      deviceScaleFactor: pixel7.deviceScaleFactor,
+      isMobile: pixel7.isMobile,
+      hasTouch: pixel7.hasTouch,
+    });
+
+    test("R1-21 Continue is on the screen after every reveal, even where the page is wider than the phone @cdp", async ({
+      page,
+    }) => {
+      await textAt200(page);
+      await startQuickPlay(page);
+      for (let n = 1; n <= 3; n += 1) {
+        await expect(
+          round(page).getByText(`Question ${n} of 10`),
+        ).toBeVisible();
+        await page.keyboard.press(n % 2 === 0 ? "a" : "b");
+        await expect(sheet(page)).toBeVisible();
+        // Against what is on the glass: a page wider than the phone makes
+        // the layout viewport taller than the screen.
+        const fit = await continueButton(page).evaluate((button) => {
+          const box = button.getBoundingClientRect();
+          const screen = window.visualViewport;
+          const top = screen?.offsetTop ?? 0;
+          return {
+            top: box.top,
+            bottom: box.bottom,
+            from: top,
+            to: top + (screen?.height ?? innerHeight),
+          };
+        });
+        expect(fit.top, `question ${n}`).toBeGreaterThanOrEqual(fit.from - 0.5);
+        expect(fit.bottom, `question ${n}`).toBeLessThanOrEqual(fit.to + 0.5);
+        await expectRingRoom(page);
+        await page.keyboard.press("Enter");
+      }
+    });
+
+    test("D12 a sheet body that scrolls takes keyboard focus with the app's 3 px ring @cdp", async ({
+      page,
+    }) => {
+      await textAt200(page);
+      await startQuickPlay(page);
+      await page.keyboard.press("a");
+      await expect(sheet(page)).toBeVisible();
+      const body = sheet(page).locator("[data-sheet-body]");
+      // 200% text on a phone: the body has to scroll inside the sheet.
+      await expect(body).toHaveAttribute("tabindex", "0");
+      // From the focused title, the first Tab reaches the body.
+      await page.keyboard.press("Tab");
+      await expect(body).toBeFocused();
+      const ring = await body.evaluate((element) => {
+        const style = getComputedStyle(element);
+        return {
+          style: style.outlineStyle,
+          width: style.outlineWidth,
+          offset: style.outlineOffset,
+        };
+      });
+      // Inside its edge, so nothing around the box can cut it off.
+      expect(ring).toEqual({ style: "solid", width: "3px", offset: "-3px" });
+    });
+  });
 
   test.describe("at 360 by 640", () => {
     test.use({ viewport: { width: 360, height: 640 } });
@@ -426,8 +589,9 @@ test.describe("RITE round 1: practice", () => {
       await expect(round(page).getByText(`Question ${n} of 10`)).toBeVisible();
       await answer(page, n % 2);
       const heading = sheet(page).getByRole("heading");
+      // One character is an answer too: "It's 4." for the bridges question.
       await expect(heading).toHaveAccessibleName(
-        /^(Right|Not quite)\. It's \S.*\S\.$/,
+        /^(Right|Not quite)\. It's \S(?:.*\S)?\.$/,
       );
       await expect(heading).not.toHaveAccessibleName(/ \.|  /);
       await continueButton(page).click();
@@ -509,6 +673,144 @@ test.describe("RITE round 1: practice", () => {
     // On the first screen, with no scrolling.
     expect(again.y + again.height).toBeLessThanOrEqual(viewport.height);
   });
+
+  test.describe("at 360 by 640 and 200% text", () => {
+    test.use({ viewport: { width: 360, height: 640 } });
+
+    test("R1-36 Continue practice · 3 of 10 wraps, so Today and /practice never scroll sideways @cdp", async ({
+      page,
+    }) => {
+      await textAt200(page);
+      await openRunAtQuestion3(page);
+      await expect(
+        todayCard(page).getByRole("link", {
+          name: "Continue practice · 3 of 10",
+        }),
+      ).toBeVisible();
+      await expectNoSidewaysScroll(page, 360, "Today");
+      await page.goto("/practice");
+      await expect(
+        page
+          .getByRole("main")
+          .getByRole("link", { name: "Continue practice · 3 of 10" }),
+      ).toBeVisible();
+      await expectNoSidewaysScroll(page, 360, "/practice");
+    });
+
+    test("R1-17 a results row keeps the screen's width for its words, with only the icon beside them @cdp", async ({
+      page,
+    }) => {
+      await textAt200(page);
+      await startQuickPlay(page);
+      for (let n = 1; n <= 10; n += 1) {
+        await expect(
+          round(page).getByText(`Question ${n} of 10`),
+        ).toBeVisible();
+        await answerByKey(page, n % 2 === 0 ? "a" : "b");
+      }
+      await expect(page).toHaveURL("/practice/results");
+      const summaries = page.locator("[data-result-row] summary");
+      await expect(summaries).toHaveCount(10);
+      const widths = await summaries.evaluateAll((rows) =>
+        rows.map((row) => ({
+          row: row.getBoundingClientRect().width,
+          words:
+            row
+              .querySelector("[data-result-stem]")
+              ?.parentElement?.getBoundingClientRect().width ?? 0,
+        })),
+      );
+      for (const [i, { row, words }] of widths.entries()) {
+        // The 16 px icon and its gap take the rest; no hint beside them.
+        expect(words, `row ${i + 1}`).toBeGreaterThanOrEqual(row * 0.8);
+      }
+      await expectNoSidewaysScroll(page, 360, "results");
+    });
+  });
+
+  test.describe("at 1280 by 800", () => {
+    test.use({ viewport: { width: 1280, height: 800 } });
+
+    test("R1-13 D6 each option shows one key hint, the letter on its badge, and still names its keys", async ({
+      page,
+    }) => {
+      await startQuickPlay(page);
+      for (let n = 1; n <= 3; n += 1) {
+        await expect(
+          round(page).getByText(`Question ${n} of 10`),
+        ).toBeVisible();
+        const hints = await options(page).evaluateAll((buttons) =>
+          buttons.map((button) => ({
+            keys: button.getAttribute("aria-keyshortcuts") ?? "",
+            kbd: [...button.querySelectorAll("kbd")].some((kbd) =>
+              kbd.checkVisibility(),
+            ),
+            text: (button as HTMLElement).innerText,
+          })),
+        );
+        for (const [i, hint] of hints.entries()) {
+          expect(hint.keys, `option ${i + 1}`).toMatch(/^[A-D]( [1-4])?$/);
+          expect(hint.kbd, `option ${i + 1}`).toBe(false);
+          // "A 1" is for assistive technology; the eye sees the badge's A.
+          if (hint.keys.includes(" ")) {
+            expect(hint.text, `option ${i + 1}`).not.toContain(hint.keys);
+          }
+        }
+        await answerAndContinue(page, n % 2);
+      }
+    });
+  });
+
+  test.describe("Share on the results (R1-01, PRD §3.5.4)", () => {
+    test.use({ permissions: ["clipboard-read", "clipboard-write"] });
+
+    // The results hand the share feature's button the practice text
+    // already, but that button (src/features/share/share-button.tsx)
+    // renders nothing in this lane: FIX-DLY builds it on lane/r4-fixdly.
+    // Un-fixme this once that lane has merged.
+    test.fixme("R1-01 AC-SHR-05 AC-SHR-08 Share copies the run's line and a path-only /practice link, never a challenge", async ({
+      page,
+    }) => {
+      // No Web Share, as in desktop Chromium on Linux.
+      await page.addInitScript(() => {
+        const proto = Navigator.prototype as unknown as Record<string, unknown>;
+        delete proto.share;
+        delete proto.canShare;
+      });
+      await startQuickPlay(page);
+      await playToResults(page);
+      const heading = await page
+        .getByRole("heading", { level: 1 })
+        .textContent();
+      const score = /(\d+)\s*out of 10/.exec(heading ?? "")?.[1];
+      await page.getByRole("button", { name: "Share", exact: true }).click();
+      await expect(page.locator("#qz-live-polite")).toHaveText(
+        "Copied. Paste it into your group chat.",
+      );
+      const text = await page.evaluate(() => navigator.clipboard.readText());
+      expect(text).toMatch(
+        new RegExp(
+          `^\\S+ Practice · Mixed · ${score ?? "\\d+"}/10\\nhttps?://[^/?#]+/practice$`,
+        ),
+      );
+      expect(text).not.toContain("/c/");
+      expect(
+        await page.evaluate(() =>
+          (
+            (
+              window as unknown as {
+                __qzTrackLog?: { name: string; props: unknown }[];
+              }
+            ).__qzTrackLog ?? []
+          )
+            .filter((event) => event.name === "share_complete")
+            .map((event) => event.props),
+        ),
+      ).toEqual([
+        { method: "clipboard", mode: "practice", surface: "practice" },
+      ]);
+    });
+  });
 });
 
 /** D12: the explanation whole on screen (not clamped, nothing behind Read more), with Learn more and Continue. */
@@ -545,5 +847,26 @@ async function expectWholeExplanation(page: Page) {
   await expect(
     sheet(page).getByRole("link", { name: /^Learn more about / }),
   ).toBeAttached();
+  await expectRingRoom(page);
   await expectContinueOnScreen(page);
+}
+
+/**
+ * Learn more's focus ring (3 px at a 3 px offset) fits across the sheet's
+ * body, which clips whatever pokes out of it once it scrolls.
+ */
+async function expectRingRoom(page: Page) {
+  const room = await sheet(page)
+    .getByRole("link", { name: /^Learn more about / })
+    .evaluate((link) => {
+      const body = link.closest("[data-sheet-body]");
+      const box = link.getBoundingClientRect();
+      const clip = body?.getBoundingClientRect();
+      return {
+        left: box.left - 6 - (clip?.left ?? -Infinity),
+        right: (clip?.right ?? Infinity) - (box.right + 6),
+      };
+    });
+  expect(room.left).toBeGreaterThanOrEqual(-0.5);
+  expect(room.right).toBeGreaterThanOrEqual(-0.5);
 }
