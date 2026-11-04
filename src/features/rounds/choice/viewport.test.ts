@@ -300,6 +300,15 @@ describe("R1-14 where focus is", () => {
     expect(focusIsElsewhere(round)).toBe(false);
   });
 
+  it("R1-09 is nowhere in particular on the main that holds the round, which the shell focuses after a route change", () => {
+    const main = element("main", "main");
+    main.tabIndex = -1;
+    const round = element("div", "round", main);
+    main.focus();
+    expect(document.activeElement).toBe(main);
+    expect(focusIsElsewhere(round)).toBe(false);
+  });
+
   it("is elsewhere on a control outside the round, unless that control is hidden", () => {
     const round = element("div", "round");
     const wrapper = element("div", "wrapper");

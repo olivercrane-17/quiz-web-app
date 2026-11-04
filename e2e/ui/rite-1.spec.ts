@@ -108,9 +108,10 @@ const options = (page: Page) =>
 
 async function startQuickPlay(page: Page): Promise<void> {
   await openToday(page);
+  // Once a run is open, FIX-PRA's card carries it on instead (R1-36).
   await page
     .locator('[data-home-slot="practice"]')
-    .getByRole("link", { name: "Quick play" })
+    .getByRole("link", { name: /^(Quick play|Continue practice)/ })
     .click();
   await expect(page).toHaveURL("/practice/run");
   await expect(options(page).first()).toBeVisible();
@@ -605,7 +606,8 @@ test.describe("R1-09 text from the page you just left", () => {
       .getByRole("link", { name: "Quick play" })
       .click();
     await expect(page).toHaveURL("/practice/run");
-    await expect.poll(() => announcer(page)).toBe("Practice · Knewt");
+    // FIX-PRA's run title, apart from the hub's.
+    await expect.poll(() => announcer(page)).toBe("Practice round · Knewt");
   });
 
   // FIX-PRA: the results page isn't prefetched, so its title lands after
@@ -724,7 +726,8 @@ test.describe("R1-20 the brand", () => {
       ["/", "Knewt"],
       ["/g", "Groups · Knewt"],
       ["/privacy", "Privacy · Knewt"],
-      ["/practice/run", "Practice · Knewt"],
+      // FIX-PRA's run title, which reads apart from the hub's.
+      ["/practice/run", "Practice round · Knewt"],
       ["/no-such-page", "Page not found · Knewt"],
     ] as const) {
       await page.goto(path);

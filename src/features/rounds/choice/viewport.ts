@@ -26,10 +26,12 @@ function isRendered(element: Element): boolean {
 
 /**
  * True when the player has put focus somewhere outside `root` on purpose:
- * on Leave, say. Focus on the page itself, inside `root`, or on an element
- * that is gone or hidden (the Continue that just unmounted, a link on a
- * route Next keeps mounted behind this one) is nowhere in particular, and
- * the round may move it (R1-14).
+ * on Leave, say. Focus on the page itself, inside `root`, on something
+ * that holds `root` (the page's `<main>`, which the shell focuses when a
+ * route change drops focus, R1-09, and the skip link's target), or on an
+ * element that is gone or hidden (the Continue that just unmounted, a link
+ * on a route Next keeps mounted behind this one) is nowhere in particular,
+ * and the round may move it (R1-14).
  */
 export function focusIsElsewhere(root: Element | null): boolean {
   if (typeof document === "undefined") return false;
@@ -42,6 +44,7 @@ export function focusIsElsewhere(root: Element | null): boolean {
     return false;
   }
   if (root?.contains(active) === true) return false;
+  if (root !== null && active.contains(root)) return false;
   return isRendered(active);
 }
 

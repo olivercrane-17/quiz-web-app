@@ -480,6 +480,13 @@ test.describe("RITE round 1: practice", () => {
         ).toBeVisible();
         await page.keyboard.press(n % 2 === 0 ? "a" : "b");
         await expect(sheet(page)).toBeVisible();
+        // DS-1's sheet rises into place from below its own height: measure
+        // where it settles, as the player sees it.
+        await sheet(page).evaluate((element) =>
+          Promise.all(
+            element.getAnimations({ subtree: true }).map((a) => a.finished),
+          ),
+        );
         // Against what is on the glass: a page wider than the phone makes
         // the layout viewport taller than the screen.
         const fit = await continueButton(page).evaluate((button) => {

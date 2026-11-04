@@ -203,12 +203,19 @@ function Results({
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   // Arriving from "See your results", the button that had focus is gone:
-  // focus lands on the heading, not on <body> (R1-34). A player who has
+  // focus lands on the heading, not on <body> (R1-34), nor on the <main>
+  // the shell caught the dropped focus with (R1-09). A player who has
   // already moved focus somewhere keeps it there.
   useLayoutEffect(() => {
+    const heading = headingRef.current;
     const active = document.activeElement;
-    if (active === null || active === document.body) {
-      headingRef.current?.focus();
+    if (
+      heading !== null &&
+      (active === null ||
+        active === document.body ||
+        (active !== heading && active.contains(heading)))
+    ) {
+      heading.focus();
     }
   }, []);
 

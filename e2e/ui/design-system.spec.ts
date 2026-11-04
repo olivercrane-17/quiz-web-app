@@ -868,7 +868,8 @@ test.describe("the settings' switches reach the tokens", () => {
     // Text set with Tailwind's sizes follows too.
     const line = await page
       .locator('[data-home-slot="practice"]')
-      .getByText("Ten questions on anything. Works offline.")
+      // FIX-PRA's line: "Works offline." waits for PWA-1 (R1-15).
+      .getByText("Ten questions on anything.")
       .evaluate((element) => {
         const css = getComputedStyle(element);
         return (
