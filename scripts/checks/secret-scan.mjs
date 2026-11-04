@@ -9,9 +9,11 @@
  *    commit.
  * 2. Every file under content/sealed/, in the working tree and in the index
  *    (what the next commit holds), is an AES-256-GCM envelope named
- *    <folder>/<id>.json.enc: exactly { v: 1, alg: "A256GCM", kid, iv, data,
- *    tag } with a 12-byte IV and a 16-byte tag. The one exception is
- *    content/sealed/README.md, the recovery notes.
+ *    <folder>/<id>.json.enc in one of the folders of ARCHITECTURE §2.1:
+ *    exactly { v: 1, alg: "A256GCM", kid, iv, data, tag } with a 12-byte IV,
+ *    a 16-byte tag, and data that does not read as text (ciphertext never
+ *    does, so readable data is plaintext in an envelope's shape). The one
+ *    exception is content/sealed/README.md, the recovery notes.
  * 3. Nothing under content/.sealed-plain/, .cache/ or supabase/.generated/
  *    is tracked (staged files count), and no key file is tracked.
  * 4. No public JSON holds sealed content. Every tracked, staged or untracked
@@ -22,13 +24,22 @@
  *    clues array, a packet header (stage cold or reveal), or an id, itemId,
  *    nearestId or contentId naming a sealed item (the pattern of §5.4,
  *    without an fx. prefix) fails the scan.
- * 5. No tracked or untracked text file holds a QZ_CONTENT_KEY value. When the
- *    key is available here (QZ_CONTENT_KEY or
- *    ~/.config/quiz-web-app/content.key), no such file holds the key's
- *    base64 or hex text, labelled or not. The key is never printed.
+ * 5. No tracked or untracked text file (content/sealed/README.md included)
+ *    holds a QZ_CONTENT_KEY value. When the key is available here
+ *    (QZ_CONTENT_KEY or ~/.config/quiz-web-app/content.key), no such file
+ *    holds the key's base64, base64url or hex text, labelled or not. The key
+ *    is never printed.
+ * 6. The QZ_CONTENT_KEY secret stays where decisions memo §17 puts it. In
+ *    .github/workflows/, only the content-sealed job references
+ *    secrets.QZ_CONTENT_KEY, that job declares no environment:, a workflow
+ *    that references it never runs on pull_request_target or workflow_run
+ *    (which hand secrets to code from forks), and no line both expands the
+ *    key and prints or exports it (echo, printf, tee, $GITHUB_ENV and the
+ *    like).
  *
  * It reads `git ls-files`, the envelopes and the text files git would
- * commit, so it takes well under a few seconds. Run it with
+ * commit, so it takes well under a few seconds. It needs only Node and git,
+ * so it runs before dependencies are installed. Run it with
  * `npm run check:secrets`.
  */
 import { execFileSync, spawnSync } from "node:child_process";
@@ -38,15 +49,42 @@ import { join, relative, sep } from "node:path";
 
 const root = process.cwd();
 const problems = [];
+/**
+ * The folders of content/sealed/ (ARCHITECTURE §2.1). The same list as
+ * ENVELOPE_FOLDERS in scripts/content/crypto.ts, copied so this scan needs no
+ * TypeScript; a test keeps the two equal.
+ */
 const FOLDERS = new Set([
   "mysteries",
   "encores",
   "room-packs",
   "schedule",
   "spares",
+  "challenge-packs",
+  "list-requests",
+  "audits",
 ]);
 const BASE64 = /^[A-Za-z0-9+/]*={0,2}$/;
 const MAX_TEXT = 4_000_000;
+/**
+ * Data at least this long that decodes to readable text is plaintext.
+ * Random bytes pass as such text at about 0.46 per byte (UTF-8 sequences
+ * included), so a 32-byte ciphertext does with odds near one in fifty
+ * billion, and real envelopes hold hundreds of bytes.
+ */
+const READABLE_MIN = 32;
+const utf8 = new TextDecoder("utf-8", { fatal: true });
+
+/** True when the bytes are valid UTF-8 with no control characters but tab, LF and CR. */
+function readsAsText(bytes) {
+  let text;
+  try {
+    text = utf8.decode(bytes);
+  } catch {
+    return false;
+  }
+  return !/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/.test(text);
+}
 
 function git(args, input) {
   return execFileSync("git", args, {
@@ -117,10 +155,15 @@ function envelopeProblems(text) {
       out.push(`${field} is not base64`);
       continue;
     }
-    const bytes = Buffer.from(raw, "base64").length;
+    const decoded = Buffer.from(raw, "base64");
+    const bytes = decoded.length;
     if (size !== null && bytes !== size)
       out.push(`${field} is ${bytes} bytes, expected ${size}`);
     if (size === null && bytes === 0) out.push("data is empty");
+    if (field === "data" && bytes >= READABLE_MIN && readsAsText(decoded))
+      out.push(
+        "data reads as text, so it is plaintext in an envelope's shape, not ciphertext",
+      );
   }
   return out;
 }
@@ -311,8 +354,12 @@ for (const file of publicJson) {
   }
 }
 
-// 5. No key in text files.
-const KEY_VALUE = /QZ_CONTENT_KEY\s*[=:]\s*["']?[A-Za-z0-9+/]{43}=/;
+// 5. No key in text files. Envelopes (.json.enc) are not text files here;
+// content/sealed/README.md is, since recovery notes are where a pasted key
+// would most likely land.
+/** A labelled key value: 43 base64 characters, padded or not. */
+const KEY_VALUE =
+  /QZ_CONTENT_KEY\s*[=:]\s*["']?[A-Za-z0-9+/]{43}(?:=|(?![A-Za-z0-9+/=]))/;
 /** The key's own text, when it is available on this machine. */
 function keyTexts() {
   let raw = process.env.QZ_CONTENT_KEY?.trim();
@@ -323,13 +370,19 @@ function keyTexts() {
   if (!raw || !BASE64.test(raw)) return [];
   const bytes = Buffer.from(raw, "base64");
   if (bytes.length !== 32) return [];
-  // 43 characters cover the padded and unpadded base64 forms.
-  return [bytes.toString("base64").slice(0, 43), bytes.toString("hex")];
+  const hex = bytes.toString("hex");
+  return [
+    // 43 characters cover the padded and unpadded base64 forms.
+    bytes.toString("base64").slice(0, 43),
+    bytes.toString("base64url"),
+    hex,
+    hex.toUpperCase(),
+  ];
 }
 const keys = keyTexts();
 let scanned = 0;
 for (const file of [...new Set([...tracked, ...untracked])]) {
-  if (!TEXT.test(file) || file.startsWith("content/sealed/")) continue;
+  if (!TEXT.test(file)) continue;
   for (const { label, text } of versions(file)) {
     scanned += 1;
     if (KEY_VALUE.test(text))
@@ -341,11 +394,91 @@ for (const file of [...new Set([...tracked, ...untracked])]) {
   }
 }
 
+// 6. The QZ_CONTENT_KEY secret in workflows (decisions memo §17). Problems
+// name line numbers only, never the line.
+const SECRET_REF =
+  /\bsecrets\s*(?:\.\s*QZ_CONTENT_KEY\b|\[\s*['"]QZ_CONTENT_KEY['"]\s*\])/;
+/** The key's value: $QZ_CONTENT_KEY, ${QZ_CONTENT_KEY}, or a ${{ }} expression naming it. */
+const KEY_EXPANSION =
+  /\$\{?QZ_CONTENT_KEY\b|\$\{\{[^}]*\bQZ_CONTENT_KEY\b[^}]*\}\}/;
+const PRINTS =
+  /\b(?:echo|printf|tee|cat|printenv|Write-Output|Write-Host)\b|>>|\bGITHUB_(?:ENV|OUTPUT|STEP_SUMMARY|PATH)\b|::set-output\b/;
+const FORK_TRIGGERS = /\b(?:pull_request_target|workflow_run)\b/;
+
+/** A shell segment that both expands the key and prints or exports it. */
+function printsKey(line) {
+  return line
+    .split(/;|&&|\|\|?/)
+    .some((part) => KEY_EXPANSION.test(part) && PRINTS.test(part));
+}
+
+function workflowProblems(text) {
+  const out = [];
+  let inJobs = false;
+  let job = null;
+  let jobIndent = -1;
+  let childIndent = -1;
+  let referencesKey = false;
+  let forkTrigger = null;
+  text.split(/\r?\n/).forEach((line, index) => {
+    if (line.trim() === "" || /^\s*#/.test(line)) return;
+    const at = `line ${index + 1}`;
+    const indent = line.length - line.trimStart().length;
+    const key = /^\s*([A-Za-z0-9_-]+)\s*:/.exec(line)?.[1];
+    if (indent === 0) {
+      inJobs = key === "jobs";
+      job = null;
+      jobIndent = -1;
+    } else if (inJobs && key && (jobIndent === -1 || indent <= jobIndent)) {
+      job = key;
+      jobIndent = indent;
+      childIndent = -1;
+      return;
+    } else if (job !== null && childIndent === -1) {
+      childIndent = indent;
+    }
+    if (!inJobs && FORK_TRIGGERS.test(line)) forkTrigger ??= at;
+    if (SECRET_REF.test(line)) {
+      referencesKey = true;
+      if (job !== "content-sealed")
+        out.push(
+          `${at}: references secrets.QZ_CONTENT_KEY outside the content-sealed job (decisions memo §17)`,
+        );
+    }
+    if (
+      job === "content-sealed" &&
+      indent === childIndent &&
+      key === "environment"
+    )
+      out.push(
+        `${at}: the content-sealed job declares an environment; QZ_CONTENT_KEY is a repository secret and the job must not (decisions memo §17)`,
+      );
+    if (printsKey(line))
+      out.push(
+        `${at}: prints or exports the value of QZ_CONTENT_KEY; pass it to the one command that needs it through env: (decisions memo §17)`,
+      );
+  });
+  if (referencesKey && forkTrigger)
+    out.push(
+      `${forkTrigger}: runs on pull_request_target or workflow_run, which hand secrets to code from forks, in a workflow that uses QZ_CONTENT_KEY (decisions memo §17)`,
+    );
+  return out;
+}
+let workflows = 0;
+for (const file of [...new Set([...tracked, ...untracked])]) {
+  if (!/^\.github\/workflows\/[^/]+\.ya?ml$/.test(file)) continue;
+  for (const { label, text } of versions(file)) {
+    workflows += 1;
+    for (const problem of workflowProblems(text))
+      problems.push(`${label}: ${problem}`);
+  }
+}
+
 if (problems.length > 0) {
   for (const problem of problems) console.error(`secret-scan: ${problem}`);
   console.error(`secret-scan: FAILED with ${problems.length} problem(s).`);
   process.exit(1);
 }
 console.log(
-  `secret-scan: OK (${envelopes} envelope(s), ${tracked.length} tracked and ${untracked.length} untracked file(s), ${jsonScanned} JSON file(s) checked for sealed content, ${scanned} scanned for keys${keys.length > 0 ? ", the local key included" : ""}).`,
+  `secret-scan: OK (${envelopes} envelope(s), ${tracked.length} tracked and ${untracked.length} untracked file(s), ${jsonScanned} JSON file(s) checked for sealed content, ${scanned} scanned for keys${keys.length > 0 ? ", the local key included" : ""}, ${workflows} workflow file(s) checked for the key secret).`,
 );

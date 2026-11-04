@@ -5,7 +5,13 @@ import { join } from "node:path";
 
 import { afterAll, describe, expect, it } from "vitest";
 
-import { REPO_ROOT, removeTempDirs, tempDir } from "./__fixtures__/builders.ts";
+import { ENVELOPE_FOLDERS } from "../../../scripts/content/crypto.ts";
+import {
+  REPO_ROOT,
+  fxMystery,
+  removeTempDirs,
+  tempDir,
+} from "./__fixtures__/builders.ts";
 import { deriveSealKeys, envelopeText, sealBytes } from "./seal.ts";
 
 afterAll(removeTempDirs);
@@ -50,18 +56,177 @@ describe("secret-scan", () => {
     expect(result.stdout).toContain("1 envelope(s)");
   });
 
-  it("fails on plaintext or junk under content/sealed/", () => {
+  it("CNT-0 the secret scan catches plaintext under content/sealed/: plain files, junk, and plaintext in an envelope's shape", () => {
     const dir = repo();
+    const plaintext = `${JSON.stringify(fxMystery(), null, 2)}\n`;
+    write(dir, "content/sealed/mysteries/m.geo.0101.json", plaintext);
+    write(dir, "content/sealed/notes.md", "clue 2 names the capital\n");
+    write(dir, "content/sealed/encores/e.0101.json.enc", '{"v": 1}');
+    // Every field well formed, but data is the plaintext in base64.
     write(
       dir,
-      "content/sealed/mysteries/m.geo.0101.json",
-      '{"id": "m.geo.0101"}',
+      "content/sealed/mysteries/m.geo.0102.json.enc",
+      envelopeText({
+        v: 1,
+        alg: "A256GCM",
+        kid: "k1",
+        iv: Buffer.alloc(12, 1).toString("base64"),
+        data: Buffer.from(plaintext).toString("base64"),
+        tag: Buffer.alloc(16, 2).toString("base64"),
+      }),
     );
-    write(dir, "content/sealed/encores/e.0101.json.enc", '{"v": 1}');
     const result = scan(dir);
     expect(result.status).toBe(1);
-    expect(result.stderr).toContain("only <folder>/<id>.json.enc envelopes");
-    expect(result.stderr).toContain("not a valid envelope");
+    const lines = result.stderr.split("\n");
+    expect(lines).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining(
+          "content/sealed/mysteries/m.geo.0101.json: only <folder>/<id>.json.enc envelopes",
+        ),
+        expect.stringContaining(
+          "content/sealed/notes.md: only <folder>/<id>.json.enc envelopes",
+        ),
+        expect.stringContaining(
+          "content/sealed/encores/e.0101.json.enc: not a valid envelope",
+        ),
+        expect.stringContaining(
+          "content/sealed/mysteries/m.geo.0102.json.enc: not a valid envelope: data reads as text",
+        ),
+      ]),
+    );
+    // The scan names files and rules, never what they hold.
+    expect(result.stderr).not.toContain("names the capital");
+    for (const clue of fxMystery().clues)
+      expect(result.stderr).not.toContain(clue);
+  });
+
+  it("accepts an envelope in every folder of ARCHITECTURE §2.1, the list content:seal uses, and in no other", () => {
+    const dir = repo();
+    for (const folder of ENVELOPE_FOLDERS)
+      write(dir, `content/sealed/${folder}/x.0001.json.enc`, envelope);
+    const result = scan(dir);
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).toContain(`${ENVELOPE_FOLDERS.length} envelope(s)`);
+    write(dir, "content/sealed/drafts/x.0001.json.enc", envelope);
+    const extra = scan(dir);
+    expect(extra.status).toBe(1);
+    expect(extra.stderr).toContain(
+      "content/sealed/drafts/x.0001.json.enc: only <folder>/<id>.json.enc envelopes",
+    );
+  });
+
+  it("scans content/sealed/README.md for the key, and finds it as base64url, as hex and labelled without padding", () => {
+    // A key whose base64 holds + and /, so its base64url form differs.
+    const raw = Buffer.from(Array.from({ length: 32 }, (_, i) => 250 - i * 7));
+    const key = raw.toString("base64");
+    expect(key).toMatch(/[+/]/);
+    const dir = repo();
+    write(dir, "content/sealed/mysteries/m.geo.0101.json.enc", envelope);
+    write(
+      dir,
+      "content/sealed/README.md",
+      `Recovered key: ${raw.toString("base64url")}\n`,
+    );
+    write(dir, "docs/hex.txt", `${raw.toString("hex").toUpperCase()}\n`);
+    write(dir, "docs/unpadded.env", `QZ_CONTENT_KEY=${key.slice(0, 43)}\n`);
+    const result = scan(dir, { QZ_CONTENT_KEY: key });
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(
+      "content/sealed/README.md: holds the content key",
+    );
+    expect(result.stderr).toContain("docs/hex.txt: holds the content key");
+    expect(result.stderr).toContain(
+      "docs/unpadded.env: holds a QZ_CONTENT_KEY value",
+    );
+    const output = `${result.stdout}${result.stderr}`;
+    for (const form of [
+      key.slice(0, 20),
+      raw.toString("base64url").slice(0, 20),
+      raw.toString("hex").slice(0, 20),
+    ])
+      expect(output.toLowerCase()).not.toContain(form.toLowerCase());
+  });
+
+  it("keeps the QZ_CONTENT_KEY secret in the content-sealed job (decisions memo §17)", () => {
+    const sealedJob = [
+      "  content-sealed:",
+      "    runs-on: ubuntu-latest",
+      "    steps:",
+      "      - uses: actions/checkout@v7",
+      "      - name: Sealed content check",
+      "        env:",
+      "          QZ_CONTENT_KEY: ${{ secrets.QZ_CONTENT_KEY }}",
+      "        run: |",
+      '          if [ -z "$QZ_CONTENT_KEY" ]; then echo "not run: no key"; exit 0; fi',
+      "          npm run content:check -- --sealed",
+    ];
+    const workflow = (on: string[], jobs: string[]) =>
+      [...on, "jobs:", ...jobs, ""].join("\n");
+    const PUSH = ["on:", "  push:", "  pull_request:"];
+
+    const good = repo();
+    write(
+      good,
+      ".github/workflows/ci.yml",
+      workflow(PUSH, [
+        "  verify:",
+        "    runs-on: ubuntu-latest",
+        "    steps:",
+        "      # QZ_CONTENT_KEY is not needed here.",
+        "      - run: npm run check:secrets",
+        ...sealedJob,
+      ]),
+    );
+    const passed = scan(good);
+    expect(passed.status, passed.stderr).toBe(0);
+    expect(passed.stdout).toContain("1 workflow file(s) checked");
+
+    const bad = repo();
+    write(
+      bad,
+      ".github/workflows/ci.yml",
+      workflow(
+        ["on:", "  pull_request_target:"],
+        [
+          "  verify:",
+          "    runs-on: ubuntu-latest",
+          "    env:",
+          "      KEY: ${{ secrets.QZ_CONTENT_KEY }}",
+          "    steps:",
+          "      - run: npm test",
+          "  content-sealed:",
+          "    runs-on: ubuntu-latest",
+          "    environment: production",
+          "    steps:",
+          "      - env:",
+          "          QZ_CONTENT_KEY: ${{ secrets.QZ_CONTENT_KEY }}",
+          "        run: |",
+          '          echo "$QZ_CONTENT_KEY"',
+          '          echo "QZ_CONTENT_KEY=${{ secrets.QZ_CONTENT_KEY }}" >> "$GITHUB_ENV"',
+        ],
+      ),
+    );
+    const failed = scan(bad);
+    expect(failed.status).toBe(1);
+    const at = (line: number, rule: string) =>
+      expect.stringContaining(
+        `.github/workflows/ci.yml: line ${line}: ${rule}`,
+      );
+    expect(failed.stderr.split("\n")).toEqual(
+      expect.arrayContaining([
+        at(
+          7,
+          "references secrets.QZ_CONTENT_KEY outside the content-sealed job",
+        ),
+        at(12, "the content-sealed job declares an environment"),
+        at(17, "prints or exports the value of QZ_CONTENT_KEY"),
+        at(18, "prints or exports the value of QZ_CONTENT_KEY"),
+        at(2, "runs on pull_request_target or workflow_run"),
+      ]),
+    );
+    // Line numbers only: no line of the workflow reaches the output.
+    expect(failed.stderr).not.toContain("GITHUB_ENV");
+    expect(failed.stderr).not.toContain("production");
   });
 
   it("fails when the plaintext workspace, a cache or a key is tracked", () => {
