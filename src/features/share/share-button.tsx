@@ -13,23 +13,25 @@
  *    an `AbortError` (the player closed the sheet) logs `share_cancel` and
  *    nothing else. Any other refusal, as in-app browsers give, falls through.
  * 2. The clipboard: on success, `share_complete` (clipboard) and "Copied.
- *    Paste it into your group chat.", in the status region and on screen.
+ *    Paste it into your group chat." as a toast, which says it in the
+ *    status region too (DESIGN §6.9).
  * 3. When both fail, a read-only text box with the text selected and "Copy
- *    this text"; the player's own copy from it logs `share_complete`
- *    (manual), once.
+ *    this text", sized to the whole text and as wide as its row; the
+ *    player's own copy from it logs `share_complete` (manual), once.
  *
  * Every press logs `share_open` first, which never counts as a share. A
- * press while the share sheet is still open does nothing. SHR-1 owns this
- * file from Wave 12: it draws the mini grid inside the button from
- * `payload.grid`, moves these words into the share feature's copy, and
- * swaps the on-screen confirmation for DS-1's toast.
+ * press while the share sheet is still open does nothing. The toast is the
+ * Daily's greybox `showToast` until DS-1's `src/ui/toast.ts` replaces it (a
+ * FIX-DS follow-up, with the same signature). SHR-1 owns this file from
+ * Wave 12: it draws the mini grid inside the button from `payload.grid`
+ * and moves these words into the share feature's copy.
  */
-import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { useId, useLayoutEffect, useRef, useState } from "react";
 
 import type { EventProps } from "@/analytics/dictionary";
 import type { ShareCell } from "@/engine/types";
 import { track } from "@/features/analytics/track";
-import { announce } from "@/ui/announce";
+import { showToast } from "@/features/daily";
 import { Button } from "@/ui/button";
 
 /** Where the button sits, as `share_open` records it. */
@@ -55,9 +57,6 @@ export const SHARE_BUTTON_COPY = {
   copied: "Copied. Paste it into your group chat.",
   copyThis: "Copy this text",
 } as const;
-
-/** How long the on-screen "Copied." stays, as a toast would (DESIGN §6.9). */
-export const COPIED_MS = 4_000;
 
 type Shared = "native" | "cancelled" | "unavailable";
 
@@ -100,22 +99,11 @@ async function copyToClipboard(text: string): Promise<boolean> {
 
 export function ShareButton({ payload, surface }: ShareButtonProps) {
   const { text, mode } = payload;
-  const [copied, setCopied] = useState(false);
   const [manual, setManual] = useState(false);
   const sharing = useRef(false);
   const copiedByHand = useRef(false);
   const boxRef = useRef<HTMLTextAreaElement>(null);
   const boxId = useId();
-
-  useEffect(() => {
-    if (!copied) return;
-    const timer = setTimeout(() => {
-      setCopied(false);
-    }, COPIED_MS);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [copied]);
 
   // The last resort opens on the text, selected, so one copy takes it all.
   useLayoutEffect(() => {
@@ -142,8 +130,7 @@ export function ShareButton({ payload, surface }: ShareButtonProps) {
       }
       if (await copyToClipboard(text)) {
         track("share_complete", { method: "clipboard", mode, surface });
-        announce(SHARE_BUTTON_COPY.copied);
-        setCopied(true);
+        showToast(SHARE_BUTTON_COPY.copied);
         return;
       }
       copiedByHand.current = false;
@@ -154,7 +141,16 @@ export function ShareButton({ payload, surface }: ShareButtonProps) {
   }
 
   return (
-    <div className="flex flex-col items-start gap-2" data-share-button="">
+    <div
+      // Once the text box shows, it takes its row's whole width, so a
+      // button row it sits in never squeezes it (R1-01).
+      className={
+        manual
+          ? "flex w-full basis-full flex-col items-start gap-2"
+          : "flex flex-col items-start gap-2"
+      }
+      data-share-button=""
+    >
       <Button
         variant="secondary"
         onClick={() => {
@@ -163,12 +159,6 @@ export function ShareButton({ payload, surface }: ShareButtonProps) {
       >
         {SHARE_BUTTON_COPY.share}
       </Button>
-      {copied ? (
-        // Seen, not heard: the status region already said it.
-        <p aria-hidden="true" className="text-sm font-semibold">
-          {SHARE_BUTTON_COPY.copied}
-        </p>
-      ) : null}
       {manual ? (
         <div className="flex w-full flex-col gap-1">
           <label htmlFor={boxId} className="text-sm font-semibold">
@@ -179,6 +169,8 @@ export function ShareButton({ payload, surface }: ShareButtonProps) {
             ref={boxRef}
             readOnly
             value={text}
+            // The fallback height where field sizing isn't supported; where
+            // it is, the box grows to the whole text, wrapped lines included.
             rows={text.split("\n").length}
             data-share-fallback=""
             onCopy={() => {
@@ -186,7 +178,7 @@ export function ShareButton({ payload, surface }: ShareButtonProps) {
               copiedByHand.current = true;
               track("share_complete", { method: "manual", mode, surface });
             }}
-            className="w-full resize-none rounded-xl border border-border bg-muted p-3 font-sans text-base outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground"
+            className="field-sizing-content w-full resize-none rounded-xl border border-border bg-muted p-3 font-sans text-base outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground"
           />
         </div>
       ) : null}

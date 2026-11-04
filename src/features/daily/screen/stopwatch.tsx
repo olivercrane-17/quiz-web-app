@@ -9,6 +9,9 @@
  *
  * It is a button: tapping it opens the More menu at "Hide stopwatch"
  * (DESIGN §6.7, R1-05), so the way to hide it is where the eye already is.
+ * In a first Daily the screen's hint, "Take your time. Time only breaks
+ * ties.", is its accessible description (`describedBy`), so a screen reader
+ * hears the hint on the stopwatch itself (R1-05).
  * The timer icon shows only while the header has room for it, measured in
  * `rem` by the header's container query, so at 200% text or under 360 px
  * the digits keep their room (DESIGN §10.2, R1-03). The screen hides the
@@ -69,6 +72,8 @@ export interface StopwatchProps {
   /** The More menu is open from here. */
   expanded: boolean;
   menuId: string;
+  /** The id of the first-Daily hint beside it, which describes it. */
+  describedBy?: string;
   buttonRef?: Ref<HTMLButtonElement>;
 }
 
@@ -78,6 +83,7 @@ export function Stopwatch({
   onOpenMenu,
   expanded,
   menuId,
+  describedBy,
   buttonRef,
 }: StopwatchProps) {
   const live = run.phase === "active" || run.phase === "judging";
@@ -95,12 +101,15 @@ export function Stopwatch({
       aria-haspopup="menu"
       aria-expanded={expanded}
       aria-controls={expanded ? menuId : undefined}
+      aria-describedby={describedBy}
       data-stopwatch=""
       onClick={(event) => {
         onOpenMenu(event.currentTarget);
       }}
       className={cx(
-        "inline-flex min-h-11 shrink-0 items-center gap-1 rounded-full border border-border px-3 text-sm font-semibold text-muted-foreground tabular-nums",
+        // A 44 px target in px, so 200% text grows the digits, not the
+        // box around them: the header stays as short as it can (R1-03).
+        "inline-flex min-h-[44px] shrink-0 items-center gap-1 rounded-full border border-border px-[12px] text-sm font-semibold text-muted-foreground tabular-nums",
         "outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground",
       )}
     >

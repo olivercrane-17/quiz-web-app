@@ -101,7 +101,7 @@ export function progressSegments(state: RunState): ProgressSegment[] {
       ? family === "encore"
         ? "E"
         : family === "mystery"
-          ? `M${slot.meta.ordinal}`
+          ? words.marks.mystery(slot.meta.ordinal)
           : String(slot.meta.ordinal)
       : undefined;
     if (outcome === null) {
@@ -137,20 +137,62 @@ export function progressSegments(state: RunState): ProgressSegment[] {
 }
 
 /**
+ * What the finished rounds' pills show, in words: each Mystery's points,
+ * miss or withdrawal ("M1 +3", "M2 ✕", "M3 –"), and how many of the
+ * questions answered so far were right ("4 of 5 right"), in round order.
+ * An Encore's pill only says it is done, so it adds nothing here.
+ */
+function finishedMarks(state: RunState): string[] {
+  const words = DAILY_SCREEN_COPY.segment;
+  const marks: string[] = [];
+  /** Where the questions' count goes: at the first answered question. */
+  let questionsAt = -1;
+  let asked = 0;
+  let right = 0;
+  for (const slot of state.slots) {
+    const outcome = slot.outcome;
+    if (outcome === null) continue;
+    if (outcome.family === "mystery") {
+      const name = words.marks.mystery(slot.meta.ordinal);
+      const mark = outcome.voided
+        ? words.marks.withdrawn
+        : outcome.solvedOn === null
+          ? words.marks.missed
+          : words.gained(outcome.points);
+      marks.push(`${name} ${mark}`);
+    } else if (outcome.family === "choice" && !outcome.voided) {
+      if (questionsAt < 0) questionsAt = marks.length;
+      asked += 1;
+      if (outcome.correct) right += 1;
+    }
+  }
+  if (questionsAt >= 0) {
+    marks.splice(questionsAt, 0, words.marks.right(right, asked));
+  }
+  return marks;
+}
+
+/**
  * Where the run stands in words, for a header too narrow for the pills (at
  * 200% text on a phone, R1-03): "Mystery 2 of 3", "Encore", "Question 4 of
- * 9". The screen shows it in the pills' place, never beside them.
+ * 9", then what the finished rounds' pills show, so the words drop none of
+ * it: "Mystery 2 of 3 · M1 +3", "Encore · M1 +3 · M2 ✕ · M3 +1", "Question
+ * 6 of 9 · 4 of 5 right". The screen shows it in the pills' place, never
+ * beside them, and for the eye only: the pills' labelled list stays in the
+ * accessibility tree.
  */
 export function progressText(state: RunState): string {
   const slot = state.slots[state.index];
   if (slot === undefined) return DAILY_SCREEN_COPY.progress;
   const words = DAILY_SCREEN_COPY.roundLabel;
   const family = ROUND_FAMILY[slot.meta.type];
-  return family === "encore"
-    ? words.encore
-    : family === "mystery"
-      ? words.mystery(slot.meta.ordinal, slot.meta.ofType)
-      : words.choice(slot.meta.ordinal, slot.meta.ofType);
+  const where =
+    family === "encore"
+      ? words.encore
+      : family === "mystery"
+        ? words.mystery(slot.meta.ordinal, slot.meta.ofType)
+        : words.choice(slot.meta.ordinal, slot.meta.ofType);
+  return [where, ...finishedMarks(state)].join(" · ");
 }
 
 /** The open round's number for `how_to_play_open` (PRD §7.2), or "none" between runs. */

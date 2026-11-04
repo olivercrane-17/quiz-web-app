@@ -61,6 +61,24 @@ function rivalsOf(id: string): { id: string; ruledOutBy: number[] }[] {
 
 const REWRITTEN = ["fx.m.geo.0101", "fx.m.film.0101", "fx.m.sci.0102"];
 
+/** Words too common to count as a clue's content (R1-30's repeat check). */
+const STOPWORDS = new Set([
+  "the",
+  "and",
+  "its",
+  "for",
+  "with",
+  "that",
+  "this",
+  "one",
+  "who",
+  "whoever",
+  "from",
+  "into",
+  "after",
+  "before",
+]);
+
 describe("the rewritten fixture Mysteries (R1-30)", () => {
   it("R1-30 Arvenna can be deduced: the raven on clue 1, the two republics on clue 2, the A at both ends on clue 3", async () => {
     const arvenna = mystery("fx.m.geo.0101");
@@ -114,6 +132,35 @@ describe("the rewritten fixture Mysteries (R1-30)", () => {
     // Clue 4 is no longer clue 2 again.
     expect(film.clues[3]).not.toMatch(/watchman|thirty winters/);
     expect(film.clues[3]).not.toBe(film.clues[1]);
+  });
+
+  it("R1-30 The Lantern Keeper's clue 4 states a fact clue 2 doesn't, and picks it out of its options", async () => {
+    const film = mystery("fx.m.film.0101");
+    /** A clue's content words: lower case, without the little ones. */
+    const contentWords = (clue: string) =>
+      new Set(
+        clue
+          .toLowerCase()
+          .split(/[^\p{L}]+/u)
+          .filter((word) => word.length > 2 && !STOPWORDS.has(word)),
+      );
+    const two = contentWords(film.clues[1]!);
+    const four = contentWords(film.clues[3]!);
+    expect([...four].filter((word) => two.has(word))).toEqual([]);
+    expect(film.clues[3]).not.toMatch(/\b(cat|sea|light)\b/i);
+    // The four options show display forms, so clue 4 holds none of the
+    // answer's words (lint C13), and only the answer's title names the
+    // lighthouse's glass room: its lantern.
+    const decoded = await loadFixtureList("film");
+    const display = (id: string) =>
+      decoded?.list.entities.find((entity) => entity.id === id)?.display ?? "";
+    expect(display(film.answer)).toBe("The Lantern Keeper (1987)");
+    expect(film.clues[3]).toMatch(/glass room that holds a lighthouse's lamp/);
+    expect(film.clues[3]).not.toMatch(/lantern|keeper|1987/i);
+    const options = [film.answer, ...film.distractors].map(display);
+    expect(options.filter((title) => /\bLantern\b/.test(title))).toEqual([
+      "The Lantern Keeper (1987)",
+    ]);
   });
 
   it("R1-30 bismuth's first two clues no longer fit antimony as well", () => {

@@ -3,18 +3,65 @@
  * refusal says, and when Practice is offered. The controller decides when a
  * rate-limited start moves from silent to plain copy to the fallback
  * (controller.test.ts); this is what the screen draws for each.
+ *
+ * Then the whole screen over the mock backend, with the echo plugins and
+ * probes for the round components: the first-Daily hint as the stopwatch's
+ * accessible description (RITE round 1, R1-05).
  */
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { act, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { BackendErrorCode } from "@/engine/types";
+import { createMemoryStore, createMockBackend } from "@/backend/mock";
+import { createFakeClock } from "@/engine/clock";
+import { createEchoRegistry } from "@/engine/rounds/testing/echo";
+import {
+  parseIdempotencyKey,
+  parseTimeZone,
+  type BackendErrorCode,
+  type IdempotencyKey,
+  type TimeZone,
+} from "@/engine/types";
+import type { RoundComponentProps } from "@/features/rounds";
+import { createLocalIdentityProvider } from "@/platform/identity/local";
+import { createServerClock } from "@/platform/server-clock";
+import { createKv, createMemoryStorage } from "@/platform/storage";
 
 import type {
   DailyController,
+  DailyControllerDeps,
   DailySnapshot,
   StartProblem,
 } from "../model/controller";
-import { StartProblemCard } from "./daily-screen";
+import { DailyScreen, StartProblemCard } from "./daily-screen";
+
+const wiring = vi.hoisted(() => ({
+  deps: null as DailyControllerDeps | null,
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ replace: () => {}, push: () => {}, prefetch: () => {} }),
+}));
+vi.mock("../model/browser", () => ({
+  browserDeps: () => {
+    if (wiring.deps === null) throw new Error("no controller deps");
+    return wiring.deps;
+  },
+}));
+// The round components are MYS-1's: a probe stands in for each family.
+vi.mock(import("@/features/rounds/client"), async (importOriginal) => {
+  const probe = (family: string) =>
+    function Probe(props: RoundComponentProps) {
+      return <h1 data-probe={family}>{props.meta.type}</h1>;
+    };
+  return {
+    ...(await importOriginal()),
+    ROUND_COMPONENTS: {
+      choice: probe("choice"),
+      mystery: probe("mystery"),
+      encore: probe("encore"),
+    },
+  };
+});
 
 const NOW = Date.UTC(2026, 10, 1, 9);
 
@@ -91,5 +138,85 @@ describe("a start that can't go through", () => {
     ).toHaveAttribute("href", "/practice/run");
     screen.getByRole("button", { name: "Try again" }).click();
     expect(retry).toHaveBeenCalledTimes(1);
+  });
+});
+
+const HINT = "Take your time. Time only breaks ties.";
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** A mock backend on a fake clock at `at`, with the echo plugins. */
+function wire(at: number) {
+  const clock = createFakeClock(at);
+  const identity = createLocalIdentityProvider({
+    kv: createKv({ storage: createMemoryStorage() }),
+    now: () => clock.now(),
+  });
+  const mock = createMockBackend(
+    {
+      identity: () => identity,
+      serverClock: createServerClock({ base: clock }),
+    },
+    {
+      store: createMemoryStore(),
+      clock,
+      init: { latencyMs: 0 },
+      attachControls: false,
+      plugins: createEchoRegistry(),
+    },
+  );
+  let keys = 0;
+  wiring.deps = {
+    backend: async () => mock,
+    plugins: createEchoRegistry(),
+    clock,
+    schedule(callback, ms) {
+      const timer = setTimeout(callback, ms);
+      return () => {
+        clearTimeout(timer);
+      };
+    },
+    random: () => 0.5,
+    newKey: () => {
+      keys += 1;
+      return parseIdempotencyKey(
+        `00000000-0000-4000-8000-${keys.toString(16).padStart(12, "0")}`,
+      ) as IdempotencyKey;
+    },
+    announce: () => {},
+    startContext: () => ({
+      tz: parseTimeZone("UTC") as TimeZone,
+      browser: { context: "browser", app: "none", platform: "desktop" },
+      appVersion: "test",
+    }),
+  };
+  return { mock, clock };
+}
+
+/** Mounts the screen and waits for the first round's stopwatch. */
+async function playing(): Promise<HTMLElement> {
+  render(<DailyScreen />);
+  return act(() => screen.findByRole("button", { name: /^Time so far/ }));
+}
+
+describe("the first-Daily hint beside the stopwatch (R1-05)", () => {
+  afterEach(() => {
+    wiring.deps = null;
+  });
+
+  it("R1-05 in a first Daily, is the stopwatch's accessible description", async () => {
+    wire(NOW);
+    const watch = await playing();
+    expect(screen.getByText(HINT)).toBeVisible();
+    expect(watch).toHaveAccessibleDescription(HINT);
+  });
+
+  it("R1-05 once a Daily is finished, neither shows nor describes the stopwatch", async () => {
+    const { mock, clock } = wire(NOW);
+    await mock.controls.seed("finished_today");
+    clock.advance(DAY_MS);
+    const watch = await playing();
+    expect(screen.queryByText(HINT)).toBeNull();
+    expect(watch).not.toHaveAttribute("aria-describedby");
+    expect(watch).toHaveAccessibleDescription("");
   });
 });

@@ -20,7 +20,9 @@
  *   settings store, everywhere.
  * - In the player's first Daily, "Take your time. Time only breaks ties."
  *   beside the stopwatch (R1-05), from the start's first-Daily flag, which
- *   the round context also carries to the rounds (R1-04).
+ *   the round context also carries to the rounds (R1-04). The hint is the
+ *   stopwatch's accessible description too, so a screen reader hears it
+ *   there.
  * - A header that fits 200% text on a phone (R1-03, `HeaderStatus`).
  * - "Saved" as a toast once Leave has taken the player to Today (R1-38).
  * - One `h1` on the route: this screen's own only while no round component
@@ -228,11 +230,17 @@ function placeInRound(): HTMLElement | null {
 
 /**
  * "Take your time. Time only breaks ties.", beside the stopwatch in the
- * player's first Daily (PRD §3.1.3, R1-05).
+ * player's first Daily (PRD §3.1.3, R1-05): right under it, first in
+ * `<main>`, so it also comes straight after the header in reading order.
+ * It stays out of the sticky header, which it would grow by a line on a
+ * phone and, at 200% text, from 177 px to 385 px on 390 by 844 (465 px of
+ * 568 on a 320 px phone). The stopwatch names it as its description
+ * (`aria-describedby`), so a screen reader hears it on the stopwatch.
  */
-function StopwatchHint() {
+function StopwatchHint({ id }: { id: string }) {
   return (
     <p
+      id={id}
       data-stopwatch-hint=""
       className="self-end text-right text-sm font-semibold text-muted-foreground"
     >
@@ -256,6 +264,7 @@ export function DailyScreen() {
   const moreRef = useRef<HTMLButtonElement>(null);
   const backToRound = useRef(false);
   const menuId = useId();
+  const hintId = useId();
 
   useEffect(() => {
     controller.start();
@@ -336,6 +345,8 @@ export function DailyScreen() {
   };
 
   const playing = status === "playing" && run !== null;
+  /** The first-Daily hint shows, and describes the stopwatch (R1-05). */
+  const hinted = playing && snapshot.firstDaily && stopwatchShown;
 
   return (
     <PlayFrame
@@ -358,6 +369,7 @@ export function DailyScreen() {
                     offset={snapshot.timeOffset}
                     expanded={menu?.from === "stopwatch"}
                     menuId={menuId}
+                    describedBy={hinted ? hintId : undefined}
                     onOpenMenu={(element) => {
                       if (menu !== null) closeMenu(false);
                       else openMenu("stopwatch", "stopwatch", element);
@@ -387,7 +399,7 @@ export function DailyScreen() {
       <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4 px-4 py-4">
         {playing ? (
           <>
-            {snapshot.firstDaily && stopwatchShown ? <StopwatchHint /> : null}
+            {hinted ? <StopwatchHint id={hintId} /> : null}
             <PlayingArea snapshot={snapshot} controller={controller} />
           </>
         ) : (

@@ -294,6 +294,89 @@ describe("the header's words when the pills don't fit (R1-03)", () => {
     expect(progressText({ ...fresh(), index: 9 })).toBe("Daily progress");
   });
 
+  it("R1-03 keeps each finished Mystery's mark in the words, as its pill shows it", () => {
+    const m1 = resolved(opened(fresh(), 0, 0), 5_000, mysteryReveal(2));
+    // The reveal still open: Mystery 1's own mark shows at once.
+    expect(progressText(m1)).toBe("Mystery 1 of 3 · M1 +3");
+    const m2 = opened({ ...m1, index: 1, phase: "opening" }, 1, 6_000);
+    expect(progressText(m2)).toBe("Mystery 2 of 3 · M1 +3");
+    const missed = resolved(m2, 9_000, mysteryReveal(null));
+    const m3 = resolved(
+      opened({ ...missed, index: 2, phase: "opening" }, 2, 10_000),
+      12_000,
+      mysteryReveal(4),
+    );
+    expect(progressText({ ...m3, index: 3, phase: "opening" })).toBe(
+      "Encore · M1 +3 · M2 ✕ · M3 +1",
+    );
+    // A withdrawn Mystery shows the pill's dash, never its 4 points.
+    const slots = m2.slots.map((slot, index) =>
+      index === 0 && slot.outcome?.family === "mystery"
+        ? { ...slot, outcome: { ...slot.outcome, voided: true, points: 4 } }
+        : slot,
+    );
+    expect(progressText({ ...m2, slots })).toBe("Mystery 2 of 3 · M1 –");
+  });
+
+  it("R1-03 counts the questions right so far, in round order, for compositions with choice rounds", () => {
+    const answered = (correct: boolean, voided = false) => ({
+      family: "choice" as const,
+      correct,
+      points: correct ? 1 : 0,
+      voided,
+      answerMs: null,
+      cells: [],
+    });
+    const mixed = createRun(
+      config(
+        metas("mc", "mc", "mc", "mc", "mc", "mystery", "encore").map(
+          (meta, index) =>
+            index < 5
+              ? { ...meta, ordinal: index + 1, ofType: 5 }
+              : index === 5
+                ? { ...meta, ordinal: 1, ofType: 1 }
+                : meta,
+        ),
+        { sealed: true },
+      ),
+      0,
+    ).state;
+    const results = [true, true, false, true, true];
+    const upTo = (count: number) =>
+      mixed.slots.map((slot, index) =>
+        index < count ? { ...slot, outcome: answered(results[index]!) } : slot,
+      );
+    expect(progressText({ ...mixed, slots: upTo(3), index: 3 })).toBe(
+      "Question 4 of 5 · 2 of 3 right",
+    );
+    const done = upTo(5);
+    const solved = done.map((slot, index) =>
+      index === 5
+        ? {
+            ...slot,
+            outcome: {
+              family: "mystery" as const,
+              solvedOn: 3 as const,
+              points: 2,
+              voided: false,
+              category: "film" as never,
+              cells: [],
+            },
+          }
+        : slot,
+    );
+    expect(progressText({ ...mixed, slots: solved, index: 6 })).toBe(
+      "Encore · 4 of 5 right · M1 +2",
+    );
+    // A withdrawn question is out of the count, as it is out of play.
+    const withdrawn = done.map((slot, index) =>
+      index === 2 ? { ...slot, outcome: answered(false, true) } : slot,
+    );
+    expect(progressText({ ...mixed, slots: withdrawn, index: 5 })).toBe(
+      "Mystery · 4 of 4 right",
+    );
+  });
+
   it("names the open round for how_to_play_open, and none once the run is over", () => {
     expect(openRoundNumber(null)).toBe("none");
     expect(openRoundNumber(opened(fresh(), 0, 0))).toBe(1);

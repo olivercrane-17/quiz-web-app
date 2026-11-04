@@ -12,6 +12,11 @@
  * on, and a press outside closes it. The screen owns whether it is open and
  * which item takes focus, because the stopwatch opens the same menu, at
  * Hide stopwatch (DESIGN §6.7).
+ *
+ * It hangs from the button's right edge and is as wide as its longest item,
+ * at least 12rem, but never wider than the screen less 1rem: at 200% text
+ * on a phone 12rem alone would run it off the left edge, so its items wrap
+ * instead (AC-A11Y-04).
  */
 import {
   useEffect,
@@ -179,7 +184,7 @@ export function MoreMenu({
           aria-label={COPY.label}
           data-more-menu=""
           onKeyDown={onMenuKeyDown}
-          className="absolute top-full right-0 z-20 mt-2 flex min-w-[12rem] flex-col rounded-2xl border border-border bg-background p-1 shadow-lg"
+          className="absolute top-full right-0 z-20 mt-2 flex w-max max-w-[calc(100vw-1rem)] min-w-[min(12rem,calc(100vw-1rem))] flex-col rounded-2xl border border-border bg-background p-1 shadow-lg"
         >
           <button
             type="button"

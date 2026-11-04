@@ -1,10 +1,14 @@
 /**
  * A greybox toast (DESIGN §6.9) for the Daily's "Saved" on Leave (RITE
- * round 1, R1-38): an ink pill 16 px above the tab bar, one at a time,
- * 4 s, tap to dismiss, its text mirrored into the polite status region,
- * which is what screen readers hear. DS-1 builds the design system's own
+ * round 1, R1-38) and the Share button's "Copied." (R1-01, through the
+ * Daily's index): an ink pill 16 px above the tab bar, one at a time, 4 s,
+ * tap to dismiss, its text mirrored into the polite status region, which
+ * is what screen readers hear. Its edge is a transparent border, which
+ * forced colours paint in CanvasText, so the pill keeps its shape when the
+ * fills drop out (DESIGN §11). DS-1 builds the design system's own
  * `showToast` in `src/ui/toast.ts` with the same signature; once it merges,
- * the Daily imports that one and this file goes (a FIX-DS follow-up).
+ * the Daily and Share import that one, with the same border, and this file
+ * goes (a FIX-DS follow-up).
  *
  * Leave navigates, so the toast waits until the address has changed and
  * the next screen is in place, then sits above that screen's tab bar.
@@ -49,7 +53,7 @@ export function showToast(message: string): () => void {
   // The status region speaks it; the pill would only say it twice.
   element.setAttribute("aria-hidden", "true");
   element.className =
-    "fixed left-1/2 z-50 flex max-w-[min(420px,calc(100vw-2rem))] -translate-x-1/2 items-center gap-2 rounded-full bg-foreground px-5 py-3 text-base font-semibold text-background shadow-lg";
+    "fixed left-1/2 z-50 flex max-w-[min(420px,calc(100vw-2rem))] -translate-x-1/2 items-center gap-2 rounded-full border-2 border-transparent bg-foreground px-5 py-3 text-base font-semibold text-background shadow-lg";
   element.style.bottom = bottomOffset();
   element.textContent = message;
 

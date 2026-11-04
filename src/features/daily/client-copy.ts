@@ -57,6 +57,18 @@ export const DAILY_SCREEN_COPY = {
       `${points} ${points === 1 ? "point" : "points"}`,
     /** A solved pill's mark, on the correct fill (decision D11): "+2". */
     gained: (points: number) => `+${points}`,
+    /**
+     * A Mystery pill's mark ("M1"), and the header's words for the finished
+     * rounds when the pills don't fit (R1-03): what each pill shows, "M1
+     * +3", "M2 ✕" or "M3 –", and the questions right so far. For the eye
+     * only: screen readers hear the pills' own labels.
+     */
+    marks: {
+      mystery: (ordinal: number) => `M${ordinal}`,
+      missed: "✕",
+      withdrawn: "–",
+      right: (right: number, asked: number) => `${right} of ${asked} right`,
+    },
     missed: "missed",
     lockedIn: "locked in",
     right: "right",

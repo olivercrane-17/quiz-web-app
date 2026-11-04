@@ -11,10 +11,12 @@
  * What RITE round 1 added (FIX-DLY): Share itself (R1-01), in a share box
  * a keyboard can select on its own (a read-only text box, so Ctrl+A takes
  * the share and never the answers around it); the one-line legend under
- * the grid (D3, R1-16); the total time, which only breaks ties (D7); the
+ * the grid (D3, R1-16), which screen readers hear as well and which
+ * describes the share box; the total time, which only breaks ties (D7); the
  * Encore row's "Breaks ties. Scores no points." (D2, R1-07); focus on the
- * results heading once they load (R1-34); and no Past 7 days link until
- * the archive has a route (R1-02).
+ * results heading once they load (R1-34); no Past 7 days link until the
+ * archive has a route (R1-02); and nothing that scrolls sideways at 200%
+ * text or with text spacing (AC-A11Y-04).
  *
  * The island reads the Daily number from the URL inside <Suspense> (§10.2
  * rule 2) and loads after the client boot; the data refetches on every
@@ -70,6 +72,10 @@ import { waitWords } from "../words";
 import { loadResults, type ResultsState } from "./results-loader";
 
 const COPY = STOP_SCREEN_COPY;
+/** "No answers inside.", which describes the share box. */
+const NOTE_ID = "qz-share-note";
+/** The grid's legend (D3), which describes the share box too. */
+const LEGEND_ID = "qz-share-legend";
 
 export function StopScreenSkeleton() {
   return (
@@ -249,13 +255,26 @@ function Results({
           {lines.map((line, index) => (
             <p key={index}>{line}</p>
           ))}
-          {token === null ? null : <p>{token}</p>}
-          {legend === null ? null : (
-            <p className="mt-1 text-sm text-muted-foreground" data-legend="">
-              {legend}
-            </p>
+          {token === null ? null : (
+            // The token's no-break spaces keep it whole in a chat bubble;
+            // on this card, at 200% text, it may wrap between its words.
+            <p>{token.replaceAll("\u00a0", " ")}</p>
           )}
         </div>
+        {/*
+         * Outside the rows that only repeat the share text: a screen reader
+         * hears the share box read its glyphs by name, and this says what
+         * they mean (D3). The share box names it as a description too.
+         */}
+        {legend === null ? null : (
+          <p
+            id={LEGEND_ID}
+            className="mt-2 text-sm text-muted-foreground"
+            data-legend=""
+          >
+            {legend}
+          </p>
+        )}
       </Card>
 
       <section
@@ -265,7 +284,7 @@ function Results({
         <h2 id="qz-share-heading" className="text-lg font-semibold">
           {COPY.shareHeading}
         </h2>
-        <p id="qz-share-note" className="text-sm text-muted-foreground">
+        <p id={NOTE_ID} className="text-sm text-muted-foreground">
           {COPY.shareNote}
         </p>
         {/*
@@ -276,7 +295,9 @@ function Results({
           readOnly
           data-share-text=""
           aria-labelledby="qz-share-heading"
-          aria-describedby="qz-share-note"
+          aria-describedby={
+            legend === null ? NOTE_ID : `${NOTE_ID} ${LEGEND_ID}`
+          }
           value={payload.text}
           rows={payload.text.split("\n").length + 1}
           className="field-sizing-content w-full resize-none rounded-xl bg-muted p-3 font-sans text-base outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground"
@@ -313,7 +334,12 @@ function Results({
           href={PRACTICE_HREF as Route}
           // Rarely followed: no prefetch.
           prefetch={false}
-          className={buttonClasses({ variant: "text" })}
+          // The one long link here: it wraps at 200% text or with text
+          // spacing instead of pushing the page sideways (AC-A11Y-04).
+          className={buttonClasses({
+            variant: "text",
+            className: "text-left whitespace-normal!",
+          })}
         >
           {COPY.practice}
         </Link>

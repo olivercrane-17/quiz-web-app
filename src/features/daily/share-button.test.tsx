@@ -5,17 +5,18 @@
  * selected text box, with the share events PRD §3.5.2 counts. The tests sit
  * here, beside the two surfaces that use it, until SHR-1 takes the file.
  */
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { TrackedEvent } from "@/features/analytics/track";
 import {
-  COPIED_MS,
   SHARE_BUTTON_COPY,
   ShareButton,
   type SharePayload,
 } from "@/features/share/share-button";
 import { LIVE_REGION_IDS } from "@/ui/announce";
+
+import { TOAST_MS } from "./toast";
 
 const TEXT = [
   "Knewt Daily #42 · 9/12 · Encore off by 4% 🎯",
@@ -51,10 +52,9 @@ function named(name: string): TrackedEvent[] {
   return log().filter((event) => event.name === name);
 }
 
-/** The confirmation drawn beside the button, not the status region's copy. */
-function onScreen(text: string): HTMLElement | null {
-  const button = document.querySelector<HTMLElement>("[data-share-button]");
-  return button === null ? null : within(button).queryByText(text);
+/** The toasts on screen (DESIGN §6.9), not the status region's copy. */
+function toasts(): HTMLElement[] {
+  return [...document.querySelectorAll<HTMLElement>("[data-toast]")];
 }
 
 function status(): string {
@@ -77,6 +77,7 @@ afterEach(() => {
   }
   delete (window as unknown as { __qzTrackLog?: unknown }).__qzTrackLog;
   document.getElementById(LIVE_REGION_IDS.polite)?.remove();
+  for (const toast of toasts()) toast.remove();
   vi.useRealTimers();
 });
 
@@ -127,8 +128,16 @@ describe("the Share button (PRD §3.5.2, DESIGN §6.11)", () => {
         props: { method: "clipboard", mode: "daily", surface: "stop" },
       },
     ]);
+    // A toast says it (DESIGN §6.9), and its status region speaks it.
+    expect(toasts().map((toast) => toast.textContent)).toEqual([
+      "Copied. Paste it into your group chat.",
+    ]);
+    expect(toasts()[0]).toHaveAttribute("aria-hidden", "true");
     expect(status()).toBe("Copied. Paste it into your group chat.");
-    expect(onScreen("Copied. Paste it into your group chat.")).toBeVisible();
+    // Nothing else draws it beside the button.
+    expect(document.querySelector("[data-share-button]")?.textContent).toBe(
+      "Share",
+    );
   });
 
   it("R1-01 falls back to the clipboard when Web Share refuses for any other reason", async () => {
@@ -207,15 +216,39 @@ describe("the Share button (PRD §3.5.2, DESIGN §6.11)", () => {
     expect(named("share_complete")).toHaveLength(1);
   });
 
-  it("R1-01 takes the on-screen confirmation down after a toast's 4 seconds", async () => {
+  it("R1-01 shows 'Copied.' as one toast that goes after its 4 seconds", async () => {
     vi.useFakeTimers();
     stubNavigator({ clipboard: { writeText: vi.fn(async () => {}) } });
     render(<ShareButton payload={PAYLOAD} surface="stop" />);
     await press();
-    expect(onScreen("Copied. Paste it into your group chat.")).toBeVisible();
+    // A second copy replaces the first toast rather than stacking.
+    await press();
+    expect(toasts().map((toast) => toast.textContent)).toEqual([
+      "Copied. Paste it into your group chat.",
+    ]);
     act(() => {
-      vi.advanceTimersByTime(COPIED_MS);
+      vi.advanceTimersByTime(TOAST_MS);
     });
-    expect(onScreen("Copied. Paste it into your group chat.")).toBeNull();
+    expect(toasts()).toEqual([]);
+  });
+
+  it("R1-01 lets the 'Copy this text' box take its row's whole width and grow to the whole text", async () => {
+    stubNavigator({
+      clipboard: {
+        writeText: vi.fn(async () => {
+          throw new DOMException("Denied", "NotAllowedError");
+        }),
+      },
+    });
+    render(<ShareButton payload={PAYLOAD} surface="stop" />);
+    const wrapper = document.querySelector("[data-share-button]");
+    expect(wrapper).not.toHaveClass("basis-full");
+    await press();
+    // In a wrapping row of buttons, the box no longer shrinks to fit.
+    expect(wrapper).toHaveClass("w-full", "basis-full");
+    // Field sizing grows it to every wrapped line; rows is the fallback.
+    const box = screen.getByRole("textbox", { name: "Copy this text" });
+    expect(box).toHaveClass("field-sizing-content");
+    expect(box).toHaveAttribute("rows", "5");
   });
 });

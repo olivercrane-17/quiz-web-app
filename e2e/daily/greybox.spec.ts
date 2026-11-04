@@ -12,6 +12,7 @@
 import type { Page } from "@playwright/test";
 
 import { expect, test } from "../fixtures";
+import { expectSealedPayloads } from "../support/sealed";
 
 /** 09:00 in London on Sunday 1 November 2026: Daily #42 (spare set 6). */
 const NOV_1 = new Date("2026-11-01T09:00:00Z");
@@ -314,6 +315,8 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
       `Questions ${"✅".repeat(5)}`,
       "Film & TV 🟧🟧🟧✅",
     ]);
+    // The Lantern Keeper as R1-30 rewrote it gave nothing away early.
+    await expectSealedPayloads(page);
   });
 
   test("the home card follows the Daily: in progress, then finished with its grid", async ({
@@ -370,6 +373,88 @@ async function withoutWebShare(page: Page): Promise<void> {
   });
 }
 
+/** 200% text, as a phone's text-size setting gives it (R1-03). */
+const BIG_TEXT = "html { font-size: 200% !important; }";
+/** WCAG 1.4.12's text spacing, as AC-A11Y-06 applies it. */
+const TEXT_SPACING = [
+  "* { line-height: 1.5 !important; letter-spacing: 0.12em !important;",
+  "word-spacing: 0.16em !important; }",
+  "p { margin-bottom: 2em !important; }",
+].join(" ");
+
+/**
+ * AC-A11Y-04's "no clipping" DOM check: every visible text or control sits
+ * inside the viewport horizontally, any of them whose overflow is hidden
+ * (and every text box) shows all of its content, and the page doesn't
+ * scroll sideways. Visually hidden text (`sr-only`, the live regions) is
+ * out of sight on purpose and doesn't count.
+ */
+async function expectNoClipping(page: Page): Promise<void> {
+  const problems = await page.evaluate(() => {
+    const width = document.documentElement.clientWidth;
+    const found: string[] = [];
+    if (document.documentElement.scrollWidth > width) {
+      found.push(`the page is ${document.documentElement.scrollWidth} px wide`);
+    }
+    // `sr-only` clips to nothing (the skip link's padding widens its box),
+    // and the live regions clip to an empty rectangle.
+    const visuallyHidden = (element: Element) => {
+      for (let at: Element | null = element; at; at = at.parentElement) {
+        const style = getComputedStyle(at);
+        if (
+          style.clipPath === "inset(50%)" ||
+          style.clip === "rect(0px, 0px, 0px, 0px)"
+        ) {
+          return true;
+        }
+      }
+      return false;
+    };
+    const clips = (value: string) => value === "hidden" || value === "clip";
+    for (const element of document.body.querySelectorAll<HTMLElement>("*")) {
+      const control = element.matches(
+        "a[href], button, input, select, textarea, summary, [tabindex], [role='button'], [role='menuitem']",
+      );
+      const text = [...element.childNodes].some(
+        (node) =>
+          node.nodeType === Node.TEXT_NODE &&
+          (node.textContent ?? "").trim() !== "",
+      );
+      if (!control && !text) continue;
+      if (!element.checkVisibility({ visibilityProperty: true })) continue;
+      if (visuallyHidden(element)) continue;
+      const box = element.getBoundingClientRect();
+      if (box.width === 0 && box.height === 0) continue;
+      const name = `${element.tagName.toLowerCase()} "${(element.textContent ?? "").trim().slice(0, 30)}"`;
+      if (box.left < -0.5 || box.right > width + 0.5) {
+        found.push(
+          `${name} runs from x ${Math.round(box.left)} to ${Math.round(box.right)}`,
+        );
+      }
+      const style = getComputedStyle(element);
+      const field = element instanceof HTMLTextAreaElement;
+      if (
+        clips(style.overflowX) &&
+        element.scrollWidth > element.clientWidth + 1
+      ) {
+        found.push(
+          `${name} hides ${element.scrollWidth - element.clientWidth} px sideways`,
+        );
+      }
+      if (
+        (field || clips(style.overflowY)) &&
+        element.scrollHeight > element.clientHeight + 1
+      ) {
+        found.push(
+          `${name} hides ${element.scrollHeight - element.clientHeight} px below`,
+        );
+      }
+    }
+    return found;
+  });
+  expect(problems).toEqual([]);
+}
+
 /** RITE round 1's findings for the Daily (docs/playtests/rite-1.md, FIX-DLY). */
 test.describe("RITE round 1", () => {
   test.describe("Share (R1-01, PRD §3.5.2)", () => {
@@ -384,14 +469,14 @@ test.describe("RITE round 1", () => {
       const box = page.locator("[data-share-text]");
       await expect(box).toHaveValue(/^Knewt Daily/);
       await page.getByRole("button", { name: "Share", exact: true }).click();
+      // A toast says it (DESIGN §6.9), and the status region speaks it.
+      const toast = page.locator("[data-toast]");
+      await expect(toast).toHaveText("Copied. Paste it into your group chat.");
+      await expect(toast).toBeVisible();
       await expect(statusRegion(page)).toHaveText(
         "Copied. Paste it into your group chat.",
       );
-      await expect(
-        page
-          .locator("[data-share-button]")
-          .getByText("Copied. Paste it into your group chat."),
-      ).toBeVisible();
+      await expect(page.locator("[data-share-button]")).toHaveText("Share");
       expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
         await box.inputValue(),
       );
@@ -441,6 +526,7 @@ test.describe("RITE round 1", () => {
     test("R1-01 shows the text selected in a box with 'Copy this text' when neither Web Share nor the clipboard works", async ({
       page,
     }) => {
+      await page.setViewportSize({ width: 320, height: 568 });
       await withoutWebShare(page);
       await page.addInitScript(() => {
         Clipboard.prototype.writeText = () =>
@@ -453,6 +539,15 @@ test.describe("RITE round 1", () => {
       await expect(fallback).toBeFocused();
       const text = await page.locator("[data-share-text]").inputValue();
       await expect(fallback).toHaveValue(text);
+      // All of it shows, wrapped lines too, as wide as the share box above.
+      expect(
+        await fallback.evaluate((el) => el.scrollHeight <= el.clientHeight),
+      ).toBe(true);
+      const shareBox = await page.locator("[data-share-text]").boundingBox();
+      const box = await fallback.boundingBox();
+      expect(Math.abs((box?.width ?? 0) - (shareBox?.width ?? 0))).toBeLessThan(
+        1,
+      );
       expect(
         await fallback.evaluate((el: HTMLTextAreaElement) => [
           el.selectionStart,
@@ -562,15 +657,21 @@ test.describe("RITE round 1", () => {
       await expect(
         page.getByRole("heading", { name: /clue 1/i }),
       ).toBeVisible();
-      await page.addStyleTag({
-        content: "html { font-size: 200% !important; }",
-      });
-      await expect(page.locator("[data-progress-text]")).toHaveText(
-        "Mystery 1 of 3",
-      );
-      await expect(
-        page.getByRole("list", { name: "Daily progress" }),
-      ).toBeHidden();
+      await page.addStyleTag({ content: BIG_TEXT });
+      const words = page.locator("[data-progress-text]");
+      await expect(words).toHaveText("Mystery 1 of 3");
+      // The words are for the eye: screen readers keep the pills' list,
+      // which is only out of sight.
+      await expect(words).toHaveAttribute("aria-hidden", "true");
+      const list = page.getByRole("list", { name: "Daily progress" });
+      await expect(list.getByRole("listitem")).toHaveCount(4);
+      // Out of sight in an sr-only box of 1 px.
+      expect(
+        await list.evaluate((el) => {
+          const box = el.parentElement?.getBoundingClientRect();
+          return box !== undefined && box.width <= 1 && box.height <= 1;
+        }),
+      ).toBe(true);
       const watch = page.locator("[data-stopwatch]");
       await expect(watch).toHaveText("0:00");
       await expect(watch.locator("svg")).toBeHidden();
@@ -604,6 +705,114 @@ test.describe("RITE round 1", () => {
       await expect(page.locator("[data-progress-text]")).toBeHidden();
       await expect(page.locator("[data-stopwatch] svg")).toBeVisible();
     });
+
+    test("R1-03 at 200% text a finished Mystery keeps its result: the words show 'M1 +3' and the list still names its 3 points", async ({
+      page,
+    }) => {
+      await mockInit(page, { scenario: "in_progress_mystery_2" });
+      await page.goto("/daily");
+      await expect(
+        page.getByRole("list", { name: "Daily progress" }),
+      ).toBeVisible();
+      await page.addStyleTag({ content: BIG_TEXT });
+      await expect(page.locator("[data-progress-text]")).toHaveText(
+        "Mystery 2 of 3 · M1 +3",
+      );
+      await expect(page.getByRole("banner")).toMatchAriaSnapshot(`
+        - list "Daily progress":
+          - listitem: Mystery 1, solved on clue 2, 3 points
+          - listitem: Mystery 2, playing now
+          - listitem: Mystery 3, not started
+          - listitem: Encore, not started
+      `);
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBeLessThanOrEqual(390);
+    });
+
+    test("R1-03 at 320 px the pills keep a row of their own, with '+3', and the stopwatch drops under them", async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 320, height: 568 });
+      await mockInit(page, { scenario: "in_progress_mystery_2" });
+      await page.goto("/daily");
+      const list = page.getByRole("list", { name: "Daily progress" });
+      await expect(list).toBeVisible();
+      await expect(list.getByRole("listitem").first()).toContainText("+3");
+      await expect(page.locator("[data-progress-text]")).toBeHidden();
+      const pills = await list.boundingBox();
+      const watch = await page.locator("[data-stopwatch]").boundingBox();
+      expect(watch?.y ?? 0).toBeGreaterThanOrEqual(
+        (pills?.y ?? 0) + (pills?.height ?? 0) - 1,
+      );
+      expect((watch?.x ?? 0) + (watch?.width ?? 0)).toBeLessThanOrEqual(320);
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBeLessThanOrEqual(320);
+    });
+
+    // At 200% text from 768 px the header has room for the pills, but
+    // their 30 px box (src/ui/progress-segments.tsx, DS-1's) doesn't grow
+    // with their text-sm marks, which spill out of it. Follow-up filed for
+    // FIX-DS: set the mark in px or let the pill grow (DESIGN §10.5); this
+    // goes green with it.
+    test.fixme("R1-03 at 200% text on a tablet each pill still holds its mark", async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 768, height: 1024 });
+      await mockInit(page, { scenario: "in_progress_mystery_2" });
+      await page.goto("/daily");
+      const pills = page
+        .getByRole("list", { name: "Daily progress" })
+        .getByRole("listitem");
+      await expect(pills).toHaveCount(4);
+      await page.addStyleTag({ content: BIG_TEXT });
+      await expect(page.locator("[data-progress-text]")).toBeHidden();
+      for (const pill of await pills.all()) {
+        const [outer, mark] = await pill.evaluate((el) =>
+          [el, el.querySelector("[aria-hidden]") ?? el].map((node) => {
+            const box = node.getBoundingClientRect();
+            return [box.left, box.top, box.right, box.bottom];
+          }),
+        );
+        const [left, top, right, bottom] = mark ?? [];
+        expect(left).toBeGreaterThanOrEqual(outer?.[0] ?? Infinity);
+        expect(top).toBeGreaterThanOrEqual(outer?.[1] ?? Infinity);
+        expect(right).toBeLessThanOrEqual(outer?.[2] ?? -Infinity);
+        expect(bottom).toBeLessThanOrEqual(outer?.[3] ?? -Infinity);
+      }
+    });
+
+    test("AC-A11Y-04 at 200% text the More menu stays on a phone's screen, its items wrapping instead", async ({
+      page,
+    }) => {
+      for (const viewport of [
+        { width: 320, height: 568 },
+        { width: 390, height: 844 },
+      ]) {
+        await page.setViewportSize(viewport);
+        await page.goto("/daily");
+        await expect(
+          page.getByRole("heading", { name: /clue 1/i }),
+        ).toBeVisible();
+        await page.addStyleTag({ content: BIG_TEXT });
+        await page.getByRole("button", { name: "More" }).click();
+        const items = page.getByRole("menuitem");
+        await expect(items).toHaveCount(2);
+        for (const item of await items.all()) {
+          const box = await item.boundingBox();
+          expect(
+            box?.x ?? -1,
+            viewport.width.toString(),
+          ).toBeGreaterThanOrEqual(0);
+          expect(
+            (box?.x ?? 0) + (box?.width ?? Infinity),
+            viewport.width.toString(),
+          ).toBeLessThanOrEqual(viewport.width);
+        }
+        await page.keyboard.press("Escape");
+      }
+    });
   });
 
   test.describe("the More menu, How to play and the stopwatch (R1-04, R1-05)", () => {
@@ -615,6 +824,10 @@ test.describe("RITE round 1", () => {
         page.getByText("Take your time. Time only breaks ties."),
       ).toBeVisible();
       const watch = page.locator("[data-stopwatch]");
+      // A screen reader hears it on the stopwatch itself.
+      await expect(watch).toHaveAccessibleDescription(
+        "Take your time. Time only breaks ties.",
+      );
       await watch.click();
       const menu = page.getByRole("menu", { name: "More" });
       await expect(menu).toBeVisible();
@@ -643,6 +856,9 @@ test.describe("RITE round 1", () => {
       await expect(
         page.getByText("Take your time. Time only breaks ties."),
       ).toHaveCount(0);
+      await expect(page.locator("[data-stopwatch]")).not.toHaveAttribute(
+        "aria-describedby",
+      );
       await page.getByRole("button", { name: "More" }).click();
       await page.getByRole("menuitem", { name: "How to play" }).click();
       expect(await tracked(page, "how_to_play_open")).toEqual([
@@ -731,6 +947,16 @@ test.describe("RITE round 1", () => {
       await expect(page.locator("[data-legend]")).toHaveText(
         "🟧 clue used · ✅ solved · ⬜ not needed",
       );
+      // Outside the rows only the eye needs, so a screen reader hears it,
+      // and it describes the share box that reads the glyphs by name.
+      await expect(
+        page.getByRole("paragraph").filter({ hasText: "clue used" }),
+      ).toHaveCount(1);
+      await expect(
+        page.getByRole("textbox", { name: "Your share text" }),
+      ).toHaveAccessibleDescription(
+        "No answers inside. 🟧 clue used · ✅ solved · ⬜ not needed",
+      );
     });
 
     test("R1-19 the share's first line says 'Encore off by 4%', while the Encore row keeps '4% off'", async ({
@@ -765,6 +991,18 @@ test.describe("RITE round 1", () => {
       await expect(heading).toHaveText("Daily #42");
       await expect(heading).toBeFocused();
     });
+
+    test("AC-A11Y-04 AC-A11Y-06 at 320 px nothing clips or scrolls sideways, with 200% text or with text spacing", async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 320, height: 568 });
+      for (const style of [BIG_TEXT, TEXT_SPACING]) {
+        await page.reload();
+        await expect(page.locator("[data-score]")).toHaveText("9/12");
+        await page.addStyleTag({ content: style });
+        await expectNoClipping(page);
+      }
+    });
   });
 
   test("R1-08 a solved Mystery's pill shows +3 and names its points, and no pill acts like a button", async ({
@@ -798,7 +1036,7 @@ test.describe("RITE round 1", () => {
   test.describe("Leave (R1-38)", () => {
     test.use({ viewport: { width: 390, height: 844 } });
 
-    test("R1-38 Leave shows 'Saved' on Today, above the tab bar, and says it in the status region", async ({
+    test("R1-38 Leave shows 'Saved' on Today, above the tab bar, says it in the status region, and keeps its edge in forced colours", async ({
       page,
     }) => {
       await page.goto("/daily");
@@ -813,6 +1051,16 @@ test.describe("RITE round 1", () => {
       await expect(toast).toHaveText("Saved");
       await expect(toast).toBeVisible();
       await expect(statusRegion(page)).toHaveText("Saved");
+      // In forced colours its fill drops out, and its border, painted in
+      // the system's text colour, keeps the pill's shape (DESIGN §11).
+      await page.emulateMedia({ forcedColors: "active" });
+      const [edge, ink] = await toast.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return [style.borderTopWidth, style.borderTopColor];
+      });
+      expect(edge).toBe("2px");
+      expect(ink).not.toBe("rgba(0, 0, 0, 0)");
+      await page.emulateMedia({ forcedColors: "none" });
       const bar = await page
         .locator('nav[data-placement="bottom"]')
         .boundingBox();
