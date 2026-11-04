@@ -1,10 +1,12 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve, sep } from "node:path";
 
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import prettier from "eslint-config-prettier/flat";
+import globals from "globals";
+import ts from "typescript";
 
 const ROOT = import.meta.dirname;
 
@@ -13,12 +15,20 @@ const ROOT = import.meta.dirname;
 // ---------------------------------------------------------------------------
 
 /**
+ * Every extension of code ESLint reads. The layer rules match all of them,
+ * so a .tsx, .mts or .js file can't step around a rule written for .ts.
+ */
+const CODE = "{ts,tsx,mts,cts,js,jsx,mjs,cjs}";
+/** CODE without plain .ts. */
+const NOT_PLAIN_TS = "{tsx,mts,cts,js,jsx,mjs,cjs}";
+
+/**
  * Test code may reach across layers to set up state: the layer rules of
  * ARCHITECTURE §2.2 govern the code that ships. Engine tests still keep the
  * engine's purity rules.
  */
 const TEST_FILES = [
-  "**/*.{test,spec}.{ts,tsx,mts}",
+  `**/*.{test,spec}.${CODE}`,
   "**/__fixtures__/**",
   "src/test/**",
 ];
@@ -68,6 +78,22 @@ const NO_REACT_PATTERNS = [
     message: "This layer has no React or Next code (ARCHITECTURE §2.2).",
   },
 ];
+/**
+ * The Supabase SDK lives behind GameBackend. A direct import would bypass
+ * it and could land the SDK in a route's first load without the lazy
+ * markers of our own wrapper modules (§10.9).
+ */
+const NO_SUPABASE = {
+  group: ["@supabase/*"],
+  message:
+    "Only src/backend/supabase and src/lib/supabase use the Supabase SDK; go through @/backend (ARCHITECTURE §2.2, §7.1).",
+};
+/** Serwist is the service worker's library (§10.7). */
+const NO_SERWIST = {
+  group: ["serwist", "@serwist/*"],
+  message:
+    "Serwist runs inside the service worker: only src/pwa imports it (ARCHITECTURE §2.2, §10.7).",
+};
 
 // ---------------------------------------------------------------------------
 // Engine purity (ARCHITECTURE §2.2, §4.1)
@@ -76,60 +102,25 @@ const NO_REACT_PATTERNS = [
 const ENGINE_IS_PURE =
   "src/engine is pure TypeScript (ARCHITECTURE §4.1): functions take data and return data.";
 
-/** Globals the engine never touches, with the reason for each group. */
-const ENGINE_GLOBALS = [
-  [
-    `${ENGINE_IS_PURE} No DOM, storage or network: pass the data in.`,
-    [
-      "window",
-      "self",
-      "globalThis",
-      "document",
-      "navigator",
-      "location",
-      "history",
-      "screen",
-      "visualViewport",
-      "localStorage",
-      "sessionStorage",
-      "indexedDB",
-      "caches",
-      "cookieStore",
-      "fetch",
-      "XMLHttpRequest",
-      "WebSocket",
-      "EventSource",
-      "BroadcastChannel",
-      "Worker",
-      "SharedWorker",
-      "MessageChannel",
-      "postMessage",
-      "alert",
-      "confirm",
-      "prompt",
-      "matchMedia",
-      "getComputedStyle",
-      "addEventListener",
-      "removeEventListener",
-      "dispatchEvent",
-      "Event",
-      "CustomEvent",
-      "EventTarget",
-      "HTMLElement",
-      "Element",
-      "MutationObserver",
-      "ResizeObserver",
-      "IntersectionObserver",
-      "Image",
-      "Audio",
-      "AudioContext",
-      "Notification",
-      "Blob",
-      "File",
-      "FileReader",
-      "FormData",
-    ],
-  ],
+/**
+ * Browser globals the engine may still use, because their output depends
+ * only on their arguments.
+ */
+const ENGINE_PURE_GLOBALS = new Set([
+  "Intl",
+  "console",
+  "URL",
+  "URLSearchParams",
+  "TextEncoder",
+  "TextDecoder",
+  "structuredClone",
+  "atob",
+  "btoa",
+  "AbortController",
+]);
+
+/** Globals the engine never touches that have a reason of their own. */
+const ENGINE_GLOBAL_GROUPS = [
   [
     `${ENGINE_IS_PURE} No timers: time arrives as \`at\` on events or through an injected Clock (§4.3).`,
     [
@@ -155,6 +146,32 @@ const ENGINE_GLOBALS = [
     `${ENGINE_IS_PURE} It runs in the browser as well as in Node: no Node globals.`,
     ["process", "Buffer", "global", "require", "__dirname", "__filename"],
   ],
+];
+
+const ENGINE_GROUPED_GLOBALS = new Set(
+  ENGINE_GLOBAL_GROUPS.flatMap(([, names]) => names),
+);
+
+/**
+ * The DOM, storage, the network and every other browser API: the whole
+ * browser table of the `globals` package (the list ESLint itself uses),
+ * plus the global object, minus the pure names and the groups above.
+ */
+const ENGINE_BROWSER_GLOBALS = [
+  ...new Set(["globalThis", ...Object.keys(globals.browser)]),
+]
+  .filter(
+    (name) =>
+      !ENGINE_PURE_GLOBALS.has(name) && !ENGINE_GROUPED_GLOBALS.has(name),
+  )
+  .sort();
+
+const ENGINE_GLOBALS = [
+  [
+    `${ENGINE_IS_PURE} No DOM, storage or network: pass the data in.`,
+    ENGINE_BROWSER_GLOBALS,
+  ],
+  ...ENGINE_GLOBAL_GROUPS,
 ].flatMap(([message, names]) => names.map((name) => ({ name, message })));
 
 const ENGINE_PROPERTIES = [
@@ -202,6 +219,16 @@ const RELATIVE_WITH_EXTENSION = {
   message:
     "Import engine and schema modules by relative path with an explicit .ts extension, so Node 22 runs them from scripts/ without a build step (ARCHITECTURE §2.2).",
 };
+
+/**
+ * src/engine and src/content/schema hold .ts modules only: Node 22 strips
+ * the types of a .ts file and runs it from scripts/, with no JSX and no
+ * build step. The whole file is refused, whatever it contains.
+ */
+const PLAIN_TS_ONLY = (folder) => ({
+  selector: "Program",
+  message: `${folder} holds .ts modules only, which Node 22 runs from scripts/ without a build step (ARCHITECTURE §2.2, §4.1). Rename the file to .ts; JSX belongs in a feature.`,
+});
 
 // ---------------------------------------------------------------------------
 // Feature boundaries (ARCHITECTURE §2.2, §2.3)
@@ -314,6 +341,36 @@ const ANYTHING = [`${ROOT_GLOB}/**`];
 const ANYTHING_IN_SRC = [`${SRC_GLOB}/**`];
 const PACKAGES = `${ROOT_GLOB}/node_modules/**`;
 
+const APP_EXCEPT = [
+  anyIn("app"),
+  anyIn("ui"),
+  moduleAt("lib/env"),
+  `${SRC_GLOB}/features/**/routes/**`,
+];
+
+const APP_ZONE = {
+  target: "./src/app",
+  from: ANYTHING_IN_SRC,
+  except: APP_EXCEPT,
+  message:
+    "src/app holds routes only: it re-exports feature route modules (@/features/*/routes/*) and may use ui and @/lib/env (ARCHITECTURE §2.2).",
+};
+
+/**
+ * Route handlers under src/app/api may also use @/platform/identity, which
+ * holds the identity's formats: POST /api/identity checks the player id and
+ * the secret before it sets the backup cookie, and GET /api/restore reads
+ * the cookie back (ARCHITECTURE §9.3). The layers/paths-route-handlers
+ * block puts this zone in APP_ZONE's place.
+ */
+const ROUTE_HANDLER_ZONE = {
+  target: "./src/app/api",
+  from: ANYTHING_IN_SRC,
+  except: [...APP_EXCEPT, anyIn("platform/identity")],
+  message:
+    "Route handlers in src/app/api use @/platform/identity (the backup cookie's formats, ARCHITECTURE §9.3), feature route modules, ui and @/lib/env only (§2.2).",
+};
+
 const LAYER_ZONES = [
   {
     target: "./src/engine",
@@ -408,18 +465,7 @@ const LAYER_ZONES = [
     message:
       "Features import the engine, @/backend (its index and types only), content, platform, ui, analytics, config, @/lib/env and @/lib/metadata (ARCHITECTURE §2.2).",
   },
-  {
-    target: "./src/app",
-    from: ANYTHING_IN_SRC,
-    except: [
-      anyIn("app"),
-      anyIn("ui"),
-      moduleAt("lib/env"),
-      `${SRC_GLOB}/features/**/routes/**`,
-    ],
-    message:
-      "src/app holds routes only: it re-exports feature route modules (@/features/*/routes/*) and may use ui and @/lib/env (ARCHITECTURE §2.2).",
-  },
+  APP_ZONE,
   {
     target: "./src/pwa",
     from: ANYTHING,
@@ -432,23 +478,33 @@ const LAYER_ZONES = [
     message:
       "src/pwa runs inside the service worker: config and the generated content manifest only (ARCHITECTURE §2.2).",
   },
+  {
+    // Shared code with no row of its own in §2.2, all of which reaches the
+    // browser: @/lib/env, the analytics dictionary that track() is typed
+    // against, config, and instrumentation-client.ts, which runs before
+    // hydration.
+    target: [
+      "./src/lib",
+      "./src/analytics",
+      "./src/config",
+      "./src/instrumentation.ts",
+      "./src/instrumentation-client.ts",
+    ],
+    from: [
+      anyIn("content/schema"),
+      anyIn("content/pipeline"),
+      `${ROOT_GLOB}/node_modules/zod/**`,
+    ],
+    message:
+      "zod, src/content/schema and src/content/pipeline are build-time only: scripts and tests import them (ARCHITECTURE §2.2, §10.9).",
+  },
 ];
 
 // ---------------------------------------------------------------------------
-// A feature's index.ts never pulls in a "use client" module (§2.2)
+// Local rules
 // ---------------------------------------------------------------------------
 
 const USE_CLIENT = /^(?:\s|\/\/[^\n]*\n|\/\*[\s\S]*?\*\/)*["']use client["']/;
-const clientModules = new Map();
-
-function isClientModule(file) {
-  let client = clientModules.get(file);
-  if (client === undefined) {
-    client = USE_CLIENT.test(readFileSync(file, "utf8").replace(/^﻿/, ""));
-    clientModules.set(file, client);
-  }
-  return client;
-}
 
 function resolveLocalModule(fromDir, source) {
   let base;
@@ -473,6 +529,137 @@ function resolveLocalModule(fromDir, source) {
   );
 }
 
+/** A repository-relative path with forward slashes, for messages. */
+const shown = (file) => relative(ROOT, file).split(sep).join("/");
+
+/** `import type`, `export type`, or a list in which every name is a type. */
+function isTypeOnlyDeclaration(node) {
+  if (node.importKind === "type" || node.exportKind === "type") return true;
+  const specifiers = node.specifiers ?? [];
+  return (
+    specifiers.length > 0 &&
+    specifiers.every(
+      (specifier) =>
+        specifier.importKind === "type" || specifier.exportKind === "type",
+    )
+  );
+}
+
+/**
+ * The modules a file passes values on from: `export * from`, `export { x }
+ * from` with at least one value in the list, and `export { x }` or
+ * `export default x` of a value it imported. Type-only exports are erased,
+ * so they pass nothing on.
+ */
+function valueReexportsOf(file, text) {
+  const jsx = file.endsWith("x");
+  const kind = /\.[cm]?jsx?$/.test(file)
+    ? jsx
+      ? ts.ScriptKind.JSX
+      : ts.ScriptKind.JS
+    : jsx
+      ? ts.ScriptKind.TSX
+      : ts.ScriptKind.TS;
+  const source = ts.createSourceFile(
+    file,
+    text,
+    ts.ScriptTarget.Latest,
+    false,
+    kind,
+  );
+  const imported = new Map();
+  const exportedNames = [];
+  const specifiers = new Set();
+  for (const statement of source.statements) {
+    if (ts.isImportDeclaration(statement)) {
+      const clause = statement.importClause;
+      if (
+        clause === undefined ||
+        clause.phaseModifier === ts.SyntaxKind.TypeKeyword ||
+        clause.isTypeOnly === true ||
+        !ts.isStringLiteral(statement.moduleSpecifier)
+      ) {
+        continue;
+      }
+      const from = statement.moduleSpecifier.text;
+      if (clause.name !== undefined) imported.set(clause.name.text, from);
+      const bindings = clause.namedBindings;
+      if (bindings !== undefined && ts.isNamespaceImport(bindings)) {
+        imported.set(bindings.name.text, from);
+      } else if (bindings !== undefined) {
+        for (const element of bindings.elements) {
+          if (!element.isTypeOnly) imported.set(element.name.text, from);
+        }
+      }
+    } else if (ts.isExportDeclaration(statement)) {
+      if (statement.isTypeOnly) continue;
+      const clause = statement.exportClause;
+      const values =
+        clause !== undefined && ts.isNamedExports(clause)
+          ? clause.elements.filter((element) => !element.isTypeOnly)
+          : null;
+      if (statement.moduleSpecifier !== undefined) {
+        if (
+          ts.isStringLiteral(statement.moduleSpecifier) &&
+          (values === null || values.length > 0)
+        ) {
+          specifiers.add(statement.moduleSpecifier.text);
+        }
+      } else if (values !== null) {
+        for (const element of values) {
+          exportedNames.push((element.propertyName ?? element.name).text);
+        }
+      }
+    } else if (
+      ts.isExportAssignment(statement) &&
+      ts.isIdentifier(statement.expression)
+    ) {
+      exportedNames.push(statement.expression.text);
+    }
+  }
+  for (const name of exportedNames) {
+    const from = imported.get(name);
+    if (from !== undefined) specifiers.add(from);
+  }
+  return [...specifiers];
+}
+
+/** What the barrel rule reads from a module, kept until the file changes. */
+const moduleFacts = new Map();
+
+function factsOf(file) {
+  const { mtimeMs } = statSync(file);
+  const cached = moduleFacts.get(file);
+  if (cached !== undefined && cached.mtimeMs === mtimeMs) return cached;
+  const text = readFileSync(file, "utf8").replace(/^﻿/, "");
+  const facts = {
+    mtimeMs,
+    client: USE_CLIENT.test(text),
+    reexports: valueReexportsOf(file, text),
+  };
+  moduleFacts.set(file, facts);
+  return facts;
+}
+
+/**
+ * The chain of value re-exports that leads from `file` to a "use client"
+ * module, ending with that module, or null when there is none. Each file
+ * is read once per walk, so an import cycle ends it.
+ */
+function clientChainFrom(file, seen = new Set()) {
+  if (seen.has(file)) return null;
+  seen.add(file);
+  const facts = factsOf(file);
+  if (facts.client) return [file];
+  for (const specifier of facts.reexports) {
+    const target = resolveLocalModule(dirname(file), specifier);
+    if (target === null) continue;
+    const chain = clientChainFrom(target, seen);
+    if (chain !== null) return [file, ...chain];
+  }
+  return null;
+}
+
 const qzPlugin = {
   meta: { name: "qz" },
   rules: {
@@ -481,11 +668,13 @@ const qzPlugin = {
         type: "problem",
         docs: {
           description:
-            'A feature\'s index.ts never imports or re-exports a "use client" module (ARCHITECTURE §2.2).',
+            "A feature's index.ts never imports or re-exports a \"use client\" module, directly or through another module's re-exports (ARCHITECTURE §2.2).",
         },
         messages: {
           client:
             '"{{source}}" is a "use client" module. A route whose server code imports this index would carry it in its first load, used or not: export it from the feature\'s client.ts instead (ARCHITECTURE §2.2).',
+          reexported:
+            '"{{source}}" passes on a "use client" module ({{chain}}). A route whose server code imports this index would carry it in its first load, used or not: export it from the feature\'s client.ts instead (ARCHITECTURE §2.2).',
         },
         schema: [],
       },
@@ -493,30 +682,83 @@ const qzPlugin = {
         const dir = dirname(context.physicalFilename);
         function check(node) {
           if (node.source === null || node.source === undefined) return;
-          if (node.importKind === "type" || node.exportKind === "type") return;
-          const specifiers = node.specifiers ?? [];
-          const typeOnly =
-            specifiers.length > 0 &&
-            specifiers.every(
-              (specifier) =>
-                specifier.importKind === "type" ||
-                specifier.exportKind === "type",
-            );
-          if (typeOnly) return;
+          if (isTypeOnlyDeclaration(node)) return;
           const source = String(node.source.value);
           const file = resolveLocalModule(dir, source);
-          if (file !== null && isClientModule(file)) {
-            context.report({
-              node: node.source,
-              messageId: "client",
-              data: { source },
-            });
-          }
+          const chain = file === null ? null : clientChainFrom(file);
+          if (chain === null) return;
+          context.report(
+            chain.length === 1
+              ? { node: node.source, messageId: "client", data: { source } }
+              : {
+                  node: node.source,
+                  messageId: "reexported",
+                  data: { source, chain: chain.map(shown).join(" > ") },
+                },
+          );
         }
         return {
           ImportDeclaration: check,
           ExportNamedDeclaration: check,
           ExportAllDeclaration: check,
+        };
+      },
+    },
+    "type-only-imports": {
+      meta: {
+        type: "problem",
+        docs: {
+          description:
+            "Imports from the given folders of the repository are type-only, whether the specifier is an @/ alias or a relative path (ARCHITECTURE §2.2).",
+        },
+        messages: { value: "{{message}}" },
+        schema: [
+          {
+            type: "object",
+            properties: {
+              from: {
+                type: "array",
+                items: { type: "string" },
+                minItems: 1,
+              },
+              message: { type: "string" },
+            },
+            required: ["from", "message"],
+            additionalProperties: false,
+          },
+        ],
+      },
+      create(context) {
+        const [{ from, message }] = context.options;
+        const folders = from.map((folder) => `${join(ROOT, folder)}${sep}`);
+        const dir = dirname(context.physicalFilename);
+        function check(node, typeOnly) {
+          const source = node.source;
+          if (
+            typeOnly ||
+            source === null ||
+            source === undefined ||
+            source.type !== "Literal" ||
+            typeof source.value !== "string"
+          ) {
+            return;
+          }
+          const file = resolveLocalModule(dir, source.value);
+          if (file === null) return;
+          if (!folders.some((folder) => file.startsWith(folder))) return;
+          context.report({
+            node: source,
+            messageId: "value",
+            data: { message },
+          });
+        }
+        return {
+          ImportDeclaration: (node) => check(node, isTypeOnlyDeclaration(node)),
+          ExportNamedDeclaration: (node) =>
+            check(node, isTypeOnlyDeclaration(node)),
+          ExportAllDeclaration: (node) =>
+            check(node, node.exportKind === "type"),
+          ImportExpression: (node) => check(node, false),
         };
       },
     },
@@ -559,22 +801,28 @@ const eslintConfig = defineConfig([
   },
   {
     name: "project/env-access",
-    files: ["src/**/*.{ts,tsx}"],
+    files: [`src/**/*.${CODE}`],
     ignores: ["src/lib/env.ts"],
     rules: {
       "no-restricted-syntax": ["error", ...ENV_ACCESS_SELECTORS],
     },
+  },
+  {
+    name: "project/local-rules",
+    plugins: { qz: qzPlugin },
   },
 
   // --- Layer rules (ARCHITECTURE §2.2) -------------------------------------
   // Each layer block sets @typescript-eslint/no-restricted-imports for its
   // own files, which never overlap, because a later block's options replace
   // an earlier one's. The resolved-path zones below catch what a specifier
-  // can't show: relative paths across layers and dynamic imports.
+  // can't show: relative paths across layers and dynamic imports. Every
+  // block matches every code extension (CODE), so a .tsx, .mts or .js file
+  // follows the same rules as a .ts one.
   {
     name: "layers/paths",
-    files: ["src/**/*.{ts,tsx,mts}"],
-    ignores: TEST_FILES,
+    files: [`src/**/*.${CODE}`],
+    ignores: [...TEST_FILES, "src/app/api/**"],
     rules: {
       "import/no-restricted-paths": [
         "error",
@@ -583,8 +831,26 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    // The same zones for route handlers, with ROUTE_HANDLER_ZONE in place of
+    // APP_ZONE (no feature zone targets src/app).
+    name: "layers/paths-route-handlers",
+    files: [`src/app/api/**/*.${CODE}`],
+    ignores: TEST_FILES,
+    rules: {
+      "import/no-restricted-paths": [
+        "error",
+        {
+          basePath: ROOT,
+          zones: LAYER_ZONES.map((zone) =>
+            zone === APP_ZONE ? ROUTE_HANDLER_ZONE : zone,
+          ),
+        },
+      ],
+    },
+  },
+  {
     name: "layers/engine",
-    files: ["src/engine/**/*.ts"],
+    files: [`src/engine/**/*.${CODE}`],
     rules: {
       "no-restricted-globals": ["error", ...ENGINE_GLOBALS],
       "no-restricted-properties": ["error", ...ENGINE_PROPERTIES],
@@ -606,7 +872,7 @@ const eslintConfig = defineConfig([
   },
   {
     name: "layers/engine-source",
-    files: ["src/engine/**/*.ts"],
+    files: [`src/engine/**/*.${CODE}`],
     ignores: TEST_FILES,
     rules: {
       "no-restricted-syntax": [
@@ -630,8 +896,22 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    // Last of the engine blocks: its list replaces theirs for these files.
+    name: "layers/engine-ts-only",
+    files: [`src/engine/**/*.${NOT_PLAIN_TS}`],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        ...ENGINE_SYNTAX,
+        NO_DYNAMIC_IMPORT,
+        NODE_RUNNABLE_SYNTAX,
+        PLAIN_TS_ONLY("src/engine"),
+      ],
+    },
+  },
+  {
     name: "layers/content-schema",
-    files: ["src/content/schema/**/*.ts"],
+    files: [`src/content/schema/**/*.${CODE}`],
     ignores: TEST_FILES,
     rules: {
       "no-restricted-syntax": [
@@ -655,10 +935,22 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    name: "layers/content-schema-ts-only",
+    files: [`src/content/schema/**/*.${NOT_PLAIN_TS}`],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        ...ENV_ACCESS_SELECTORS,
+        NODE_RUNNABLE_SYNTAX,
+        PLAIN_TS_ONLY("src/content/schema"),
+      ],
+    },
+  },
+  {
     name: "layers/content",
     files: [
-      "src/content/loaders/**/*.ts",
-      "src/content/generated/**/*.ts",
+      `src/content/loaders/**/*.${CODE}`,
+      `src/content/generated/**/*.${CODE}`,
       "src/content/types.ts",
     ],
     ignores: TEST_FILES,
@@ -667,63 +959,60 @@ const eslintConfig = defineConfig([
         "error",
         {
           paths: [...NO_REACT_PATHS, NO_ZOD],
-          patterns: NO_REACT_PATTERNS,
+          patterns: [...NO_REACT_PATTERNS, NO_SUPABASE, NO_SERWIST],
         },
       ],
     },
   },
   {
     name: "layers/backend",
-    files: ["src/backend/**/*.{ts,tsx}"],
+    files: [`src/backend/**/*.${CODE}`],
     ignores: TEST_FILES,
     rules: {
       "@typescript-eslint/no-restricted-imports": [
         "error",
         {
           paths: [...NO_REACT_PATHS, NO_ZOD],
-          patterns: [
-            ...NO_REACT_PATTERNS,
-            {
-              group: ["@/analytics", "@/analytics/**"],
-              allowTypeImports: true,
-              message:
-                "src/backend takes types only from @/analytics/dictionary (ARCHITECTURE §2.2).",
-            },
-          ],
+          patterns: [...NO_REACT_PATTERNS, NO_SERWIST],
+        },
+      ],
+      // By resolved path, so "../analytics/dictionary" counts too, and the
+      // backend's own analytics adapters (./analytics) don't.
+      "qz/type-only-imports": [
+        "error",
+        {
+          from: ["src/analytics"],
+          message:
+            "src/backend takes types only from @/analytics/dictionary (ARCHITECTURE §2.2).",
         },
       ],
     },
   },
   {
     name: "layers/platform",
-    files: ["src/platform/**/*.{ts,tsx}"],
+    files: [`src/platform/**/*.${CODE}`],
     ignores: TEST_FILES,
     rules: {
       "@typescript-eslint/no-restricted-imports": [
         "error",
         {
           paths: [...NO_REACT_PATHS, NO_ZOD],
-          patterns: [
-            ...NO_REACT_PATTERNS,
-            {
-              group: [
-                "@/analytics",
-                "@/analytics/**",
-                "@/backend",
-                "@/backend/**",
-              ],
-              allowTypeImports: true,
-              message:
-                "src/platform takes types only from analytics and @/backend: a backend implementation would make every adapter carry it (ARCHITECTURE §2.2, §2.3).",
-            },
-          ],
+          patterns: [...NO_REACT_PATTERNS, NO_SUPABASE, NO_SERWIST],
+        },
+      ],
+      "qz/type-only-imports": [
+        "error",
+        {
+          from: ["src/analytics", "src/backend"],
+          message:
+            "src/platform takes types only from analytics and @/backend: a backend implementation would make every adapter carry it (ARCHITECTURE §2.2, §2.3).",
         },
       ],
     },
   },
   {
     name: "layers/ui",
-    files: ["src/ui/**/*.{ts,tsx}"],
+    files: [`src/ui/**/*.${CODE}`],
     ignores: TEST_FILES,
     rules: {
       "@typescript-eslint/no-restricted-imports": [
@@ -743,6 +1032,8 @@ const eslintConfig = defineConfig([
               message:
                 "src/ui imports React and config only (ARCHITECTURE §2.2). Routing belongs to features.",
             },
+            NO_SUPABASE,
+            NO_SERWIST,
           ],
         },
       ],
@@ -750,25 +1041,25 @@ const eslintConfig = defineConfig([
   },
   {
     name: "layers/features-and-app",
-    files: ["src/features/**/*.{ts,tsx}", "src/app/**/*.{ts,tsx}"],
+    files: [`src/features/**/*.${CODE}`, `src/app/**/*.${CODE}`],
     ignores: TEST_FILES,
     rules: {
       "@typescript-eslint/no-restricted-imports": [
         "error",
-        { paths: [NO_ZOD] },
+        { paths: [NO_ZOD], patterns: [NO_SUPABASE, NO_SERWIST] },
       ],
     },
   },
   {
     name: "layers/pwa",
-    files: ["src/pwa/**/*.ts"],
+    files: [`src/pwa/**/*.${CODE}`],
     ignores: TEST_FILES,
     rules: {
       "@typescript-eslint/no-restricted-imports": [
         "error",
         {
           paths: [...NO_REACT_PATHS, NO_ZOD],
-          patterns: NO_REACT_PATTERNS,
+          patterns: [...NO_REACT_PATTERNS, NO_SUPABASE],
         },
       ],
     },
@@ -776,7 +1067,6 @@ const eslintConfig = defineConfig([
   {
     name: "layers/feature-barrels",
     files: ["src/features/*/index.{ts,tsx}"],
-    plugins: { qz: qzPlugin },
     rules: {
       "qz/no-client-in-barrel": "error",
     },
@@ -796,6 +1086,10 @@ const eslintConfig = defineConfig([
     "test-results/**",
     "blob-report/**",
     "docs/**",
+    // Service worker, generated after next build (ARCHITECTURE §10.7). ESLint
+    // 9 doesn't read .gitignore, which lists them too.
+    "public/sw.js",
+    "public/sw.js.map",
   ]),
 ]);
 

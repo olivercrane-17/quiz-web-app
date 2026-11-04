@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
+import type * as FeatureTable from "../config/features";
 import { FEATURE_DEFAULTS, FEATURE_FLAGS } from "../config/features";
 
 import {
@@ -387,6 +388,59 @@ describe("parsePublicEnv", () => {
         expect.stringContaining("(roms, editr)"),
         expect.stringContaining("the default flags apply"),
       ]);
+    });
+
+    it("reports the flags that are on by default and that a list turns off", async () => {
+      // Every default is off until its owner ships (§2.3), so this case
+      // pretends BLZ-1 has turned Blitz and Survival on.
+      vi.resetModules();
+      vi.doMock("../config/features", async (importOriginal) => {
+        const actual = await importOriginal<typeof FeatureTable>();
+        return {
+          ...actual,
+          FEATURE_DEFAULTS: Object.freeze({
+            ...actual.FEATURE_DEFAULTS,
+            blitz: true,
+            survival: true,
+          }),
+        };
+      });
+      try {
+        const { parsePublicEnv: parse } = await import("./env-parse");
+
+        expect(parse({}).features).toMatchObject({
+          blitz: true,
+          survival: true,
+        });
+        expect(parse({}).issues).toEqual([]);
+
+        // The Beta switch of D19, copied from .env.example as it stands.
+        const beta = parse({ NEXT_PUBLIC_FEATURES: "rooms,editor" });
+        expect(beta.features).toMatchObject({
+          rooms: true,
+          editor: true,
+          blitz: false,
+          survival: false,
+        });
+        expect(beta.issues).toEqual([
+          "NEXT_PUBLIC_FEATURES replaces the defaults, so this build turns off blitz and survival, which are on by default. List them too to keep them on.",
+        ]);
+
+        expect(parse({ NEXT_PUBLIC_FEATURES: "rooms,blitz" }).issues).toEqual([
+          expect.stringContaining(
+            "turns off survival, which is on by default. List it too",
+          ),
+        ]);
+        // Listing them keeps them on, and "none" turns everything off on
+        // purpose: neither one is a surprise.
+        expect(
+          parse({ NEXT_PUBLIC_FEATURES: "rooms,blitz,survival" }).issues,
+        ).toEqual([]);
+        expect(parse({ NEXT_PUBLIC_FEATURES: NO_FEATURES }).issues).toEqual([]);
+      } finally {
+        vi.doUnmock("../config/features");
+        vi.resetModules();
+      }
     });
 
     it("hands out a frozen table", () => {

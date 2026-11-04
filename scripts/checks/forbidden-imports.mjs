@@ -16,6 +16,12 @@
  *
  * Words are matched whole, after splitting camelCase, kebab-case and
  * snake_case, so "header", "download" and "readAloud" never read as "ad".
+ * "AD" next to an era word (AD_ERA, isAdYear, formatAdDate) is the era,
+ * not an advert. Copy that states the rule ("Strikes are never sold or
+ * refilled.") passes: an offer verb doesn't count after a negator in the
+ * same sentence. These are tripwires for wording, not a parser; review and
+ * the E2E half of each criterion carry the rest.
+ *
  * A graph whose entry modules don't exist yet (Survival before BLZ-1) is
  * reported as not built, and passes.
  */
@@ -33,6 +39,19 @@ const MONETIZATION_WORD =
 const OFFER_VERB =
   /^(?:restor(?:e|es|ed|ing)|buy(?:s|ing)?|bought|sell(?:s|ing)?|sold|purchas(?:e|es|ed|ing)|earn(?:s|ed|ing)?|refill(?:s|ed|ing)?|regain(?:s|ed|ing)?|recover(?:s|ed|ing)?|reviv(?:e|es|ed|ing)|unlock(?:s|ed|ing)?|grant(?:s|ed|ing)?|refund(?:s|ed|ing)?|extra|bonus)$/;
 const STRIKE_NOUN = /^(?:strikes?|li(?:fe|ves))$/;
+
+/**
+ * Words after which an offer verb in the same sentence is denied, not
+ * offered: "never sold", "no extra lives", "cannot buy", "won't refill".
+ * Contractions arrive joined ("cant", "wont"): see joinContractions().
+ */
+const NEGATOR = /^(?:never|no|not|cannot|cant|wont|without)$/;
+/** A contrast that ends the denial before it: "No ads, but you can buy a life." */
+const CONTRAST = /^(?:but|however|yet)$/;
+
+/** Era words that make a neighbouring "AD" the era: AD_ERA, isAdYear, formatAdDate. */
+const ERA_WORD = /^(?:bc|bce|ce|eras?|years?|dates?)$/;
+const ERA_AD = /^ads?$/;
 
 /**
  * The graphs. `entries` are globs relative to the repository root; `offers`
@@ -105,18 +124,56 @@ export function wordsOf(text) {
     .map((word) => word.toLowerCase());
 }
 
-/** The first monetization word in `text`, or null. */
+/**
+ * The first monetization word in `text`, or null. Each path segment is
+ * read on its own, so the era exemption for "AD" never reaches across a
+ * folder name: "ad-era.ts" is the era, "ads/year-end.ts" is still ads.
+ */
 export function monetizationWordIn(text) {
-  return wordsOf(text).find((word) => MONETIZATION_WORD.test(word)) ?? null;
+  for (const segment of text.split("/")) {
+    const words = wordsOf(segment);
+    const found = words.find(
+      (word, index) =>
+        MONETIZATION_WORD.test(word) &&
+        !(
+          ERA_AD.test(word) &&
+          [words[index - 1], words[index + 1]].some(
+            (neighbour) => neighbour !== undefined && ERA_WORD.test(neighbour),
+          )
+        ),
+    );
+    if (found !== undefined) return found;
+  }
+  return null;
 }
 
-/** True when `text` both offers something (restore, buy, earn...) and names a strike or a life. */
+/** "can't" and "won’t" as one word each ("cant", "wont"), so they can deny. */
+function joinContractions(text) {
+  return text.replace(/\b(\w+)n['’]t\b/gi, "$1nt");
+}
+
+/**
+ * True when `text` names a strike or a life and offers something (restore,
+ * buy, earn...) that no negator before it in the same sentence denies. So
+ * "Out of lives? Buy more." offers one, while "Strikes are never sold or
+ * refilled." and "You cannot buy or earn strikes." state the rule.
+ */
 export function offersStrike(text) {
-  const words = wordsOf(text);
-  return (
-    words.some((word) => OFFER_VERB.test(word)) &&
-    words.some((word) => STRIKE_NOUN.test(word))
-  );
+  const prose = joinContractions(text);
+  if (!wordsOf(prose).some((word) => STRIKE_NOUN.test(word))) return false;
+  return prose.split(/[.!?;:\n]+/).some((sentence) => {
+    const words = wordsOf(sentence);
+    let denied = false;
+    return words.some((word, index) => {
+      if (NEGATOR.test(word)) {
+        // "Why not buy an extra life?" asks; it doesn't deny.
+        denied = !(word === "not" && words[index - 1] === "why");
+      } else if (CONTRAST.test(word)) {
+        denied = false;
+      }
+      return !denied && OFFER_VERB.test(word);
+    });
+  });
 }
 
 /** A small glob: `**`, `*` and `{a,b}`; everything else, brackets included, is literal. */

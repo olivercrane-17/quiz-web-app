@@ -30,13 +30,23 @@ beforeAll(async () => {
   await eslint.lintText("export {};\n", { filePath: "src/engine/warm-up.ts" });
 }, 60_000);
 
-/** The rule ids that fire on `code` at `path`, one per message, in order. */
-async function rulesFiredAt(path: string, code: string): Promise<string[]> {
+/** What ESLint reports for `code` at `path`, in order. */
+async function messagesAt(
+  path: string,
+  code: string,
+): Promise<Linter.LintMessage[]> {
   const [result] = await eslint.lintText(code, { filePath: path });
   const messages: Linter.LintMessage[] = result?.messages ?? [];
   const fatal = messages.find((message) => message.fatal === true);
   if (fatal !== undefined) throw new Error(`${path}: ${fatal.message}`);
-  return messages.map((message) => message.ruleId ?? "(none)");
+  return messages;
+}
+
+/** The rule ids that fire on `code` at `path`, one per message, in order. */
+async function rulesFiredAt(path: string, code: string): Promise<string[]> {
+  return (await messagesAt(path, code)).map(
+    (message) => message.ruleId ?? "(none)",
+  );
 }
 
 const IMPORTS = "@typescript-eslint/no-restricted-imports";
@@ -45,6 +55,7 @@ const GLOBALS = "no-restricted-globals";
 const PROPERTIES = "no-restricted-properties";
 const SYNTAX = "no-restricted-syntax";
 const BARREL = "qz/no-client-in-barrel";
+const TYPE_ONLY = "qz/type-only-imports";
 
 type Case = [label: string, path: string, code: string, fired: string[]];
 
@@ -57,6 +68,44 @@ describe("engine purity (§4.1)", () => {
       ),
     ).toEqual([IMPORTS]);
   });
+
+  it.each<Case>([
+    [
+      "React in a .tsx file",
+      "src/engine/x.tsx",
+      'import { useState } from "react";\nexport const hook = useState;\n',
+      [SYNTAX, IMPORTS],
+    ],
+    [
+      "the DOM and the network in a .tsx file",
+      "src/engine/og/lint-fixture.tsx",
+      'export const w = window.innerWidth;\nexport const r = fetch("/x");\n',
+      [SYNTAX, GLOBALS, GLOBALS],
+    ],
+    [
+      "React and Date.now() in a .mts file",
+      "src/engine/lint-fixture.mts",
+      'import { useState } from "react";\nexport const hook = useState;\nexport const t = Date.now();\n',
+      [SYNTAX, IMPORTS, PROPERTIES],
+    ],
+    [
+      "React and Date.now() in a .js file",
+      "src/engine/lint-fixture.js",
+      'import { useState } from "react";\nexport const hook = useState;\nexport const t = Date.now();\n',
+      [SYNTAX, IMPORTS, PROPERTIES],
+    ],
+    [
+      "a .tsx test",
+      "src/engine/og/lint-fixture.test.tsx",
+      'import { it } from "vitest";\nit("renders", () => {});\n',
+      [SYNTAX],
+    ],
+  ])(
+    "refuses a module that isn't plain .ts, whatever it holds: %s",
+    async (_label, path, code, fired) => {
+      expect(await rulesFiredAt(path, code)).toEqual(fired);
+    },
+  );
 
   it.each<Case>([
     [
@@ -174,8 +223,41 @@ describe("engine purity (§4.1)", () => {
       "export const mode = process.env.NODE_ENV;\n",
       [GLOBALS],
     ],
+    [
+      "any browser global, not only the well-known ones",
+      "src/engine/x.ts",
+      [
+        "export const a = innerWidth;",
+        "export const b = scrollY;",
+        "export const c = new DOMParser();",
+        "export const d = getSelection();",
+        "export const e = devicePixelRatio;",
+        "",
+      ].join("\n"),
+      [GLOBALS, GLOBALS, GLOBALS, GLOBALS, GLOBALS],
+    ],
   ])("refuses %s", async (_label, path, code, fired) => {
     expect(await rulesFiredAt(path, code)).toEqual(fired);
+  });
+
+  it("keeps the browser globals whose output depends only on their arguments", async () => {
+    expect(
+      await rulesFiredAt(
+        "src/engine/x.ts",
+        [
+          'export const url = new URL("/daily", "https://example.com");',
+          'export const query = new URLSearchParams("a=1");',
+          'export const bytes = new TextEncoder().encode("x");',
+          "export const text = new TextDecoder().decode(bytes);",
+          "export const copy = structuredClone({ a: 1 });",
+          'export const coded = btoa("x") + atob("eA==");',
+          "export const controller = new AbortController();",
+          'export const months = new Intl.DateTimeFormat("en-US").formatToParts(0);',
+          'console.warn("x");',
+          "",
+        ].join("\n"),
+      ),
+    ).toEqual([]);
   });
 
   it("accepts pure code: relative .ts imports, JSON with its attribute, Intl and dates from arguments", async () => {
@@ -240,6 +322,62 @@ describe("layer boundaries (§2.2)", () => {
       'import type { ItemId } from "@/engine/types";\nexport type X = ItemId;\n',
       [IMPORTS],
     ],
+    [
+      "schema → React, from a .tsx file",
+      "src/content/schema/lint-fixture.tsx",
+      'import { useState } from "react";\nexport const x = useState;\n',
+      [SYNTAX, IMPORTS],
+    ],
+    [
+      "schema as a .js file",
+      "src/content/schema/lint-fixture.js",
+      'import { z } from "zod";\nexport const x = z;\n',
+      [SYNTAX],
+    ],
+    // src/lib, src/analytics, src/config and instrumentation: no row of
+    // their own in §2.2, but all of them reach the browser.
+    [
+      "lib → zod",
+      "src/lib/lint-fixture.ts",
+      'import { z } from "zod";\nexport const x = z;\n',
+      [PATHS],
+    ],
+    [
+      "lib → schema",
+      "src/lib/lint-fixture.ts",
+      'import { PracticeItemSchema } from "@/content/schema/items";\nexport const x = PracticeItemSchema;\n',
+      [PATHS],
+    ],
+    [
+      "lib → the content pipeline",
+      "src/lib/lint-fixture.ts",
+      'import { loadBank } from "@/content/pipeline/bank";\nexport const x = loadBank;\n',
+      [PATHS],
+    ],
+    [
+      "lib → config",
+      "src/lib/lint-fixture.ts",
+      'import { FEATURE_FLAGS } from "../config/features";\nexport const x = FEATURE_FLAGS;\n',
+      [],
+    ],
+    [
+      "analytics → schema",
+      "src/analytics/lint-fixture.ts",
+      'import { PracticeItemSchema } from "@/content/schema/items";\nexport const x = PracticeItemSchema;\n',
+      [PATHS],
+    ],
+    [
+      "config → zod",
+      "src/config/lint-fixture.ts",
+      'import { z } from "zod";\nexport const x = z;\n',
+      [PATHS],
+    ],
+    [
+      "instrumentation-client.ts → zod",
+      "src/instrumentation-client.ts",
+      'import { z } from "zod";\nexport const x = z;\n',
+      [PATHS],
+    ],
     // src/content: the engine and config; schema and pipeline are build-time.
     [
       "content loader → schema",
@@ -273,6 +411,42 @@ describe("layer boundaries (§2.2)", () => {
       "backend → analytics values",
       "src/backend/lint-fixture.ts",
       'import { EVENT_DICTIONARY } from "@/analytics/dictionary";\nexport const x = EVENT_DICTIONARY;\n',
+      [TYPE_ONLY],
+    ],
+    [
+      "backend → analytics values, by relative path",
+      "src/backend/lint-fixture.ts",
+      'import { EVENT_DICTIONARY } from "../analytics/dictionary";\nexport const x = EVENT_DICTIONARY;\n',
+      [TYPE_ONLY],
+    ],
+    [
+      "backend → analytics values, loaded lazily",
+      "src/backend/mock/lint-fixture.ts",
+      'export const load = () => import("../../analytics/dictionary");\n',
+      [TYPE_ONLY],
+    ],
+    [
+      "backend → analytics types, by relative path",
+      "src/backend/mock/lint-fixture.ts",
+      'import type { EventEnvelope } from "../../analytics/dictionary";\nexport type X = EventEnvelope;\n',
+      [],
+    ],
+    [
+      "backend → its own analytics adapter",
+      "src/backend/supabase/lint-fixture.ts",
+      'import { createAnalyticsArea } from "./analytics";\nexport const x = createAnalyticsArea;\n',
+      [],
+    ],
+    [
+      "backend → the Supabase SDK, in the Supabase implementation",
+      "src/backend/supabase/lint-fixture.ts",
+      'import { createClient } from "@supabase/supabase-js";\nexport const x = createClient;\n',
+      [],
+    ],
+    [
+      "backend → Serwist",
+      "src/backend/lint-fixture.ts",
+      'import { Serwist } from "serwist";\nexport const x = Serwist;\n',
       [IMPORTS],
     ],
     [
@@ -298,13 +472,25 @@ describe("layer boundaries (§2.2)", () => {
       "platform → a backend implementation",
       "src/platform/lint-fixture.ts",
       'import { createMockBackend } from "@/backend/mock";\nexport const x = createMockBackend;\n',
-      [IMPORTS, PATHS],
+      [PATHS, TYPE_ONLY],
+    ],
+    [
+      "platform → analytics values, by relative path",
+      "src/platform/identity/lint-fixture.ts",
+      'import { EVENT_DICTIONARY } from "../../analytics/dictionary";\nexport const x = EVENT_DICTIONARY;\n',
+      [TYPE_ONLY],
     ],
     [
       "platform → ui",
       "src/platform/lint-fixture.ts",
       'import { announce } from "@/ui/announce";\nexport const x = announce;\n',
       [PATHS],
+    ],
+    [
+      "platform → the Supabase SDK",
+      "src/platform/lint-fixture.ts",
+      'import { createClient } from "@supabase/supabase-js";\nexport const x = createClient;\n',
+      [IMPORTS],
     ],
     // src/ui
     [
@@ -324,6 +510,12 @@ describe("layer boundaries (§2.2)", () => {
       "src/ui/lint-fixture.tsx",
       'import { getKv } from "@/platform/storage";\nexport const x = getKv;\n',
       [PATHS],
+    ],
+    [
+      "ui → the Supabase SDK",
+      "src/ui/lint-fixture.tsx",
+      'import { createClient } from "@supabase/supabase-js";\nexport const x = createClient;\n',
+      [IMPORTS],
     ],
     // src/features
     [
@@ -365,6 +557,18 @@ describe("layer boundaries (§2.2)", () => {
       [IMPORTS],
     ],
     [
+      "feature → the Supabase SDK",
+      "src/features/daily/lint-fixture.ts",
+      'import { createClient } from "@supabase/supabase-js";\nexport const x = createClient;\n',
+      [IMPORTS],
+    ],
+    [
+      "feature → Serwist",
+      "src/features/pwa/lint-fixture.ts",
+      'import { Serwist } from "serwist";\nexport const x = Serwist;\n',
+      [IMPORTS],
+    ],
+    [
       "feature → src/app",
       "src/features/daily/lint-fixture.ts",
       'import Layout from "@/app/layout";\nexport const x = Layout;\n',
@@ -389,11 +593,42 @@ describe("layer boundaries (§2.2)", () => {
       'import { createRng } from "@/engine/rng";\nexport const x = createRng;\n',
       [PATHS],
     ],
+    [
+      "app → the Supabase SDK",
+      "src/app/(tabs)/lint-fixture/page.tsx",
+      'import { createClient } from "@supabase/supabase-js";\nexport const x = createClient;\n',
+      [IMPORTS],
+    ],
+    [
+      "app → platform identity, outside a route handler",
+      "src/app/(tabs)/lint-fixture/page.tsx",
+      'import { decodeLocalIdentity } from "@/platform/identity/local";\nexport const x = decodeLocalIdentity;\n',
+      [PATHS],
+    ],
+    // Route handlers check the identity's formats (§9.3).
+    [
+      "route handler → platform identity and @/lib/env",
+      "src/app/api/identity/route.ts",
+      'import { decodeLocalIdentity } from "@/platform/identity/local";\nimport { getSiteUrl } from "@/lib/env";\nexport const x = [decodeLocalIdentity, getSiteUrl];\n',
+      [],
+    ],
+    [
+      "route handler → the rest of platform",
+      "src/app/api/restore/route.ts",
+      'import { getKv } from "@/platform/storage";\nexport const x = getKv;\n',
+      [PATHS],
+    ],
+    [
+      "route handler → the engine",
+      "src/app/api/identity/route.ts",
+      'import { parseSecret } from "@/engine/types";\nexport const x = parseSecret;\n',
+      [PATHS],
+    ],
     // src/pwa
     [
-      "pwa → config",
+      "pwa → config and Serwist",
       "src/pwa/lint-fixture.ts",
-      'import { TUNABLES } from "@/config/tunables";\nexport const x = TUNABLES;\n',
+      'import { Serwist } from "serwist";\nimport { TUNABLES } from "@/config/tunables";\nexport const x = [Serwist, TUNABLES];\n',
       [],
     ],
     [
@@ -401,6 +636,24 @@ describe("layer boundaries (§2.2)", () => {
       "src/pwa/lint-fixture.ts",
       'import { useState } from "react";\nexport const x = useState;\n',
       [IMPORTS],
+    ],
+    [
+      "pwa → React, from a .mts file",
+      "src/pwa/lint-fixture.mts",
+      'import { useState } from "react";\nexport const x = useState;\n',
+      [IMPORTS],
+    ],
+    [
+      "pwa → the Supabase SDK",
+      "src/pwa/lint-fixture.ts",
+      'import { createClient } from "@supabase/supabase-js";\nexport const x = createClient;\n',
+      [IMPORTS],
+    ],
+    [
+      "pwa → a feature's shell table",
+      "src/pwa/lint-fixture.ts",
+      'import { SHELL_ROUTES } from "@/features/shell/shell-routes";\nexport const x = SHELL_ROUTES;\n',
+      [PATHS],
     ],
     [
       "pwa → platform",
@@ -502,4 +755,71 @@ describe("feature boundaries (§2.2, §2.3)", () => {
       ),
     ).toEqual([]);
   });
+
+  it.each<Case>([
+    [
+      "a name from the client entry",
+      "src/features/offers/index.ts",
+      'export { OfferCard } from "./client";\n',
+      [BARREL],
+    ],
+    [
+      "the whole client entry",
+      "src/features/shell/index.ts",
+      'export * from "./client";\n',
+      [BARREL],
+    ],
+    [
+      "the client entry as a namespace",
+      "src/features/practice/index.ts",
+      'export * as client from "./client";\n',
+      [BARREL],
+    ],
+    [
+      "an import from the client entry, exported again",
+      "src/features/shell/index.ts",
+      'import { ShellParam } from "./client";\nexport { ShellParam };\n',
+      [BARREL],
+    ],
+  ])(
+    'follows re-exports to a "use client" module: %s',
+    async (_label, path, code, fired) => {
+      expect(await rulesFiredAt(path, code)).toEqual(fired);
+    },
+  );
+
+  it("names the chain of re-exports that reaches the client module", async () => {
+    const [message] = await messagesAt(
+      "src/features/offers/index.ts",
+      'export { OfferCard } from "./client";\n',
+    );
+
+    expect(message?.message).toContain(
+      "src/features/offers/client.ts > src/features/offers/offer-card.tsx",
+    );
+  });
+
+  it("lets types and server modules through the client entry's neighbours", async () => {
+    expect(
+      await rulesFiredAt(
+        "src/features/offers/index.ts",
+        'export type { OfferCardLayoutProps } from "./client";\nexport { type OfferCardLayoutProps as Props } from "./client";\n',
+      ),
+    ).toEqual([]);
+    expect(
+      await rulesFiredAt(
+        "src/features/shell/index.ts",
+        'export { SHELL_COPY } from "./copy";\nexport { PlayFrame } from "./play-frame";\nexport { SiteFooter } from "./footer";\n',
+      ),
+    ).toEqual([]);
+  });
+});
+
+describe("generated files", () => {
+  it.each(["public/sw.js", "public/sw.js.map"])(
+    "ignores %s, the service worker that the build writes (§10.7)",
+    async (path) => {
+      expect(await eslint.isPathIgnored(path)).toBe(true);
+    },
+  );
 });

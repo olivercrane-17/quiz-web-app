@@ -78,8 +78,23 @@ describe("words", () => {
     "loadAddress",
     "AdaptiveMixed",
     "src/features/daily/stop-screen/results-loader.ts",
+    // "AD" beside an era word is the era (src/engine/text/metrics.ts reads "AD 79").
+    "AD_ERA",
+    "isAdYear",
+    "formatAdDate",
+    "parseYearAd",
+    "src/engine/text/ad-era.ts",
   ])("reads %s as no monetization word", (text) => {
     expect(monetizationWordIn(text)).toBeNull();
+  });
+
+  it.each([
+    // The era word has to sit right beside "AD", in the same path segment.
+    ["src/features/ads/year-end.ts", "ads"],
+    ["AdYearlyRevenue", "ad"],
+    ["AdBannerDate", "ad"],
+  ])("still finds the advert in %s", (text, word) => {
+    expect(monetizationWordIn(text)).toBe(word);
   });
 
   it("splits camelCase, kebab-case, snake_case and digits", () => {
@@ -103,6 +118,22 @@ describe("words", () => {
     ["addStrike", false],
     ["strikesLeft", false],
     ["Restore your progress", false],
+    // Copy that states the rule (PRD §3.3.6) is not an offer.
+    [
+      "Strikes show as three X slots, never hearts, and are never sold or refilled.",
+      false,
+    ],
+    ["No extra lives, no second chances.", false],
+    ["You cannot buy or earn strikes.", false],
+    ["Strikes can't be bought or earned back.", false],
+    ["Play without buying extra lives.", false],
+    ["noExtraLives", false],
+    // An offer still counts in its own sentence, after a contrast, or asked.
+    ["Out of lives? Buy more.", true],
+    ["Never lose a strike: buy an extra life now!", true],
+    ["No ads, but you can buy extra lives.", true],
+    ["Why not buy an extra life?", true],
+    ["Earn strikes back without paying.", true],
   ])("offersStrike(%s) is %s", (text, offers) => {
     expect(offersStrike(text)).toBe(offers);
   });
@@ -233,6 +264,25 @@ describe("the module graph", () => {
         "Earn an extra strike every ten answers.",
       ],
     ]);
+  });
+
+  it("passes Survival copy that states the rule, and an era helper on the Daily's path", () => {
+    const root = tree({
+      ...DAILY_ROUTE,
+      "src/features/daily/routes/daily.tsx":
+        'import { AD_ERA } from "@/engine/text/metrics";\nexport default function Daily() { return AD_ERA; }\n',
+      "src/engine/text/metrics.ts": 'export const AD_ERA = "AD";\n',
+      "src/app/(play)/practice/survival/page.tsx":
+        'export { default } from "@/features/practice/survival/routes/survival";\n',
+      "src/features/practice/survival/routes/survival.tsx": [
+        "export default function Survival() {",
+        "  return <p>Strikes show as three X slots, never hearts, and are never sold or refilled.</p>;",
+        "}",
+        "",
+      ].join("\n"),
+    });
+
+    expect(checkForbiddenImports({ root }).findings).toEqual([]);
   });
 
   it("reports a graph with no entry module as not built, and passes it", () => {

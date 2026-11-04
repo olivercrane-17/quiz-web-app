@@ -43,7 +43,8 @@ export const PUBLIC_ENV_NAMES = [
   "NEXT_PUBLIC_SITE_URL",
   /**
    * The feature flags that are on in this build, comma-separated, or `none`.
-   * Unset means the defaults in src/config/features.ts (ARCHITECTURE §10.5).
+   * Unset means the defaults in src/config/features.ts (ARCHITECTURE §10.5);
+   * a list replaces them.
    */
   "NEXT_PUBLIC_FEATURES",
   /** Set by Vercel: "production", "preview" or "development". */
@@ -153,6 +154,10 @@ export function parsePublicEnv(source: PublicEnvSource): PublicEnv {
  *
  * An unknown name is reported and ignored. A value that names no known
  * flag at all keeps the defaults, so a typo can't switch every feature off.
+ * A list replaces the defaults, so a flag that is on by default but missing
+ * from the list is off in that build, and reported, since copying a Beta
+ * switch such as "rooms,editor" would otherwise turn off every shipped
+ * Should feature without a word.
  */
 function parseFeatures(
   raw: string | undefined,
@@ -189,6 +194,17 @@ function parseFeatures(
       "NEXT_PUBLIC_FEATURES names no known flag, so the default flags apply.",
     );
     return FEATURE_DEFAULTS;
+  }
+
+  // "none" asks for every flag off, so it drops nothing by surprise.
+  const dropped = FEATURE_FLAGS.filter(
+    (flag) => FEATURE_DEFAULTS[flag] && !on.has(flag),
+  );
+  if (on.size > 0 && dropped.length > 0) {
+    const one = dropped.length === 1;
+    issues.push(
+      `NEXT_PUBLIC_FEATURES replaces the defaults, so this build turns off ${listOf(dropped)}, which ${one ? "is" : "are"} on by default. List ${one ? "it" : "them"} too to keep ${one ? "it" : "them"} on.`,
+    );
   }
 
   return Object.freeze(
@@ -364,6 +380,13 @@ function resolveSiteUrl(source: PublicEnvSource, issues: string[]): string {
   }
 
   return LOCAL_SITE_URL;
+}
+
+/** "a", "a and b", "a, b and c". */
+function listOf(names: readonly string[]): string {
+  return names.length <= 1
+    ? names.join("")
+    : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
 }
 
 /** Trimmed value, or undefined when the variable is unset or blank. */
