@@ -1,6 +1,6 @@
 {
   "id": "p.geo.0245",
-  "status": "checking",
+  "status": "cut",
   "category": "geo",
   "tags": ["flags", "birds", "central-america"],
   "region": "global",
@@ -178,19 +178,13 @@
         "verdict": "revise"
       }
     ],
-    "estimates": [
-      {
-        "by": "es-pgeo02e",
-        "at": "2026-11-01T02:33:41Z"
-      }
-    ],
     "tiebreak": {
-      "checker": "fc-pgeo02t",
+      "checker": "fc-tbp3t",
       "pass": "T",
       "brief": "tiebreak",
       "packetSha256": "ce606e674372058a01909155ac0df46992dc1ce6be34fc25febfe64bfacd7376",
-      "startedAt": "2026-11-01T04:58:12Z",
-      "finishedAt": "2026-11-01T05:11:28Z",
+      "startedAt": "2026-11-04T13:31:57Z",
+      "finishedAt": "2026-11-04T13:55:32Z",
       "coldSolve": {
         "answerGiven": "Guatemala",
         "confidence": "high",
@@ -198,63 +192,79 @@
       },
       "claimResults": [
         {
-          "claimId": "c1",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Guatemala's national flag is a sky-blue, white and sky-blue vertical triband with the coat of arms in the centre, and the arms show a resplendent quetzal, the national bird.",
-            "confidence": "certain"
-          },
-          "note": "No web search ran: the shared turn-wide WebSearch budget was exhausted (my one call was refused before it ran), so this rests on knowledge. No pinned dataset describes flag designs (mledoze-countries carries only a flag emoji, and its currency entry naming the quetzal says nothing about the flag). Cold solve Guatemala, high confidence."
-        },
-        {
-          "claimId": "c2",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Honduras flies a blue, white and blue triband with five blue stars; Nicaragua's blue, white and blue flag carries a triangle with five volcanoes, a Phrygian cap and a rainbow; Costa Rica's state flag shows arms with three volcanoes between two seas, ships and stars. No bird appears on any of them.",
-            "confidence": "certain"
-          },
-          "note": "No web search ran: the shared turn-wide WebSearch budget was exhausted (my one call was refused before it ran), so this rests on knowledge."
-        },
-        {
           "claimId": "c3",
           "verdict": "uncertain",
-          "method": "knowledge",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "The Maya prized quetzal tail feathers as precious goods, worn above all in the headdresses of rulers and other nobles. That they were reserved for rulers and priests in particular is a common popular summary I cannot confirm.",
-            "confidence": "likely"
+            "kind": "web",
+            "query": "quetzal tail feathers reserved for Maya royalty and priests killing the bird forbidden",
+            "results": [
+              {
+                "title": "Resplendent Quetzal",
+                "url": "https://www.nationalgeographic.com/animals/birds/facts/resplendent-quetzal"
+              },
+              {
+                "title": "Qʼuqʼumatz",
+                "url": "https://en.wikipedia.org/wiki/Q%CA%BCuq%CA%BCumatz"
+              },
+              {
+                "title": "Resplendant Quetzal bird, Guatemala, collected around 1923",
+                "url": "https://americanhistory.si.edu/collections/object/nmah_910651"
+              },
+              {
+                "title": "Resplendent quetzal",
+                "url": "https://en.wikipedia.org/wiki/Resplendent_quetzal"
+              },
+              {
+                "title": "quetzal - Kids",
+                "url": "https://kids.britannica.com/kids/article/quetzal/390147"
+              },
+              {
+                "title": "Communities and Cultures",
+                "url": "https://americanhistory.si.edu/explore/exhibitions/really-big-money/online/communities-and-cultures"
+              },
+              {
+                "title": "Name that Flag, #3: And the Answer Is...",
+                "url": "https://www.audubon.org/news/name-flag-3-and-answer"
+              },
+              {
+                "title": "Mexican featherwork",
+                "url": "https://en.wikipedia.org/wiki/Mexican_featherwork"
+              },
+              {
+                "title": "Moctezuma's headdress",
+                "url": "https://en.wikipedia.org/wiki/Moctezuma's_headdress"
+              }
+            ],
+            "summaryExcerpt": "Sources say the bird was sacred to the Maya and Aztecs, and that priests and royalty wore its feathers in ceremonies (Mayans and Aztecs revered the bird as sacred, and priests and royalty donned its feathers in ceremonies.). Feathers also went into headdresses and clothing for royalty and religious leaders (The feathers were also made into headdresses and clothing for royalty and religious leaders.). [...] Restricted wearing: Britannica states that only the Aztec nobility were allowed to wear quetzal feathers.",
+            "tiers": ["A", "B", "C"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "Uncertain, not refuted. The exclusivity in 'reserved them for rulers and priests' (explanation: 'kept them for rulers and priests') is what I cannot stand behind: my knowledge says rulers and other nobles wore quetzal-feather headdresses, and no web search could run to settle it because the shared turn-wide budget was exhausted. See the fix issue for a safer wording."
-        },
-        {
-          "claimId": "c4",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "In Guatemala's coat of arms a resplendent quetzal stands on top of a scroll inscribed with the independence date, 15 September 1821, over crossed rifles and swords inside a laurel wreath.",
-            "confidence": "certain"
-          },
-          "note": "No web search ran: the shared turn-wide WebSearch budget was exhausted (my one call was refused before it ran), so this rests on knowledge."
+          "note": "Supports 'prized' and 'worn by rulers and priests', not 'reserved for' them: the only restriction any source states is Britannica's for Aztec nobility, a different people and a wider group. An earlier search ('ancient Maya quetzal feathers worn only by rulers priests nobility headdresses', National Geographic, Smithsonian and Wikipedia results) said the same: 'The \"only\" part of your query isn't confirmed by these results.' One result here is a flag quiz feature (Tier C). Not refuted, not confirmed."
         }
       ],
       "issues": [
         {
           "type": "wording",
           "severity": "fix",
-          "note": "c3 (explanation, first sentence): 'kept them for rulers and priests' asserts an exclusivity I rate only likely, so the claim stays uncertain. Either find a Tier A or B source for rulers and priests, or step down the precision ladder to what is well documented, for example 'The Maya prized quetzal feathers, and their rulers wore them in headdresses.' A changed claim needs two fresh checks (CONTENT_GUIDE 9.7). Key, distractors and the scroll detail are fine."
+          "note": "Checker doubt on c3 (the record schema has no checker_doubt type). Two searches support 'The Maya prized quetzal feathers, and their rulers and priests wore them in ceremonies', but not the exclusivity in c3 and in the explanation's 'kept them for rulers and priests'. Reword both to the supported form, or find a Tier A or B source for the restriction. A changed claim needs two fresh checks (§9.7). The key, the distractors and the scroll detail were not in dispute and were not re-checked here."
         }
       ],
-      "searchesUsed": 0,
+      "searchesUsed": 2,
       "verdict": "revise"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp3t. A pass, B revise, T revise, so rule 2 cannot pass (§9.7). B left c3 uncertain ('reserved them for rulers and priests'), and T's two searches (National Geographic, the Smithsonian, Britannica and Wikipedia) support only that the Maya prized the feathers and that rulers and priests wore them in ceremonies; the one restriction any source states is Britannica's, for Aztec nobility. The fix rewrites c3 and the explanation's 'kept them for rulers and priests', a changed claim that needs two fresh checks, so no wording-only rewrite applies. The key, the distractors and the scroll detail were not in dispute. Redraft under a new id with the supported wording.",
+      "decidedAt": "2026-11-04T14:11:30Z"
     }
   },
   "format": "mc",

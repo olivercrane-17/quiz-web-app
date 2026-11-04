@@ -1,6 +1,6 @@
 {
   "id": "p.music.0141",
-  "status": "checking",
+  "status": "active",
   "category": "music",
   "tags": ["world-music", "latin-music", "new-york"],
   "region": "global",
@@ -186,12 +186,170 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp2t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "0e458b2a7d3910e7168a377fbcb3b2f5f0f228f9a18fc15cf448c45ec662dc79",
+      "startedAt": "2026-11-04T13:02:58Z",
+      "finishedAt": "2026-11-04T13:27:22Z",
+      "coldSolve": {
+        "answerGiven": "New York City",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "salsa music style developed New York City 1960s 1970s Cuban Puerto Rican musicians son",
+            "results": [
+              {
+                "title": "Salsa",
+                "url": "https://www.britannica.com/art/salsa-music"
+              },
+              {
+                "title": "salsa - Students",
+                "url": "https://kids.britannica.com/students/article/salsa/633684"
+              },
+              {
+                "title": "Salsa",
+                "url": "https://www.britannica.com/art/salsa-dance"
+              },
+              {
+                "title": "Tito Puente",
+                "url": "https://www.britannica.com/biography/Tito-Puente"
+              },
+              {
+                "title": "Latin American dance - Caribbean, Salsa, Merengue",
+                "url": "https://www.britannica.com/art/Latin-American-dance/The-Caribbean"
+              },
+              {
+                "title": "Willie Colon",
+                "url": "https://www.britannica.com/biography/Willie-Colon"
+              },
+              {
+                "title": "Susan V. Cashion",
+                "url": "https://www.britannica.com/contributor/Susan-V-Cashion/6436"
+              },
+              {
+                "title": "Ruben Blades",
+                "url": "https://www.britannica.com/biography/Ruben-Blades"
+              },
+              {
+                "title": "Latin American music",
+                "url": "https://www.britannica.com/art/Latin-American-music"
+              },
+              {
+                "title": "Latin American dance",
+                "url": "https://www.britannica.com/art/Latin-American-dance"
+              }
+            ],
+            "summaryExcerpt": "Salsa grew out of Afro-Cuban son and was shaped mainly by Cuban and Puerto Rican musicians in New York. New York development: Migration from Latin America in the early to mid-20th century brought musicians to the city. There musicians began adding horns, an aspect of American jazz, into the son tradition, eventually developing salsa.",
+            "tiers": ["B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "Britannica-only search (Tier B). The timing difference the summary mentions concerns when the style formed (1940s and 1950s, or the 1960s), not where: 'Both accounts agree that the New York scene was decisive.'"
+        },
+        {
+          "claimId": "c2",
+          "verdict": "confirmed",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "salsa music style developed New York City 1960s 1970s Cuban Puerto Rican musicians son",
+            "results": [
+              {
+                "title": "Salsa",
+                "url": "https://www.britannica.com/art/salsa-music"
+              },
+              {
+                "title": "salsa - Students",
+                "url": "https://kids.britannica.com/students/article/salsa/633684"
+              },
+              {
+                "title": "Salsa",
+                "url": "https://www.britannica.com/art/salsa-dance"
+              },
+              {
+                "title": "Tito Puente",
+                "url": "https://www.britannica.com/biography/Tito-Puente"
+              },
+              {
+                "title": "Latin American dance - Caribbean, Salsa, Merengue",
+                "url": "https://www.britannica.com/art/Latin-American-dance/The-Caribbean"
+              },
+              {
+                "title": "Willie Colon",
+                "url": "https://www.britannica.com/biography/Willie-Colon"
+              },
+              {
+                "title": "Susan V. Cashion",
+                "url": "https://www.britannica.com/contributor/Susan-V-Cashion/6436"
+              },
+              {
+                "title": "Ruben Blades",
+                "url": "https://www.britannica.com/biography/Ruben-Blades"
+              },
+              {
+                "title": "Latin American music",
+                "url": "https://www.britannica.com/art/Latin-American-music"
+              },
+              {
+                "title": "Latin American dance",
+                "url": "https://www.britannica.com/art/Latin-American-dance"
+              }
+            ],
+            "summaryExcerpt": "Sources differ slightly on timing. Some say the music was developed in the 1940s and '50s and only labeled salsa in the 1960s, while others place its coalescence in the 1960s. Both accounts agree that the New York scene was decisive.",
+            "tiers": ["B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "The style took shape in New York. Havana is where its root, the son, came from, which the stem already grants ('rooted in Cuban son'). No source found places salsa's formation in Havana, Miami or Mexico City."
+        }
+      ],
+      "issues": [
+        {
+          "type": "ambiguity",
+          "severity": "note",
+          "note": "Pass B's point that some Cuban accounts treat salsa as son under a new name is real but handled: the stem grants the Cuban son roots and asks where it took shape as a style, and Britannica says it was shaped mainly by Cuban and Puerto Rican musicians in New York. No change needed."
+        }
+      ],
+      "searchesUsed": 1,
+      "verdict": "pass"
+    },
     "estimates": [
       {
         "by": "es-pmusic01e",
         "at": "2026-11-01T02:04:12Z"
       }
-    ]
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp2t. A pass, B revise, T pass (§9.7). B's revise was its doubt that salsa took shape mainly in New York (c1 and c2 uncertain, with Havana as the purist's rival). T's Britannica-only search (Tier B) says salsa was shaped mainly by Cuban and Puerto Rican musicians in New York, and the only difference it reports is when the style formed, not where. So B's fix (a reword) is rejected on that evidence: the stem already grants the Cuban son roots. A and B confirmed high-risk c3 directly at certain (memo §18). T's own issue is a note. The acceptance rule passes.",
+      "decidedAt": "2026-11-04T13:57:18Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-04T13:57:18Z",
+      "nearestId": "p.geo.0003",
+      "score": 0.2,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T13:57:18Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "Salsa music, rooted in Cuban son, took shape as a style mainly in which city?",

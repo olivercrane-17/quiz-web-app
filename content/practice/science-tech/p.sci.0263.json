@@ -1,6 +1,6 @@
 {
   "id": "p.sci.0263",
-  "status": "checking",
+  "status": "cut",
   "category": "sci",
   "tags": ["computing", "computer-history", "photography"],
   "region": "global",
@@ -219,19 +219,13 @@
         "verdict": "pass"
       }
     ],
-    "estimates": [
-      {
-        "by": "es-psci02e",
-        "at": "2026-11-01T03:38:23Z"
-      }
-    ],
     "tiebreak": {
-      "checker": "fc-psci02t",
+      "checker": "fc-tbp3t",
       "pass": "T",
       "brief": "tiebreak",
       "packetSha256": "b46a2b3e93001ffd2949243aa7d0013d6d6b21f488908a097c12dc6c99eec29b",
-      "startedAt": "2026-11-01T05:11:26.000Z",
-      "finishedAt": "2026-11-01T05:17:30.000Z",
+      "startedAt": "2026-11-04T13:32:13Z",
+      "finishedAt": "2026-11-04T13:55:32Z",
       "coldSolve": {
         "answerGiven": "Jacquard's punched-card loom",
         "confidence": "high",
@@ -241,54 +235,198 @@
         {
           "claimId": "c1",
           "verdict": "uncertain",
-          "method": "knowledge",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Jacquard's card-controlled loom is most often dated to 1804, but some references date his loom to 1801, the year he showed an earlier loom at the Paris industrial exhibition. I cannot say with certainty which of those years a patent belongs to.",
-            "confidence": "likely"
+            "kind": "web",
+            "query": "Joseph Marie Jacquard loom punched cards patent year 1801 exhibition 1804",
+            "results": [
+              {
+                "title": "1801: Punched cards control Jacquard loom",
+                "url": "https://www.computerhistory.org/storageengine/punched-cards-control-jacquard-loom/"
+              },
+              {
+                "title": "Joseph Marie Jacquard",
+                "url": "https://en.wikipedia.org/wiki/Joseph_Marie_Jacquard"
+              },
+              {
+                "title": "Jacquard machine",
+                "url": "https://en.wikipedia.org/wiki/Jacquard_machine"
+              },
+              {
+                "title": "Information retrieval",
+                "url": "https://en.wikipedia.org/wiki/Information_retrieval"
+              },
+              {
+                "title": "Textile - Jacquard, Weaving, Automation",
+                "url": "https://www.britannica.com/topic/textile/The-Jacquard-attachment"
+              },
+              {
+                "title": "The Punched Card’s Pedigree - CHM Revolution",
+                "url": "https://www.computerhistory.org/revolution/story/4"
+              },
+              {
+                "title": "Timeline of clothing and textiles technology",
+                "url": "https://en.wikipedia.org/wiki/Timeline_of_clothing_and_textiles_technology"
+              },
+              {
+                "title": "Punch Cards",
+                "url": "https://www.si.edu/spotlight/punch-cards"
+              },
+              {
+                "title": "Joseph-Marie Jacquard - Students",
+                "url": "https://kids.britannica.com/students/article/Joseph-Marie-Jacquard/275120"
+              },
+              {
+                "title": "Punched card",
+                "url": "https://en.wikipedia.org/wiki/Punched_card"
+              }
+            ],
+            "summaryExcerpt": "The search results support the 1801 exhibition, but they disagree on the patent date and the 1804 link. [...] The Wikipedia article on the Jacquard machine says it was patented by Joseph Marie Jacquard in 1804. The Jacquard biography instead says the emperor granted the patent for Jacquard's loom to the city of Lyon on 15 April 1805. Britannica gives 1804–05 for the introduction of the invention. [...] The 1801 exhibition is well attested. The patent year is inconsistent across sources",
+            "tiers": ["A", "B"],
+            "conflictReported": true,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "Disputed claim. No external evidence could be had in this run: the one WebSearch call was refused before it ran, because the per-turn search limit shared by every agent was used up, and no pinned dataset mentions Jacquard or any patent. Knowledge alone cannot settle a high-risk date in a tiebreak, and mine is only likely, so I share A's doubt. The order holds under either year (1801 and 1804 both come well before 1826); the open point is the displayed patent year."
+          "note": "A reported conflict fails the claim as written (§9.5.2): 1804 against 15 April 1805, with Britannica giving 1804 to 1805. Every date in play (1801 to 1805) is before 1826, so the order and the key hold."
         },
         {
           "claimId": "c2",
           "verdict": "confirmed",
-          "method": "knowledge",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Niépce's heliograph of the view from a window at his estate, Le Gras, is regarded as the oldest surviving photograph taken with a camera, and it is dated 1826 or 1827.",
-            "confidence": "certain"
+            "kind": "web",
+            "query": "Niépce View from the Window at Le Gras date 1826 or 1827 oldest surviving camera photograph Harry Ransom Center",
+            "results": [
+              {
+                "title": "View from the Window at Le Gras",
+                "url": "https://en.wikipedia.org/wiki/View_from_the_Window_at_Le_Gras"
+              },
+              {
+                "title": "The Niépce Heliograph",
+                "url": "https://www.hrc.utexas.edu/niepce-heliograph/"
+              },
+              {
+                "title": "12 Key Dates in the History of Photography",
+                "url": "https://www.britannica.com/topic/12-Key-Dates-in-the-History-of-Photography"
+              },
+              {
+                "title": "File:View from the Window at Le Gras, Joseph Nicéphore Niépce, uncompressed UMN source.png",
+                "url": "https://en.wikipedia.org/wiki/File:View_from_the_Window_at_Le_Gras,_Joseph_Nic%C3%A9phore_Ni%C3%A9pce,_uncompressed_UMN_source.png"
+              },
+              {
+                "title": "First Photograph To Travel To Europe For First Time in 50 Years - UT News",
+                "url": "https://news.utexas.edu/2012/06/26/first-photograph-to-travel-to-europe-for-first-time-in-50-years/"
+              },
+              {
+                "title": "Harry Ransom Center",
+                "url": "https://en.wikipedia.org/wiki/Harry_Ransom_Humanities_Research_Center"
+              },
+              {
+                "title": "Web exhibition highlights world’s first photo",
+                "url": "https://sites.utexas.edu/ransomcentermagazine/2010/08/05/web-exhibition-highlights-worlds-first-photo/"
+              },
+              {
+                "title": "Flair Symposium 2027: Niépce Now: Origins and Futures of the Photographic Imagee",
+                "url": "https://www.hrc.utexas.edu/flair-symposium/?ct=t%28N_COPY_02%29&mc_eid=4880a7f43f"
+              },
+              {
+                "title": "History of photography",
+                "url": "https://www.britannica.com/technology/photography"
+              },
+              {
+                "title": "Images from \"Discovering the Language of Photography: The Gernsheim Collection\"",
+                "url": "https://sites.utexas.edu/ransomcentermagazine/2010/09/09/watch-a-slideshow-of-images-from-discovering-the-language-of-photography-the-gernsheim-collection/"
+              }
+            ],
+            "summaryExcerpt": "Its catalogue record gives 1827. [...] Britannica states that in 1826 or 1827 Niépce made the first permanent photograph, using a process he called heliography. [...] The Ransom Center's own symposium announcement calls it the earliest surviving photograph made with the camera obscura.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "Knowledge only. In a tiebreak this is not external evidence, so c2 still has no dataset or web result: the WebSearch call was refused (shared per-turn limit used up) and no pinned dataset covers early photography."
+          "note": "The Harry Ransom Center, which holds the plate (Tier A), dates it 1827 and calls it the earliest surviving photograph made with the camera obscura; Britannica gives 1826 or 1827. c2's 'about 1826 or 1827' fits every source. c2 was not in dispute: this adds external evidence to a high-risk superlative that had knowledge only."
         },
         {
           "claimId": "c5",
-          "verdict": "uncertain",
-          "method": "knowledge",
+          "verdict": "confirmed",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "With a patent year of 1804, the photograph (1826 or 1827) came 22 or 23 years later, so 'about 22 years' holds. With 1801 the gap would be 25 or 26 years.",
-            "confidence": "likely"
+            "kind": "web",
+            "query": "Niépce View from the Window at Le Gras date 1826 or 1827 oldest surviving camera photograph Harry Ransom Center",
+            "results": [
+              {
+                "title": "View from the Window at Le Gras",
+                "url": "https://en.wikipedia.org/wiki/View_from_the_Window_at_Le_Gras"
+              },
+              {
+                "title": "The Niépce Heliograph",
+                "url": "https://www.hrc.utexas.edu/niepce-heliograph/"
+              },
+              {
+                "title": "12 Key Dates in the History of Photography",
+                "url": "https://www.britannica.com/topic/12-Key-Dates-in-the-History-of-Photography"
+              },
+              {
+                "title": "File:View from the Window at Le Gras, Joseph Nicéphore Niépce, uncompressed UMN source.png",
+                "url": "https://en.wikipedia.org/wiki/File:View_from_the_Window_at_Le_Gras,_Joseph_Nic%C3%A9phore_Ni%C3%A9pce,_uncompressed_UMN_source.png"
+              },
+              {
+                "title": "First Photograph To Travel To Europe For First Time in 50 Years - UT News",
+                "url": "https://news.utexas.edu/2012/06/26/first-photograph-to-travel-to-europe-for-first-time-in-50-years/"
+              },
+              {
+                "title": "Harry Ransom Center",
+                "url": "https://en.wikipedia.org/wiki/Harry_Ransom_Humanities_Research_Center"
+              },
+              {
+                "title": "Web exhibition highlights world’s first photo",
+                "url": "https://sites.utexas.edu/ransomcentermagazine/2010/08/05/web-exhibition-highlights-worlds-first-photo/"
+              },
+              {
+                "title": "Flair Symposium 2027: Niépce Now: Origins and Futures of the Photographic Imagee",
+                "url": "https://www.hrc.utexas.edu/flair-symposium/?ct=t%28N_COPY_02%29&mc_eid=4880a7f43f"
+              },
+              {
+                "title": "History of photography",
+                "url": "https://www.britannica.com/technology/photography"
+              },
+              {
+                "title": "Images from \"Discovering the Language of Photography: The Gernsheim Collection\"",
+                "url": "https://sites.utexas.edu/ransomcentermagazine/2010/09/09/watch-a-slideshow-of-images-from-discovering-the-language-of-photography-the-gernsheim-collection/"
+              }
+            ],
+            "summaryExcerpt": "Its catalogue record gives 1827. [...] Wikipedia gives a tighter window, saying it was created between June 4 and July 18, 1827, in Saint-Loup-de-Varennes, France. Other sources still use the wider \"1826 or 1827\" range.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "Disputed claim, derived from c1 and c2, so it inherits c1's doubt. The record schema has no calculation method and no web search could run, so it stays uncertain. 'More than 20 years later' would hold under every date in play."
+          "note": "Arithmetic across every date the sources give: the photograph 1826 or 1827 (this search), the patent 1804 or 1805 (the search recorded under c1). The gap is 21 to 23 years in every combination, so 'about 22 years' holds whichever patent year is right. If the display moves to the 1801 exhibition, the gap becomes about 25 years and needs re-checking."
         }
       ],
       "issues": [
         {
           "type": "wording",
           "severity": "fix",
-          "note": "c1 and c5 stay uncertain: references date Jacquard's loom to 1801 or 1804, and this run could get no external evidence (WebSearch refused under the shared per-turn limit; no pinned dataset covers it). Either re-run this tiebreak with web access, or step down the precision ladder: show the loom as made in the early 1800s rather than 'patented in 1804', and say 'more than 20 years later' in the explanation. The order holds under every date in play, so the key would not change."
+          "note": "Checker doubt on c1 (the record schema has no checker_doubt type). The patent year conflicts (1804; 15 April 1805; 1804 to 1805), so the label's 'patented in 1804' fails as written; the 1801 exhibition is agreed. Options: 'patented by 1805', 'first shown in 1801' (then 'about 25 years later' in the explanation), or 'in the early 1800s'. The key holds under all of them. A changed value or claim needs two fresh checks (§9.7)."
         },
         {
           "type": "wording",
           "severity": "note",
-          "note": "The option reads 'The oldest surviving photograph' while c2 says camera photograph. Every widely cited candidate I know of, including Niépce's 1825 heliographic copy of an engraving (from memory, not checked in this run), postdates both 1801 and 1804, so the order holds. Adding 'camera' to the label (37 characters, inside C04's limit) would match c2 and close off readings built on cameraless or copied images."
+          "note": "The option 'The oldest surviving photograph' is wider than c2's 'camera photograph' (the Ransom Center's wording is 'made with the camera obscura'). Every rival reading I know of, such as Niépce's heliographic copies of engravings from the mid-1820s (my knowledge, not checked here), still postdates 1805, so the order holds; adding 'camera' to the label would close the reading."
         }
       ],
-      "searchesUsed": 0,
+      "searchesUsed": 2,
       "verdict": "revise"
+    },
+    "estimates": [
+      {
+        "by": "es-psci02e",
+        "at": "2026-11-01T03:38:23Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psci02d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp3t. B pass, A revise, T revise, so rule 2 cannot pass (§9.7). A left c1 (patented in 1804) and c5 uncertain, and T's search reports a conflict on the patent year: 1804 on Wikipedia's Jacquard machine page, 15 April 1805 on the Jacquard biography, 1804 to 1805 on Britannica. A reported conflict fails the claim as written (§9.5.2). The key holds on every date in play, and T confirmed c2 and c5 with Tier A and B results, but the fix ('patented by 1805', or 'first shown in 1801' with a new gap) changes a label value and claims, which needs two fresh checks. Redraft under a new id, adding 'camera' to the photograph label as B and T suggest.",
+      "decidedAt": "2026-11-04T14:12:45Z"
     }
   },
   "format": "comparison",

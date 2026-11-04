@@ -1,6 +1,6 @@
 {
   "id": "p.nat.0257",
-  "status": "checking",
+  "status": "cut",
   "category": "nat",
   "tags": ["senses", "taste", "fish", "fresh-water"],
   "region": "global",
@@ -182,12 +182,94 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp2t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "3d1dbd5061ad2edca72fb424c8a59b8d7212aa1a4d820ca559ad308b331d2c19",
+      "startedAt": "2026-11-04T13:03:23Z",
+      "finishedAt": "2026-11-04T13:27:22Z",
+      "coldSolve": {
+        "answerGiven": "A channel catfish",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "uncertain",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "catfish \"swimming tongue\" total taste buds estimated 175,000 Caprio",
+            "results": [
+              {
+                "title": "The taste system of the channel catfish: from biophysics to behavior - PubMed",
+                "url": "https://pubmed.ncbi.nlm.nih.gov/7685945/"
+              },
+              {
+                "title": "Taste responses to amino acids from facial nerve branches innervating oral and extra-oral taste buds in the channel catfish,Ictalurus punctatus - ScienceDirect",
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/0006899387907748"
+              },
+              {
+                "title": "Beyond Taste Buds: The Science of Delicious",
+                "url": "https://www.nationalgeographic.com/magazine/2015/12/food-science-of-taste/"
+              },
+              {
+                "title": "Taste bud",
+                "url": "https://www.britannica.com/science/taste-bud"
+              },
+              {
+                "title": "Methods for determining cellular response to stimuli",
+                "url": "https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/7279338"
+              },
+              {
+                "title": "Convergence of oral and extraoral information in the superior secondary gustatory nucless of the channel catfish - ScienceDirect",
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/000689939291576Z"
+              },
+              {
+                "title": "Tongue - an overview",
+                "url": "https://www.sciencedirect.com/topics/immunology-and-microbiology/tongue"
+              },
+              {
+                "title": "Taste receptors and gustatory associated G proteins in channel catfish, Ictalurus punctatus - ScienceDirect",
+                "url": "https://www.sciencedirect.com/science/article/abs/pii/S1744117X16300788"
+              },
+              {
+                "title": "High sensitivity of catfish taste receptors to amino acids - PubMed",
+                "url": "https://pubmed.ncbi.nlm.nih.gov/240558/"
+              }
+            ],
+            "summaryExcerpt": "I couldn't find the 175,000 figure in these results. The closest number is a lower estimate. A ScienceDirect overview says catfish, which locate food almost entirely by taste, have numerous taste buds (over 100,000) scattered all over their skin. That source is a general reference page and doesn't name Caprio as the origin of the count.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "Three searches (12 to 14, Tier A and B sites only, among them the US Fish and Wildlife Service, the Missouri Department of Conservation, the National Park Service and PubMed) found no count for the channel catfish. The only figure, 'over 100,000', is for catfish in general, from one reference page, so the species-specific number stays uncertain. The direction of the comparison is not in doubt: the agency pages say taste buds cover the whole body."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "The label value 'more than 100,000' for a channel catfish has no species-specific source. Find one, or restate the label for catfish in general with the reference figure, or use a bound that has its own evidence (pass B's fix). The answer is unaffected; the changed claim needs fresh checks."
+        }
+      ],
+      "searchesUsed": 3,
+      "verdict": "revise"
+    },
     "estimates": [
       {
         "by": "es-pnat02e",
         "at": "2026-11-01T02:29:19Z"
       }
-    ]
+    ],
+    "editor": {
+      "editor": "ed-pnat02d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp2t. A pass, B revise, and T also revise, so no passing tiebreak stands in for B (§9.9 rule 2). Three restricted Tier A or B searches found no taste-bud count for the channel catfish; the only figure, over 100,000, is for catfish in general from one reference page. So label claim c1 stays uncertain, as B left it. The fix (a bound with its own evidence, or a label for catfish in general) changes a label claim, so no wording-only rewrite applies. The direction of the comparison is not in doubt: redraft under a new id.",
+      "decidedAt": "2026-11-04T13:57:55Z"
+    }
   },
   "format": "comparison",
   "stem": "Which has more taste buds?",

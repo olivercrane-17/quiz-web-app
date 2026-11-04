@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0229",
-  "status": "checking",
+  "status": "active",
   "category": "sport",
   "tags": ["winter-olympics", "bobsleigh", "jamaica"],
   "region": "global",
@@ -213,19 +213,13 @@
         "verdict": "revise"
       }
     ],
-    "estimates": [
-      {
-        "by": "es-psport02e",
-        "at": "2026-11-01T02:59:01Z"
-      }
-    ],
     "tiebreak": {
-      "checker": "fc-psport02t",
+      "checker": "fc-tbp3t",
       "pass": "T",
       "brief": "tiebreak",
       "packetSha256": "1b32fa1ba940f81f3ff85cb6d24cd338695454ddcc8b56557598507a4b04aa97",
-      "startedAt": "2026-11-01T04:59:04Z",
-      "finishedAt": "2026-11-01T05:07:00Z",
+      "startedAt": "2026-11-04T13:32:31Z",
+      "finishedAt": "2026-11-04T13:55:32Z",
       "coldSolve": {
         "answerGiven": "Calgary 1988",
         "confidence": "high",
@@ -233,76 +227,100 @@
       },
       "claimResults": [
         {
-          "claimId": "c1",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Jamaica first sent bobsleigh crews to the Olympics at the 1988 Winter Games in Calgary, its first Winter Games of any kind.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed: A and B both confirmed it. High-risk, so this knowledge result counts neither for the high-risk rule nor as a tiebreak result (§9.5.3, §9.7). No external evidence could be gathered: my one WebSearch call was refused because the shared per-turn search budget was already spent (0 searches ran), and no pinned dataset lists Winter Games entries by nation (olympic-editions holds editions and medal tables only, and Jamaica won no Winter medal)."
-        },
-        {
-          "claimId": "c2",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Jamaica had no bobsleigh entry at Sarajevo 1984 because its Olympic bobsleigh debut came in 1988, and the 1992 and 1994 Games came after that debut.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed. The chronology half is in olympic-editions (edition_metadata.csv, edition_id 42 to 45: Sarajevo 1984, Calgary 1988, Albertville 1992 and Lillehammer 1994, all Winter), but that file cannot show that Jamaica was absent in 1984, so the claim as a whole rests on knowledge and still needs web evidence (§9.9 rule 3)."
-        },
-        {
-          "claimId": "c3",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "At Calgary 1988 Jamaica raced in both the two-man and the four-man bobsleigh events.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed. High-risk and knowledge only, so it still needs dataset or web evidence; none could be gathered (search refused, no dataset covers it)."
-        },
-        {
           "claimId": "c4",
-          "verdict": "uncertain",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "The four-man sled crashed at Calgary and the crew finished on foot to applause, but I cannot say for certain whether they walked beside the sled or pushed it over the line.",
-            "confidence": "likely"
-          },
-          "note": "The disputed claim: B left it uncertain. It stays unconfirmed here. A tiebreak needs dataset or web evidence on it, and none could be gathered: the search was refused (shared budget spent) and no pinned dataset covers race incidents. See the fix issue."
-        },
-        {
-          "claimId": "c5",
           "verdict": "confirmed",
-          "method": "knowledge",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Cool Runnings, released in 1993, is a loose, fictionalised retelling of the 1988 Jamaican bobsleigh team's story.",
-            "confidence": "certain"
+            "kind": "web",
+            "query": "Jamaica four-man bobsleigh crash Calgary 1988 crew walked alongside sled to finish line",
+            "results": [
+              {
+                "title": "Jamaica at the 1988 Winter Olympics",
+                "url": "https://en.wikipedia.org/wiki/Jamaica_at_the_1988_Winter_Olympics"
+              },
+              {
+                "title": "Jamaican bobsleigh team: Everything you need to know about Cool Runnings, the 1988 Olympic Games, and more",
+                "url": "https://www.olympics.com/en/news/jamaican-bobsleigh-team-1988-winter-olympics"
+              },
+              {
+                "title": "Throwback: The Jamaican bobsleigh team and the birth of 'Cool Runnings'",
+                "url": "https://www.olympics.com/en/news/throwback-the-jamaican-bobsleigh-team-and-the-birth-of-cool-runnings"
+              },
+              {
+                "title": "1988 Calgary, Canada",
+                "url": "https://www.cbc.ca/sports/2.722/1988-calgary-canada-1.845090"
+              },
+              {
+                "title": "Olympic сinderellas: Devon Harris and Chris Stokes of Jamaica bobsleigh team teach how to follow your dreams",
+                "url": "https://www.olympics.com/en/news/devon-harris-and-chris-stokes-famous-jamaica-bobsleigh-interview"
+              },
+              {
+                "title": "Canada Olympic Park bobsleigh, luge, and skeleton track",
+                "url": "https://en.wikipedia.org/wiki/Canada_Olympic_Park_bobsleigh,_luge,_and_skeleton_track"
+              },
+              {
+                "title": "Venues of the 1988 Winter Olympics",
+                "url": "https://en.wikipedia.org/wiki/Venues_of_the_1988_Winter_Olympics"
+              },
+              {
+                "title": "1988 Winter Olympics",
+                "url": "https://en.wikipedia.org/wiki/1988_Winter_Olympics"
+              },
+              {
+                "title": "The Jamaican bobsleigh team is ‘The hottest thing on ice’ - Olympic News",
+                "url": "https://www.olympics.com/en/news/the-jamaican-bobsleigh-team-is-the-hottest-thing-on-ice"
+              },
+              {
+                "title": "Cool Runnings",
+                "url": "https://en.wikipedia.org/wiki/Cool_Runnings"
+              }
+            ],
+            "summaryExcerpt": "The crash happened on the third run of the four-man event, and the team then walked beside the sled rather than carrying it. [...] The team walked alongside the bobsleigh while support staff pushed it to the end of the track. [...] Olympics.com says the film is inaccurate on this point. The team did not pick up the sleigh and carry it over the line. Instead, they walked next to it.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "Not disputed. High-risk and knowledge only, so it still needs dataset or web evidence; none could be gathered."
+          "note": "Attributed to Olympics.com (the IOC, Tier A) and matched by Wikipedia. The only discrepancy the summary reports (a push-bar on the first run) is not in c4."
         }
       ],
       "issues": [
         {
           "type": "wording",
-          "severity": "fix",
-          "note": "Checker doubt on c4 (the record schema has no checker_doubt type, so it is filed as wording). I side with B: the explanation's 'the crew walked beside it to the finish line' is unconfirmed, and no search could run to settle it. Either a re-run of this tiebreak finds a Tier A or B source for 'walked beside it', or the explanation steps down, for example to 'Their four-man sled crashed during the competition.' The key (Calgary 1988) is not in doubt."
+          "severity": "note",
+          "note": "c1, c2, c3 and c5 are high-risk and rest on knowledge in both A and B. The shared WebSearch budget ran out before I could source them, and no pinned dataset covers Jamaica's entries: olympic-editions confirms only the four Games and their dates (Sarajevo 8 to 19 February 1984, Calgary 13 to 28 February 1988, Albertville 8 to 23 February 1992, Lillehammer 12 to 27 February 1994). Under §9.9 rule 3 they still need dataset or web evidence in a confirming check."
         }
       ],
-      "searchesUsed": 0,
-      "verdict": "revise"
-    }
+      "searchesUsed": 1,
+      "verdict": "pass"
+    },
+    "estimates": [
+      {
+        "by": "es-psport02e",
+        "at": "2026-11-01T02:59:01Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psport02d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp3t. A pass, B revise, T pass (§9.7). B's revise was its doubt on c4 (the crew walked beside the crashed sled to the finish). T's search (Olympics.com, the IOC's site, named in its summary, and Wikipedia; counted at Tier B) says the four-man sled crashed on its third run and the team walked alongside it to the end of the track rather than carrying it, as the film shows. So c4, which needed the tiebreak, has external evidence, and B's fix is rejected on it. A and B confirmed high-risk c1, c2, c3 and c5 directly at certain (memo §18). T's note that they lack external evidence applies the rule before memo §18. The acceptance rule passes.",
+      "decidedAt": "2026-11-04T14:14:21Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-04T14:14:21Z",
+      "nearestId": "p.sport.0001",
+      "score": 0.267,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T14:14:21Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "Jamaica's bobsleigh team, whose story inspired the film Cool Runnings, made its Olympic debut at which Games?",

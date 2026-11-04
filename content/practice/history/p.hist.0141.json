@@ -1,6 +1,6 @@
 {
   "id": "p.hist.0141",
-  "status": "checking",
+  "status": "cut",
   "category": "hist",
   "tags": ["korea", "cold-war", "1940s"],
   "region": "global",
@@ -598,12 +598,98 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp1t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "69c1aad14f47743c5b42827ebb3421b04617421e4056096165fb2898281bb04f",
+      "startedAt": "2026-11-04T13:02:33Z",
+      "finishedAt": "2026-11-04T13:26:26Z",
+      "coldSolve": {
+        "answerGiven": "38th parallel",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c3",
+          "verdict": "uncertain",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "Dean Rusk Charles Bonesteel 38th parallel August 1945 given thirty minutes National Geographic map division of Korea",
+            "results": [
+              {
+                "title": "Charles H. Bonesteel III",
+                "url": "https://en.wikipedia.org/wiki/Charles_H._Bonesteel_III"
+              },
+              {
+                "title": "Division of Korea",
+                "url": "https://en.wikipedia.org/wiki/Division_of_Korea"
+              },
+              {
+                "title": "Korean War Timeline",
+                "url": "https://www.britannica.com/list/korean-war-timeline"
+              },
+              {
+                "title": "Korean War",
+                "url": "https://en.wikipedia.org/wiki/War_Between_South_Korea_and_North_Korea"
+              },
+              {
+                "title": "Historical Documents - Office of the Historian",
+                "url": "https://history.state.gov/historicaldocuments/frus1951v07p1/d173"
+              },
+              {
+                "title": "Demilitarized zone (DMZ)",
+                "url": "https://www.britannica.com/place/demilitarized-zone-Korean-peninsula"
+              },
+              {
+                "title": "Foreign Relations of the United States, 1950, Korea ...",
+                "url": "https://history.state.gov/historicaldocuments/frus1950v07/d532"
+              },
+              {
+                "title": "Dean Rusk",
+                "url": "https://en.wikipedia.org/wiki/David_Dean_Rusk"
+              },
+              {
+                "title": "South Korea",
+                "url": "https://en.wikipedia.org/wiki/South_Korea"
+              },
+              {
+                "title": "Foreign Relations of the United States, 1950, Korea, Volume VII",
+                "url": "https://history.state.gov/historicaldocuments/frus1950v07/d949"
+              }
+            ],
+            "summaryExcerpt": "The search confirms the core of the claim but doesn't support the \"thirty minutes\" detail, and the sources disagree on the date. Confirmed: Dean Rusk and Charles Bonesteel used a National Geographic map to pick the 38th parallel as the dividing line. Working on extremely short notice and completely unprepared, they used a National Geographic map to decide on the 38th parallel as the dividing line. Dates conflict: Sources give 10, 11, and 14 August 1945. Time pressure: I found no source saying they had thirty minutes. The sources only describe short notice, so the \"thirty minutes\" figure is unverified.",
+            "tiers": ["A", "B"],
+            "conflictReported": true,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "The two officers, the National Geographic map and August 1945 are confirmed (the Office of the Historian, Britannica and Wikipedia are in the results), but nothing supports 'in about half an hour': the summary says the sources describe only short notice. Checker B's search found the same. The reported conflict is about the day (10, 11 or 14 August), which the claim avoids by giving the month."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "Checker doubt on c3: 'in about half an hour' has no Tier A or B support in this search or in checker B's. Drop the time or write 'at short notice', and keep the two officers, August 1945 and the National Geographic map, which the sources confirm."
+        }
+      ],
+      "searchesUsed": 1,
+      "verdict": "revise"
+    },
     "estimates": [
       {
         "by": "es-phist01e",
         "at": "2026-11-01T00:46:48Z"
       }
-    ]
+    ],
+    "editor": {
+      "editor": "ed-phist01d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp1t. A pass, B revise, and T also revise, so no passing tiebreak stands in for B (§9.9 rule 2). c3's 'in about half an hour' has no Tier A or B support: B's search found it only on low-quality sites, and T's search reports that the sources describe only short notice (and differ on the day, 10, 11 or 14 August). Memo §18 still requires external evidence for a claim that needed the tiebreak, and an accept probe is refused on rules 2 and 3. Dropping the time changes claim c3, so no wording-only fix applies. c1, c2 and c4 have Britannica evidence: redraft under a new id with 'at short notice' or no time detail.",
+      "decidedAt": "2026-11-04T13:40:20Z"
+    }
   },
   "format": "mc",
   "stem": "Along which line of latitude was Korea divided at the end of the Second World War?",

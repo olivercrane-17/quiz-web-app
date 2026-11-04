@@ -1,6 +1,6 @@
 {
   "id": "p.hist.0143",
-  "status": "checking",
+  "status": "cut",
   "category": "hist",
   "tags": ["aztecs", "money", "everyday-life"],
   "region": "global",
@@ -222,12 +222,94 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp1t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "bfd2bec8db44efb0499a6a8ea8f888191baaabb1caeb49890da2329a296245ab",
+      "startedAt": "2026-11-04T13:02:33Z",
+      "finishedAt": "2026-11-04T13:26:26Z",
+      "coldSolve": {
+        "answerGiven": "Cacao beans",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c4",
+          "verdict": "uncertain",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "counterfeit cacao beans Aztec currency empty husks filled with earth or sand described by Spanish chronicler Oviedo or Sahagún",
+            "results": [
+              {
+                "title": "Expedition Magazine",
+                "url": "https://www.penn.museum/sites/expedition/food-notes-yom-yom-cacao/"
+              },
+              {
+                "title": "Yom Yom Cacao!",
+                "url": "https://www.penn.museum/documents/publications/expedition/45-2/Yom%20Yom%20Cacao.pdf"
+              },
+              {
+                "title": "Theobroma cacao",
+                "url": "https://en.wikipedia.org/wiki/Theobroma_cacao"
+              },
+              {
+                "title": "Aztec cuisine",
+                "url": "https://en.wikipedia.org/wiki/Aztec_cuisine"
+              },
+              {
+                "title": "History of chocolate",
+                "url": "https://en.wikipedia.org/wiki/History_of_chocolate"
+              },
+              {
+                "title": "What We Know About the Earliest History of Chocolate",
+                "url": "https://www.smithsonianmag.com/history/archaeology-chocolate-180954243/"
+              },
+              {
+                "title": "Cocoa Beans",
+                "url": "https://americanhistory.si.edu/collections/object/nmah_1068722"
+              },
+              {
+                "title": "Ancestral Pueblo jars - Infinity of Nations: Art and History in the Collections of the National Museum of the American Indian - George Gustav Heye Center, New York",
+                "url": "https://americanindian.si.edu/exhibitions/infinityofnations/southwest/052109.html"
+              },
+              {
+                "title": "The Power of Chocolate: Cocoa and Chocolate in American History and Culture",
+                "url": "https://www.si.edu/spotlight/chocolate"
+              }
+            ],
+            "summaryExcerpt": "The search did not find any source that attributes the counterfeit-bean description to Oviedo or Sahagún. The claim appears in modern sources without a named chronicler. The counterfeiting itself is well documented in modern summaries. One Penn Museum article says counterfeit \"coins\" were created by filling empty cacao shells with clay or sand. Wikipedia's Aztec cuisine article says beans were frequently counterfeited by filling empty cacao shells with dirt or mud. Oviedo does not appear in any result.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "The forgery itself is confirmed (the Penn Museum: empty cacao shells filled with clay or sand; Wikipedia: with dirt or mud), but no result attributes the report to a Spanish chronicler: the summary says the claim appears in modern sources without a named chronicler, and neither Sahagun's nor Oviedo's text was retrieved. So 'Spanish chroniclers reported' stays unconfirmed."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "Checker doubt on c4: the attribution to Spanish chroniclers has no Tier A or B support. Checker B's rewording fits the evidence: 'Forgers made fake beans by filling empty shells with earth' (the Penn Museum says clay or sand, Wikipedia dirt or mud)."
+        }
+      ],
+      "searchesUsed": 1,
+      "verdict": "revise"
+    },
     "estimates": [
       {
         "by": "es-phist01e",
         "at": "2026-11-01T00:46:48Z"
       }
-    ]
+    ],
+    "editor": {
+      "editor": "ed-phist01d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp1t. A pass, B revise, and T also revise, so no passing tiebreak stands in for B (§9.9 rule 2). c4 credits the counterfeit beans to Spanish chroniclers, and neither B's search nor T's found a Tier A or B source naming one: the Penn Museum and Wikipedia describe the forgery without an attribution. Memo §18 still requires external evidence for a claim that needed the tiebreak, and an accept probe is refused on rules 2 and 3. Rewording to 'Forgers made fake beans' changes claim c4, so no wording-only fix applies. The key and c1 to c3 read as sound: redraft under a new id that states the forgery without the attribution.",
+      "decidedAt": "2026-11-04T13:40:20Z"
+    }
   },
   "format": "mc",
   "stem": "Which seeds did the Aztecs use as small change in their markets?",

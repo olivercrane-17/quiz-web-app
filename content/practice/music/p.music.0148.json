@@ -1,6 +1,6 @@
 {
   "id": "p.music.0148",
-  "status": "checking",
+  "status": "active",
   "category": "music",
   "tags": ["songs-albums", "myths", "tudor-england"],
   "region": "global",
@@ -181,12 +181,114 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp2t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "0368b53b1999cc9eac8719ad746a5e4a68baf5fd5060ea5032ae90489f4e740c",
+      "startedAt": "2026-11-04T13:02:58Z",
+      "finishedAt": "2026-11-04T13:27:22Z",
+      "coldSolve": {
+        "answerGiven": "False",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "Greensleeves Henry VIII legend Italian style romanesca did not reach England until after his death Elizabethan origin",
+            "results": [
+              {
+                "title": "Greensleeves",
+                "url": "https://en.wikipedia.org/wiki/Greensleeves"
+              },
+              {
+                "title": "Talk:Greensleeves",
+                "url": "https://en.wikipedia.org/wiki/Talk:Greensleeves"
+              },
+              {
+                "title": "The Visit (Loreena McKennitt album)",
+                "url": "https://en.wikipedia.org/wiki/The_Visit_(Loreena_McKennitt_album)"
+              },
+              {
+                "title": "I'm Henery the Eighth, I Am",
+                "url": "https://en.wikipedia.org/wiki/I'm%20Henery%20the%20Eighth,%20I%20Am"
+              },
+              {
+                "title": "Henry VIII",
+                "url": "https://en.wikipedia.org/?title=Henry_VIII_of_England"
+              },
+              {
+                "title": "Ground bass",
+                "url": "https://www.britannica.com/art/ground-bass"
+              },
+              {
+                "title": "Huntingtower Castle",
+                "url": "https://en.wikipedia.org/wiki/Huntingtower_Castle"
+              },
+              {
+                "title": "Talk:Henry VIII/Archive 1",
+                "url": "https://en.wikipedia.org/wiki/Talk:Henry_VIII/Archive_1"
+              },
+              {
+                "title": "Green Groweth the Holly",
+                "url": "https://en.wikipedia.org/wiki/Green_Groweth_the_Holly"
+              },
+              {
+                "title": "Honi soit qui mal y pense",
+                "url": "https://en.wikipedia.org/wiki/Honi_soit_qui_mal_y_pense"
+              }
+            ],
+            "summaryExcerpt": "Main argument: The Wikipedia article calls the Henry VIII attribution a common myth, because the tune rests on an Italian compositional style that only reached England after his death in 1547 (It is a common myth that Greensleeves was written by King Henry VIII. However, Henry could not have written Greensleeves, as the piece is based on an Italian style of composition that did not reach England until after his death.). The Henry VIII article is similarly firm, saying it is certain he did not.",
+            "tiers": ["B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "Quoted from the named Wikipedia article 'Greensleeves' (Tier B), and no source found contradicts it. The summary adds that the detailed dating is thinly sourced ('Only the Henry VIII attribution is firmly rejected'), and search 8 (Britannica, British Library, Library of Congress) was silent on the timing. So c3 rests on one Tier B source: enough for a high-risk practice claim under section 9.5.2, and no more."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "c3 rests on a single Tier B source (Wikipedia). The Tier A library pages and Britannica found say nothing either way about when the Italian ground reached England. Acceptable for a practice item, and a good candidate for the seeded audit."
+        }
+      ],
+      "searchesUsed": 2,
+      "verdict": "pass"
+    },
     "estimates": [
       {
         "by": "es-pmusic01e",
         "at": "2026-11-01T02:04:12Z"
       }
-    ]
+    ],
+    "editor": {
+      "editor": "ed-pmusic01d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp2t. A pass, B revise, T pass (§9.7). B's revise was its doubt on c3, that the Italian style behind the tune reached England only after Henry VIII died in 1547. T's Wikipedia and Britannica search finds the Greensleeves article saying exactly that (Tier B), and no source found contradicts it. T notes the dating rests on that one source, enough for a high-risk practice claim, and flags the item as a good seeded-audit candidate. A and B confirmed high-risk c1 (the key) and c4 (the 1580 registration) directly at certain (memo §18). No myth-screen hit. The acceptance rule passes.",
+      "decidedAt": "2026-11-04T13:57:18Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-04T13:57:18Z",
+      "nearestId": "p.music.0155",
+      "score": 0.4,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T13:57:18Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "tf",
   "stem": "King Henry VIII wrote the song 'Greensleeves'.",

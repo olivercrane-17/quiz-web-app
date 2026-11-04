@@ -1,6 +1,6 @@
 {
   "id": "p.geo.0250",
-  "status": "checking",
+  "status": "active",
   "category": "geo",
   "tags": ["islands", "indian-ocean", "south-asia"],
   "region": "global",
@@ -225,76 +225,19 @@
         "verdict": "pass"
       }
     ],
-    "editor": {
-      "editor": "ed-pgeo02d",
-      "decision": "rewrite",
-      "reason": "B passes, A revises (outdated): India renamed Port Blair as Sri Vijaya Puram in 2024, so the explanation no longer names the town. The facts stay those of c3, c4 and c5, so no claim changes, and adding the new name would add an unchecked fact. A's revise stands, so the item waits for a tiebreak T with external evidence on the renaming issue before any accept (§9.7). [wording-only rewrite by ed-pgeo02d at 2026-11-01T04:36:56Z of explanation; checks kept, packetSha256 re-stamped: pass A 9245a7c05f1e5c459ced5b207ad426b24587c8a67abf3413c2d944665297a353 -> 00ae7f3b4159ce775d933638c6a5b49e597f9fc466666cb98419bd32f81a42d5; pass B 90b6cc8a3385cebfb029535b74d8f89c58fa5fc305612286bdb13dcbe7c7eed3 -> 611fcb65f9a1e381dabebb8ea61b198dc146ca7e88a45190c3fe7332d9019ecb]",
-      "decidedAt": "2026-11-01T04:36:56Z"
-    },
-    "estimates": [
-      {
-        "by": "es-pgeo02e",
-        "at": "2026-11-01T02:33:41Z"
-      }
-    ],
     "tiebreak": {
-      "checker": "fc-pgeo02t",
+      "checker": "fc-tbp3t",
       "pass": "T",
       "brief": "tiebreak",
       "packetSha256": "868ed5a172647b4d15570108f6ac5a4b6c61db77b258b4571bb8b7b53b7bca1c",
-      "startedAt": "2026-11-01T04:58:12Z",
-      "finishedAt": "2026-11-01T05:11:28Z",
+      "startedAt": "2026-11-04T13:31:57Z",
+      "finishedAt": "2026-11-04T13:55:32Z",
       "coldSolve": {
         "answerGiven": "India",
         "confidence": "high",
         "matchedKey": true
       },
       "claimResults": [
-        {
-          "claimId": "c1",
-          "verdict": "confirmed",
-          "method": "dataset",
-          "evidence": {
-            "kind": "dataset",
-            "dataset": "geonames-cities",
-            "version": "1.1.65",
-            "file": "admin1.json",
-            "locator": "code=IN.01",
-            "excerpt": "{\"code\":\"IN.01\",\"name\":\"Andaman and Nicobar\"}",
-            "retrievedAt": "2026-11-01"
-          },
-          "note": "GeoNames lists the territory as a first-level division of India (country code IN), and its places in cities.json carry country IN and admin1 01, for example {\"name\":\"Port Blair\",\"lat\":\"11.66613\",\"lng\":\"92.74635\",\"country\":\"IN\",\"admin1\":\"01\",\"admin2\":\"640\"}. world-cities agrees (Port Blair,India,Andaman and Nicobar,1259385), but it is built from GeoNames, so it is no independent second source. High risk (checker_doubt): this dataset record is the external evidence. Cold solve India, high confidence."
-        },
-        {
-          "claimId": "c2",
-          "verdict": "confirmed",
-          "method": "dataset",
-          "evidence": {
-            "kind": "dataset",
-            "dataset": "world-cities",
-            "version": "73c9f54ab9f305168c76d0802db151e30a157b28",
-            "file": "world-cities.csv",
-            "locator": "every row whose subcountry is Andaman and Nicobar (rows 14913, 15327, 16228, 17426)",
-            "excerpt": "Port Blair,India,Andaman and Nicobar,1259385 | Māyābandar,India,Andaman and Nicobar,1263259 | Diglipur,India,Andaman and Nicobar,1272607 | Rangat,India,Andaman and Nicobar,11184472",
-            "retrievedAt": "2026-11-01"
-          },
-          "note": "Every row for the territory has country India, and no Myanmar, Thailand or Indonesia row uses that subcountry. In geonames-cities admin1.json the only entry naming Andaman or Nicobar is IN.01; no MM, TH or ID entry does. Myanmar's Coco Islands sit at the north end of the same island chain but are not part of the Indian territory the stem names (note-level issue)."
-        },
-        {
-          "claimId": "c3",
-          "verdict": "confirmed",
-          "method": "dataset",
-          "evidence": {
-            "kind": "dataset",
-            "dataset": "geonames-cities",
-            "version": "1.1.65",
-            "file": "cities.json",
-            "locator": "name=Diglipur and name=Campbell Bay (country IN, admin1 01); name=Parva I (IN, admin1 31, Mizoram); name=Labutta (MM); name=Sabang (ID, admin1 01)",
-            "excerpt": "{\"name\":\"Diglipur\",\"lat\":\"13.26667\",\"lng\":\"93\",\"country\":\"IN\",\"admin1\":\"01\",\"admin2\":\"639\"} {\"name\":\"Campbell Bay\",\"lat\":\"7.00832\",\"lng\":\"93.89419\",\"country\":\"IN\",\"admin1\":\"01\",\"admin2\":\"638\"} {\"name\":\"Parva I\",\"lat\":\"22.08556\",\"lng\":\"92.64658\",\"country\":\"IN\",\"admin1\":\"31\",\"admin2\":\"287\"} {\"name\":\"Labutta\",\"lat\":\"16.14948\",\"lng\":\"94.75898\",\"country\":\"MM\",\"admin1\":\"03\",\"admin2\":\"MMR017D004\"} {\"name\":\"Sabang\",\"lat\":\"5.88969\",\"lng\":\"95.31644\",\"country\":\"ID\",\"admin1\":\"01\",\"admin2\":\"1172\"}",
-            "retrievedAt": "2026-11-01"
-          },
-          "note": "Haversine on GeoNames coordinates (mean Earth radius 6,371 km), nearest pair over all nine IN.01 places: nearest mainland Indian place 981 km (Diglipur to Parva I; Lakshadweep, IN.14, left out as islands), nearest Myanmar place 372 km (Diglipur to Labutta), nearest Indonesian place 200 km (Campbell Bay to Sabang). From Port Blair itself: 1,158 km to the nearest mainland place (Konārka, Odisha), 544 km to Labutta, 702 km to Sabang. Towns stand in for coastlines, but the margins are wide."
-        },
         {
           "claimId": "c4",
           "verdict": "confirmed",
@@ -306,38 +249,105 @@
             "file": "cities.json",
             "locator": "name=Port Blair, country=IN; name=Chennai, country=IN",
             "excerpt": "{\"name\":\"Port Blair\",\"lat\":\"11.66613\",\"lng\":\"92.74635\",\"country\":\"IN\",\"admin1\":\"01\",\"admin2\":\"640\"} {\"name\":\"Chennai\",\"lat\":\"13.08784\",\"lng\":\"80.27847\",\"country\":\"IN\",\"admin1\":\"25\",\"admin2\":\"603\"}",
-            "retrievedAt": "2026-11-01"
+            "retrievedAt": "2026-10-31"
           },
-          "note": "Great-circle distance from these coordinates by haversine (mean Earth radius 6,371 km): 1,363 km. A straight line is the shortest possible distance, so any sea or air route is longer still, and 'more than 1,300 km' holds with about 60 km to spare. High risk (number): this dataset record is the external evidence."
+          "note": "Great-circle distance from these two records (haversine, R = 6,371 km) is 1,363 km, so 'more than 1,300 km' holds; any sea route is longer. The town is the one renamed Sri Vijaya Puram in 2024 (see c5), so the figure is unaffected by the renaming."
         },
         {
           "claimId": "c5",
           "verdict": "confirmed",
-          "method": "knowledge",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Port Blair, on South Andaman, is the capital and largest town of the Andaman and Nicobar Islands; India renamed it Sri Vijaya Puram in September 2024.",
-            "confidence": "certain"
+            "kind": "web",
+            "query": "Port Blair renamed Sri Vijaya Puram capital of Andaman and Nicobar Islands September 2024",
+            "results": [
+              {
+                "title": "Port Blair",
+                "url": "https://en.wikipedia.org/wiki/Port_Blair"
+              },
+              {
+                "title": "Government has decided to rename the capital of Andaman & Nicobar Islands Port Blair as \"Sri Vijaya Puram”",
+                "url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2054647&reg=48&lang=2"
+              },
+              {
+                "title": "Sri Vijaya Puram",
+                "url": "https://www.britannica.com/place/Sri-Vijaya-Puram"
+              },
+              {
+                "title": "Port Blair tehsil",
+                "url": "https://en.wikipedia.org/wiki/Port_Blair_tehsil"
+              },
+              {
+                "title": "Union Home and Cooperation Minister Shri Amit Shah today inaugurated and laid the foundation stone for various development projects worth ₹373 crore of the Andaman and Nicobar UT Government in Sri Vijaya Puram",
+                "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2211146&amp%3Breg=3&amp%3Blang=1&reg=3&lang=2"
+              },
+              {
+                "title": "Andaman and Nicobar Islands - Kids",
+                "url": "https://kids.britannica.com/kids/article/Andaman-and-Nicobar-Islands/645279"
+              },
+              {
+                "title": "List of renamed places in India",
+                "url": "https://en.wikipedia.org/wiki/List_of_renamed_places_in_India"
+              },
+              {
+                "title": "Andaman and Nicobar Islands",
+                "url": "https://en.wikipedia.org/wiki/Andaman_and_Nicobar_Islands"
+              },
+              {
+                "title": "Port Blair Municipal Council",
+                "url": "https://en.wikipedia.org/wiki/Port_Blair_Municipal_Council"
+              },
+              {
+                "title": "Andaman Islands",
+                "url": "https://en.wikipedia.org/wiki/Andaman_Islands"
+              }
+            ],
+            "summaryExcerpt": "The Indian government renamed Port Blair as Sri Vijaya Puram on 13 September 2024. The city remains the capital of the Andaman and Nicobar Islands union territory. [...] the Press Information Bureau (PIB) published the decision the same day. [...] Official sources now use the new name, though the old one remains in common use.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "No web search ran: the shared turn-wide WebSearch budget was exhausted (my one call was refused before it ran), so this rests on knowledge. The pinned city datasets list Port Blair in the territory but carry no capital flag or population (world-cities only says each of its four rows has 15,000 people or more). Standard risk."
+          "note": "The main town is the territory's capital, which the Government of India renamed Sri Vijaya Puram on 13 September 2024; the PIB press release is among the results (Tier A). c5 uses the former name, which the summary says remains in common use, so the claim still identifies the right town."
         }
       ],
       "issues": [
         {
-          "type": "ambiguity",
-          "severity": "note",
-          "note": "Myanmar's Coco Islands lie just north of North Andaman on the same island chain, but they are not part of the Andaman and Nicobar Islands, the Indian union territory the stem names. A player who knows them still answers India, so Myanmar is no second answer."
-        },
-        {
           "type": "outdated",
           "severity": "note",
-          "note": "India renamed Port Blair Sri Vijaya Puram in September 2024 (my knowledge; no search could run). Claims c4 and c5 use the old name, but the player-facing explanation says only 'their main town', so nothing a player sees is out of date. If the town is ever named in player-facing text, use 'Sri Vijaya Puram (formerly Port Blair)'."
+          "note": "A's outdated issue is settled with external evidence: the rename is real (13 September 2024), and the explanation as it stands says only 'Their main town', so nothing a player sees uses the superseded name. Claims c4 and c5 still say Port Blair; when the item is next rewritten, or if the town is ever named in player-facing text, use 'Sri Vijaya Puram (formerly Port Blair)'."
         }
       ],
-      "searchesUsed": 0,
+      "searchesUsed": 1,
       "verdict": "pass"
-    }
+    },
+    "editor": {
+      "editor": "ed-pgeo02d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp3t. B pass, A revise, T pass (§9.7). A's revise was outdated (fix): India renamed Port Blair as Sri Vijaya Puram in 2024. The first editor pass dropped the town's name from the explanation, wording only, with no claim changed. T's search, with the Press Information Bureau release among its results (counted at Tier B), confirms the renaming on 13 September 2024 and that the town is still the territory's capital, so 'Their main town' is right as it stands, and its geonames-cities distance of 1,363 km confirms c4. High-risk c1 and c4 carry geonames-cities evidence in both A and B. Dedupe flags a neighbour across the seal; checked locally, it states a different fact, so related_ok. The acceptance rule passes. (earlier, rewrite by ed-pgeo02d: B passes, A revises (outdated): India renamed Port Blair as Sri Vijaya Puram in 2024, so the explanation no longer names the town. The facts stay those of c3, c4 and c5, so no claim changes, and adding the new name would add an unchecked fact. A's revise stands, so the item waits for a tiebreak T with external evidence on the renaming issue before any accept (§9.7). [wording-only rewrite by ed-pgeo02d at 2026-11-01T04:36:56Z of explanation; checks kept, packetSha256 re-stamped: pass A 9245a7c05f1e5c459ced5b207ad426b24587c8a67abf3413c2d944665297a353 -> 00ae7f3b4159ce775d933638c6a5b49e597f9fc466666cb98419bd32f81a42d5; pass B 90b6cc8a3385cebfb029535b74d8f89c58fa5fc305612286bdb13dcbe7c7eed3 -> 611fcb65f9a1e381dabebb8ea61b198dc146ca7e88a45190c3fe7332d9019ecb])",
+      "decidedAt": "2026-11-04T14:11:30Z"
+    },
+    "estimates": [
+      {
+        "by": "es-pgeo02e",
+        "at": "2026-11-01T02:33:41Z"
+      }
+    ],
+    "dedupe": {
+      "checkedAt": "2026-11-04T14:11:30Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "related_ok"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T14:11:30Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "The Andaman and Nicobar Islands belong to which country?",

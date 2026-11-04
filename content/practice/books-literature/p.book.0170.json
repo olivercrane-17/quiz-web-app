@@ -1,6 +1,6 @@
 {
   "id": "p.book.0170",
-  "status": "checking",
+  "status": "active",
   "category": "book",
   "tags": ["childrens-books", "beatrix-potter"],
   "region": "global",
@@ -179,18 +179,114 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp1t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "6d1d902b70250cacd550621c214307843d1bda3cfe5ed67d7551850eedd3fcfe",
+      "startedAt": "2026-11-04T13:01:37Z",
+      "finishedAt": "2026-11-04T13:26:26Z",
+      "coldSolve": {
+        "answerGiven": "Beatrix Potter",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c3",
+          "verdict": "confirmed",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "Beatrix Potter picture letter to Noel Moore September 1893 Peter Rabbit story sick child",
+            "results": [
+              {
+                "title": "Peter Rabbit picture letter",
+                "url": "https://collections.vam.ac.uk/item/O1247436/peter-rabbit-picture-letter-correspondence-beatrix-potter/"
+              },
+              {
+                "title": "Beatrix Potter: The Picture Letters",
+                "url": "https://www.themorgan.org/collection/Beatrix-Potter-Picture-Letters"
+              },
+              {
+                "title": "Peter Rabbit: the tale of 'The Tale' · V&A",
+                "url": "https://www.vam.ac.uk/articles/peter-rabbit-the-tale-of-the-tale"
+              },
+              {
+                "title": "The Original Peter Rabbit Letter",
+                "url": "https://www.themorgan.org/exhibitions/online/drawn-to-nature/10"
+              },
+              {
+                "title": "The Original Peter Rabbit Letter",
+                "url": "https://www.themorgan.org/book/export/html/1422326"
+              },
+              {
+                "title": "The Tale of Peter Rabbit",
+                "url": "https://en.wikipedia.org/wiki/The_Tale_of_Peter_Rabbit"
+              },
+              {
+                "title": "Peter Rabbit",
+                "url": "https://en.wikipedia.org/wiki/Peter_Rabbit"
+              },
+              {
+                "title": "Collection in Focus: Beatrix Potter's Letters",
+                "url": "https://www.themorgan.org/videos/collection-focus-beatrix-potters-letters"
+              },
+              {
+                "title": "Peter Rabbit Storytime Trail - Peter Rabbit",
+                "url": "https://peterrabbit.com/home/storytimetrail/"
+              },
+              {
+                "title": "About - Peter Rabbit",
+                "url": "https://peterrabbit.com/about/"
+              }
+            ],
+            "summaryExcerpt": "The letter: The V&A's record describes it as an illustrated letter Potter sent to Noel Moore on 4 September 1893 while she was on holiday in Dunkeld. Why she wrote it: Noel was the five-year-old son of Potter's former governess, Annie Moore. He was recovering from scarlet fever, and Potter wrote the story to entertain him. The Tale of Peter Rabbit's Wikipedia entry gives the same account. The Morgan Library's record simply says he was recovering from an illness. Path to publication: In 1900 Annie Moore suggested the letters could become picture books. Potter borrowed the letter back and reworked it.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "The V&A (which holds the letter on loan) and the Morgan Library (Tier A), with Wikipedia: Potter's illustrated letter to Noel Moore, dated 4 September 1893 and written to entertain him while he was ill, first told Peter's story, and she later reworked it into the book. The sources differ only on the page count and on how they name the illness."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "note",
+          "note": "Checker B's wording fix ('his story') is already in the current explanation through the editor's wording-only rewrite. Nothing is left to fix."
+        }
+      ],
+      "searchesUsed": 1,
+      "verdict": "pass"
+    },
+    "editor": {
+      "editor": "ed-pbook01d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp1t. A pass, B revise, T pass (§9.7). B's revise was only its wording fix ('his story' beside 'her'), which the first-pass wording-only rewrite applied, and B confirmed every claim directly at certain. High-risk c3 (the 1893 picture letter to Noel Moore) now has Tier A or B web evidence from T (the V&A, the Morgan Library, Wikipedia), and no issue is open. The acceptance rule passes. (earlier, rewrite by ed-pbook01d: Applies B's wording fix: 'his story' read as a slip about Potter's gender beside 'her', so the explanation now names the Peter Rabbit story. No claim changes. B's revise still stands and c3 (1893) has knowledge only in both checks, so the item awaits a tiebreak with web evidence on c3. [wording-only rewrite by ed-pbook01d at 2026-11-01T04:03:00Z of explanation; checks kept, packetSha256 re-stamped: pass A 67405c3b8641c58f4f704afc2c439b2781153fd658305959b93a700c788a3217 -> 5f33e4cb64ba0ada1921ce4a6ee3321f7f5210eca46ec324de24779ba3f2897a; pass B 973acf7c65af11a52224126ba3dfa6017bf52a040a908b91096c1ff31a944af4 -> 54a808a2aa3c363b130b7bf26dea8f6ebd4422f8691c7086a968a81777ba2588])",
+      "decidedAt": "2026-11-04T13:40:15Z"
+    },
     "estimates": [
       {
         "by": "es-pbook01e",
         "at": "2026-11-01T00:45:05Z"
       }
     ],
-    "editor": {
-      "editor": "ed-pbook01d",
-      "decision": "rewrite",
-      "reason": "Applies B's wording fix: 'his story' read as a slip about Potter's gender beside 'her', so the explanation now names the Peter Rabbit story. No claim changes. B's revise still stands and c3 (1893) has knowledge only in both checks, so the item awaits a tiebreak with web evidence on c3. [wording-only rewrite by ed-pbook01d at 2026-11-01T04:03:00Z of explanation; checks kept, packetSha256 re-stamped: pass A 67405c3b8641c58f4f704afc2c439b2781153fd658305959b93a700c788a3217 -> 5f33e4cb64ba0ada1921ce4a6ee3321f7f5210eca46ec324de24779ba3f2897a; pass B 973acf7c65af11a52224126ba3dfa6017bf52a040a908b91096c1ff31a944af4 -> 54a808a2aa3c363b130b7bf26dea8f6ebd4422f8691c7086a968a81777ba2588]",
-      "decidedAt": "2026-11-01T04:03:00Z"
-    }
+    "dedupe": {
+      "checkedAt": "2026-11-04T13:40:15Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T13:40:15Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "Which author and illustrator created Peter Rabbit?",

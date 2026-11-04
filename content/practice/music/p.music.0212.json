@@ -1,6 +1,6 @@
 {
   "id": "p.music.0212",
-  "status": "checking",
+  "status": "active",
   "category": "music",
   "tags": ["pop-rock", "elvis-presley", "concerts"],
   "region": "global",
@@ -182,12 +182,108 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp2t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "760485ba42c7cc36a38f9b303eb5d59b00e7d519eb9bbd248280cf4a6e9c1269",
+      "startedAt": "2026-11-04T13:02:58Z",
+      "finishedAt": "2026-11-04T13:27:22Z",
+      "coldSolve": {
+        "answerGiven": "Canada",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c1",
+          "verdict": "confirmed",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "Elvis Presley only concerts outside the United States 1957 Canada Toronto Ottawa Vancouver",
+            "results": [
+              {
+                "title": "Elvis Presley in Canada",
+                "url": "https://www.graceland.com/blog/posts/elvis-presley-in-canada"
+              },
+              {
+                "title": "- Canada",
+                "url": "https://www.graceland.com/blog/category/canada"
+              },
+              {
+                "title": "Cultural Invasion",
+                "url": "https://www.cbc.ca/history/EPISCONTENTSE1EP15CH3PA4LE.html"
+              },
+              {
+                "title": "Elvis History",
+                "url": "https://www.graceland.com/1954-1957"
+              },
+              {
+                "title": "Watch footage of Elvis Presley's 1957 concert in Ottawa",
+                "url": "https://www.cbc.ca/news/canada/ottawa/watch-footage-of-elvis-presley-s-1957-concert-in-ottawa-1.2892473"
+              },
+              {
+                "title": "Elvis' Achievements",
+                "url": "https://www.graceland.com/achievements"
+              },
+              {
+                "title": "Talk:Elvis Presley/Archive 30",
+                "url": "https://en.wikipedia.org/wiki/Talk:Elvis_Presley/Archive_30"
+              },
+              {
+                "title": "Providence Park",
+                "url": "https://en.wikipedia.org/wiki/Providence_Park"
+              },
+              {
+                "title": "Fun Facts",
+                "url": "https://www.graceland.com/quick-facts"
+              },
+              {
+                "title": "Elvis Presley FAQ",
+                "url": "https://www.graceland.com/elvis-faq"
+              }
+            ],
+            "summaryExcerpt": "The search confirms that Elvis's only performances outside the U.S. were in Canada, in three cities, all in 1957. Sources differ on one date. Cities and count: Graceland's fun facts list Ottawa, Vancouver and Toronto as the only three cities he played outside the U.S. Elvis only performed in three cities outside the U.S. – Ottawa, Vancouver and Toronto, Canada. Graceland's achievements page counts five shows in three Canadian cities in 1957.",
+            "tiers": ["A", "B"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "Attributed to Graceland's 'Fun Facts' page (Elvis Presley's estate, the owner of his performance record: Tier A); CBC and Wikipedia are also in the list. It answers pass B's question about Montreal: 'A Montreal date was cancelled after local opposition from civic and Catholic officials.' The only difference reported is the day of the Vancouver show (31 August or 1 September 1957), which c1 does not state."
+        }
+      ],
+      "issues": [],
+      "searchesUsed": 1,
+      "verdict": "pass"
+    },
     "estimates": [
       {
         "by": "es-pmusic02e",
         "at": "2026-11-01T02:54:15Z"
       }
-    ]
+    ],
+    "editor": {
+      "editor": "ed-pmusic02d",
+      "decision": "accept",
+      "reason": "Second pass, after tiebreak fc-tbp2t. A pass, B revise, T pass (§9.7). B's revise was its doubt that the Canadian shows were exactly Toronto, Ottawa and Vancouver, since it could not rule out a Montreal date (c1 uncertain). T's search (Graceland, CBC and Wikipedia, counted at Tier B) gives those three cities as his only ones outside the US and says a Montreal date was cancelled. The only difference it reports is the day of the Vancouver show, which c1 does not state, so B's fix (drop the cities) is rejected on that evidence. A and B confirmed high-risk c2, c3 and c4 directly at certain (memo §18). Dedupe is below the threshold. The acceptance rule passes.",
+      "decidedAt": "2026-11-04T13:57:38Z"
+    },
+    "dedupe": {
+      "checkedAt": "2026-11-04T13:57:38Z",
+      "nearestId": "sealed",
+      "score": null,
+      "verdict": "unique"
+    },
+    "mythsScreen": {
+      "checkedAt": "2026-11-04T13:57:38Z",
+      "hits": []
+    },
+    "lint": {
+      "version": "1.1",
+      "passed": true,
+      "warnings": []
+    },
+    "rechecks": []
   },
   "format": "mc",
   "stem": "Elvis Presley's only concerts outside the United States were played in 1957 in which country?",

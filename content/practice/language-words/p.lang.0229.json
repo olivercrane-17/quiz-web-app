@@ -1,6 +1,6 @@
 {
   "id": "p.lang.0229",
-  "status": "checking",
+  "status": "cut",
   "category": "lang",
   "tags": ["punctuation", "symbols", "word-origins"],
   "region": "global",
@@ -182,19 +182,13 @@
         "verdict": "revise"
       }
     ],
-    "estimates": [
-      {
-        "by": "es-plang02e",
-        "at": "2026-11-01T03:03:38Z"
-      }
-    ],
     "tiebreak": {
-      "checker": "fc-plang02t",
+      "checker": "fc-tbp3t",
       "pass": "T",
       "brief": "tiebreak",
       "packetSha256": "3ef8f9fa79d1c8090687190b76ec18a15ba4e0ef397bf9d308b1c6713cfcef2c",
-      "startedAt": "2026-11-01T05:04:45Z",
-      "finishedAt": "2026-11-01T05:10:48Z",
+      "startedAt": "2026-11-04T13:32:05Z",
+      "finishedAt": "2026-11-04T13:55:32Z",
       "coldSolve": {
         "answerGiven": "The ampersand",
         "confidence": "high",
@@ -202,63 +196,79 @@
       },
       "claimResults": [
         {
-          "claimId": "c1",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "The name of the & sign is a slurred form of 'and per se and', said when the sign was recited as the last item after Z.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed: A and B both confirmed it on knowledge. It is high-risk and no check carries dataset or web evidence for it, so rule 3 still needs external evidence. This run's only WebSearch call was refused (the turn's shared search limit was used up) and no pinned dataset covers etymology. Knowledge in a tiebreak does not count (§9.7), so this stays open until a re-run tiebreak (content:record --replace) carries web evidence."
-        },
-        {
-          "claimId": "c2",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Only the & sign's name comes from 'and per se and'. Asterisk is from the Greek for 'little star', the at sign is named for the word 'at' it stands for, and the hash sign's name has nothing to do with the alphabet recitation.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed: A and B both confirmed it on knowledge. High-risk (etymology) with no external evidence in any check, so rule 3 still needs it. No search was possible in this run (see c1)."
-        },
-        {
           "claimId": "c3",
-          "verdict": "uncertain",
-          "method": "knowledge",
+          "verdict": "refuted",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "The recitation part holds: & came after Z and was read 'and per se and', meaning & by itself is 'and'. For the date I recall 1837 as the year the word is said to have been in common use, but I cannot say from memory that no earlier record exists, so 'recorded from 1837' is not settled.",
-            "confidence": "likely"
+            "kind": "web",
+            "query": "ampersand word history \"and per se and\" end of alphabet first known use 1837 ligature of Latin et",
+            "results": [
+              {
+                "title": "Ampersand",
+                "url": "https://en.wikipedia.org/wiki/Ampersand"
+              },
+              {
+                "title": "Ampersand",
+                "url": "https://www.britannica.com/topic/ampersand"
+              },
+              {
+                "title": "How the & Came by its Name",
+                "url": "https://www.merriam-webster.com/grammar/the-history-of-ampersand"
+              },
+              {
+                "title": "Talk:Ampersand/Archive 1",
+                "url": "https://en.wikipedia.org/wiki/Talk:Ampersand/Archive_1"
+              },
+              {
+                "title": "Ampersand - Etymology, Origin & Meaning",
+                "url": "https://www.etymonline.com/word/ampersand"
+              },
+              {
+                "title": "AMPERSAND Definition & Meaning - Merriam-Webster",
+                "url": "https://www.merriam-webster.com/dictionary/ampersand"
+              },
+              {
+                "title": "AMPERSANDS Definition & Meaning - Merriam-Webster",
+                "url": "https://www.merriam-webster.com/dictionary/ampersands"
+              },
+              {
+                "title": "AMPERSAND definition and meaning",
+                "url": "https://www.collinsdictionary.com/dictionary/english/ampersand"
+              },
+              {
+                "title": "ampersand, n. meanings, etymology and more",
+                "url": "https://www.oed.com/dictionary/ampersand_n"
+              }
+            ],
+            "summaryExcerpt": "The search turned up the 1837 date you mentioned, but the dictionaries give earlier first-use dates, so the answer depends on what you mean by \"first known use.\" [...] Britannica says it was taught as the 27th letter of the alphabet, after z, to 19th-century British students, who recited it that way. Merriam-Webster notes that the phrase was rendered & per se, and, meaning \"& by itself (is the word) and.\" [...] Wikipedia states that the term had entered common English usage by 1837. This is about wide usage, not the earliest written appearance. [...] The Oxford English Dictionary's earliest evidence for ampersand is from 1777, in a diary entry by Hester Lynch Thrale. Merriam-Webster gives 1795 as its first known use. [...] I did not find a source tying 1837 to a first use.",
+            "tiers": ["B"],
+            "conflictReported": true,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "Disputed: B left c3 uncertain. It needs a Tier A or B source on the word's earliest record, because an earlier citation would make 'recorded from 1837' wrong. No external evidence could be gathered in this run (WebSearch refused, no dataset covers it). The year appears only in the claim, not in the stem or the explanation, so the fallback is to drop it from the claim (precision ladder, §9.2); a changed claim needs two fresh checks on it (§9.7)."
-        },
-        {
-          "claimId": "c4",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "textbook",
-            "restatement": "The & sign began as a ligature of the letters e and t, the Latin word et, 'and', in Roman cursive writing.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed: A and B both confirmed it on knowledge. High-risk with no external evidence in any check, so rule 3 still needs it. No search was possible in this run (see c1)."
+          "note": "The recitation half of c3 is supported (Britannica, Merriam-Webster). The year is not: the OED's earliest evidence is 1777 and Merriam-Webster's first known use 1795, while 1837 is only the date by which the word was in common use (Wikipedia). 'The word ampersand is recorded from 1837' is therefore wrong as written."
         }
       ],
       "issues": [
         {
           "type": "wording",
-          "severity": "note",
-          "note": "checker_doubt c3: the year 1837 rests on knowledge in all three checks. Settle it with web evidence in a re-run tiebreak, or drop the year from the claim. Nothing a player sees raised a doubt here: the cold solve matched the key, and the distractors and explanation agree with what I know."
+          "severity": "fix",
+          "note": "c3's year is contradicted by the OED (1777) and Merriam-Webster (1795). The year is not in the player-facing text, so the simplest fix is to drop it from c3, or to restate it as 'in common use by 1837'. Either changes a claim, which needs two fresh checks (§9.7). Nothing in this search contradicts the key or the explanation a player sees."
         }
       ],
-      "searchesUsed": 0,
-      "verdict": "revise"
+      "searchesUsed": 1,
+      "verdict": "fail"
+    },
+    "estimates": [
+      {
+        "by": "es-plang02e",
+        "at": "2026-11-01T03:03:38Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-plang02d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp3t. A pass, B revise, T fail (§9.7). T's search (Britannica, Merriam-Webster, Wikipedia and the OED among the results, counted at Tier B) refuted c3 as written: the OED's earliest evidence for 'ampersand' is 1777 and Merriam-Webster's first known use is 1795, while 1837 is only the date by which the word was in common use. A refuted claim is a real problem, and the fix restates c3, a changed claim that needs two fresh checks, so no wording-only rewrite applies. The recitation, the key and the et ligature were not in dispute. Redraft under a new id without the year, or with what every source agrees on.",
+      "decidedAt": "2026-11-04T14:12:12Z"
     }
   },
   "format": "mc",

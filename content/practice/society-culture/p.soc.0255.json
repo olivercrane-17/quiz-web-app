@@ -1,6 +1,6 @@
 {
   "id": "p.soc.0255",
-  "status": "checking",
+  "status": "cut",
   "category": "soc",
   "tags": ["symbols", "road-signs", "shapes"],
   "region": "global",
@@ -211,19 +211,13 @@
         "verdict": "revise"
       }
     ],
-    "estimates": [
-      {
-        "by": "es-psoc02e",
-        "at": "2026-11-01T03:33:49Z"
-      }
-    ],
     "tiebreak": {
-      "checker": "fc-psoc02t",
+      "checker": "fc-tbp3t",
       "pass": "T",
       "brief": "tiebreak",
       "packetSha256": "03ea9c3f73e3ab606d75ef7e25870d85b24c5dcb786187bfa0fdc4177abbc7d1",
-      "startedAt": "2026-11-01T05:09:22Z",
-      "finishedAt": "2026-11-01T05:16:35Z",
+      "startedAt": "2026-11-04T13:32:22Z",
+      "finishedAt": "2026-11-04T13:55:32Z",
       "coldSolve": {
         "answerGiven": "Stop",
         "confidence": "high",
@@ -231,80 +225,144 @@
       },
       "claimResults": [
         {
-          "claimId": "c1",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "The red octagon is the stop sign of the 1968 Vienna Convention on Road Signs and Signals and of the US traffic-control manual, and the large majority of countries use it. Japan's downward-pointing triangle is the best-known exception.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed: A and B both confirmed it. It is high-risk (superlative) with no external evidence in any check, so rule 3 still needs dataset or web evidence. None could be gathered: the WebSearch call was refused (the turn's shared limit of 200 calls was used up) and no pinned dataset covers it. Knowledge does not count here (§9.5.3)."
-        },
-        {
-          "claimId": "c2",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "everyday",
-            "restatement": "Give way signs are downward-pointing triangles, no entry signs are round (red with a white bar), and speed limit signs are round or, in North America, upright rectangles. None is an octagon.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed. Standard risk."
-        },
-        {
           "claimId": "c3",
           "verdict": "uncertain",
-          "method": "knowledge",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "As I recall, the first stop signs went up in Detroit in 1915 as small square signs with black letters on white, the octagon was adopted in the early 1920s, and US stop signs stayed yellow until the 1950s. I cannot certify the decade, the colour or the 1915 details from memory.",
-            "confidence": "likely"
+            "kind": "web",
+            "query": "stop sign history first Detroit 1915 white square octagon shape 1920s yellow background changed to red with white letters 1954 MUTCD",
+            "results": [
+              {
+                "title": "Stop sign",
+                "url": "https://en.wikipedia.org/wiki/Stop_sign"
+              },
+              {
+                "title": "The Evolution of MUTCD - Knowledge - FHWA MUTCD",
+                "url": "https://mutcd.fhwa.dot.gov/kno-history.htm"
+              },
+              {
+                "title": "Road signs in the United States",
+                "url": "https://en.wikipedia.org/wiki/American_road_signs"
+              },
+              {
+                "title": "Talk:Stop sign",
+                "url": "https://en.wikipedia.org/wiki/Talk:Stop_sign"
+              },
+              {
+                "title": "File:Stop Sign Detroit 1915 NYT 2011-12-09.jpg",
+                "url": "https://en.wikipedia.org/wiki/File:Stop_Sign_Detroit_1915_NYT_2011-12-09.jpg"
+              },
+              {
+                "title": "Manual on Uniform Traffic Control Devices (MUTCD)- Happy Birthday to the MUTCD! - FHWA MUTCD",
+                "url": "https://mutcd.fhwa.dot.gov/mutcd_80_bday.htm"
+              },
+              {
+                "title": "Manual on Uniform Traffic Control Devices",
+                "url": "https://en.wikipedia.org/wiki/MUTCD"
+              },
+              {
+                "title": "CHAPTER 2B. REGULATORY SIGNS Section 2B.01 Application of Regulatory Signs",
+                "url": "https://mutcd.fhwa.dot.gov/pdfs/2003/ch2b.pdf"
+              },
+              {
+                "title": "Proposed Revision No. 2 Page 2B-1 CHAPTER 2B. REGULATORY SIGNS",
+                "url": "https://mutcd.fhwa.dot.gov/pdfs/millennium/pr2/2br2.pdf"
+              },
+              {
+                "title": "File:MUTCD R1-1.svg",
+                "url": "https://en.wikipedia.org/wiki/File:Stop_sign_dark_red.svg"
+              }
+            ],
+            "summaryExcerpt": "Wikipedia says the first stop sign was created in 1914 by Detroit police sergeant Harold \"Harry\" Jackson, who cut the corners off a rectangular piece of plywood, wrote \"STOP\" over the center, and placed it facing the street. The FHWA timeline lists 1915, the first STOP sign appears in Detroit. [...] So the \"white square\" detail in your query is only partly right: the sign was a white board with its corners cut [...] Wikipedia says that from 1924 to 1954, stop signs bore a red or black stop legend on a yellow field.",
+            "tiers": ["A", "B", "C"],
+            "conflictReported": true,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "The disputed claim: B left it uncertain. I side with B. It bundles three dated details, high-risk by date, and a tiebreak needs dataset or web evidence on them. None could be gathered: the WebSearch call was refused (the turn's shared limit of 200 calls was used up) and no pinned dataset covers it. It stays unconfirmed."
+          "note": "The main clause is supported (a yellow field from 1924 to 1954). The parenthetical is not: Detroit 1914 (Wikipedia) against 1915 (FHWA), and a white board with its corners cut against a 24 by 24 inch white sign. A reported conflict fails the claim as written (§9.5.2)."
         },
         {
           "claimId": "c4",
           "verdict": "confirmed",
-          "method": "knowledge",
+          "method": "web",
           "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "In 1954 the US national manual for traffic signs changed the standard stop sign from yellow to red with white letters.",
-            "confidence": "certain"
+            "kind": "web",
+            "query": "stop sign history first Detroit 1915 white square octagon shape 1920s yellow background changed to red with white letters 1954 MUTCD",
+            "results": [
+              {
+                "title": "Stop sign",
+                "url": "https://en.wikipedia.org/wiki/Stop_sign"
+              },
+              {
+                "title": "The Evolution of MUTCD - Knowledge - FHWA MUTCD",
+                "url": "https://mutcd.fhwa.dot.gov/kno-history.htm"
+              },
+              {
+                "title": "Road signs in the United States",
+                "url": "https://en.wikipedia.org/wiki/American_road_signs"
+              },
+              {
+                "title": "Talk:Stop sign",
+                "url": "https://en.wikipedia.org/wiki/Talk:Stop_sign"
+              },
+              {
+                "title": "File:Stop Sign Detroit 1915 NYT 2011-12-09.jpg",
+                "url": "https://en.wikipedia.org/wiki/File:Stop_Sign_Detroit_1915_NYT_2011-12-09.jpg"
+              },
+              {
+                "title": "Manual on Uniform Traffic Control Devices (MUTCD)- Happy Birthday to the MUTCD! - FHWA MUTCD",
+                "url": "https://mutcd.fhwa.dot.gov/mutcd_80_bday.htm"
+              },
+              {
+                "title": "Manual on Uniform Traffic Control Devices",
+                "url": "https://en.wikipedia.org/wiki/MUTCD"
+              },
+              {
+                "title": "CHAPTER 2B. REGULATORY SIGNS Section 2B.01 Application of Regulatory Signs",
+                "url": "https://mutcd.fhwa.dot.gov/pdfs/2003/ch2b.pdf"
+              },
+              {
+                "title": "Proposed Revision No. 2 Page 2B-1 CHAPTER 2B. REGULATORY SIGNS",
+                "url": "https://mutcd.fhwa.dot.gov/pdfs/millennium/pr2/2br2.pdf"
+              },
+              {
+                "title": "File:MUTCD R1-1.svg",
+                "url": "https://en.wikipedia.org/wiki/File:Stop_sign_dark_red.svg"
+              }
+            ],
+            "summaryExcerpt": "The FHWA says that in 1954, the MUTCD ushered in the modern \"STOP\" sign as we now know it: white letters on a red octagonal background, which replaced a similar version with a yellow background.",
+            "tiers": ["A"],
+            "conflictReported": false,
+            "retrievedAt": "2026-11-04"
           },
-          "note": "The disputed claim: B left it uncertain. 1954 is the year in every account I know, but knowledge counts neither in a tiebreak nor for a high-risk claim (§9.5.3, §9.7), so this result does not settle it. It still needs dataset or web evidence. None could be gathered: the WebSearch call was refused (the turn's shared limit of 200 calls was used up) and no pinned dataset covers it."
-        },
-        {
-          "claimId": "c5",
-          "verdict": "confirmed",
-          "method": "knowledge",
-          "evidence": {
-            "kind": "knowledge",
-            "basis": "reference",
-            "restatement": "Japan's stop sign is a red, downward-pointing triangle carrying the word tomare.",
-            "confidence": "certain"
-          },
-          "note": "Not disputed. Standard risk."
+          "note": "The summary attributes this sentence to the FHWA, which owns the MUTCD (an FHWA MUTCD page among the results), so the call counts at Tier A for it. The conflicts the summary reports concern only the Detroit origin in c3."
         }
       ],
       "issues": [
         {
           "type": "wording",
           "severity": "fix",
-          "note": "Checker doubt on c3 (the record schema has no checker_doubt type, so it is filed as wording). This tiebreak could not settle c3 or c4: the WebSearch call was refused because the turn's shared limit of 200 calls was used up, and no pinned dataset covers road signs. Re-run the tiebreak (content:record with --replace) with Tier A or B sources for c3 and c4, for example a road authority's history of the sign or a reference work, and for c1, which is high-risk with knowledge only in every check. If evidence stays out of reach, B's suggestion holds: trim the explanation to what can be sourced. That drops c3 and c4, so the changed claims need fresh checks (§9.7)."
+          "note": "Checker doubt on c3 (the record schema has no checker_doubt type). Its parenthetical (the first sign, in Detroit in 1915, was a white square) is contested in both date and shape, and it is not in the player-facing text. Drop it from c3, leaving 'From the 1920s, standard US stop signs were yellow octagons', which the FHWA and Wikipedia support (a yellow field from 1924, replaced by white on red in 1954). A changed claim needs two fresh checks (§9.7)."
         },
         {
           "type": "wording",
           "severity": "note",
-          "note": "The key is solid in my cold solve and in both checks, and the stem's 'in most countries' covers Japan. Only the explanation's US sign history is in doubt, as B said."
+          "note": "c1 ('in most countries the stop sign is an octagon') is high-risk with knowledge only in A and B; the shared WebSearch budget ran out before I could source it, so it still needs dataset or web evidence before acceptance (§9.9 rule 3)."
         }
       ],
-      "searchesUsed": 0,
+      "searchesUsed": 1,
       "verdict": "revise"
+    },
+    "estimates": [
+      {
+        "by": "es-psoc02e",
+        "at": "2026-11-01T03:33:49Z"
+      }
+    ],
+    "editor": {
+      "editor": "ed-psoc02d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp3t. A pass, B revise, T revise, so rule 2 cannot pass (§9.7). B left c3 and c4 uncertain. T's search confirmed c4 from the FHWA (Tier A: white letters on red from the 1954 manual) but reported a conflict on c3's parenthetical, Detroit's first stop sign (1914 or 1915; a square, or a board with its corners cut), and a reported conflict fails the claim as written (§9.5.2). Dropping the parenthetical is a changed claim, which needs two fresh checks, so no wording-only rewrite applies. The key and the player-facing explanation were not refuted. Redraft under a new id with c3 limited to what the FHWA and Wikipedia agree on (a yellow field from 1924 to 1954).",
+      "decidedAt": "2026-11-04T14:13:24Z"
     }
   },
   "format": "mc",

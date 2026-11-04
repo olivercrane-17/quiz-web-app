@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0117",
-  "status": "checking",
+  "status": "cut",
   "category": "sport",
   "tags": ["badminton", "word-origins", "racket-sports"],
   "region": "global",
@@ -181,12 +181,98 @@
         "verdict": "pass"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp2t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "15818268d023926be267474f274dad0986cf7ed7f0b24d84a8943ed79aaefc8e",
+      "startedAt": "2026-11-04T13:03:23Z",
+      "finishedAt": "2026-11-04T13:27:22Z",
+      "coldSolve": {
+        "answerGiven": "An English country house",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c3",
+          "verdict": "uncertain",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "badminton named after Badminton House Duke of Beaufort Gloucestershire when game first played there 1873 1860s",
+            "results": [
+              {
+                "title": "Badminton",
+                "url": "https://www.britannica.com/sports/badminton"
+              },
+              {
+                "title": "Badminton",
+                "url": "https://en.wikipedia.org/wiki/Badminton"
+              },
+              {
+                "title": "Badminton: Olympic history, rules, latest updates and upcoming events for the Olympic sport",
+                "url": "https://www.olympics.com/en/sports/badminton/"
+              },
+              {
+                "title": "History of badminton in India: The complete guide",
+                "url": "https://www.olympics.com/en/news/indian-badminton-history-rules-players-sport-game"
+              },
+              {
+                "title": "badminton - Students",
+                "url": "https://kids.britannica.com/students/article/badminton/273053"
+              },
+              {
+                "title": "badminton - Scholars",
+                "url": "https://kids.britannica.com/scholars/article/badminton/11711"
+              },
+              {
+                "title": "Badminton Basics",
+                "url": "https://shuttletime.bwfbadminton.com/badminton-basics"
+              },
+              {
+                "title": "Olympic Badminton",
+                "url": "https://www.olympics.com/en/dakar-2026/sports/badminton/"
+              },
+              {
+                "title": "Historical Facts - Badminton England",
+                "url": "https://www.badmintonengland.co.uk/about-us/history/historical-facts"
+              },
+              {
+                "title": "Olympic Badminton",
+                "url": "https://olympics.com/en/paris-2024/sports/badminton?displayAsWebView=true,true"
+              }
+            ],
+            "summaryExcerpt": "The sources agree that the game took its name from the Duke of Beaufort's Badminton House in Gloucestershire, but they disagree on when it was first played there. Most give 1873, while others point to earlier dates. 1873 is the most common date. Britannica says the game was first played at the estate of the 9th Duke of Beaufort, Henry Somerset, about 1873. Earlier dates. Badminton England says the Duke held parties at the house in 1863. Olympics.com's Paris 2024 page says it was sometime in the early 1860s. The Badminton World Federation's guide dates the game's development at the house to between 1856 and 1859. Origins are uncertain. Wikipedia says the name's derivation from the house is clear, but why or when remains unclear. It also notes that as early as 1860, a London toy dealer named Isaac Spratt published a booklet titled Badminton Battledore – A New Game, though no copy survives. The 1873 date is the one most widely repeated, but the sources conflict and the earliest play at the estate is not firmly documented.",
+            "tiers": ["A", "B"],
+            "conflictReported": true,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "The sport's world and English governing bodies (Tier A) date play at the house to the late 1850s or the 1860s, Britannica to about 1873, and Wikipedia says the timing is unclear. The summary reports the conflict, so c3 fails as written (section 9.5.2), and pass A's doubt holds."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "Drop the decade from c3 and the explanation (pass A's fix): sources date play at Badminton House anywhere from 1856 to 1873. 'The game was fashionable at Badminton House, the Duke of Beaufort's estate in Gloucestershire' needs no date. The changed claim needs fresh checks. The key (c1) is not in dispute, and the same search says every source agrees on it."
+        }
+      ],
+      "searchesUsed": 1,
+      "verdict": "revise"
+    },
     "estimates": [
       {
         "by": "es-psport01e",
         "at": "2026-11-01T01:50:15Z"
       }
-    ]
+    ],
+    "editor": {
+      "editor": "ed-psport01d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp2t. A revise, B pass, and T also revise, so no passing tiebreak stands in for A (§9.9 rule 2). T's search reports a conflict on c3's decade: the sport's world and English governing bodies and Olympics.com date play at Badminton House to the late 1850s or the 1860s, Britannica to about 1873, and Wikipedia calls the timing unclear. So c3 fails as written (§9.5.2) and A's doubt holds. Dropping the decade changes claim c3, so no wording-only rewrite applies. The key (c1) is not in dispute: redraft under a new id without the date.",
+      "decidedAt": "2026-11-04T13:59:04Z"
+    }
   },
   "format": "mc",
   "stem": "The sport of badminton takes its name from what?",

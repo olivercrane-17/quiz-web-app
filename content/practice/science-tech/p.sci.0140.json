@@ -1,6 +1,6 @@
 {
   "id": "p.sci.0140",
-  "status": "checking",
+  "status": "cut",
   "category": "sci",
   "tags": ["weather", "atmosphere"],
   "region": "global",
@@ -181,12 +181,94 @@
         "verdict": "revise"
       }
     ],
+    "tiebreak": {
+      "checker": "fc-tbp2t",
+      "pass": "T",
+      "brief": "tiebreak",
+      "packetSha256": "1c44e7f87382be57d01ee51a0e3188c1206a37e425a612203ce0a3615b5ff541",
+      "startedAt": "2026-11-04T13:03:23Z",
+      "finishedAt": "2026-11-04T13:27:22Z",
+      "coldSolve": {
+        "answerGiven": "Troposphere",
+        "confidence": "high",
+        "matchedKey": true
+      },
+      "claimResults": [
+        {
+          "claimId": "c3",
+          "verdict": "uncertain",
+          "method": "web",
+          "evidence": {
+            "kind": "web",
+            "query": "troposphere height at the poles and at the equator km tropopause",
+            "results": [
+              {
+                "title": "Layers of the Atmosphere",
+                "url": "https://www.noaa.gov/jetstream/atmosphere/layers-of-atmosphere"
+              },
+              {
+                "title": "NWS JetStream - Layers of the Atmosphere",
+                "url": "https://w2.weather.gov/jetstream/layers"
+              },
+              {
+                "title": "The Troposphere - UCAR Center for Science Education",
+                "url": "https://scied.ucar.edu/learning-zone/atmosphere/troposphere"
+              },
+              {
+                "title": "Change in the attenuation coefficient of light at the boundary between the troposphere and stratosphere",
+                "url": "https://arxiv.org/pdf/2205.14713"
+              },
+              {
+                "title": "11-1 Weather Theory Chapter 11 Introduction",
+                "url": "https://www.weather.gov/media/zhu/ZHU_Training_Page/Met_Tutorials/Weather_Theory.pdf"
+              },
+              {
+                "title": "Meridional Structure and Future Changes of Tropopause Height and Temperature",
+                "url": "https://arxiv.org/pdf/1902.08230"
+              },
+              {
+                "title": "Earth's Rotation Causes Global Atmospheric Circulation",
+                "url": "https://arxiv.org/pdf/2206.14887"
+              },
+              {
+                "title": "Atmosphere and Greenhouse Gas Primer",
+                "url": "https://arxiv.org/pdf/2303.00808"
+              },
+              {
+                "title": "National Aeronautics and Space Administration",
+                "url": "https://www.nasa.gov/wp-content/uploads/2023/05/dressing-for-altitude-nov-2017.pdf"
+              }
+            ],
+            "summaryExcerpt": "Sources agree that the troposphere is thickest at the equator and thinnest at the poles, but the exact figures differ somewhat. Equator: NOAA puts the top of the troposphere at about 18 to 20 km. It is 11-12 miles (18-20 km) high at the equator. NASA gives a slightly lower range of about 17 to 18 km. Poles: NOAA gives about 6 km, and NASA gives about 7 km. UCAR notes that the poles are lowest in winter, when the tropopause can drop to around 7 km.",
+            "tiers": ["A"],
+            "conflictReported": true,
+            "retrievedAt": "2026-11-04"
+          },
+          "note": "Figures attributed to NOAA, NASA and UCAR (Tier A); the arXiv preprints in the list are not relied on. The tropics figure fits (17 to 20 km by source), but no Tier A source gives 8 km for the poles (NOAA about 6 km, NASA and UCAR about 7 km), and the summary reports that the figures differ. A conflict fails the claim as written (section 9.5.2)."
+        }
+      ],
+      "issues": [
+        {
+          "type": "wording",
+          "severity": "fix",
+          "note": "c3 and the explanation say 'about 8 km over the poles'; NOAA gives about 6 km and NASA about 7 km, and the tropical top runs from 17 to 20 km by source. Restate as a range the Tier A sources share (for example 'about 6 to 7 km over the poles and 17 to 20 km over the tropics') or drop the figures, as pass B suggested; the changed claim needs fresh checks. c1, c2 and c4 are not in dispute."
+        }
+      ],
+      "searchesUsed": 1,
+      "verdict": "revise"
+    },
     "estimates": [
       {
         "by": "es-psci01e",
         "at": "2026-11-01T02:09:46Z"
       }
-    ]
+    ],
+    "editor": {
+      "editor": "ed-psci01d",
+      "decision": "cut",
+      "reason": "Second pass, after tiebreak fc-tbp2t. A pass, B revise, and T also revise, so no passing tiebreak stands in for B (§9.9 rule 2). T's Tier A search (NOAA, NASA and UCAR) reports figures that differ, and none gives 8 km for the poles (NOAA about 6 km, NASA and UCAR about 7 km), so c3 fails as written (§9.5.2), as B suspected. Restating the range changes claim c3, so no wording-only rewrite applies. c1, c2 and c4 are not in dispute: redraft under a new id with figures the Tier A sources share, or without them.",
+      "decidedAt": "2026-11-04T13:58:27Z"
+    }
   },
   "format": "mc",
   "stem": "In which layer of the atmosphere does almost all of Earth's weather happen?",
