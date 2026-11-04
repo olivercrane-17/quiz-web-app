@@ -111,14 +111,19 @@ export function buildBundle(input: BundleInput): string {
     "begin;",
   ];
   for (const migration of input.migrations) {
-    out.push("", `-- ===== migration ${migration.path} =====`, migration.sql.trim());
+    out.push(
+      "",
+      `-- ===== migration ${migration.path} =====`,
+      migration.sql.trim(),
+    );
   }
   out.push(
     "",
     `create temporary table ${RESULTS} (n integer generated always as identity, line text not null);`,
   );
   const tests = [...input.tests];
-  if (input.expectedRpcs !== null) tests.push(allowlistCheck(input.expectedRpcs));
+  if (input.expectedRpcs !== null)
+    tests.push(allowlistCheck(input.expectedRpcs));
   for (const test of tests) {
     out.push(
       "",
@@ -172,7 +177,12 @@ export function sendableProblems(
 
 function selectMigrations(
   root: string,
-  options: { after?: string; applied?: string; with: string[]; attended: boolean },
+  options: {
+    after?: string;
+    applied?: string;
+    with: string[];
+    attended: boolean;
+  },
 ): { migrations: { path: string; sql: string }[]; skipped: string[] } {
   const { migrations } = listMigrations(root);
   const chosen = new Set<string>();
@@ -188,7 +198,9 @@ function selectMigrations(
       (migration) => migration.stem === after || migration.version === after,
     );
     if (anchor === undefined) {
-      throw new Error(`--after ${after}: no such migration in ${MIGRATIONS_DIR}`);
+      throw new Error(
+        `--after ${after}: no such migration in ${MIGRATIONS_DIR}`,
+      );
     }
     for (const migration of migrations) {
       if (migration.stem > anchor.stem) {
@@ -213,7 +225,9 @@ function selectMigrations(
       throw new Error(`--with ${path}: not a migration in ${MIGRATIONS_DIR}`);
     }
     if (migration.ownerOnly) {
-      throw new Error(`--with ${path}: owner-only migrations are never bundled`);
+      throw new Error(
+        `--with ${path}: owner-only migrations are never bundled`,
+      );
     }
     if (migration.attended && !options.attended) {
       throw new Error(`--with ${path}: an attended migration needs --attended`);
@@ -251,12 +265,19 @@ export function main(argv: string[], root = process.cwd()): number {
   }
   const attended = values.attended;
 
-  const { migrations, skipped } = selectMigrations(root, {
-    ...(values.after === undefined ? {} : { after: values.after }),
-    ...(values.applied === undefined ? {} : { applied: values.applied }),
-    with: values.with,
-    attended,
-  });
+  let selection: ReturnType<typeof selectMigrations>;
+  try {
+    selection = selectMigrations(root, {
+      ...(values.after === undefined ? {} : { after: values.after }),
+      ...(values.applied === undefined ? {} : { applied: values.applied }),
+      with: values.with,
+      attended,
+    });
+  } catch (error) {
+    console.error(`sql:bundle: refused: ${(error as Error).message}`);
+    return 1;
+  }
+  const { migrations, skipped } = selection;
   for (const file of skipped) {
     console.error(
       `sql:bundle: left out ${file}, which only applies attended (add --attended for a run someone attends)`,
@@ -270,7 +291,9 @@ export function main(argv: string[], root = process.cwd()): number {
 
   const problems: string[] = [];
   for (const migration of migrations) {
-    problems.push(...sendableProblems(migration.path, migration.sql, "migration", attended));
+    problems.push(
+      ...sendableProblems(migration.path, migration.sql, "migration", attended),
+    );
   }
   const tests: TestFile[] = [];
   for (const path of testPaths) {
@@ -297,7 +320,9 @@ export function main(argv: string[], root = process.cwd()): number {
   };
   const rpcs = expected.rpc?.functions;
   if (!Array.isArray(rpcs) || !rpcs.every((name) => typeof name === "string")) {
-    problems.push(`${EXPECTED_ADVISORS}: rpc.functions must be an array of names`);
+    problems.push(
+      `${EXPECTED_ADVISORS}: rpc.functions must be an array of names`,
+    );
   }
   if (problems.length > 0) {
     console.error(
@@ -323,7 +348,9 @@ export function main(argv: string[], root = process.cwd()): number {
   });
   const confirmations = mcpConfirmationReasons(bundle);
   if (confirmations.length > 0 && !attended) {
-    console.error("sql:bundle: refused. The MCP would ask a human to confirm the bundle:");
+    console.error(
+      "sql:bundle: refused. The MCP would ask a human to confirm the bundle:",
+    );
     for (const reason of confirmations) console.error(`  ${reason}`);
     return 1;
   }

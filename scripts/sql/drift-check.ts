@@ -6,11 +6,13 @@
  * and pass it. It fails when an applied migration has no file in the repo
  * (someone applied SQL that is not versioned), when a file that was never
  * applied sorts before the newest applied one (it would run out of order),
- * when a file name breaks the rule, or when a migration holds a statement
- * the MCP would stop to confirm. Files after the newest applied one are
- * pending: listed, and an error only with --strict (the wave exit, after the
- * integrator applied everything). Owner-only migrations are listed as owner
- * items and never count as drift.
+ * when a file name breaks the rule, or when a migration still to apply holds
+ * a forbidden word or, unless it is an attended one, a statement the MCP
+ * would stop to confirm. Applied migrations are never sent again, so they
+ * are not scanned. Files after the newest applied one are pending: listed,
+ * and an error only with --strict (the wave exit, after the integrator
+ * applied everything). Owner-only migrations are listed as owner items and
+ * never count as drift.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -21,6 +23,7 @@ import {
   MIGRATIONS_DIR,
   describeFinding,
   listMigrations,
+  mcpConfirmationReasons,
   parseAppliedMigrations,
   readText,
   scanForbidden,
@@ -44,7 +47,7 @@ export interface DriftReport {
   /** Owner-only migrations, and whether the project recorded them. */
   ownerOnly: { stem: string; applied: boolean }[];
   badNames: string[];
-  /** Statements in agent-applied migrations that cannot apply unattended. */
+  /** Statements in migrations still to apply that cannot apply unattended. */
   forbidden: string[];
 }
 
@@ -74,15 +77,24 @@ export function driftReport(
     forbidden: [],
   };
   for (const file of agentFiles) {
-    if (applied.has(file.stem)) report.applied.push(file.stem);
-    else if (newestApplied !== undefined && file.stem < newestApplied)
+    if (applied.has(file.stem)) {
+      report.applied.push(file.stem);
+      continue;
+    }
+    if (newestApplied !== undefined && file.stem < newestApplied)
       report.outOfOrder.push(file.stem);
     else report.pending.push(file.stem);
-    report.forbidden.push(
-      ...scanForbidden(`${MIGRATIONS_DIR}/${file.file}`, read(file)).map(
-        describeFinding,
-      ),
-    );
+    const path = `${MIGRATIONS_DIR}/${file.file}`;
+    const sql = read(file);
+    report.forbidden.push(...scanForbidden(path, sql).map(describeFinding));
+    if (!file.attended) {
+      report.forbidden.push(
+        ...mcpConfirmationReasons(sql).map(
+          (reason) =>
+            `${path}: the MCP would ask a human to confirm: ${reason}`,
+        ),
+      );
+    }
   }
   return report;
 }
@@ -100,7 +112,9 @@ export function driftProblems(report: DriftReport, strict: boolean): string[] {
     ...report.badNames.map(
       (name) => `${name} is not <14-digit version>_<snake_case>.sql`,
     ),
-    ...report.forbidden.map((finding) => `would stop for confirmation: ${finding}`),
+    ...report.forbidden.map(
+      (finding) => `would stop for confirmation: ${finding}`,
+    ),
     ...(strict
       ? report.pending.map((name) => `${name} is not applied yet`)
       : []),

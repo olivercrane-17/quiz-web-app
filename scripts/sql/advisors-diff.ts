@@ -116,15 +116,13 @@ export function parseExpected(json: unknown): ExpectedFile {
 /** The accepted entries plus one required entry per RPC lint and allowlisted function. */
 export function expandExpected(file: ExpectedFile): ExpectedEntry[] {
   const rpcEntries = file.rpc.functions.flatMap((fn) =>
-    file.rpc.lints.map(
-      (lint): ExpectedEntry => ({
-        lint,
-        schema: "public",
-        function: fn,
-        required: true,
-        why: file.rpc.why,
-      }),
-    ),
+    file.rpc.lints.map((lint): ExpectedEntry => ({
+      lint,
+      schema: "public",
+      function: fn,
+      required: true,
+      why: file.rpc.why,
+    })),
   );
   return [...rpcEntries, ...file.accepted];
 }
@@ -149,22 +147,32 @@ export function entryMatches(entry: ExpectedEntry, lint: Lint): boolean {
   ].join(" ");
   if (entry.schema !== undefined) {
     const schema = metadata.schema;
-    if (typeof schema === "string" ? schema !== entry.schema : !haystack.includes(entry.schema)) {
+    if (
+      typeof schema === "string"
+        ? schema !== entry.schema
+        : !haystack.includes(entry.schema)
+    ) {
       return false;
     }
   }
   const object = entry.table ?? entry.function;
   if (object !== undefined) {
     const name = metadata.name;
-    if (typeof name === "string" ? name !== object : !haystack.includes(object)) {
+    if (
+      typeof name === "string" ? name !== object : !haystack.includes(object)
+    ) {
       return false;
     }
   }
-  if (entry.index !== undefined && !haystack.includes(entry.index)) return false;
+  if (entry.index !== undefined && !haystack.includes(entry.index))
+    return false;
   return true;
 }
 
-export function diffAdvisors(expected: ExpectedEntry[], lints: Lint[]): AdvisorDiff {
+export function diffAdvisors(
+  expected: ExpectedEntry[],
+  lints: Lint[],
+): AdvisorDiff {
   const diff: AdvisorDiff = {
     matched: [],
     unexpected: [],
@@ -189,12 +197,7 @@ export function diffAdvisors(expected: ExpectedEntry[], lints: Lint[]): AdvisorD
 }
 
 function describeEntry(entry: ExpectedEntry): string {
-  return [
-    entry.lint,
-    entry.schema,
-    entry.table ?? entry.function,
-    entry.index,
-  ]
+  return [entry.lint, entry.schema, entry.table ?? entry.function, entry.index]
     .filter((part) => part !== undefined)
     .join(" ");
 }
@@ -205,14 +208,27 @@ function describeLint(lint: Lint): string {
 
 export function formatDiff(diff: AdvisorDiff): string {
   const lines: string[] = [];
-  for (const { entry } of diff.matched) lines.push(`expected   ${describeEntry(entry)}`);
+  for (const { entry } of diff.matched)
+    lines.push(`expected   ${describeEntry(entry)}`);
   for (const entry of diff.absentOptional)
     lines.push(`not seen   ${describeEntry(entry)} (optional)`);
   for (const entry of diff.missingRequired)
     lines.push(`MISSING    ${describeEntry(entry)} (required)`);
-  for (const lint of diff.unexpected) lines.push(`UNEXPECTED ${describeLint(lint)}`);
+  for (const lint of diff.unexpected)
+    lines.push(`UNEXPECTED ${describeLint(lint)}`);
   return lines.join("\n");
 }
+
+/** Lints the performance advisor reports; every other lint is a security one. */
+export const PERFORMANCE_LINTS = new Set([
+  "unindexed_foreign_keys",
+  "auth_rls_initplan",
+  "no_primary_key",
+  "unused_index",
+  "multiple_permissive_policies",
+  "duplicate_index",
+  "table_bloat",
+]);
 
 export function main(argv: string[], root = process.cwd()): number {
   const { values } = parseArgs({
@@ -246,7 +262,9 @@ export function main(argv: string[], root = process.cwd()): number {
   const expected = expandExpected(parseExpected(JSON.parse(expectedText)));
   // Entries of an advisor type that was not passed cannot be judged missing.
   const types = new Set(
-    [values.security && "security", values.performance && "performance"].filter(Boolean),
+    [values.security && "security", values.performance && "performance"].filter(
+      Boolean,
+    ),
   );
   const judged = expected.filter((entry) =>
     types.has(PERFORMANCE_LINTS.has(entry.lint) ? "performance" : "security"),
@@ -265,17 +283,6 @@ export function main(argv: string[], root = process.cwd()): number {
   );
   return 0;
 }
-
-/** Lints the performance advisor reports; every other lint is a security one. */
-export const PERFORMANCE_LINTS = new Set([
-  "unindexed_foreign_keys",
-  "auth_rls_initplan",
-  "no_primary_key",
-  "unused_index",
-  "multiple_permissive_policies",
-  "duplicate_index",
-  "table_bloat",
-]);
 
 if (
   process.argv[1] !== undefined &&

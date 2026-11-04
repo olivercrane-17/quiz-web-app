@@ -10,7 +10,8 @@ import { join } from "node:path";
 export const MIGRATIONS_DIR = "supabase/migrations";
 export const TESTS_DIR = "supabase/tests";
 export const EXPECTED_ADVISORS = "supabase/expected-advisors.json";
-export const STANDING_CHECKS = "supabase/tests/baseline/standing-checks.test.sql";
+export const STANDING_CHECKS =
+  "supabase/tests/baseline/standing-checks.test.sql";
 
 /** `<14-digit version>_<snake_case name>.sql`, the form apply_migration records. */
 const MIGRATION_NAME = /^(\d{14})_([a-z0-9]+(?:_[a-z0-9]+)*)\.sql$/;
@@ -135,10 +136,7 @@ export function scanForbidden(file: string, sql: string): ForbiddenFinding[] {
   }
   for (const match of sql.matchAll(DELETE_FROM)) {
     const end = sql.indexOf(";", match.index);
-    const statement = sql.slice(
-      match.index,
-      end === -1 ? undefined : end + 1,
-    );
+    const statement = sql.slice(match.index, end === -1 ? undefined : end + 1);
     if (!/\bwhere\b/i.test(statement)) {
       findings.push({
         file,
@@ -165,16 +163,28 @@ function withoutComments(sql: string): string {
 }
 
 /** A quoted string that starts with a destructive command (the MCP's check inside EXECUTE). */
-const QUOTED_DESTRUCTIVE = /['"]\s*(drop\b|delete\b|truncate\b|alter\s+table\b)/gi;
+const QUOTED_DESTRUCTIVE =
+  /['"]\s*(drop\b|delete\b|truncate\b|alter\s+table\b)/gi;
 const DOLLAR_DESTRUCTIVE =
   /execute\s+\$\w*\$\s*(drop\b|delete\b|truncate\b|alter\s+table\b)/gi;
 const WORD_DESTRUCTIVE = /\b(drop|delete|truncate|alter\s+table)\b/gi;
+/** An identifier, quoted or not, as the MCP reads one. */
+const IDENT = String.raw`(?:"(?:[^"]|"")+"|[a-z_\u0080-￿][\w$\u0080-￿]*)`;
+/** A whole statement ALTER TABLE t DROP [COLUMN] c: a dropped column, with or without the word COLUMN. */
+const ALTER_DROP_COLUMN = new RegExp(
+  String.raw`^\s*alter\s+table\s+(?:if\s+exists\s+)?(?:only\s+)?${IDENT}(?:\s*\.\s*${IDENT})?\s+drop\s+(?!constraint(?![\w$\u0080-￿]))(?:column\s+)?(?:if\s+exists\s+)?${IDENT}(?:\s+(?:cascade|restrict))?\s*$`,
+  "i",
+);
 
 /** True when a match is destructive: anything but ALTER TABLE, or ALTER TABLE followed by DROP COLUMN. */
 function destructiveMatch(text: string, pattern: RegExp): boolean {
   pattern.lastIndex = 0;
   let firstAlter = -1;
-  for (let match = pattern.exec(text); match !== null; match = pattern.exec(text)) {
+  for (
+    let match = pattern.exec(text);
+    match !== null;
+    match = pattern.exec(text)
+  ) {
     if (!/^alter/i.test(match[1] as string)) return true;
     if (firstAlter === -1) firstAlter = pattern.lastIndex;
   }
@@ -223,7 +233,9 @@ export function splitStatements(sql: string): string[] {
     index += 1;
   }
   out.push(current);
-  return out.map((statement) => statement.trim()).filter((statement) => statement !== "");
+  return out
+    .map((statement) => statement.trim())
+    .filter((statement) => statement !== "");
 }
 
 /**
@@ -239,7 +251,10 @@ export function mcpConfirmationReasons(sql: string): string[] {
   const reasons = new Set<string>();
   const text = withoutComments(sql);
   const alter = /(?:^|;)\s*alter\s+table\s+/i.exec(text);
-  if (alter && /\sdrop\s+column\s/i.test(text.slice(alter.index + alter[0].length))) {
+  if (
+    alter &&
+    /\sdrop\s+column\s/i.test(text.slice(alter.index + alter[0].length))
+  ) {
     reasons.add("ALTER TABLE ... DROP COLUMN");
   }
   for (const piece of text.split(";")) {
@@ -249,17 +264,32 @@ export function mcpConfirmationReasons(sql: string): string[] {
         `a statement starts with ${(lead[1] as string).toUpperCase()} (${piece.trim().split("\n")[0]})`,
       );
     }
+    if (ALTER_DROP_COLUMN.test(piece)) {
+      reasons.add(
+        `ALTER TABLE ... DROP of a column (${piece.trim().split("\n")[0]})`,
+      );
+    }
     const execute = /execute\s+/i.exec(piece);
     if (
       execute &&
-      (destructiveMatch(piece.slice(execute.index + execute[0].length), QUOTED_DESTRUCTIVE) ||
+      (destructiveMatch(
+        piece.slice(execute.index + execute[0].length),
+        QUOTED_DESTRUCTIVE,
+      ) ||
         destructiveMatch(piece, DOLLAR_DESTRUCTIVE))
     ) {
-      reasons.add(`EXECUTE of a destructive command (${piece.trim().split("\n")[0]})`);
+      reasons.add(
+        `EXECUTE of a destructive command (${piece.trim().split("\n")[0]})`,
+      );
     }
   }
-  for (const match of text.matchAll(/execute\s+(format|concat(?:_ws)?)\s*\([^)]*(?:\)[^;]*|$)/gi)) {
-    const pattern = (match[1] as string).toLowerCase() === "format" ? QUOTED_DESTRUCTIVE : WORD_DESTRUCTIVE;
+  for (const match of text.matchAll(
+    /execute\s+(format|concat(?:_ws)?)\s*\([^)]*(?:\)[^;]*|$)/gi,
+  )) {
+    const pattern =
+      (match[1] as string).toLowerCase() === "format"
+        ? QUOTED_DESTRUCTIVE
+        : WORD_DESTRUCTIVE;
     if (destructiveMatch(match[0], pattern)) {
       reasons.add(`EXECUTE ${match[1]}(...) of a destructive command`);
     }
@@ -380,7 +410,9 @@ export function parsePayloadFile(path: string, text: string): string {
     const sql = statement.join("\n").trim();
     const select = /^select\s+([\s\S]+);$/i.exec(sql);
     if (!select) {
-      throw new Error(`${path}:${index + 2}: a payload is one "select <expression>;"`);
+      throw new Error(
+        `${path}:${index + 2}: a payload is one "select <expression>;"`,
+      );
     }
     out.push(
       `insert into qz_test_results (line) select 'PAYLOAD ${mark[1]} ' || (${select[1]})::text;`,
