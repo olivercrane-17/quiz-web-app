@@ -209,12 +209,16 @@ export function PracticeResultsScreen({
   let body;
   if (results.kind === "loading") {
     body = (
-      <Loading label={COPY.results.loading} className="flex flex-col gap-4">
-        <span className="flex flex-col gap-4">
-          <Skeleton width="30%" height="48px" />
-          <SkeletonText lines={4} />
-        </span>
-      </Loading>
+      <>
+        {/* The page's one h1 until the score's (R1-09). */}
+        <h1 className="sr-only">{COPY.results.title}</h1>
+        <Loading label={COPY.results.loading} className="flex flex-col gap-4">
+          <span className="flex flex-col gap-4">
+            <Skeleton width="30%" height="48px" />
+            <SkeletonText lines={4} />
+          </span>
+        </Loading>
+      </>
     );
   } else if (results.kind === "none") {
     body = (

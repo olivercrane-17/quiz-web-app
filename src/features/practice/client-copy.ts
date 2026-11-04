@@ -26,6 +26,11 @@ export const PRACTICE_CLIENT_COPY = {
   mixed: "Mixed",
   difficulty: DIFFICULTY_WORDS,
   run: {
+    /**
+     * The page's title, and its one h1 while the questions load, so Next's
+     * route announcer never falls back to the page left behind (R1-09).
+     */
+    title: "Practice round",
     /** The X in the header; only the icon shows, so this is its whole name. */
     leave: "Leave practice",
     loading: "Loading your questions",
@@ -75,6 +80,8 @@ export const PRACTICE_CLIENT_COPY = {
     },
   },
   results: {
+    /** The page's title, and its one h1 while the results load (R1-09). */
+    title: "Practice results",
     /**
      * The page's one h1, which takes focus when the results arrive. Screen
      * readers hear this; the eye sees the score large in the same heading.

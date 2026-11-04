@@ -294,6 +294,16 @@ export function DailyScreen() {
   );
 
   const { status, daily, attemptId, movedOn, run } = snapshot;
+  // The stop screen, prefetched while the Daily plays, arrives with its
+  // title, so the route announcer reads it rather than the hidden Encore's
+  // heading (R1-09).
+  const dailyNumber = daily?.dailyNumber ?? null;
+  useEffect(() => {
+    if (dailyNumber !== null) {
+      router.prefetch(`/daily/${dailyNumber}/results` as Route);
+    }
+  }, [router, dailyNumber]);
+
   useEffect(() => {
     if (status !== "finished" || daily === null || attemptId === null) return;
     rememberFinished(daily.dailyNumber, attemptId);

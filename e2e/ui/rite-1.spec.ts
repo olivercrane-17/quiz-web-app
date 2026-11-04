@@ -604,12 +604,9 @@ test.describe("R1-09 text from the page you just left", () => {
     await expect.poll(() => announcer(page)).toBe("Practice round · Knewt");
   });
 
-  // FIX-PRA: the results page isn't prefetched, so its title lands after
-  // the announcer reads, and Next falls back to the first h1 in the
-  // document, the hidden run's stem. Call router.prefetch("/practice/
-  // results") when a run starts in src/features/practice/run-screen.tsx,
-  // before its router.replace; the results title already exists.
-  test.fixme("R1-09 after the last practice question, the route announcer reads the results page's title, not the question", async ({
+  // The run screen prefetches /practice/results as the run starts, so the
+  // page arrives with its title before the last question hands over.
+  test("R1-09 after the last practice question, the route announcer reads the results page's title, not the question", async ({
     page,
   }) => {
     test.setTimeout(90_000);
@@ -630,13 +627,39 @@ test.describe("R1-09 text from the page you just left", () => {
     await expect.poll(() => announcer(page)).toBe("Practice results · Knewt");
   });
 
-  // FIX-PRA: with no prefetch landed (slow 4G, or a press straight after
-  // Today renders) the title arrives after the announcer reads, and the
-  // run screen has no h1 in its first render, so Next's h1 fallback finds
-  // the hidden Today's "Good evening.". The run screen renders an h1 in
-  // its first render (a visually hidden "Practice" until the stem): it
-  // comes first in the document, so the fallback reads it.
-  test.fixme("R1-09 when Quick play is pressed before its prefetch lands, the route announcer never reads Today's greeting", async ({
+  // The Daily screen prefetches its stop screen while it plays, so the
+  // results arrive with their title before "See your results" hands over.
+  test("R1-09 after the Encore, the route announcer reads the stop screen's title, not the Encore", async ({
+    page,
+  }) => {
+    test.setTimeout(90_000);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/daily");
+    for (const next of ["Next mystery", "Next mystery", "On to the Encore"]) {
+      await expect(
+        page.getByRole("button", { name: /^Next clue/ }),
+      ).toBeVisible();
+      for (let clue = 1; clue < 4; clue += 1) {
+        await page
+          .getByRole("button", { name: /^(Next clue|Last clue)/ })
+          .click();
+      }
+      await page.getByRole("button", { name: /^A\. / }).click();
+      await page.getByRole("button", { name: next }).click();
+    }
+    await page.getByLabel(/your number/i).fill("1000");
+    await page.getByRole("button", { name: "Lock in" }).click();
+    await page.getByRole("button", { name: "See your results" }).click();
+    await expect(page).toHaveURL(/\/daily\/\d+\/results$/);
+    await expect.poll(() => announcer(page)).toBe("Your Daily results · Knewt");
+  });
+
+  // With no prefetch landed (slow 4G, or a press straight after Today
+  // renders) the title arrives after the announcer reads, and Next falls
+  // back to the first h1 in the document. The run screen's first render
+  // holds one, a visually hidden "Practice round" until the question's
+  // own, which comes before the hidden Today's greeting.
+  test("R1-09 when Quick play is pressed before its prefetch lands, the route announcer never reads Today's greeting", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });

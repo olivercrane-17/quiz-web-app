@@ -235,6 +235,13 @@ export function PracticeRunScreen({
     return () => document.removeEventListener("visibilitychange", onChange);
   }, []);
 
+  // The results page, prefetched while the run plays, arrives with its
+  // title, so the route announcer reads "Practice results" rather than
+  // the hidden run's question (R1-09).
+  useEffect(() => {
+    router.prefetch("/practice/results");
+  }, [router]);
+
   useEffect(() => {
     if (state.status !== "finished" || state.runId === null) return;
     if (navigatedFor.current === state.runId) return;
@@ -380,7 +387,15 @@ export function PracticeRunScreen({
       </Message>
     );
   } else {
-    body = <RunSkeleton />;
+    // The page's one h1 until the question's own: with no prefetch landed,
+    // the title arrives late and Next's route announcer reads the first h1
+    // in the document, which is then this one, not Today's greeting (R1-09).
+    body = (
+      <>
+        <h1 className="sr-only">{COPY.run.title}</h1>
+        <RunSkeleton />
+      </>
+    );
   }
   return (
     <PlayFrame

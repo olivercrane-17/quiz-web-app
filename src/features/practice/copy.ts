@@ -33,7 +33,7 @@ export const PRACTICE_COPY = {
   meta: {
     hub: "Practice",
     hubDescription: "Ten quick questions on anything, untimed.",
-    run: "Practice round",
-    results: "Practice results",
+    run: PRACTICE_CLIENT_COPY.run.title,
+    results: PRACTICE_CLIENT_COPY.results.title,
   },
 } as const;

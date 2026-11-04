@@ -28,13 +28,16 @@ const wiring = vi.hoisted(() => ({
   controller: null as PracticeController | null,
   intent: null as PracticeIntent | null,
   replace: (() => {}) as (href: string) => void,
+  prefetched: [] as string[],
 }));
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     replace: (href: string) => wiring.replace(href),
     push: () => {},
-    prefetch: () => {},
+    prefetch: (href: string) => {
+      wiring.prefetched.push(href);
+    },
   }),
 }));
 vi.mock("@/features/identity", () => ({ bootClient: () => Promise.resolve() }));
@@ -121,6 +124,7 @@ beforeEach(() => {
   wiring.controller = null;
   wiring.intent = null;
   wiring.replace = () => {};
+  wiring.prefetched = [];
 });
 
 afterEach(() => {
@@ -130,6 +134,26 @@ afterEach(() => {
 });
 
 describe("the practice run screen", () => {
+  it("R1-09 holds the page's one h1 while the questions load, then hands it to the question, and prefetches the results page", async () => {
+    wire();
+    wiring.intent = hardGeo;
+    render(<PracticeRunScreen categories={LABELS} />);
+    // The first render: no question yet, so the route announcer's h1
+    // fallback reads the page's own name, never the page left behind.
+    expect(
+      screen.getAllByRole("heading", { level: 1 }).map((h) => h.textContent),
+    ).toEqual(["Practice round"]);
+    await act(async () => {
+      for (let i = 0; i < 10; i += 1) await Promise.resolve();
+    });
+    const [stem, ...others] = screen.getAllByRole("heading", { level: 1 });
+    expect(others).toEqual([]);
+    expect(stem).not.toHaveTextContent("Practice round");
+    // So its title is in place when the last question hands over (R1-09).
+    // (This mock's router changes each render; Next's stays put.)
+    expect(new Set(wiring.prefetched)).toEqual(new Set(["/practice/results"]));
+  });
+
   it("AC-PRA-14 notes a fresh Medium fill of a short Hard filter above question 1", async () => {
     wire();
     await mount(hardGeo);
