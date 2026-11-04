@@ -120,7 +120,9 @@ describe("MysteryRound with options_from_clue 3", () => {
       within(card).getByText("Solved on clue 3", { exact: false }),
     ).toBeInTheDocument();
     expect(within(card).getByText("2 points")).toBeInTheDocument();
-    expect(within(card).getByText("Got it.")).toBeInTheDocument();
+    // D10: "Got there." on clue 3, a pick included; "Got it." is clue 4's.
+    expect(within(card).getByText("Got there.")).toBeInTheDocument();
+    expect(within(card).queryByText("Got it.")).toBeNull();
     const outcome = mysteryPlugin.outcome(
       clients.at(-1) as MysteryClient,
       mysteryMeta(),

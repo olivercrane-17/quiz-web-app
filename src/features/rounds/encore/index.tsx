@@ -4,16 +4,22 @@
  * Extension point (ARCHITECTURE §2.3, §4.4.3): the Encore round (PRD §3.1.5,
  * §4.2; DESIGN §6.5, §12.2), registered in ../registry.tsx.
  *
- * The question, then one number field with its unit beside it, one polite
- * line beneath that shows the parsed preview ("You're answering 1,250 km",
- * grouped in the preview and never in the field, so the caret never jumps)
- * or, in its place, the inline error, so a screen reader hears whichever
- * is current; the two band hints, and Lock in. The field asks for the
- * numeric keypad (`inputmode` numeric, or decimal when decimals are
- * allowed), and Enter locks in too. Locking in sends the parsed value
- * once; the guess can't change afterwards. Focusing the field reads the
- * question with it, so a desktop pointer (where the field takes focus on
- * arrival) still hears what is asked.
+ * The kicker ("Encore · one number, no points") and the question, the line
+ * that says what the Encore decides ("If you tie on points, the closer
+ * guess ranks higher.", D2), then one number field with its unit beside
+ * it (under the number when the field is narrow in em, as at large text on
+ * a phone), one line beneath that shows the parsed preview ("You're
+ * answering 1,250 km", grouped in the preview and never in the field, so
+ * the caret never jumps) or, in its place, the inline error; the two band
+ * hints, and Lock in. The line is spoken through the status region once
+ * typing has settled for `PREVIEW_ANNOUNCE_DELAY_MS` (R1-34), so a screen
+ * reader hears the number meant rather than every keystroke; the field's
+ * description holds it too. The field asks for the numeric keypad
+ * (`inputmode` numeric, or decimal when decimals are allowed), and Enter
+ * locks in too. Locking in sends the parsed value once; the guess can't
+ * change afterwards. Focusing the field reads the question with it, so a
+ * desktop pointer (where the field takes focus on arrival) still hears
+ * what is asked.
  *
  * With the keypad open (tracked through `visualViewport`), Lock in sits
  * right under the preview, above the hints, and the page scrolls so the
@@ -25,11 +31,13 @@
  * (`encoreBandsOf`), or the defaults for its kind.
  *
  * On the result the hints give way to the result card: "Your guess 1,200 km
- * · Answer 1,250 km · 4% off", the band chip, the number line, the
- * explanation, the crowd line once enough have answered, the heart and
- * report actions, Learn more, and "See your results". Focus lands on the
- * result line (AC-DLY-18), and Enter there continues (PRD §3.0.3). A voided
- * Encore shows the withdrawn card.
+ * · Answer 1,250 km · 4% off", the band chip ("Bullseye" or "Close guess",
+ * D16), the number line, the two band lines again as its legend (D16: a
+ * guess outside both still shows where they were), the explanation, the
+ * crowd line once enough have answered, the heart and report actions,
+ * Learn more, and "See your results". Focus lands on the result line
+ * (AC-DLY-18), and Enter there continues (PRD §3.0.3). A voided Encore
+ * shows the withdrawn card.
  */
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
@@ -66,7 +74,12 @@ import {
 } from "../mystery/reveal-parts";
 import { DISPLAY_FONT, TONE, enter } from "../mystery/tones";
 import { keepInView, useOnScreenKeyboard } from "../mystery/use-keyboard";
-import { ENCORE_COPY, encoreAnnouncementText, parseErrorText } from "./copy";
+import {
+  ENCORE_COPY,
+  PREVIEW_ANNOUNCE_DELAY_MS,
+  encoreAnnouncementText,
+  parseErrorText,
+} from "./copy";
 import { NumberLine } from "./number-line";
 
 export { encoreAnnouncementText, ENCORE_COPY };
@@ -187,33 +200,31 @@ function EncorePlay({
   // What the field shows once locked in: the value sent, or after a reload the reveal's guess.
   const shownValue = result !== null && raw === "" ? String(result.guess) : raw;
 
+  const errorText =
+    invalid && !parsed.ok
+      ? parseErrorText(parsed.error, encore.decimals)
+      : null;
+  const amount =
+    previewing && parsed.ok
+      ? formatEncoreAmount(parsed.value, encore.unitShort, encore.valueKind)
+      : null;
+  // The line under the field, spoken once typing settles (R1-34): each
+  // keystroke restarts the wait, and a lock-in or a cleared field cancels it.
+  const lineText =
+    errorText ??
+    (amount === null ? null : `${ENCORE_COPY.previewLead} ${amount}`);
+  useEffect(() => {
+    if (lineText === null) return;
+    const timer = setTimeout(() => {
+      announce(lineText);
+    }, PREVIEW_ANNOUNCE_DELAY_MS);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [lineText]);
+
   const hints = (
-    <div
-      role="group"
-      aria-label={ENCORE_COPY.hints.group}
-      className="mt-3 flex flex-wrap gap-2"
-    >
-      {/* Ink on sunken: the greybox's secondary ink is too light on it (4.34:1). */}
-      <span
-        className={cx(
-          "inline-flex items-center gap-1.5 rounded-full py-[5px] pr-[11px] pl-2 text-[0.8125rem] font-bold forced-colors:border forced-colors:border-[color:CanvasText]",
-          TONE.sunken,
-          TONE.ink,
-        )}
-      >
-        <TargetIcon size={16} />
-        {ENCORE_COPY.hints.bullseye(bands.bullseye, encore.valueKind)}
-      </span>
-      <span
-        className={cx(
-          "inline-flex items-center rounded-full px-[11px] py-[5px] text-[0.8125rem] font-bold forced-colors:border forced-colors:border-[color:CanvasText]",
-          TONE.sunken,
-          TONE.ink,
-        )}
-      >
-        {ENCORE_COPY.hints.close(bands.close, encore.valueKind)}
-      </span>
-    </div>
+    <BandHints bands={bands} valueKind={encore.valueKind} className="mt-3" />
   );
 
   return (
@@ -247,81 +258,99 @@ function EncorePlay({
         {ENCORE_COPY.tiebreak}
       </p>
 
-      <div
-        ref={fieldRef}
-        className={cx(
-          "relative mt-4 flex h-[5.25rem] items-center gap-2.5 overflow-hidden rounded-2xl border-2 px-4 pb-3.5 outline-offset-2 has-[input:focus-visible]:outline-[3px] has-[input:focus-visible]:outline-[color:color-mix(in_oklab,var(--kn-play-accent,var(--foreground))_50%,transparent)]",
-          TONE.surface,
-          TONE.inkBorder,
-        )}
-      >
-        <label
-          htmlFor={`${ids}-input`}
-          className={cx("absolute top-1.5 left-4 text-xs font-bold", TONE.ink3)}
-        >
-          {ENCORE_COPY.field}
-        </label>
-        <input
-          ref={inputRef}
-          id={`${ids}-input`}
-          type="text"
-          inputMode={encore.decimals === 0 ? "numeric" : "decimal"}
-          enterKeyHint="done"
-          autoComplete="off"
-          autoCorrect="off"
-          spellCheck={false}
-          value={shownValue}
-          readOnly={locked || offline}
-          aria-disabled={offline || undefined}
-          aria-invalid={invalid || undefined}
-          aria-describedby={[
-            // The question first: focusing the field reads what is asked.
-            questionId,
-            unitWord === "" ? null : unitId,
-            previewing ? previewId : null,
-            invalid ? errorId : null,
-          ]
-            .filter((part) => part !== null)
-            .join(" ")}
-          onChange={(event) => {
-            setRaw(event.target.value);
-          }}
-          onFocus={() => {
-            setFieldFocused(true);
-          }}
-          onBlur={() => {
-            setFieldFocused(false);
-          }}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && !event.nativeEvent.isComposing) {
-              event.preventDefault();
-              lockIn();
-            }
-          }}
+      {/* The field's width in em decides whether the unit fits beside the
+          number: when it doesn't (large text on a phone), the unit takes a
+          line of its own under it, so the number keeps the field's width
+          and what you type stays in sight (DESIGN §10.5, as R1-03 found for
+          the guess field). The height follows the text, never fixed. */}
+      <div className="@container/encore mt-4">
+        <div
+          ref={fieldRef}
+          data-encore-field=""
           className={cx(
-            "mt-4 min-w-0 flex-1 bg-transparent text-[2.75rem] leading-none font-bold tracking-[-0.01em] tabular-nums outline-none",
-            DISPLAY_FONT,
-            TONE.ink,
+            // The focus ring is DESIGN §11's: 3 px of the focus token at 3 px.
+            "relative flex min-h-[5.25rem] items-center gap-x-2.5 overflow-hidden rounded-2xl border-2 px-4 pb-3.5 outline-offset-[3px] has-[input:focus-visible]:outline-[3px] has-[input:focus-visible]:outline-[color:var(--kn-focus,var(--foreground))] @max-[20em]/encore:flex-wrap",
+            TONE.surface,
+            TONE.inkBorder,
           )}
-        />
-        {unitWord === "" ? null : (
-          <span
-            id={unitId}
-            className={cx("mt-4 shrink-0 text-lg font-bold", TONE.ink2)}
+        >
+          <label
+            htmlFor={`${ids}-input`}
+            className={cx(
+              "absolute top-1.5 left-4 text-xs font-bold",
+              TONE.ink3,
+            )}
           >
-            {unitWord}
-          </span>
-        )}
-        {/* A ruler along the bottom edge: the Encore is a measurement. */}
-        <span
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-[9px] bg-[repeating-linear-gradient(90deg,var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_40%,transparent))_0_1.5px,transparent_1.5px_9px)] bg-[length:auto_6px] bg-bottom bg-repeat-x opacity-70"
-        />
+            {ENCORE_COPY.field}
+          </label>
+          <input
+            ref={inputRef}
+            id={`${ids}-input`}
+            type="text"
+            inputMode={encore.decimals === 0 ? "numeric" : "decimal"}
+            enterKeyHint="done"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+            value={shownValue}
+            readOnly={locked || offline}
+            aria-disabled={offline || undefined}
+            aria-invalid={invalid || undefined}
+            aria-describedby={[
+              // The question first: focusing the field reads what is asked.
+              questionId,
+              unitWord === "" ? null : unitId,
+              previewing ? previewId : null,
+              invalid ? errorId : null,
+            ]
+              .filter((part) => part !== null)
+              .join(" ")}
+            onChange={(event) => {
+              setRaw(event.target.value);
+            }}
+            onFocus={() => {
+              setFieldFocused(true);
+            }}
+            onBlur={() => {
+              setFieldFocused(false);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.nativeEvent.isComposing) {
+                event.preventDefault();
+                lockIn();
+              }
+            }}
+            className={cx(
+              "mt-4 min-w-0 flex-1 bg-transparent text-[2.75rem] leading-none font-bold tracking-[-0.01em] tabular-nums outline-none",
+              DISPLAY_FONT,
+              TONE.ink,
+            )}
+          />
+          {unitWord === "" ? null : (
+            <span
+              id={unitId}
+              data-encore-unit=""
+              className={cx(
+                "mt-4 shrink-0 text-lg font-bold @max-[20em]/encore:mt-1 @max-[20em]/encore:basis-full",
+                TONE.ink2,
+              )}
+            >
+              {unitWord}
+            </span>
+          )}
+          {/* A ruler along the bottom edge: the Encore is a measurement. */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 h-[9px] bg-[repeating-linear-gradient(90deg,var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_40%,transparent))_0_1.5px,transparent_1.5px_9px)] bg-[length:auto_6px] bg-bottom bg-repeat-x opacity-70"
+          />
+        </div>
       </div>
 
-      {/* One polite line: the preview, or the error that replaces it. */}
+      {/* One line: the preview, or the error that replaces it. The status
+          region speaks it once typing settles (above), so it is no live
+          region of its own. */}
       <p
-        aria-live="polite"
+        data-encore-line=""
         className="mt-2.5 min-h-[1.4em] text-[0.9375rem] font-semibold"
       >
         {invalid && !parsed.ok ? (
@@ -334,18 +363,12 @@ function EncorePlay({
             )}
           >
             <CrossIcon size={16} />
-            {parseErrorText(parsed.error, encore.decimals)}
+            {errorText}
           </span>
-        ) : previewing && parsed.ok ? (
+        ) : amount !== null ? (
           <span id={previewId} className={TONE.ink2}>
             {ENCORE_COPY.previewLead}{" "}
-            <strong className={TONE.ink}>
-              {formatEncoreAmount(
-                parsed.value,
-                encore.unitShort,
-                encore.valueKind,
-              )}
-            </strong>
+            <strong className={TONE.ink}>{amount}</strong>
           </span>
         ) : null}
       </p>
@@ -398,6 +421,66 @@ function EncorePlay({
         />
       )}
     </section>
+  );
+}
+
+/**
+ * The two band lines (DESIGN §6.5 hint chips): "Within 5% is a bullseye"
+ * and "Within 15% is close", named by the Encore's own bands. On the
+ * result card they stay as the number line's legend (D16), each with a
+ * swatch of the band it names, so a guess outside both still shows where
+ * they were.
+ */
+function BandHints({
+  bands,
+  valueKind,
+  legend = false,
+  className,
+}: {
+  bands: { bullseye: number; close: number };
+  valueKind: "quantity" | "year";
+  legend?: boolean;
+  className?: string;
+}) {
+  // Ink on sunken: the greybox's secondary ink is too light on it (4.34:1).
+  const chip = cx(
+    "inline-flex items-center gap-1.5 rounded-full py-[5px] pr-[11px] text-[0.8125rem] font-bold forced-colors:border forced-colors:border-[color:CanvasText]",
+    TONE.sunken,
+    TONE.ink,
+  );
+  return (
+    <div
+      role="group"
+      aria-label={ENCORE_COPY.hints.group}
+      data-band-hints={legend ? "legend" : "hints"}
+      className={cx("flex flex-wrap gap-2", className)}
+    >
+      <span className={cx(chip, "pl-2")}>
+        {legend ? (
+          <span
+            aria-hidden="true"
+            data-swatch="bullseye"
+            className={cx(
+              "h-3 w-4 rounded-[3px] shadow-[inset_0_0_0_1.5px_var(--kn-correct-line,var(--foreground))] forced-colors:border-2 forced-colors:border-[color:CanvasText]",
+              TONE.correctTint,
+            )}
+          />
+        ) : (
+          <TargetIcon size={16} />
+        )}
+        {ENCORE_COPY.hints.bullseye(bands.bullseye, valueKind)}
+      </span>
+      <span className={cx(chip, legend ? "pl-2" : "pl-[11px]")}>
+        {legend ? (
+          <span
+            aria-hidden="true"
+            data-swatch="close"
+            className="h-3 w-4 rounded-[3px] bg-[color:color-mix(in_oklab,var(--kn-correct-tint,var(--muted))_55%,transparent)] shadow-[inset_0_0_0_1px_var(--kn-rule-strong,color-mix(in_oklab,var(--foreground)_45%,transparent))] forced-colors:border-[1.5px] forced-colors:border-dashed forced-colors:border-[color:CanvasText]"
+          />
+        ) : null}
+        {ENCORE_COPY.hints.close(bands.close, valueKind)}
+      </span>
+    </div>
   );
 }
 
@@ -467,6 +550,7 @@ function EncoreResult({
 }) {
   const headingRef = useFocusOnMount<HTMLHeadingElement>();
   const kind = encore.valueKind;
+  const bands = encoreBandsOf(encore);
   const guess = formatEncoreAmount(result.guess, result.unitShort, kind);
   const answer = formatEncoreAmount(result.answer, result.unitShort, kind);
   const crowd =
@@ -521,7 +605,7 @@ function EncoreResult({
               {result.band === "bullseye" ? (
                 <TargetIcon size={15} className={TONE.correctText} />
               ) : null}
-              {ENCORE_COPY.result.band[result.band]}
+              {ENCORE_COPY.result.chip[result.band]}
             </span>
           </p>
         )}
@@ -530,11 +614,13 @@ function EncoreResult({
           guess={result.guess}
           answer={result.answer}
           median={crowd?.medianGuess ?? null}
-          bands={encoreBandsOf(encore)}
+          bands={bands}
           unitShort={result.unitShort}
           decimals={encore.decimals}
           reducedMotion={reducedMotion}
         />
+        {/* D16: both band lines stay, as the line's legend. */}
+        <BandHints bands={bands} valueKind={kind} legend className="mt-3" />
         <p className="mt-3 text-base leading-normal text-pretty">
           {result.explanation}
         </p>

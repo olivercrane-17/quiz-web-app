@@ -117,6 +117,25 @@ describe("the answer list handle", () => {
     });
   });
 
+  it("R1-37 ranks typo matches after every real match and says which they are", async () => {
+    await waitFor(() => {
+      expect(answerListFor("film").status).toBe("ready");
+    });
+    // Priya's "light": the lighthouses, then "Halvessa Nights" by a typo.
+    const { rows } = answerListFor("film").search("light", none);
+    const typos = rows.map((row) => row.typo);
+    expect(typos).toContain(true);
+    expect(typos.indexOf(true)).toBeGreaterThan(typos.lastIndexOf(false));
+    for (const row of rows.filter((r) => r.typo)) expect(row.match).toBeNull();
+    expect(rows.find((row) => row.display.startsWith("Halvessa"))?.typo).toBe(
+      true,
+    );
+    // The contract's rows stay the four fields it names.
+    expect(
+      Object.keys(answerListFor("film").suggest("light", none)[0] ?? {}),
+    ).toEqual(["entityId", "display", "alreadyGuessed", "match"]);
+  });
+
   it("wraps a list in memory, and tells extended handles from plain ones", () => {
     const handle = answerListHandleOf({
       type: "sport",

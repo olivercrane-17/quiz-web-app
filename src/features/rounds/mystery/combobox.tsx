@@ -8,27 +8,58 @@
  *   player types, from the first character; nothing is sent per keystroke.
  *   Rows show the display form with the typed letters in bold, a
  *   disambiguation at the right ("cartographer", "1995", "France"), and
- *   already-guessed entities stay listed, disabled, "Already guessed".
+ *   already-guessed entities stay listed, disabled, "Already guessed". A
+ *   row is one 48 px line, so three whole rows fit above a keyboard
+ *   (AC-DLY-32); when the field is narrow in `em` (large text on a phone),
+ *   names wrap instead of truncating and the disambiguation drops under
+ *   them, so the word that tells decoys apart always shows (R1-03). A row
+ *   that only a typo matched comes last, as the engine ranks it, and says
+ *   "Similar spelling" (R1-37). A highlighted or hovered row sets its
+ *   disambiguation and marks in full ink, which keeps them readable on the
+ *   row's tint.
  * - Arrow keys move the highlight (`aria-activedescendant`), Enter on a
  *   highlighted row selects it, Escape closes the list (then clears the
- *   field), and Tab leaves. With nothing highlighted, Enter selects the one
- *   entity whose name, alias or display equals the text exactly, and nothing
- *   for namesakes or no match (AC-SUG-05). With a selection in place, Enter
- *   submits. Editing the text clears the selection, and Guess stays
- *   disabled until there is one.
+ *   field), and Tab leaves. When exactly one selectable row matches, it is
+ *   highlighted by itself (D5), so Enter or Go picks it and a second Enter
+ *   submits; namesakes still pick nothing. With nothing highlighted, Enter
+ *   selects the one entity whose name, alias or display equals the text
+ *   exactly, and nothing for namesakes or no match (AC-SUG-05). With a
+ *   selection in place, Enter submits. Editing the text clears the
+ *   selection, and Guess stays disabled until there is one.
+ * - Guess, or Enter, with nothing picked shows the field's description,
+ *   "Pick a name from the list, then Guess.", under the field and says it
+ *   (R1-29). A chosen name shows in full under the field (R1-28): the field
+ *   itself may only have room for part of it.
  * - The count is announced on each change ("4 people match"), a moment
  *   after typing settles, so screen readers aren't flooded. A list that
  *   failed to load is announced once, and the loading and failed lines
  *   describe the field.
  * - Guess, Clear and the rows keep focus in the field on touch (they cancel
  *   the pointer-down blur), so the keyboard stays up after a wrong guess.
+ * - A wrong guess clears the field (`resetKey` changes); Next clue keeps
+ *   the typing and its list (D9).
+ * - When the field is narrow in `em` (large text on a phone), Guess takes
+ *   its own full-width row under the field and its list, and the inline
+ *   Clear and the search icon go (Escape and Backspace still clear), so the
+ *   field keeps room for the text (R1-03). The placeholder may wrap there
+ *   (D14: its noun is the point), drawn over the field while it is empty;
+ *   the input's own placeholder stays for assistive tech. A container query
+ *   decides, so it follows the text size as well as the width.
+ * - Whenever the list opens, the page scrolls the least distance that keeps
+ *   the field and its first three rows above the visual viewport's bottom
+ *   edge, and the list holds only the whole rows that fit there (R1-11):
+ *   zoom and short windows leave the list below the fold as surely as a
+ *   keyboard does. The field itself never goes under the top edge (the
+ *   sticky header): when it and three rows can't all fit, as at large text
+ *   sizes, its top stays in view and the list holds the rows that fit.
  * - With the on-screen keyboard open (compact): the field keeps the room
  *   for the typed text and the chosen name (no search icon or Clear;
  *   Escape and Backspace still clear), Next clue sits beside it
- *   (`beside`), the space for three whole rows is reserved under it, and
- *   the page scrolls so the field, those rows and the top of the current
- *   clue (`keepVisible`) sit between the top edge and the keyboard. The list
- *   holds only whole rows that fit above the keyboard.
+ *   (`beside`), the list runs the full width under both, the space for
+ *   three whole rows is reserved under it, and the page scrolls so the
+ *   field, those rows and the top of the current clue (`keepVisible`) sit
+ *   between the top edge and the keyboard. The list holds only whole rows
+ *   that fit above the keyboard.
  */
 import {
   useEffect,
@@ -49,22 +80,39 @@ import { announce } from "@/ui/announce";
 import { Button } from "@/ui/button";
 import { cx } from "@/ui/cx";
 
-import { isMysteryAnswerList, type SuggestionSearch } from "../answer-list";
+import {
+  isMysteryAnswerList,
+  type SuggestionRow,
+  type SuggestionSearch,
+} from "../answer-list";
 import type { AnswerListHandle, Suggestion } from "../contracts";
 import { MYSTERY_COPY } from "./copy";
 import { focusTargetProps, keepFieldFocus } from "./focus";
 import { AnswerTypeIcon, ClearIcon, SearchIcon } from "./icons";
 import { TONE } from "./tones";
-import { keepInView, remPx, type KeyboardState } from "./use-keyboard";
+import {
+  keepBetween,
+  remPx,
+  roomBetweenEdges,
+  viewportBottom,
+  type KeyboardState,
+} from "./use-keyboard";
 
 /** DESIGN §4: suggestion rows are 48 px (3rem, `min-h-12`). */
 export const ROW_HEIGHT_REM = 3;
-/** AC-DLY-32: at least three whole rows stay visible with the keyboard up. */
+/** AC-DLY-32 and R1-11: at least three whole rows stay visible as the list opens. */
 export const MIN_VISIBLE_ROWS = 3;
 /** The listbox's padding (4 px each side) and bottom border (2 px). */
 const LIST_CHROME_PX = 10;
 /** Typing settles this long before the count is spoken. */
 export const COUNT_ANNOUNCE_DELAY_MS = 450;
+/**
+ * Under this width the field is too narrow for Guess beside the text
+ * (R1-03): 18em is 288 px at 100% text, so only phones under 320 px stack,
+ * and 576 px at 200% text, so every phone does. The classes below spell it
+ * out in full (`@max-[18em]/guess:`), as Tailwind reads them from source.
+ */
+export const NARROW_FIELD_EM = 18;
 
 const NOTHING: SuggestionSearch = { rows: [], total: 0 };
 
@@ -102,6 +150,26 @@ export function splitDisplay(
   return { name: display, aside: null, asideStart: display.length };
 }
 
+/**
+ * The row D5 highlights by itself: the one selectable row when exactly one
+ * matching entity can be picked, else -1. Matches past the shown rows count
+ * as selectable: a Mystery holds at most three guesses, so a list long
+ * enough to hide rows always has more than one entity to pick.
+ */
+export function loneSelectableRow(
+  rows: readonly Suggestion[],
+  total: number,
+): number {
+  let lone = -1;
+  let selectable = Math.max(0, total - rows.length);
+  rows.forEach((row, index) => {
+    if (row.alreadyGuessed) return;
+    selectable += 1;
+    lone = index;
+  });
+  return selectable === 1 ? lone : -1;
+}
+
 /** `text` (which starts at `offset` in the display) with the matched range in a `<mark>`. */
 function Highlighted({
   text,
@@ -132,8 +200,13 @@ export interface GuessComboboxProps {
   answerType: AnswerType | null;
   list: AnswerListHandle | null;
   alreadyGuessed: ReadonlySet<EntityId>;
-  /** The clue on screen; a new one clears the field, which keeps focus. */
+  /** The clue on screen: the layout is measured again when it changes. */
   clue: number;
+  /**
+   * Clears the field when it changes, focus kept: the count of wrong
+   * guesses, so a wrong guess clears and Next clue keeps the typing (D9).
+   */
+  resetKey: number;
   /** The player's guess is being judged. */
   busy: boolean;
   /** Offline, or another action is in flight. */
@@ -146,10 +219,13 @@ export interface GuessComboboxProps {
   /** Shown beside the field: Next clue while the keyboard is open. */
   beside?: ReactNode;
   /**
-   * With the keyboard open, the element whose top should stay in view above
-   * the field (the current clue's card). It must be a stable function.
+   * The element whose top should stay in view above the field (the current
+   * clue's card) while the list is open or the keyboard is up. It must be
+   * a stable function.
    */
   keepVisible?: () => HTMLElement | null;
+  /** More of the field's description, such as the first-Daily hint's id. */
+  describedBy?: string;
   inputRef: Ref<HTMLInputElement>;
   onGuess(entityId: EntityId): void;
   onFocusChange?(focused: boolean): void;
@@ -160,6 +236,7 @@ export function GuessCombobox({
   list,
   alreadyGuessed,
   clue,
+  resetKey,
   busy,
   disabled,
   sound,
@@ -167,6 +244,7 @@ export function GuessCombobox({
   focusTarget,
   beside,
   keepVisible,
+  describedBy: moreDescription,
   inputRef,
   onGuess,
   onFocusChange,
@@ -184,14 +262,17 @@ export function GuessCombobox({
   const [selection, setSelection] = useState<Suggestion | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [active, setActive] = useState(-1);
-  const [shownClue, setShownClue] = useState(clue);
-  if (clue !== shownClue) {
-    // A new clue: start afresh, without remounting, so the field keeps focus.
-    setShownClue(clue);
+  /** Guess or Enter found nothing picked: the hint shows (R1-29). */
+  const [nudged, setNudged] = useState(false);
+  const [shownReset, setShownReset] = useState(resetKey);
+  if (resetKey !== shownReset) {
+    // A wrong guess: start afresh, without remounting, so the field keeps focus.
+    setShownReset(resetKey);
     setQuery("");
     setSelection(null);
     setExpanded(false);
     setActive(-1);
+    setNudged(false);
   }
 
   const words = MYSTERY_COPY.guess;
@@ -202,7 +283,9 @@ export function GuessCombobox({
   const result = useMemo<SuggestionSearch>(() => {
     if (list === null || !hasQuery || selection !== null) return NOTHING;
     if (isMysteryAnswerList(list)) return list.search(query, alreadyGuessed);
-    const rows = list.suggest(query, alreadyGuessed);
+    const rows: SuggestionRow[] = list
+      .suggest(query, alreadyGuessed)
+      .map((row) => ({ ...row, typo: false }));
     return { rows, total: rows.length };
   }, [list, query, hasQuery, selection, alreadyGuessed]);
   const rows = result.rows;
@@ -210,11 +293,15 @@ export function GuessCombobox({
   const searching = expanded && selection === null && hasQuery && ready;
   const listOpen = searching && rows.length > 0;
   const noMatches = searching && rows.length === 0;
-  const activeRow = listOpen && active >= 0 ? rows[active] : undefined;
+  // D5: a lone selectable row is highlighted until the arrows move away.
+  const lone = listOpen ? loneSelectableRow(rows, result.total) : -1;
+  const current = active >= 0 ? active : lone;
+  const activeRow = listOpen && current >= 0 ? rows[current] : undefined;
   const optionId = (index: number) => `${id}-option-${String(index)}`;
   const locked = busy || disabled;
   const failed = list?.status === "failed";
   const loading = list?.status === "loading" && hasQuery && selection === null;
+  const hintShown = nudged && selection === null && !locked;
 
   const countText = noMatches
     ? words.noMatches
@@ -242,48 +329,91 @@ export function GuessCombobox({
   // Keep the highlighted row in view when the list scrolls.
   useEffect(() => {
     if (activeRow === undefined) return;
-    const row = document.getElementById(`${id}-option-${String(active)}`);
+    const row = document.getElementById(`${id}-option-${String(current)}`);
     if (typeof row?.scrollIntoView === "function") {
       row.scrollIntoView({ block: "nearest" });
     }
-  }, [id, active, activeRow]);
+  }, [id, current, activeRow]);
 
-  // With the keyboard up: scroll the field, three whole rows and the top of
-  // the current clue into view, then fit the list to the rows above the
-  // keyboard. The space for those rows is reserved (below), so the scroll is
-  // the same before and after the list opens and is never cut short by the
-  // page ending.
-  const fieldRowRef = useRef<HTMLDivElement>(null);
-  const [maxRows, setMaxRows] = useState<number | null>(null);
+  // Whenever the list opens, or the keyboard is up: scroll the field, three
+  // whole rows and the top of the current clue into view, then fit the list
+  // to the rows above the bottom edge (the keyboard's, else the visual
+  // viewport's: R1-11). With the keyboard up, the space for those rows is
+  // reserved (below), so the scroll is the same before and after the list
+  // opens and is never cut short by the page ending. When the field and
+  // three rows are taller than the room between the edges (large text, R1-03),
+  // the field's own top is what must stay in view: the typing is what the
+  // player is reading, and the list then holds the one or two rows that fit.
+  const fieldRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  /** The list's height cap: the whole rows that fit above the bottom edge. */
+  const [listMax, setListMax] = useState<string | null>(null);
   useLayoutEffect(() => {
-    const field = fieldRowRef.current;
-    if (!keyboard.open || field === null) {
-      setMaxRows(null);
+    const field = fieldRef.current;
+    const before = field?.getBoundingClientRect();
+    // Nothing laid out (a hidden route, or no layout engine): nothing to keep in view.
+    if ((!keyboard.open && !listOpen) || field === null || !before?.height) {
+      setListMax(null);
       return;
     }
+    // A row is 48 px (3rem) until names wrap, as they do at large text
+    // sizes (R1-03): then its drawn height counts.
     const rowPx = ROW_HEIGHT_REM * remPx();
-    const before = field.getBoundingClientRect();
-    keepInView(
-      keyboard,
-      before.bottom + MIN_VISIBLE_ROWS * rowPx + LIST_CHROME_PX,
-      keepVisible?.()?.getBoundingClientRect().top ?? before.top,
-    );
-    // Whole rows down to the keyboard's edge itself: the scroll above keeps
-    // a small gap where it can, and a sub-pixel short scroll mustn't cost a row.
-    const room =
-      keyboard.bottom - field.getBoundingClientRect().bottom - LIST_CHROME_PX;
-    setMaxRows(Math.max(1, Math.floor(room / rowPx)));
-  }, [keyboard, listOpen, rows.length, clue, keepVisible]);
+    const drawn = listOpen
+      ? [
+          ...(listRef.current?.querySelectorAll<HTMLElement>(
+            '[role="option"]',
+          ) ?? []),
+        ].map((row) => row.getBoundingClientRect().height)
+      : [];
+    const rowHeight = (index: number) => drawn[index] || rowPx;
+    const bottom = keyboard.open ? keyboard.bottom : viewportBottom();
+    const shownRows = keyboard.open
+      ? MIN_VISIBLE_ROWS
+      : Math.min(MIN_VISIBLE_ROWS, rows.length);
+    let block = 0;
+    for (let index = 0; index < shownRows; index += 1) {
+      block += rowHeight(index);
+    }
+    const blockBottom = before.bottom + block + LIST_CHROME_PX;
+    if (blockBottom - before.top > roomBetweenEdges(bottom)) {
+      keepBetween(bottom, blockBottom, before.top, "read");
+    } else {
+      keepBetween(
+        bottom,
+        blockBottom,
+        keepVisible?.()?.getBoundingClientRect().top ?? before.top,
+      );
+    }
+    // Whole rows down to the edge itself: the scroll above keeps a small
+    // gap where it can, and a sub-pixel short scroll mustn't cost a row.
+    const room = bottom - field.getBoundingClientRect().bottom - LIST_CHROME_PX;
+    if (!drawn.some((height) => height > 0)) {
+      const whole = Math.max(1, Math.floor(room / rowPx));
+      setListMax(
+        `calc(${String(whole * ROW_HEIGHT_REM)}rem + ${String(LIST_CHROME_PX)}px)`,
+      );
+      return;
+    }
+    let fit = rowHeight(0);
+    for (
+      let index = 1;
+      index < drawn.length && fit + rowHeight(index) <= room + 0.5;
+      index += 1
+    ) {
+      fit += rowHeight(index);
+    }
+    setListMax(`${String(Math.ceil(fit + LIST_CHROME_PX))}px`);
+  }, [keyboard, listOpen, rows, clue, keepVisible]);
 
-  // A chosen name that overflows the field shows its end, the qualifier
-  // that tells namesakes apart ("…ow (cartographer)"), with the caret there.
+  // A chosen name leaves the caret at its end, so Backspace edits it; the
+  // whole name shows under the field (R1-28), wherever the field scrolls.
   useLayoutEffect(() => {
     if (selection === null) return;
     const input = document.getElementById(inputId);
     if (!(input instanceof HTMLInputElement)) return;
     const end = input.value.length;
     if (document.activeElement === input) input.setSelectionRange(end, end);
-    input.scrollLeft = input.scrollWidth;
   }, [selection, inputId]);
 
   function choose(row: Suggestion) {
@@ -292,8 +422,16 @@ export function GuessCombobox({
     setQuery(row.display);
     setExpanded(false);
     setActive(-1);
+    setNudged(false);
     if (sound) playEffect("suggestion_picked");
     announce(words.selected(row.display));
+  }
+
+  /** Guess or Enter with nothing picked: say how to pick (R1-29, D5). */
+  function nudge() {
+    if (locked) return;
+    setNudged(true);
+    announce(words.hint);
   }
 
   function submit() {
@@ -332,13 +470,13 @@ export function GuessCombobox({
           setActive(0);
           return;
         }
-        setActive((a) => (a + 1) % rows.length);
+        setActive((current + 1) % rows.length);
         return;
       }
       case "ArrowUp": {
         event.preventDefault();
         if (!listOpen) return;
-        setActive((a) => (a <= 0 ? rows.length - 1 : a - 1));
+        setActive(current <= 0 ? rows.length - 1 : current - 1);
         return;
       }
       case "Enter": {
@@ -357,8 +495,10 @@ export function GuessCombobox({
           choose(exact);
           return;
         }
-        // Namesakes or nothing: the list stays open to pick from.
+        // Namesakes or nothing: the list stays open to pick from, and the
+        // hint says how.
         if (hasQuery) setExpanded(true);
+        nudge();
         return;
       }
       case "Escape": {
@@ -382,8 +522,10 @@ export function GuessCombobox({
   }
 
   const plural = MYSTERY_COPY.guess.listLabel(answerType, query.trim());
+  const placeholder = words.placeholder(answerType);
   const describedBy = [
     hintId,
+    moreDescription ?? null,
     noMatches ? noMatchesId : listOpen ? statusId : null,
     loading ? loadingId : null,
     failed ? failedId : null,
@@ -394,7 +536,7 @@ export function GuessCombobox({
   return (
     <div
       className={cx(
-        "relative",
+        "@container/guess relative",
         // The field and three whole rows, which the list opens into, and a
         // little room under them, so the page can scroll that far.
         compact && "min-h-[calc(3.625rem+9rem+26px)]",
@@ -402,18 +544,52 @@ export function GuessCombobox({
       data-combobox=""
       data-keyboard={compact ? "open" : undefined}
     >
-      <div ref={fieldRowRef} className="flex items-stretch gap-2">
+      {/*
+        One grid for both layouts. Wide: the field's frame spans the field
+        and Guess, which sits inside its right edge, with Next clue beside
+        while the keyboard is up; the list hangs from the frame, then the
+        notes. Narrow (R1-03): one column, so the field takes the row, the
+        list and the notes follow, then Guess on a row of its own, and Next
+        clue on the next one when it is there: two buttons that can't share
+        a row stack (DESIGN §10.2). Focus order stays field, Guess, Next clue.
+      */}
+      <div
+        className={cx(
+          "group/field grid items-center gap-x-2 @max-[18em]/guess:grid-cols-[minmax(0,1fr)]",
+          beside === undefined
+            ? "grid-cols-[minmax(0,1fr)_auto]"
+            : "grid-cols-[minmax(0,1fr)_auto_auto]",
+        )}
+      >
+        {/* The field's frame: border, fill and focus ring, behind the field and Guess. */}
         <div
+          ref={fieldRef}
+          aria-hidden="true"
+          data-field-frame=""
           className={cx(
-            "relative flex h-[3.625rem] min-w-0 flex-1 items-center rounded-2xl border-2 outline-offset-2 has-[input:focus-visible]:outline-[3px] has-[input:focus-visible]:outline-[color:color-mix(in_oklab,var(--kn-play-accent,var(--foreground))_50%,transparent)]",
+            "pointer-events-none col-start-1 col-end-3 row-start-1 self-stretch rounded-2xl border-2 outline-offset-[3px] group-has-[input:focus-visible]/field:outline-[3px] group-has-[input:focus-visible]/field:outline-[color:var(--kn-focus,var(--foreground))] @max-[18em]/guess:col-end-[-1]",
             TONE.surface,
             TONE.inkBorder,
             listOpen && "rounded-b-none",
             disabled && "opacity-80",
           )}
+        />
+        <div
+          data-field=""
+          className={cx(
+            "relative col-start-1 row-start-1 flex h-[3.625rem] min-w-0 items-center @max-[18em]/guess:col-end-[-1]",
+            disabled && "opacity-80",
+          )}
         >
           {compact ? null : (
-            <SearchIcon size={22} className={cx("ml-3", TONE.ink2)} />
+            // A narrow field gives the icon's room to the text (R1-03, D14).
+            <SearchIcon
+              size={22}
+              className={cx(
+                "ml-3 shrink-0 @max-[18em]/guess:hidden",
+                TONE.ink2,
+              )}
+            />
           )}
           <div className="relative h-full min-w-0 flex-1">
             <label
@@ -425,6 +601,21 @@ export function GuessCombobox({
             >
               {words.label}
             </label>
+            {query === "" ? (
+              // A narrow field's placeholder: it wraps onto a second line
+              // rather than lose its noun (D14). The input's own, which
+              // assistive tech reads, is transparent there.
+              <span
+                aria-hidden="true"
+                data-placeholder=""
+                className={cx(
+                  "pointer-events-none absolute inset-x-0 top-[1.375rem] bottom-1 hidden items-center overflow-hidden pr-1 pl-2.5 text-xs leading-tight font-semibold @max-[18em]/guess:flex",
+                  TONE.ink2,
+                )}
+              >
+                {placeholder}
+              </span>
+            ) : null}
             <input
               ref={inputRef}
               id={inputId}
@@ -434,7 +625,7 @@ export function GuessCombobox({
               aria-controls={listId}
               aria-autocomplete="list"
               aria-activedescendant={
-                activeRow === undefined ? undefined : optionId(active)
+                activeRow === undefined ? undefined : optionId(current)
               }
               aria-describedby={describedBy}
               aria-disabled={disabled || undefined}
@@ -445,7 +636,7 @@ export function GuessCombobox({
               autoCapitalize="words"
               spellCheck={false}
               enterKeyHint="go"
-              placeholder={words.placeholder(answerType)}
+              placeholder={placeholder}
               value={query}
               onChange={(event) => {
                 setQuery(event.target.value);
@@ -454,14 +645,21 @@ export function GuessCombobox({
                 setActive(-1);
               }}
               onKeyDown={onKeyDown}
-              onFocus={() => onFocusChange?.(true)}
+              onFocus={() => {
+                // Back in a field that kept its typing (D9): its list comes back.
+                if (hasQuery && selection === null) setExpanded(true);
+                onFocusChange?.(true);
+              }}
               onBlur={() => {
                 setExpanded(false);
                 setActive(-1);
                 onFocusChange?.(false);
               }}
               className={cx(
-                "absolute inset-0 w-full truncate rounded-none border-0 bg-transparent pt-[1.375rem] pr-1 pb-1 pl-2.5 text-[1.1875rem] font-bold outline-none placeholder:font-semibold placeholder:opacity-60",
+                // The placeholder is set smaller than the typed name, so the
+                // longest short noun (D14) fits beside Guess at 360 px; a
+                // narrow field draws its own, which can wrap (above).
+                "absolute inset-0 w-full truncate rounded-none border-0 bg-transparent pt-[1.375rem] pr-1 pb-1 pl-2.5 text-[1.1875rem] font-bold outline-none placeholder:text-[0.9375rem] placeholder:font-semibold placeholder:opacity-60 @max-[18em]/guess:placeholder:text-transparent",
                 TONE.ink,
               )}
             />
@@ -473,171 +671,254 @@ export function GuessCombobox({
               onMouseDown={keepFieldFocus}
               onClick={clear}
               className={cx(
-                "grid size-11 shrink-0 place-items-center rounded-full outline-offset-[-2px] focus-visible:outline-[3px] focus-visible:outline-[color:var(--kn-focus,var(--foreground))]",
+                "grid size-11 shrink-0 place-items-center rounded-full outline-offset-[-2px] focus-visible:outline-[3px] focus-visible:outline-[color:var(--kn-focus,var(--foreground))] @max-[18em]/guess:hidden",
                 TONE.ink2,
               )}
             >
               <ClearIcon size={20} />
             </button>
           ) : null}
-          <Button
-            variant="primary"
-            size="small"
-            disabled={selection === null || disabled}
-            focusableWhenDisabled
-            busy={busy}
-            // The label holds still while busy; "Checking…" shows under the field.
-            slowLabel={words.button}
-            onMouseDown={keepFieldFocus}
-            onClick={submit}
-            // The marked utilities override the variant's own (cx doesn't
-            // merge them), so Guess stays small inside the field.
-            className="mr-1.5 min-h-11! shrink-0 rounded-[11px]! px-3.5! text-base!"
-          >
-            {words.button}
-          </Button>
         </div>
-        {beside}
-      </div>
-
-      <p id={hintId} className="sr-only">
-        {words.hint}
-      </p>
-      {/* The count, for the field's description; "No matches" is visible already. */}
-      <p id={statusId} className="sr-only">
-        {listOpen ? countText : ""}
-      </p>
-
-      <ul
-        id={listId}
-        role="listbox"
-        aria-label={plural}
-        hidden={!listOpen}
-        style={
-          maxRows === null
-            ? undefined
-            : {
-                maxHeight: `calc(${String(maxRows * ROW_HEIGHT_REM)}rem + ${String(LIST_CHROME_PX)}px)`,
-              }
-        }
-        className={cx(
-          "z-[3] overflow-y-auto rounded-b-2xl border-2 border-t-0 p-1",
-          TONE.surface,
-          TONE.inkBorder,
-          TONE.ledgeTall,
-        )}
-      >
-        {rows.map((row, index) => {
-          const isActive = index === active;
-          const { name, aside, asideStart } = splitDisplay(
-            row.display,
-            answerType,
-          );
-          return (
-            <li
-              key={row.entityId}
-              id={optionId(index)}
-              role="option"
-              aria-selected={isActive}
-              aria-disabled={row.alreadyGuessed || undefined}
-              data-entity={row.entityId}
-              onMouseDown={keepFieldFocus}
-              onClick={() => {
-                choose(row);
-              }}
-              className={cx(
-                "relative flex min-h-12 cursor-pointer items-center gap-2.5 rounded-[11px] pr-2.5 pl-3 text-lg select-none",
-                index > 0 &&
-                  !isActive &&
-                  "shadow-[0_-1px_0_0_var(--kn-rule,var(--border))]",
-                isActive &&
-                  cx(
-                    TONE.accentTint,
-                    // Forced colours drop the tint: an outline marks the row.
-                    "forced-colors:outline-2 forced-colors:-outline-offset-2 forced-colors:outline-[color:Highlight]",
-                  ),
-                row.alreadyGuessed
-                  ? cx("cursor-not-allowed", TONE.ink3)
-                  : "hover:bg-[color:var(--kn-surface-2,var(--muted))]",
-              )}
-            >
-              {isActive ? (
-                <span
-                  aria-hidden="true"
-                  className={cx(
-                    "absolute top-2.5 bottom-2.5 left-[3px] w-1 rounded-sm forced-colors:bg-[color:Highlight] forced-colors:forced-color-adjust-none",
-                    TONE.accentBar,
-                  )}
-                />
-              ) : null}
-              {answerType === null ? null : (
-                <AnswerTypeIcon
-                  type={answerType}
-                  size={20}
-                  className={TONE.ink3}
-                />
-              )}
-              <span className="min-w-0 flex-1 truncate">
-                <Highlighted text={name} offset={0} match={row.match} />
-              </span>
-              {row.alreadyGuessed ? (
-                <>
-                  <span className="sr-only">,</span>{" "}
-                  <span className="shrink-0 text-sm font-semibold">
-                    {words.alreadyGuessed}
-                  </span>
-                </>
-              ) : aside === null ? null : (
-                <>
-                  <span className="sr-only">,</span>{" "}
-                  <span
-                    className={cx(
-                      "max-w-[45%] shrink-0 truncate text-sm font-semibold",
-                      TONE.ink2,
-                    )}
-                  >
-                    <Highlighted
-                      text={aside}
-                      offset={asideStart}
-                      match={row.match}
-                    />
-                  </span>
-                </>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-
-      {noMatches ? (
-        <p
-          id={noMatchesId}
-          className={cx("mt-2 text-[0.9375rem] font-semibold", TONE.ink2)}
+        <Button
+          variant="primary"
+          size="small"
+          disabled={selection === null || disabled}
+          focusableWhenDisabled
+          busy={busy}
+          // The label holds still while busy; "Checking…" shows under the field.
+          slowLabel={words.button}
+          onMouseDown={keepFieldFocus}
+          // A press with nothing picked says how to pick (R1-29); the
+          // button's own click is blocked while it's disabled.
+          onClickCapture={() => {
+            if (selection === null) nudge();
+          }}
+          onClick={submit}
+          data-guess=""
+          // The marked utilities override the variant's own (cx doesn't
+          // merge them), so Guess stays small inside the field, and takes
+          // a whole row of its own when the field is narrow.
+          className="col-start-2 row-start-1 mr-1.5 min-h-11! shrink-0 rounded-[11px]! px-3.5! text-base! @max-[18em]/guess:col-start-1 @max-[18em]/guess:col-end-[-1] @max-[18em]/guess:row-start-4 @max-[18em]/guess:mt-2 @max-[18em]/guess:mr-0 @max-[18em]/guess:min-h-12! @max-[18em]/guess:w-full"
         >
-          {words.noMatches}
-        </p>
-      ) : null}
-      {loading ? (
-        <p id={loadingId} className={cx("mt-2 text-[0.9375rem]", TONE.ink2)}>
-          {words.listLoading}
-        </p>
-      ) : null}
-      {failed ? (
-        <div className={cx("mt-2 text-[0.9375rem]", TONE.ink2)}>
-          <p id={failedId}>{words.listFailed}</p>
-          {isMysteryAnswerList(list) ? (
-            <Button
-              variant="text"
-              onMouseDown={keepFieldFocus}
-              onClick={() => {
-                list.retry();
-              }}
+          {words.button}
+        </Button>
+        {beside === undefined ? null : (
+          <div
+            data-beside=""
+            className="col-start-3 row-start-1 flex self-stretch @max-[18em]/guess:col-start-1 @max-[18em]/guess:col-end-[-1] @max-[18em]/guess:row-start-5 @max-[18em]/guess:mt-2 @max-[18em]/guess:*:flex-1"
+          >
+            {beside}
+          </div>
+        )}
+
+        <ul
+          ref={listRef}
+          id={listId}
+          role="listbox"
+          aria-label={plural}
+          hidden={!listOpen}
+          style={listMax === null ? undefined : { maxHeight: listMax }}
+          className={cx(
+            // Every column: under Next clue too while it sits beside the
+            // field, so the rows keep the row's whole width (AC-DLY-32).
+            "z-[3] col-start-1 col-end-[-1] row-start-2 overflow-y-auto rounded-b-2xl border-2 border-t-0 p-1",
+            TONE.surface,
+            TONE.inkBorder,
+            TONE.ledgeTall,
+          )}
+        >
+          {rows.map((row, index) => {
+            const isActive = index === current;
+            const { name, aside, asideStart } = splitDisplay(
+              row.display,
+              answerType,
+            );
+            // Full ink on the highlight's or the hover's tint, where the
+            // secondary ink falls short of 4.5:1 (WCAG 1.4.3).
+            const quiet = cx(
+              isActive ? TONE.ink : TONE.ink2,
+              !row.alreadyGuessed &&
+                "group-hover/row:text-[color:var(--kn-ink,var(--foreground))]",
+            );
+            return (
+              <li
+                key={row.entityId}
+                id={optionId(index)}
+                role="option"
+                aria-selected={isActive}
+                aria-disabled={row.alreadyGuessed || undefined}
+                data-entity={row.entityId}
+                data-typo={row.typo ? "" : undefined}
+                onMouseDown={keepFieldFocus}
+                onClick={() => {
+                  choose(row);
+                }}
+                className={cx(
+                  // A narrow field's rows give their padding to the name,
+                  // so a long word fits whole ("Lighthouse" at 320 px and
+                  // 200% text).
+                  "group/row relative flex min-h-12 cursor-pointer items-center gap-2.5 rounded-[11px] py-1.5 pr-2.5 pl-3 text-lg select-none @max-[18em]/guess:pr-1.5 @max-[18em]/guess:pl-2.5",
+                  index > 0 &&
+                    !isActive &&
+                    "shadow-[0_-1px_0_0_var(--kn-rule,var(--border))]",
+                  isActive &&
+                    cx(
+                      TONE.accentTint,
+                      // Forced colours drop the tint: an outline marks the row.
+                      "forced-colors:outline-2 forced-colors:-outline-offset-2 forced-colors:outline-[color:Highlight]",
+                    ),
+                  row.alreadyGuessed
+                    ? cx("cursor-not-allowed", TONE.ink3)
+                    : "hover:bg-[color:var(--kn-surface-2,var(--muted))]",
+                )}
+              >
+                {isActive ? (
+                  <span
+                    aria-hidden="true"
+                    className={cx(
+                      "absolute top-2.5 bottom-2.5 left-[3px] w-1 rounded-sm forced-colors:bg-[color:Highlight] forced-colors:forced-color-adjust-none",
+                      TONE.accentBar,
+                    )}
+                  />
+                ) : null}
+                {answerType === null ? null : (
+                  // A narrow field gives the icon's room to the name.
+                  <AnswerTypeIcon
+                    type={answerType}
+                    size={20}
+                    className={cx(
+                      "shrink-0 @max-[18em]/guess:hidden",
+                      TONE.ink3,
+                    )}
+                  />
+                )}
+                {/* One line: the name truncates before the qualifier and the
+                    marks do. When the field is narrow (R1-03) the name
+                    wraps instead, and the qualifier sits under it. */}
+                <span className="flex min-w-0 flex-1 items-center gap-x-2.5 gap-y-0.5 leading-snug @max-[18em]/guess:flex-wrap @max-[18em]/guess:items-baseline">
+                  <span
+                    data-row-name=""
+                    className="min-w-0 truncate @max-[18em]/guess:overflow-visible @max-[18em]/guess:break-words @max-[18em]/guess:whitespace-normal"
+                  >
+                    <Highlighted text={name} offset={0} match={row.match} />
+                  </span>
+                  {row.alreadyGuessed ? (
+                    <>
+                      <span className="sr-only">,</span>{" "}
+                      <span className="ml-auto shrink-0 text-sm font-semibold whitespace-nowrap @max-[18em]/guess:ml-0 @max-[18em]/guess:basis-full @max-[18em]/guess:whitespace-normal">
+                        {words.alreadyGuessed}
+                      </span>
+                    </>
+                  ) : aside === null ? null : (
+                    <>
+                      <span className="sr-only">,</span>{" "}
+                      <span
+                        data-row-aside=""
+                        className={cx(
+                          "ml-auto max-w-[45%] shrink-0 truncate text-right text-sm font-semibold @max-[18em]/guess:ml-0 @max-[18em]/guess:max-w-full @max-[18em]/guess:basis-full @max-[18em]/guess:overflow-visible @max-[18em]/guess:text-left @max-[18em]/guess:break-words @max-[18em]/guess:whitespace-normal",
+                          quiet,
+                        )}
+                      >
+                        <Highlighted
+                          text={aside}
+                          offset={asideStart}
+                          match={row.match}
+                        />
+                      </span>
+                    </>
+                  )}
+                  {row.typo ? (
+                    <>
+                      <span className="sr-only">,</span>{" "}
+                      <span
+                        data-typo-mark=""
+                        className={cx(
+                          "shrink-0 rounded-full border border-dashed px-2 text-xs leading-[1.4] font-bold whitespace-nowrap @max-[18em]/guess:max-w-full @max-[18em]/guess:whitespace-normal forced-colors:border-[color:CanvasText]",
+                          aside === null &&
+                            !row.alreadyGuessed &&
+                            "ml-auto @max-[18em]/guess:ml-0",
+                          TONE.strongBorder,
+                          quiet,
+                        )}
+                      >
+                        {words.typo}
+                      </span>
+                    </>
+                  ) : null}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+
+        <div
+          data-guess-notes=""
+          className="col-start-1 col-end-[-1] row-start-3"
+        >
+          {/* The field's description, shown once Guess or Enter finds nothing picked. */}
+          <p
+            id={hintId}
+            data-hint={hintShown ? "shown" : undefined}
+            className={
+              hintShown
+                ? cx("mt-2 text-[0.9375rem] font-semibold", TONE.ink)
+                : "sr-only"
+            }
+          >
+            {words.hint}
+          </p>
+          {/* The count, for the field's description; "No matches" is visible already. */}
+          <p id={statusId} className="sr-only">
+            {listOpen ? countText : ""}
+          </p>
+          {selection === null ? null : (
+            // The field says it already; this is for eyes the field cut short.
+            <p
+              aria-hidden="true"
+              data-pick=""
+              className={cx(
+                "mt-2 text-[0.9375rem] leading-snug font-semibold break-words",
+                TONE.ink2,
+              )}
             >
-              {MYSTERY_COPY.errors.retry}
-            </Button>
+              {words.pickLead}{" "}
+              <strong className={TONE.ink}>{selection.display}</strong>
+            </p>
+          )}
+          {noMatches ? (
+            <p
+              id={noMatchesId}
+              className={cx("mt-2 text-[0.9375rem] font-semibold", TONE.ink2)}
+            >
+              {words.noMatches}
+            </p>
+          ) : null}
+          {loading ? (
+            <p
+              id={loadingId}
+              className={cx("mt-2 text-[0.9375rem]", TONE.ink2)}
+            >
+              {words.listLoading}
+            </p>
+          ) : null}
+          {failed ? (
+            <div className={cx("mt-2 text-[0.9375rem]", TONE.ink2)}>
+              <p id={failedId}>{words.listFailed}</p>
+              {isMysteryAnswerList(list) ? (
+                <Button
+                  variant="text"
+                  onMouseDown={keepFieldFocus}
+                  onClick={() => {
+                    list.retry();
+                  }}
+                >
+                  {MYSTERY_COPY.errors.retry}
+                </Button>
+              ) : null}
+            </div>
           ) : null}
         </div>
-      ) : null}
+      </div>
     </div>
   );
 }

@@ -4,9 +4,11 @@
  * The Mystery reveal card (PRD §3.1.4, DESIGN §6.3, §7.4, §12.2). It
  * replaces the clue screen when the round resolves:
  *
- * - Solved: "Knew it." stamped in ("Got it." for a pick among the four
- *   options), "Solved on clue 2 · +3" with the points counting up, and the
- *   answer in large type.
+ * - Solved: the stamp stamped in (D10: "Knew it." for a typed solve on
+ *   clue 1 or 2 with no miss, "Got there." on clue 3 or after a miss, "Got
+ *   it." for a pick among the four options on clue 4), "Solved on clue 2
+ *   · +3" with the points counting up from 1 (never a "+0" while it
+ *   waits, R1-33), and the answer in large type.
  * - Missed: "This one got away.", "The answer was Heat (1995) · 0 points",
  *   and no celebration.
  *
@@ -31,7 +33,7 @@ import { cx } from "@/ui/cx";
 import { CrossIcon } from "@/ui/icons";
 
 import type { PlaySettings } from "../contracts";
-import { MYSTERY_COPY } from "./copy";
+import { MYSTERY_COPY, mysteryMissed, solvedStamp } from "./copy";
 import { CrowdChart } from "./crowd";
 import { continueOnEnter, focusTargetProps } from "./focus";
 import { ArrowRightIcon, TickIcon } from "./icons";
@@ -146,7 +148,11 @@ export function MysteryRevealCard({
             )}
           >
             <TickIcon size={18} strokeWidth={3} />
-            {reveal.pickedOption === null ? copy.solved : copy.picked}
+            {solvedStamp({
+              clue: reveal.solvedOn ?? 4,
+              picked: reveal.pickedOption !== null,
+              missed: mysteryMissed(lastOpen),
+            })}
           </span>
         ) : (
           <span
@@ -162,9 +168,17 @@ export function MysteryRevealCard({
               {copy.solvedOn(reveal.solvedOn)} ·{" "}
               <span
                 aria-hidden="true"
-                className={cx("text-lg tabular-nums", DISPLAY_FONT, TONE.ink)}
+                data-points={shownPoints ?? undefined}
+                className={cx(
+                  "text-lg tabular-nums",
+                  DISPLAY_FONT,
+                  TONE.ink,
+                  // Before the count starts, the final figure holds the
+                  // space unseen: a "+0" would read as no points (R1-33).
+                  shownPoints === null && "invisible",
+                )}
               >
-                +{shownPoints}
+                +{shownPoints ?? reveal.points}
               </span>
               <span className="sr-only">{copy.points(reveal.points)}</span>
             </>

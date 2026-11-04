@@ -1,6 +1,7 @@
 import {
   act,
   fireEvent,
+  render,
   screen,
   waitFor,
   within,
@@ -16,7 +17,11 @@ import {
   type RoundIntent,
   type RoundReveal,
 } from "@/engine/types";
-import { clearAnnouncements, LIVE_REGION_IDS } from "@/ui/announce";
+import {
+  clearAnnouncements,
+  ensureLiveRegions,
+  LIVE_REGION_IDS,
+} from "@/ui/announce";
 import { renderWithUser } from "@/test/render";
 
 import type { RoundComponentProps } from "../contracts";
@@ -24,6 +29,7 @@ import { EncoreHarness, TEST_SETTINGS, encoreMeta } from "../mystery/testing";
 import { EncoreRound } from ".";
 import {
   ENCORE_COPY,
+  PREVIEW_ANNOUNCE_DELAY_MS,
   bandWords,
   encoreAnnouncementText,
   parseErrorText,
@@ -89,7 +95,7 @@ describe("EncoreRound, entering a number", () => {
       }),
     ).toHaveFocus();
     expect(
-      screen.getByText("Encore · one number, the tiebreak"),
+      screen.getByText("Encore · one number, no points"),
     ).toBeInTheDocument();
     expect(numberField()).toHaveAttribute("inputmode", "numeric");
     // Focusing the field reads the question with it, then the unit.
@@ -136,10 +142,11 @@ describe("EncoreRound, entering a number", () => {
     await user.type(numberField(), "1250");
     const preview = screen.getByText("You're answering", { exact: false });
     expect(preview).toHaveTextContent("You're answering 1,250 km");
-    expect(preview.closest("[aria-live]")).toHaveAttribute(
-      "aria-live",
-      "polite",
-    );
+    // The status region speaks it (R1-34); the line itself is no live region.
+    expect(preview.closest("[aria-live]")).toBeNull();
+    await waitFor(() => {
+      expect(liveText()).toBe("You're answering 1,250 km");
+    });
     expect(numberField()).toHaveValue("1250");
     expect(lockIn()).not.toHaveAttribute("aria-disabled");
     expect(numberField()).toHaveAccessibleDescription(
@@ -147,28 +154,131 @@ describe("EncoreRound, entering a number", () => {
     );
   });
 
-  it("speaks a parse error in place of the preview, in the same live line", async () => {
+  it("shows a parse error in place of the preview, on the same line, and speaks it", async () => {
     const { user } = play();
     await user.type(numberField(), "1,25");
     const line = screen
       .getByText("You're answering", { exact: false })
-      .closest("[aria-live]");
+      .closest("[data-encore-line]");
     expect(line).toHaveTextContent("You're answering 125 km");
     await user.type(numberField(), "x");
-    // The error replaced the preview inside the one polite line.
+    // The error replaced the preview on the one line.
     expect(line).toHaveTextContent("Numbers only, please.");
     expect(line).not.toHaveTextContent("You're answering");
     expect(numberField()).toHaveAttribute("aria-invalid", "true");
     expect(numberField()).toHaveAccessibleDescription(
       "How long is the fixture Coast Road, in kilometres? km Numbers only, please.",
     );
+    await waitFor(() => {
+      expect(liveText()).toBe("Numbers only, please.");
+    });
+  });
+
+  it("R1-34 speaks the preview once typing settles, never on every keystroke", () => {
+    // Synchronous events under a fake clock: user-event's async wrapper
+    // waits on a real setTimeout, which a fake clock never fires.
+    vi.useFakeTimers();
+    const said: string[] = [];
+    const collect = (records: MutationRecord[]) => {
+      for (const record of records) {
+        for (const node of record.addedNodes) said.push(node.textContent ?? "");
+      }
+    };
+    const observer = new MutationObserver(collect);
+    try {
+      ensureLiveRegions();
+      const region = document.getElementById(LIVE_REGION_IDS.polite);
+      if (region === null) throw new Error("no polite region");
+      // Each announcement puts a new node in the region.
+      observer.observe(region, { childList: true });
+      const spoken = () => {
+        collect(observer.takeRecords());
+        return said;
+      };
+      const flush = (ms: number) => {
+        act(() => {
+          vi.advanceTimersByTime(ms);
+        });
+      };
+      const typeOut = (text: string) => {
+        for (let end = 1; end <= text.length; end += 1) {
+          fireEvent.change(numberField(), {
+            target: { value: text.slice(0, end) },
+          });
+          // A keystroke every 120 ms: quicker than the wait, as typing is.
+          flush(120);
+        }
+      };
+      render(<EncoreHarness content={encore()} onIntent={vi.fn()} />);
+      typeOut("1250");
+      // Sam heard "You're answering 1 km", "12 km", "125 km", "1,250 km".
+      flush(PREVIEW_ANNOUNCE_DELAY_MS - 200);
+      expect(spoken()).toEqual([]);
+      flush(200);
+      expect(spoken()).toEqual(["You're answering 1,250 km"]);
+      // A pause, then one more digit: one more message, for the new number.
+      fireEvent.change(numberField(), { target: { value: "12500" } });
+      flush(PREVIEW_ANNOUNCE_DELAY_MS);
+      expect(spoken()).toEqual([
+        "You're answering 1,250 km",
+        "You're answering 12,500 km",
+      ]);
+      // Locking in inside the wait drops the pending preview: the verdict follows alone.
+      fireEvent.change(numberField(), { target: { value: "1250" } });
+      fireEvent.keyDown(numberField(), { key: "Enter" });
+      flush(PREVIEW_ANNOUNCE_DELAY_MS + 50);
+      expect(spoken()).toEqual([
+        "You're answering 1,250 km",
+        "You're answering 12,500 km",
+        "Spot on. The answer was 1,250 km.",
+      ]);
+    } finally {
+      observer.disconnect();
+      vi.useRealTimers();
+    }
+  });
+
+  it("R1-07 says what the Encore decides for a solo player: no points, and ties go to the closer guess", () => {
+    play();
+    const round = document.querySelector('[data-round="encore"]');
+    if (!(round instanceof HTMLElement)) throw new Error("no Encore");
+    expect(
+      within(round).getByText("Encore · one number, no points"),
+    ).toBeInTheDocument();
+    expect(
+      within(round).getByText(
+        "If you tie on points, the closer guess ranks higher.",
+      ),
+    ).toBeInTheDocument();
+    expect(round).toHaveTextContent(/no points/);
+    expect(round).toHaveTextContent(/tie/);
+    // The old words asked "a tiebreak against whom?".
+    expect(round).not.toHaveTextContent(/the tiebreak|wins the tiebreak/);
+  });
+
+  it("R1-10 previews 1,200 as twelve hundred on an Encore that allows a decimal, and locks it in", async () => {
+    const { user, onIntent } = play(
+      encore({ decimals: 1, answer: 86.4, unitShort: "m", unitLabel: "m" }),
+    );
+    await user.type(numberField(), "1,200");
+    expect(screen.queryByText("Up to 1 decimal place, please.")).toBeNull();
+    expect(
+      screen.getByText("You're answering", { exact: false }),
+    ).toHaveTextContent("You're answering 1,200 m");
+    expect(lockIn()).not.toHaveAttribute("aria-disabled");
+    await user.keyboard("{Enter}");
+    expect(onIntent).toHaveBeenCalledWith({
+      family: "encore",
+      kind: "lock_in",
+      value: 1200,
+    });
   });
 
   it.each([
     ["abc", 0, "Numbers only, please."],
     ["-5", 0, "Positive numbers only."],
     ["0", 0, "Positive numbers only."],
-    ["1,250", 1, "Up to 1 decimal place, please."],
+    ["1,2345", 1, "Up to 1 decimal place, please."],
     ["1,250.5,3", 1, "Check the dots and commas."],
     ["1234567890123456", 0, "That's more digits than we can take."],
   ] as const)(
@@ -235,7 +345,7 @@ describe("EncoreRound, entering a number", () => {
 });
 
 describe("EncoreRound, the result", () => {
-  it("replaces the hints with the result line, the band and the number line, and moves focus there", async () => {
+  it("replaces the play hints with the result line, the band, the number line and its legend, and moves focus there", async () => {
     const { user, onContinue } = play();
     await user.type(numberField(), "1200");
     await user.click(lockIn());
@@ -246,7 +356,14 @@ describe("EncoreRound, the result", () => {
     });
     expect(heading).toHaveFocus();
     expect(heading).toHaveAttribute("data-focus-target", "reveal_heading");
-    expect(screen.queryByText("Within 5% is a bullseye")).toBeNull();
+    // One set of band lines: the result card's legend (D16), not the hints.
+    expect(screen.getAllByText("Within 5% is a bullseye")).toHaveLength(1);
+    expect(document.querySelector('[data-band-hints="hints"]')).toBeNull();
+    const card = document.querySelector("[data-encore-result]");
+    if (!(card instanceof HTMLElement)) throw new Error("no result card");
+    expect(
+      within(card).getByRole("group", { name: "How the Encore is judged" }),
+    ).toHaveAttribute("data-band-hints", "legend");
     const chip = document.querySelector("[data-band-chip]");
     expect(chip).toHaveTextContent("Bullseye");
     expect(liveText()).toBe(
@@ -285,8 +402,10 @@ describe("EncoreRound, the result", () => {
     // 3% off: outside the own bullseye, inside the own close band.
     await user.type(numberField(), "103{Enter}");
     expect(document.querySelector("[data-band-chip]")).toHaveTextContent(
-      "Close",
+      "Close guess",
     );
+    // The legend names the own bands too.
+    expect(screen.getByText("Within 10% is close")).toBeInTheDocument();
     const line = screen.getByRole("img", {
       name: "Your guess 103 km. Answer 100 km. Bullseye means within 2%, close within 10%.",
     });
@@ -418,6 +537,150 @@ describe("EncoreRound, the result", () => {
     expect(guess).toHaveAttribute("data-edge", "high");
     expect(guess?.querySelector("svg")).not.toBeNull();
     expect(document.querySelector("[data-band-chip]")).toBeNull();
+  });
+
+  /** Daily #45's Encore: Lake Ostry, 86.4 m deep, one decimal. */
+  function ostry(guess: number, band: "bullseye" | "close" | null) {
+    const result: RoundReveal = {
+      family: "encore",
+      guess,
+      answer: 86.4,
+      unit: "metres",
+      unitShort: "m",
+      error: { kind: "relative", value: 0, display: "x% off" },
+      band,
+      explanation: "A survey boat lowered a weighted line through winter ice.",
+      learnMore: "Lake Ostry (fixture)",
+      sourceLabels: [],
+      crowd: null,
+    };
+    const props = resultProps(result, true);
+    return {
+      ...props,
+      open: {
+        ...(props.open as Extract<
+          RoundComponentProps["open"],
+          { family: "encore" }
+        >),
+        unitShort: "m",
+        unitLabel: "in metres",
+        decimals: 1 as const,
+      },
+    };
+  }
+  const label = (name: "guess" | "answer" | "low" | "high") =>
+    document.querySelector(`[data-label="${name}"]`)?.textContent ?? null;
+
+  it("R1-26 labels a guess off the line's end with its value, and both marks", () => {
+    // Priya's 300 m and Marcus's 240 m sat at the 172.8 m end with no value.
+    const { unmount } = renderWithUser(<EncoreRound {...ostry(300, null)} />);
+    expect(label("guess")).toBe("You 300 m →");
+    expect(label("answer")).toBe("Answer 86.4 m");
+    expect(label("low")).toBe("43.2 m");
+    expect(label("high")).toBe("172.8 m");
+    // It holds the line's right end, in the line's own width, and wraps
+    // between words if it must: a long value never runs off the card.
+    const high = document.querySelector('[data-label="guess"]');
+    expect(high).toHaveAttribute("data-edge", "high");
+    expect(high?.className).toMatch(/(^|\s)text-right(\s|$)/);
+    expect(high?.className).toMatch(/(^|\s)max-w-full(\s|$)/);
+    expect(high?.className).not.toMatch(/whitespace-nowrap|translate-x/);
+    // The pinned dot's arrow is drawn in ink on the card, not in the dot's
+    // on-accent colour, which left it white on white.
+    expect(
+      document.querySelector("[data-edge-arrow]")?.getAttribute("class"),
+    ).toContain("--kn-ink");
+    unmount();
+
+    renderWithUser(<EncoreRound {...ostry(20, null)} />);
+    expect(label("guess")).toBe("← You 20 m");
+    expect(document.querySelector('[data-mark="guess"]')).toHaveAttribute(
+      "data-edge",
+      "low",
+    );
+    expect(document.querySelector('[data-label="guess"]')?.className).toMatch(
+      /(^|\s)text-left(\s|$)/,
+    );
+  });
+
+  it("never breaks a value inside itself, and stacks the ends over the answer when the labels' row is narrow", () => {
+    // 320 by 568 at 200% text: the side columns shrank to nothing and
+    // "43.2 m" and "172.8 m" stood one character to a line.
+    renderWithUser(<EncoreRound {...ostry(100, "close")} />);
+    const narrow = "@max-[20em]/ends:";
+    const ends = document.querySelector("[data-ends]");
+    expect(ends?.parentElement?.className).toMatch(
+      /(^|\s)@container\/ends(\s|$)/,
+    );
+    for (const name of ["low", "high"] as const) {
+      const classes = document.querySelector(
+        `[data-label="${name}"]`,
+      )?.className;
+      expect(classes).toMatch(/(^|\s)whitespace-nowrap(\s|$)/);
+      expect(classes).not.toMatch(/break-words/);
+    }
+    // Narrow: the ends share a line, each at its end, and the answer's
+    // label takes a centred line of its own under them.
+    for (const layout of ["flex", "flex-wrap", "justify-between"]) {
+      expect(ends?.className.split(/\s+/)).toContain(`${narrow}${layout}`);
+    }
+    const answer = document.querySelector('[data-label="answer"]');
+    for (const placement of ["order-last", "basis-full"]) {
+      expect(answer?.className.split(/\s+/)).toContain(`${narrow}${placement}`);
+    }
+    expect(
+      document.querySelector('[data-label="high"]')?.className.split(/\s+/),
+    ).toContain(`${narrow}ml-auto`);
+    expect(answer?.querySelector(".whitespace-nowrap")).toHaveTextContent(
+      /^86\.4 m$/,
+    );
+  });
+
+  it("R1-03 moves the unit under the number when the field is narrow in em, so what you type stays in sight", () => {
+    // 360 by 640 at 200% text: "in metres" kept its 164 px beside a 44 px
+    // input, and "86.4" showed as "4".
+    renderWithUser(<EncoreRound {...ostry(100, null)} />);
+    const narrow = "@max-[20em]/encore:";
+    const fieldBox = document.querySelector("[data-encore-field]");
+    expect(fieldBox?.parentElement?.className).toMatch(
+      /(^|\s)@container\/encore(\s|$)/,
+    );
+    const classes = fieldBox?.className.split(/\s+/) ?? [];
+    expect(classes).toContain(`${narrow}flex-wrap`);
+    // The height follows the text (DESIGN §10.5).
+    expect(classes).toContain("min-h-[5.25rem]");
+    expect(classes).not.toContain("h-[5.25rem]");
+    const unit = document.querySelector("[data-encore-unit]");
+    expect(unit).toHaveTextContent("in metres");
+    expect(unit?.className.split(/\s+/)).toContain(`${narrow}basis-full`);
+  });
+
+  it("R1-26 marks a guess on the line as You, over its mark", () => {
+    renderWithUser(<EncoreRound {...ostry(100, "close")} />);
+    expect(label("guess")).toBe("You");
+    const mark = document.querySelector<HTMLElement>('[data-mark="guess"]');
+    const text = document.querySelector<HTMLElement>('[data-label="guess"]');
+    expect(text?.style.left).toBe(mark?.style.left);
+    expect(text?.className).toMatch(/-translate-x-1\/2/);
+  });
+
+  it("R1-26 D16 the close chip reads Close guess, and a guess outside both bands still shows where they were", () => {
+    const { unmount } = renderWithUser(<EncoreRound {...ostry(80, "close")} />);
+    const chip = document.querySelector("[data-band-chip]");
+    expect(chip).toHaveTextContent(/^Close guess$/);
+    expect(chip).not.toHaveTextContent(/^Close$/);
+    unmount();
+
+    renderWithUser(<EncoreRound {...ostry(300, null)} />);
+    expect(document.querySelector("[data-band-chip]")).toBeNull();
+    const legend = screen.getByRole("group", {
+      name: "How the Encore is judged",
+    });
+    expect(legend).toHaveAttribute("data-band-hints", "legend");
+    expect(within(legend).getByText("Within 5% is a bullseye")).toBeVisible();
+    expect(within(legend).getByText("Within 15% is close")).toBeVisible();
+    expect(legend.querySelector('[data-swatch="bullseye"]')).not.toBeNull();
+    expect(legend.querySelector('[data-swatch="close"]')).not.toBeNull();
   });
 
   it("shows the withdrawn card for a voided Encore", async () => {

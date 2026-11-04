@@ -1,7 +1,9 @@
 /**
  * The Mystery round's words (PRD §3.1.4, §4.1.3; DESIGN §1.4, §6.3, §6.4,
  * §12.2). DESIGN's polished strings win where it has one; PRD wording fills
- * the rest. One ellipsis character, never three dots.
+ * the rest, and the decisions after RITE round 1 (02-PRODUCT-DECISIONS §19)
+ * override both: D10's three stamps, D14's short placeholder nouns and D17's
+ * "No matches" line. One ellipsis character, never three dots.
  *
  * `mysteryAnnouncementText` turns the plugin's announcement data into the
  * status message ("Not Heat. Clue 3 is in. Now worth 2. ..."), so every
@@ -12,37 +14,71 @@ import type { Announcement } from "@/engine/rounds";
 import { worthOnClue } from "@/engine/scoring/mystery";
 import type { AnswerType, DifficultyBand } from "@/engine/types";
 
-/** How each answer type is named (CONTENT_GUIDE §2.10, "Player line"). */
+/**
+ * How each answer type is named (CONTENT_GUIDE §2.10, "Player line").
+ * `short` is the placeholder's noun (D14): short enough that "Start typing
+ * an element" fits beside Guess at 360 px, while the title keeps the full
+ * line ("A chemical element").
+ */
 export const ANSWER_TYPE_WORDS: Readonly<
-  Record<AnswerType, { line: string; one: string; many: string }>
+  Record<AnswerType, { line: string; one: string; many: string; short: string }>
 > = {
-  country: { line: "a country", one: "country", many: "countries" },
-  city: { line: "a city", one: "city", many: "cities" },
-  person: { line: "a person", one: "person", many: "people" },
-  film: { line: "a film", one: "film", many: "films" },
-  tv_series: { line: "a TV series", one: "TV series", many: "TV series" },
-  book: { line: "a book", one: "book", many: "books" },
-  animal: { line: "an animal", one: "animal", many: "animals" },
+  country: {
+    line: "a country",
+    one: "country",
+    many: "countries",
+    short: "a country",
+  },
+  city: { line: "a city", one: "city", many: "cities", short: "a city" },
+  person: {
+    line: "a person",
+    one: "person",
+    many: "people",
+    short: "a person",
+  },
+  film: { line: "a film", one: "film", many: "films", short: "a film" },
+  tv_series: {
+    line: "a TV series",
+    one: "TV series",
+    many: "TV series",
+    short: "a series",
+  },
+  book: { line: "a book", one: "book", many: "books", short: "a book" },
+  animal: {
+    line: "an animal",
+    one: "animal",
+    many: "animals",
+    short: "an animal",
+  },
   element: {
     line: "a chemical element",
     one: "chemical element",
     many: "chemical elements",
+    short: "an element",
   },
-  landmark: { line: "a landmark", one: "landmark", many: "landmarks" },
+  landmark: {
+    line: "a landmark",
+    one: "landmark",
+    many: "landmarks",
+    short: "a landmark",
+  },
   music_artist: {
     line: "a musician or band",
     one: "musician or band",
     many: "musicians or bands",
+    short: "an artist",
   },
   dish: {
     line: "a dish or drink",
     one: "dish or drink",
     many: "dishes or drinks",
+    short: "a dish",
   },
   sport: {
     line: "a sport or game",
     one: "sport or game",
     many: "sports or games",
+    short: "a sport",
   },
 };
 
@@ -51,6 +87,7 @@ const ANY_ANSWER = {
   line: "an answer",
   one: "answer",
   many: "answers",
+  short: "an answer",
 } as const;
 
 /** The words for a type, or the neutral ones. */
@@ -94,6 +131,12 @@ export const MYSTERY_COPY = {
     /** The stamp on a clue a wrong guess was made on: "Not Mary Shelley", never struck through. */
     stamp: (name: string) => `Not ${name}`,
     stampPrefix: "You guessed ",
+    /**
+     * Under Mystery 1's clue 1 in the player's first Daily (PRD §3.1.4,
+     * R1-04): what a wrong guess costs, before the first one.
+     */
+    firstDailyHint:
+      "Get it from this clue for 4 points. A wrong guess costs the same as Next clue, so have a go.",
   },
 
   nextClue: {
@@ -106,11 +149,17 @@ export const MYSTERY_COPY = {
 
   guess: {
     label: "Your guess",
+    /** D14: a short noun, so the placeholder fits beside Guess at 360 px. */
     placeholder: (type: AnswerType | null) =>
-      `Start typing ${answerWords(type).line}`,
+      `Start typing ${answerWords(type).short}`,
     button: "Guess",
     clear: "Clear your guess",
+    /** The field's description, and shown when Guess or Enter finds no pick (D5, R1-29). */
     hint: "Pick a name from the list, then Guess.",
+    /** Under the field once a row is chosen, so the whole name shows (R1-28). */
+    pickLead: "Your pick:",
+    /** A row that only a typo matched (R1-37). */
+    typo: "Similar spelling",
     listLabel: (type: AnswerType | null, query: string) =>
       `${capitalize(answerWords(type).many)} matching ${query}`,
     /** The count announced on each change: "4 people match", "1 film matches". */
@@ -120,7 +169,8 @@ export const MYSTERY_COPY = {
         : `${String(n)} ${answerWords(type).many} match`,
     /** Spoken when a row is chosen, since the field's new value is not. */
     selected: (name: string) => `${name} selected.`,
-    noMatches: "No matches. Try another spelling, or tap Next clue.",
+    /** D17: "use", not "tap", since a keyboard may be what the player has. */
+    noMatches: "No matches. Try another spelling, or use Next clue.",
     listFailed:
       "We couldn't load the suggestions. You can still use Next clue and pick from four options at the end.",
     listLoading: "Loading the suggestions…",
@@ -130,6 +180,12 @@ export const MYSTERY_COPY = {
   options: {
     lead: "Pick one of four",
     group: "Four options",
+    /**
+     * The keys that pick (D6), as the options' description: letters always,
+     * digits only when no option reads as a number.
+     */
+    keys: (digits: boolean) =>
+      digits ? "Keys A to D, or 1 to 4, pick." : "Keys A to D pick.",
   },
 
   errors: {
@@ -143,9 +199,14 @@ export const MYSTERY_COPY = {
   },
 
   reveal: {
-    /** The solved stamp; the pun lives here and nowhere else (DESIGN §1.1). */
+    /**
+     * The solved stamp (D10, `solvedStamp`): the pun lives here and nowhere
+     * else (DESIGN §1.1), and only for a solve on clue 1 or 2 with no miss.
+     */
     solved: "Knew it.",
-    /** A solve picked from the four options. */
+    /** A solve on clue 3, or any solve after a wrong guess or pick (D10). */
+    gotThere: "Got there.",
+    /** A solve picked from the four options on clue 4 (D10). */
     picked: "Got it.",
     missed: "This one got away.",
     solvedOn: (clue: number) => `Solved on clue ${String(clue)}`,
@@ -185,14 +246,54 @@ export const MYSTERY_COPY = {
 } as const;
 
 /**
+ * The stamp for a solve (D10): "Got it." for a pick among the options on
+ * clue 4, "Knew it." for a typed solve on clue 1 or 2 with no wrong guess
+ * or pick before it, and "Got there." for the rest: a solve on clue 3 (a
+ * pick there too, when the options come from clue 3), or any solve after a
+ * miss. "Knew it." after a miss read as unearned (R1-22).
+ */
+export function solvedStamp(solve: {
+  clue: number;
+  picked: boolean;
+  missed: boolean;
+}): string {
+  const copy = MYSTERY_COPY.reveal;
+  if (solve.picked && solve.clue >= 4) return copy.picked;
+  return solve.clue <= 2 && !solve.missed ? copy.solved : copy.gotThere;
+}
+
+/**
+ * True when the round shows a miss before its resolution: a wrong typed
+ * guess, or an option disabled by a wrong pick (or by an earlier guess).
+ */
+export function mysteryMissed(
+  open: {
+    wrongGuesses: readonly unknown[];
+    options: readonly { alreadyGuessed: boolean }[] | null;
+  } | null,
+): boolean {
+  if (open === null) return false;
+  return (
+    open.wrongGuesses.length > 0 ||
+    (open.options?.some((option) => option.alreadyGuessed) ?? false)
+  );
+}
+
+/**
  * The status message for a Mystery announcement (PRD §3.1.4, DESIGN §1.4,
  * §7.4), or null for another family's. A wrong guess and Next clue name the
  * new worth, so the status region repeats it (AC-DLY-29); a wrong guess
  * also reads the new clue in full, because focus stays in the field.
+ *
+ * A solve speaks its stamp (`solvedStamp`). The announcement doesn't say
+ * whether a miss came first, so a controller that knows passes `history`
+ * (`mysteryMissed` over the round's open); without it a typed solve on
+ * clue 1 or 2 reads "Knew it.", as the reveal does after a reload.
  */
 export function mysteryAnnouncementText(
   announcement: Announcement,
   rules: { optionsFromClue: 3 | 4 },
+  history?: { missed: boolean },
 ): string | null {
   switch (announcement.kind) {
     case "wrong_guess":
@@ -212,10 +313,11 @@ export function mysteryAnnouncementText(
         : `${opened}${pick}`;
     }
     case "mystery_solved": {
-      const stamp =
-        announcement.clue >= rules.optionsFromClue
-          ? MYSTERY_COPY.reveal.picked
-          : MYSTERY_COPY.reveal.solved;
+      const stamp = solvedStamp({
+        clue: announcement.clue,
+        picked: announcement.clue >= rules.optionsFromClue,
+        missed: history?.missed ?? false,
+      });
       return `${stamp} ${announcement.answer}. Solved on clue ${String(announcement.clue)}, ${points(announcement.points)}.`;
     }
     case "mystery_missed":
