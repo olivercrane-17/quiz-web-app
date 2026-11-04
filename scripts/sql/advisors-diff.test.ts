@@ -40,6 +40,37 @@ const RPC: Lint = {
   detail: "Function `public.register_player` can be executed by anon",
   metadata: { name: "register_player", type: "function", schema: "public" },
 };
+/** The hosted MCP's performance reply on 4 November 2026: findings grouped under their lint. */
+const GROUPED = {
+  result: {
+    lints: [
+      {
+        name: "unused_index",
+        title: "Unused Index",
+        level: "INFO",
+        facing: "EXTERNAL",
+        categories: ["PERFORMANCE"],
+        count: 2,
+        findings: [
+          {
+            detail:
+              "Index \\`rate_counters_window_start_idx\\` on table \\`private.rate_counters\\` has not been used",
+            metadata: {
+              name: "rate_counters",
+              type: "table",
+              schema: "private",
+            },
+          },
+          {
+            detail:
+              "Index \\`write_keys_player_id_idx\\` on table \\`private.write_keys\\` has not been used",
+            metadata: { name: "write_keys", type: "table", schema: "private" },
+          },
+        ],
+      },
+    ],
+  },
+};
 
 describe("parseLints", () => {
   it("reads every form the reply is pasted in", () => {
@@ -51,6 +82,26 @@ describe("parseLints", () => {
     expect(parseLints([RPC])).toEqual([RPC]);
     expect(() => parseLints({ result: {} })).toThrow(/lints array/);
     expect(() => parseLints([{ level: "WARN" }])).toThrow(/no name/);
+  });
+
+  it("splits a lint's grouped findings into one lint each", () => {
+    const lints = parseLints(GROUPED);
+    expect(
+      lints.map((lint) => [lint.name, lint.level, lint.metadata?.name]),
+    ).toEqual([
+      ["unused_index", "INFO", "rate_counters"],
+      ["unused_index", "INFO", "write_keys"],
+    ]);
+    expect(lints[1]?.detail).toContain("write_keys_player_id_idx");
+    expect(
+      parseLints({ lints: [{ name: "unused_index", count: 0, findings: [] }] }),
+    ).toEqual([]);
+    expect(() =>
+      parseLints({ lints: [{ name: "unused_index", findings: {} }] }),
+    ).toThrow(/not an array/);
+    expect(() =>
+      parseLints({ lints: [{ name: "unused_index", findings: ["x"] }] }),
+    ).toThrow(/not an object/);
   });
 });
 
@@ -154,6 +205,20 @@ describe("main", () => {
     );
     expect(log.mock.calls.flat().join("\n")).toContain(
       "expected   unused_index private rate_counters",
+    );
+  });
+
+  it("accepts the hosted MCP's grouped reply", () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const performance = write("performance.json", GROUPED);
+    expect(main(["--performance", performance])).toBe(0);
+    const out = log.mock.calls.flat().join("\n");
+    expect(out).toContain(
+      "expected   unused_index private rate_counters rate_counters_window_start_idx",
+    );
+    expect(out).toContain(
+      "expected   unused_index private write_keys write_keys_player_id_idx",
     );
   });
 

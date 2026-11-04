@@ -2,10 +2,19 @@
   "about": "The advisor findings we accept on purpose (ARCHITECTURE §8.2 rule 4, §11.6). npm run sql:advisors compares get_advisors output (security and performance) with this file: a finding that matches no entry fails, and a required entry with no finding fails. Every entry says why it is accepted. Edit it in the same pull request as the migration that causes the finding.",
   "live": {
     "checked": "2026-11-04",
-    "applied": ["20261031000000_key_escrow"],
+    "applied": [
+      "20261031000000_key_escrow",
+      "20261104000000_baseline",
+      "20261104000100_helpers"
+    ],
     "security": [],
-    "performance": [],
-    "note": "Before SQL-1 the project held only CNT-0's private.key_escrow, and both advisors reported nothing. A restrictive deny-all policy counts as a policy for lint 0008."
+    "performance": [
+      "unused_index private.rate_counters rate_counters_window_start_idx",
+      "unused_index private.write_keys write_keys_created_at_idx",
+      "unused_index private.write_keys write_keys_player_id_idx",
+      "unused_index private.rpc_errors rpc_errors_at_idx"
+    ],
+    "note": "After SQL-1's baseline and helpers were applied, the security advisor reported nothing and the performance advisor reported INFO 0005 for exactly the four indexes accepted below. The hosted MCP grouped them as one unused_index lint with four findings, which npm run sql:advisors splits into one lint per finding. A restrictive deny-all policy counts as a policy for lint 0008, so the new tables raise no 0008 finding."
   },
   "rpc": {
     "lints": [

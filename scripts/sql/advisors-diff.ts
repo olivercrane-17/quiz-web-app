@@ -55,7 +55,13 @@ export interface AdvisorDiff {
   absentOptional: ExpectedEntry[];
 }
 
-/** The lints in a get_advisors reply: `{ result: { lints } }`, `{ lints }` or an array. */
+/**
+ * The lints in a get_advisors reply: `{ result: { lints } }`, `{ lints }` or
+ * an array, one lint per finding. The hosted MCP groups a lint's findings
+ * under it instead (`{ name, title, level, count, findings: [{ detail,
+ * metadata }] }`, seen on 4 November 2026), so each finding of a group
+ * becomes a lint of its own with the group's name, title and level.
+ */
 export function parseLints(json: unknown): Lint[] {
   let value = json;
   if (typeof value === "object" && value !== null && "result" in value) {
@@ -73,7 +79,7 @@ export function parseLints(json: unknown): Lint[] {
   if (!Array.isArray(value)) {
     throw new Error("an advisor reply must hold a lints array");
   }
-  return value.map((lint, index) => {
+  return value.flatMap((lint, index) => {
     if (
       typeof lint !== "object" ||
       lint === null ||
@@ -81,7 +87,20 @@ export function parseLints(json: unknown): Lint[] {
     ) {
       throw new Error(`lint ${index} has no name`);
     }
-    return lint as Lint;
+    const { findings, count, ...group } = lint as Lint & {
+      findings?: unknown;
+      count?: unknown;
+    };
+    if (findings === undefined) return [lint as Lint];
+    if (!Array.isArray(findings)) {
+      throw new Error(`lint ${index} has findings that are not an array`);
+    }
+    return findings.map((finding, at): Lint => {
+      if (typeof finding !== "object" || finding === null) {
+        throw new Error(`lint ${index} finding ${at} is not an object`);
+      }
+      return { ...group, ...finding, name: group.name };
+    });
   });
 }
 
