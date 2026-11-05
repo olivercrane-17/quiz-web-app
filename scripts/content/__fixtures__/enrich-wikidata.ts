@@ -19,8 +19,9 @@
  *   ne_110m_admin_0_countries.geojson, the WIKIDATAID of ISO_A2 CA, US, ZM
  *   and ZW.
  * Labels follow those datasets' names, and birth years and country codes
- * follow the records the lists cite. Sitelink counts, descriptions and every
- * other claim are invented for the tests. None of this is Wikidata data.
+ * follow the records the lists cite. Sitelink counts, revision ids,
+ * descriptions and every other claim are invented for the tests. None of
+ * this is Wikidata data.
  *
  * Nothing here runs on import. A CLI test preloads a module that calls
  * installFetchStub(), which reads the mode from ENR_FETCH.
@@ -183,7 +184,19 @@ export interface Reply {
   headers?: Record<string, string>;
 }
 
-const PROPS = ["labels", "aliases", "descriptions", "claims", "sitelinks"];
+/** An entity's synthetic latest revision (props=info's lastrevid), invented like the rest. */
+export function revisionOf(id: string): number {
+  return 2_400_000_000 + Number(id.slice(1));
+}
+
+const PROPS = [
+  "labels",
+  "aliases",
+  "descriptions",
+  "claims",
+  "sitelinks",
+  "info",
+];
 
 function terms(entity: SyntheticEntity, props: Set<string>) {
   const out: Record<string, unknown> = {};
@@ -263,6 +276,15 @@ export function answer(world: SyntheticWorld, url: URL): Reply {
         entities[id] = {
           type: id.startsWith("P") ? "property" : "item",
           id,
+          ...(props.has("info")
+            ? {
+                pageid: Number(id.slice(1)),
+                ns: id.startsWith("P") ? 120 : 0,
+                title: id.startsWith("P") ? `Property:${id}` : id,
+                lastrevid: revisionOf(id),
+                modified: "2026-11-01T00:00:00Z",
+              }
+            : {}),
           ...terms(entity, props),
           ...(props.has("claims") ? { claims: claimsOf(entity) } : {}),
           ...(props.has("sitelinks") ? { sitelinks: sitelinksOf(entity) } : {}),

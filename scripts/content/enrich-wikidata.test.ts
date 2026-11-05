@@ -22,13 +22,24 @@ import { afterAll, describe, expect, it } from "vitest";
 
 import {
   REPO_ROOT,
+  fxMystery,
   removeTempDirs,
   tempDir,
+  writeTree,
 } from "../../src/content/pipeline/__fixtures__/builders.ts";
+import { loadBank } from "../../src/content/pipeline/bank.ts";
+import { sha256Hex, stableStringify } from "../../src/content/pipeline/json.ts";
+import { resolveLayout } from "../../src/content/pipeline/layout.ts";
+import {
+  deriveSealKeys,
+  envelopeText,
+  sealBytes,
+} from "../../src/content/pipeline/seal.ts";
 import type {
   AnswerEntity,
   AnswerList,
 } from "../../src/content/schema/answer-lists.ts";
+import type { Mystery } from "../../src/content/schema/items.ts";
 import {
   ANSWER_TYPES,
   type AnswerType,
@@ -42,6 +53,7 @@ import {
   networkError,
   quantity,
   replyToResponse,
+  revisionOf,
   text,
   time,
   type SyntheticWorld,
@@ -49,6 +61,7 @@ import {
 import {
   CHECKS,
   EnrichmentFileSchema,
+  MUSIC_ARTIST_HELD,
   PROPERTIES,
   WIKIDATA_API,
   WIKIDATA_PROVENANCE,
@@ -57,6 +70,8 @@ import {
   fetchEnrichment,
   labelMatchOf,
   networkFailure,
+  qidHolders,
+  suggestionGuard,
   summaryMarkdown,
   verdictOf,
   writeEnrichmentFiles,
@@ -67,6 +82,8 @@ import {
   type EntityData,
   type PropertyId,
 } from "./enrich-wikidata.ts";
+import { RULES_LANDED_AT } from "./lint/cutoff.ts";
+import { cnt2Findings } from "./lint/index.ts";
 import { citedDatasets } from "./lists/importer.ts";
 
 afterAll(removeTempDirs);
@@ -191,6 +208,7 @@ const candidate = (
   qualifier: Candidate["qualifier"],
 ): Candidate => ({
   qid,
+  revision: revisionOf(qid),
   label,
   description: SYNTHETIC,
   sitelinks,
@@ -199,10 +217,30 @@ const candidate = (
   qualifier,
 });
 
+/** The hash a run records for an entry: its name, aliases and qualifier. */
+function hashOf(entity: AnswerEntity): string {
+  return sha256Hex(
+    stableStringify({
+      name: entity.name,
+      aliases: entity.aliases,
+      qualifier: entity.qualifier,
+    }),
+  );
+}
+
+/** The hash of a fixture entry, by type and id. */
+function fixtureHash(type: AnswerType, id: string): string {
+  const entity = fixtureLists()
+    .find((l) => l.type === type)
+    ?.entities.find((e) => e.id === id);
+  if (!entity) throw new Error(`no fixture entry ${id}`);
+  return hashOf(entity);
+}
+
 /** What the fixture QID list gives, list by list. */
 const EXPECTED: Record<string, EnrichmentFile> = {
   country: {
-    format: 1,
+    format: 2,
     type: "country",
     listVersion: "2026-11-01",
     fetchedAt: FETCHED_AT,
@@ -212,6 +250,7 @@ const EXPECTED: Record<string, EnrichmentFile> = {
     candidates: [
       {
         id: "x.country.canada",
+        entryHash: fixtureHash("country", "x.country.canada"),
         name: "Canada",
         ours: { iso_a2: "CA" },
         verdict: "match",
@@ -222,6 +261,7 @@ const EXPECTED: Record<string, EnrichmentFile> = {
       },
       {
         id: "x.country.zambia",
+        entryHash: fixtureHash("country", "x.country.zambia"),
         name: "Zambia",
         ours: { iso_a2: "ZW" },
         verdict: "none",
@@ -233,7 +273,7 @@ const EXPECTED: Record<string, EnrichmentFile> = {
     ],
   },
   landmark: {
-    format: 1,
+    format: 2,
     type: "landmark",
     listVersion: "2026-11-01",
     fetchedAt: FETCHED_AT,
@@ -245,15 +285,18 @@ const EXPECTED: Record<string, EnrichmentFile> = {
     sitelinks: [
       {
         id: "Q34221",
+        entryHash: fixtureHash("landmark", "Q34221"),
         qid: "Q34221",
         label: "Niagara Falls",
         labelMatch: "label",
         sitelinks: 5,
+        revision: revisionOf("Q34221"),
       },
     ],
     candidates: [
       {
         id: "x.landmark.niagara-falls",
+        entryHash: fixtureHash("landmark", "x.landmark.niagara-falls"),
         name: "Niagara Falls",
         ours: { country: "US" },
         verdict: "duplicate",
@@ -271,6 +314,7 @@ const EXPECTED: Record<string, EnrichmentFile> = {
       },
       {
         id: "x.landmark.victoria-falls",
+        entryHash: fixtureHash("landmark", "x.landmark.victoria-falls"),
         name: "Victoria Falls",
         ours: { country: "ZM" },
         verdict: "match",
@@ -288,7 +332,7 @@ const EXPECTED: Record<string, EnrichmentFile> = {
     ],
   },
   music_artist: {
-    format: 1,
+    format: 2,
     type: "music_artist",
     listVersion: "2026-11-01",
     fetchedAt: FETCHED_AT,
@@ -300,15 +344,18 @@ const EXPECTED: Record<string, EnrichmentFile> = {
     sitelinks: [
       {
         id: "Q1299",
+        entryHash: fixtureHash("music_artist", "Q1299"),
         qid: "Q1299",
         label: "The Beatles",
         labelMatch: "label",
         sitelinks: 3,
+        revision: revisionOf("Q1299"),
       },
     ],
     candidates: [
       {
         id: "x.music_artist.john-lennon",
+        entryHash: fixtureHash("music_artist", "x.music_artist.john-lennon"),
         name: "John Lennon",
         ours: { kind: "solo" },
         verdict: "match",
@@ -326,7 +373,7 @@ const EXPECTED: Record<string, EnrichmentFile> = {
     ],
   },
   person: {
-    format: 1,
+    format: 2,
     type: "person",
     listVersion: "2026-11-01",
     fetchedAt: FETCHED_AT,
@@ -335,23 +382,28 @@ const EXPECTED: Record<string, EnrichmentFile> = {
     sitelinks: [
       {
         id: "Q5432",
+        entryHash: fixtureHash("person", "Q5432"),
         qid: "Q5432",
         label: "Francisco Goya",
         labelMatch: "label",
         sitelinks: 7,
+        revision: revisionOf("Q5432"),
       },
       {
         id: "x.person.edouard-manet",
+        entryHash: fixtureHash("person", "x.person.edouard-manet"),
         qid: "Q40599",
         label: null,
         labelMatch: "none",
         sitelinks: null,
+        revision: null,
         missing: true,
       },
     ],
     candidates: [
       {
         id: "x.person.camille-pissarro",
+        entryHash: fixtureHash("person", "x.person.camille-pissarro"),
         name: "Camille Pissarro",
         ours: { born: null },
         verdict: "label-only",
@@ -368,6 +420,7 @@ const EXPECTED: Record<string, EnrichmentFile> = {
       },
       {
         id: "x.person.claude-monet",
+        entryHash: fixtureHash("person", "x.person.claude-monet"),
         name: "Claude Monet",
         ours: { born: 1840 },
         verdict: "match",
@@ -378,6 +431,7 @@ const EXPECTED: Record<string, EnrichmentFile> = {
       },
       {
         id: "x.person.edgar-degas",
+        entryHash: fixtureHash("person", "x.person.edgar-degas"),
         name: "Edgar Degas",
         ours: { born: 1835 },
         verdict: "none",
@@ -446,11 +500,11 @@ async function dryRun(world: SyntheticWorld = FIXTURE_WORLD) {
 }
 
 /** A throwaway repository holding the fixture lists, and a preload that stubs fetch. */
-function cliRepo(): string {
+function cliRepo(lists: readonly AnswerList[] = fixtureLists()): string {
   const repo = tempDir("qz-enrich-");
   writeFileSync(join(repo, "package.json"), "{}\n");
   mkdirSync(join(repo, "content/answer-lists"), { recursive: true });
-  for (const fixture of fixtureLists())
+  for (const fixture of lists)
     writeFileSync(
       join(repo, "content/answer-lists", `${fixture.type}.json`),
       `${JSON.stringify(fixture, null, 2)}\n`,
@@ -462,7 +516,42 @@ function cliRepo(): string {
   return repo;
 }
 
+/** A throwaway content key: never the machine's own (HOME is the throwaway repository). */
+const TEST_KEY = Buffer.alloc(32, 7);
+
+/** Seals an item into the throwaway repository with TEST_KEY. */
+function seal(repo: string, folder: string, id: string, value: unknown): void {
+  const dir = join(repo, "content/sealed", folder);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(
+    join(dir, `${id}.json.enc`),
+    envelopeText(
+      sealBytes(
+        deriveSealKeys(TEST_KEY),
+        Buffer.from(`${JSON.stringify(value, null, 2)}\n`),
+      ),
+    ),
+  );
+}
+
 function cli(repo: string, fetchMode: string, ...args: string[]) {
+  return spawnCli(repo, { ENR_FETCH: fetchMode }, args);
+}
+
+/** An apply through the CLI, offline, with the throwaway content key. */
+function cliWithKey(repo: string, ...args: string[]) {
+  return spawnCli(
+    repo,
+    { ENR_FETCH: "offline", QZ_CONTENT_KEY: TEST_KEY.toString("base64") },
+    args,
+  );
+}
+
+function spawnCli(
+  repo: string,
+  env: Record<string, string>,
+  args: readonly string[],
+) {
   const result = spawnSync(
     process.execPath,
     [
@@ -479,7 +568,7 @@ function cli(repo: string, fetchMode: string, ...args: string[]) {
         NODE_ENV: "test",
         PATH: process.env.PATH ?? "",
         HOME: repo,
-        ENR_FETCH: fetchMode,
+        ...env,
       },
     },
   );
@@ -619,6 +708,73 @@ describe("ENR-1 .github/workflows/wikidata-enrich.yml", () => {
   it("checks the properties under the labels the synthetic Wikidata gives", () => {
     expect(PROPERTY_LABELS).toEqual(PROPERTIES);
   });
+
+  const hasJq = spawnSync("jq", ["--version"]).status === 0;
+  it.skipIf(!hasJq)(
+    "proposes nothing when only fetchedAt and the revisions changed, and copies the output otherwise",
+    () => {
+      const step = workflow.jobs["pull-request"]?.steps.find(
+        (s) => s.name === "Commit, push and open the pull request",
+      );
+      // Only the part before the first git command runs here.
+      const [compare = ""] = (step?.run ?? "").split("git config user.name");
+      expect(compare).toContain("nothing to propose");
+      const dir = tempDir("qz-enrich-pr-");
+      const runner = join(dir, "runner");
+      const output = "content/answer-lists/_wikidata";
+      mkdirSync(join(runner, "wikidata/out"), { recursive: true });
+      mkdirSync(join(dir, output), { recursive: true });
+      const earlier = EXPECTED.person;
+      if (earlier === undefined) throw new Error("no expected person file");
+      const base = `${JSON.stringify(earlier, null, 2)}\n`;
+      writeFileSync(join(dir, output, "person.json"), base);
+      const rerun = structuredClone(earlier);
+      rerun.fetchedAt = "2026-11-16T02:47:12Z";
+      for (const record of rerun.sitelinks)
+        if (record.revision !== null) record.revision += 1;
+      for (const entry of rerun.candidates)
+        for (const c of entry.candidates)
+          if (c.revision !== null) c.revision += 1;
+      const write = () =>
+        writeFileSync(
+          join(runner, "wikidata/out/person.json"),
+          JSON.stringify(rerun),
+        );
+      const runStep = (script: string) =>
+        spawnSync("bash", ["-c", script], {
+          cwd: dir,
+          encoding: "utf8",
+          env: {
+            NODE_ENV: "test",
+            PATH: process.env.PATH ?? "",
+            HOME: dir,
+            RUNNER_TEMP: runner,
+            OUTPUT: output,
+            BASE: "main",
+            UNCHANGED_BY: String(step?.env?.UNCHANGED_BY),
+          },
+        });
+
+      write();
+      const same = runStep(compare);
+      expect(same.stderr).toBe("");
+      expect([same.status, same.stdout.trim()]).toEqual([
+        0,
+        "Only fetchedAt and revisions differ from main; nothing to propose.",
+      ]);
+      expect(readFileSync(join(dir, output, "person.json"), "utf8")).toBe(base);
+
+      // A sitelink count that moved is a change: the output is copied over.
+      const goya = rerun.sitelinks[0];
+      if (goya?.sitelinks != null) goya.sitelinks += 1;
+      write();
+      const changed = runStep(`${compare}\necho "proposing"`);
+      expect([changed.status, changed.stdout.trim()]).toEqual([0, "proposing"]);
+      expect(
+        JSON.parse(readFileSync(join(dir, output, "person.json"), "utf8")),
+      ).toEqual(rerun);
+    },
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -869,12 +1025,165 @@ describe("ENR-1 without network", () => {
     expect(fileOf(files, "person")).toEqual(EXPECTED.person);
   });
 
+  it("rides out a long spell of maxlag on its wait budget, not on its attempts", async () => {
+    const { deps, sleeps } = stubDeps(FIXTURE_WORLD, (_url, call) =>
+      call >= 2 && call <= 11
+        ? replyToResponse({
+            status: 200,
+            body: { error: { code: "maxlag", info: "6 seconds lagged." } },
+            headers: { "retry-after": "5" },
+          })
+        : undefined,
+    );
+    const files = await fetchEnrichment(fixtureLists(), deps, NOW);
+    expect(sleeps).toEqual(Array<number>(10).fill(5000));
+    expect(fileOf(files, "person")).toEqual(EXPECTED.person);
+  });
+
+  it("gives up once the waits Wikidata asks for pass 15 minutes, naming the host", async () => {
+    const { deps, sleeps } = stubDeps(FIXTURE_WORLD, () =>
+      replyToResponse({
+        status: 200,
+        body: { error: { code: "ratelimited", info: "slow down" } },
+        headers: { "retry-after": "60" },
+      }),
+    );
+    await expect(fetchEnrichment(fixtureLists(), deps, NOW)).rejects.toThrow(
+      "www.wikidata.org still answered API error ratelimited to wbgetentities after 15 minutes of waiting",
+    );
+    expect(sleeps).toEqual(Array<number>(15).fill(60_000));
+  });
+
   it("retries a dropped connection with growing waits", async () => {
     const { deps, sleeps } = stubDeps(FIXTURE_WORLD, (_url, call) =>
       call <= 2 ? networkError("ECONNRESET") : undefined,
     );
     await fetchEnrichment(fixtureLists(), deps, NOW);
     expect(sleeps).toEqual([2000, 4000]);
+  });
+
+  /** A 200 answer whose body fails while it arrives, as undici reports it. */
+  const failingBody = (error: Error) =>
+    new Response(
+      new ReadableStream({
+        start(controller) {
+          controller.enqueue(new TextEncoder().encode('{"entities":'));
+          controller.error(error);
+        },
+      }),
+      { status: 200, headers: { "content-type": "application/json" } },
+    );
+
+  it("retries a body that times out on the way, and never calls it not JSON", async () => {
+    const { deps, sleeps } = stubDeps(FIXTURE_WORLD, (_url, call) =>
+      call === 2
+        ? failingBody(
+            new DOMException(
+              "The operation was aborted due to timeout",
+              "TimeoutError",
+            ),
+          )
+        : undefined,
+    );
+    const files = await fetchEnrichment(fixtureLists(), deps, NOW);
+    expect(sleeps).toEqual([2000]);
+    expect(fileOf(files, "person")).toEqual(EXPECTED.person);
+  });
+
+  it("gives up on a connection that keeps dropping mid-body, naming the host and the socket error", async () => {
+    const { deps, sleeps } = stubDeps(FIXTURE_WORLD, () =>
+      failingBody(
+        new TypeError("terminated", { cause: { code: "UND_ERR_SOCKET" } }),
+      ),
+    );
+    await expect(fetchEnrichment(fixtureLists(), deps, NOW)).rejects.toThrow(
+      "cannot reach www.wikidata.org (UND_ERR_SOCKET)",
+    );
+    expect(sleeps).toEqual([2000, 4000, 8000, 16000, 32000]);
+  });
+
+  it("still says not JSON for a body that arrives whole but isn't JSON", async () => {
+    const { deps, requests } = stubDeps(
+      FIXTURE_WORLD,
+      () => new Response("<html>maintenance</html>", { status: 200 }),
+    );
+    await expect(fetchEnrichment(fixtureLists(), deps, NOW)).rejects.toThrow(
+      "www.wikidata.org sent a wbgetentities response that is not JSON",
+    );
+    expect(requests).toHaveLength(1);
+  });
+
+  it("reads a country item that wbgetclaims calls an unresolved redirect as no country", async () => {
+    const { deps } = stubDeps(FIXTURE_WORLD, (url) =>
+      url.searchParams.get("action") === "wbgetclaims" &&
+      url.searchParams.get("entity") === "Q954"
+        ? replyToResponse({
+            status: 200,
+            body: {
+              error: {
+                code: "unresolved-redirect",
+                info: "The given entity ID refers to a redirect, which is not supported in this context.",
+              },
+            },
+          })
+        : undefined,
+    );
+    const landmark = fileOf(
+      await fetchEnrichment(fixtureLists(), deps, NOW),
+      "landmark",
+    );
+    const victoria = landmark.candidates.find(
+      (c) => c.id === "x.landmark.victoria-falls",
+    );
+    expect(victoria?.candidates[0]?.facts).toEqual({ country: ["ZM"] });
+    expect([victoria?.verdict, victoria?.match]).toEqual(["match", "Q43278"]);
+  });
+
+  it("asks again for an id a truncated wbgetentities answer left out, instead of calling it missing", async () => {
+    let truncated = 0;
+    const { deps, requests } = stubDeps(FIXTURE_WORLD, (url) => {
+      const ids = (url.searchParams.get("ids") ?? "").split("|");
+      if (truncated > 0 || !ids.includes("Q34221")) return undefined;
+      truncated += 1;
+      const body = answer(FIXTURE_WORLD, url).body as {
+        entities: Record<string, unknown>;
+      };
+      delete body.entities.Q34221;
+      return replyToResponse({
+        status: 200,
+        body: {
+          ...body,
+          warnings: {
+            result: {
+              warnings:
+                "This result was truncated because it would otherwise be larger than the limit of 8,388,608 bytes.",
+            },
+          },
+        },
+      });
+    });
+    const files = await fetchEnrichment(fixtureLists(), deps, NOW);
+    expect(fileOf(files, "landmark")).toEqual(EXPECTED.landmark);
+    // The referenced QIDs once, then Q34221 on its own; then the candidates.
+    const asked = requests
+      .filter((r) => r.url.searchParams.get("action") === "wbgetentities")
+      .map((r) => r.url.searchParams.get("ids"));
+    expect(asked[2]).toBe("Q34221");
+  });
+
+  it("fails the run, naming the id, when a truncated answer keeps leaving it out", async () => {
+    const { deps } = stubDeps(FIXTURE_WORLD, (url) => {
+      const ids = (url.searchParams.get("ids") ?? "").split("|");
+      if (!ids.includes("Q43278")) return undefined;
+      const body = answer(FIXTURE_WORLD, url).body as {
+        entities: Record<string, unknown>;
+      };
+      delete body.entities.Q43278;
+      return replyToResponse({ status: 200, body });
+    });
+    await expect(fetchEnrichment(fixtureLists(), deps, NOW)).rejects.toThrow(
+      "www.wikidata.org left Q43278 out of wbgetentities (the result was truncated)",
+    );
   });
 
   it("gives up after six 503 answers, naming the host", async () => {
@@ -946,6 +1255,7 @@ const NOTHING_RESOLVED = { countries: new Map(), names: new Map() };
 function data(claims: EntityData["claims"]): EntityData {
   return {
     id: "Q296",
+    revision: null,
     label: null,
     description: null,
     aliases: [],
@@ -1146,6 +1456,7 @@ describe("the qualifier checks", () => {
   it("decides each entry's verdict over its label-agreeing candidates", () => {
     const of = (qid: string, qualifier: Candidate["qualifier"]): Candidate => ({
       qid,
+      revision: null,
       label: null,
       description: null,
       sitelinks: 0,
@@ -1219,8 +1530,24 @@ describe("the pull request body", () => {
       "| person | 2 | 1 | 0 | 1 | 0 | 3 | 1 | 0 | 0 | 1 | 1 |",
     ])
       expect(markdown).toContain(row);
-    expect(markdown).toContain("npm run content:check -- --sealed");
     expect(markdown).not.toContain("Not compared this run");
+  });
+
+  it("gives the list builder's steps in order: a preview of exactly what the write sets, the probed write, the build, both checks, one commit", async () => {
+    const steps = summaryMarkdown(await dryRun())
+      .split("\n")
+      .filter((line) => /^\d\. /.test(line));
+    expect(steps).toHaveLength(5);
+    expect(steps[0]).toContain(
+      "scripts/content/enrich-wikidata.ts --apply --all --accept-matches`",
+    );
+    expect(steps[1]).toContain("`--write`");
+    expect(steps[1]).toContain("C12's suggestion probe");
+    expect(steps[2]).toContain("`npm run content:build`");
+    expect(steps[3]).toContain(
+      "`npm run content:check -- --sealed`, then `npm run content:check`",
+    );
+    expect(steps[4]).toContain("in a commit that touches no sealed envelope");
   });
 });
 
@@ -1324,24 +1651,31 @@ describe("apply, the list builder's step after a merged run", () => {
     expect(landmark).toEqual(before);
   });
 
-  it("with acceptMatches sets wikidataId only where the verdict is match", async () => {
+  it("with acceptMatches sets wikidataId only where the verdict is match, and never for a music_artist", async () => {
     const files = await dryRun();
     const lists = fixtureLists();
-    const accepted = lists.flatMap(
-      (l) =>
-        applyEnrichment(l, fileOf(files, l.type), {
-          write: true,
-          acceptMatches: true,
-          today: TODAY,
-        }).accepted,
+    const reports = lists.map((l) =>
+      applyEnrichment(l, fileOf(files, l.type), {
+        write: true,
+        acceptMatches: true,
+        today: TODAY,
+      }),
     );
-    // Not the duplicate, the label-only entry or the entries that disagree.
-    expect(accepted).toEqual([
+    // Not the duplicate, the label-only entry or the entries that disagree,
+    // and not John Lennon: a date of birth says person, not musician.
+    expect(reports.flatMap((r) => r.accepted)).toEqual([
       { id: "x.country.canada", qid: "Q16" },
       { id: "x.landmark.victoria-falls", qid: "Q43278" },
-      { id: "x.music_artist.john-lennon", qid: "Q1203" },
       { id: "x.person.claude-monet", qid: "Q296" },
     ]);
+    expect(reports.find((r) => r.type === "music_artist")?.held).toEqual([
+      { id: "x.music_artist.john-lennon", reason: MUSIC_ARTIST_HELD },
+    ]);
+    expect(
+      listOf(lists, "music_artist").entities.find(
+        (e) => e.id === "x.music_artist.john-lennon",
+      ),
+    ).toMatchObject({ wikidataId: null, popularity: 0 });
     const monet = listOf(lists, "person").entities.find(
       (e) => e.id === "x.person.claude-monet",
     );
@@ -1392,41 +1726,255 @@ describe("apply, the list builder's step after a merged run", () => {
     ]);
   });
 
+  it("holds an entry whose qualifier or aliases changed after the run, even under its old name", async () => {
+    const files = await dryRun();
+    const person = listOf(fixtureLists(), "person");
+    for (const entity of person.entities) {
+      // The list builder repoints Monet's entry at someone else...
+      if (entity.id === "x.person.claude-monet")
+        entity.qualifier = { descriptor: "footballer", born: 1900 };
+      // ...and drops the alias Goya's label check could have rested on.
+      if (entity.id === "Q5432") entity.aliases = [];
+    }
+    person.version = "2026-11-12";
+    const report = applyEnrichment(person, fileOf(files, "person"), {
+      write: true,
+      acceptMatches: true,
+      today: TODAY,
+    });
+    const changed = "the entry changed after the run; fetch again";
+    expect(report).toMatchObject({
+      stale: true,
+      popularity: [],
+      accepted: [],
+      held: [
+        { id: "Q5432", reason: changed },
+        { id: "x.person.claude-monet", reason: changed },
+        {
+          id: "x.person.edouard-manet",
+          reason: "Q40599 is missing on Wikidata",
+        },
+      ],
+      written: false,
+    });
+    expect(
+      person.entities.find((e) => e.id === "x.person.claude-monet"),
+    ).toMatchObject({ wikidataId: null, popularity: 0 });
+  });
+
+  it("holds a match its own candidates don't bear out, and refuses such a file outright", async () => {
+    const files = await dryRun();
+    const edits: [string, (file: EnrichmentFile) => void][] = [
+      // A QID no candidate carries.
+      [
+        "a match no candidate carries",
+        (file) => {
+          const monet = file.candidates.find(
+            (c) => c.id === "x.person.claude-monet",
+          );
+          if (monet) monet.match = "Q12345";
+        },
+      ],
+      // The only candidate disagrees, yet the verdict stayed match.
+      [
+        "a match whose candidate disagrees",
+        (file) => {
+          const agreeing = file.candidates.find(
+            (c) => c.id === "x.person.claude-monet",
+          )?.candidates[0];
+          if (agreeing) agreeing.qualifier = "disagrees";
+        },
+      ],
+    ];
+    for (const [what, edit] of edits) {
+      const file = structuredClone(fileOf(files, "person"));
+      edit(file);
+      const report = applyEnrichment(listOf(fixtureLists(), "person"), file, {
+        write: false,
+        acceptMatches: true,
+        today: TODAY,
+      });
+      expect(report.accepted, what).toEqual([]);
+      expect(report.held, what).toContainEqual({
+        id: "x.person.claude-monet",
+        reason: "the file's verdict does not follow from its candidates",
+      });
+      const parsed = EnrichmentFileSchema.safeParse(file);
+      expect(parsed.success, what).toBe(false);
+      expect(
+        parsed.error?.issues.map((i) => i.path.join(".")),
+        what,
+      ).toEqual(["candidates.1.verdict"]);
+    }
+    // A duplicate always names whom it shares the QID with.
+    const shared = structuredClone(fileOf(files, "landmark"));
+    delete shared.candidates[0]?.sharedWith;
+    expect(EnrichmentFileSchema.safeParse(shared).success).toBe(false);
+  });
+
+  it("marks a match on a QID another list, a retired entry or a redirect already holds as a duplicate", async () => {
+    const music = list("music_artist", [
+      entry("Q1203", "John Lennon", {
+        descriptor: "singer-songwriter",
+        kind: "solo",
+      }),
+    ]);
+    const person = () =>
+      list("person", [
+        entry("x.person.john-lennon", "John Lennon", {
+          descriptor: "musician",
+          born: 1940,
+        }),
+        // Retired, yet its QID still names the entity.
+        entry(
+          "Q46373",
+          "Edgar Degas",
+          { descriptor: "painter", born: 1834 },
+          { status: "retired" },
+        ),
+        entry("x.person.edgar-degas", "Edgar Degas", {
+          descriptor: "painter",
+          born: 1834,
+        }),
+        // Its wikidataId redirects to Monet's QID (a synthetic redirect).
+        entry(
+          "x.person.edouard-manet",
+          "Édouard Manet",
+          { descriptor: "painter", born: 1832 },
+          { wikidataId: "Q40599" },
+        ),
+        entry("x.person.claude-monet", "Claude Monet", {
+          descriptor: "painter",
+          born: 1840,
+        }),
+      ]);
+    // Wikidata answers for Q40599 with Q296 and the redirect, as for a merged item.
+    const redirecting = (url: URL) => {
+      const ids = url.searchParams.get("ids")?.split("|") ?? [];
+      if (!ids.includes("Q40599")) return undefined;
+      const merged = new URL(url.href);
+      merged.searchParams.set(
+        "ids",
+        ids.map((id) => (id === "Q40599" ? "Q296" : id)).join("|"),
+      );
+      const body = answer(FIXTURE_WORLD, merged).body as {
+        entities: Record<string, Record<string, unknown>>;
+      };
+      const monet = body.entities.Q296;
+      if (monet) monet.redirects = { from: "Q40599", to: "Q296" };
+      return replyToResponse({ status: 200, body });
+    };
+    const verdicts = (file: EnrichmentFile) =>
+      file.candidates.map((c) => [c.id, c.verdict, c.match, c.sharedWith]);
+    const expected = [
+      [
+        "x.person.claude-monet",
+        "duplicate",
+        "Q296",
+        ["x.person.edouard-manet"],
+      ],
+      ["x.person.edgar-degas", "duplicate", "Q46373", ["Q46373"]],
+      ["x.person.john-lennon", "duplicate", "Q1203", ["Q1203"]],
+    ];
+
+    // Every list read in one run...
+    const both = await fetchEnrichment(
+      [music, person()],
+      stubDeps(FIXTURE_WORLD, redirecting).deps,
+      NOW,
+    );
+    expect(verdicts(fileOf(both, "person"))).toEqual(expected);
+    // ...or one list, with the others read for their QIDs only.
+    const alone = await fetchEnrichment(
+      [person()],
+      stubDeps(FIXTURE_WORLD, redirecting).deps,
+      NOW,
+      [music],
+    );
+    expect(verdicts(fileOf(alone, "person"))).toEqual(expected);
+
+    // A run that read neither the music list nor the redirect sees two
+    // matches; apply still holds both, given the QIDs every list holds
+    // (applyMain reads every list present for them).
+    const blind = fileOf(
+      await fetchEnrichment([person()], stubDeps().deps, NOW),
+      "person",
+    );
+    expect(verdicts(blind)).toEqual([
+      ["x.person.claude-monet", "match", "Q296", undefined],
+      ["x.person.edgar-degas", "duplicate", "Q46373", ["Q46373"]],
+      ["x.person.john-lennon", "match", "Q1203", undefined],
+    ]);
+    const target = person();
+    const report = applyEnrichment(target, blind, {
+      write: false,
+      acceptMatches: true,
+      today: TODAY,
+      holders: qidHolders([music, target], new Map([["Q40599", "Q296"]])),
+    });
+    expect(report.accepted).toEqual([]);
+    expect(report.held).toEqual([
+      {
+        id: "x.person.claude-monet",
+        reason: "Q296 already belongs to x.person.edouard-manet",
+      },
+      {
+        id: "x.person.edouard-manet",
+        reason: "Q40599 is missing on Wikidata",
+      },
+      {
+        id: "x.person.john-lennon",
+        reason: "Q1203 already belongs to Q1203",
+      },
+    ]);
+  });
+
   it(
-    "through the CLI reports, then writes, and names the reviewer step, all without network",
+    "through the CLI previews exactly what the write sets, writes only with the content key, and names the next steps, all without network",
     { timeout: 60_000 },
     () => {
       const repo = cliRepo();
       expect(cli(repo, "world").code).toBe(0);
       const lists = join(repo, "content/answer-lists");
       const before = snapshot(lists);
+      const args = ["--apply", "--all", "--accept-matches", "--today", TODAY];
 
-      const report = cli(repo, "offline", "--apply", "--all");
+      // The preview lists the wikidataId acceptances the write will make.
+      const report = cli(repo, "offline", ...args);
       expect(report.code).toBe(0);
       expect(report.stdout).toContain(
-        "person: 1 popularity change(s), 0 wikidataId(s) accepted, 1 held.",
+        "person: 2 popularity change(s), 1 wikidataId(s) accepted, 1 held.",
       );
       expect(report.stdout).toContain(
         "  would set popularity of Q5432: 0 -> 7",
       );
+      expect(report.stdout).toContain(
+        "  would set wikidataId of x.person.claude-monet: Q296",
+      );
+      expect(report.stdout).toContain(
+        `  held x.music_artist.john-lennon: ${MUSIC_ARTIST_HELD}`,
+      );
       expect(snapshot(lists)).toEqual(before);
 
-      const write = cli(
-        repo,
-        "offline",
-        "--apply",
-        "--all",
-        "--write",
-        "--accept-matches",
-        "--today",
-        TODAY,
-      );
+      // No content key, no write: the probe needs it.
+      const keyless = cli(repo, "offline", ...args, "--write");
+      expect(keyless.code).toBe(1);
+      expect(keyless.stdout).toBe("");
+      expect(keyless.stderr).toContain("--write needs the content key");
+      expect(snapshot(lists)).toEqual(before);
+
+      const write = cliWithKey(repo, ...args, "--write");
       expect(write.stderr).toBe("");
       expect(write.code).toBe(0);
       expect(write.stdout).toContain(
         "  set wikidataId of x.person.claude-monet: Q296",
       );
-      expect(write.stdout).toContain("npm run content:check -- --sealed");
+      expect(write.stdout).toContain(
+        "C12's suggestion probe found no new hit on 0 checking or active sealed mystery(ies).",
+      );
+      expect(write.stdout).toContain(
+        "Next: npm run content:build, then npm run content:check -- --sealed and npm run content:check",
+      );
       const person = JSON.parse(
         readFileSync(join(lists, "person.json"), "utf8"),
       ) as AnswerList;
@@ -1436,9 +1984,281 @@ describe("apply, the list builder's step after a merged run", () => {
       // content:lists reads the credit as no dataset, so it asks for no pin.
       expect([...citedDatasets(person)]).toEqual([]);
 
+      // A hand-edited verdict fails the file's own schema.
+      const out = join(lists, "_wikidata/country.json");
+      const edited = JSON.parse(readFileSync(out, "utf8")) as EnrichmentFile;
+      const canada = edited.candidates[0];
+      if (canada) canada.match = "Q12345";
+      writeFileSync(out, JSON.stringify(edited));
+      const refused = cli(repo, "offline", "--apply", "--type", "country");
+      expect(refused.code).toBe(1);
+      expect(refused.stderr).toContain(
+        "content/answer-lists/_wikidata/country.json is not a format 2 enrichment file (candidates.0.verdict: the file's verdict does not follow from its candidates)",
+      );
+
       const missing = cli(repo, "offline", "--apply");
       expect(missing.code).toBe(1);
       expect(missing.stderr).toContain("--apply takes --type <type> or --all");
+    },
+  );
+
+  it(
+    "through the CLI holds a match on a QID another list holds, with --type too",
+    { timeout: 60_000 },
+    async () => {
+      const music = list("music_artist", [
+        entry("Q1203", "John Lennon", {
+          descriptor: "singer-songwriter",
+          kind: "solo",
+        }),
+      ]);
+      const person = list("person", [
+        entry("x.person.john-lennon", "John Lennon", {
+          descriptor: "musician",
+          born: 1940,
+        }),
+      ]);
+      const repo = cliRepo([music, person]);
+      // A file fetched for the person list alone, blind to the music list.
+      const [file] = await fetchEnrichment([person], stubDeps().deps, NOW);
+      await writeEnrichmentFiles(
+        join(repo, "content/answer-lists/_wikidata"),
+        file ? [file] : [],
+      );
+      expect(file?.candidates[0]?.verdict).toBe("match");
+      const run = cli(
+        repo,
+        "offline",
+        "--apply",
+        "--type",
+        "person",
+        "--accept-matches",
+      );
+      expect(run.code).toBe(0);
+      expect(run.stdout).toContain(
+        "  held x.person.john-lennon: Q1203 already belongs to Q1203",
+      );
+      expect(run.stdout).not.toContain("would set wikidataId");
+    },
+  );
+});
+
+// ---------------------------------------------------------------------------
+// The suggestion probe before --write (C12, CONTENT_GUIDE §2.13)
+// ---------------------------------------------------------------------------
+
+describe("the suggestion probe that --write runs first", () => {
+  const TODAY = "2026-11-09";
+  /** Six invented people who sort before Claude Monet on "cla". */
+  const CLABORS = ["Aster", "Brine", "Corrin", "Dune", "Esk", "Fenn"].map(
+    (surname) =>
+      entry(`x.person.clabor-${surname.toLowerCase()}`, `Clabor ${surname}`, {
+        descriptor: "fixture painter",
+        born: 1900,
+      }),
+  );
+
+  /** The fixture lists, with the Clabors in the person list. */
+  function probeLists(): AnswerList[] {
+    return fixtureLists().map((l) =>
+      l.type === "person" ? { ...l, entities: [...l.entities, ...CLABORS] } : l,
+    );
+  }
+
+  /**
+   * An invented mystery about Claude Monet's entry, accepted on 1 November
+   * (before CNT-2's rules landed), so content:check would only warn on a C12
+   * hit. Its first clue holds "clan": typing "cla" shows six Clabors while
+   * every popularity is 0, and Monet first once he has one.
+   */
+  function mystery(): Mystery {
+    const accepted = JSON.parse(
+      readFileSync(
+        join(REPO_ROOT, "content/practice/geography/p.geo.0101.json"),
+        "utf8",
+      ),
+    ) as { verification: Mystery["verification"] };
+    return {
+      ...fxMystery(),
+      id: "m.art.0101",
+      status: "active",
+      category: "art",
+      answerType: "person",
+      answer: "x.person.claude-monet",
+      clues: [
+        "Its fixture clan gathered by the Vellum river.",
+        "Its calendar has thirteen weeks of 28 days.",
+        "The river runs through its capital, Cindral.",
+        "This invented fixture person painted the seven bridges of Cindral.",
+      ],
+      distractors: [
+        "x.person.edgar-degas",
+        "x.person.camille-pissarro",
+        "Q5432",
+      ],
+      likelyGuesses: CLABORS.map((e) => e.id),
+      rivals: [
+        { id: "x.person.edgar-degas", ruledOutBy: [1, 2] },
+        { id: "x.person.camille-pissarro", ruledOutBy: [2, 3] },
+        { id: "Q5432", ruledOutBy: [1, 3] },
+      ],
+      predicted: {
+        solveByClue: [0.2, 0.4, 0.6, 0.9],
+        spread: 0.1,
+        estimator: "es-fx-estimator",
+      },
+      verification: accepted.verification,
+    } as Mystery;
+  }
+
+  it("finds the C12 hit a new popularity brings on a mystery accepted before the rules landed, which content:check only warns about", async () => {
+    const lists = probeLists();
+    const person = listOf(lists, "person");
+    const record = mystery();
+    expect(
+      Date.parse(record.verification?.editor?.decidedAt ?? ""),
+    ).toBeLessThan(Date.parse(RULES_LANDED_AT));
+    const tree = (people: AnswerList) =>
+      writeTree({
+        "answer-lists/person.json": people,
+        ".sealed-plain/mysteries/m.art.0101.json": record,
+      });
+    const bank = await loadBank(
+      resolveLayout({ repoRoot: REPO_ROOT, root: await tree(person) }),
+    );
+    expect(bank.itemsById.get("m.art.0101")?.item.status).toBe("active");
+
+    // As the lists stand, and with a popularity elsewhere: no new hit.
+    expect(suggestionGuard(bank, [person])).toEqual({
+      probed: 1,
+      findings: [],
+    });
+    const goya = structuredClone(person);
+    for (const e of goya.entities) if (e.id === "Q5432") e.popularity = 7;
+    expect(suggestionGuard(bank, [goya]).findings).toEqual([]);
+
+    // Monet's sitelink count takes him to the top of "cla": a new hit.
+    const monet = structuredClone(person);
+    for (const e of monet.entities)
+      if (e.id === "x.person.claude-monet") e.popularity = 9;
+    expect(suggestionGuard(bank, [monet])).toEqual({
+      probed: 1,
+      findings: [
+        expect.objectContaining({
+          rule: "C12",
+          severity: "error",
+          itemId: "m.art.0101",
+          path: "clues[0]",
+        }),
+      ],
+    });
+
+    // content:check sees the same hit on that list, but only as a warning,
+    // which exits 0: why --write probes for itself.
+    const after = await loadBank(
+      resolveLayout({ repoRoot: REPO_ROOT, root: await tree(monet) }),
+    );
+    expect(
+      cnt2Findings(after, { dedupe: false })
+        .findings.filter((f) => f.rule === "C12" && f.itemId === "m.art.0101")
+        .map((f) => `${f.severity} ${f.path ?? ""}`),
+    ).toEqual(["warn clues[0]"]);
+  });
+
+  it("names a sealed mystery it can't read rather than vouch for it, but lets a broken draft be", async () => {
+    const person = listOf(probeLists(), "person");
+    const bank = await loadBank(
+      resolveLayout({
+        repoRoot: REPO_ROOT,
+        root: await writeTree({
+          "answer-lists/person.json": person,
+          ".sealed-plain/mysteries/m.art.0101.json": "{ not json",
+          ".sealed-plain/mysteries/m.art.0102.json": {
+            ...mystery(),
+            id: "m.art.0102",
+            status: "draft",
+            clues: [],
+          },
+        }),
+      }),
+    );
+    expect(suggestionGuard(bank, [person]).findings).toEqual([
+      expect.objectContaining({
+        rule: "C01",
+        file: expect.stringMatching(/mysteries\/m\.art\.0101\.json$/),
+      }),
+    ]);
+  });
+
+  it(
+    "through the CLI refuses the write, prints only ids, rules and paths, and leaves every list as it was",
+    { timeout: 60_000 },
+    () => {
+      const repo = cliRepo(probeLists());
+      seal(repo, "mysteries", "m.art.0101", mystery());
+      expect(cli(repo, "world").code).toBe(0);
+      const lists = join(repo, "content/answer-lists");
+      const before = snapshot(lists);
+      const write = cliWithKey(
+        repo,
+        "--apply",
+        "--all",
+        "--accept-matches",
+        "--write",
+        "--today",
+        TODAY,
+      );
+      expect(write.stderr).toBe("");
+      expect(write.code).toBe(1);
+      const lines = write.stdout.trim().split("\n");
+      expect(lines.slice(0, 2)).toEqual([
+        "error m.art.0101 C12 clues[0]",
+        "enrich-wikidata: 1 item(s), 1 error(s), 0 warning(s).",
+      ]);
+      expect(lines).toHaveLength(3);
+      expect(lines[2]).toMatch(/^enrich-wikidata: nothing was written\./);
+      // No entry, clue or popularity: nothing ties the refusal to an answer.
+      for (const secret of [
+        "Monet",
+        "monet",
+        "Clabor",
+        "clan",
+        "popularity",
+        "x.person",
+        "Q296",
+      ])
+        expect(write.stdout).not.toContain(secret);
+      expect(snapshot(lists)).toEqual(before);
+
+      // A key that opens nothing can't vouch for the mystery either.
+      const wrongKey = spawnCli(
+        repo,
+        {
+          ENR_FETCH: "offline",
+          QZ_CONTENT_KEY: Buffer.alloc(32, 8).toString("base64"),
+        },
+        ["--apply", "--all", "--accept-matches", "--write", "--today", TODAY],
+      );
+      expect(wrongKey.code).toBe(1);
+      expect(wrongKey.stdout).toContain(
+        "error content/sealed/mysteries/m.art.0101.json.enc C01",
+      );
+      expect(snapshot(lists)).toEqual(before);
+
+      // Without the accept, Monet keeps popularity 0: the probe passes.
+      const popularityOnly = cliWithKey(
+        repo,
+        "--apply",
+        "--all",
+        "--write",
+        "--today",
+        TODAY,
+      );
+      expect(popularityOnly.stderr).toBe("");
+      expect(popularityOnly.code).toBe(0);
+      expect(popularityOnly.stdout).toContain(
+        "C12's suggestion probe found no new hit on 1 checking or active sealed mystery(ies).",
+      );
     },
   );
 });

@@ -7,8 +7,8 @@ name: Wikidata enrichment
 # writes content/answer-lists/_wikidata/. The pull-request job puts that
 # output on one bot branch and opens, or updates, a pull request. Nothing
 # here changes a list entry: popularity and wikidataId change only when the
-# list builder applies a merged run and the sealed check has passed (see
-# content/answer-lists/_wikidata/README.md).
+# list builder applies a merged run, after the suggestion probe over the
+# sealed mysteries has passed (see content/answer-lists/_wikidata/README.md).
 #
 # Owner checklist (ARCHITECTURE §12.5): allow GitHub Actions to create pull
 # requests (Settings, Actions, General, Workflow permissions), or open the
@@ -123,14 +123,25 @@ jobs:
       - name: Commit, push and open the pull request
         env:
           GH_TOKEN: ${{ github.token }}
+          # Every run stamps a new fetchedAt, and an item's revision moves
+          # with any edit on Wikidata, so neither counts as a change.
+          UNCHANGED_BY: 'del(.fetchedAt) | walk(if type == "object" then del(.revision) else . end)'
         run: |
           set -euo pipefail
           mkdir -p "$OUTPUT"
-          cp "$RUNNER_TEMP"/wikidata/out/*.json "$OUTPUT/"
-          if [ -z "$(git status --porcelain -- "$OUTPUT")" ]; then
-            echo "The output matches $BASE; nothing to propose."
+          # jq ships on the runner image, so this job still installs nothing.
+          changed=false
+          for f in "$RUNNER_TEMP"/wikidata/out/*.json; do
+            b="$OUTPUT/$(basename "$f")"
+            if [ ! -f "$b" ] || ! cmp -s <(jq -S "$UNCHANGED_BY" "$f") <(jq -S "$UNCHANGED_BY" "$b"); then
+              changed=true
+            fi
+          done
+          if [ "$changed" = false ]; then
+            echo "Only fetchedAt and revisions differ from $BASE; nothing to propose."
             exit 0
           fi
+          cp "$RUNNER_TEMP"/wikidata/out/*.json "$OUTPUT/"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch --create "$BRANCH"

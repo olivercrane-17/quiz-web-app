@@ -24,11 +24,17 @@
  * merged. It copies each referenced QID's sitelink count into the entry's
  * popularity (PRD §4.1.3's tie-break) and, with --accept-matches, sets
  * wikidataId where exactly one candidate agrees on label and qualifier,
- * under a new list version. Then comes the reviewer step, before any
- * commit: popularity reorders suggestion ties, which C12's suggestion probe
- * reads for every sealed mystery, so `npm run content:check -- --sealed`
- * runs first. Apply never skips an entry because a sealed item uses it: a
- * skipped entry would point at a mystery in a public diff.
+ * under a new list version. It holds whatever the run's judgement no longer
+ * covers: an entry whose name, aliases or qualifier changed since the fetch
+ * (each record carries a hash of them), a verdict that doesn't follow from
+ * the file's own candidates, a QID an entry of any list already references,
+ * and every music_artist match, whose check can't tell a musician from a
+ * namesake. Popularity reorders suggestion ties, which C12's suggestion
+ * probe reads for every sealed mystery, so --write needs the content key:
+ * it probes every checking or active mystery with the lists as they stand
+ * and as they would be, and writes nothing if any mystery gains a hit.
+ * Apply never skips an entry because a sealed item uses it: a skipped entry
+ * would point at a mystery in a public diff.
  *
  * QIDs here only ever come from fetched records or the lists themselves,
  * never from memory (CONTENT_GUIDE §9.6). The property ids the qualifier
@@ -42,6 +48,7 @@ import { fileURLToPath } from "node:url";
 import { z } from "zod";
 
 import { normalizeName } from "../../src/engine/suggest/normalize.ts";
+import { loadBank, type Bank } from "../../src/content/pipeline/bank.ts";
 import {
   parseCli,
   run,
@@ -50,6 +57,8 @@ import {
 } from "../../src/content/pipeline/cli.ts";
 import {
   readJsonFile,
+  sha256Hex,
+  stableStringify,
   writeJsonFile,
   writeTextFile,
 } from "../../src/content/pipeline/json.ts";
@@ -64,22 +73,34 @@ import {
   type AnswerEntity,
   type AnswerList,
 } from "../../src/content/schema/answer-lists.ts";
+import type { Mystery } from "../../src/content/schema/items.ts";
 import {
   ANSWER_TYPES,
   QID_PATTERN,
   answerType,
   entityId,
   isoDate,
+  sha256Hex as sha256Digest,
   type AnswerType,
 } from "../../src/content/schema/primitives.ts";
+import {
+  keySourceFromProcess,
+  loadMasterKey,
+  type SealKeys,
+} from "./crypto.ts";
+import { printReport, type ReportFinding } from "./lib/report.ts";
+import { suggestionProbe } from "./lint/mysteries.ts";
 
 const NAME = "enrich-wikidata";
 
 /** The one host the fetch talks to. Every network failure names it. */
 export const WIKIDATA_HOST = "www.wikidata.org";
 export const WIKIDATA_API = `https://${WIKIDATA_HOST}/w/api.php`;
-/** The output's shape. Apply refuses a file of another format. */
-export const OUTPUT_FORMAT = 1;
+/**
+ * The output's shape. Apply refuses a file of another format. Format 2
+ * added each record's entryHash and the item revisions the run read.
+ */
+export const OUTPUT_FORMAT = 2;
 /** The output folder, inside the lists folder (ARCHITECTURE §2.1). */
 export const OUTPUT_FOLDER = "_wikidata";
 
@@ -88,9 +109,19 @@ const IDS_PER_REQUEST = 50;
 /** Search results read per entry, and label-agreeing candidates kept. */
 const SEARCH_LIMIT = 10;
 const CANDIDATES_KEPT = 5;
-/** Attempts per request before the run gives up; the waits grow. */
+/**
+ * Tries per request when it fails on the way (no answer, a connection lost
+ * while the body arrives, a 5xx answer); the waits grow.
+ */
 const MAX_ATTEMPTS = 6;
 const MAX_WAIT_MS = 120_000;
+/**
+ * What one request may wait in all when Wikidata asks it to (maxlag,
+ * ratelimited, HTTP 429), following Retry-After. Replication lag can last
+ * minutes, and an unattended run of thousands of requests should ride it
+ * out instead of throwing away everything fetched so far.
+ */
+const MAX_LAG_WAIT_MS = 15 * 60_000;
 const REQUEST_TIMEOUT_MS = 60_000;
 /** Wikimedia's API etiquette: wait while database replication lags. */
 const MAXLAG_SECONDS = 5;
@@ -144,15 +175,29 @@ export const VERDICTS = [
 ] as const;
 export type Verdict = (typeof VERDICTS)[number];
 
+const VERDICT_DOES_NOT_FOLLOW =
+  "the file's verdict does not follow from its candidates";
+
+/**
+ * What a run judged an entry on, as entryHashOf computes it: apply holds a
+ * record once the entry's name, aliases or qualifier differ from the run's.
+ */
+const entryHash = sha256Digest;
+/** The item revision a fact came from: Special:PermanentLink/<revision>. */
+const revision = z.int().min(1).nullable();
+
 const SitelinkRecordSchema = z.strictObject({
   /** The list entry. */
   id: entityId,
+  entryHash,
   /** The QID it references: its id, or its wikidataId. */
   qid,
   label: z.string().nullable(),
   /** Whether Wikidata's English label or an alias is the entry's name or one of its aliases. */
   labelMatch: z.enum(["label", "alias", "none"]),
   sitelinks: z.int().min(0).nullable(),
+  /** The revision the run read; null for a missing item. */
+  revision,
   missing: z.literal(true).optional(),
   /** The QID Wikidata redirected to (a merged item). */
   redirectedTo: qid.optional(),
@@ -160,6 +205,8 @@ const SitelinkRecordSchema = z.strictObject({
 
 const CandidateSchema = z.strictObject({
   qid,
+  /** The revision the run read the labels and facts from. */
+  revision,
   label: z.string().nullable(),
   description: z.string().nullable(),
   sitelinks: z.int().min(0),
@@ -169,19 +216,44 @@ const CandidateSchema = z.strictObject({
   qualifier: z.enum(["agrees", "disagrees", "unknown"]),
 });
 
-const CandidateEntrySchema = z.strictObject({
-  id: entityId,
-  name: z.string(),
-  /** The entry's own value for each compared qualifier field. */
-  ours: z.record(z.string(), factValue.nullable()),
-  verdict: z.enum(VERDICTS),
-  /** The agreeing QID for `match` and `duplicate`. */
-  match: qid.nullable(),
-  /** For `duplicate`: the other entries that hold or match the QID. */
-  sharedWith: z.array(entityId).optional(),
-  /** The strongest label-agreeing candidates, agreeing ones first. */
-  candidates: z.array(CandidateSchema),
-});
+const CandidateEntrySchema = z
+  .strictObject({
+    id: entityId,
+    entryHash,
+    name: z.string(),
+    /** The entry's own value for each compared qualifier field. */
+    ours: z.record(z.string(), factValue.nullable()),
+    verdict: z.enum(VERDICTS),
+    /** The agreeing QID for `match` and `duplicate`. */
+    match: qid.nullable(),
+    /** For `duplicate`: the other entries that hold or match the QID. */
+    sharedWith: z.array(entityId).min(1).optional(),
+    /** The strongest label-agreeing candidates, agreeing ones first. */
+    candidates: z.array(CandidateSchema),
+  })
+  .superRefine((entry, ctx) => {
+    // The verdict follows from the candidates kept, which always include
+    // every candidate the verdict rests on: agreeing ones sort first, then
+    // unknown ones. A hand edit or a bad merge that breaks this would turn
+    // into a QID nobody fetched (CONTENT_GUIDE §9.6).
+    const derived = verdictOf(entry.candidates);
+    const duplicate = entry.verdict === "duplicate";
+    if (
+      derived.verdict !== (duplicate ? "match" : entry.verdict) ||
+      derived.match !== entry.match
+    )
+      ctx.addIssue({
+        code: "custom",
+        path: ["verdict"],
+        message: VERDICT_DOES_NOT_FOLLOW,
+      });
+    if (duplicate !== (entry.sharedWith !== undefined))
+      ctx.addIssue({
+        code: "custom",
+        path: ["sharedWith"],
+        message: "a duplicate names the entries it shares its QID with",
+      });
+  });
 
 export const EnrichmentFileSchema = z.strictObject({
   format: z.literal(OUTPUT_FORMAT),
@@ -345,10 +417,59 @@ function apiErrorOf(body: unknown): { code: string; info: string } | null {
     : null;
 }
 
+/** One request's two budgets (see createHttp). */
+interface Budgets {
+  /** Requests that failed on the way: no answer, a lost body, a 5xx. */
+  failures: number;
+  /** Waits Wikidata asked for, and their total in milliseconds. */
+  waits: number;
+  waited: number;
+}
+
+/**
+ * After a request, or the body of its answer, failed on the way: waits to
+ * try again, or throws once retrying can't help (no route to the host, or
+ * MAX_ATTEMPTS used up). The 60 s timeout covers the body too, so a stalled
+ * or dropped transfer lands here as well, never as "not JSON".
+ */
+async function afterNetworkFailure(
+  error: unknown,
+  budgets: Budgets,
+  deps: EnrichDeps,
+): Promise<void> {
+  budgets.failures += 1;
+  const { reason, permanent } = networkFailure(error);
+  if (permanent || budgets.failures >= MAX_ATTEMPTS)
+    throw new Error(`cannot reach ${WIKIDATA_HOST} (${reason})`);
+  await deps.sleep(backoffMs(budgets.failures));
+}
+
+/** Waits as Wikidata asked (maxlag, ratelimited, 429), or throws once MAX_LAG_WAIT_MS is spent. */
+async function afterAskedToWait(
+  response: Response,
+  problem: string,
+  action: string,
+  budgets: Budgets,
+  deps: EnrichDeps,
+): Promise<void> {
+  budgets.waits += 1;
+  const wait = waitMs(response, budgets.waits);
+  if (budgets.waited + wait > MAX_LAG_WAIT_MS)
+    throw new Error(
+      `${WIKIDATA_HOST} still answered ${problem} to ${action} after ${Math.round(budgets.waited / 60_000)} minutes of waiting`,
+    );
+  budgets.waited += wait;
+  await deps.sleep(wait);
+}
+
 /**
  * GET requests to the Action API, one at a time, as Wikimedia's API
- * etiquette asks: a descriptive User-Agent, maxlag, and waits that follow
- * Retry-After on 429, 5xx and maxlag answers.
+ * etiquette asks: a descriptive User-Agent and maxlag. Two budgets decide
+ * when a request gives up. Waits Wikidata asks for (maxlag, ratelimited,
+ * HTTP 429) follow Retry-After and may add up to MAX_LAG_WAIT_MS. Failures
+ * on the way (no answer, a connection lost while the body arrives, a 5xx
+ * answer) get MAX_ATTEMPTS tries with growing waits, and a missing route to
+ * the host ends the run at once.
  */
 function createHttp(deps: EnrichDeps): Http {
   const headers = { "User-Agent": deps.userAgent, Accept: "application/json" };
@@ -364,8 +485,8 @@ function createHttp(deps: EnrichDeps): Http {
       for (const [key, value] of Object.entries(query))
         url.searchParams.set(key, value);
       const action = params.action ?? "request";
-      let problem = "";
-      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
+      const budgets: Budgets = { failures: 0, waits: 0, waited: 0 };
+      for (;;) {
         let response: Response;
         try {
           response = await deps.fetch(url.href, {
@@ -373,18 +494,22 @@ function createHttp(deps: EnrichDeps): Http {
             signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
           });
         } catch (error) {
-          const { reason, permanent } = networkFailure(error);
-          if (permanent || attempt === MAX_ATTEMPTS)
-            throw new Error(`cannot reach ${WIKIDATA_HOST} (${reason})`);
-          problem = reason;
-          await deps.sleep(backoffMs(attempt));
+          await afterNetworkFailure(error, budgets, deps);
           continue;
         }
-        if (response.status === 429 || response.status >= 500) {
-          problem = `HTTP ${response.status}`;
+        if (response.status === 429) {
           await discard(response);
-          if (attempt === MAX_ATTEMPTS) break;
-          await deps.sleep(waitMs(response, attempt));
+          await afterAskedToWait(response, "HTTP 429", action, budgets, deps);
+          continue;
+        }
+        if (response.status >= 500) {
+          budgets.failures += 1;
+          await discard(response);
+          if (budgets.failures >= MAX_ATTEMPTS)
+            throw new Error(
+              `${WIKIDATA_HOST} still answered HTTP ${response.status} to ${action} after ${MAX_ATTEMPTS} attempts`,
+            );
+          await deps.sleep(waitMs(response, budgets.failures));
           continue;
         }
         if (!response.ok) {
@@ -393,9 +518,16 @@ function createHttp(deps: EnrichDeps): Http {
             `${WIKIDATA_HOST} answered HTTP ${response.status} to ${action}`,
           );
         }
+        let raw: string;
+        try {
+          raw = await response.text();
+        } catch (error) {
+          await afterNetworkFailure(error, budgets, deps);
+          continue;
+        }
         let body: unknown;
         try {
-          body = await response.json();
+          body = JSON.parse(raw);
         } catch {
           throw new Error(
             `${WIKIDATA_HOST} sent a ${action} response that is not JSON`,
@@ -404,9 +536,13 @@ function createHttp(deps: EnrichDeps): Http {
         const error = apiErrorOf(body);
         if (error === null) return body;
         if (error.code === "maxlag" || error.code === "ratelimited") {
-          problem = `API error ${error.code}`;
-          if (attempt === MAX_ATTEMPTS) break;
-          await deps.sleep(waitMs(response, attempt));
+          await afterAskedToWait(
+            response,
+            `API error ${error.code}`,
+            action,
+            budgets,
+            deps,
+          );
           continue;
         }
         throw apiError(
@@ -414,9 +550,6 @@ function createHttp(deps: EnrichDeps): Http {
           `${WIKIDATA_HOST} refused ${action} (${error.code}${error.info ? `: ${oneLine(error.info)}` : ""})`,
         );
       }
-      throw new Error(
-        `${WIKIDATA_HOST} still answered ${problem} to ${action} after ${MAX_ATTEMPTS} attempts`,
-      );
     },
   };
 }
@@ -464,6 +597,8 @@ const Statement = z.object({
 const ApiEntity = z.object({
   id: z.string().optional(),
   missing: z.unknown().optional(),
+  /** props=info: the item's latest revision, which the run read. */
+  lastrevid: z.int().min(1).optional().catch(undefined),
   redirects: z
     .object({ from: z.string(), to: z.string() })
     .optional()
@@ -509,6 +644,8 @@ type ClaimValue = { type: string; value: unknown };
 export interface EntityData {
   /** The id Wikidata answered with: a redirect's target. */
   id: string;
+  /** The revision read (props=info), or null when the request didn't ask for it. */
+  revision: number | null;
   label: string | null;
   description: string | null;
   aliases: string[];
@@ -536,6 +673,7 @@ function entityData(
       entity.id !== undefined && ENTITY_PATTERN.test(entity.id)
         ? entity.id
         : requested,
+    revision: entity.lastrevid ?? null,
     label: entity.labels?.en?.value ?? null,
     description: entity.descriptions?.en?.value ?? null,
     aliases: (entity.aliases?.en ?? []).map((alias) => alias.value),
@@ -544,38 +682,57 @@ function entityData(
   };
 }
 
-/** wbgetentities in batches; a missing or deleted id maps to null. */
+/**
+ * wbgetentities in batches. An id Wikidata marks missing (deleted, or never
+ * created) maps to null. An id the answer leaves out altogether is not
+ * missing: MediaWiki drops whatever would take a result past its size limit
+ * and only adds a warning, so those ids are asked again in batches half the
+ * size, and one still left out on its own fails the run.
+ */
 async function getEntities(
   http: Http,
   ids: readonly string[],
   props: string,
 ): Promise<Map<string, EntityData | null>> {
   const out = new Map<string, EntityData | null>();
-  for (let start = 0; start < ids.length; start += IDS_PER_REQUEST) {
-    const chunk = ids.slice(start, start + IDS_PER_REQUEST);
-    const body = await http.get({
-      action: "wbgetentities",
-      ids: chunk.join("|"),
-      props,
-      languages: "en",
-      languagefallback: "1",
-    });
-    const { entities } = parseResponse(
-      GetEntitiesResponse,
-      body,
-      "wbgetentities",
-    );
-    const answered = Object.values(entities);
-    for (const id of chunk) {
-      const entity =
-        entities[id] ?? answered.find((item) => item.redirects?.from === id);
-      out.set(
-        id,
-        entity === undefined || entity.missing !== undefined
-          ? null
-          : entityData(id, entity),
+  let pending: readonly string[] = ids;
+  for (
+    let size = IDS_PER_REQUEST;
+    pending.length > 0;
+    size = Math.max(1, Math.floor(size / 2))
+  ) {
+    const absent: string[] = [];
+    for (let start = 0; start < pending.length; start += size) {
+      const chunk = pending.slice(start, start + size);
+      const body = await http.get({
+        action: "wbgetentities",
+        ids: chunk.join("|"),
+        props,
+        languages: "en",
+        languagefallback: "1",
+      });
+      const { entities } = parseResponse(
+        GetEntitiesResponse,
+        body,
+        "wbgetentities",
       );
+      const answered = Object.values(entities);
+      for (const id of chunk) {
+        const entity =
+          entities[id] ?? answered.find((item) => item.redirects?.from === id);
+        if (entity === undefined) absent.push(id);
+        else
+          out.set(
+            id,
+            entity.missing !== undefined ? null : entityData(id, entity),
+          );
+      }
     }
+    if (absent.length > 0 && size === 1)
+      throw new Error(
+        `${WIKIDATA_HOST} left ${absent[0]} out of wbgetentities (the result was truncated)`,
+      );
+    pending = absent;
   }
   return out;
 }
@@ -787,7 +944,9 @@ export const CHECKS: Readonly<Record<AnswerType, readonly FieldCheck[]>> = {
   music_artist: [
     {
       // A date of birth marks a person (solo or composer), an inception
-      // without one a group: no class ids needed.
+      // without one a group. That tells a person from a group, not a
+      // musician from a namesake (a company, a city or a cricketer agrees
+      // too), so apply never accepts a music_artist match on its own.
       field: "kind",
       properties: ["P569", "P571"],
       ours: own("kind"),
@@ -976,8 +1135,17 @@ async function resolveCountries(
         ),
       ];
     } catch (error) {
-      // A deleted or merged item names no country.
-      if (!isApiError(error, "no-such-entity", "invalid-entity-id"))
+      // A deleted item names no country, and nor does a merged one:
+      // wbgetclaims doesn't follow a redirect and answers
+      // unresolved-redirect. Either way the fact reads as unknown.
+      if (
+        !isApiError(
+          error,
+          "no-such-entity",
+          "invalid-entity-id",
+          "unresolved-redirect",
+        )
+      )
         throw error;
     }
     out.set(id, codes);
@@ -1010,14 +1178,70 @@ function usesProperty(type: AnswerType, property: PropertyId): boolean {
   return CHECKS[type].some((check) => check.properties.includes(property));
 }
 
-/** Marks a match whose QID another entry already holds or also matches. */
-function markDuplicates(list: AnswerList, entries: CandidateEntry[]): void {
+/** What a run judges an entry on: its name, aliases and qualifier, hashed. */
+export function entryHashOf(
+  entity: Pick<AnswerEntity, "name" | "aliases" | "qualifier">,
+): string {
+  return sha256Hex(
+    stableStringify({
+      name: entity.name,
+      aliases: entity.aliases,
+      qualifier: entity.qualifier,
+    }),
+  );
+}
+
+/**
+ * Every QID an entry already references, in every list given and whatever
+ * the entry's status (a retired entry still names its entity, and merging
+ * two entries is what replacedBy is for), plus the target of each one that
+ * Wikidata redirects: QID to the ids of the entries holding it. One entity,
+ * one entry (CONTENT_GUIDE §2.10 rule 1).
+ */
+export function qidHolders(
+  lists: readonly AnswerList[],
+  redirects: ReadonlyMap<string, string> = new Map(),
+): Map<string, string[]> {
   const holders = new Map<string, string[]>();
-  for (const entity of list.entities.filter(live)) {
-    const held = referencedQid(entity);
-    if (held !== null)
-      holders.set(held, [...(holders.get(held) ?? []), entity.id]);
-  }
+  const add = (held: string, id: string) => {
+    const ids = holders.get(held) ?? [];
+    if (!ids.includes(id)) ids.push(id);
+    holders.set(held, ids);
+  };
+  for (const list of lists)
+    for (const entity of list.entities) {
+      const held = referencedQid(entity);
+      if (held === null) continue;
+      add(held, entity.id);
+      const target = redirects.get(held);
+      if (target !== undefined) add(target, entity.id);
+    }
+  return holders;
+}
+
+/** The redirects runs found among the QIDs entries hold: QID to its target. */
+export function redirectsOf(
+  files: readonly EnrichmentFile[],
+): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const file of files)
+    for (const record of file.sitelinks)
+      if (record.redirectedTo !== undefined)
+        out.set(record.qid, record.redirectedTo);
+  return out;
+}
+
+/**
+ * Marks a match as duplicate when another entry already holds its QID
+ * (`held`, from qidHolders) or another entry of the run matches it too.
+ */
+function markDuplicates(
+  entries: readonly CandidateEntry[],
+  held: ReadonlyMap<string, readonly string[]>,
+): void {
+  const holders = new Map<string, string[]>(
+    [...held].map(([qid, ids]) => [qid, [...ids]]),
+  );
   for (const entry of entries) {
     if (entry.verdict === "match" && entry.match !== null)
       holders.set(entry.match, [...(holders.get(entry.match) ?? []), entry.id]);
@@ -1041,11 +1265,14 @@ function byId<T extends { id: string }>(a: T, b: T): number {
 /**
  * Fetches everything the lists need and returns one file per list. It
  * writes nothing: the caller writes once every request has succeeded.
+ * `others` are lists this run doesn't fetch for, read only for the QIDs
+ * their entries hold, so a match on one of those is a duplicate too.
  */
 export async function fetchEnrichment(
   lists: readonly AnswerList[],
   deps: EnrichDeps,
   now: Date,
+  others: readonly AnswerList[] = [],
 ): Promise<EnrichmentFile[]> {
   const http = createHttp(deps);
   // The first request: a run without network fails here, before any output.
@@ -1057,10 +1284,13 @@ export async function fetchEnrichment(
     `Wikidata answered; ${verified.size} of ${PROPERTY_IDS.length} qualifier properties verified by label.`,
   );
 
+  // Every QID the lists hold, whatever the entry's status: a live entry's
+  // for its sitelink count, and every one for the redirect a duplicate can
+  // hide behind.
   const referenced = [
     ...new Set(
       lists.flatMap((list) =>
-        list.entities.filter(live).flatMap((entity) => {
+        list.entities.flatMap((entity) => {
           const held = referencedQid(entity);
           return held === null ? [] : [held];
         }),
@@ -1071,8 +1301,12 @@ export async function fetchEnrichment(
   const referencedData = await getEntities(
     http,
     referenced,
-    "labels|aliases|sitelinks",
+    "labels|aliases|sitelinks|info",
   );
+  const redirects = new Map<string, string>();
+  for (const [held, data] of referencedData)
+    if (data && data.id !== held && isQid(data.id))
+      redirects.set(held, data.id);
 
   const hits = new Map<AnswerEntity, SearchHit[]>();
   const candidateTypes = new Map<string, Set<AnswerType>>();
@@ -1103,7 +1337,7 @@ export async function fetchEnrichment(
   const candidateData = await getEntities(
     http,
     candidateIds,
-    "labels|aliases|descriptions|claims|sitelinks",
+    "labels|aliases|descriptions|claims|sitelinks|info",
   );
 
   const countryItems = new Set<string>();
@@ -1134,7 +1368,7 @@ export async function fetchEnrichment(
   };
 
   const fetchedAt = now.toISOString().replace(/\.\d{3}Z$/, "Z");
-  return lists.map((list) => {
+  const files = lists.map((list) => {
     const sitelinks: SitelinkRecord[] = [];
     for (const entity of list.entities.filter(live)) {
       const held = referencedQid(entity);
@@ -1143,20 +1377,24 @@ export async function fetchEnrichment(
       if (!data) {
         sitelinks.push({
           id: entity.id,
+          entryHash: entryHashOf(entity),
           qid: held,
           label: null,
           labelMatch: "none",
           sitelinks: null,
+          revision: null,
           missing: true,
         });
         continue;
       }
       sitelinks.push({
         id: entity.id,
+        entryHash: entryHashOf(entity),
         qid: held,
         label: data.label,
         labelMatch: labelMatchOf(namesOf(entity), data.label, data.aliases),
         sitelinks: data.sitelinks,
+        revision: data.revision,
         ...(data.id !== held && isQid(data.id)
           ? { redirectedTo: data.id }
           : {}),
@@ -1182,6 +1420,7 @@ export async function fetchEnrichment(
         );
         scored.set(data.id, {
           qid: data.id,
+          revision: data.revision,
           label: data.label,
           description: data.description,
           sitelinks: data.sitelinks,
@@ -1194,6 +1433,7 @@ export async function fetchEnrichment(
       const { verdict, match } = verdictOf(candidates);
       entries.push({
         id: entity.id,
+        entryHash: entryHashOf(entity),
         name: entity.name,
         ours: Object.fromEntries(
           CHECKS[list.type].map((check) => [
@@ -1206,7 +1446,6 @@ export async function fetchEnrichment(
         candidates: candidates.slice(0, CANDIDATES_KEPT),
       });
     }
-    markDuplicates(list, entries);
 
     const used = PROPERTY_IDS.filter((id) => usesProperty(list.type, id));
     return {
@@ -1225,6 +1464,13 @@ export async function fetchEnrichment(
       candidates: entries.sort(byId),
     } satisfies EnrichmentFile;
   });
+  // One holders map for every list read, of every status, so a match on a
+  // QID another list (or a retired entry) holds is a duplicate too.
+  markDuplicates(
+    files.flatMap((file) => file.candidates),
+    qidHolders([...lists, ...others], redirects),
+  );
+  return files;
 }
 
 /** Validates every file, then writes them; nothing is written if one fails. */
@@ -1337,12 +1583,15 @@ export function summaryMarkdown(files: readonly EnrichmentFile[]): string {
       : []),
     "### After merging: the list builder",
     "",
-    `1. See what a merged run would change: \`${RUN} --apply --all\`. Popularity takes each referenced QID's sitelink count. Add \`--accept-matches\` to also set \`wikidataId\` on entries whose verdict is match.`,
-    "2. Make the changes with `--write`.",
-    "3. The reviewer step: run `npm run content:check -- --sealed` with the content key. Popularity breaks suggestion ties, and C12's suggestion probe reads it for every sealed mystery, so a clue word could start suggesting an answer. Settle every finding before committing.",
-    "4. Commit the changed lists on their own, the same UTC day, since a list version goes live with its commit (CONTENT_GUIDE §2.10 rule 5).",
+    `1. See exactly what the write will change: \`${RUN} --apply --all --accept-matches\`. Popularity takes each referenced QID's sitelink count, and \`wikidataId\` the QID of each entry whose verdict is match. Every held entry is listed with its reason.`,
+    "2. Make the changes: the same command with `--write`. It needs the content key, because it first runs C12's suggestion probe on every checking or active sealed mystery, with the lists as they stand and as they would be. Popularity breaks suggestion ties, so a clue word could start suggesting an answer. If any mystery gains a hit, it writes nothing and exits 1 (see the README for what to do then).",
+    "3. `npm run content:build`: popularity ships in each list's client projection, so `public/content/lists/` and `src/content/generated/manifest.ts` change.",
+    "4. `npm run content:check -- --sealed`, then `npm run content:check`, which runs the drift check that `--sealed` skips.",
+    "5. Commit the changed lists together with the files `content:build` wrote, in a commit that touches no sealed envelope, the same UTC day, since a list version goes live with its commit (CONTENT_GUIDE §2.10 rule 5).",
     "",
-    "Entries marked duplicate, ambiguous, label only or none need the list builder's judgement. Accept a QID only where the label and the qualifier agree, and copy it from these files, never from memory (CONTENT_GUIDE §2.12, §9.5.1).",
+    "Every changed list gets a new version, so pass D must be confirmed again for each unfrozen Daily that uses one, and the apply waits while a frozen Daily that hasn't been published uses one (CONTENT_GUIDE §9.9 rule 7, ARCHITECTURE §8.7).",
+    "",
+    "Entries marked duplicate, ambiguous, label only or none need the list builder's judgement, and so does every music_artist match: its check tells a person from a group, never a musician from a namesake, so `--accept-matches` holds them. Accept a QID only where the label and the qualifier agree, and copy it from these files, never from memory (CONTENT_GUIDE §2.12, §9.5.1).",
     "",
   ].join("\n");
 }
@@ -1371,16 +1620,33 @@ export interface ApplyReport {
   written: boolean;
 }
 
+/** Why apply holds every music_artist match (see CHECKS.music_artist). */
+export const MUSIC_ARTIST_HELD =
+  "music_artist needs the list builder's judgement: kind does not identify a musician";
+
 /**
  * Copies a merged run into one list: popularity from every referenced QID's
  * sitelink count, and with acceptMatches a wikidataId from every `match`
- * entry. It changes no other field and skips nothing because a sealed item
- * uses it. With write, the list takes a new version and liveAt.
+ * entry. It holds a record whose entry changed since the run (its hash), a
+ * match its own candidates don't bear out, a music_artist match, and a QID
+ * that an entry already holds. It changes no other field and skips nothing
+ * because a sealed item uses it. With write, the list object takes the
+ * changes, a new version and liveAt; the caller writes the file.
+ *
+ * `holders` (qidHolders over every list, of every status) is shared by the
+ * lists applied together, and each accepted match joins it, so two lists
+ * never take one QID. Without it, this list's own entries and the file's
+ * redirects stand in.
  */
 export function applyEnrichment(
   list: AnswerList,
   file: EnrichmentFile,
-  options: { write: boolean; acceptMatches: boolean; today: string },
+  options: {
+    write: boolean;
+    acceptMatches: boolean;
+    today: string;
+    holders?: Map<string, string[]>;
+  },
 ): ApplyReport {
   if (file.type !== list.type)
     throw new Error(
@@ -1401,7 +1667,12 @@ export function applyEnrichment(
 
   for (const record of file.sitelinks) {
     const entity = entities.get(record.id);
-    if (!entity || !live(entity) || referencedQid(entity) !== record.qid) {
+    if (
+      !entity ||
+      !live(entity) ||
+      referencedQid(entity) !== record.qid ||
+      entryHashOf(entity) !== record.entryHash
+    ) {
       report.held.push({ id: record.id, reason: changed });
       continue;
     }
@@ -1424,19 +1695,29 @@ export function applyEnrichment(
   }
 
   if (options.acceptMatches) {
-    const holders = new Map<string, string>();
-    for (const entity of list.entities.filter(live)) {
-      const held = referencedQid(entity);
-      if (held !== null) holders.set(held, entity.id);
-    }
+    const holders = options.holders ?? qidHolders([list], redirectsOf([file]));
     for (const entry of file.candidates) {
       if (entry.verdict !== "match" || entry.match === null) continue;
       const entity = entities.get(entry.id);
-      if (!entity || !needsCandidates(entity) || entity.name !== entry.name) {
+      if (
+        !entity ||
+        !needsCandidates(entity) ||
+        entity.name !== entry.name ||
+        entryHashOf(entity) !== entry.entryHash
+      ) {
         report.held.push({ id: entry.id, reason: changed });
         continue;
       }
-      const holder = holders.get(entry.match);
+      const derived = verdictOf(entry.candidates);
+      if (derived.verdict !== "match" || derived.match !== entry.match) {
+        report.held.push({ id: entry.id, reason: VERDICT_DOES_NOT_FOLLOW });
+        continue;
+      }
+      if (list.type === "music_artist") {
+        report.held.push({ id: entry.id, reason: MUSIC_ARTIST_HELD });
+        continue;
+      }
+      const holder = holders.get(entry.match)?.find((id) => id !== entry.id);
       if (holder !== undefined) {
         report.held.push({
           id: entry.id,
@@ -1444,7 +1725,7 @@ export function applyEnrichment(
         });
         continue;
       }
-      holders.set(entry.match, entry.id);
+      holders.set(entry.match, [...(holders.get(entry.match) ?? []), entry.id]);
       wikidataIds.set(entity, entry.match);
       report.accepted.push({ id: entry.id, qid: entry.match });
       const candidate = entry.candidates.find((c) => c.qid === entry.match);
@@ -1491,6 +1772,74 @@ function creditWikidata(list: AnswerList, retrievedAt: string): void {
   else if (credit.retrievedAt < retrievedAt) credit.retrievedAt = retrievedAt;
 }
 
+/**
+ * C12's suggestion probe (scripts/content/lint/mysteries.ts) before --write
+ * changes anything. Every checking or active mystery of `bank`, loaded with
+ * its sealed content, is probed with the lists as they stand and again with
+ * `changed` in their place; a hit only the changed lists bring is a
+ * finding. content:check can't stand in: on a mystery accepted before
+ * CNT-2's rules landed (lint/cutoff.ts) a C12 hit is only a warning, which
+ * exits 0. A mystery file the bank couldn't read or parse is a finding too,
+ * since the probe can't vouch for it, unless it says it is a draft (or cut
+ * or retired). Findings carry ids, rule codes and paths only, for the
+ * redacting reporter (ARCHITECTURE §5.4).
+ */
+export function suggestionGuard(
+  bank: Bank,
+  changed: readonly AnswerList[],
+): { probed: number; findings: ReportFinding[] } {
+  const after: Bank = { ...bank, lists: new Map(bank.lists) };
+  for (const list of changed) {
+    const before = bank.lists.get(list.type);
+    if (before === undefined)
+      throw new Error(`the ${list.type} list did not load into the bank`);
+    // A new index object, so the probe builds its suggestion index afresh.
+    after.lists.set(list.type, {
+      ...before,
+      version: list.version,
+      entities: new Map(list.entities.map((entity) => [entity.id, entity])),
+    });
+  }
+  const findings: ReportFinding[] = [];
+  const loaded = new Set(bank.items.map((record) => record.file));
+  for (const file of bank.files) {
+    if (file.kind !== "mystery" || loaded.has(file)) continue;
+    const status = isRecord(file.data) ? file.data.status : undefined;
+    if (status === "draft" || status === "cut" || status === "retired")
+      continue;
+    findings.push({
+      rule: "C01",
+      severity: "error",
+      file: file.rel,
+      message: "the mystery could not be read, so the probe can't vouch for it",
+      sealed: file.sealed,
+    });
+  }
+  let probed = 0;
+  for (const record of bank.items) {
+    const item = record.item;
+    if (!("kind" in item) || item.kind !== "mystery") continue;
+    if (item.status !== "checking" && item.status !== "active") continue;
+    probed += 1;
+    const mystery = item as Mystery;
+    const had = new Set(suggestionProbe(bank, mystery).map((hit) => hit.path));
+    for (const hit of suggestionProbe(after, mystery)) {
+      if (had.has(hit.path)) continue;
+      const finding: ReportFinding = {
+        rule: "C12",
+        severity: "error",
+        file: record.file.rel,
+        itemId: record.id,
+        message: hit.message,
+        sealed: record.file.sealed,
+      };
+      if (hit.path !== undefined) finding.path = hit.path;
+      findings.push(finding);
+    }
+  }
+  return { probed, findings };
+}
+
 // ---------------------------------------------------------------------------
 // The CLI
 // ---------------------------------------------------------------------------
@@ -1505,7 +1854,9 @@ const USAGE = `Usage:
       Report, or make with --write, what a merged run changes in the lists:
       popularity from each referenced QID's sitelink count, and with
       --accept-matches a wikidataId on every entry whose verdict is match.
-      Then the reviewer step: npm run content:check -- --sealed.
+      --write needs the content key: it first runs C12's suggestion probe
+      on the sealed mysteries and writes nothing if one gains a hit. Then:
+      npm run content:build, content:check -- --sealed, content:check.
 
   --type <type>      One list (default: every list)
   --all              Every list (with --apply)
@@ -1562,6 +1913,7 @@ async function readEnrichment(
 async function fetchMain(
   layout: Layout,
   types: readonly AnswerType[],
+  present: readonly AnswerType[],
   summaryPath: string | undefined,
   deps: EnrichDeps,
 ): Promise<number> {
@@ -1571,9 +1923,13 @@ async function fetchMain(
     throw new Error(
       `no answer lists in ${repoRelative(layout, layout.answerListsDir)}/`,
     );
+  // The other lists, for the QIDs their entries hold (a run for one type).
+  const others: AnswerList[] = [];
+  for (const type of present)
+    if (!types.includes(type)) others.push(await readList(layout, type));
   let files: EnrichmentFile[];
   try {
-    files = await fetchEnrichment(lists, deps, new Date());
+    files = await fetchEnrichment(lists, deps, new Date(), others);
   } catch (error) {
     throw new Error(
       `${error instanceof Error ? error.message : String(error)}; nothing was written`,
@@ -1591,35 +1947,115 @@ async function fetchMain(
   return 0;
 }
 
+/** The content key, which --write needs for the suggestion probe; it is never printed. */
+async function contentKeys(): Promise<SealKeys> {
+  const key = await loadMasterKey(keySourceFromProcess());
+  if (key === null)
+    throw new Error(
+      "--write needs the content key, because it runs C12's suggestion probe on the sealed mysteries before it writes anything: set QZ_CONTENT_KEY or restore the key file (content/sealed/README.md). Nothing was written",
+    );
+  return key.keys;
+}
+
+/**
+ * The suggestion probe of --write, over the content bank decrypted in
+ * memory. Anything thrown while reading sealed content is replaced by one
+ * line that says nothing about it, as the redacting reporter does.
+ */
+async function probeSealed(
+  layout: Layout,
+  keys: SealKeys,
+  changed: readonly AnswerList[],
+): Promise<{ probed: number; findings: ReportFinding[] }> {
+  try {
+    return suggestionGuard(
+      await loadBank(layout, { sealed: true, keys }),
+      changed,
+    );
+  } catch {
+    throw new Error(
+      "C12's suggestion probe stopped on an internal error while it read sealed content; details are hidden (run npm run content:check -- --sealed). Nothing was written",
+    );
+  }
+}
+
 async function applyMain(
   layout: Layout,
   types: readonly AnswerType[],
+  present: readonly AnswerType[],
   options: { write: boolean; acceptMatches: boolean; today: string },
 ): Promise<number> {
+  const keys = options.write ? await contentKeys() : null;
   const outDir = join(layout.answerListsDir, OUTPUT_FOLDER);
-  let written = 0;
-  let changes = 0;
+  const files = new Map<AnswerType, EnrichmentFile>();
   for (const type of types) {
     const path = join(outDir, `${type}.json`);
-    if (!existsSync(path)) {
+    if (existsSync(path)) files.set(type, await readEnrichment(layout, path));
+  }
+  // Every list present, every entry of any status: the QIDs already held
+  // anywhere (CONTENT_GUIDE §2.10 rule 1), shared by the lists applied here.
+  const lists = new Map<AnswerType, AnswerList>();
+  for (const type of new Set([...present, ...files.keys()]))
+    lists.set(type, await readList(layout, type));
+  const holders = qidHolders(
+    [...lists.values()],
+    redirectsOf([...files.values()]),
+  );
+
+  const results: { list: AnswerList; report: ApplyReport }[] = [];
+  for (const type of types) {
+    const file = files.get(type);
+    const list = lists.get(type);
+    if (file === undefined || list === undefined) {
       console.log(
-        `${type}: no ${repoRelative(layout, path)} yet; nothing to apply.`,
+        `${type}: no ${repoRelative(layout, join(outDir, `${type}.json`))} yet; nothing to apply.`,
       );
       continue;
     }
-    const list = await readList(layout, type);
-    const report = applyEnrichment(
+    results.push({
       list,
-      await readEnrichment(layout, path),
-      options,
+      report: applyEnrichment(list, file, { ...options, holders }),
+    });
+  }
+  const changed = results.filter((result) => result.report.written);
+
+  let probed = 0;
+  if (keys !== null && changed.length > 0) {
+    const guard = await probeSealed(
+      layout,
+      keys,
+      changed.map((result) => result.list),
     );
-    if (report.written)
-      await writeJsonFile(join(layout.answerListsDir, `${type}.json`), list);
+    if (guard.findings.length > 0) {
+      // Ids, rule codes and paths only, and no word of which entries moved.
+      printReport(
+        {
+          command: NAME,
+          items: guard.probed,
+          findings: guard.findings,
+          notes: [],
+        },
+        { redact: true, reveal: false, json: false },
+      );
+      console.log(
+        `${NAME}: nothing was written. With these changes a word of a typed clue would bring up the answer among the top suggestions (C12), or a sealed mystery could not be read. Rewrite or swap out each mystery named, then apply again; if one is in a Daily inside the freeze window, hold this whole apply until that date has passed, never single entries (content/answer-lists/_wikidata/README.md).`,
+      );
+      return 1;
+    }
+    probed = guard.probed;
+    for (const { list } of changed)
+      await writeJsonFile(
+        join(layout.answerListsDir, `${list.type}.json`),
+        list,
+      );
+  }
+
+  let changes = 0;
+  for (const { report } of results) {
     changes += report.popularity.length + report.accepted.length;
-    if (report.written) written += 1;
     const verb = report.written ? "set" : "would set";
     console.log(
-      `${type}: ${report.popularity.length} popularity change(s), ${report.accepted.length} wikidataId(s) accepted, ${report.held.length} held${report.stale ? " (the run read another list version)" : ""}.`,
+      `${report.type}: ${report.popularity.length} popularity change(s), ${report.accepted.length} wikidataId(s) accepted, ${report.held.length} held${report.stale ? " (the run read another list version)" : ""}.`,
     );
     for (const change of report.popularity)
       console.log(
@@ -1630,13 +2066,13 @@ async function applyMain(
     for (const held of report.held)
       console.log(`  held ${held.id}: ${held.reason}`);
   }
-  if (written > 0)
+  if (changed.length > 0)
     console.log(
-      `${NAME}: wrote ${written} list(s) under version ${options.today}. Before committing, run the reviewer step: npm run content:check -- --sealed (C12's suggestion probe reads popularity for every sealed mystery). Then commit the lists on their own, today (CONTENT_GUIDE §2.10 rule 5).`,
+      `${NAME}: C12's suggestion probe found no new hit on ${probed} checking or active sealed mystery(ies). Wrote ${changed.length} list(s) under version ${options.today}. Next: npm run content:build, then npm run content:check -- --sealed and npm run content:check, then commit the lists with the regenerated outputs, in a commit that touches no sealed envelope, today (CONTENT_GUIDE §2.10 rule 5). Pass D: see content/answer-lists/_wikidata/README.md.`,
     );
   else
     console.log(
-      `${NAME}: ${changes} change(s)${changes > 0 ? "; --write makes them" : ""}.`,
+      `${NAME}: ${changes} change(s)${changes > 0 ? "; --write makes them, once C12's suggestion probe passes with the content key" : ""}.`,
     );
   return 0;
 }
@@ -1679,7 +2115,7 @@ export async function main(
     const today = str(values, "today") ?? todayUtc();
     if (!isoDate.safeParse(today).success)
       throw new Error(`--today must be a date (YYYY-MM-DD)`);
-    return applyMain(layout, type ? [type as AnswerType] : present, {
+    return applyMain(layout, type ? [type as AnswerType] : present, present, {
       write: values.write === true,
       acceptMatches: values["accept-matches"] === true,
       today,
@@ -1691,6 +2127,7 @@ export async function main(
   return fetchMain(
     layout,
     type ? [type as AnswerType] : present,
+    present,
     str(values, "summary"),
     deps,
   );
