@@ -273,7 +273,7 @@ describe("sealed validation output", () => {
   // and a sealed retirement refused. The planted failures still never leak,
   // and no line joins the public item to a sealed id.
   it("still never leaks with a cross-pool judgment recorded and a sealed retirement refused", () => {
-    const { repo, mystery, write, unseal, node, expectClean } = plantedRepo();
+    const { repo, write, unseal, node, expectClean } = plantedRepo();
     unseal();
     // The workspace guard asks git whether the workspace is ignored.
     spawnSync("git", ["init", "-q"], { cwd: repo });
@@ -303,7 +303,7 @@ describe("sealed validation output", () => {
         join(repo, "content/.sealed-plain/mysteries/m.geo.0101.json"),
         "utf8",
       ),
-    ) as typeof mystery & { verification?: { crossPool?: unknown[] } };
+    ) as { verification?: { crossPool?: unknown[] } };
     expect(judged.verification?.crossPool).toHaveLength(1);
     write("mysteries", "m.geo.0101", judged);
 

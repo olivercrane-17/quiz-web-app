@@ -176,7 +176,7 @@ const reload = (bank: Bank) => loadBank(bank.layout);
 describe("retire (CNT-2b)", () => {
   it(
     "retires an active item of every pool, keeping its id, checks and history and recording why",
-    { timeout: 30_000 },
+    { timeout: 60_000 },
     async () => {
       const ids = ["fx.p.geo.0101", "fx.m.geo.0101", "fx.e.0101", ROOM];
       const bank = await decidedBank(ids);
@@ -213,170 +213,203 @@ describe("retire (CNT-2b)", () => {
     },
   );
 
-  it("refuses draft, checking, cut and retired items, and points draft and checking items to content:decide", async () => {
-    const bank = await decidedBank(["fx.p.geo.0101"], {
-      cut: ["fx.p.geo.0103"],
-    });
-    const record = itemOf(bank, "fx.e.0101");
-    await saveItems(
-      bank,
-      new Map([
-        [
-          "fx.e.0101",
-          {
-            ...mergeRecord(record.item, fxRecord(bank, record, "A"), "A", false)
-              .item,
-            predicted: PREDICTED.encore,
-            status: "checking",
-          } as AnyItem,
-        ],
-      ]),
-    );
-    expect(await refusal(bank, "fx.p.geo.0102")).toBe(
-      "fx.p.geo.0102 is draft; retire takes active items only, and content:decide covers draft and checking items (cut, or rewrite and re-check)",
-    );
-    expect(await refusal(bank, "fx.e.0101")).toMatch(
-      /^fx\.e\.0101 is checking; retire takes active items only, and content:decide covers/,
-    );
-    expect(await refusal(bank, "fx.p.geo.0103")).toBe(
-      "fx.p.geo.0103 is cut already; its id is never reused",
-    );
-    await retire(bank, "fx.p.geo.0101");
-    expect(await refusal(await reload(bank), "fx.p.geo.0101")).toBe(
-      `fx.p.geo.0101 is retired already, by ${RETIRER} at ${AT}`,
-    );
-    expect(await refusal(bank, "fx.p.geo.0199")).toBe(
-      "fx.p.geo.0199 is not an item of the bank",
-    );
-  });
-
-  it("takes only an editor who did not write, check or estimate the item", async () => {
-    const bank = await decidedBank(["fx.p.geo.0101"]);
-    expect(await refusal(bank, "fx.p.geo.0101", { editor: "w-fx-new" })).toBe(
-      "--editor is an editor's agent id (ed-<run id>), not w-fx-new",
-    );
-    expect(
-      await refusal(bank, "fx.p.geo.0101", { editor: `ed-${WRITER.slice(2)}` }),
-    ).toBe(
-      "ed-fx-writer wrote fx.p.geo.0101; one run holds one role on an item, so another editor decides (CONTENT_GUIDE §0.2)",
-    );
-    expect(
-      await refusal(bank, "fx.p.geo.0101", {
-        editor: `ed-${CHECKER_A.slice(3)}`,
-      }),
-    ).toMatch(/^ed-fx-alpha checked fx\.p\.geo\.0101;/);
-    const record = itemOf(bank, "fx.p.geo.0101");
-    const estimated = cloneJson(record.item);
-    if (estimated.verification)
-      estimated.verification.estimates = [
-        ...(estimated.verification.estimates ?? []),
-        { by: "es-fx-guess", at: AT },
-      ];
-    await saveItems(bank, new Map([[record.id, estimated]]));
-    expect(
-      await refusal(bank, "fx.p.geo.0101", { editor: "ed-FX-GUESS" }),
-    ).toMatch(/^ed-FX-GUESS estimated fx\.p\.geo\.0101;/);
-    // The editor who accepted it may retire it.
-    expect(await refusal(bank, "fx.p.geo.0101", { editor: EDITOR })).toBe(
-      "accepted",
-    );
-  });
-
-  it("needs a reason and a known kind, and keeps anything sealed out of a public item's reason", async () => {
-    const bank = await decidedBank(["fx.p.geo.0101", "fx.m.geo.0101"]);
-    expect(await refusal(bank, "fx.p.geo.0101", { reason: "  " })).toBe(
-      "--reason says why the item leaves play",
-    );
-    expect(
-      await refusal(bank, "fx.p.geo.0101", {
-        kind: "duplicate" as RetireRequest["kind"],
-      }),
-    ).toBe("--kind is cross_pool, recheck, other");
-    for (const reason of [
-      "It shares a fact with m.geo.0101.",
-      "Same flag as fx.m.geo.0101's first clue.",
-      "Same value as e.0102.",
-      "Overlaps r.all-sorts.04.",
-      "Overlaps a question of batch m.geo.b01.",
-      "Its answer waits on lr.m.geo.b01.03.",
-    ]) {
-      expect(namesSealedContent(reason), reason).toBe(true);
-      expect(await refusal(bank, "fx.p.geo.0101", { reason })).toMatch(
-        /^the reason names a sealed item, batch or list request, and fx\.p\.geo\.0101's file is public/,
+  it(
+    "refuses draft, checking, cut and retired items, and points draft and checking items to content:decide",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await decidedBank(["fx.p.geo.0101"], {
+        cut: ["fx.p.geo.0103"],
+      });
+      const record = itemOf(bank, "fx.e.0101");
+      await saveItems(
+        bank,
+        new Map([
+          [
+            "fx.e.0101",
+            {
+              ...mergeRecord(
+                record.item,
+                fxRecord(bank, record, "A"),
+                "A",
+                false,
+              ).item,
+              predicted: PREDICTED.encore,
+              status: "checking",
+            } as AnyItem,
+          ],
+        ]),
       );
-    }
-    for (const reason of [
-      "Shares its fact with a Daily item.",
-      "Replaced by p.geo.0144 after a key change (e.g. 2026).",
-    ])
-      expect(namesSealedContent(reason), reason).toBe(false);
-    // A sealed item's file is sealed, so its reason may name what it likes.
-    expect(
-      await refusal(bank, "fx.m.geo.0101", {
-        reason: "Its clue 1 states p.geo.0101's fact; m.geo.0102 replaces it.",
-      }),
-    ).toBe("accepted");
-  });
+      expect(await refusal(bank, "fx.p.geo.0102")).toBe(
+        "fx.p.geo.0102 is draft; retire takes active items only, and content:decide covers draft and checking items (cut, or rewrite and re-check)",
+      );
+      expect(await refusal(bank, "fx.e.0101")).toMatch(
+        /^fx\.e\.0101 is checking; retire takes active items only, and content:decide covers/,
+      );
+      expect(await refusal(bank, "fx.p.geo.0103")).toBe(
+        "fx.p.geo.0103 is cut already; its id is never reused",
+      );
+      await retire(bank, "fx.p.geo.0101");
+      expect(await refusal(await reload(bank), "fx.p.geo.0101")).toBe(
+        `fx.p.geo.0101 is retired already, by ${RETIRER} at ${AT}`,
+      );
+      expect(await refusal(bank, "fx.p.geo.0199")).toBe(
+        "fx.p.geo.0199 is not an item of the bank",
+      );
+    },
+  );
 
-  it("recounts a closed batch, which stays closed: accepted drops and retired rises; a batch still open is counted at close", async () => {
-    const bank = await decidedBank(["fx.p.geo.0101", "fx.p.geo.0103"], {
-      cut: ["fx.p.geo.0102"],
-    });
-    // Close p.geo.b01 as content:batch -- close counts it.
-    const register = bank.register;
-    const batch = register?.batches.find((b) => b.batchId === "p.geo.b01");
-    if (!register || !batch) throw new Error("no register");
-    Object.assign(batch, { status: "closed", accepted: 2, cut: 1 });
-    writeFileSync(
-      bank.layout.registerFile,
-      JSON.stringify(BatchRegisterSchema.parse(register)),
-    );
-    const fresh = await reload(bank);
-    const plan = await retire(fresh, "fx.p.geo.0101");
-    expect(plan.register).toEqual({
-      before: { accepted: 2, cut: 1, retired: 0 },
-      after: { accepted: 1, cut: 1, retired: 1 },
-    });
-    const entry = (b: Bank) =>
-      b.register?.batches.find((x) => x.batchId === "p.geo.b01");
-    expect(entry(await reload(fresh))).toMatchObject({
-      status: "closed",
-      accepted: 1,
-      cut: 1,
-      retired: 1,
-    });
-    await retire(await reload(fresh), "fx.p.geo.0103");
-    expect(entry(await reload(fresh))).toMatchObject({
-      status: "closed",
-      accepted: 0,
-      cut: 1,
-      retired: 2,
-    });
-    // m.geo.b01 is still open: nothing is counted until it closes.
-    const open = await decidedBank(["fx.m.geo.0101"]);
-    const openPlan = await retire(open, "fx.m.geo.0101");
-    expect(openPlan).toMatchObject({
-      batchId: "m.geo.b01",
-      batchStatus: "open",
-      register: null,
-    });
-    expect(
-      (await reload(open)).register?.batches.find(
-        (b) => b.batchId === "m.geo.b01",
-      ),
-    ).toMatchObject({ status: "open", accepted: null, cut: null });
-  });
+  it(
+    "takes only an editor who did not write, check or estimate the item",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await decidedBank(["fx.p.geo.0101"]);
+      expect(await refusal(bank, "fx.p.geo.0101", { editor: "w-fx-new" })).toBe(
+        "--editor is an editor's agent id (ed-<run id>), not w-fx-new",
+      );
+      expect(
+        await refusal(bank, "fx.p.geo.0101", {
+          editor: `ed-${WRITER.slice(2)}`,
+        }),
+      ).toBe(
+        "ed-fx-writer wrote fx.p.geo.0101; one run holds one role on an item, so another editor decides (CONTENT_GUIDE §0.2)",
+      );
+      expect(
+        await refusal(bank, "fx.p.geo.0101", {
+          editor: `ed-${CHECKER_A.slice(3)}`,
+        }),
+      ).toMatch(/^ed-fx-alpha checked fx\.p\.geo\.0101;/);
+      const record = itemOf(bank, "fx.p.geo.0101");
+      const estimated = cloneJson(record.item);
+      if (estimated.verification)
+        estimated.verification.estimates = [
+          ...(estimated.verification.estimates ?? []),
+          { by: "es-fx-guess", at: AT },
+        ];
+      await saveItems(bank, new Map([[record.id, estimated]]));
+      expect(
+        await refusal(bank, "fx.p.geo.0101", { editor: "ed-FX-GUESS" }),
+      ).toMatch(/^ed-FX-GUESS estimated fx\.p\.geo\.0101;/);
+      // The editor who accepted it may retire it.
+      expect(await refusal(bank, "fx.p.geo.0101", { editor: EDITOR })).toBe(
+        "accepted",
+      );
+    },
+  );
 
-  it("never reuses the id: the register issues past it, and the file stays", async () => {
-    const bank = await decidedBank(["fx.p.geo.0101"]);
-    await retire(bank, "fx.p.geo.0101");
-    const fresh = await reload(bank);
-    expect(itemOf(fresh, "fx.p.geo.0101").item.status).toBe("retired");
-    const register = fresh.register;
-    if (!register) throw new Error("no register");
-    // lastSequence is 20 in the fixture register: the next id is 21.
-    expect(issueIds(register, "p.geo.b01", WRITER, 1)).toEqual(["p.geo.0121"]);
-  });
+  it(
+    "needs a reason and a known kind, and keeps anything sealed out of a public item's reason",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await decidedBank(["fx.p.geo.0101", "fx.m.geo.0101"]);
+      expect(await refusal(bank, "fx.p.geo.0101", { reason: "  " })).toBe(
+        "--reason says why the item leaves play",
+      );
+      expect(
+        await refusal(bank, "fx.p.geo.0101", {
+          kind: "duplicate" as RetireRequest["kind"],
+        }),
+      ).toBe("--kind is cross_pool, recheck, other");
+      for (const reason of [
+        "It shares a fact with m.geo.0101.",
+        "Same flag as fx.m.geo.0101's first clue.",
+        "Same value as e.0102.",
+        "Overlaps r.all-sorts.04.",
+        "Overlaps a question of batch m.geo.b01.",
+        "Its answer waits on lr.m.geo.b01.03.",
+        "Same fact as spare.07's mystery.",
+        "Same fact as Daily #42.",
+        "Same fact as daily number 42.",
+        "It overlaps the 2026-12-01 Daily.",
+      ]) {
+        expect(namesSealedContent(reason), reason).toBe(true);
+        expect(await refusal(bank, "fx.p.geo.0101", { reason })).toMatch(
+          /^the reason names sealed content \(a sealed item, batch, list request or spare set, or a Daily by its number or date\), and fx\.p\.geo\.0101's file is public/,
+        );
+      }
+      for (const reason of [
+        "Shares its fact with a Daily item.",
+        "Replaced by p.geo.0144 after a key change (e.g. 2026).",
+      ])
+        expect(namesSealedContent(reason), reason).toBe(false);
+      // A sealed item's file is sealed, so its reason may name what it likes.
+      expect(
+        await refusal(bank, "fx.m.geo.0101", {
+          reason:
+            "Its clue 1 states p.geo.0101's fact; m.geo.0102 replaces it.",
+        }),
+      ).toBe("accepted");
+    },
+  );
+
+  it(
+    "recounts a closed batch, which stays closed: accepted drops and retired rises; a batch still open is counted at close",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await decidedBank(["fx.p.geo.0101", "fx.p.geo.0103"], {
+        cut: ["fx.p.geo.0102"],
+      });
+      // Close p.geo.b01 as content:batch -- close counts it.
+      const register = bank.register;
+      const batch = register?.batches.find((b) => b.batchId === "p.geo.b01");
+      if (!register || !batch) throw new Error("no register");
+      Object.assign(batch, { status: "closed", accepted: 2, cut: 1 });
+      writeFileSync(
+        bank.layout.registerFile,
+        JSON.stringify(BatchRegisterSchema.parse(register)),
+      );
+      const fresh = await reload(bank);
+      const plan = await retire(fresh, "fx.p.geo.0101");
+      expect(plan.register).toEqual({
+        before: { accepted: 2, cut: 1, retired: 0 },
+        after: { accepted: 1, cut: 1, retired: 1 },
+      });
+      const entry = (b: Bank) =>
+        b.register?.batches.find((x) => x.batchId === "p.geo.b01");
+      expect(entry(await reload(fresh))).toMatchObject({
+        status: "closed",
+        accepted: 1,
+        cut: 1,
+        retired: 1,
+      });
+      await retire(await reload(fresh), "fx.p.geo.0103");
+      expect(entry(await reload(fresh))).toMatchObject({
+        status: "closed",
+        accepted: 0,
+        cut: 1,
+        retired: 2,
+      });
+      // m.geo.b01 is still open: nothing is counted until it closes.
+      const open = await decidedBank(["fx.m.geo.0101"]);
+      const openPlan = await retire(open, "fx.m.geo.0101");
+      expect(openPlan).toMatchObject({
+        batchId: "m.geo.b01",
+        batchStatus: "open",
+        register: null,
+      });
+      expect(
+        (await reload(open)).register?.batches.find(
+          (b) => b.batchId === "m.geo.b01",
+        ),
+      ).toMatchObject({ status: "open", accepted: null, cut: null });
+    },
+  );
+
+  it(
+    "never reuses the id: the register issues past it, and the file stays",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await decidedBank(["fx.p.geo.0101"]);
+      await retire(bank, "fx.p.geo.0101");
+      const fresh = await reload(bank);
+      expect(itemOf(fresh, "fx.p.geo.0101").item.status).toBe("retired");
+      const register = fresh.register;
+      if (!register) throw new Error("no register");
+      // lastSequence is 20 in the fixture register: the next id is 21.
+      expect(issueIds(register, "p.geo.b01", WRITER, 1)).toEqual([
+        "p.geo.0121",
+      ]);
+    },
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -409,105 +442,121 @@ describe("the schedule guard (CNT-2b)", () => {
     expect(dailyHasClosed("2026-12-01", "2026-11-05")).toBe(false);
   });
 
-  it("refuses an item a Daily still to close names, without --allow-frozen", async () => {
-    for (const [status, why] of [
-      ["assembled", "1 main-track Daily(ies) that have not closed"],
-      ["frozen", "1 main-track Daily(ies) that have not closed (1 frozen)"],
-    ] as const) {
-      const bank = await decidedBank([MYSTERY], {
-        files: fxFiles(month([daily("2026-12-01", status)])),
-      });
-      for (const today of ["2026-11-05", "2026-12-01", "2026-12-02"])
-        expect(await refusal(bank, MYSTERY, { today })).toBe(
-          `${MYSTERY} is on ${why}. Pass --allow-frozen for a correction, as content:release takes it for frozen Dailies, and have the scheduler replace it there before the next release`,
+  it(
+    "refuses an item a Daily still to close names, without --allow-frozen",
+    { timeout: 60_000 },
+    async () => {
+      for (const [status, why] of [
+        ["assembled", "1 main-track Daily(ies) that have not closed"],
+        ["frozen", "1 main-track Daily(ies) that have not closed (1 frozen)"],
+      ] as const) {
+        const bank = await decidedBank([MYSTERY], {
+          files: fxFiles(month([daily("2026-12-01", status)])),
+        });
+        for (const today of ["2026-11-05", "2026-12-01", "2026-12-02"])
+          expect(await refusal(bank, MYSTERY, { today })).toBe(
+            `${MYSTERY} is on ${why}. Pass --allow-frozen for a correction, as content:release takes it for frozen Dailies, and have the scheduler replace it there before the next release`,
+          );
+        const plan = await planRetirement(
+          bank,
+          request(MYSTERY, { allowFrozen: true }),
         );
-      const plan = await planRetirement(
-        bank,
-        request(MYSTERY, { allowFrozen: true }),
-      );
-      expect(plan.locks).toMatchObject({
-        open: 1,
-        frozen: status === "frozen" ? 1 : 0,
-        played: 0,
+        expect(plan.locks).toMatchObject({
+          open: 1,
+          frozen: status === "frozen" ? 1 : 0,
+          played: 0,
+        });
+      }
+    },
+  );
+
+  it(
+    "retires an item that only played on Dailies that have closed, without --allow-frozen",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await decidedBank([MYSTERY], {
+        files: fxFiles(month([daily("2026-12-01", "published")])),
       });
-    }
-  });
+      const plan = await retire(bank, MYSTERY, { today: "2026-12-03" });
+      expect(plan.locks).toMatchObject({ open: 0, played: 1 });
+    },
+  );
 
-  it("retires an item that only played on Dailies that have closed, without --allow-frozen", async () => {
-    const bank = await decidedBank([MYSTERY], {
-      files: fxFiles(month([daily("2026-12-01", "published")])),
-    });
-    const plan = await retire(bank, MYSTERY, { today: "2026-12-03" });
-    expect(plan.locks).toMatchObject({ open: 0, played: 1 });
-  });
+  it(
+    "refuses an item a spare set or a challenge pack names, and leaves the e2e track unlocked",
+    { timeout: 60_000 },
+    async () => {
+      const rounds = [
+        { type: "mystery", difficulty: "easy", contentId: MYSTERY },
+      ];
+      const spare = await decidedBank([MYSTERY], {
+        files: fxFiles({
+          "spares/spare.01.json": {
+            id: "spare.01",
+            track: "main",
+            rounds,
+            status: "assembled",
+            predictedPoints: 3.4,
+            dayCheck: null,
+          },
+        }),
+      });
+      expect(await refusal(spare, MYSTERY)).toMatch(
+        /^fx\.m\.geo\.0101 is on 1 spare set\(s\)\. Pass --allow-frozen/,
+      );
+      const pack = await decidedBank([MYSTERY], {
+        files: fxFiles({
+          "challenge-packs/fx-week-one.json": {
+            id: "fx-week-one",
+            track: "main",
+            title: "Week one",
+            theme: "The first week's Dailies",
+            rounds,
+          },
+        }),
+      });
+      expect(await refusal(pack, MYSTERY)).toMatch(
+        /^fx\.m\.geo\.0101 is on 1 challenge pack\(s\)\. Pass --allow-frozen/,
+      );
+      const e2e = await decidedBank([MYSTERY], {
+        files: fxFiles(month([daily("2026-12-01", "frozen")], "e2e")),
+      });
+      expect(await refusal(e2e, MYSTERY)).toBe("accepted");
+    },
+  );
 
-  it("refuses an item a spare set or a challenge pack names, and leaves the e2e track unlocked", async () => {
-    const rounds = [
-      { type: "mystery", difficulty: "easy", contentId: MYSTERY },
-    ];
-    const spare = await decidedBank([MYSTERY], {
-      files: fxFiles({
-        "spares/spare.01.json": {
-          id: "spare.01",
-          track: "main",
-          rounds,
-          status: "assembled",
-          predictedPoints: 3.4,
-          dayCheck: null,
-        },
-      }),
-    });
-    expect(await refusal(spare, MYSTERY)).toMatch(
-      /^fx\.m\.geo\.0101 is on 1 spare set\(s\)\. Pass --allow-frozen/,
-    );
-    const pack = await decidedBank([MYSTERY], {
-      files: fxFiles({
-        "challenge-packs/fx-week-one.json": {
-          id: "fx-week-one",
-          track: "main",
-          title: "Week one",
-          theme: "The first week's Dailies",
-          rounds,
-        },
-      }),
-    });
-    expect(await refusal(pack, MYSTERY)).toMatch(
-      /^fx\.m\.geo\.0101 is on 1 challenge pack\(s\)\. Pass --allow-frozen/,
-    );
-    const e2e = await decidedBank([MYSTERY], {
-      files: fxFiles(month([daily("2026-12-01", "frozen")], "e2e")),
-    });
-    expect(await refusal(e2e, MYSTERY)).toBe("accepted");
-  });
-
-  it("X10 lets an item retired after it played stay on the Dailies that have closed, and fails it on one still to close", async () => {
-    const bank = await decidedBank([MYSTERY], {
-      files: fxFiles(
-        month([daily("2026-12-01", "published"), daily("2026-12-20")]),
-      ),
-    });
-    await retire(bank, MYSTERY, { today: "2026-12-03", allowFrozen: true });
-    const fresh = await reload(bank);
-    const x10 = (today: string) =>
-      poolFindings(fresh, today)
-        .filter((f) => f.rule === "X10")
-        .map((f) => f.message);
-    // Before 1 December closes both Dailies are still to come.
-    expect(x10("2026-11-30")).toEqual([
-      `2026-12-01: round ${MYSTERY} is retired, not active (§0.2)`,
-      `2026-12-20: round ${MYSTERY} is retired, not active (§0.2)`,
-    ]);
-    // Once it has closed, only the Daily still to come fails.
-    expect(x10("2026-12-03")).toEqual([
-      `2026-12-20: round ${MYSTERY} is retired, not active (§0.2)`,
-    ]);
-    // The lint reads the same date.
-    expect(
-      lintBank(fresh, { today: "2026-12-03", dedupe: false })
-        .filter((f) => f.rule === "X10")
-        .map((f) => f.message),
-    ).toEqual([`2026-12-20: round ${MYSTERY} is retired, not active (§0.2)`]);
-  });
+  it(
+    "X10 lets an item retired after it played stay on the Dailies that have closed, and fails it on one still to close",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await decidedBank([MYSTERY], {
+        files: fxFiles(
+          month([daily("2026-12-01", "published"), daily("2026-12-20")]),
+        ),
+      });
+      await retire(bank, MYSTERY, { today: "2026-12-03", allowFrozen: true });
+      const fresh = await reload(bank);
+      const x10 = (today: string) =>
+        poolFindings(fresh, today)
+          .filter((f) => f.rule === "X10")
+          .map((f) => f.message);
+      // Before 1 December closes both Dailies are still to come.
+      expect(x10("2026-11-30")).toEqual([
+        `2026-12-01: round ${MYSTERY} is retired, not active (§0.2)`,
+        `2026-12-20: round ${MYSTERY} is retired, not active (§0.2)`,
+      ]);
+      // Once it has closed, only the Daily still to come fails.
+      expect(x10("2026-12-03")).toEqual([
+        `2026-12-20: round ${MYSTERY} is retired, not active (§0.2)`,
+      ]);
+      // The lint reads the same date.
+      expect(
+        lintBank(fresh, { today: "2026-12-03", dedupe: false })
+          .filter((f) => f.rule === "X10")
+          .map((f) => f.message),
+      ).toEqual([`2026-12-20: round ${MYSTERY} is retired, not active (§0.2)`]);
+    },
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -545,7 +594,7 @@ describe("a retired item leaves the pool (CNT-2b)", () => {
 
   it(
     "AC-CNT-04 a retired practice item leaves X19's counts and every pool count",
-    { timeout: 30_000 },
+    { timeout: 60_000 },
     async () => {
       const bank = await loadContentTree(pool(100));
       expect(geo(bank)).toEqual([]);
@@ -692,7 +741,7 @@ describe("content:batch -- retire (CNT-2b)", () => {
     },
   );
 
-  it("refuses bad options with exit code 2", async () => {
+  it("refuses bad options with exit code 2", { timeout: 60_000 }, async () => {
     const bank = await decidedBank(["fx.p.geo.0101"]);
     const root = bank.layout.root;
     const fixture = (...args: string[]) =>

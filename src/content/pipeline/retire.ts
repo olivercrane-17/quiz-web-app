@@ -58,24 +58,30 @@ import { editableCopy, saveItems, type SaveOptions } from "./store.ts";
 export { RETIRE_KINDS, type RetireKind };
 
 /**
- * Anything in a sealed pool's id space a public file must never name: a
- * mystery, encore or room question id, a batch of those pools, or a list
- * request, with or without the fixtures' `fx.` prefix.
+ * Anything sealed a public file must never name: a mystery, encore or room
+ * question id, a batch of those pools, a list request or a spare set (with
+ * or without the fixtures' `fx.` prefix), and a Daily by its number or its
+ * date, which would tie the public item to one day's answers.
  */
-const SEALED_REFERENCE = new RegExp(
-  [
-    String.raw`\b(?:fx\.)?(?:`,
-    String.raw`m\.[a-z]+\.(?:\d{4}|b\d{2})`,
-    String.raw`|e\.(?:\d{4}|b\d{2})`,
-    String.raw`|r\.[a-z0-9]+(?:-[a-z0-9]+)*\.(?:\d{2}|b\d{2})`,
-    String.raw`|lr\.[a-z0-9.-]+`,
-    String.raw`)\b`,
-  ].join(""),
-);
+const SEALED_REFERENCES: readonly RegExp[] = [
+  new RegExp(
+    [
+      String.raw`\b(?:fx\.)?(?:`,
+      String.raw`m\.[a-z]+\.(?:\d{4}|b\d{2})`,
+      String.raw`|e\.(?:\d{4}|b\d{2})`,
+      String.raw`|r\.[a-z0-9]+(?:-[a-z0-9]+)*\.(?:\d{2}|b\d{2})`,
+      String.raw`|lr\.[a-z0-9.-]+`,
+      String.raw`|spare\.\d{2}`,
+      String.raw`)\b`,
+    ].join(""),
+  ),
+  /\bdaily\s*(?:#|no\.?|number)?\s*\d+/i,
+  /\b\d{4}-\d{2}-\d{2}\b/,
+];
 
-/** True when `text` names something sealed (see SEALED_REFERENCE). */
+/** True when `text` names something sealed (see SEALED_REFERENCES). */
 export function namesSealedContent(text: string): boolean {
-  return SEALED_REFERENCE.test(text);
+  return SEALED_REFERENCES.some((pattern) => pattern.test(text));
 }
 
 export interface RetireRequest {
@@ -216,7 +222,7 @@ export async function planRetirement(
   if (role !== null) refuse(role);
   if (!record.file.sealed && namesSealedContent(request.reason))
     refuse(
-      `the reason names a sealed item, batch or list request, and ${itemId}'s file is public: nothing public names sealed content (ARCHITECTURE §5.4), so describe it without the id`,
+      `the reason names sealed content (a sealed item, batch, list request or spare set, or a Daily by its number or date), and ${itemId}'s file is public: nothing public names sealed content (ARCHITECTURE §5.4), so describe it without them`,
     );
 
   const locks = await scheduleLocks(bank, record, request.today);

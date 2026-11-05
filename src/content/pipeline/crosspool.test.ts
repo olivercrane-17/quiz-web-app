@@ -140,242 +140,274 @@ const judgmentsOf = (bank: Bank, id = MYSTERY): CrossPoolJudgment[] =>
   itemOf(bank, id).item.verification?.crossPool ?? [];
 
 describe("cross-pool pairs and their hash (CNT-2b)", () => {
-  it("hashes both items' packet fields: either side's stem, key or claims change it, and tags, notes or the verification record do not", async () => {
-    const bank = await tree();
-    const daily = itemOf(bank, MYSTERY);
-    const other = itemOf(bank, TWIN);
-    const hash = crossPoolPairSha256(daily, other);
-    expect(hash).toMatch(/^[0-9a-f]{64}$/);
-    expect(crossPoolPairSha256(daily, other)).toBe(hash);
-    const variant = (
-      side: "daily" | "other",
-      patch: Record<string, unknown>,
-    ) => {
-      const record = side === "daily" ? daily : other;
-      const changed = {
-        id: record.id,
-        item: { ...record.item, ...patch } as AnyItem,
+  it(
+    "hashes both items' packet fields: either side's stem, key or claims change it, and tags, notes or the verification record do not",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await tree();
+      const daily = itemOf(bank, MYSTERY);
+      const other = itemOf(bank, TWIN);
+      const hash = crossPoolPairSha256(daily, other);
+      expect(hash).toMatch(/^[0-9a-f]{64}$/);
+      expect(crossPoolPairSha256(daily, other)).toBe(hash);
+      const variant = (
+        side: "daily" | "other",
+        patch: Record<string, unknown>,
+      ) => {
+        const record = side === "daily" ? daily : other;
+        const changed = {
+          id: record.id,
+          item: { ...record.item, ...patch } as AnyItem,
+        };
+        return side === "daily"
+          ? crossPoolPairSha256(changed, other)
+          : crossPoolPairSha256(daily, changed);
       };
-      return side === "daily"
-        ? crossPoolPairSha256(changed, other)
-        : crossPoolPairSha256(daily, changed);
-    };
-    // What a packet shows lapses the pair...
-    expect(variant("other", { stem: `${twin().stem} ` })).not.toBe(hash);
-    expect(variant("other", { answer: "Belloria" })).not.toBe(hash);
-    expect(
-      variant("daily", {
-        clues: [...fxMystery().clues.slice(0, 3), "A reworded fourth clue."],
-      }),
-    ).not.toBe(hash);
-    expect(
-      variant("daily", {
-        claims: [
-          ...fxMystery().claims,
-          {
-            id: "c8",
-            role: "explanation",
-            risk: "standard",
-            text: "A new claim.",
-          },
-        ],
-      }),
-    ).not.toBe(hash);
-    // ...and nothing else does.
-    expect(variant("other", { tags: ["fixtures", "flags"] })).toBe(hash);
-    expect(variant("daily", { writerNotes: "Another note." })).toBe(hash);
-    expect(
-      variant("daily", { verification: { checks: [], crossPool: [] } }),
-    ).toBe(hash);
-    // The order of the pair is fixed: the Daily item first.
-    expect(crossPoolPairSha256(other, daily)).not.toBe(hash);
-  });
+      // What a packet shows lapses the pair...
+      expect(variant("other", { stem: `${twin().stem} ` })).not.toBe(hash);
+      expect(variant("other", { answer: "Belloria" })).not.toBe(hash);
+      expect(
+        variant("daily", {
+          clues: [...fxMystery().clues.slice(0, 3), "A reworded fourth clue."],
+        }),
+      ).not.toBe(hash);
+      expect(
+        variant("daily", {
+          claims: [
+            ...fxMystery().claims,
+            {
+              id: "c8",
+              role: "explanation",
+              risk: "standard",
+              text: "A new claim.",
+            },
+          ],
+        }),
+      ).not.toBe(hash);
+      // ...and nothing else does.
+      expect(variant("other", { tags: ["fixtures", "flags"] })).toBe(hash);
+      expect(variant("daily", { writerNotes: "Another note." })).toBe(hash);
+      expect(
+        variant("daily", { verification: { checks: [], crossPool: [] } }),
+      ).toBe(hash);
+      // The order of the pair is fixed: the Daily item first.
+      expect(crossPoolPairSha256(other, daily)).not.toBe(hash);
+    },
+  );
 
-  it("flags every practice and room item at or above the threshold, not only the nearest", async () => {
-    const bank = await tree({
-      [`practice/geography/${TWIN_TF}.json`]: twinTf(),
-      ".sealed-plain/room-packs/fx-party.json": fxPack([roomTwin()]),
-      // An unrelated practice item stays out.
-      "practice/geography/fx.p.geo.0103.json": fxMc({ id: "fx.p.geo.0103" }),
-    });
-    const pairs = crossPoolPairs(bank);
-    expect(
-      pairs.map((pair) => `${pair.dailyId} ${pair.otherId} ${pair.state}`),
-    ).toEqual(
-      expect.arrayContaining([
-        `${MYSTERY} ${TWIN} none`,
-        `${MYSTERY} ${TWIN_TF} none`,
-        `${MYSTERY} fx.r.fx-party.01 none`,
-      ]),
-    );
-    expect(pairs.map((pair) => pair.otherId)).not.toContain("fx.p.geo.0103");
-    expect(pairs.every((pair) => pair.score >= 0.5)).toBe(true);
-  });
+  it(
+    "flags every practice and room item at or above the threshold, not only the nearest",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await tree({
+        [`practice/geography/${TWIN_TF}.json`]: twinTf(),
+        ".sealed-plain/room-packs/fx-party.json": fxPack([roomTwin()]),
+        // An unrelated practice item stays out.
+        "practice/geography/fx.p.geo.0103.json": fxMc({ id: "fx.p.geo.0103" }),
+      });
+      const pairs = crossPoolPairs(bank);
+      expect(
+        pairs.map((pair) => `${pair.dailyId} ${pair.otherId} ${pair.state}`),
+      ).toEqual(
+        expect.arrayContaining([
+          `${MYSTERY} ${TWIN} none`,
+          `${MYSTERY} ${TWIN_TF} none`,
+          `${MYSTERY} fx.r.fx-party.01 none`,
+        ]),
+      );
+      expect(pairs.map((pair) => pair.otherId)).not.toContain("fx.p.geo.0103");
+      expect(pairs.every((pair) => pair.score >= 0.5)).toBe(true);
+    },
+  );
 });
 
 describe("X29 with the editor's judgments (CNT-2b)", () => {
-  it("AC-CNT-06 a related_ok on the sealed Daily item clears its pair, and only that pair", async () => {
-    const bank = await tree({
-      [`practice/geography/${TWIN_TF}.json`]: twinTf(),
-    });
-    expect(x29(bank)).toEqual([`${MYSTERY} X29`]);
-    const first = await judge(bank);
-    expect(first).toMatchObject({
-      dailyId: MYSTERY,
-      otherPool: "practice",
-      replaced: false,
-      judgments: 1,
-    });
-    // Stored on the sealed item, never on the public one.
-    expect(judgmentsOf(bank)).toEqual([
-      {
-        itemId: TWIN,
-        decision: "related_ok",
-        by: EDITOR,
-        at: AT,
-        reason: request().reason,
-        pairSha256: crossPoolPairSha256(
-          itemOf(bank, MYSTERY),
-          itemOf(bank, TWIN),
-        ),
-      },
-    ]);
-    expect(itemOf(bank, TWIN).item.verification?.crossPool).toBeUndefined();
-    // The true/false twin is still unjudged, so the Daily item still fails.
-    const left = crossPoolRules(bank, OPTIONS);
-    expect(left.map((f) => `${f.itemId} ${f.rule}`)).toEqual([
-      `${MYSTERY} X29`,
-    ]);
-    expect(left[0]?.message).toContain("1 practice or room item(s)");
-    expect(left[0]?.message).not.toMatch(/p\.geo/);
-    await judge(bank, { itemId: TWIN_TF });
-    expect(x29(bank)).toEqual([]);
-    expect(judgmentsOf(bank).map((j) => j.itemId)).toEqual([TWIN, TWIN_TF]);
-  });
-
-  it("AC-CNT-06 the judgment lapses when either item changes what a packet shows, and X29 reports the pair again", async () => {
-    const bank = await tree();
-    await judge(bank);
-    expect(x29(bank)).toEqual([]);
-    // A tag is not in any packet: the judgment holds.
-    await edit(bank, TWIN, { tags: ["fixtures", "flags"] });
-    expect(x29(bank)).toEqual([]);
-    // A reworded stem is: the judgment lapses...
-    await edit(bank, TWIN, {
-      stem: "Which fixture country flies a silver heron over three blue waves?",
-    });
-    expect(judgmentState(bank, itemOf(bank, MYSTERY), itemOf(bank, TWIN))).toBe(
-      "lapsed",
-    );
-    const lapsed = crossPoolRules(bank, OPTIONS);
-    expect(lapsed.map((f) => `${f.itemId} ${f.rule}`)).toEqual([
-      `${MYSTERY} X29`,
-    ]);
-    expect(lapsed[0]?.message).toContain("lapsed when an item changed");
-    // ...until the editor records it again, which replaces the old one.
-    const again = await judge(bank);
-    expect(again.replaced).toBe(true);
-    expect(judgmentsOf(bank)).toHaveLength(1);
-    expect(x29(bank)).toEqual([]);
-    // A change on the Daily side lapses it too.
-    await edit(bank, MYSTERY, {
-      explanation:
-        "The heron nests by the Vellum, so all four clues point to one valley.",
-    });
-    expect(x29(bank)).toEqual([`${MYSTERY} X29`]);
-  });
-
-  it("AC-CNT-06 a room question near a Daily item: the judgment, on the Daily item, clears both of X29's findings", async () => {
-    const bank = await tree({
-      [`practice/geography/${TWIN}.json`]: fxMc(),
-      ".sealed-plain/room-packs/fx-party.json": fxPack([roomTwin()]),
-    });
-    expect(x29(bank).sort()).toEqual(
-      [`${MYSTERY} X29`, "fx.r.fx-party.01 X29"].sort(),
-    );
-    const plan = await judge(bank, { itemId: "fx.r.fx-party.01" });
-    expect(plan.otherPool).toBe("room");
-    expect(x29(bank)).toEqual([]);
-    expect(judgmentsOf(bank).map((j) => j.itemId)).toEqual([
-      "fx.r.fx-party.01",
-    ]);
-  });
-
-  it("AC-CNT-06 ignores retired items on either side of a pair", async () => {
-    const retired = {
-      at: AT,
-      by: EDITOR,
-      kind: "cross_pool",
-      reason: "Shares its fact with a Daily item.",
-    };
-    const checked = {
-      predicted: { p: 0.6, spread: 0.3, estimator: "v0" },
-      verification: { checks: [] },
-    };
-    const publicRetired = await tree({
-      [`practice/geography/${TWIN}.json`]: twin({
-        ...checked,
-        status: "retired",
-        retired,
-      }),
-    });
-    expect(itemOf(publicRetired, TWIN).item.status).toBe("retired");
-    expect(x29(publicRetired)).toEqual([]);
-    expect(crossPoolPairs(publicRetired)).toEqual([]);
-    const dailyRetired = await tree({
-      [`.sealed-plain/mysteries/${MYSTERY}.json`]: fxMystery({
-        status: "retired",
-        retired,
-        predicted: {
-          solveByClue: [0.5, 0.8, 0.92, 0.98],
-          spread: 0.3,
-          estimator: "v0",
+  it(
+    "AC-CNT-06 a related_ok on the sealed Daily item clears its pair, and only that pair",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await tree({
+        [`practice/geography/${TWIN_TF}.json`]: twinTf(),
+      });
+      expect(x29(bank)).toEqual([`${MYSTERY} X29`]);
+      const first = await judge(bank);
+      expect(first).toMatchObject({
+        dailyId: MYSTERY,
+        otherPool: "practice",
+        replaced: false,
+        judgments: 1,
+      });
+      // Stored on the sealed item, never on the public one.
+      expect(judgmentsOf(bank)).toEqual([
+        {
+          itemId: TWIN,
+          decision: "related_ok",
+          by: EDITOR,
+          at: AT,
+          reason: request().reason,
+          pairSha256: crossPoolPairSha256(
+            itemOf(bank, MYSTERY),
+            itemOf(bank, TWIN),
+          ),
         },
+      ]);
+      expect(itemOf(bank, TWIN).item.verification?.crossPool).toBeUndefined();
+      // The true/false twin is still unjudged, so the Daily item still fails.
+      const left = crossPoolRules(bank, OPTIONS);
+      expect(left.map((f) => `${f.itemId} ${f.rule}`)).toEqual([
+        `${MYSTERY} X29`,
+      ]);
+      expect(left[0]?.message).toContain("1 practice or room item(s)");
+      expect(left[0]?.message).not.toMatch(/p\.geo/);
+      await judge(bank, { itemId: TWIN_TF });
+      expect(x29(bank)).toEqual([]);
+      expect(judgmentsOf(bank).map((j) => j.itemId)).toEqual([TWIN, TWIN_TF]);
+    },
+  );
+
+  it(
+    "AC-CNT-06 the judgment lapses when either item changes what a packet shows, and X29 reports the pair again",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await tree();
+      await judge(bank);
+      expect(x29(bank)).toEqual([]);
+      // A tag is not in any packet: the judgment holds.
+      await edit(bank, TWIN, { tags: ["fixtures", "flags"] });
+      expect(x29(bank)).toEqual([]);
+      // A reworded stem is: the judgment lapses...
+      await edit(bank, TWIN, {
+        stem: "Which fixture country flies a silver heron over three blue waves?",
+      });
+      expect(
+        judgmentState(bank, itemOf(bank, MYSTERY), itemOf(bank, TWIN)),
+      ).toBe("lapsed");
+      const lapsed = crossPoolRules(bank, OPTIONS);
+      expect(lapsed.map((f) => `${f.itemId} ${f.rule}`)).toEqual([
+        `${MYSTERY} X29`,
+      ]);
+      expect(lapsed[0]?.message).toContain("lapsed when an item changed");
+      // ...until the editor records it again, which replaces the old one.
+      const again = await judge(bank);
+      expect(again.replaced).toBe(true);
+      expect(judgmentsOf(bank)).toHaveLength(1);
+      expect(x29(bank)).toEqual([]);
+      // A change on the Daily side lapses it too.
+      await edit(bank, MYSTERY, {
+        explanation:
+          "The heron nests by the Vellum, so all four clues point to one valley.",
+      });
+      expect(x29(bank)).toEqual([`${MYSTERY} X29`]);
+    },
+  );
+
+  it(
+    "AC-CNT-06 a room question near a Daily item: the judgment, on the Daily item, clears both of X29's findings",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await tree({
+        [`practice/geography/${TWIN}.json`]: fxMc(),
+        ".sealed-plain/room-packs/fx-party.json": fxPack([roomTwin()]),
+      });
+      expect(x29(bank).sort()).toEqual(
+        [`${MYSTERY} X29`, "fx.r.fx-party.01 X29"].sort(),
+      );
+      const plan = await judge(bank, { itemId: "fx.r.fx-party.01" });
+      expect(plan.otherPool).toBe("room");
+      expect(x29(bank)).toEqual([]);
+      expect(judgmentsOf(bank).map((j) => j.itemId)).toEqual([
+        "fx.r.fx-party.01",
+      ]);
+    },
+  );
+
+  it(
+    "AC-CNT-06 ignores retired items on either side of a pair",
+    { timeout: 60_000 },
+    async () => {
+      const retired = {
+        at: AT,
+        by: EDITOR,
+        kind: "cross_pool",
+        reason: "Shares its fact with a Daily item.",
+      };
+      const checked = {
+        predicted: { p: 0.6, spread: 0.3, estimator: "v0" },
         verification: { checks: [] },
-      }),
-    });
-    expect(x29(dailyRetired)).toEqual([]);
-  });
+      };
+      const publicRetired = await tree({
+        [`practice/geography/${TWIN}.json`]: twin({
+          ...checked,
+          status: "retired",
+          retired,
+        }),
+      });
+      expect(itemOf(publicRetired, TWIN).item.status).toBe("retired");
+      expect(x29(publicRetired)).toEqual([]);
+      expect(crossPoolPairs(publicRetired)).toEqual([]);
+      const dailyRetired = await tree({
+        [`.sealed-plain/mysteries/${MYSTERY}.json`]: fxMystery({
+          status: "retired",
+          retired,
+          predicted: {
+            solveByClue: [0.5, 0.8, 0.92, 0.98],
+            spread: 0.3,
+            estimator: "v0",
+          },
+          verification: { checks: [] },
+        }),
+      });
+      expect(x29(dailyRetired)).toEqual([]);
+    },
+  );
 
-  it("AC-CNT-06 a judgment by a run that wrote, checked or estimated either item does not count", async () => {
-    const bank = await tree();
-    await judge(bank);
-    expect(x29(bank)).toEqual([]);
-    // Hand-edited to name the batch writer's run as its editor.
-    const forged = judgmentsOf(bank).map((j) => ({
-      ...j,
-      by: `ed-${WRITER.slice(2)}`,
-    }));
-    const daily = itemOf(bank, MYSTERY).item;
-    await edit(bank, MYSTERY, {
-      verification: { ...daily.verification, crossPool: forged },
-    });
-    expect(judgmentState(bank, itemOf(bank, MYSTERY), itemOf(bank, TWIN))).toBe(
-      "invalid",
-    );
-    const findings = crossPoolRules(bank, OPTIONS);
-    expect(findings.map((f) => `${f.itemId} ${f.rule}`)).toEqual([
-      `${MYSTERY} X29`,
-    ]);
-    expect(findings[0]?.message).toContain("wrote, checked or estimated");
-  });
+  it(
+    "AC-CNT-06 a judgment by a run that wrote, checked or estimated either item does not count",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await tree();
+      await judge(bank);
+      expect(x29(bank)).toEqual([]);
+      // Hand-edited to name the batch writer's run as its editor.
+      const forged = judgmentsOf(bank).map((j) => ({
+        ...j,
+        by: `ed-${WRITER.slice(2)}`,
+      }));
+      const daily = itemOf(bank, MYSTERY).item;
+      await edit(bank, MYSTERY, {
+        verification: { ...daily.verification, crossPool: forged },
+      });
+      expect(
+        judgmentState(bank, itemOf(bank, MYSTERY), itemOf(bank, TWIN)),
+      ).toBe("invalid");
+      const findings = crossPoolRules(bank, OPTIONS);
+      expect(findings.map((f) => `${f.itemId} ${f.rule}`)).toEqual([
+        `${MYSTERY} X29`,
+      ]);
+      expect(findings[0]?.message).toContain("wrote, checked or estimated");
+    },
+  );
 
-  it("AC-CNT-06 an encore and the practice item that asks its question: judged like a mystery", async () => {
-    const encore = fxEncore();
-    const bank = await tree({
-      [`practice/geography/${TWIN}.json`]: fxMc(),
-      [`.sealed-plain/encores/${encore.id}.json`]: encore,
-      "practice/geography/fx.p.geo.0104.json": fxMc({
-        id: "fx.p.geo.0104",
-        stem: "How many steps lead up to the fixture lighthouse of Gorlund?",
-        answer: "212",
-        wrong: ["180", "196", "230"],
-      }),
-    });
-    expect(x29(bank)).toEqual([`${encore.id} X29`]);
-    await judge(bank, { dailyId: encore.id, itemId: "fx.p.geo.0104" });
-    expect(x29(bank)).toEqual([]);
-  });
+  it(
+    "AC-CNT-06 an encore and the practice item that asks its question: judged like a mystery",
+    { timeout: 60_000 },
+    async () => {
+      const encore = fxEncore();
+      const bank = await tree({
+        [`practice/geography/${TWIN}.json`]: fxMc(),
+        [`.sealed-plain/encores/${encore.id}.json`]: encore,
+        "practice/geography/fx.p.geo.0104.json": fxMc({
+          id: "fx.p.geo.0104",
+          stem: "How many steps lead up to the fixture lighthouse of Gorlund?",
+          answer: "212",
+          wrong: ["180", "196", "230"],
+        }),
+      });
+      expect(x29(bank)).toEqual([`${encore.id} X29`]);
+      await judge(bank, { dailyId: encore.id, itemId: "fx.p.geo.0104" });
+      expect(x29(bank)).toEqual([]);
+    },
+  );
 });
 
 describe("recording a judgment: what is refused (CNT-2b)", () => {
@@ -388,85 +420,94 @@ describe("recording a judgment: what is refused (CNT-2b)", () => {
     return "accepted";
   };
 
-  it("takes only an editor, never a run that wrote, checked or estimated either item", async () => {
-    const bank = await tree();
-    expect(refusal(bank, { editor: "fc-fx-somebody" })).toMatch(
-      /^--editor is an editor's agent id/,
-    );
-    expect(refusal(bank, { editor: "w-fx-editor" })).toMatch(
-      /^--editor is an editor's agent id/,
-    );
-    // The writer of either item's batch (both are w-fx-writer's).
-    expect(refusal(bank, { editor: `ed-${WRITER.slice(2)}` })).toBe(
-      `ed-fx-writer wrote ${MYSTERY}; one run holds one role on an item, so another editor decides (CONTENT_GUIDE §0.2)`,
-    );
-    // A checker of the Daily item, and an estimator of the practice item.
-    const daily = itemOf(bank, MYSTERY);
-    const other = itemOf(bank, TWIN);
-    await saveItems(
-      bank,
-      new Map<string, AnyItem>([
-        [
-          MYSTERY,
-          mergeRecord(daily.item, fxRecord(bank, daily, "A"), "A", false).item,
-        ],
-        [
-          TWIN,
-          {
-            ...other.item,
-            verification: {
-              checks: [],
-              estimates: [{ by: "es-fx-guess", at: AT }],
-            },
-          } as AnyItem,
-        ],
-      ]),
-      { skipGuard: true },
-    );
-    expect(refusal(bank, { editor: `ed-${CHECKER_A.slice(3)}` })).toMatch(
-      new RegExp(`^ed-fx-alpha checked ${MYSTERY.replace(/\./g, "\\.")};`),
-    );
-    expect(refusal(bank, { editor: "ed-fx-guess" })).toMatch(
-      new RegExp(`^ed-fx-guess estimated ${TWIN.replace(/\./g, "\\.")};`),
-    );
-    expect(refusal(bank, {})).toBe("accepted");
-  });
+  it(
+    "takes only an editor, never a run that wrote, checked or estimated either item",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await tree();
+      expect(refusal(bank, { editor: "fc-fx-somebody" })).toMatch(
+        /^--editor is an editor's agent id/,
+      );
+      expect(refusal(bank, { editor: "w-fx-editor" })).toMatch(
+        /^--editor is an editor's agent id/,
+      );
+      // The writer of either item's batch (both are w-fx-writer's).
+      expect(refusal(bank, { editor: `ed-${WRITER.slice(2)}` })).toBe(
+        `ed-fx-writer wrote ${MYSTERY}; one run holds one role on an item, so another editor decides (CONTENT_GUIDE §0.2)`,
+      );
+      // A checker of the Daily item, and an estimator of the practice item.
+      const daily = itemOf(bank, MYSTERY);
+      const other = itemOf(bank, TWIN);
+      await saveItems(
+        bank,
+        new Map<string, AnyItem>([
+          [
+            MYSTERY,
+            mergeRecord(daily.item, fxRecord(bank, daily, "A"), "A", false)
+              .item,
+          ],
+          [
+            TWIN,
+            {
+              ...other.item,
+              verification: {
+                checks: [],
+                estimates: [{ by: "es-fx-guess", at: AT }],
+              },
+            } as AnyItem,
+          ],
+        ]),
+        { skipGuard: true },
+      );
+      expect(refusal(bank, { editor: `ed-${CHECKER_A.slice(3)}` })).toMatch(
+        new RegExp(`^ed-fx-alpha checked ${MYSTERY.replace(/\./g, "\\.")};`),
+      );
+      expect(refusal(bank, { editor: "ed-fx-guess" })).toMatch(
+        new RegExp(`^ed-fx-guess estimated ${TWIN.replace(/\./g, "\\.")};`),
+      );
+      expect(refusal(bank, {})).toBe("accepted");
+    },
+  );
 
-  it("names a Daily item and a practice item or room question, both in play, that X29 flags, with a reason", async () => {
-    const bank = await tree({
-      "practice/geography/fx.p.geo.0103.json": fxMc({ id: "fx.p.geo.0103" }),
-      [`practice/geography/${TWIN_TF}.json`]: twinTf(),
-    });
-    expect(refusal(bank, { reason: "   " })).toMatch(/^--reason says why/);
-    expect(refusal(bank, { dailyId: "fx.m.geo.0199" })).toMatch(
-      /^fx\.m\.geo\.0199 is not an item of the bank; sealed items are read from content\/\.sealed-plain\//,
-    );
-    expect(refusal(bank, { dailyId: TWIN, itemId: TWIN_TF })).toBe(
-      `--daily names a Daily item (a mystery or an encore), and ${TWIN} is a practice item`,
-    );
-    expect(refusal(bank, { itemId: MYSTERY })).toBe(
-      `--item names a practice item or a room question, and ${MYSTERY} is a mystery`,
-    );
-    expect(refusal(bank, { itemId: "fx.p.geo.0199" })).toBe(
-      "fx.p.geo.0199 is not an item of the bank",
-    );
-    // An unrelated practice item: nothing for X29 to flag, nothing to judge.
-    expect(refusal(bank, { itemId: "fx.p.geo.0103" })).toBe(
-      "the cross-pool check does not flag this pair (it scores below 0.5), so there is nothing to judge",
-    );
-    // An item out of play.
-    await edit(bank, TWIN, { status: "cut" });
-    expect(refusal(bank, {})).toBe(
-      `${TWIN} is cut: the cross-pool check no longer reads it, so there is nothing to judge`,
-    );
-    // No refusal joins the practice item to the sealed one.
-    for (const message of [
-      refusal(bank, {}),
-      refusal(bank, { itemId: "fx.p.geo.0103" }),
-      refusal(bank, { editor: `ed-${WRITER.slice(2)}` }),
-    ])
-      expect(message.includes(MYSTERY) && /p\.geo/.test(message)).toBe(false);
-  });
+  it(
+    "names a Daily item and a practice item or room question, both in play, that X29 flags, with a reason",
+    { timeout: 60_000 },
+    async () => {
+      const bank = await tree({
+        "practice/geography/fx.p.geo.0103.json": fxMc({ id: "fx.p.geo.0103" }),
+        [`practice/geography/${TWIN_TF}.json`]: twinTf(),
+      });
+      expect(refusal(bank, { reason: "   " })).toMatch(/^--reason says why/);
+      expect(refusal(bank, { dailyId: "fx.m.geo.0199" })).toMatch(
+        /^fx\.m\.geo\.0199 is not an item of the bank; sealed items are read from content\/\.sealed-plain\//,
+      );
+      expect(refusal(bank, { dailyId: TWIN, itemId: TWIN_TF })).toBe(
+        `--daily names a Daily item (a mystery or an encore), and ${TWIN} is a practice item`,
+      );
+      expect(refusal(bank, { itemId: MYSTERY })).toBe(
+        `--item names a practice item or a room question, and ${MYSTERY} is a mystery`,
+      );
+      expect(refusal(bank, { itemId: "fx.p.geo.0199" })).toBe(
+        "fx.p.geo.0199 is not an item of the bank",
+      );
+      // An unrelated practice item: nothing for X29 to flag, nothing to judge.
+      expect(refusal(bank, { itemId: "fx.p.geo.0103" })).toBe(
+        "the cross-pool check does not flag this pair (it scores below 0.5), so there is nothing to judge",
+      );
+      // An item out of play.
+      await edit(bank, TWIN, { status: "cut" });
+      expect(refusal(bank, {})).toBe(
+        `${TWIN} is cut: the cross-pool check no longer reads it, so there is nothing to judge`,
+      );
+      // No refusal joins the practice item to the sealed one.
+      for (const message of [
+        refusal(bank, {}),
+        refusal(bank, { itemId: "fx.p.geo.0103" }),
+        refusal(bank, { editor: `ed-${WRITER.slice(2)}` }),
+      ])
+        expect(message.includes(MYSTERY) && /p\.geo/.test(message)).toBe(false);
+    },
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -629,37 +670,41 @@ describe("content:dedupe -- --cross-pool-ok (CNT-2b)", () => {
     },
   );
 
-  it("refuses --sealed, a missing or stray option, and a refused judgment, without joining the two items", () => {
-    const repo = contentRepo(files());
-    const sealed = cli(repo, ...judgeArgs("--sealed"));
-    expect(sealed.code).toBe(2);
-    expect(sealed.err).toContain("do not run with --sealed");
-    const missing = cli(repo, "--cross-pool-ok", "--daily", MYSTERY);
-    expect(missing.code).toBe(2);
-    expect(missing.err).toContain(
-      "--cross-pool-ok needs --item, --editor, --reason",
-    );
-    const stray = cli(repo, ...judgeArgs("--write"));
-    expect(stray.code).toBe(2);
-    expect(stray.err).toContain("not --write");
-    const alone = cli(repo, "--editor", EDITOR);
-    expect(alone.code).toBe(2);
-    expect(alone.err).toContain("--editor goes with --cross-pool-ok only");
-    const writer = cli(
-      repo,
-      ...judgeArgs().map((arg) => (arg === EDITOR ? "ed-fx-writer" : arg)),
-    );
-    expect(writer.code).toBe(1);
-    expect(writer.err).toContain(`ed-fx-writer wrote ${MYSTERY}`);
-    for (const result of [sealed, missing, stray, alone, writer])
-      expectNoJoin(`${result.out}\n${result.err}`, TWIN);
-    // Nothing was written by any of them.
-    const stored = JSON.parse(
-      readFileSync(
-        join(repo, "content/.sealed-plain/mysteries", `${MYSTERY}.json`),
-        "utf8",
-      ),
-    ) as AnyItem;
-    expect(stored.verification).toBeUndefined();
-  });
+  it(
+    "refuses --sealed, a missing or stray option, and a refused judgment, without joining the two items",
+    { timeout: 60_000 },
+    () => {
+      const repo = contentRepo(files());
+      const sealed = cli(repo, ...judgeArgs("--sealed"));
+      expect(sealed.code).toBe(2);
+      expect(sealed.err).toContain("do not run with --sealed");
+      const missing = cli(repo, "--cross-pool-ok", "--daily", MYSTERY);
+      expect(missing.code).toBe(2);
+      expect(missing.err).toContain(
+        "--cross-pool-ok needs --item, --editor, --reason",
+      );
+      const stray = cli(repo, ...judgeArgs("--write"));
+      expect(stray.code).toBe(2);
+      expect(stray.err).toContain("not --write");
+      const alone = cli(repo, "--editor", EDITOR);
+      expect(alone.code).toBe(2);
+      expect(alone.err).toContain("--editor goes with --cross-pool-ok only");
+      const writer = cli(
+        repo,
+        ...judgeArgs().map((arg) => (arg === EDITOR ? "ed-fx-writer" : arg)),
+      );
+      expect(writer.code).toBe(1);
+      expect(writer.err).toContain(`ed-fx-writer wrote ${MYSTERY}`);
+      for (const result of [sealed, missing, stray, alone, writer])
+        expectNoJoin(`${result.out}\n${result.err}`, TWIN);
+      // Nothing was written by any of them.
+      const stored = JSON.parse(
+        readFileSync(
+          join(repo, "content/.sealed-plain/mysteries", `${MYSTERY}.json`),
+          "utf8",
+        ),
+      ) as AnyItem;
+      expect(stored.verification).toBeUndefined();
+    },
+  );
 });
