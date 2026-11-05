@@ -1,20 +1,23 @@
 /**
- * Route module (ARCHITECTURE §10.1): one of the seven trust pages (PRD
- * §3.14, DESIGN §12.40), in the (info) group's reading layout:
- * `/accessibility`. A placeholder until LGL-1 writes its text and keeps the
- * default export and the metadata (RITE round 1, R1-02: every footer link
- * opened a bare 404).
- * `src/app/(info)/accessibility/page.tsx` re-exports it.
+ * Route module (ARCHITECTURE §10.1): `/accessibility`, one of the seven trust
+ * pages (PRD §3.14, DESIGN §12.40), fully static in the (info) group's
+ * reading layout, and indexable. Its words are in
+ * `../documents/accessibility.ts`. `src/app/(info)/accessibility/page.tsx` re-exports it.
  */
 import type { Metadata } from "next";
 
-import { PagePlaceholder, SHELL_COPY } from "@/features/shell";
+import { SHELL_COPY } from "@/features/shell";
+import { isFeatureEnabled } from "@/lib/env";
+import { indexable } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: SHELL_COPY.legal.accessibility,
-  robots: { index: false },
-};
+import { accessibilityDocument } from "../documents/accessibility";
+import { LegalPage } from "../ui/legal-page";
+
+export const metadata: Metadata = indexable(
+  SHELL_COPY.legal.accessibility,
+  "/accessibility",
+);
 
 export default function AccessibilityRoute() {
-  return <PagePlaceholder title={SHELL_COPY.legal.accessibility} />;
+  return <LegalPage document={accessibilityDocument(isFeatureEnabled)} />;
 }
