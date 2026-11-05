@@ -6,14 +6,17 @@
  * (C22), and the cross-pool check of ARCHITECTURE §5.2 (X29, AC-CNT-06): no
  * practice or room item may share a fact with a Daily item (CONTENT_GUIDE
  * §10.5, §10.9). X29 runs whenever sealed items are loaded, and each of its
- * findings is an error; a near-duplicate pair is a warning for the editor's
- * call in content:decide. Exit 1 on any error, or any warning with --strict.
+ * findings is an error; a near-duplicate pair is for the editor's call in
+ * content:decide. Exit 1 on any X29 finding, or on any pair with --strict.
  *
- * Every report names ids, rule codes and counts only, never item text. A
- * pair with one sealed side (the other a plaintext item or a guide example,
- * whose answers are public) would give the sealed answer away, so without
- * --reveal it is reported under its sealed id only, with no score or
- * reason, in the text and the JSON output alike.
+ * Every report names ids, rule codes, scores and counts only, never item
+ * text. A pair with one sealed side (the other a plaintext item or a guide
+ * example, whose answers are public) would give the sealed answer away, so
+ * without --reveal it is listed under its sealed id only, with no score or
+ * reason, in the text and the JSON output alike. On the workspace a pair
+ * prints as `0.912  m.geo.0101  m.geo.0103  (reason)` and a pair across the
+ * seal as `  -    m.geo.0102  a public item` (content/README.md); each X29
+ * finding follows as `error X29 m.geo.0101: ...`, then the counts.
  *
  * Sealed items come from the plaintext workspace (content/.sealed-plain/)
  * by default. --sealed decrypts content/sealed/ in memory instead, with the
@@ -188,9 +191,6 @@ runReported(
       return 0;
     }
 
-    const fileOf = (id: string) =>
-      bank.itemsById.get(id)?.file.rel ?? layout.root;
-    const findings: ReportFinding[] = [];
     const notes = [...bank.notes];
 
     // X29 (AC-CNT-06): the check content:check runs, reported on the sealed side.
@@ -206,8 +206,9 @@ runReported(
       histories: null,
       dedupe: true,
     });
-    findings.push(...crossPool);
-    if (bank.sealedSource === "none" || layout.kind !== "content")
+    const crossPoolRan =
+      bank.sealedSource !== "none" && layout.kind === "content";
+    if (!crossPoolRan)
       notes.push(
         "Cross-pool check: not run, because no sealed Daily items are loaded.",
       );
@@ -224,21 +225,6 @@ runReported(
           }
         : pair,
     );
-    for (const pair of pairs) {
-      const hidden = pair.crossesSeal && !reveal;
-      const itemId = pair.crossesSeal ? (pair.sealedId ?? pair.a) : pair.a;
-      const other = itemId === pair.a ? pair.b : pair.a;
-      findings.push({
-        rule: "C22",
-        severity: "warn",
-        file: fileOf(itemId),
-        itemId,
-        message: hidden
-          ? "near-duplicate of a public item (pass --reveal to see the pair)"
-          : `score ${pair.score.toFixed(3)} with ${show(other)} (${pair.reason})`,
-        sealed: sealedIds.has(itemId),
-      });
-    }
 
     let written = 0;
     const left: string[] = [];
@@ -270,32 +256,88 @@ runReported(
       }
       if (updates.size > 0) await saveItems(bank, updates);
       written = updates.size;
+    }
+
+    if (sealedRun) {
+      // Decrypted content: the redacting reporter's three-part lines only.
+      const findings: ReportFinding[] = [...crossPool];
+      for (const pair of pairs) {
+        const itemId = pair.crossesSeal ? (pair.sealedId ?? pair.a) : pair.a;
+        findings.push({
+          rule: "C22",
+          severity: "warn",
+          file: bank.itemsById.get(itemId)?.file.rel ?? layout.root,
+          itemId,
+          message: "near-duplicate pair",
+          sealed: sealedIds.has(itemId),
+        });
+      }
       notes.push(
-        `Recorded dedupe on ${written} item(s); ${left.length} flagged item(s) left for the editor.`,
+        `${positions.size} item(s) indexed, ${pairs.length} near-duplicate pair(s), ${crossPool.length} item(s) sharing a fact across pools.`,
+      );
+      return printReport(
+        {
+          command: "content:dedupe",
+          items: positions.size,
+          findings,
+          notes,
+          strict: values.strict === true,
+          extra: { pairs: pairs.length, crossPool: crossPool.length },
+        },
+        { redact: true, reveal: false, json },
       );
     }
-    notes.push(
-      `${positions.size} item(s) indexed, ${pairs.length} near-duplicate pair(s), ${crossPool.length} item(s) sharing a fact across pools.`,
-    );
 
-    return printReport(
-      {
-        command: "content:dedupe",
-        items: positions.size,
-        findings,
-        notes,
-        strict: values.strict === true,
-        extra: sealedRun
-          ? { pairs: pairs.length, crossPool: crossPool.length }
-          : {
-              threshold,
-              pairs: shown,
-              crossPool: crossPool.length,
-              written,
-              leftForEditor: left,
-            },
-      },
-      { redact: sealedRun, reveal, json },
-    );
+    // The workspace: the pair list content/README.md shows, then X29.
+    const failed =
+      crossPool.length > 0 || (values.strict === true && pairs.length > 0);
+    if (json) {
+      console.log(
+        JSON.stringify(
+          {
+            ok: !failed,
+            indexed: positions.size,
+            threshold,
+            pairs: shown,
+            crossPoolRan,
+            crossPool: crossPool.map((finding) => ({
+              itemId: finding.itemId ?? null,
+              rule: finding.rule,
+              message: finding.message,
+            })),
+            written,
+            leftForEditor: left,
+            notes,
+          },
+          null,
+          2,
+        ),
+      );
+    } else {
+      for (const pair of shown) {
+        console.log(
+          "hidden" in pair
+            ? `  -    ${pair.sealedId}  a public item  (pass --reveal to see the pair)`
+            : `${pair.score.toFixed(3)}  ${pair.a}  ${show(pair.b)}  (${pair.reason})`,
+        );
+      }
+      for (const finding of crossPool)
+        console.log(
+          `error ${finding.rule} ${finding.itemId ?? finding.file}: ${finding.message}`,
+        );
+      for (const note of notes) console.log(`note: ${note}`);
+      console.log(
+        `content:dedupe: ${positions.size} item(s) indexed, ${pairs.length} pair(s) at or above ${threshold}.`,
+      );
+      if (crossPoolRan)
+        console.log(
+          `content:dedupe: ${crossPool.length} Daily item(s) share a fact with a practice or room item (X29).`,
+        );
+      if (values.write)
+        console.log(
+          `content:dedupe: recorded dedupe on ${written} item(s); ${left.length} flagged item(s) left for the editor.`,
+        );
+    }
+    return failed ? 1 : 0;
   },
 );
