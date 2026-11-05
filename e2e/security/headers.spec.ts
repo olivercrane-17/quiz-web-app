@@ -29,12 +29,50 @@ import type { APIResponse, Page } from "@playwright/test";
 
 import { CATEGORIES } from "../../src/content/generated/categories";
 import shareCodes from "../../src/engine/fixtures/share-codes.json";
+import {
+  SHELL_ROUTES,
+  type ShellRoute,
+} from "../../src/features/shell/shell-routes";
 import { PUBLIC_ENV_NAMES } from "../../src/lib/env-parse";
 import { expect, test } from "../fixtures";
 import { setClock } from "../support/clock";
 
 const PROJECT_DIR = path.resolve(__dirname, "..", "..");
 const NEXT_BIN = path.join(PROJECT_DIR, "node_modules/next/dist/bin/next");
+
+/**
+ * Pages that came with round 5, which the every-route test must reach:
+ * IDN-2's sync code and restore screens, LGL-1's seven trust pages, and
+ * the not-found page LGL-1 rewrote. A page the route manifest left out
+ * would otherwise pass without being loaded.
+ */
+const ROUND_5_PAGES = [
+  "/me/sync",
+  "/restore",
+  "/how-scoring-works",
+  "/about-our-questions",
+  "/privacy",
+  "/terms",
+  "/content-policy",
+  "/accessibility",
+  "/credits",
+  "/no-such-page",
+];
+
+/**
+ * A realistic address for each rewritten shell (ARCHITECTURE §10.1), as
+ * e2e/identity/cookie.spec.ts writes them. The island reads its param from
+ * the address, so `/claim/<token>` runs code that `/shell/claim` never does.
+ */
+function shellExample(route: ShellRoute): string {
+  return route.source
+    .replace(":code", route.source.startsWith("/join") ? "482913" : "AB12CD34")
+    .replace(":token", "kq3Zr0x9TWb7vY4mN2cH8sLp6eJd1gAfUoXiRtBnM5w")
+    .replace(
+      /:(groupId|roomId|quizId)/,
+      "0f8fad5b-d9cb-469f-a165-70867728950e",
+    );
+}
 
 /**
  * A real value for each dynamic segment a page may have (ARCHITECTURE
@@ -410,22 +448,27 @@ test.describe("the Content Security Policy in the browser", () => {
     expect(await violations()).toEqual([]);
   });
 
-  test("loads every route this build prerendered without a violation", async ({
+  test("loads every route this build prerendered, and every rewritten shell at a real address, without a violation", async ({
     page,
     consoleErrors,
   }) => {
     const routes = builtRoutes();
+    expect(routes).toContain("/");
+    expect(routes).toEqual(expect.arrayContaining(ROUND_5_PAGES));
+    const addresses = [...routes, ...SHELL_ROUTES.map(shellExample)];
+    expect(addresses).toContain(
+      "/claim/kq3Zr0x9TWb7vY4mN2cH8sLp6eJd1gAfUoXiRtBnM5w",
+    );
     // A route takes under a second even under a full suite's load, so 3 s
     // each keeps room for the routes ARCHITECTURE §10.1 still adds, which a
     // fixed 30 s would soon run out of.
-    test.setTimeout(30_000 + routes.length * 3_000);
-    expect(routes).toContain("/");
+    test.setTimeout(30_000 + addresses.length * 3_000);
     const violations = await watchViolations(page);
 
     // Beta shells whose flag is off answer with the not-found page, as the
     // missing page does; their HTML carries the policy all the same.
     let notFound = 0;
-    for (const route of routes) {
+    for (const route of addresses) {
       const response = await page.goto(route);
       if (response?.status() === 404) notFound += 1;
       await page.waitForLoadState("networkidle");
