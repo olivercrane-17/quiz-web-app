@@ -27,12 +27,30 @@ import path from "node:path";
 
 import type { APIResponse, Page } from "@playwright/test";
 
+import { CATEGORIES } from "../../src/content/generated/categories";
+import shareCodes from "../../src/engine/fixtures/share-codes.json";
 import { PUBLIC_ENV_NAMES } from "../../src/lib/env-parse";
 import { expect, test } from "../fixtures";
 import { setClock } from "../support/clock";
 
 const PROJECT_DIR = path.resolve(__dirname, "..", "..");
 const NEXT_BIN = path.join(PROJECT_DIR, "node_modules/next/dist/bin/next");
+
+/**
+ * A real value for each dynamic segment a page may have (ARCHITECTURE
+ * §10.1). builtRoutes() throws on any other, so a new dynamic route gets
+ * an example here instead of being requested as written and passing as a
+ * 404.
+ */
+const EXAMPLE_PARAMS: Readonly<Record<string, string | undefined>> = {
+  // /daily/[number]/results (DLY-3), /daily/[number] (ARC-1)
+  number: "1",
+  // /categories/[slug] (CAT-1)
+  slug: CATEGORIES[0]?.slug,
+  // /s/[number]/[code] (SHR-2): the PRD's sample result, which the
+  // engine's share-code tests round-trip.
+  code: shareCodes.roundTrips[0]?.code,
+};
 
 /** A mock build over http: 'self' only, and no upgrade-insecure-requests. */
 const CSP = [
@@ -197,23 +215,38 @@ async function withStubWorker<T>(
 }
 
 /**
- * Every page route the build under test prerendered, from its route stats,
- * with a real value for each param and a missing page for the not-found
- * route.
+ * Every page route the build under test prerendered, from its route
+ * manifest (route stats may leave a route out), with an example value for
+ * each dynamic segment and a missing page for the not-found route. Next's
+ * own /_global-error page has no address to visit.
  */
 function builtRoutes(): string[] {
-  const stats = JSON.parse(
+  const manifest = JSON.parse(
     readFileSync(
-      path.join(PROJECT_DIR, ".next/diagnostics/route-bundle-stats.json"),
+      path.join(PROJECT_DIR, ".next/app-path-routes-manifest.json"),
       "utf8",
     ),
-  ) as { route: string }[];
-  return stats
-    .map(({ route }) =>
-      route === "/_not-found"
-        ? "/no-such-page"
-        : route.replaceAll("[number]", "1"),
+  ) as Record<string, string>;
+  const pages = Object.entries(manifest)
+    .filter(
+      ([appPath, route]) =>
+        appPath.endsWith("/page") && route !== "/_global-error",
     )
+    .map(([, route]) => route);
+  return [...new Set(pages)]
+    .map((route) => {
+      if (route === "/_not-found") return "/no-such-page";
+      const url = route.replace(/\[([^\]]+)\]/g, (segment, name: string) => {
+        const value = EXAMPLE_PARAMS[name];
+        return value === undefined || value === "" ? segment : value;
+      });
+      if (/\[[^\]]+\]/.test(url)) {
+        throw new Error(
+          `builtRoutes() has no example value for ${route}: add its segment to EXAMPLE_PARAMS, so the page loads under the policy instead of passing as a 404.`,
+        );
+      }
+      return url;
+    })
     .sort();
 }
 
@@ -381,9 +414,13 @@ test.describe("the Content Security Policy in the browser", () => {
     page,
     consoleErrors,
   }) => {
-    const violations = await watchViolations(page);
     const routes = builtRoutes();
+    // A route takes under a second even under a full suite's load, so 3 s
+    // each keeps room for the routes ARCHITECTURE §10.1 still adds, which a
+    // fixed 30 s would soon run out of.
+    test.setTimeout(30_000 + routes.length * 3_000);
     expect(routes).toContain("/");
+    const violations = await watchViolations(page);
 
     // Beta shells whose flag is off answer with the not-found page, as the
     // missing page does; their HTML carries the policy all the same.

@@ -3,8 +3,12 @@
  * The header builder in next.config.ts (SEC-1, ARCHITECTURE §10.8): the
  * Content Security Policy for each kind of build, and which headers each
  * path gets. `e2e/security/headers.spec.ts` checks the same headers on a
- * production build's responses.
+ * production build's responses. Last, the premise behind the policy's
+ * 'unsafe-inline': no code under src/ parses a string as HTML.
  */
+import { readdirSync, readFileSync } from "node:fs";
+import { join, relative, resolve, sep } from "node:path";
+
 import {
   PHASE_DEVELOPMENT_SERVER,
   PHASE_PRODUCTION_BUILD,
@@ -357,5 +361,102 @@ describe("next.config.ts", () => {
     )?.value;
 
     expect(sourcesOf(policy ?? "", "script-src")).toContain("'unsafe-eval'");
+  });
+});
+
+const SRC = resolve(__dirname, "../../src");
+
+/**
+ * DOM APIs that parse a string as HTML. Under 'unsafe-inline', markup that
+ * reaches one can run script even with script-src-attr 'none': a
+ * `javascript:` link runs when clicked, and a <script> from
+ * createContextualFragment runs once inserted (measured in Chromium).
+ */
+const HTML_SINKS: readonly (readonly [string, RegExp])[] = [
+  ["innerHTML", /\.innerHTML\b/g],
+  ["outerHTML", /\.outerHTML\b/g],
+  ["insertAdjacentHTML", /\.insertAdjacentHTML\b/g],
+  ["setHTMLUnsafe", /\.setHTMLUnsafe\b/g],
+  ["parseHTMLUnsafe", /\bparseHTMLUnsafe\b/g],
+  ["createContextualFragment", /\.createContextualFragment\b/g],
+  ["document.write", /\bdocument\s*\.\s*write(?:ln)?\b/g],
+  ["srcdoc", /\bsrcdoc\b/gi],
+  ["dangerouslySetInnerHTML", /\bdangerouslySetInnerHTML\b/g],
+];
+
+/**
+ * The calls the policy allows, each fed only a build-time constant, with
+ * how often each file may make it: the inline boot and intro scripts, and
+ * the toast's icon SVG from ICON_PATHS.
+ */
+const ALLOWED_HTML_SINKS = new Map([
+  ["src/ui/inline-script.tsx: dangerouslySetInnerHTML", 1],
+  ["src/ui/toast.ts: insertAdjacentHTML", 1],
+]);
+
+/** One entry per HTML sink in `text`, by name. */
+function htmlSinksIn(text: string): string[] {
+  return HTML_SINKS.flatMap(([name, pattern]) =>
+    Array.from(text.matchAll(pattern), () => name),
+  );
+}
+
+/** The code under `dir` that ships: tests and their helpers left out, as ESLint's TEST_FILES does. */
+function* shippedSources(dir: string): Generator<string> {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (entry.name === "__fixtures__" || path === join(SRC, "test")) continue;
+      yield* shippedSources(path);
+    } else if (
+      /\.[cm]?[jt]sx?$/.test(entry.name) &&
+      !/\.(?:test|spec)\.[cm]?[jt]sx?$/.test(entry.name)
+    ) {
+      yield path;
+    }
+  }
+}
+
+describe("the premise of 'unsafe-inline' (D16)", () => {
+  it("knows the DOM APIs that parse a string as HTML", () => {
+    expect(
+      htmlSinksIn(
+        'a.innerHTML = s; b.outerHTML; c.insertAdjacentHTML("x", s); d.setHTMLUnsafe(s); Document.parseHTMLUnsafe(s); range.createContextualFragment(s); document.write(s); document.writeln(s); <iframe srcDoc={s} />; <div dangerouslySetInnerHTML={x} />; el.textContent = s;',
+      ),
+    ).toEqual([
+      "innerHTML",
+      "outerHTML",
+      "insertAdjacentHTML",
+      "setHTMLUnsafe",
+      "parseHTMLUnsafe",
+      "createContextualFragment",
+      "document.write",
+      "document.write",
+      "srcdoc",
+      "dangerouslySetInnerHTML",
+    ]);
+  });
+
+  it("holds in src/: nothing parses a string as HTML but the two calls fed build-time constants", () => {
+    const found = new Map<string, number>();
+    let files = 0;
+    for (const path of shippedSources(SRC)) {
+      files += 1;
+      const file = relative(resolve(SRC, ".."), path).split(sep).join("/");
+      for (const name of htmlSinksIn(readFileSync(path, "utf8"))) {
+        const sink = `${file}: ${name}`;
+        found.set(sink, (found.get(sink) ?? 0) + 1);
+      }
+    }
+
+    expect(files).toBeGreaterThan(100);
+    // Build the nodes instead (createElement, textContent, React), so no
+    // nickname, quiz title or toast text is ever parsed as markup. ESLint
+    // takes this over once it bans these APIs (a PLT-1/CI-1 follow-up).
+    expect(
+      [...found]
+        .filter(([sink, count]) => count > (ALLOWED_HTML_SINKS.get(sink) ?? 0))
+        .map(([sink, count]) => `${sink} (${count})`),
+    ).toEqual([]);
   });
 });

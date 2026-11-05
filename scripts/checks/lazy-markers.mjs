@@ -41,10 +41,17 @@
  *    the item, the field and the file, never the text (§5.4's output rule),
  *    and an error while loading sealed content prints nothing about it.
  *
+ * Neither check may pass by covering nothing. Both stop when an input they
+ * read is missing: a scan root, the prerendered Home page in
+ * .next/server/app (a sign that Next moved its output), or a page route
+ * the route stats leave out. Next writes those stats without any route
+ * whose client manifest it can't read (route-bundle-stats.js in
+ * next/dist/build), which would also drop the route from check:bundle.
+ *
  * Exit status 1 on any finding. The functions are exported for
  * scripts/checks/lazy-markers.test.ts.
  */
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
@@ -56,6 +63,12 @@ export const SERVER_FILES = ".next/required-server-files.json";
 export const CLIENT_DIR = ".next/static";
 /** What the sealed scan reads (AC-CNT-07). */
 export const SCAN_ROOTS = [".next/static", ".next/server/app", "public"];
+/** Home, which every build prerenders: proof that .next/server/app still holds the prerendered pages. */
+export const HOME_PAGE = ".next/server/app/index.html";
+/** Every app route the build has, by app path (`/(tabs)/page`), route handlers included. */
+export const ROUTES_MANIFEST = ".next/app-path-routes-manifest.json";
+/** Next's own error page, which it leaves out of the route stats on purpose (filterAndSortList in next/dist/build/utils.js). */
+const UNLISTED_PAGES = new Set(["/_global-error"]);
 
 /** The string a lazy-only module of ours carries: `__qz_lazy_<name>__`. */
 const MARKER = /__qz_lazy_([a-z0-9]+(?:_[a-z0-9]+)*)__/g;
@@ -177,6 +190,62 @@ export function readRouteStats(root) {
     }
   }
   return stats;
+}
+
+/**
+ * The page routes the build has (ROUTES_MANIFEST) that `stats` leave out,
+ * sorted. Next skips a route in its stats when it can't read the route's
+ * client manifest, and then no first-load check sees that route at all.
+ */
+export function routesMissingFromStats(root, stats) {
+  const manifest = readJson(join(root, ROUTES_MANIFEST), ROUTES_MANIFEST);
+  if (typeof manifest !== "object" || manifest === null) {
+    throw new CheckError(
+      `${ROUTES_MANIFEST} is not a map of routes. Has its format changed?`,
+    );
+  }
+  const listed = new Set(stats.map((row) => row.route));
+  const missing = new Set();
+  for (const [appPath, route] of Object.entries(manifest)) {
+    if (!appPath.endsWith("/page") || typeof route !== "string") continue;
+    if (!UNLISTED_PAGES.has(route) && !listed.has(route)) missing.add(route);
+  }
+  return [...missing].sort();
+}
+
+function isDirectory(path) {
+  try {
+    return statSync(path).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Stops unless the build has what both checks read: every scan root, the
+ * prerendered Home page where the scan looks for pages, and stats for
+ * every page route. A missing one would make a check pass while covering
+ * nothing there.
+ */
+export function assertCompleteBuild(root, stats) {
+  for (const dir of SCAN_ROOTS) {
+    if (!isDirectory(join(root, dir))) {
+      throw new CheckError(
+        `${dir} is missing, so the sealed scan would cover nothing there. Run "npm run build" first.`,
+      );
+    }
+  }
+  if (!existsSync(join(root, HOME_PAGE))) {
+    throw new CheckError(
+      `.next/server/app has no prerendered Home page (index.html), so the sealed scan may be missing every prerendered page. Has Next moved its build output?`,
+    );
+  }
+  const missing = routesMissingFromStats(root, stats);
+  if (missing.length > 0) {
+    throw new CheckError(
+      `${STATS_FILE} leaves out ${missing.join(", ")}, which ${ROUTES_MANIFEST} lists, so neither this check nor check:bundle sees ${missing.length === 1 ? "its" : "their"} first load. Next skips a route whose client manifest it can't read: rebuild, and find out why if it persists.`,
+    );
+  }
 }
 
 /**
@@ -601,6 +670,7 @@ export async function runCheck({
 } = {}) {
   const lines = [];
   const stats = readRouteStats(root);
+  assertCompleteBuild(root, stats);
   const mode = buildBackendMode(root);
   const lazy = lazyMarkerProblems({
     root,
@@ -654,7 +724,9 @@ export async function runCheck({
 const USAGE = `Usage: npm run check:lazy [-- --sealed]
 
 After "npm run build": no lazy-only module in a route's first load, and no
-sealed id under .next/static, .next/server/app or public/.
+sealed id under .next/static, .next/server/app or public/. Stops when the
+build lacks one of those folders, its prerendered Home page, or route
+stats for one of its pages.
 
   --sealed   Also look for sealed texts (clues, stems, Encore questions,
              explanations, claims) and Encore answers beside their

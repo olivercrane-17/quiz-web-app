@@ -13,7 +13,10 @@
  * unnoticed while they wait for PERF-1 (or a ticket that touches them) to
  * bring them back under. A waived route over its ceiling fails like any
  * other, and the check says when a waiver is no longer needed. Lazy-only
- * modules are scripts/checks/lazy-markers.mjs's job.
+ * modules are scripts/checks/lazy-markers.mjs's job, and so is making sure
+ * the stats cover every page the build has: Next leaves out a route whose
+ * client manifest it can't read, and this check would never see it. CI's
+ * verify job runs both on one build.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";

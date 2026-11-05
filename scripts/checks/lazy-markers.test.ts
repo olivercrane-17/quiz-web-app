@@ -16,6 +16,7 @@ import {
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  renameSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -32,6 +33,7 @@ import {
   isReservedExampleId,
   packageSignatures,
   runCheck,
+  SCAN_ROOTS,
   sealedIdsIn,
 } from "./lazy-markers.mjs";
 
@@ -43,7 +45,11 @@ const SDK_VERSION = "9.9.9";
 interface FakeBuild {
   root: string;
   write(path: string, content: string): void;
-  /** route-bundle-stats.json: each route's first-load chunks, by file name under .next/static/chunks. */
+  /**
+   * route-bundle-stats.json: each route's first-load chunks, by file name
+   * under .next/static/chunks. The build's route manifest lists the same
+   * pages, plus what the stats always leave out.
+   */
   routes(rows: Record<string, string[]>): void;
 }
 
@@ -55,7 +61,11 @@ afterEach(() => {
   }
 });
 
-/** A fake build of `mode`, with the two Supabase packages installed at SDK_VERSION. */
+/**
+ * A fake build of `mode`, with the two Supabase packages installed at
+ * SDK_VERSION, a prerendered Home page and a public/ folder: a clean build
+ * that every check passes.
+ */
 function fakeBuild(mode: "supabase" | "mock" | "off" = "mock"): FakeBuild {
   const root = mkdtempSync(join(tmpdir(), "qz-lazy-markers-"));
   roots.push(root);
@@ -92,6 +102,20 @@ function fakeBuild(mode: "supabase" | "mock" | "off" = "mock"): FakeBuild {
         })),
       ),
     );
+    write(
+      ".next/app-path-routes-manifest.json",
+      JSON.stringify({
+        ...Object.fromEntries(
+          Object.keys(rows).map((route) => [
+            `/(tabs)${route === "/" ? "" : route}/page`,
+            route,
+          ]),
+        ),
+        // Next's error page and route handlers never get route stats.
+        "/_global-error/page": "/_global-error",
+        "/api/restore/route": "/api/restore",
+      }),
+    );
   };
   // Every build has a shared framework chunk and a lazy chunk with the SDK.
   write(".next/static/chunks/framework.js", "self.__framework=1;");
@@ -99,6 +123,11 @@ function fakeBuild(mode: "supabase" | "mock" | "off" = "mock"): FakeBuild {
     ".next/static/chunks/sdk.js",
     `var h={"X-Client-Info":\`supabase-js/${SDK_VERSION}\`},r="realtime-js/${SDK_VERSION}";`,
   );
+  write(
+    ".next/server/app/index.html",
+    "<!DOCTYPE html><html><body><h1>Today</h1></body></html>",
+  );
+  mkdirSync(join(root, "public"));
   routes({ "/": ["framework.js"], "/daily": ["framework.js"] });
   return { root, write, routes };
 }
@@ -320,6 +349,76 @@ describe("lazy markers", () => {
     expect(() => packageSignatures(build.root, "supabase")).toThrow(
       /@supabase\/supabase-js.*npm ci/,
     );
+  });
+});
+
+describe("an incomplete build", () => {
+  it.each(SCAN_ROOTS)(
+    "stops the check when %s is missing, since the sealed scan would cover nothing there",
+    async (dir) => {
+      const build = fakeBuild();
+      rmSync(join(build.root, dir), { recursive: true });
+
+      const run = runCheck({ root: build.root });
+
+      await expect(run).rejects.toThrow(
+        `${dir} is missing, so the sealed scan would cover nothing there. Run "npm run build" first.`,
+      );
+      await expect(run).rejects.toBeInstanceOf(CheckError);
+    },
+  );
+
+  it("stops the check when .next/server/app holds no prerendered Home page, as when Next moves its output", async () => {
+    const build = fakeBuild();
+    rmSync(join(build.root, ".next/server/app/index.html"));
+    build.write(".next/server/app/page_client-reference-manifest.js", "");
+
+    await expect(runCheck({ root: build.root })).rejects.toThrow(
+      /^\.next\/server\/app has no prerendered Home page \(index\.html\)/,
+    );
+  });
+
+  it("AC-CNT-07 exits 1 from the command line when .next/server/app has moved, though its pages hold a sealed id", () => {
+    const build = fakeBuild();
+    build.write(
+      ".next/server/app/index.html",
+      '<!DOCTYPE html><html><body><p data-id="m.film.0107">Today</p></body></html>',
+    );
+    renameSync(
+      join(build.root, ".next/server/app"),
+      join(build.root, ".next/server/app-moved"),
+    );
+
+    const result = spawnSync(process.execPath, [SCRIPT], {
+      cwd: build.root,
+      encoding: "utf8",
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(
+      "check:lazy: .next/server/app is missing, so the sealed scan would cover nothing there.",
+    );
+  });
+
+  it("stops the check when the route stats leave out a page the build has, which neither first-load check would then see", async () => {
+    const build = fakeBuild();
+    const manifest = join(build.root, ".next/app-path-routes-manifest.json");
+    build.write(
+      ".next/app-path-routes-manifest.json",
+      JSON.stringify({
+        ...(JSON.parse(readFileSync(manifest, "utf8")) as object),
+        "/(tabs)/me/page": "/me",
+        "/(play)/daily/[number]/results/page": "/daily/[number]/results",
+      }),
+    );
+
+    const run = runCheck({ root: build.root });
+
+    // Next's error page and the route handlers have no stats, rightly.
+    await expect(run).rejects.toThrow(
+      ".next/diagnostics/route-bundle-stats.json leaves out /daily/[number]/results, /me, which .next/app-path-routes-manifest.json lists, so neither this check nor check:bundle sees their first load.",
+    );
+    await expect(run).rejects.toBeInstanceOf(CheckError);
   });
 });
 

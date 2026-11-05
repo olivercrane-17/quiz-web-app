@@ -19,7 +19,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
 import { createServer } from "node:net";
 import path from "node:path";
 
-import type { Page } from "@playwright/test";
+import type { Browser, Page } from "@playwright/test";
 
 import {
   isSpikeWorker,
@@ -333,15 +333,55 @@ async function probe(page: Page, url: string) {
   return { routed, fromServiceWorker };
 }
 
+/**
+ * probe() for another origin's `url`, from a page under the worker in a
+ * context of its own that bypasses the page's Content Security Policy:
+ * connect-src 'self' (SEC-1) refuses the fetch before the worker could see
+ * it. The rest of the spike runs under the real policy. This context keeps
+ * the guards the test's own has: nothing but the probe leaves the spike's
+ * origin, and the page logs no error.
+ */
+async function probeOtherOrigin(browser: Browser, origin: string, url: string) {
+  const context = await browser.newContext({
+    bypassCSP: true,
+    serviceWorkers: "allow",
+  });
+  const errors: string[] = [];
+  const blocked: string[] = [];
+  try {
+    // probe() routes `url` on the page, which wins over this route.
+    await context.route(
+      (target) => target.origin !== origin,
+      async (route) => {
+        blocked.push(route.request().url());
+        await route.abort("blockedbyclient");
+      },
+    );
+    const page = await context.newPage();
+    page.on("console", (message) => {
+      if (message.type() === "error") errors.push(message.text());
+    });
+    page.on("pageerror", (error) => errors.push(error.message));
+
+    await page.goto(`${origin}/practice/run`);
+    await registerWorker(page);
+    // The worker claims no open page (clientsClaim: false): a reload puts
+    // this one under it.
+    await page.reload();
+    const controlled = await page.evaluate(
+      () => navigator.serviceWorker.controller !== null,
+    );
+    return { controlled, ...(await probe(page, url)), errors, blocked };
+  } finally {
+    await context.close();
+  }
+}
+
 test.describe("the service-worker spike", () => {
   test.describe.configure({ timeout: 120_000 });
-  // Rule 1's probe fetches another origin from the page, which a mock
-  // build's Content Security Policy (connect-src 'self', SEC-1) refuses
-  // before the worker could see it. The spike tests the worker's routing,
-  // not the page's policy (e2e/security/headers.spec.ts does that).
-  test.use({ bypassCSP: true });
 
   test("after one online visit, /practice/run plays offline to its results from the spike worker's precache", async ({
+    browser,
     page,
     spike,
     consoleErrors,
@@ -418,9 +458,18 @@ test.describe("the service-worker spike", () => {
         routed: true,
         fromServiceWorker: false,
       });
-      expect(await probe(page, "https://pwa-spike-probe.invalid/rpc")).toEqual({
+      expect(
+        await probeOtherOrigin(
+          browser,
+          origin,
+          "https://pwa-spike-probe.invalid/rpc",
+        ),
+      ).toEqual({
+        controlled: true,
         routed: true,
         fromServiceWorker: false,
+        errors: [],
+        blocked: [],
       });
     });
 

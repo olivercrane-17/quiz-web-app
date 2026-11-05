@@ -109,13 +109,21 @@ export function supabaseOrigins(supabase: SupabaseConfig | null): string[] {
  * prerendered App Router page can carry, and the app's own inline scripts
  * (the boot script, Today's intro, the date slot) run under it.
  *
- * Three things keep that narrow. `script-src-attr 'none'` forbids inline
- * event handlers, the usual way markup injected through innerHTML runs
- * code (React never renders one). No script comes from another origin.
- * And `dangerouslySetInnerHTML` only ever carries build-time constants
- * (src/ui/inline-script.tsx). `e2e/security/headers.spec.ts` proves the
- * app's inline scripts run under this policy, and every E2E test fails on
- * a console error, which is how Chromium reports a violation.
+ * What keeps that narrow: no script comes from another origin, and
+ * `script-src-attr 'none'` forbids inline event handlers, the usual way
+ * markup injected through innerHTML runs code (React never renders one).
+ * That rule alone isn't enough. Under 'unsafe-inline' an injected
+ * `javascript:` link still runs when clicked, and a <script> parsed by
+ * createContextualFragment runs once inserted (measured in Chromium). So
+ * the policy also rests on no DOM API parsing a string as HTML unless the
+ * string is a build-time constant: `dangerouslySetInnerHTML` only in
+ * src/ui/inline-script.tsx, and insertAdjacentHTML only for the toast's
+ * icon from ICON_PATHS (src/ui/toast.ts).
+ * scripts/checks/security-headers.test.ts fails on any other such call
+ * under src/ until ESLint bans them (a PLT-1/CI-1 follow-up).
+ * `e2e/security/headers.spec.ts` proves the app's inline scripts run under
+ * this policy, and every E2E test fails on a console error, which is how
+ * Chromium reports a violation.
  *
  * Per build: the Supabase https and wss origins only when the backend is
  * Supabase (mock and off builds talk to 'self' alone); `'unsafe-eval'` only
