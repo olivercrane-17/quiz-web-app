@@ -9,10 +9,12 @@
  * in-app browser, through the same ClaimPanel the card renders.
  *
  * Covered: the address swap (AC-IAB-03), redeeming in the system browser
- * as the same player with Today's note, the link opened back in the app
- * that made it, the expired-claim copy for a used, an out-of-date and an
- * unknown link, the address going back after 10 minutes, the confirm step
- * on a browser with progress, and Open in Chrome on Android.
+ * as the same player with Today's note (and Back never returning to the
+ * spent link), the link opened back in the app that made it, the
+ * expired-claim copy for a used, an out-of-date and an unknown link, the
+ * address going back after 10 minutes (said in the status region, with
+ * focus on Keep my streak), the confirm step on a browser with progress,
+ * and Open in Chrome on Android.
  */
 import type { BrowserContext, Page } from "@playwright/test";
 
@@ -103,8 +105,10 @@ test.describe("the claim link (PRD §3.10.4)", () => {
     });
     await openToday(app);
     await app.goto("/me/sync");
-    // The card says what moves (AC-SYN-07), and the sync code sits below it.
-    await expect(app.getByText(WHAT_MOVES).first()).toBeVisible();
+    // The page says what moves (AC-SYN-07), once, and the sync code sits
+    // below the claim.
+    await expect(app.getByText(WHAT_MOVES)).toBeVisible();
+    await expect(app.getByText(WHAT_MOVES)).toHaveCount(1);
     await expect(
       app.getByRole("heading", { name: "Or save your sync code" }),
     ).toBeVisible();
@@ -113,9 +117,15 @@ test.describe("the claim link (PRD §3.10.4)", () => {
     await expect(
       app.getByRole("heading", { name: "Now open this page in your browser" }),
     ).toBeFocused();
+    // The two taps for WhatsApp.
     await expect(
       app.getByText(
-        "Tap the three dots (⋯) at the top or bottom of the screen.",
+        "Tap WhatsApp's menu, the three dots (⋯) at the top or bottom of the screen.",
+      ),
+    ).toBeVisible();
+    await expect(
+      app.getByText(
+        "Choose Open in browser. Some versions say Open in Safari.",
       ),
     ).toBeVisible();
     await expect(
@@ -160,6 +170,10 @@ test.describe("the claim link (PRD §3.10.4)", () => {
       source: "claim",
     });
     expect(claimed?.secret).not.toBe(inApp?.secret);
+    // Today took the claim page's place: Back never lands on the spent link.
+    await browser.goBack();
+    expect(new URL(browser.url()).pathname).not.toMatch(/^\/claim\//);
+    await expect(browser.getByText(EXPIRED)).toHaveCount(0);
     // The in-app copy keeps working: a credential was added, none replaced.
     await app.goto("/");
     await expect(app.locator('[data-daily-card="finished"]')).toBeVisible();
@@ -239,12 +253,14 @@ test.describe("the claim link (PRD §3.10.4)", () => {
     await makeClaim(app);
     await app.clock.fastForward("10:01");
     await expect.poll(() => new URL(app.url()).pathname).toBe("/me/sync");
-    await expect(app.locator("[data-claim-message]")).toHaveText(
-      "That link has run out. Tap Keep my streak for a new one.",
-    );
-    await expect(
-      app.getByRole("button", { name: "Keep my streak" }),
-    ).toBeVisible();
+    const ranOut = "That link has run out. Tap Keep my streak for a new one.";
+    await expect(app.locator("[data-claim-message]")).toHaveText(ranOut);
+    const keep = app.getByRole("button", { name: "Keep my streak" });
+    await expect(keep).toBeVisible();
+    // Said in the status region, and still there once the address changed
+    // back; focus went to Keep my streak, not to the page.
+    await expect(app.locator("#qz-live-polite")).toHaveText(ranOut);
+    await expect(keep).toBeFocused();
   });
 
   test("a browser with progress of its own confirms first; Cancel keeps its identity", async ({
@@ -323,7 +339,9 @@ test.describe("the claim link (PRD §3.10.4)", () => {
       `intent://${host}${path}#Intent;scheme=http;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(`http://${host}${path}`)};end`,
     );
     await expect(
-      app.getByText("Tap the three dots (⋮) at the top right."),
+      app.getByText(
+        "Tap WhatsApp's menu, the three dots (⋮) at the top right.",
+      ),
     ).toBeVisible();
   });
 });

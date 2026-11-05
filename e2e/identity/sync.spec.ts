@@ -6,6 +6,11 @@
  * progress (AC-SYN-06), what moves and what stays (AC-SYN-07), and the
  * backup cookie a restore posts.
  *
+ * Also: the code never leaves in a URL before the restore form hydrates,
+ * the field shows a whole code at 320 px, at 200% text and under the text
+ * spacing overrides (PRD §3.12.4), and a code made from the keyboard takes
+ * the focus and is announced.
+ *
  * Device namespaces never touch the backup cookie (§9.1), so the cookie
  * test restores on the page's own, unnamespaced device.
  */
@@ -78,10 +83,39 @@ function grouped(code: string): string {
   return code.match(/.{4}/g)?.join("-") ?? code;
 }
 
-async function restore(page: Page, typed: string): Promise<void> {
+/** /restore once it has hydrated: Restore stays off until then. */
+async function openRestore(page: Page): Promise<void> {
   await page.goto("/restore");
+  await expect(page.getByRole("button", { name: "Restore" })).toBeEnabled();
+}
+
+async function restore(page: Page, typed: string): Promise<void> {
+  await openRestore(page);
   await page.getByRole("textbox", { name: "Your sync code" }).fill(typed);
   await page.getByRole("button", { name: "Restore" }).click();
+}
+
+const EXAMPLE_CODE = "K7QX-2M9P-T4RW-8HNC";
+
+/** The field's own boxes, for AC-A11Y-04's "no clipping" DOM check. */
+function fieldBoxes(page: Page) {
+  return page
+    .getByRole("textbox", { name: "Your sync code" })
+    .evaluate((field) => {
+      const css = getComputedStyle(field);
+      const lineHeight = Number.parseFloat(css.lineHeight);
+      const padding =
+        Number.parseFloat(css.paddingTop) +
+        Number.parseFloat(css.paddingBottom);
+      return {
+        scrollWidth: field.scrollWidth,
+        clientWidth: field.clientWidth,
+        scrollHeight: field.scrollHeight,
+        clientHeight: field.clientHeight,
+        lines: Math.round((field.scrollHeight - padding) / lineHeight),
+        right: field.getBoundingClientRect().right,
+      };
+    });
 }
 
 const NOTE = "[data-restore-notice] p";
@@ -126,6 +160,31 @@ test.describe("sync codes (PRD §3.10.2)", () => {
     await expect(a.locator('[data-daily-card="finished"]')).toBeVisible();
   });
 
+  test("Today's welcome-back note shows once: back on Today from Practice or Me, it is neither shown nor said again", async ({
+    context,
+  }) => {
+    const a = await deviceIn(context, "phone-a", { finished: true });
+    const code = await makeCode(a);
+    const b = await deviceIn(context, "phone-b");
+    await restore(b, code);
+    const note = b.locator(NOTE).filter({ visible: true });
+    await expect(note).toHaveText(/^Welcome back, /);
+    const tabs = b.getByRole("navigation", { name: "Main" });
+    for (const tab of ["Practice", "Me"]) {
+      await tabs.getByRole("link", { name: tab, exact: true }).click();
+      await expect(b).not.toHaveURL(/\/$/);
+      await tabs.getByRole("link", { name: "Today", exact: true }).click();
+      await expect(b).toHaveURL(/\/$/);
+      await expect(
+        b.locator('[data-daily-card="finished"]').filter({ visible: true }),
+      ).toBeVisible();
+      await expect(note).toHaveCount(0);
+      await expect(b.locator("#qz-live-polite")).not.toContainText(
+        "Welcome back",
+      );
+    }
+  });
+
   test("AC-SYN-02 input variants (lowercase, no hyphens, I for 1, O for 0) redeem the same code", async ({
     context,
   }) => {
@@ -157,7 +216,7 @@ test.describe("sync codes (PRD §3.10.2)", () => {
   });
 
   test("the field groups the code as it is typed", async ({ page }) => {
-    await page.goto("/restore");
+    await openRestore(page);
     const field = page.getByRole("textbox", { name: "Your sync code" });
     await field.pressSequentially("k7qx2m9pt4rw8hio");
     await expect(field).toHaveValue("K7QX-2M9P-T4RW-8H10");
@@ -221,7 +280,9 @@ test.describe("sync codes (PRD §3.10.2)", () => {
       );
     });
 
-    // The restore page says it, and so does the confirm step on a device with progress.
+    // The restore page says it, and so does the confirm step on a device
+    // with progress: here practice alone, which stays, so nothing is
+    // "replaced".
     const c = await deviceIn(context, "phone-c");
     await c.goto("/restore");
     await expect(c.getByText(WHAT_MOVES)).toBeVisible();
@@ -233,8 +294,13 @@ test.describe("sync codes (PRD §3.10.2)", () => {
     });
     await restore(c, code);
     const dialog = c.getByRole("dialog", {
-      name: "Replace this device's progress?",
+      name: "Restore your profile here?",
     });
+    await expect(
+      dialog.getByText(
+        "Your practice stats on this device stay here. Restoring brings in the streak and Daily history from your code.",
+      ),
+    ).toBeVisible();
     await expect(dialog.getByText(WHAT_MOVES)).toBeVisible();
     await dialog.getByRole("button", { name: "Cancel" }).click();
 
@@ -334,8 +400,83 @@ test.describe("sync codes (PRD §3.10.2)", () => {
       );
     });
     await restore(c, "K7QX-2M9P-T4RW-8HNC");
-    await expect(c.getByRole("dialog")).toBeVisible();
+    const dialog = c.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    // axe reads the colours where the sheet comes to rest, not mid-rise.
+    await dialog.evaluate((element) =>
+      Promise.all(
+        element
+          .getAnimations({ subtree: true })
+          .map((animation) => animation.finished),
+      ),
+    );
     await expectNoSeriousAxe(c);
+  });
+
+  test("the field shows a whole code at 320 px and 360 px, at 200% text and under the text-spacing overrides", async ({
+    page,
+  }) => {
+    const cases = [
+      { width: 320, text: "100%", spacing: false, oneLine: true },
+      { width: 360, text: "100%", spacing: false, oneLine: true },
+      { width: 320, text: "100%", spacing: true, oneLine: false },
+      { width: 320, text: "200%", spacing: false, oneLine: false },
+      { width: 390, text: "200%", spacing: false, oneLine: false },
+    ];
+    for (const { width, text, spacing, oneLine } of cases) {
+      const where = `${width} px, ${text} text${spacing ? ", text spacing" : ""}`;
+      await page.setViewportSize({ width, height: 800 });
+      await openRestore(page);
+      await page.evaluate((size) => {
+        document.documentElement.style.fontSize = size;
+      }, text);
+      if (spacing) {
+        // WCAG 1.4.12's overrides (AC-A11Y-06).
+        await page.addStyleTag({
+          content:
+            "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }",
+        });
+      }
+      const field = page.getByRole("textbox", { name: "Your sync code" });
+      await field.fill(EXAMPLE_CODE);
+      await expect(field).toHaveValue(EXAMPLE_CODE);
+      const box = await fieldBoxes(page);
+      expect(box.scrollWidth, where).toBeLessThanOrEqual(box.clientWidth);
+      expect(box.scrollHeight, where).toBeLessThanOrEqual(box.clientHeight);
+      expect(box.right, where).toBeLessThanOrEqual(width);
+      if (oneLine) expect(box.lines, where).toBe(1);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= window.innerWidth,
+        ),
+        where,
+      ).toBe(true);
+    }
+  });
+
+  test("Show my code and Make a new code, from the keyboard, put focus on the code and say a new one is ready", async ({
+    context,
+  }) => {
+    const a = await deviceIn(context, "phone-a", { finished: true });
+    await openToday(a);
+    await a.goto("/me/sync");
+    const show = a.getByRole("button", { name: "Show my code" });
+    await show.focus();
+    await a.keyboard.press("Enter");
+    const well = a.locator("[data-sync-code]");
+    await expect(well).toBeFocused();
+    const first = await well.getAttribute("data-sync-code");
+
+    await a.getByRole("button", { name: "Make a new code" }).focus();
+    await a.keyboard.press("Enter");
+    const dialog = a.getByRole("dialog", { name: "Make a new code?" });
+    await dialog.getByRole("button", { name: "Make a new code" }).focus();
+    await a.keyboard.press("Enter");
+    await expect(well).not.toHaveAttribute("data-sync-code", first ?? "");
+    await expect(well).toBeFocused();
+    await expect(a.locator("#qz-live-polite")).toHaveText(
+      "New code ready. Your old code no longer works.",
+    );
   });
 
   test("/me/sync has nothing to show before the first Daily", async ({
@@ -348,5 +489,66 @@ test.describe("sync codes (PRD §3.10.2)", () => {
     await expect(
       page.getByRole("link", { name: "Restore from a code" }),
     ).toHaveAttribute("href", "/restore");
+  });
+});
+
+/** A request or address that carries the code, in any of its forms. */
+function carriesCode(url: string): boolean {
+  const flat = decodeURIComponent(url).toUpperCase().replace(/[-\s]/g, "");
+  return flat.includes(EXAMPLE_CODE.replaceAll("-", ""));
+}
+
+test.describe("before /restore hydrates (the code is a pass to the profile)", () => {
+  test.describe("with JavaScript off", () => {
+    test.use({ javaScriptEnabled: false });
+
+    test("Enter and Restore send nothing: the code never reaches a URL or a request", async ({
+      page,
+    }) => {
+      const requested: string[] = [];
+      page.on("request", (request) => requested.push(request.url()));
+      await page.goto("/restore");
+      const field = page.getByRole("textbox", { name: "Your sync code" });
+      const submit = page.getByRole("button", { name: "Restore" });
+      await expect(submit).toBeDisabled();
+      await field.fill(EXAMPLE_CODE);
+      await field.press("Enter");
+      await submit.click({ force: true });
+      await page.waitForLoadState("load");
+      expect(new URL(page.url()).pathname).toBe("/restore");
+      expect(new URL(page.url()).search).toBe("");
+      expect(carriesCode(page.url())).toBe(false);
+      expect(requested.filter(carriesCode)).toEqual([]);
+    });
+  });
+
+  test("while its scripts are still loading, Enter sends nothing, and Restore turns on once they have", async ({
+    page,
+  }) => {
+    const requested: string[] = [];
+    page.on("request", (request) => requested.push(request.url()));
+    let release: () => void = () => {};
+    const held = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    // The page's scripts wait; its HTML and styles arrive as usual.
+    const script = (url: URL) =>
+      url.pathname.startsWith("/_next/static/") && url.pathname.endsWith(".js");
+    await page.route(script, async (route) => {
+      await held;
+      await route.continue();
+    });
+    await page.goto("/restore", { waitUntil: "domcontentloaded" });
+    const field = page.getByRole("textbox", { name: "Your sync code" });
+    const submit = page.getByRole("button", { name: "Restore" });
+    await expect(submit).toBeDisabled();
+    await field.fill(EXAMPLE_CODE);
+    await field.press("Enter");
+    expect(new URL(page.url()).search).toBe("");
+    release();
+    await expect(submit).toBeEnabled();
+    await page.unroute(script);
+    expect(carriesCode(page.url())).toBe(false);
+    expect(requested.filter(carriesCode)).toEqual([]);
   });
 });

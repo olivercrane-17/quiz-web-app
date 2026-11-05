@@ -9,6 +9,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { formatSyncCode, parseSyncCode, type SyncCode } from "@/engine/types";
 import { renderWithUser } from "@/test/render";
+import { LIVE_REGION_IDS } from "@/ui/announce";
 
 import {
   bootDevice,
@@ -29,6 +30,11 @@ function playerId() {
   const id = storedIdentity()?.playerId;
   if (id === undefined) throw new Error("no identity");
   return id;
+}
+
+/** What the polite status region says now. */
+function said(): string {
+  return document.getElementById(LIVE_REGION_IDS.polite)?.textContent ?? "";
 }
 
 /** The code the panel shows, as its data attribute holds it. */
@@ -177,6 +183,94 @@ describe("SyncCodePanel", () => {
     expect(redeemed.ok ? "ok" : redeemed.error.code).toBe("not_found");
   });
 
+  it("Enter on Show my code lands focus on the code, which a screen reader spells out, not on the page", async () => {
+    await bootDevice({ registered: true });
+    const { user } = renderWithUser(<SyncCodePanel trigger="manual" />);
+    const show = await screen.findByRole("button", { name: "Show my code" });
+    show.focus();
+    await user.keyboard("{Enter}");
+    const code = await shownCode();
+    await waitFor(() => {
+      expect(document.activeElement).toHaveAttribute("data-sync-code", code);
+    });
+    expect(document.activeElement).not.toBe(document.body);
+    expect(document.activeElement).toHaveTextContent(
+      `Your sync code: ${spokenCode(code as SyncCode)}`,
+    );
+  });
+
+  it("says a new code is ready and the old one no longer works, and focuses it", async () => {
+    await bootDevice({ registered: true });
+    storeSyncCode(playerId(), CODE, Date.now());
+    const { user } = renderWithUser(
+      <SyncCodePanel trigger="manual" allowNew />,
+    );
+    await user.click(
+      await screen.findByRole("button", { name: "Make a new code" }),
+    );
+    await user.click(
+      within(
+        await screen.findByRole("dialog", { name: "Make a new code?" }),
+      ).getByRole("button", { name: "Make a new code" }),
+    );
+    await waitFor(async () => {
+      expect(await shownCode()).not.toBe(CODE);
+    });
+    await waitFor(() => {
+      expect(said()).toBe("New code ready. Your old code no longer works.");
+    });
+    expect(document.activeElement).toHaveAttribute("data-sync-code");
+  });
+
+  it("says the current code still works when Make a new code can't reach us", async () => {
+    const { backend } = await bootDevice({ registered: true });
+    storeSyncCode(playerId(), CODE, Date.now());
+    backend.controls.failNext("identity.createSyncCode", "offline");
+    const { user } = renderWithUser(
+      <SyncCodePanel trigger="manual" allowNew />,
+    );
+    await user.click(
+      await screen.findByRole("button", { name: "Make a new code" }),
+    );
+    await user.click(
+      within(
+        await screen.findByRole("dialog", { name: "Make a new code?" }),
+      ).getByRole("button", { name: "Make a new code" }),
+    );
+    const line =
+      "Making a new code needs a connection. Your current code still works.";
+    expect(
+      await screen.findByText(line, { selector: "[data-sync-error] p" }),
+    ).toBeVisible();
+    expect(said()).toBe(line);
+    // The code on screen is still the one that works.
+    expect(await shownCode()).toBe(CODE);
+    expect(screen.queryByText(/needs a connection the first time/)).toBeNull();
+  });
+
+  it("says the current code still works when a new one fails for another reason", async () => {
+    const { backend } = await bootDevice({ registered: true });
+    storeSyncCode(playerId(), CODE, Date.now());
+    backend.controls.failNext("identity.createSyncCode", "unreachable");
+    const { user } = renderWithUser(
+      <SyncCodePanel trigger="manual" allowNew />,
+    );
+    await user.click(
+      await screen.findByRole("button", { name: "Make a new code" }),
+    );
+    await user.click(
+      within(
+        await screen.findByRole("dialog", { name: "Make a new code?" }),
+      ).getByRole("button", { name: "Make a new code" }),
+    );
+    expect(
+      await screen.findByText(
+        "We couldn't make a new code. Your current code still works. Try again.",
+        { selector: "[data-sync-error] p" },
+      ),
+    ).toBeVisible();
+  });
+
   it("says a first code needs a connection, and tries again", async () => {
     const { backend } = await bootDevice({ registered: true });
     backend.controls.failNext("identity.createSyncCode", "offline");
@@ -213,5 +307,21 @@ describe("SyncCodePanel", () => {
     await bootDevice({ registered: true });
     renderWithUser(<SyncCodePanel trigger="third_daily" autoCreate />);
     expect(await shownCode()).toMatch(/^[0-9A-HJKMNP-TV-Z]{16}$/);
+  });
+
+  it("never asks at once for a restored profile, whose code may be written down elsewhere", async () => {
+    const { backend } = await bootDevice({ registered: true });
+    const identity = storedIdentity();
+    localStorage.setItem(
+      "qz:identity",
+      JSON.stringify({ ...identity, source: "claim" }),
+    );
+    const create = vi.spyOn(backend.identity, "createSyncCode");
+    renderWithUser(<SyncCodePanel trigger="tenth_daily" autoCreate />);
+    expect(
+      await screen.findByRole("button", { name: "Show my code" }),
+    ).toBeVisible();
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    expect(create).not.toHaveBeenCalled();
   });
 });

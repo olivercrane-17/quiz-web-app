@@ -10,10 +10,13 @@
  *   `/claim/<token>` page knows the profile is already here and never
  *   redeems its own token.
  *
- * The record belongs to one player: after a restore or a recovery that
- * changes the player, the old record is ignored, with nothing to clear by
- * hand. It holds no secret (a claim token is a ten-minute bearer link that
- * sits in this device's address bar anyway).
+ * The record belongs to one player, and its sync code is that player's
+ * bearer credential: anyone holding it can restore the whole profile. So
+ * a restore that switches the device to another player drops the old
+ * player's record (`keepSyncRecordOf`), and every read checks the player,
+ * so a record left by any other switch (a recovery) is never shown. A
+ * claim token is a ten-minute bearer link that sits in this device's
+ * address bar anyway.
  */
 import {
   parseClaimToken,
@@ -87,6 +90,15 @@ export function readSyncRecord(
 ): SyncRecord | null {
   const record = kv.read(SYNC_KEY, decodeSyncRecord);
   return record !== null && record.playerId === playerId ? record : null;
+}
+
+/**
+ * Drops whatever the device keeps that isn't `playerId`'s, so a switch to
+ * another player leaves no working code for the old profile behind.
+ */
+export function keepSyncRecordOf(playerId: PlayerId, kv: Kv = getKv()): void {
+  if (kv.readRaw(SYNC_KEY).state === "missing") return;
+  if (readSyncRecord(playerId, kv) === null) kv.remove(SYNC_KEY);
 }
 
 function update(

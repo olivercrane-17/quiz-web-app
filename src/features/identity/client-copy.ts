@@ -31,8 +31,32 @@ export const APP_NAMES: Readonly<Record<AppTag, string | null>> = {
   none: null,
 };
 
+/**
+ * What each app's in-app browser usually calls the menu item that opens
+ * the page in the system browser (§9.5). Apps rename it between versions,
+ * so the claim's second step names the platform's own wording as well.
+ * An app missing here uses the platform's wording alone.
+ */
+export const APP_MENU_ITEMS: Readonly<Partial<Record<AppTag, string>>> = {
+  whatsapp: "Open in browser",
+  instagram: "Open in external browser",
+  facebook: "Open in external browser",
+  messenger: "Open in external browser",
+  tiktok: "Open in browser",
+  snapchat: "Open in browser",
+  linkedin: "Open in browser",
+};
+
 /** "Daily No. 42", as DESIGN §6.11 writes a Daily's number in running text. */
-const dailyNo = (n: number) => `Daily No. ${n}`;
+const dailyNo = (n: number) => `Daily No. ${n}`;
+
+/** "40 minutes", "1 hour": a wait as exact as DESIGN §1.3 rule 2 asks. */
+function waitPhrase(ms: number): string {
+  const minutes = Math.max(1, Math.ceil(ms / 60_000));
+  if (minutes < 60) return minutes === 1 ? "1 minute" : `${minutes} minutes`;
+  const hours = Math.ceil(minutes / 60);
+  return hours === 1 ? "1 hour" : `${hours} hours`;
+}
 
 export const IDENTITY_CLIENT_COPY = {
   whatMoves: WHAT_MOVES,
@@ -58,6 +82,8 @@ export const IDENTITY_CLIENT_COPY = {
     makeNew: "Make a new code",
     confirmNewTitle: "Make a new code?",
     confirmNewBody: "Your old code will stop working.",
+    /** Said once Make a new code has put the new code on screen. */
+    newCodeReady: "New code ready. Your old code no longer works.",
     noProfile:
       "Your sync code arrives with your first Daily. It brings your streak and Daily history to another device.",
     copied: "Copied. Keep it somewhere safe.",
@@ -65,11 +91,21 @@ export const IDENTITY_CLIENT_COPY = {
       "We couldn't copy it. Select the code and copy it, or write it down.",
     savedLine: "Saved. You'll find it here again in Me, then Your sync code.",
     loading: "Loading your sync code",
+    /** Show my code failed: this device has no code yet. */
     errors: {
       offline:
         "Your sync code needs a connection the first time. Try again once you're online.",
       rateLimited: "That's a lot of new codes for one day. Try again tomorrow.",
       generic: "We couldn't get your code. Nothing changed. Try again.",
+    },
+    /** Make a new code failed: the code on screen still works (PRD §3.0.4). */
+    replaceErrors: {
+      offline:
+        "Making a new code needs a connection. Your current code still works.",
+      rateLimited:
+        "That's a lot of new codes for one day. Your current code still works.",
+      generic:
+        "We couldn't make a new code. Your current code still works. Try again.",
     },
     restoreLink: "Restore from a code",
     restoreLead: "Have a code from another device?",
@@ -87,7 +123,7 @@ export const IDENTITY_CLIENT_COPY = {
     /** Below the claim card, the fallback (PRD §3.10.4). */
     fallback: {
       title: "Or save your sync code",
-      body: "Can't get to your browser? Enter the code there instead, under Settings, then Restore from a code.",
+      body: "If the link won't open, save your code. Then open Knewt in your browser and enter it under Settings, then Restore from a code.",
     },
   },
 
@@ -99,8 +135,9 @@ export const IDENTITY_CLIENT_COPY = {
     submit: "Restore",
     confirmTitle: "Replace this device's progress?",
     /**
-     * PRD §3.10.2's confirm step, for a code or a claim link; the device's
-     * own streak shows when it is known.
+     * PRD §3.10.2's confirm step, for a code or a claim link, on a device
+     * whose own profile has played here; the device's streak shows when it
+     * is known.
      */
     confirmBody: (streak: number | null, via: "code" | "link") => {
       const own =
@@ -111,8 +148,25 @@ export const IDENTITY_CLIENT_COPY = {
         ? `${own} Restoring replaces it with the profile from your code.`
         : `${own} Continuing replaces it with the profile from your link.`;
     },
+    /**
+     * The same step on a device whose only progress is practice (§9.2):
+     * practice stays, so nothing here is replaced.
+     */
+    confirmTitlePractice: (via: "code" | "link") =>
+      via === "code"
+        ? "Restore your profile here?"
+        : "Bring your profile to this browser?",
+    confirmBodyPractice: (via: "code" | "link") =>
+      via === "code"
+        ? "Your practice stats on this device stay here. Restoring brings in the streak and Daily history from your code."
+        : "Your practice stats in this browser stay here. Continuing brings in the streak and Daily history from your link.",
     confirmAction: "Restore",
     errors: {
+      /** Restore with nothing typed. */
+      empty: "Enter your sync code first. It has 16 characters.",
+      /** Restore with part of a code, counting what is there. */
+      short: (count: number) =>
+        `Your code has 16 characters. This one has ${count}.`,
       bad: "That code didn't work. Check for typos, or make a new code on your other device.",
       rateLimited: "Too many tries. Please wait 15 minutes.",
       rateLimitedToday: "Too many tries today. Please try again tomorrow.",
@@ -130,17 +184,42 @@ export const IDENTITY_CLIENT_COPY = {
     action: "Keep my streak",
     notNow: "Not now",
     stepsTitle: "Now open this page in your browser",
-    /** The two taps, by platform (§9.5). */
+    /**
+     * The two taps for that app (PRD §3.10.4, §5.14): its menu, then the
+     * item that opens the page in the system browser (`APP_MENU_ITEMS`).
+     */
     steps: {
-      ios: [
-        "Tap the three dots (⋯) at the top or bottom of the screen.",
-        "Choose Open in Safari. Some apps call it Open in browser.",
-      ],
-      android: [
-        "Tap the three dots (⋮) at the top right.",
-        "Choose Open in Chrome. Some apps call it Open in browser.",
-      ],
-      other: ["Open this app's menu.", "Choose Open in browser."],
+      /** Step 1 for a named app, by platform. */
+      menu: {
+        ios: (app: string) =>
+          `Tap ${app}'s menu, the three dots (⋯) at the top or bottom of the screen.`,
+        android: (app: string) =>
+          `Tap ${app}'s menu, the three dots (⋮) at the top right.`,
+        other: (app: string) => `Open ${app}'s menu.`,
+      },
+      /** Step 2: the app's name for the item, then the platform's when it differs. */
+      choose: (item: string, platformItem: string) =>
+        item === platformItem
+          ? `Choose ${item}.`
+          : `Choose ${item}. Some versions say ${platformItem}.`,
+      /** The platform's own name for the item. */
+      platformItem: {
+        ios: "Open in Safari",
+        android: "Open in Chrome",
+        other: "Open in browser",
+      },
+      /** An app without a name: the platform's two taps. */
+      unnamed: {
+        ios: [
+          "Tap the three dots (⋯) at the top or bottom of the screen.",
+          "Choose Open in Safari. Some apps call it Open in browser.",
+        ],
+        android: [
+          "Tap the three dots (⋮) at the top right.",
+          "Choose Open in Chrome. Some apps call it Open in browser.",
+        ],
+        other: ["Open this app's menu.", "Choose Open in browser."],
+      },
     },
     openInChrome: "Open in Chrome",
     lasts: "This link works for 10 minutes.",
@@ -177,7 +256,14 @@ export const IDENTITY_CLIENT_COPY = {
       "You made this link on this device, so your profile is already here. To keep your streak, open the link in your browser.",
     offline:
       "Keeping your streak needs a connection. Try again once you're online.",
-    rateLimited: "Too many tries. Please wait a few minutes and try again.",
+    /**
+     * Opening and redeeming links share one hourly limit; the wait is the
+     * server's `retryAfterMs` when it gave one.
+     */
+    rateLimited: (retryAfterMs: number | null) =>
+      retryAfterMs === null
+        ? "Too many tries. Please try again later."
+        : `Too many tries. Please wait ${waitPhrase(retryAfterMs)}.`,
     generic: "That didn't reach us. Nothing changed on this device. Try again.",
   },
 

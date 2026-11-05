@@ -7,6 +7,11 @@
  * your code." with the line on what moves (AC-SYN-07). Cancel keeps the
  * device's identity (AC-SYN-06). There is no merge in v1.
  *
+ * A device whose only progress is practice (it never played a Daily, so
+ * its identity is unregistered) loses nothing: its practice stays. Its
+ * confirm says so instead of "replaces", and the line on what moves
+ * still follows.
+ *
  * A dialog (DESIGN §6.10): the confirm first, Cancel beside it.
  */
 import { useEffect, useState } from "react";
@@ -59,6 +64,11 @@ export interface ConfirmReplaceProps {
   open: boolean;
   /** The device's own streak, when known. */
   streak: number | null;
+  /**
+   * Whether the device's identity has played here (it is registered);
+   * false when its only progress is practice, which stays.
+   */
+  registered: boolean;
   /** A sync code, or a claim link. */
   via: "code" | "link";
   onConfirm: () => void;
@@ -68,6 +78,7 @@ export interface ConfirmReplaceProps {
 export function ConfirmReplace({
   open,
   streak,
+  registered,
   via,
   onConfirm,
   onCancel,
@@ -75,8 +86,16 @@ export function ConfirmReplace({
   return (
     <Dialog
       open={open}
-      title={COPY.restore.confirmTitle}
-      description={COPY.restore.confirmBody(streak, via)}
+      title={
+        registered
+          ? COPY.restore.confirmTitle
+          : COPY.restore.confirmTitlePractice(via)
+      }
+      description={
+        registered
+          ? COPY.restore.confirmBody(streak, via)
+          : COPY.restore.confirmBodyPractice(via)
+      }
       onClose={onCancel}
       actions={
         <>

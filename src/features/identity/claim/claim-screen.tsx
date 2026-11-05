@@ -9,11 +9,17 @@
  * - Continue mints a new secret here and redeems the claim, which adds it
  *   as a credential of the same player (the in-app copy keeps working);
  *   the browser stores the identity, posts the backup cookie and lands on
- *   Today: "You're all set. Your streak is safe in this browser."
+ *   Today: "You're all set. Your streak is safe in this browser." Once the
+ *   server has spent the claim, nothing waits between its answer and the
+ *   identity being stored: the claim is single use, so a stall there
+ *   would lose the profile for this browser.
  * - A browser with progress of its own confirms first (§9.2).
  * - A used, expired or unknown link says so, with "Enter a sync code".
  * - Opened in the browser that made it, it says the profile is already
  *   here and never redeems its own token (§9.5).
+ * - Too many tries says how long to wait, from the server's answer, and
+ *   keeps Try again (or Continue) off until then: every try counts
+ *   against the same hourly limit.
  *
  * The token comes from the address through `usePathParam` (§10.2 rule 8):
  * Next reuses this one shell for every token, so the flow is keyed by it.
@@ -25,12 +31,17 @@ import { useEffect, useId, useState, useSyncExternalStore } from "react";
 import { getBackend } from "@/backend";
 import {
   parseClaimToken,
+  type BackendError,
   type ClaimPreview,
   type ClaimToken,
+  type EpochMs,
 } from "@/engine/types";
 import { track } from "@/features/analytics/track";
 import { usePathParam } from "@/features/shell/client";
-import { detectBrowserContext } from "@/platform/browser-context";
+import {
+  detectBrowserContext,
+  peekBrowserContext,
+} from "@/platform/browser-context";
 import { announce } from "@/ui/announce";
 import { Button } from "@/ui/button";
 import { buttonClasses } from "@/ui/button-classes";
@@ -49,13 +60,24 @@ import { isOwnClaim } from "../sync-store";
 
 const COPY = IDENTITY_CLIENT_COPY;
 
+/** A limit's wait: how long the server asked for, and when it ends. */
+interface Wait {
+  ms: number;
+  until: EpochMs;
+}
+
 type ClaimView =
   | { phase: "loading" }
   /** Used, expired, unknown or malformed: the expired copy (PRD §3.10.4). */
   | { phase: "expired" }
   | { phase: "same_device" }
   | { phase: "preview"; preview: ClaimPreview; busy: boolean }
-  | { phase: "error"; error: ScreenError; preview: ClaimPreview | null };
+  | {
+      phase: "error";
+      error: ScreenError;
+      wait: Wait | null;
+      preview: ClaimPreview | null;
+    };
 
 type LinkResult = "ok" | "expired" | "used";
 
@@ -71,17 +93,46 @@ function linkResult(current: unknown): LinkResult {
     : "expired";
 }
 
-function errorText(error: ScreenError): string {
+/** The wait a refusal names, from now (call it in a handler or an effect). */
+function waitOf(error: BackendError): Wait | null {
+  if (error.code !== "rate_limited" || error.retryAfterMs === null) {
+    return null;
+  }
+  return {
+    ms: error.retryAfterMs,
+    until: (Date.now() + error.retryAfterMs) as EpochMs,
+  };
+}
+
+function errorText(error: ScreenError, wait: Wait | null): string {
   switch (error) {
     case "offline":
       return COPY.claimPage.offline;
     case "rate_limited":
-      return COPY.claimPage.rateLimited;
+      return COPY.claimPage.rateLimited(wait?.ms ?? null);
     case "unavailable":
       return COPY.unavailable;
     default:
       return COPY.claimPage.generic;
   }
+}
+
+/** True until `until` has passed (false without one). */
+function useStillWaiting(until: EpochMs | null): boolean {
+  const [passed, setPassed] = useState<EpochMs | null>(null);
+  useEffect(() => {
+    if (until === null) return;
+    const timer = setTimeout(
+      () => {
+        setPassed(until);
+      },
+      Math.max(0, until - Date.now()),
+    );
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [until]);
+  return until !== null && passed !== until;
 }
 
 function displayName(preview: ClaimPreview): string {
@@ -98,22 +149,30 @@ export function ClaimFlow({ token }: { token: ClaimToken | null }) {
   );
   const [attempt, setAttempt] = useState(0);
   const [confirming, setConfirming] = useState(false);
-  const [hasProgress, setHasProgress] = useState(false);
-  const streak = useDeviceStreak(hasProgress);
+  const [device, setDevice] = useState({ progress: false, registered: false });
+  const streak = useDeviceStreak(device.progress && device.registered);
+  const waiting = useStillWaiting(
+    view.phase === "error" ? (view.wait?.until ?? null) : null,
+  );
   const titleId = useId();
 
   useEffect(() => {
     if (token === null) return;
+    // Warmed now, so logging the link's use never waits on it.
+    void detectBrowserContext();
     let live = true;
     void (async () => {
       await bootClient();
       if (!live) return;
-      const device = readDeviceIdentity();
-      if (device !== null && isOwnClaim(device.playerId, token)) {
+      const stored = readDeviceIdentity();
+      if (stored !== null && isOwnClaim(stored.playerId, token)) {
         setView({ phase: "same_device" });
         return;
       }
-      setHasProgress(deviceHasProgress());
+      setDevice({
+        progress: deviceHasProgress(),
+        registered: stored?.registered === true,
+      });
       const backend = await getBackend();
       const result = await backend.identity.peekClaim(token);
       if (!live) return;
@@ -130,6 +189,7 @@ export function ClaimFlow({ token }: { token: ClaimToken | null }) {
       setView({
         phase: "error",
         error: screenError(result.error),
+        wait: waitOf(result.error),
         preview: null,
       });
     })();
@@ -145,14 +205,20 @@ export function ClaimFlow({ token }: { token: ClaimToken | null }) {
     const backend = await getBackend();
     const result = await backend.identity.redeemClaim(token, secret);
     if (result.ok) {
-      // Logged before Today loads, which ends this page.
-      await logUse("ok");
+      // The claim is spent: store the identity before anything else can
+      // wait. The event goes now, before Today loads in place of this page.
+      track("claim_link_used", {
+        app: peekBrowserContext()?.app ?? "none",
+        result: "ok",
+      });
       const done = await finishRestore({
         restored: result.value,
         secret,
         source: "claim",
       });
-      if (!done) setView({ phase: "error", error: "generic", preview });
+      if (!done) {
+        setView({ phase: "error", error: "generic", wait: null, preview });
+      }
       return;
     }
     const { code, current } = result.error;
@@ -163,8 +229,9 @@ export function ClaimFlow({ token }: { token: ClaimToken | null }) {
       return;
     }
     const error = screenError(result.error);
-    setView({ phase: "error", error, preview });
-    announce(errorText(error));
+    const wait = waitOf(result.error);
+    setView({ phase: "error", error, wait, preview });
+    announce(errorText(error, wait));
   };
 
   if (view.phase === "loading") {
@@ -211,14 +278,17 @@ export function ClaimFlow({ token }: { token: ClaimToken | null }) {
 
   const preview = view.preview;
   if (preview === null) {
+    const failed = view.phase === "error" ? view : null;
     return (
       <Card data-claim-state="error" className="flex flex-col gap-4">
         <p className="text-body">
-          {errorText(view.phase === "error" ? view.error : "generic")}
+          {errorText(failed?.error ?? "generic", failed?.wait ?? null)}
         </p>
         <Button
           variant="secondary"
           className="self-start"
+          disabled={waiting}
+          focusableWhenDisabled
           onClick={() => {
             setView({ phase: "loading" });
             setAttempt((n) => n + 1);
@@ -253,7 +323,7 @@ export function ClaimFlow({ token }: { token: ClaimToken | null }) {
       <p className="text-body-sm text-ink-2">{COPY.whatMoves}</p>
       {view.phase === "error" ? (
         <p className="text-body-sm text-incorrect-text">
-          {errorText(view.error)}
+          {errorText(view.error, view.wait)}
         </p>
       ) : null}
       <div className="flex flex-col items-center gap-2">
@@ -261,8 +331,10 @@ export function ClaimFlow({ token }: { token: ClaimToken | null }) {
           variant="primary"
           block
           busy={busy}
+          disabled={waiting}
+          focusableWhenDisabled
           onClick={() => {
-            if (hasProgress) {
+            if (device.progress) {
               setConfirming(true);
             } else {
               void redeem(preview);
@@ -278,6 +350,7 @@ export function ClaimFlow({ token }: { token: ClaimToken | null }) {
       <ConfirmReplace
         open={confirming}
         streak={streak}
+        registered={device.registered}
         via="link"
         onCancel={() => {
           setConfirming(false);

@@ -7,11 +7,14 @@
  *    tab, posted to the backup cookie. Its old identity stays on the
  *    server untouched.
  * 2. The profile the server answered is cached (`cacheProfile`), so Today
- *    can greet the player by name before any call; a restored code is
- *    kept too, already saved, since the player has it.
+ *    can greet the player by name before any call. The old player's
+ *    `qz:sync` record goes (its code is that profile's bearer credential,
+ *    which no screen here would show again), and a restored code is kept,
+ *    already saved, since the player has it.
  * 3. Today gets its note (`leaveRestoreNotice`), `identity_restored` is
- *    logged, and Today loads afresh, so every island starts from the
- *    restored player.
+ *    logged, and Today loads afresh in place of this page, so every island
+ *    starts from the restored player and Back never returns to a used
+ *    claim link or a filled-in code.
  *
  * Practice history, mastery and the review queue stay where they are: they
  * belong to the device, not the profile (PRD §1.4).
@@ -28,7 +31,7 @@ import { cacheProfile } from "@/platform/identity/profile";
 
 import { leaveRestoreNotice } from "./restore-notice";
 import { adoptIdentity, type AdoptOptions } from "./switch";
-import { storeSyncCode } from "./sync-store";
+import { keepSyncRecordOf, storeSyncCode } from "./sync-store";
 
 export interface FinishRestoreInput {
   restored: RestoredProfile & { playerId: PlayerId };
@@ -46,12 +49,12 @@ export interface FinishRestoreOptions extends AdoptOptions {
 
 /**
  * How a finished restore leaves for Today: a full navigation, so the boot
- * starts over from the restored identity. Component tests replace `go`,
- * since jsdom can't navigate.
+ * starts over from the restored identity, that replaces this page in the
+ * history. Component tests replace `go`, since jsdom can't navigate.
  */
 export const restoreNavigation = {
   go(href: string): void {
-    window.location.assign(href);
+    window.location.replace(href);
   },
 };
 
@@ -79,6 +82,7 @@ export async function finishRestore(
   );
   if (!stored) return false;
   cacheProfile(restored.profile);
+  keepSyncRecordOf(restored.playerId);
   if (input.code !== undefined) {
     storeSyncCode(restored.playerId, input.code, now(), { savedAt: now() });
   }

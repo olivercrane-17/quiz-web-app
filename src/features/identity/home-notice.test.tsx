@@ -1,12 +1,15 @@
 /**
  * Today's restore note (DESIGN §12.1): shown once after a sync code or a
  * claim, by the cached profile's name, never for another player, and never
- * after the backup cookie's silent restore.
+ * after the backup cookie's silent restore. Leaving Today ends it: coming
+ * back neither shows nor says it again.
  */
 import { render, screen, waitFor } from "@testing-library/react";
+import { Activity } from "react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { cacheProfile } from "@/platform/identity/profile";
+import { LIVE_REGION_IDS, clearAnnouncements } from "@/ui/announce";
 
 import { bootDevice, resetDevice, storedIdentity } from "./__fixtures__/device";
 import { RestoreNotice } from "./home-notice";
@@ -17,6 +20,13 @@ import { leaveRestoreNotice } from "./restore-notice";
 afterEach(() => {
   resetDevice();
 });
+
+const CLAIMED = "You're all set. Your streak is safe in this browser.";
+
+/** What the polite status region says now. */
+function said(): string {
+  return document.getElementById(LIVE_REGION_IDS.polite)?.textContent ?? "";
+}
 
 function device() {
   const identity = storedIdentity();
@@ -91,6 +101,58 @@ describe("RestoreNotice", () => {
         { selector: "[data-restore-notice] p" },
       ),
     ).toBeVisible();
+  });
+
+  it("shows and says the note once: leaving Today and coming back brings neither back", async () => {
+    await bootDevice({ registered: true });
+    leaveRestoreNotice({
+      v: 1,
+      kind: "claim",
+      playerId: device().playerId,
+      streak: 1,
+    });
+    // Next keeps Today mounted but hidden while the player is elsewhere.
+    const today = (mode: "visible" | "hidden") => (
+      <Activity mode={mode}>
+        <RestoreNoticeCard />
+      </Activity>
+    );
+    const { rerender, container } = render(today("visible"));
+    expect(
+      await screen.findByText(CLAIMED, { selector: "[data-restore-notice] p" }),
+    ).toBeVisible();
+    expect(said()).toBe(CLAIMED);
+    // The player goes to Practice (the shell clears the regions on the way)...
+    clearAnnouncements();
+    rerender(today("hidden"));
+    // ...and back to Today, twice.
+    rerender(today("visible"));
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    rerender(today("hidden"));
+    rerender(today("visible"));
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(container.querySelector("[data-restore-notice]")).toBeNull();
+    expect(said()).toBe("");
+  });
+
+  it("says nothing more when Today mounts again in the same page load", async () => {
+    await bootDevice({ registered: true });
+    leaveRestoreNotice({
+      v: 1,
+      kind: "claim",
+      playerId: device().playerId,
+      streak: 1,
+    });
+    const first = render(<RestoreNotice />);
+    expect(
+      await screen.findByText(CLAIMED, { selector: "[data-restore-notice] p" }),
+    ).toBeVisible();
+    first.unmount();
+    clearAnnouncements();
+    const { container } = render(<RestoreNotice />);
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(container.querySelector("[data-restore-notice]")).toBeNull();
+    expect(said()).toBe("");
   });
 
   it("shows nothing for a note about another player", async () => {

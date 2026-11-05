@@ -2,13 +2,28 @@
  * The claim link in the system browser (PRD §3.10.4, §5.14; DESIGN §12.27):
  * the preview, Continue redeeming it as a credential of the same player,
  * the expired-claim copy for a used, expired or unknown link, the browser
- * that made the link, and the confirm step on a browser with progress.
+ * that made the link, the confirm step on a browser with progress, the
+ * limit's exact wait, and a spent claim stored whatever else stalls.
  */
 import { screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { parseLocalDate, type EpochMs, type LocalDate } from "@/engine/types";
+import type * as BrowserContextModule from "@/platform/browser-context";
 import { renderWithUser } from "@/test/render";
+
+/** Lets a test stall the browser detection, as a chunk that never loads would. */
+const detection = vi.hoisted(() => ({ stalled: false }));
+vi.mock("@/platform/browser-context", async (importOriginal) => {
+  const actual = await importOriginal<typeof BrowserContextModule>();
+  return {
+    ...actual,
+    detectBrowserContext: () =>
+      detection.stalled
+        ? new Promise<never>(() => {})
+        : actual.detectBrowserContext(),
+  };
+});
 
 import {
   bootDevice,
@@ -25,6 +40,7 @@ import { rememberClaim } from "../sync-store";
 import { ClaimFlow } from "./claim-screen";
 
 afterEach(() => {
+  detection.stalled = false;
   resetDevice();
 });
 
@@ -216,6 +232,81 @@ describe("the claim page", () => {
       expect(go).toHaveBeenCalledWith("/");
     });
     expect(storedIdentity()?.playerId).toBe(playerId);
+  });
+
+  it("stores the claimed identity at once, even when the browser detection never answers", async () => {
+    detection.stalled = true;
+    const { backend } = await bootDevice();
+    const token = mintClaimToken();
+    const playerId = await seedPlayer(backend, { claim: { token } });
+    const go = stubNavigation();
+    const { user } = renderWithUser(<ClaimFlow token={token} />);
+    const card = await screen.findByRole("region", { name: /^Continue as/ });
+    await user.click(within(card).getByRole("button", { name: "Continue" }));
+    await waitFor(() => {
+      expect(go).toHaveBeenCalledWith("/");
+    });
+    expect(storedIdentity()).toMatchObject({ playerId, source: "claim" });
+    expect(trackLog()).toContainEqual({
+      name: "claim_link_used",
+      props: { app: "none", result: "ok" },
+    });
+  });
+
+  it("on a browser whose only progress is practice, says its practice stays", async () => {
+    const { backend } = await bootDevice();
+    const token = mintClaimToken();
+    const playerId = await seedPlayer(backend, { claim: { token } });
+    localStorage.setItem("qz:history", JSON.stringify([{ runId: "r1" }]));
+    const go = stubNavigation();
+    const { user } = renderWithUser(<ClaimFlow token={token} />);
+    const card = await screen.findByRole("region", { name: /^Continue as/ });
+    await user.click(within(card).getByRole("button", { name: "Continue" }));
+    const dialog = await screen.findByRole("dialog", {
+      name: "Bring your profile to this browser?",
+    });
+    expect(
+      within(dialog).getByText(
+        "Your practice stats in this browser stay here. Continuing brings in the streak and Daily history from your link.",
+      ),
+    ).toBeVisible();
+    expect(within(dialog).getByText(WHAT_MOVES)).toBeVisible();
+    expect(dialog.textContent).not.toMatch(/replace/i);
+    await user.click(within(dialog).getByRole("button", { name: "Continue" }));
+    await waitFor(() => {
+      expect(go).toHaveBeenCalledWith("/");
+    });
+    expect(storedIdentity()?.playerId).toBe(playerId);
+  });
+
+  it("says exactly how long to wait after too many tries, and keeps Try again off until then", async () => {
+    const { backend } = await bootDevice();
+    const token = mintClaimToken();
+    await seedPlayer(backend, { claim: { token } });
+    // The mock's limit asks for a one-second wait.
+    backend.controls.failNext("identity.peekClaim", "rate_limited");
+    const { user } = renderWithUser(<ClaimFlow token={token} />);
+    expect(
+      await screen.findByText("Too many tries. Please wait 1 minute."),
+    ).toBeVisible();
+    const retry = screen.getByRole("button", { name: "Try again" });
+    // Still focusable, so it can be found, but off while the wait lasts.
+    expect(retry).toHaveAttribute("aria-disabled", "true");
+    expect(retry).toBeEnabled();
+    const peek = vi.spyOn(backend.identity, "peekClaim");
+    await user.click(retry);
+    expect(peek).not.toHaveBeenCalled();
+    await waitFor(
+      () => {
+        expect(retry).not.toHaveAttribute("aria-disabled");
+      },
+      { timeout: 3000 },
+    );
+    await user.click(retry);
+    expect(
+      await screen.findByRole("region", { name: /^Continue as/ }),
+    ).toBeInTheDocument();
+    expect(peek).toHaveBeenCalledTimes(1);
   });
 
   it("offers Try again when the server can't be reached", async () => {

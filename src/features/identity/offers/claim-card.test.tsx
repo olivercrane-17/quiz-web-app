@@ -1,12 +1,18 @@
 /**
  * The stop screen's claim card (PRD §3.10.4): the claim link for this app,
  * the address swap to /claim/<token>, the two taps, Open in Chrome on
- * Android, and the sync code below as the fallback, all in one card.
+ * Android, and the sync code below as the fallback, all in one card. The
+ * offer counts as taken only once a link is live, the address never takes
+ * a link the card is no longer there for, and the expiry is said and
+ * hands focus back to Keep my streak.
  */
 import { screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import type { EpochMs } from "@/engine/types";
+import { getServerClock } from "@/platform/server-clock";
 import { renderWithUser } from "@/test/render";
+import { LIVE_REGION_IDS } from "@/ui/announce";
 
 import {
   WHATSAPP,
@@ -57,11 +63,12 @@ describe("the claim card", () => {
       name: "Now open this page in your browser",
     });
     expect(steps).toHaveFocus();
+    // The two taps for WhatsApp, on iOS.
     expect(
       screen.getAllByRole("listitem").map((item) => item.textContent),
     ).toEqual([
-      "Tap the three dots (⋯) at the top or bottom of the screen.",
-      "Choose Open in Safari. Some apps call it Open in browser.",
+      "Tap WhatsApp's menu, the three dots (⋯) at the top or bottom of the screen.",
+      "Choose Open in browser. Some versions say Open in Safari.",
     ]);
     expect(screen.getByText("This link works for 10 minutes.")).toBeVisible();
     // iOS has no Chrome intent.
@@ -135,8 +142,51 @@ describe("the claim card", () => {
       )};end`,
     );
     expect(screen.getAllByRole("listitem")[0]).toHaveTextContent(
-      "Tap the three dots (⋮) at the top right.",
+      "Tap WhatsApp's menu, the three dots (⋮) at the top right.",
     );
+  });
+
+  it("gives each app its own two taps", async () => {
+    await bootDevice({ registered: true });
+    const { user } = renderCard({ ...WHATSAPP, app: "instagram" });
+    expect(
+      screen.getByRole("heading", { name: "Playing inside Instagram?" }),
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Keep my streak" }));
+    await screen.findByRole("heading", {
+      name: "Now open this page in your browser",
+    });
+    expect(
+      screen.getAllByRole("listitem").map((item) => item.textContent),
+    ).toEqual([
+      "Tap Instagram's menu, the three dots (⋯) at the top or bottom of the screen.",
+      "Choose Open in external browser. Some versions say Open in Safari.",
+    ]);
+  });
+
+  it("has the offer card's icon tile, and keeps one secondary action once the code shows", async () => {
+    const { backend } = await bootDevice({ registered: true });
+    const { user, container } = renderCard();
+    const tile = container.querySelector("[data-claim-icon]");
+    expect(tile).not.toBeNull();
+    expect(tile).toHaveAttribute("aria-hidden", "true");
+    const fallback = screen.getByRole("region", {
+      name: "Or save your sync code",
+    });
+    const create = vi.spyOn(backend.identity, "createSyncCode");
+    await user.click(
+      await within(fallback).findByRole("button", { name: "Show my code" }),
+    );
+    expect(create).toHaveBeenCalledTimes(1);
+    expect(
+      await within(fallback).findByRole("button", { name: "Copy code" }),
+    ).toHaveAttribute("data-variant", "text");
+    expect(
+      container.querySelectorAll('button[data-variant="secondary"]'),
+    ).toHaveLength(1);
+    expect(
+      screen.getByRole("button", { name: "Keep my streak" }),
+    ).toHaveAttribute("data-variant", "secondary");
   });
 
   it("names no app when the in-app browser has none", async () => {
@@ -147,7 +197,7 @@ describe("the claim card", () => {
     ).toBeInTheDocument();
   });
 
-  it("says so when the link can't be made, keeps the address, and lets the player try again", async () => {
+  it("says so when the link can't be made, keeps the address and the offer, and lets the player try again", async () => {
     const { backend } = await bootDevice({ registered: true });
     backend.controls.failNext("identity.createClaim", "offline");
     window.history.replaceState(null, "", "/daily/42/results");
@@ -159,12 +209,27 @@ describe("the claim card", () => {
       }),
     ).toBeVisible();
     expect(window.location.pathname).toBe("/daily/42/results");
+    // No link, so the offer wasn't taken: it may come back on a later finish.
+    expect(onAccept).not.toHaveBeenCalled();
     await user.click(screen.getByRole("button", { name: "Keep my streak" }));
     await waitFor(() => {
       expect(window.location.pathname).toMatch(/^\/claim\//);
     });
-    // Accepted once, however many tries it took.
+    // Taken once the link is live.
     expect(onAccept).toHaveBeenCalledTimes(1);
+  });
+
+  it("doesn't count a tap that couldn't make a link as taking the offer", async () => {
+    const { backend } = await bootDevice({ registered: true });
+    backend.controls.failNext("identity.createClaim", "rate_limited");
+    const { user, onAccept } = renderCard();
+    await user.click(screen.getByRole("button", { name: "Keep my streak" }));
+    expect(
+      await screen.findByText(/That's a lot of links for one hour/, {
+        selector: "[data-claim-message]",
+      }),
+    ).toBeVisible();
+    expect(onAccept).not.toHaveBeenCalled();
   });
 
   it("Not now dismisses the card", async () => {
@@ -172,6 +237,62 @@ describe("the claim card", () => {
     const { user, onDismiss } = renderCard();
     await user.click(screen.getByRole("button", { name: "Not now" }));
     expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it("leaves the address alone when the card goes while the link is being made", async () => {
+    const { backend } = await bootDevice({ registered: true });
+    backend.controls.setLatency(300);
+    window.history.replaceState(null, "", "/daily/42/results");
+    const { user, unmount, onAccept } = renderCard();
+    await user.click(screen.getByRole("button", { name: "Keep my streak" }));
+    expect(
+      screen.getByRole("button", { name: "Keep my streak" }),
+    ).toHaveAttribute("aria-busy", "true");
+    unmount();
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    expect(window.location.pathname).toBe("/daily/42/results");
+    expect(onAccept).not.toHaveBeenCalled();
+  });
+
+  it("when the link runs out, says so in the status region through the address change, and gives Keep my streak the focus", async () => {
+    await bootDevice({ registered: true });
+    window.history.replaceState(null, "", "/daily/42/results");
+    // The device's clock reads past the claim's 10 minutes: it runs out at once.
+    const clock = getServerClock();
+    const now = clock.now();
+    const late = vi
+      .spyOn(clock, "now")
+      .mockReturnValue((now + 11 * 60_000) as EpochMs);
+    const { user } = renderCard();
+    await user.click(screen.getByRole("button", { name: "Keep my streak" }));
+    const message = await screen.findByText(
+      "That link has run out. Tap Keep my streak for a new one.",
+      { selector: "[data-claim-message]" },
+    );
+    expect(message).toBeVisible();
+    expect(window.location.pathname).toBe("/daily/42/results");
+    const keep = screen.getByRole("button", { name: "Keep my streak" });
+    await waitFor(() => {
+      expect(keep).toHaveFocus();
+    });
+    // Said politely, and kept through the address change (the shell clears
+    // a page's messages when its address changes, all but kept ones).
+    const said = document.getElementById(
+      LIVE_REGION_IDS.polite,
+    )?.firstElementChild;
+    expect(said).toHaveTextContent(
+      "That link has run out. Tap Keep my streak for a new one.",
+    );
+    expect(said).toHaveAttribute("data-qz-keep");
+    // A new link withdraws the line.
+    late.mockRestore();
+    await user.click(keep);
+    await waitFor(() => {
+      expect(window.location.pathname).toMatch(/^\/claim\//);
+    });
+    expect(
+      document.getElementById(LIVE_REGION_IDS.polite)?.textContent ?? "",
+    ).not.toContain("That link has run out");
   });
 
   it("puts the address back when the card goes while the link shows", async () => {

@@ -7,12 +7,18 @@
  */
 import { normalizeCrockford } from "@/engine/types";
 
-const CODE_LENGTH = 16;
+/** A sync code's length in characters (§9.2). */
+export const CODE_LENGTH = 16;
 const GROUP = 4;
 
 /** The code characters in `text`: normalized, letters and digits only. */
 function codeCharacters(text: string): string {
   return normalizeCrockford(text).replace(/[^0-9A-Z]/g, "");
+}
+
+/** How many code characters `text` holds, so a short code can say so. */
+export function countCodeCharacters(text: string): number {
+  return codeCharacters(text).length;
 }
 
 /** The field's text for what was typed. */

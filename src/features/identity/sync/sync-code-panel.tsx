@@ -12,9 +12,15 @@
  * fallback, and the iOS install pitch and installed first run (CAL-1) and
  * the first server-saved quiz (EDT-3), each with its own trigger. Screen
  * readers hear the code one character at a time, group by group.
+ *
+ * When a code this panel asked for arrives (Show my code, the offer's
+ * `autoCreate`, Make a new code), the button the player pressed may be
+ * gone, so the code's well takes focus and a screen reader reads the code
+ * out; a new code also says, in the status region, that the old one no
+ * longer works (PRD §3.0.2's success state).
  */
 import Link from "next/link";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState, type Ref } from "react";
 
 import { formatSyncCode, type SyncCode } from "@/engine/types";
 import { announce } from "@/ui/announce";
@@ -23,26 +29,33 @@ import { buttonClasses } from "@/ui/button-classes";
 import { cx } from "@/ui/cx";
 import { Dialog } from "@/ui/dialog";
 import { CheckIcon, CopyIcon } from "@/ui/icons";
-import { Skeleton } from "@/ui/skeleton";
+import { Loading, Skeleton } from "@/ui/skeleton";
 import { showToast } from "@/ui/toast";
 
 import { IDENTITY_CLIENT_COPY } from "../client-copy";
 import { LockIcon } from "../icons";
 import type { ScreenError } from "../errors";
 import type { SyncTrigger } from "../offers/eligibility";
-import { useSyncCode, type SaveMethod } from "./use-sync-code";
+import {
+  useSyncCode,
+  type CodeLanded,
+  type CodeRequest,
+  type SaveMethod,
+} from "./use-sync-code";
 
 const COPY = IDENTITY_CLIENT_COPY;
 
 export interface SyncCodePanelProps {
   /** What offered the code, for `sync_code_saved`. */
   trigger: SyncTrigger;
-  /** Ask for a code at once when the device has none (the tap was Show my code). */
+  /** Ask for a code at once when this device can't have one elsewhere (the tap was Show my code). */
   autoCreate?: boolean;
   /** Offer "Make a new code" (`/me/sync`). */
   allowNew?: boolean;
   /** How "Show my code" looks: a secondary button, or a text button beside a card's own action. */
   showVariant?: "secondary" | "text";
+  /** How "Copy code" looks: secondary (DESIGN §12.25), or a text button inside a card whose one secondary action is its own. */
+  copyVariant?: "secondary" | "text";
   /** After Copy code or I've saved it. */
   onSaved?: (method: SaveMethod) => void;
   className?: string;
@@ -56,29 +69,39 @@ export function spokenCode(code: SyncCode): string {
     .join(", ");
 }
 
-function errorText(error: ScreenError): string {
+/**
+ * The words for a failed request: asking for the first code here, or, with
+ * a code already on screen, Make a new code, which leaves it working.
+ */
+function errorText(error: ScreenError, request: CodeRequest): string {
+  const words =
+    request === "replace" ? COPY.sync.replaceErrors : COPY.sync.errors;
   switch (error) {
     case "offline":
-      return COPY.sync.errors.offline;
+      return words.offline;
     case "rate_limited":
-      return COPY.sync.errors.rateLimited;
+      return words.rateLimited;
     case "unavailable":
       return COPY.unavailable;
     default:
-      return COPY.sync.errors.generic;
+      return words.generic;
   }
 }
 
 function ErrorLine({
   error,
+  request,
   onRetry,
 }: {
   error: ScreenError;
+  request: CodeRequest;
   onRetry: () => void;
 }) {
   return (
     <div className="flex flex-wrap items-center gap-x-3" data-sync-error="">
-      <p className="text-body-sm text-incorrect-text">{errorText(error)}</p>
+      <p className="text-body-sm text-incorrect-text">
+        {errorText(error, request)}
+      </p>
       {error === "generic" || error === "offline" ? (
         <Button variant="text" onClick={onRetry}>
           {COPY.tryAgain}
@@ -88,10 +111,19 @@ function ErrorLine({
   );
 }
 
-function CodeWell({ code }: { code: SyncCode }) {
+function CodeWell({
+  code,
+  ref,
+}: {
+  code: SyncCode;
+  /** Takes focus when a requested code arrives; its hidden text spells the code. */
+  ref?: Ref<HTMLDivElement>;
+}) {
   return (
     <div
-      className="rounded-md bg-sunken px-4 py-5 text-center"
+      ref={ref}
+      tabIndex={-1}
+      className="rounded-md bg-sunken px-4 py-5 text-center outline-none"
       data-sync-code={code}
     >
       <p
@@ -112,29 +144,44 @@ export function SyncCodePanel({
   autoCreate = false,
   allowNew = false,
   showVariant = "secondary",
+  copyVariant = "secondary",
   onSaved,
   className,
 }: SyncCodePanelProps) {
-  const { view, request, markSaved } = useSyncCode(trigger, {
+  const { view, landed, request, markSaved } = useSyncCode(trigger, {
     autoCreate,
     onSaved,
   });
   const [confirming, setConfirming] = useState(false);
   const [copyFailed, setCopyFailed] = useState(false);
   const warningId = useId();
+  const replacesId = useId();
+  const wellRef = useRef<HTMLDivElement>(null);
+  const handled = useRef<CodeLanded | null>(null);
+
+  // A requested code arrived: it takes focus, once, even when the route is
+  // shown again later (its effects run again then).
+  useEffect(() => {
+    if (landed === null || handled.current === landed) return;
+    handled.current = landed;
+    wellRef.current?.focus();
+    if (landed.kind === "replace") announce(COPY.sync.newCodeReady);
+  }, [landed]);
 
   // A failed request is said in the status region as well as beside it.
   const error =
     view.phase === "none" || view.phase === "ready" ? view.error : null;
+  const failed: CodeRequest = view.phase === "ready" ? "replace" : "show";
   useEffect(() => {
-    if (error !== null) announce(errorText(error));
-  }, [error]);
+    if (error !== null) announce(errorText(error, failed));
+  }, [error, failed]);
 
   if (view.phase === "loading") {
     return (
-      <div className={className} aria-busy="true" data-sync-panel="loading">
-        <span className="sr-only">{COPY.sync.loading}</span>
-        <Skeleton shape="block" height="5.5rem" />
+      <div className={className} data-sync-panel="loading">
+        <Loading label={COPY.sync.loading}>
+          <Skeleton shape="block" height="5.5rem" />
+        </Loading>
       </div>
     );
   }
@@ -162,20 +209,24 @@ export function SyncCodePanel({
         <Button
           variant={showVariant}
           busy={view.busy}
+          aria-describedby={view.mayReplace ? replacesId : undefined}
           onClick={() => {
-            void request();
+            void request("show");
           }}
         >
           {COPY.sync.show}
         </Button>
         {view.mayReplace ? (
-          <p className="text-meta text-ink-2">{COPY.sync.replacesOld}</p>
+          <p id={replacesId} className="text-meta text-ink-2">
+            {COPY.sync.replacesOld}
+          </p>
         ) : null}
         {view.error === null ? null : (
           <ErrorLine
             error={view.error}
+            request="show"
             onRetry={() => {
-              void request();
+              void request("show");
             }}
           />
         )}
@@ -200,10 +251,10 @@ export function SyncCodePanel({
       className={cx("flex flex-col gap-3", className)}
       data-sync-panel="ready"
     >
-      <CodeWell code={view.code} />
+      <CodeWell code={view.code} ref={wellRef} />
       <div className="flex flex-wrap items-center gap-3">
         <Button
-          variant="secondary"
+          variant={copyVariant}
           aria-describedby={warningId}
           onClick={() => {
             void copy();
@@ -257,8 +308,9 @@ export function SyncCodePanel({
           {view.error === null ? null : (
             <ErrorLine
               error={view.error}
+              request="replace"
               onRetry={() => {
-                void request();
+                void request("replace");
               }}
             />
           )}
@@ -275,7 +327,7 @@ export function SyncCodePanel({
                   variant="primary"
                   onClick={() => {
                     setConfirming(false);
-                    void request();
+                    void request("replace");
                   }}
                 >
                   {COPY.sync.makeNew}

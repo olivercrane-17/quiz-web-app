@@ -98,7 +98,33 @@ export function takeRestoreNotice(
   return entry;
 }
 
-/** Tests only: forget what this page load took. */
+/**
+ * Where the note stands in this page load: not yet on screen, on screen
+ * (its words already said), or over, once Today was left while it showed.
+ * Next keeps Today mounted but hidden while the player is elsewhere and
+ * runs its effects again when it comes back, so the card asks this
+ * instead of its own state: the note shows, and is said, once.
+ */
+export type RestoreNoticeStage = "waiting" | "shown" | "over";
+
+let stage: RestoreNoticeStage = "waiting";
+
+export function restoreNoticeStage(): RestoreNoticeStage {
+  return stage;
+}
+
+/** The card put the note on screen and said it. */
+export function markRestoreNoticeShown(): void {
+  if (stage === "waiting") stage = "shown";
+}
+
+/** Today was left while the note showed: it doesn't come back. */
+export function markRestoreNoticeOver(): void {
+  if (stage === "shown") stage = "over";
+}
+
+/** Tests only: forget what this page load took and showed. */
 export function resetRestoreNoticeForTests(): void {
   taken = null;
+  stage = "waiting";
 }

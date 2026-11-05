@@ -1,18 +1,37 @@
 /**
  * How to get from an in-app browser to the system browser (§9.5, PRD
- * §3.10.4): the two taps for the platform, and on Android an "Open in
+ * §3.10.4, §5.14): the two taps for that app, and on Android an "Open in
  * Chrome" link through an `intent://` URL.
  */
 import type { Platform } from "@/analytics/dictionary";
+import type { AppTag } from "@/backend";
 
-import { IDENTITY_CLIENT_COPY } from "../client-copy";
+import {
+  APP_MENU_ITEMS,
+  APP_NAMES,
+  IDENTITY_CLIENT_COPY,
+} from "../client-copy";
 
-/** The two taps: open the app's menu, then its open-in-browser item. */
-export function claimSteps(platform: Platform): readonly string[] {
+/**
+ * The two taps: open the app's menu, then its open-in-browser item, by
+ * the app's name for it (`APP_MENU_ITEMS`) with the platform's wording as
+ * the second guess. An in-app browser without a name gets the platform's
+ * two taps.
+ */
+export function claimSteps(
+  app: AppTag,
+  platform: Platform,
+): readonly [string, string] {
   const { steps } = IDENTITY_CLIENT_COPY.claim;
-  if (platform === "ios") return steps.ios;
-  if (platform === "android") return steps.android;
-  return steps.other;
+  const where =
+    platform === "ios" || platform === "android" ? platform : "other";
+  const name = APP_NAMES[app];
+  if (name === null) return steps.unnamed[where];
+  const platformItem = steps.platformItem[where];
+  return [
+    steps.menu[where](name),
+    steps.choose(APP_MENU_ITEMS[app] ?? platformItem, platformItem),
+  ];
 }
 
 /**

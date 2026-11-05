@@ -8,6 +8,12 @@
  *   offline. A device without one asks the server for one only when the
  *   player taps Show my code: making a code ends any older one (AC-SYN-03),
  *   and a code the player wrote down elsewhere must not die unasked.
+ * - `autoCreate` (the stop screen's offer, whose own Show my code was the
+ *   tap) asks at once only on a device whose identity was minted here, so
+ *   no code can exist anywhere else. A restored identity (the backup
+ *   cookie, a sync code, a claim) may have one written down, so it waits
+ *   for a second, deliberate Show my code beside the line saying the old
+ *   code stops working.
  * - A device whose identity the server has never seen (no Daily played)
  *   has nothing to move yet.
  * - "Make a new code" replaces the code everywhere (5 a day).
@@ -34,6 +40,9 @@ import {
 
 export type SaveMethod = "copy" | "confirm";
 
+/** Why a code was asked for: the first one here, or Make a new code. */
+export type CodeRequest = "show" | "replace";
+
 export type SyncCodeView =
   | { phase: "loading" }
   /** No Daily played yet: nothing on the server to move. */
@@ -53,8 +62,13 @@ export type SyncCodeView =
       error: ScreenError | null;
     };
 
+/** A request that put a code on screen; a new object each time one does. */
+export interface CodeLanded {
+  kind: CodeRequest;
+}
+
 export interface SyncCodeOptions {
-  /** Ask for a code at once when the device has none (the tap was Show my code). */
+  /** Ask for a code at once when this device can't have one elsewhere (the tap was Show my code). */
   autoCreate?: boolean;
   /** After Copy code or I've saved it. */
   onSaved?: (method: SaveMethod) => void;
@@ -87,6 +101,7 @@ export function useSyncCode(
   options: SyncCodeOptions = {},
 ) {
   const [view, setView] = useState<SyncCodeView>({ phase: "loading" });
+  const [landed, setLanded] = useState<CodeLanded | null>(null);
   const onSaved = useRef(options.onSaved);
   useEffect(() => {
     onSaved.current = options.onSaved;
@@ -94,7 +109,7 @@ export function useSyncCode(
   const autoCreate = options.autoCreate === true;
   const asked = useRef(false);
 
-  const request = useCallback(async () => {
+  const request = useCallback(async (kind: CodeRequest = "show") => {
     setView((current) =>
       current.phase === "none" || current.phase === "ready"
         ? { ...current, busy: true, error: null }
@@ -114,7 +129,9 @@ export function useSyncCode(
           result.value.createdAt,
         );
       }
-      setView(settle());
+      const next = settle();
+      setView(next);
+      if (next.phase === "ready") setLanded({ kind });
       return;
     }
     const error = result.ok ? "generic" : screenError(result.error);
@@ -132,9 +149,14 @@ export function useSyncCode(
         if (!live) return;
         const next = settle();
         setView(next);
-        if (autoCreate && next.phase === "none" && !asked.current) {
+        if (
+          autoCreate &&
+          next.phase === "none" &&
+          !next.mayReplace &&
+          !asked.current
+        ) {
           asked.current = true;
-          void request();
+          void request("show");
         }
       });
     };
@@ -161,5 +183,5 @@ export function useSyncCode(
     [trigger],
   );
 
-  return { view, request, markSaved };
+  return { view, landed, request, markSaved };
 }

@@ -12,11 +12,35 @@
  *   adds it as a credential and answers the player and profile, and the
  *   device switches to it, posts the backup cookie and lands on Today with
  *   "Welcome back, Plucky Otter. Your 23-day streak is here."
- * - A code that can't be one fails at once without costing an attempt;
- *   the server's refusals use the PRD's copy inline, next to the field.
+ * - A code that can't be one fails at once without costing an attempt:
+ *   nothing typed, or fewer than 16 characters, says exactly that; the
+ *   server's refusals use the PRD's copy inline, next to the field.
+ *
+ * **The code never leaves in a URL.** The sync code is a pass to the whole
+ * profile, and the page is prerendered, so until it hydrates the browser
+ * would submit the form natively (a GET to `/restore?code=...`, into
+ * request logs, history and the address bar). So the field has no `name`,
+ * a native submission carries nothing, and Restore stays natively disabled
+ * until hydration; a disabled default button blocks Enter's implicit
+ * submission too.
+ *
+ * **The field fits its code** at 320 px, at 200% text and under the WCAG
+ * text-spacing overrides (PRD §3.12.4): its type shrinks with narrow
+ * screens down to the body size, and it is a textarea that wraps between
+ * groups, growing with its text (`field-sizing`, or a measured height
+ * where the browser has none), instead of a single line that clips.
+ * Enter submits; the code has no line breaks.
  */
 import Link from "next/link";
-import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type RefObject,
+} from "react";
 
 import { getBackend } from "@/backend";
 import {
@@ -32,12 +56,14 @@ import { buttonClasses } from "@/ui/button-classes";
 import { bootClient } from "../boot";
 import { IDENTITY_CLIENT_COPY } from "../client-copy";
 import { ConfirmReplace, useDeviceStreak } from "../confirm-replace";
-import { deviceHasProgress } from "../device";
+import { deviceHasProgress, readDeviceIdentity } from "../device";
 import { mintSecret } from "../mint";
 import { finishRestore } from "../restore-flow";
 import {
+  CODE_LENGTH,
   caretAfter,
   codeCharactersBefore,
+  countCodeCharacters,
   formatTypedCode,
 } from "./code-input";
 
@@ -64,8 +90,58 @@ function refusalText(error: BackendError): string {
   }
 }
 
+/** Why typed text can't be a code yet, before any server call; null when it may be one. */
+function incompleteText(text: string): string | null {
+  const count = countCodeCharacters(text);
+  if (count === 0) return COPY.restore.errors.empty;
+  if (count < CODE_LENGTH) return COPY.restore.errors.short(count);
+  return null;
+}
+
 function isOffline(): boolean {
   return typeof navigator !== "undefined" && navigator.onLine === false;
+}
+
+const noSubscription = () => () => {};
+
+/** What the device holds, as the confirm step needs it; after the boot. */
+function deviceFacts(): { progress: boolean; registered: boolean } {
+  return {
+    progress: deviceHasProgress(),
+    registered: readDeviceIdentity()?.registered === true,
+  };
+}
+
+function fieldSizingSupported(): boolean {
+  return (
+    typeof CSS !== "undefined" &&
+    typeof CSS.supports === "function" &&
+    CSS.supports("field-sizing", "content")
+  );
+}
+
+/**
+ * Keeps the field as tall as its text where CSS can't (`field-sizing`),
+ * so a wrapped code is never cut off.
+ */
+function useFieldFitsText(
+  ref: RefObject<HTMLTextAreaElement | null>,
+  text: string,
+): void {
+  useLayoutEffect(() => {
+    const field = ref.current;
+    if (field === null || fieldSizingSupported()) return;
+    const fit = () => {
+      field.style.height = "auto";
+      const borders = field.offsetHeight - field.clientHeight;
+      field.style.height = `${field.scrollHeight + borders}px`;
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    return () => {
+      window.removeEventListener("resize", fit);
+    };
+  }, [ref, text]);
 }
 
 export function RestoreScreen() {
@@ -73,26 +149,33 @@ export function RestoreScreen() {
   const [error, setError] = useState<string | null>(null);
   const [confirming, setConfirming] = useState<SyncCode | null>(null);
   const [busy, setBusy] = useState(false);
-  const [hasProgress, setHasProgress] = useState(false);
-  const streak = useDeviceStreak(hasProgress);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [device, setDevice] = useState({ progress: false, registered: false });
+  // False in the prerendered HTML and while it hydrates (see the header).
+  const hydrated = useSyncExternalStore(
+    noSubscription,
+    () => true,
+    () => false,
+  );
+  const streak = useDeviceStreak(device.progress && device.registered);
+  const fieldRef = useRef<HTMLTextAreaElement>(null);
   const caret = useRef<number | null>(null);
   const ids = useId();
   const hintId = `${ids}-hint`;
   const errorId = `${ids}-error`;
+  useFieldFitsText(fieldRef, text);
 
   useEffect(() => {
     void bootClient().then(() => {
-      setHasProgress(deviceHasProgress());
+      setDevice(deviceFacts());
     });
   }, []);
 
   // Grouping rewrites the text; the caret stays after the same character.
   useLayoutEffect(() => {
-    const input = inputRef.current;
-    if (caret.current === null || input === null) return;
-    if (document.activeElement === input) {
-      input.setSelectionRange(caret.current, caret.current);
+    const field = fieldRef.current;
+    if (caret.current === null || field === null) return;
+    if (document.activeElement === field) {
+      field.setSelectionRange(caret.current, caret.current);
     }
     caret.current = null;
   }, [text]);
@@ -100,7 +183,7 @@ export function RestoreScreen() {
   const fail = (message: string) => {
     setError(message);
     announce(message);
-    inputRef.current?.focus();
+    fieldRef.current?.focus();
   };
 
   const redeem = async (code: SyncCode) => {
@@ -146,6 +229,11 @@ export function RestoreScreen() {
         onSubmit={(event) => {
           event.preventDefault();
           if (busy) return;
+          const incomplete = incompleteText(text);
+          if (incomplete !== null) {
+            fail(incomplete);
+            return;
+          }
           const code = parseSyncCode(text);
           if (code === null) {
             fail(COPY.restore.errors.bad);
@@ -159,8 +247,9 @@ export function RestoreScreen() {
           setError(null);
           // Asked after the boot, so a quick submit can't skip the confirm.
           void bootClient().then(() => {
-            if (deviceHasProgress()) {
-              setHasProgress(true);
+            const facts = deviceFacts();
+            setDevice(facts);
+            if (facts.progress) {
               setConfirming(code);
             } else {
               void redeem(code);
@@ -172,11 +261,10 @@ export function RestoreScreen() {
           <label htmlFor={`${ids}-code`} className="text-label">
             {COPY.restore.fieldLabel}
           </label>
-          <input
-            ref={inputRef}
+          <textarea
+            ref={fieldRef}
             id={`${ids}-code`}
-            name="code"
-            type="text"
+            rows={1}
             inputMode="text"
             enterKeyHint="go"
             autoComplete="off"
@@ -189,10 +277,18 @@ export function RestoreScreen() {
             aria-describedby={[hintId, error === null ? null : errorId]
               .filter((part) => part !== null)
               .join(" ")}
-            className="h-14 w-full rounded-md border-2 border-ink bg-surface px-4 font-text text-[1.375rem] font-bold tracking-[0.08em] text-ink tabular-nums placeholder:font-normal placeholder:tracking-normal placeholder:text-ink-3"
+            className="field-sizing-content min-h-14 w-full resize-none rounded-md border-2 border-ink bg-surface px-3 py-[max(0.75rem,calc((3.25rem_-_1.25em)/2))] font-text text-[length:clamp(1rem,5.2vw,1.375rem)] leading-tight font-bold tracking-[0.04em] text-ink tabular-nums min-[400px]:tracking-[0.08em]"
+            onKeyDown={(event) => {
+              // A code has no line breaks: Enter (Go on a phone) submits.
+              if (event.key !== "Enter" || event.nativeEvent.isComposing) {
+                return;
+              }
+              event.preventDefault();
+              event.currentTarget.form?.requestSubmit();
+            }}
             onChange={(event) => {
               const raw = event.target.value;
-              const at = event.target.selectionStart ?? raw.length;
+              const at = event.target.selectionStart;
               const formatted = formatTypedCode(raw);
               caret.current = caretAfter(codeCharactersBefore(raw, at));
               setText(formatted);
@@ -215,6 +311,7 @@ export function RestoreScreen() {
         <Button
           variant="primary"
           type="submit"
+          disabled={!hydrated}
           busy={busy}
           className="self-start"
         >
@@ -232,6 +329,7 @@ export function RestoreScreen() {
       <ConfirmReplace
         open={confirming !== null}
         streak={streak}
+        registered={device.registered}
         via="code"
         onCancel={() => {
           setConfirming(null);

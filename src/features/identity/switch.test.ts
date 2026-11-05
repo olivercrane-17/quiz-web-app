@@ -1,7 +1,8 @@
 /**
  * Switching the device to a restored identity (§9.2, §9.5, §9.6): stored,
  * told to every tab, the tab's own boot identity included, and posted to
- * the backup cookie; nothing at all under the Under 13 flag.
+ * the backup cookie; nothing at all under the Under 13 flag. A switch to
+ * another player leaves no working code for the old one behind.
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -11,10 +12,13 @@ import type { IdentityChannel } from "@/platform/identity/broadcast";
 import { mintIdentity } from "@/platform/identity/local";
 import { createKv, createMemoryStorage } from "@/platform/storage";
 
+import { parseSyncCode, type SyncCode } from "@/engine/types";
+
 import { bootDevice, resetDevice, storedIdentity } from "./__fixtures__/device";
 import { onIdentityChange } from "./boot";
-import { finishRestore } from "./restore-flow";
+import { finishRestore, type FinishRestoreInput } from "./restore-flow";
 import { adoptIdentity } from "./switch";
+import { SYNC_KEY, readSyncRecord, storeSyncCode } from "./sync-store";
 
 const AT = Date.UTC(2026, 10, 5, 9) as EpochMs;
 
@@ -128,7 +132,67 @@ describe("adoptIdentity", () => {
   );
 });
 
+/** What a redemption answered for `next`. */
+function answer(
+  next: LocalIdentity,
+  source: FinishRestoreInput["source"],
+): FinishRestoreInput {
+  return {
+    restored: {
+      playerId: next.playerId,
+      profile: {
+        playerId: next.playerId,
+        friendlyName: "Plucky Otter",
+        nickname: null,
+        ageBand: null,
+        createdAt: AT,
+      },
+      streak: { current: 3, best: 3 },
+      lastDaily: null,
+    },
+    secret: next.secret,
+    source,
+  };
+}
+
+const OLD_CODE = parseSyncCode("K7QX2M9PT4RW8HNC") as SyncCode;
+
 describe("finishRestore", () => {
+  it("after a claim, drops the old player's sync code from the device", async () => {
+    await bootDevice({ registered: true });
+    const old = storedIdentity();
+    if (old === null) throw new Error("no identity");
+    storeSyncCode(old.playerId, OLD_CODE, AT, { savedAt: AT });
+    const next = restored();
+    const navigate = vi.fn();
+    const done = await finishRestore(answer(next, "claim"), {
+      navigate,
+      backup: null,
+    });
+    expect(done).toBe(true);
+    expect(navigate).toHaveBeenCalledWith("/");
+    expect(storedIdentity()?.playerId).toBe(next.playerId);
+    // Nothing of the old profile's pass is left in storage.
+    expect(localStorage.getItem(SYNC_KEY)).toBeNull();
+    expect(readSyncRecord(old.playerId)).toBeNull();
+  });
+
+  it("after a sync code, keeps only the restored code, already saved", async () => {
+    await bootDevice({ registered: true });
+    const old = storedIdentity();
+    if (old === null) throw new Error("no identity");
+    storeSyncCode(old.playerId, OLD_CODE, AT);
+    const next = restored();
+    const code = parseSyncCode("0000111122223333") as SyncCode;
+    await finishRestore(
+      { ...answer(next, "sync"), code },
+      { navigate: vi.fn(), backup: null },
+    );
+    expect(readSyncRecord(next.playerId)).toMatchObject({ code });
+    expect(readSyncRecord(next.playerId)?.savedAt).not.toBeNull();
+    expect(localStorage.getItem(SYNC_KEY)).not.toContain(OLD_CODE);
+  });
+
   it("does nothing more when the device keeps no identity", async () => {
     await bootDevice();
     localStorage.setItem("qz:under13", JSON.stringify({ since: AT }));

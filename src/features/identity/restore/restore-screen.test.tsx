@@ -2,9 +2,11 @@
  * Restore from a code (PRD §3.10.2, §5.13; DESIGN §12.26): the typed forms
  * of a code (AC-SYN-02), the confirm step on a device with progress and
  * its Cancel (AC-SYN-06, AC-SYN-07), the switch to the restored player
- * with its backup cookie and Today's note, and the refusals' copy.
+ * with its backup cookie and Today's note, and the refusals' copy. Before
+ * hydration nothing can submit the code natively.
  */
 import { screen, waitFor, within } from "@testing-library/react";
+import { renderToString } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { parseSyncCode, type SyncCode } from "@/engine/types";
@@ -148,9 +150,11 @@ describe("restoring from a code", () => {
     });
   });
 
-  it("treats a device with practice history as having progress", async () => {
-    await bootDevice();
+  it("treats a device with practice history as having progress, and says its practice stays", async () => {
+    const { backend } = await bootDevice();
+    const playerId = await seedPlayerWithCode(backend, CODE);
     localStorage.setItem("qz:history", JSON.stringify([{ runId: "r1" }]));
+    const go = stubNavigation();
     const { user } = renderWithUser(<RestoreScreen />);
     // The check runs after the boot.
     await waitFor(() => {
@@ -159,14 +163,48 @@ describe("restoring from a code", () => {
     await user.type(field(), CODE);
     await new Promise((resolve) => setTimeout(resolve, 0));
     await user.click(screen.getByRole("button", { name: "Restore" }));
+    // Practice is all this device has, and it stays: nothing is "replaced".
+    const dialog = await screen.findByRole("dialog", {
+      name: "Restore your profile here?",
+    });
     expect(
-      await screen.findByRole("dialog", {
-        name: "Replace this device's progress?",
-      }),
-    ).toBeInTheDocument();
+      within(dialog).getByText(
+        "Your practice stats on this device stay here. Restoring brings in the streak and Daily history from your code.",
+      ),
+    ).toBeVisible();
+    expect(within(dialog).getByText(WHAT_MOVES)).toBeVisible();
+    expect(dialog.textContent).not.toMatch(/replace/i);
+    await user.click(within(dialog).getByRole("button", { name: "Restore" }));
+    await waitFor(() => {
+      expect(go).toHaveBeenCalledWith("/");
+    });
+    expect(storedIdentity()?.playerId).toBe(playerId);
+    // Practice stays on the device.
+    expect(localStorage.getItem("qz:history")).toBe(
+      JSON.stringify([{ runId: "r1" }]),
+    );
   });
 
-  it("says a code that can't be one didn't work, without asking the server", async () => {
+  it("asks for the code when nothing was typed, without asking the server", async () => {
+    const { backend } = await bootDevice();
+    const redeem = vi.spyOn(backend.identity, "redeemSyncCode");
+    const { user } = renderWithUser(<RestoreScreen />);
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Restore" })).toBeEnabled();
+    });
+    await user.click(screen.getByRole("button", { name: "Restore" }));
+    expect(
+      await screen.findByText(
+        "Enter your sync code first. It has 16 characters.",
+        UNDER_FIELD,
+      ),
+    ).toBeVisible();
+    expect(field()).toHaveAttribute("aria-invalid", "true");
+    expect(field()).toHaveFocus();
+    expect(redeem).not.toHaveBeenCalled();
+  });
+
+  it("counts the characters of a half-typed code, without asking the server", async () => {
     const { backend } = await bootDevice();
     const redeem = vi.spyOn(backend.identity, "redeemSyncCode");
     const { user } = renderWithUser(<RestoreScreen />);
@@ -174,13 +212,64 @@ describe("restoring from a code", () => {
     await user.click(screen.getByRole("button", { name: "Restore" }));
     expect(
       await screen.findByText(
-        "That code didn't work. Check for typos, or make a new code on your other device.",
+        "Your code has 16 characters. This one has 8.",
         UNDER_FIELD,
       ),
     ).toBeVisible();
     expect(field()).toHaveAttribute("aria-invalid", "true");
     expect(field()).toHaveFocus();
     expect(redeem).not.toHaveBeenCalled();
+  });
+
+  it("says a full-length code that can't be one didn't work, without asking the server", async () => {
+    const { backend } = await bootDevice();
+    const redeem = vi.spyOn(backend.identity, "redeemSyncCode");
+    const { user } = renderWithUser(<RestoreScreen />);
+    // U is no Crockford character, so no code holds one.
+    await user.type(field(), "UUUU-UUUU-UUUU-UUUU");
+    await user.click(screen.getByRole("button", { name: "Restore" }));
+    expect(
+      await screen.findByText(
+        "That code didn't work. Check for typos, or make a new code on your other device.",
+        UNDER_FIELD,
+      ),
+    ).toBeVisible();
+    expect(redeem).not.toHaveBeenCalled();
+  });
+
+  it("restores on Enter in the field, as on Go on a phone's keyboard", async () => {
+    const { backend } = await bootDevice();
+    const playerId = await seedPlayerWithCode(backend, CODE);
+    const go = stubNavigation();
+    const { user } = renderWithUser(<RestoreScreen />);
+    await user.type(field(), `${CODE}{Enter}`);
+    await waitFor(() => {
+      expect(go).toHaveBeenCalledWith("/");
+    });
+    expect(storedIdentity()?.playerId).toBe(playerId);
+    // The code holds no line break.
+    expect(field()).toHaveValue("K7QX-2M9P-T4RW-8H10");
+  });
+
+  it("can't submit the code natively before it hydrates: the field has no name and Restore is disabled", () => {
+    // The prerendered HTML, as the browser has it until the page hydrates.
+    const page = document.createElement("div");
+    page.innerHTML = renderToString(<RestoreScreen />);
+    const form = page.querySelector("form");
+    const restore = page.querySelector('button[type="submit"]');
+    expect(form).not.toBeNull();
+    // Nothing a native submission would carry, and no button to send it.
+    expect(form?.querySelectorAll("[name]")).toHaveLength(0);
+    expect(restore).toHaveTextContent("Restore");
+    expect(restore).toHaveAttribute("disabled");
+    expect(form?.querySelector("textarea")).not.toBeNull();
+  });
+
+  it("enables Restore once the page has hydrated", async () => {
+    await bootDevice();
+    renderWithUser(<RestoreScreen />);
+    expect(screen.getByRole("button", { name: "Restore" })).toBeEnabled();
+    expect(field()).not.toHaveAttribute("name");
   });
 
   it("says an unknown code didn't work", async () => {

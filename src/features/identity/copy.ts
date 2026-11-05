@@ -5,14 +5,20 @@
  */
 import { IDENTITY_CLIENT_COPY, WHAT_MOVES } from "./client-copy";
 
-export { APP_NAMES, IDENTITY_CLIENT_COPY, WHAT_MOVES } from "./client-copy";
+export {
+  APP_MENU_ITEMS,
+  APP_NAMES,
+  IDENTITY_CLIENT_COPY,
+  WHAT_MOVES,
+} from "./client-copy";
 
 export const IDENTITY_COPY = {
   ...IDENTITY_CLIENT_COPY,
+  /** Page titles: each matches its page's heading (DESIGN §1.3). */
   metadata: {
     sync: "Your sync code",
     restore: "Restore from a code",
-    claim: "Claim your streak",
+    claim: "Keep your streak",
   },
   /**
    * The rows that lead here (DESIGN §12.23, §12.28): "Your sync code" on

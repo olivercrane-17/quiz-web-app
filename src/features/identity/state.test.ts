@@ -34,6 +34,7 @@ import {
   SYNC_KEY,
   decodeSyncRecord,
   isOwnClaim,
+  keepSyncRecordOf,
   markSyncCodeSaved,
   readSyncRecord,
   rememberClaim,
@@ -89,6 +90,18 @@ describe("qz:sync", () => {
     markSyncCodeSaved(B, AT, store);
     expect(readSyncRecord(B, store)).toMatchObject({ code: null, savedAt: AT });
     expect(readSyncRecord(A, store)).toBeNull();
+  });
+
+  it("drops another player's record, code and all, when the device switches player", () => {
+    const store = kv();
+    storeSyncCode(A, CODE, AT, { savedAt: AT }, store);
+    keepSyncRecordOf(A, store);
+    expect(readSyncRecord(A, store)?.code).toBe(CODE);
+    keepSyncRecordOf(B, store);
+    expect(store.readRaw(SYNC_KEY)).toEqual({ state: "missing" });
+    // With nothing stored there is nothing to drop.
+    keepSyncRecordOf(B, store);
+    expect(store.readRaw(SYNC_KEY)).toEqual({ state: "missing" });
   });
 
   it("refuses anything that isn't a record", () => {
@@ -203,13 +216,57 @@ describe("what a restore mints", () => {
 });
 
 describe("the claim's steps", () => {
-  it("names the menu and the item for the platform", () => {
-    expect(claimSteps("ios")).toHaveLength(2);
-    expect(claimSteps("android")[1]).toContain("Open in Chrome");
-    expect(claimSteps("desktop")).toEqual([
+  it("gives the two taps for that app: its menu, then its name for the item and the platform's", () => {
+    expect(claimSteps("instagram", "ios")).toEqual([
+      "Tap Instagram's menu, the three dots (⋯) at the top or bottom of the screen.",
+      "Choose Open in external browser. Some versions say Open in Safari.",
+    ]);
+    expect(claimSteps("whatsapp", "android")).toEqual([
+      "Tap WhatsApp's menu, the three dots (⋮) at the top right.",
+      "Choose Open in browser. Some versions say Open in Chrome.",
+    ]);
+    expect(claimSteps("tiktok", "ios")[1]).toBe(
+      "Choose Open in browser. Some versions say Open in Safari.",
+    );
+    // An app whose browser names the platform's own item says it once.
+    expect(claimSteps("telegram", "android")[1]).toBe("Choose Open in Chrome.");
+    expect(claimSteps("google", "ios")).toEqual([
+      "Tap the Google app's menu, the three dots (⋯) at the top or bottom of the screen.",
+      "Choose Open in Safari.",
+    ]);
+    expect(claimSteps("facebook", "desktop")).toEqual([
+      "Open Facebook's menu.",
+      "Choose Open in external browser. Some versions say Open in browser.",
+    ]);
+  });
+
+  it("falls back to the platform's two taps when the app has no name", () => {
+    expect(claimSteps("other", "ios")).toEqual([
+      "Tap the three dots (⋯) at the top or bottom of the screen.",
+      "Choose Open in Safari. Some apps call it Open in browser.",
+    ]);
+    expect(claimSteps("other", "android")[1]).toContain("Open in Chrome");
+    expect(claimSteps("none", "desktop")).toEqual([
       "Open this app's menu.",
       "Choose Open in browser.",
     ]);
+  });
+
+  it("names every app the detection maps (§9.4 step 3)", () => {
+    for (const app of [
+      "whatsapp",
+      "instagram",
+      "facebook",
+      "messenger",
+      "tiktok",
+      "snapchat",
+      "linkedin",
+      "telegram",
+      "google",
+    ] as const) {
+      const [menu] = claimSteps(app, "ios");
+      expect(menu, app).toMatch(/^Tap .+'s menu, /);
+    }
   });
 
   it("builds an intent link that opens the claim in Chrome, falling back to the page", () => {

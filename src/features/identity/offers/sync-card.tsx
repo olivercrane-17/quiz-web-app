@@ -5,7 +5,12 @@
  * your streak safe" (or, in a private window, "Private window?") with the
  * line on what moves (AC-SYN-07), "Show my code" and "Not now". Show my
  * code opens the code in the card, asking the server for one if this
- * device has none.
+ * device has none and can't have one elsewhere; a restored profile, which
+ * may have a code written down, sees Show my code again beside the line
+ * saying an old code stops working, so ending it takes a second tap.
+ *
+ * Opening the card replaces the button the player pressed, so its title
+ * takes focus, until a code the panel asked for arrives and takes it.
  *
  * The card reports accepted when the player saves the code (Copy code or
  * I've saved it): the offer exists to get a code saved, and an offer
@@ -34,10 +39,18 @@ export function SyncCard({ ctx, onAccept, onDismiss }: OfferCardProps) {
   const [open, setOpen] = useState(false);
   const saved = useRef(false);
   const titleId = useId();
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const focusTitle = useRef(false);
 
   useEffect(() => {
     track("sync_code_offer", { trigger });
   }, [trigger]);
+
+  useEffect(() => {
+    if (!open || !focusTitle.current) return;
+    focusTitle.current = false;
+    titleRef.current?.focus();
+  }, [open]);
 
   if (!open) {
     return (
@@ -52,6 +65,7 @@ export function SyncCard({ ctx, onAccept, onDismiss }: OfferCardProps) {
         actionLabel={COPY.sync.offer.action}
         icon={<KeyIcon />}
         onAccept={() => {
+          focusTitle.current = true;
           setOpen(true);
         }}
         onDismiss={onDismiss}
@@ -67,7 +81,12 @@ export function SyncCard({ ctx, onAccept, onDismiss }: OfferCardProps) {
       className="flex flex-col gap-3"
     >
       <div className="flex flex-col gap-1">
-        <h2 id={titleId} className="text-lg font-bold">
+        <h2
+          ref={titleRef}
+          id={titleId}
+          tabIndex={-1}
+          className="text-lg font-bold outline-none"
+        >
           {COPY.sync.title}
         </h2>
         <p className="text-body-sm text-ink-2">{COPY.whatMoves}</p>

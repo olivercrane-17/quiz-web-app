@@ -6,7 +6,9 @@
  * offline once the code is on the device. Inside an in-app browser the
  * claim link comes first, since one tap there moves the profile to the
  * system browser, with the code below it as the fallback (§9.5).
- * Below both, the way to restore a code from another device.
+ * Below both, the way to restore a code from another device. The page's
+ * header already carries the line on what moves, so the claim panel here
+ * leaves its own copy out.
  *
  * Logs `sync_code_offer` (`manual`) once a code can be shown.
  */
@@ -19,7 +21,7 @@ import {
   type DetectedContext,
 } from "@/platform/browser-context";
 import { buttonClasses } from "@/ui/button-classes";
-import { Skeleton } from "@/ui/skeleton";
+import { Loading, Skeleton } from "@/ui/skeleton";
 
 import { bootClient, onIdentityChange } from "../boot";
 import { ClaimPanel } from "../claim/claim-panel";
@@ -76,17 +78,16 @@ export function SyncScreen() {
 
   if (place.phase === "loading") {
     return (
-      <div aria-busy="true" className="flex flex-col gap-4">
-        <span className="sr-only">{COPY.sync.loading}</span>
+      <Loading label={COPY.sync.loading}>
         <Skeleton shape="block" height="5.5rem" />
-      </div>
+      </Loading>
     );
   }
 
   if (place.registered && place.browser.context === "in_app") {
     return (
       <div className="flex flex-col gap-8" data-sync-screen="in-app">
-        <ClaimPanel browser={place.browser} />
+        <ClaimPanel browser={place.browser} hideWhatMoves />
         <section
           aria-labelledby={fallbackId}
           className="flex flex-col gap-3 border-t border-rule pt-6"
