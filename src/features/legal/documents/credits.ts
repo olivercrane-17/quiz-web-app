@@ -94,7 +94,7 @@ function datasetItem(dataset: DatasetCredit): TermItem {
     datasetUse(dataset),
   ];
   if (dataset.licenseNote !== null) {
-    details.push(`Licence note: ${dataset.licenseNote}.`);
+    details.push(`Licence note: ${dataset.licenseNote.replace(/\.$/, "")}.`);
   }
   return {
     term: `[${dataset.title}](${dataset.url})`,
