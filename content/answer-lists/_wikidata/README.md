@@ -85,6 +85,7 @@ What `--apply` changes, and what it never does:
 
 - It sets `popularity` to the sitelink count of each active entry's referenced QID. It holds, and prints, an entry whose QID is missing on Wikidata, whose Wikidata label is neither the entry's name nor an alias, or that changed after the run.
 - With `--accept-matches` it sets `wikidataId` on each `x.` entry whose verdict is `match`, unless another entry took that QID meanwhile, and gives it the candidate's sitelink count.
+- A list it changes gains one `provenance` entry, "Wikidata, through the enrichment workflow: sitelink counts and QIDs" (CC0-1.0, retrieved on the run's date), so `/credits` names Wikidata (PRD §3.14). It cites no `key@pin`, so `content:lists` asks for no dataset pin.
 - It never changes an `id`, `name`, `display`, alias, qualifier or `status`. An id never changes once anything references it (CONTENT_GUIDE §2.12), and Wikidata's labels and aliases are candidates for the content team to review, never copied in.
 - It never skips an entry because a sealed item uses it. A skipped entry would mark a mystery's answer or guesses in a public diff, so the sealed check is the reviewer step instead.
 

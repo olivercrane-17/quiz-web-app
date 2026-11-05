@@ -51,6 +51,7 @@ import {
   EnrichmentFileSchema,
   PROPERTIES,
   WIKIDATA_API,
+  WIKIDATA_PROVENANCE,
   applyEnrichment,
   compareQualifier,
   fetchEnrichment,
@@ -66,6 +67,7 @@ import {
   type EntityData,
   type PropertyId,
 } from "./enrich-wikidata.ts";
+import { citedDatasets } from "./lists/importer.ts";
 
 afterAll(removeTempDirs);
 
@@ -1230,25 +1232,56 @@ describe("apply, the list builder's step after a merged run", () => {
       written: true,
     });
     expect([person.version, person.liveAt]).toEqual([TODAY, TODAY]);
+    // The list now credits Wikidata, for /credits (PRD §3.14).
+    expect(person.provenance).toEqual([
+      ...before.provenance,
+      {
+        source: WIKIDATA_PROVENANCE,
+        license: "CC0-1.0",
+        retrievedAt: "2026-11-09",
+      },
+    ]);
     expect({
       ...person,
       version: before.version,
       liveAt: before.liveAt,
+      provenance: before.provenance,
       entities: person.entities.map((e) =>
         e.id === "Q5432" ? { ...e, popularity: 0 } : e,
       ),
     }).toEqual(before);
 
-    // A second run finds nothing to do and keeps the version.
-    const again = applyEnrichment(person, fileOf(files, "person"), {
+    // A later run credits Wikidata once, keeping the newest retrieval date.
+    const later = structuredClone(fileOf(files, "person"));
+    later.fetchedAt = "2026-11-16T02:47:12Z";
+    const goya = later.sitelinks.find((r) => r.id === "Q5432");
+    if (goya) goya.sitelinks = 8;
+    applyEnrichment(person, later, {
       write: true,
       acceptMatches: false,
-      today: "2026-11-10",
+      today: "2026-11-16",
+    });
+    expect(
+      person.provenance.filter((p) => p.source === WIKIDATA_PROVENANCE),
+    ).toEqual([
+      {
+        source: WIKIDATA_PROVENANCE,
+        license: "CC0-1.0",
+        retrievedAt: "2026-11-16",
+      },
+    ]);
+    expect(person.version).toBe("2026-11-16");
+
+    // The same run again has nothing new to give: nothing changes, version included.
+    const again = applyEnrichment(person, later, {
+      write: true,
+      acceptMatches: false,
+      today: "2026-11-17",
     });
     expect([again.popularity, again.written, person.version]).toEqual([
       [],
       false,
-      TODAY,
+      "2026-11-16",
     ]);
   });
 
@@ -1372,6 +1405,9 @@ describe("apply, the list builder's step after a merged run", () => {
     ) as AnswerList;
     expect([person.version, person.liveAt]).toEqual([TODAY, TODAY]);
     expect(person.entities.find((e) => e.id === "Q5432")?.popularity).toBe(7);
+    expect(person.provenance.at(-1)?.source).toBe(WIKIDATA_PROVENANCE);
+    // content:lists reads the credit as no dataset, so it asks for no pin.
+    expect([...citedDatasets(person)]).toEqual([]);
 
     const missing = cli(repo, "offline", "--apply");
     expect(missing.code).toBe(1);

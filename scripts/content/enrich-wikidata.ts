@@ -1464,9 +1464,31 @@ export function applyEnrichment(
     for (const [entity, id] of wikidataIds) entity.wikidataId = id;
     list.version = options.today;
     list.liveAt = options.today;
+    creditWikidata(list, file.fetchedAt.slice(0, 10));
     report.written = true;
   }
   return report;
+}
+
+/**
+ * The provenance entry a list gains once Wikidata data is in it, so /credits
+ * names Wikidata (CC0) wherever the enrichment supplied ids or counts (PRD
+ * §3.14). It names no `key@pin`, so content:lists reads it as no dataset.
+ */
+export const WIKIDATA_PROVENANCE =
+  "Wikidata, through the enrichment workflow: sitelink counts and QIDs";
+
+function creditWikidata(list: AnswerList, retrievedAt: string): void {
+  const credit = list.provenance.find(
+    (entry) => entry.source === WIKIDATA_PROVENANCE,
+  );
+  if (credit === undefined)
+    list.provenance.push({
+      source: WIKIDATA_PROVENANCE,
+      license: "CC0-1.0",
+      retrievedAt,
+    });
+  else if (credit.retrievedAt < retrievedAt) credit.retrievedAt = retrievedAt;
 }
 
 // ---------------------------------------------------------------------------
