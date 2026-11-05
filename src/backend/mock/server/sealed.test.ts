@@ -32,7 +32,7 @@ import { createKv, createMemoryStorage } from "@/platform/storage";
 import type { BrowserContextInfo } from "../../types";
 import { createMockBackend } from "../index";
 import { createMemoryStore } from "../store";
-import { voidRound, type MockAttemptRow } from "./sealed";
+import { voidRound, type ActResponse, type MockAttemptRow } from "./sealed";
 
 /** 09:00 UTC on Sunday 1 November 2026: Daily #42, spare set 6 (m3e1). */
 const NOV_1 = Date.UTC(2026, 10, 1, 9);
@@ -915,5 +915,159 @@ describe("round times in the snapshot (PRD §4.1.4)", () => {
     t.clock.advance(20 * 60 * 1000);
     const capped = await t.mock.sealed.get(attemptId);
     expect(capped.ok && capped.value.current?.activeMs).toBe(15 * 60 * 1000);
+  });
+});
+
+describe("clue-4 option orders across players (RITE round 2, R2-03)", () => {
+  /** 09:00 UTC on Thursday 5 November 2026: Daily #46, round 2's Daily. */
+  const NOV_5 = Date.UTC(2026, 10, 5, 9);
+
+  /**
+   * A fresh browser: its own empty store and its own device identity, with
+   * the mock's default seed, as every new player's browser has.
+   */
+  function freshBrowser(seed: number) {
+    const t = setup(NOV_5, PLUGINS);
+    t.useDevice(device(seed));
+    return t;
+  }
+
+  /** Each Mystery's clue-4 labels in display order, played on Next clue and option A. */
+  async function clue4Orders(t: ReturnType<typeof setup>) {
+    const { attemptId, rounds } = await started(t);
+    const orders: string[][] = [];
+    for (const meta of rounds) {
+      if (meta.type !== "mystery") break;
+      if (meta.index > 0) await t.mock.sealed.beginRound(attemptId, meta.index);
+      let labels: string[] = [];
+      for (let step = 1; step <= 3; step += 1) {
+        const moved = await act(t, attemptId, meta.index, step, nextClue);
+        if (!moved.ok || moved.value.verdict.kind !== "continue") {
+          throw new Error(`Next clue on clue ${step} did not move on`);
+        }
+        const open = moved.value.verdict.open;
+        if (open.family === "mystery" && open.options !== null) {
+          labels = open.options.map((option) => option.label);
+        }
+      }
+      orders.push(labels);
+      const picked = await act(t, attemptId, meta.index, 4, {
+        family: "mystery",
+        kind: "pick",
+        option: 0,
+      });
+      expect(picked).toMatchObject({
+        ok: true,
+        value: { verdict: { kind: "resolved" } },
+      });
+    }
+    return { attemptId, orders };
+  }
+
+  it("R2-03 two fresh stores with different player ids mint the same attempt id but not the same order on all three Mysteries", async () => {
+    const first = await clue4Orders(freshBrowser(11));
+    const second = await clue4Orders(freshBrowser(12));
+    // The condition round 2 met: every fresh browser's first attempt id is
+    // the same, so a shuffle forked from the id alone repeated for everyone.
+    expect(second.attemptId).toBe(first.attemptId);
+    expect(first.orders).toHaveLength(3);
+    for (const labels of [...first.orders, ...second.orders]) {
+      expect(labels).toHaveLength(4);
+    }
+    // The same four options on each Mystery, in another order somewhere.
+    first.orders.forEach((labels, index) => {
+      expect([...(second.orders[index] ?? [])].sort()).toEqual(
+        [...labels].sort(),
+      );
+    });
+    expect(second.orders).not.toEqual(first.orders);
+  });
+
+  it("R2-03 keeps one player's order for their attempt through a reload, a second tab and a replayed key", async () => {
+    const t = freshBrowser(21);
+    const { attemptId } = await started(t);
+    for (const step of [1, 2, 3]) {
+      await act(t, attemptId, 0, step, nextClue);
+    }
+    const before = await t.mock.sealed.get(attemptId);
+    const again = await t.mock.sealed.start({ kind: "today" }, START);
+    const optionsOf = (snapshot: typeof before) =>
+      snapshot.ok && snapshot.value.current?.open?.family === "mystery"
+        ? snapshot.value.current.open.options?.map((option) => option.label)
+        : null;
+    expect(optionsOf(before)).toHaveLength(4);
+    expect(optionsOf(again)).toEqual(optionsOf(before));
+  });
+});
+
+describe("one clock for the header and the stop screen (RITE round 2, R2-08)", () => {
+  it("R2-08 a verdict that resolves a round carries the round's recorded time to the second, and a continue verdict carries none", async () => {
+    const t = setup();
+    const { attemptId } = await started(t);
+    t.clock.advance(30_400);
+    const wrong = await act(t, attemptId, 0, 1, guess(WRONG[0]!));
+    expect(wrong.ok && wrong.value.verdict.kind).toBe("continue");
+    expect(wrong.ok && "activeMs" in wrong.value).toBe(false);
+    t.clock.advance(45_200);
+    const solved = await act(t, attemptId, 0, 2, guess(ANSWERS[0]!));
+    // 75,600 ms on the server, less 400 ms for each of its three requests
+    // (begin, the wrong guess, the solve), beats the 1,000 ms the device
+    // reported: 74,400 ms, which counts as 74 s.
+    expect(solved).toMatchObject({
+      ok: true,
+      value: { verdict: { kind: "resolved" }, activeMs: 74_000 },
+    });
+    // A reload reads the same figure, and so does a replay of the key.
+    const reloaded = await t.mock.sealed.get(attemptId);
+    expect(reloaded.ok && reloaded.value.resolved[0]?.activeMs).toBe(74_000);
+  });
+
+  it("R2-08 the finish adds each round's whole seconds, the same figures the verdicts carried", async () => {
+    const t = setup();
+    const { attemptId } = await started(t);
+    const recorded: number[] = [];
+    for (let index = 0; index < 4; index += 1) {
+      if (index > 0) await t.mock.sealed.beginRound(attemptId, index);
+      // 10.6 s each: 9.8 s once the allowance for its two requests (the
+      // begin and the answer) is taken.
+      t.clock.advance(10_600);
+      const result = await act(
+        t,
+        attemptId,
+        index,
+        1,
+        index < 3
+          ? guess(ANSWERS[index]!)
+          : { family: "encore", kind: "lock_in", value: 104 },
+      );
+      if (!result.ok) throw new Error(result.error.code);
+      // The field rides beside GameBackend's own (ActResponse in sealed.ts).
+      const { activeMs } = result.value as ActResponse;
+      recorded.push(activeMs ?? Number.NaN);
+      if (index === 3) {
+        // Raw, the four rounds come to 39,200 ms; in whole seconds, 40 s.
+        expect(result.value.finished?.totalMs).toBe(40_000);
+      }
+    }
+    expect(recorded).toEqual([10_000, 10_000, 10_000, 10_000]);
+    const summary = await t.mock.sealed.finish(attemptId);
+    expect(summary.ok && summary.value.totalMs).toBe(
+      recorded.reduce((sum, ms) => sum + ms, 0),
+    );
+  });
+
+  it("R2-08 a round withdrawn mid-round records no time", async () => {
+    const t = setup();
+    const { attemptId } = await started(t);
+    t.clock.advance(20_000);
+    await voidRound(t.mock.context, { dailyNumber: 42, round: 0 });
+    const withdrawn = await act(t, attemptId, 0, 1, nextClue);
+    expect(withdrawn).toMatchObject({
+      ok: true,
+      value: {
+        verdict: { kind: "resolved", reveal: { family: "withdrawn" } },
+        activeMs: 0,
+      },
+    });
   });
 });

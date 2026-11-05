@@ -5,7 +5,14 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { isTestPlayerId, parsePlayerId, parseSecret } from "@/engine/types";
+import { createFakeClock } from "@/engine/clock";
+import {
+  isTestPlayerId,
+  parsePlayerId,
+  parseSecret,
+  parseTimeZone,
+  type TimeZone,
+} from "@/engine/types";
 
 import { AREA_METHODS } from "../areas";
 import {
@@ -57,6 +64,27 @@ describe("the harness", () => {
     expect(env.backend.mode).toBe("mock");
     expect(env.identity.current().registered).toBe(false);
     expect(REAL_BACKEND).toBe(false);
+  });
+
+  it("R2-03 gives each context the mock clock its suite asked for, and seeds identities on request", async () => {
+    const at = Date.UTC(2026, 10, 5, 9);
+    const options = {
+      mockClock: () => createFakeClock(at),
+      random: (bytes: number) => new Uint8Array(bytes).fill(7),
+    };
+    const first = createContractEnv("mock", options);
+    const second = createContractEnv("mock", options);
+    // Seeded: the same bytes give the same player, in a context of its own.
+    expect(second.identity.current().playerId).toBe(
+      first.identity.current().playerId,
+    );
+    expect(second.backend).not.toBe(first.backend);
+    expect(first.options).toBe(options);
+    const today = await first.backend.daily.today(
+      parseTimeZone("UTC") as TimeZone,
+    );
+    expect(today.ok && today.value.daily.dailyNumber).toBe(46);
+    expect(today.ok && today.value.serverTime).toBe(at);
   });
 });
 

@@ -11,9 +11,12 @@
  *   that start counts as round 0's `begin_round` (§8.4). The start also
  *   says whether the player has never finished a Daily (`firstDaily`, for
  *   the first-Daily hints of PRD §3.1.3 to §3.1.5).
- * - Every snapshot carries each resolved round's server interval and the
+ * - Every snapshot carries each resolved round's recorded time and the
  *   open round's interval so far, to the second (PRD §4.1.4), so the
- *   stopwatch picks up where it was after a reload.
+ *   stopwatch picks up where it was after a reload. The verdict that
+ *   resolves a round carries the same recorded time (`activeMs`), and the
+ *   finish's total adds those whole seconds, so the header frozen at Lock
+ *   in and the stop screen agree (RITE round 2, R2-08).
  * - `beginRound` opens the current round once the previous one resolved.
  *   Repeated calls return the same open state without moving its issue
  *   time or counting a request. A voided round never opens: it resolves at
@@ -35,7 +38,8 @@
  * The plugins' judge states are stored as JSON with the attempt, so a
  * reload, a second tab or a resync all judge against the same state.
  * Option shuffles come from the judge context's rng, forked as
- * `attempt:<id>:round:<n>` (§4.2), so they repeat for an attempt.
+ * `player:<playerId>:attempt:<id>:round:<n>` (§4.2, `shuffleLabel`), so
+ * they repeat for an attempt and differ from player to player (R2-03).
  *
  * `createAttempt`, `beginRoundIn`, `actIn` and `finishAttempt` are exported
  * for the areas that start other kinds of attempt (ARC-1's archive,
@@ -290,6 +294,24 @@ export async function loadRound(
   return { content, entities };
 }
 
+/**
+ * The label a round's shuffles fork from (RITE round 2, R2-03): the player
+ * as well as the attempt. Every fresh browser's store mints the same first
+ * attempt id from the seeded stream, so an id alone gave every new player
+ * the same clue-4 order (on #46, the key at A on all three Mysteries). A
+ * player id comes from `crypto.getRandomValues` on the device, so two
+ * browsers never share one, while a reload, a second tab or a resync of
+ * one attempt still draws the same order. SQL draws its stored shuffle
+ * from `gen_random_bytes` (§4.2); `src/backend/contract/daily.contract.ts`
+ * holds both to the same spread.
+ */
+export function shuffleLabel(
+  attempt: Pick<MockAttemptRow, "id" | "playerId">,
+  index: number,
+): string {
+  return `player:${attempt.playerId}:attempt:${attempt.id}:round:${index}`;
+}
+
 function judgeContext(
   ctx: MockContext,
   attempt: MockAttemptRow,
@@ -299,7 +321,7 @@ function judgeContext(
 ): JudgeContext {
   return {
     at,
-    rng: ctx.rng.fork(`attempt:${attempt.id}:round:${index}`),
+    rng: ctx.rng.fork(shuffleLabel(attempt, index)),
     shuffle: null,
     optionsFromClue: ctx.rules.optionsFromClue,
     entities,
@@ -359,6 +381,17 @@ function toSecond(ms: number): number {
   return Math.round(ms / 1000) * 1000;
 }
 
+/**
+ * What a resolved round counts toward total time, as every response
+ * carries it: its effective time (§4.6) to the whole second. The verdict
+ * that resolves the round, the snapshot a reload reads and the finish's
+ * total all use this one figure, so the header and the stop screen add the
+ * same whole seconds (RITE round 2, R2-08).
+ */
+export function recordedRoundMs(row: MockRoundRow): number {
+  return toSecond(effectiveRoundMs(row));
+}
+
 /** The open round's server interval so far, from its first issue (PRD §4.1.4), capped. */
 function openRoundMs(row: MockRoundRow, now: EpochMs): number {
   if (row.issuedAt === null || row.open === null) return 0;
@@ -384,7 +417,7 @@ export function snapshotOf(
             reveal: row.reveal,
             // What the round counts toward total time, so the stopwatch
             // survives a reload (R1-06).
-            activeMs: toSecond(effectiveRoundMs(row)),
+            activeMs: recordedRoundMs(row),
           },
         ],
   );
@@ -599,10 +632,10 @@ export function finishAttempt(
     points: attempt.points,
     maxPoints,
     encore: encoreError,
-    totalMs: attempt.rounds.reduce(
-      (sum, row) => sum + effectiveRoundMs(row),
-      0,
-    ),
+    // Whole seconds per round, as the verdicts and snapshots carry them,
+    // so the header frozen on this total at Lock in and the stop screen
+    // read the same time (R2-08).
+    totalMs: attempt.rounds.reduce((sum, row) => sum + recordedRoundMs(row), 0),
     ranked: attempt.ranked,
     streak: null,
     facts: bestMomentFacts(db, attempt, maxPoints),
@@ -808,6 +841,15 @@ export interface ActResponse {
   finished: FinishSummary | null;
   converted: boolean;
   serverTime: EpochMs;
+  /**
+   * With a verdict that resolved the round (a reveal, or a withdrawal):
+   * the round's recorded time, `recordedRoundMs`, which the controller puts
+   * in place of the device's own measure and the offset a reload left
+   * (R2-08). Absent while the round goes on. It rides beside the response's
+   * own fields until ARCHITECTURE §7.2 and §8.4 name it, for SQL-4 and
+   * SQL-5's round_action to return as `active_ms`.
+   */
+  activeMs?: number;
 }
 
 /** A known key's answer, rebuilt from the attempt as it stands (§8.8). */
@@ -830,6 +872,7 @@ function rebuild(
       finished,
       converted: attempt.converted,
       serverTime: now,
+      activeMs: recordedRoundMs(row),
     });
   }
   if (row.open === null) return stale(db, attempt, now);
@@ -905,6 +948,8 @@ export async function actIn(
       finished: voided.finished,
       converted,
       serverTime: now,
+      // A withdrawn round counts no time (§3.13.4): 0.
+      activeMs: recordedRoundMs(attempt.rounds[voidedIndex] as MockRoundRow),
     });
   }
 
@@ -969,6 +1014,7 @@ export async function actIn(
     finished,
     converted,
     serverTime: now,
+    activeMs: recordedRoundMs(row),
   });
 }
 
