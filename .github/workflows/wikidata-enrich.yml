@@ -1,0 +1,159 @@
+name: Wikidata enrichment
+
+# ARCHITECTURE §5.5 and §11.7, ticket ENR-1. A GitHub runner can reach
+# Wikidata; the agents' sandbox can't. The fetch job reads every answer list
+# and asks Wikidata for the sitelink counts of the QIDs the lists reference
+# and for QID candidates for their x. entries (CONTENT_GUIDE §9.5.1), and
+# writes content/answer-lists/_wikidata/. The pull-request job puts that
+# output on one bot branch and opens, or updates, a pull request. Nothing
+# here changes a list entry: popularity and wikidataId change only when the
+# list builder applies a merged run and the sealed check has passed (see
+# content/answer-lists/_wikidata/README.md).
+#
+# Owner checklist (ARCHITECTURE §12.5): allow GitHub Actions to create pull
+# requests (Settings, Actions, General, Workflow permissions), or open the
+# pull request from the bot branch by hand. The job prints the link when it
+# can't open one.
+on:
+  schedule:
+    # Weekly, Monday 02:47 UTC, clear of the nightly real-backend jobs.
+    - cron: "47 2 * * 1"
+  workflow_dispatch:
+    inputs:
+      type:
+        description: "One answer list (country, city, person and so on); empty for every list"
+        required: false
+        default: ""
+        type: string
+      pull_request:
+        description: "Open or update the pull request (off: a dry run that only uploads the output)"
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+# One run at a time; a running one is never cancelled, a second one waits.
+concurrency:
+  group: wikidata-enrich
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    name: Fetch from Wikidata
+    runs-on: ubuntu-latest
+    # About 6,000 requests, one at a time, on the first full run.
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The input reaches the script through the environment, never pasted
+      # into the command, and the script accepts only a list type.
+      - name: Fetch sitelink counts and QID candidates
+        env:
+          LIST_TYPE: ${{ inputs.type }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/wikidata/out"
+          args=(--summary "$RUNNER_TEMP/wikidata/summary.md")
+          if [ -n "${LIST_TYPE:-}" ]; then
+            args+=(--type "$LIST_TYPE")
+          fi
+          node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content/enrich-wikidata.ts "${args[@]}"
+
+      # The script writes through Prettier; this proves it, so CI's format
+      # check passes on the pull request.
+      - name: Check formatting
+        run: npx prettier --check content/answer-lists/_wikidata
+
+      - name: Collect the output
+        run: cp content/answer-lists/_wikidata/*.json "$RUNNER_TEMP/wikidata/out/"
+
+      - name: Upload the output
+        uses: actions/upload-artifact@v7
+        with:
+          name: wikidata-enrichment
+          path: ${{ runner.temp }}/wikidata/
+          retention-days: 14
+          if-no-files-found: error
+
+  pull-request:
+    name: Open or update the pull request
+    needs: fetch
+    # A scheduled run is on the default branch. A manual run opens a pull
+    # request only from the default branch, and only when asked to.
+    if: github.event_name == 'schedule' || (inputs.pull_request && github.ref_name == github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # The only job that can write, so it installs and runs nothing from npm.
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      BRANCH: bot/wikidata-enrich
+      BASE: ${{ github.ref_name }}
+      OUTPUT: content/answer-lists/_wikidata
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Download the output
+        uses: actions/download-artifact@v7
+        with:
+          name: wikidata-enrichment
+          path: ${{ runner.temp }}/wikidata
+
+      - name: Commit, push and open the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$OUTPUT"
+          cp "$RUNNER_TEMP"/wikidata/out/*.json "$OUTPUT/"
+          if [ -z "$(git status --porcelain -- "$OUTPUT")" ]; then
+            echo "The output matches $BASE; nothing to propose."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch --create "$BRANCH"
+          git add -- "$OUTPUT"
+          git commit --quiet \
+            --message "Wikidata enrichment: sitelink counts and QID candidates" \
+            --message "Written by .github/workflows/wikidata-enrich.yml (ENR-1). Only content/answer-lists/_wikidata/ changes; no list entry does."
+          # The token reaches git for this one command, the way
+          # actions/checkout passes it, and is masked in the log.
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 --wrap=0)"
+          echo "::add-mask::$auth"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" \
+            push --force origin "HEAD:refs/heads/$BRANCH"
+          title="Wikidata enrichment: sitelink counts and QID candidates"
+          body="$RUNNER_TEMP/wikidata/summary.md"
+          number="$(gh pr list --head "$BRANCH" --base "$BASE" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$number" ]; then
+            gh pr edit "$number" --title "$title" --body-file "$body"
+          elif ! gh pr create --base "$BASE" --head "$BRANCH" --title "$title" --body-file "$body"; then
+            echo "::error::Pushed $BRANCH but could not open the pull request (see above). If GitHub Actions may not create pull requests here, allow it (Settings, Actions, General, Workflow permissions) or open it by hand: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/compare/$BASE...$BRANCH"
+            exit 1
+          fi
+          # A pull request opened with this token starts no workflow run, so
+          # CI is started on the branch explicitly.
+          gh workflow run ci.yml --ref "$BRANCH" \
+            || echo "::warning::Could not start CI on $BRANCH; re-run it from the pull request."
