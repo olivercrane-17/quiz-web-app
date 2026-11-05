@@ -434,6 +434,20 @@ function apiMap<T extends z.ZodType>(value: T) {
     );
 }
 
+/**
+ * The items of an array that fit the schema. A long run should not fail on
+ * one odd statement or search result: an item that doesn't fit drops out,
+ * so its fact reads as unknown and no candidate can agree through it.
+ */
+function lenientArray<T extends z.ZodType>(item: T) {
+  return z.array(z.unknown()).transform((items) =>
+    items.flatMap((value) => {
+      const result = item.safeParse(value);
+      return result.success ? [result.data as z.output<T>] : [];
+    }),
+  );
+}
+
 const Term = z.object({ value: z.string() });
 const Statement = z.object({
   rank: z.string().optional(),
@@ -442,28 +456,38 @@ const Statement = z.object({
     datavalue: z.object({ type: z.string(), value: z.unknown() }).optional(),
   }),
 });
+/**
+ * Terms and claims that don't fit read as absent (no label, no fact), which
+ * can only lose a candidate. Sitelinks stay strict: a count the run can't
+ * read fails the run rather than reaching popularity as 0.
+ */
 const ApiEntity = z.object({
   id: z.string().optional(),
   missing: z.unknown().optional(),
-  redirects: z.object({ from: z.string(), to: z.string() }).optional(),
-  labels: apiMap(Term).optional(),
-  descriptions: apiMap(Term).optional(),
-  aliases: apiMap(z.array(Term)).optional(),
-  claims: apiMap(z.array(Statement)).optional(),
+  redirects: z
+    .object({ from: z.string(), to: z.string() })
+    .optional()
+    .catch(undefined),
+  labels: apiMap(Term).optional().catch(undefined),
+  descriptions: apiMap(Term).optional().catch(undefined),
+  aliases: apiMap(lenientArray(Term)).optional().catch(undefined),
+  claims: apiMap(lenientArray(Statement)).optional().catch(undefined),
   sitelinks: apiMap(z.unknown()).optional(),
 });
 const GetEntitiesResponse = z.object({ entities: apiMap(ApiEntity) });
-const SearchResponse = z.object({
-  search: z.array(
-    z.object({
-      id: z.string(),
-      label: z.string().optional(),
-      aliases: z.array(z.string()).optional(),
-      match: z.object({ type: z.string(), text: z.string() }).optional(),
-    }),
-  ),
+const SearchHit = z.object({
+  id: z.string(),
+  label: z.string().optional().catch(undefined),
+  aliases: lenientArray(z.string()).optional().catch(undefined),
+  match: z
+    .object({ type: z.string(), text: z.string() })
+    .optional()
+    .catch(undefined),
 });
-const GetClaimsResponse = z.object({ claims: apiMap(z.array(Statement)) });
+const SearchResponse = z.object({ search: lenientArray(SearchHit) });
+const GetClaimsResponse = z.object({
+  claims: apiMap(lenientArray(Statement)),
+});
 
 function parseResponse<T extends z.ZodType>(
   schema: T,

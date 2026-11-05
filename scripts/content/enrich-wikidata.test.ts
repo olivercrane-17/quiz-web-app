@@ -665,6 +665,42 @@ describe("ENR-1 a dry run over the fixture QID list", () => {
     );
   });
 
+  it("skips a statement or a search result it can't read instead of failing the run", async () => {
+    const world: SyntheticWorld = {
+      ...FIXTURE_WORLD,
+      entities: {
+        ...FIXTURE_WORLD.entities,
+        Q296: {
+          ...FIXTURE_WORLD.entities.Q296,
+          // An unreadable statement beside a good one.
+          claims: {
+            P569: [{ type: 5 as unknown as string, value: null }, time(1840)],
+          },
+        },
+      },
+    };
+    const { deps } = stubDeps(world, (url) =>
+      url.searchParams.get("search") === "Claude Monet"
+        ? replyToResponse({
+            status: 200,
+            body: {
+              search: [
+                { label: "a result without an id" },
+                {
+                  id: "Q296",
+                  label: "Claude Monet",
+                  aliases: [7, "Monet"],
+                  match: "unexpected",
+                },
+              ],
+            },
+          })
+        : undefined,
+    );
+    const files = await fetchEnrichment(fixtureLists(), deps, NOW);
+    expect(fileOf(files, "person")).toEqual(EXPECTED.person);
+  });
+
   it("reads the real lists' QIDs at most 50 a request", async () => {
     // Only the QIDs the real lists hold, each copied from a dataset record.
     const lists = ANSWER_TYPES.filter((type) =>
