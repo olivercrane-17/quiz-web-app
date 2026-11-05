@@ -157,11 +157,15 @@ export function RestoreScreen() {
             return;
           }
           setError(null);
-          if (hasProgress) {
-            setConfirming(code);
-          } else {
-            void redeem(code);
-          }
+          // Asked after the boot, so a quick submit can't skip the confirm.
+          void bootClient().then(() => {
+            if (deviceHasProgress()) {
+              setHasProgress(true);
+              setConfirming(code);
+            } else {
+              void redeem(code);
+            }
+          });
         }}
       >
         <div className="flex flex-col gap-2">

@@ -141,7 +141,8 @@ export function ClaimFlow({ token }: { token: ClaimToken | null }) {
     const backend = await getBackend();
     const result = await backend.identity.redeemClaim(token, secret);
     if (result.ok) {
-      void logUse("ok");
+      // Logged before Today loads, which ends this page.
+      await logUse("ok");
       const done = await finishRestore({
         restored: result.value,
         secret,
