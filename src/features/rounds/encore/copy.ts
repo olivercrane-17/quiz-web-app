@@ -1,10 +1,12 @@
 /**
  * The Encore round's words (PRD §3.1.5, §4.2; DESIGN §1.4, §6.5, §12.2).
  * DESIGN's polished strings win where it has one; PRD wording fills the
- * rest, and the decisions after RITE round 1 (02-PRODUCT-DECISIONS §19)
- * override both: D2 says what the Encore does for a solo player ("one
- * number, no points"; ties on points go to the closer guess), and D16 names
- * the close band's chip "Close guess", so it never reads as a close button.
+ * rest, and the decisions after RITE rounds 1 and 2 (02-PRODUCT-DECISIONS
+ * §19, §22) override both: D2 says what the Encore does for a solo player
+ * ("one number, no points"; ties on points go to the closer guess), D21
+ * adds that time only counts after that, so the order of the two
+ * tiebreaks is said in play (R2-04), and D16 names the close band's chip
+ * "Close guess", so it never reads as a close button.
  * `encoreAnnouncementText` words the plugin's announcement for every
  * controller that runs an Encore.
  */
@@ -32,7 +34,9 @@ export const ENCORE_COPY = {
   /** D2: on every Daily, what the Encore is for when nobody else is in sight. */
   kicker: "Encore · one number, no points",
   label: "Encore",
-  tiebreak: "If you tie on points, the closer guess ranks higher.",
+  /** D21: both tiebreaks, in their order (points, then the Encore, then time). */
+  tiebreak:
+    "If you tie on points, the closer guess ranks higher. Time only counts after that.",
   field: "Your number",
   /** "You're answering 1,250 km": the amount is set in bold. */
   previewLead: "You're answering",

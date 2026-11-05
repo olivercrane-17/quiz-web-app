@@ -29,9 +29,13 @@
  * last clue, as far as the clue's top allows (R1-33: C and D sat below the
  * fold at 360 by 640).
  *
- * Keys, while focus is in the round and shortcuts are on: A to D pick an
- * option (digits 1 to 4 too, unless an option reads as a number: D6), and
- * "/" goes to the guess field (R1-32).
+ * Keys, while shortcuts are on: "/" goes to the guess field from anywhere in
+ * the round (R1-32). The option keys belong to the options group, never to
+ * the round (D20, R2-02): they act only while focus is on an option, so a
+ * letter typed on a heading, or a name typed once the guess field has given
+ * way to the options, does nothing. There a key chooses, and Enter or the
+ * same key again locks in (`MysteryOptions`). Whatever presses, keys or
+ * pointer, arrive while one pick is out, the round sends that one only.
  *
  * The component renders what the run machine holds and sends intents back;
  * it never calls the backend. Announcements of verdicts come from the
@@ -68,7 +72,7 @@ import { focusTargetProps, keepFocusOnControls } from "./focus";
 import { categoryName, roundLabel, RoundKicker } from "./kicker";
 import { ClueLadder } from "./ladder";
 import { NextClueButton, nextClueLabel } from "./next-clue";
-import { MysteryOptions, optionForKey } from "./options";
+import { MysteryOptions } from "./options";
 import { MysteryRevealCard } from "./reveal";
 import { WithdrawnCard } from "./reveal-parts";
 import { StakeIndicator } from "./stake";
@@ -191,8 +195,24 @@ function MysteryPlay({
       ? { id: hintId, text: MYSTERY_COPY.ladder.firstDailyHint }
       : null;
 
+  /**
+   * A pick that is out and not yet answered: until the round's status, its
+   * error or its options change, no second pick is sent, whether a held
+   * Enter repeats, a key follows Enter, or a click follows a key (D20: one
+   * pick only). A retry after an error goes through Retry, or a new pick
+   * once the error shows.
+   */
+  const pickOut = useRef(false);
+  useEffect(() => {
+    pickOut.current = false;
+  }, [status, error, open.clue, open.options]);
+
   function send(intent: MysteryIntent) {
     if (busy || offline) return;
+    if (intent.kind === "pick") {
+      if (pickOut.current) return;
+      pickOut.current = true;
+    }
     setLastIntent(intent);
     onIntent(intent);
   }
@@ -260,24 +280,15 @@ function MysteryPlay({
     if (spoken !== null) announce(spoken);
   }, [spoken, error]);
 
-  // Keys, while focus is inside the round (PRD §3.0.3): A to D pick (digits
-  // too unless an option is a number, D6), and "/" reaches the field (R1-32).
+  // "/" reaches the field from anywhere in the round (R1-32). The option
+  // keys are the options group's own, and act only from an option (D20).
   function onKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (!settings.shortcuts || busy || offline) return;
     if (event.altKey || event.ctrlKey || event.metaKey) return;
+    if (open.options !== null || event.key !== "/") return;
     if (typingIn(event.target)) return;
-    if (open.options === null) {
-      if (event.key !== "/") return;
-      event.preventDefault();
-      inputRef.current?.focus();
-      return;
-    }
-    const option = optionForKey(event.key, open.options);
-    if (option === null) return;
     event.preventDefault();
-    // A held key repeats: the first press is the pick.
-    if (event.repeat) return;
-    send({ family: "mystery", kind: "pick", option: option.index });
+    inputRef.current?.focus();
   }
 
   const nextClue =
@@ -360,6 +371,7 @@ function MysteryPlay({
         <div ref={optionsRef} data-options-area="">
           <MysteryOptions
             options={open.options}
+            last={open.clue >= 4}
             picked={lastIntent?.kind === "pick" ? lastIntent.option : null}
             busy={busy}
             disabled={offline}

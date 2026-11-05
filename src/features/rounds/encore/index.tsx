@@ -5,8 +5,9 @@
  * §4.2; DESIGN §6.5, §12.2), registered in ../registry.tsx.
  *
  * The kicker ("Encore · one number, no points") and the question, the line
- * that says what the Encore decides ("If you tie on points, the closer
- * guess ranks higher.", D2), then one number field with its unit beside
+ * that says what the Encore decides, and what comes after it ("If you tie
+ * on points, the closer guess ranks higher. Time only counts after that.",
+ * D2 and D21, R2-04), then one number field with its unit beside
  * it (under the number when the field is narrow in em, as at large text on
  * a phone), one line beneath that shows the parsed preview ("You're
  * answering 1,250 km", grouped in the preview and never in the field, so
@@ -43,6 +44,14 @@
  * Learn more, and "See your results". Focus lands on the result line
  * (AC-DLY-18), and Enter there continues (PRD §3.0.3). A voided Encore
  * shows the withdrawn card.
+ *
+ * "See your results" is docked at the bottom of the screen, as the stop
+ * screen docks "Done for today" (DESIGN §10.2, §12.4): at 390 by 844 it
+ * sat below the fold after Lock in, and nothing said it was there (R2-12).
+ * The dock's height is the page's bottom scroll inset, so focus never
+ * lands under it, and toasts rise above it. As the result arrives, the
+ * page scrolls the least distance that shows the result card between the
+ * sticky header and the dock, its top first when it is taller than that.
  */
 import {
   useEffect,
@@ -63,6 +72,7 @@ import {
 } from "@/engine/rounds/encore";
 import { analyticsMode } from "@/features/analytics/track";
 import { RevealActions } from "@/features/reports/reveal-actions";
+import { ScrollInset } from "@/features/shell/client";
 import { HAPTICS, vibrate } from "@/platform/haptics";
 import { playEffect } from "@/platform/sound";
 import { announce } from "@/ui/announce";
@@ -82,10 +92,14 @@ import {
   LearnMoreLink,
   SourcesLine,
   WithdrawnCard,
-  useFocusOnMount,
 } from "../mystery/reveal-parts";
 import { DISPLAY_FONT, TONE, enter } from "../mystery/tones";
-import { keepInView, useOnScreenKeyboard } from "../mystery/use-keyboard";
+import {
+  keepBetween,
+  keepInView,
+  useOnScreenKeyboard,
+  viewportBottom,
+} from "../mystery/use-keyboard";
 import {
   ENCORE_COPY,
   PREVIEW_ANNOUNCE_DELAY_MS,
@@ -607,7 +621,16 @@ function EncoreResult({
   sound: boolean;
   haptics: boolean;
 }) {
-  const headingRef = useFocusOnMount<HTMLHeadingElement>();
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const dockRef = useRef<HTMLDivElement>(null);
+  // The result line takes focus (AC-DLY-18) without the browser's scroll,
+  // and the card comes into view above the dock (R2-12): a layout effect,
+  // so it never paints anywhere else.
+  useLayoutEffect(() => {
+    headingRef.current?.focus({ preventScroll: true });
+    showAboveDock(cardRef.current, dockRef.current);
+  }, []);
   const kind = encore.valueKind;
   const bands = encoreBandsOf(encore);
   const guess = formatEncoreAmount(result.guess, result.unitShort, kind);
@@ -629,6 +652,7 @@ function EncoreResult({
   return (
     <div data-encore-reveal="" onKeyDown={continueOnEnter(onContinue)}>
       <div
+        ref={cardRef}
         data-encore-result={result.band ?? "none"}
         className={cx(
           "mt-4 rounded-3xl border p-4",
@@ -708,15 +732,38 @@ function EncoreResult({
           <LearnMoreLink name={result.learnMore} />
         </div>
       </div>
-      <Button
-        variant="primary"
-        block
-        className="mt-5"
-        onClick={onContinue}
-        data-continue=""
+      {/*
+       * The dock (R2-12, DESIGN §10.2): "See your results" held at the
+       * bottom of the screen while the result scrolls under it, as the stop
+       * screen holds "Done for today". It bleeds over the play column's
+       * 16 px gutters, its height is the page's bottom scroll inset, and
+       * toasts rise above it.
+       */}
+      <div
+        ref={dockRef}
+        data-encore-dock=""
+        data-toast-anchor=""
+        className="sticky bottom-0 z-10 -mx-4 mt-5 border-t border-border bg-background px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]"
       >
-        {continueLabel}
-      </Button>
+        <ScrollInset edge="bottom" />
+        <Button variant="primary" block onClick={onContinue} data-continue="">
+          {continueLabel}
+        </Button>
+      </div>
     </div>
   );
+}
+
+/**
+ * Scrolls the least distance that shows `card` between the sticky header
+ * and the docked button (R2-12); when it is taller than that room, its top
+ * stays in view, under the header. Without layout (a test DOM, a hidden
+ * route) the page stays put.
+ */
+function showAboveDock(card: HTMLElement | null, dock: HTMLElement | null) {
+  if (card === null || typeof window.scrollBy !== "function") return;
+  const box = card.getBoundingClientRect();
+  if (box.height === 0) return;
+  const docked = dock?.getBoundingClientRect().height ?? 0;
+  keepBetween(viewportBottom() - docked, box.bottom, box.top, "read");
 }

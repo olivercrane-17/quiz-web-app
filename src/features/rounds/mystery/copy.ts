@@ -1,9 +1,11 @@
 /**
  * The Mystery round's words (PRD §3.1.4, §4.1.3; DESIGN §1.4, §6.3, §6.4,
  * §12.2). DESIGN's polished strings win where it has one; PRD wording fills
- * the rest, and the decisions after RITE round 1 (02-PRODUCT-DECISIONS §19)
- * override both: D10's three stamps, D14's short placeholder nouns and D17's
- * "No matches" line. One ellipsis character, never three dots.
+ * the rest, and the decisions after RITE rounds 1 and 2
+ * (02-PRODUCT-DECISIONS §19, §22) override both: D10's three stamps, D14's
+ * short placeholder nouns and D17's "No matches" line; D20's key legend,
+ * D24's clue-4 line and D26's match count. One ellipsis character, never
+ * three dots.
  *
  * `mysteryAnnouncementText` turns the plugin's announcement data into the
  * status message ("Not Heat. Clue 3 is in. Now worth 2. ..."), so every
@@ -100,6 +102,19 @@ const capitalize = (text: string) =>
 
 const points = (n: number) => `${String(n)} ${n === 1 ? "point" : "points"}`;
 
+function matchCount(type: AnswerType | null, n: number): string {
+  return n === 1
+    ? `1 ${answerWords(type).one} matches`
+    : `${String(n)} ${answerWords(type).many} match`;
+}
+
+function showingCount(shown: number): string {
+  return `Showing ${String(shown)}, so keep typing.`;
+}
+
+/** Clue 4's rule, after "Pick one of four" (D24). */
+const ONE_PICK = "One pick: a wrong one scores 0.";
+
 export const MYSTERY_COPY = {
   roundLabel: (ordinal: number, ofType: number) =>
     `Mystery ${String(ordinal)} of ${String(ofType)}`,
@@ -163,10 +178,15 @@ export const MYSTERY_COPY = {
     listLabel: (type: AnswerType | null, query: string) =>
       `${capitalize(answerWords(type).many)} matching ${query}`,
     /** The count announced on each change: "4 people match", "1 film matches". */
-    count: (type: AnswerType | null, n: number) =>
-      n === 1
-        ? `1 ${answerWords(type).one} matches`
-        : `${String(n)} ${answerWords(type).many} match`,
+    count: matchCount,
+    /**
+     * D26: under the list when more match than it shows (PRD §4.1.3 caps
+     * it), so nobody goes looking for the seventh.
+     */
+    showing: showingCount,
+    /** D26, spoken: "7 countries match. Showing 6, so keep typing." */
+    countMore: (type: AnswerType | null, total: number, shown: number) =>
+      `${matchCount(type, total)}. ${showingCount(shown)}`,
     /** Spoken when a row is chosen, since the field's new value is not. */
     selected: (name: string) => `${name} selected.`,
     /** D17: "use", not "tap", since a keyboard may be what the player has. */
@@ -178,14 +198,26 @@ export const MYSTERY_COPY = {
   },
 
   options: {
+    /** The options' line, and the group's name, while a later clue is still to come. */
     lead: "Pick one of four",
-    group: "Four options",
     /**
-     * The keys that pick (D6), as the options' description: letters always,
-     * digits only when no option reads as a number.
+     * D24: the line on clue 4, where the one pick is the last chance, so
+     * nobody has to guess that a wrong one scores 0 (R2-16).
      */
-    keys: (digits: boolean) =>
-      digits ? "Keys A to D, or 1 to 4, pick." : "Keys A to D pick.",
+    lastLead: `Last clue. Pick one of four. ${ONE_PICK}`,
+    /** What the announcement of clue 4 adds after "Pick one of four." (D24). */
+    onePick: ONE_PICK,
+    /**
+     * D20: under the options once a keyboard is in use, and the options'
+     * description: a key chooses, Enter (or the same key again) locks in.
+     * Digits choose too where no option reads as a number (D6); each
+     * option names its own keys in `aria-keyshortcuts`.
+     */
+    legend: "Keys A to D choose. Enter locks in.",
+    /** The chosen option's description, read as a key moves focus to it (D20). */
+    chosen: "Chosen. Enter locks it in.",
+    /** Said when a key chooses the option that already has focus, which reads nothing new. */
+    chosenNamed: (label: string) => `${label} chosen. Enter locks it in.`,
   },
 
   errors: {
@@ -306,8 +338,11 @@ export function mysteryAnnouncementText(
         clue === 4
           ? `Last clue, now worth ${points(worth)}.`
           : `Clue ${String(clue)} is in. Now worth ${String(worth)}.`;
+      // The options' line, as clue 4 shows it: one pick, and a wrong one scores 0 (D24).
       const pick =
-        clue >= rules.optionsFromClue ? ` ${MYSTERY_COPY.options.lead}.` : "";
+        clue >= rules.optionsFromClue
+          ? ` ${MYSTERY_COPY.options.lead}.${clue === 4 ? ` ${MYSTERY_COPY.options.onePick}` : ""}`
+          : "";
       return announcement.kind === "wrong_guess"
         ? `Not ${announcement.guess}. ${opened} ${announcement.clueText}${pick}`
         : `${opened}${pick}`;

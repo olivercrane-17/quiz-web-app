@@ -115,9 +115,10 @@ export function useCountUp(
  * heading takes focus without the browser's scroll, which would leave the
  * heading at the screen's top edge with the stamp and kicker under the
  * sticky header, and the card then starts just below the header (R1-12,
- * `focusReveal`). A heading outside such a card, like the Encore's result
- * line under its field, is brought into view by the browser as it takes
- * focus. A layout effect, so the reveal never paints in the wrong place.
+ * `focusReveal`). A heading outside such a card is brought into view by
+ * the browser as it takes focus. (The Encore's result line does its own:
+ * its card shows above the docked button, R2-12.) A layout effect, so the
+ * reveal never paints in the wrong place.
  */
 export function useFocusOnMount<T extends HTMLElement>(): Ref<T> {
   const ref = useRef<T>(null);

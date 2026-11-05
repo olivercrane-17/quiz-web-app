@@ -20,20 +20,26 @@
  * - Arrow keys move the highlight (`aria-activedescendant`), Enter on a
  *   highlighted row selects it, Escape closes the list (then clears the
  *   field), and Tab leaves. When exactly one selectable row matches, it is
- *   highlighted by itself (D5), so Enter or Go picks it and a second Enter
- *   submits; namesakes still pick nothing. With nothing highlighted, Enter
+ *   highlighted by itself (D5); namesakes still pick nothing. Then Guess,
+ *   or Go on the on-screen keyboard, guesses that one match at once (D23,
+ *   R2-13), while Enter from a hardware keyboard keeps D5's two steps: it
+ *   picks, and a second Enter submits. With nothing highlighted, Enter
  *   selects the one entity whose name, alias or display equals the text
  *   exactly, and nothing for namesakes or no match (AC-SUG-05). With a
  *   selection in place, Enter submits. Editing the text clears the
- *   selection, and Guess stays disabled until there is one.
- * - Guess, or Enter, with nothing picked shows the field's description,
+ *   selection, and Guess stays disabled until there is one, or one match
+ *   highlighted.
+ * - Guess, or Enter, with nothing to guess shows the field's description,
  *   "Pick a name from the list, then Guess.", under the field and says it
- *   (R1-29). A chosen name shows in full under the field (R1-28): the field
- *   itself may only have room for part of it.
+ *   (R1-29); with one match highlighted it never shows, since Guess takes
+ *   it (D23). A chosen name shows in full under the field (R1-28): the
+ *   field itself may only have room for part of it.
  * - The count is announced on each change ("4 people match"), a moment
- *   after typing settles, so screen readers aren't flooded. A list that
- *   failed to load is announced once, and the loading and failed lines
- *   describe the field.
+ *   after typing settles, so screen readers aren't flooded. When more match
+ *   than the list shows (PRD §4.1.3 caps it at 6), it says so: "7 countries
+ *   match. Showing 6, so keep typing.", and the second sentence also shows
+ *   under the list (D26, R2-21). A list that failed to load is announced
+ *   once, and the loading and failed lines describe the field.
  * - Guess, Clear and the rows keep focus in the field on touch (they cancel
  *   the pointer-down blur), so the keyboard stays up after a wrong guess.
  * - A wrong guess clears the field (`resetKey` changes); Next clue keeps
@@ -297,16 +303,22 @@ export function GuessCombobox({
   const lone = listOpen ? loneSelectableRow(rows, result.total) : -1;
   const current = active >= 0 ? active : lone;
   const activeRow = listOpen && current >= 0 ? rows[current] : undefined;
+  /** D23: the one selectable match, highlighted, which Guess and Go take at once. */
+  const loneMatch = lone >= 0 && current === lone ? activeRow : undefined;
   const optionId = (index: number) => `${id}-option-${String(index)}`;
   const locked = busy || disabled;
   const failed = list?.status === "failed";
   const loading = list?.status === "loading" && hasQuery && selection === null;
   const hintShown = nudged && selection === null && !locked;
+  /** D26: more match than the list shows. */
+  const moreThanShown = listOpen && result.total > rows.length;
 
   const countText = noMatches
     ? words.noMatches
     : listOpen
-      ? words.count(answerType, result.total)
+      ? moreThanShown
+        ? words.countMore(answerType, result.total, rows.length)
+        : words.count(answerType, result.total)
       : "";
 
   // Speak the count once typing settles (DESIGN §6.4).
@@ -439,6 +451,29 @@ export function GuessCombobox({
     onGuess(selection.entityId);
   }
 
+  /**
+   * D23: Guess, or Go, with the one match highlighted guesses it in one
+   * step. The field shows the name while it is judged, as after a pick; the
+   * verdict is what's said next, so the pick itself isn't announced.
+   */
+  function guessLone(row: Suggestion) {
+    if (row.alreadyGuessed || locked) return;
+    setSelection(row);
+    setQuery(row.display);
+    setExpanded(false);
+    setActive(-1);
+    setNudged(false);
+    if (sound) playEffect("suggestion_picked");
+    onGuess(row.entityId);
+  }
+
+  /** Guess pressed: the selection, else the one highlighted match (D23), else how to pick. */
+  function pressGuess() {
+    if (selection !== null) submit();
+    else if (loneMatch !== undefined) guessLone(loneMatch);
+    else nudge();
+  }
+
   function clear() {
     setQuery("");
     setSelection(null);
@@ -482,6 +517,13 @@ export function GuessCombobox({
       case "Enter": {
         event.preventDefault();
         if (locked) return;
+        // With the on-screen keyboard up, Enter is its Go key, which guesses
+        // the one highlighted match like Guess does (D23); a hardware Enter
+        // keeps D5's pick, then submit.
+        if (loneMatch !== undefined && keyboard.open) {
+          guessLone(loneMatch);
+          return;
+        }
         if (activeRow !== undefined) {
           choose(activeRow);
           return;
@@ -682,18 +724,19 @@ export function GuessCombobox({
         <Button
           variant="primary"
           size="small"
-          disabled={selection === null || disabled}
+          // Ready with a pick, or with the one match highlighted (D23).
+          disabled={(selection === null && loneMatch === undefined) || disabled}
           focusableWhenDisabled
           busy={busy}
           // The label holds still while busy; "Checking…" shows under the field.
           slowLabel={words.button}
           onMouseDown={keepFieldFocus}
-          // A press with nothing picked says how to pick (R1-29); the
+          // A press with nothing to guess says how to pick (R1-29); the
           // button's own click is blocked while it's disabled.
           onClickCapture={() => {
-            if (selection === null) nudge();
+            if (selection === null && loneMatch === undefined) nudge();
           }}
-          onClick={submit}
+          onClick={pressGuess}
           data-guess=""
           // The marked utilities override the variant's own (cx doesn't
           // merge them), so Guess stays small inside the field, and takes
@@ -855,6 +898,17 @@ export function GuessCombobox({
           data-guess-notes=""
           className="col-start-1 col-end-[-1] row-start-3"
         >
+          {moreThanShown ? (
+            // D26: right under the list, so nobody hunts for a seventh row.
+            // The count says it in full to screen readers already.
+            <p
+              aria-hidden="true"
+              data-showing=""
+              className={cx("mt-2 text-[0.9375rem] font-semibold", TONE.ink2)}
+            >
+              {words.showing(rows.length)}
+            </p>
+          ) : null}
           {/* The field's description, shown once Guess or Enter finds nothing picked. */}
           <p
             id={hintId}

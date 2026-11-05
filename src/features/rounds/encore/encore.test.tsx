@@ -247,7 +247,7 @@ describe("EncoreRound, entering a number", () => {
     ).toBeInTheDocument();
     expect(
       within(round).getByText(
-        "If you tie on points, the closer guess ranks higher.",
+        /^If you tie on points, the closer guess ranks higher\./,
       ),
     ).toBeInTheDocument();
     expect(round).toHaveTextContent(/no points/);
@@ -921,5 +921,112 @@ describe("the Encore's copy", () => {
 
   it("uses the same default bands as src/config/shared.json, which SQL reads", () => {
     expect(DEFAULT_ENCORE_BANDS).toEqual(SHARED.encoreBands);
+  });
+});
+
+describe("EncoreRound after RITE round 2", () => {
+  it("R2-04 D21 says both tiebreaks in their order: the closer guess, then time", () => {
+    // All five asked whether the Encore or time breaks a tie first.
+    play();
+    const round = document.querySelector('[data-round="encore"]');
+    if (!(round instanceof HTMLElement)) throw new Error("no Encore");
+    expect(
+      within(round).getByText(
+        "If you tie on points, the closer guess ranks higher. Time only counts after that.",
+      ),
+    ).toBeVisible();
+    expect(ENCORE_COPY.tiebreak).toBe(
+      "If you tie on points, the closer guess ranks higher. Time only counts after that.",
+    );
+  });
+
+  it("R2-12 docks See your results at the bottom after Lock in, as the stop screen docks Done for today", async () => {
+    // Priya and Marcus at 390 by 844: the button sat below the fold.
+    const { user, onContinue } = play();
+    expect(document.querySelector("[data-encore-dock]")).toBeNull();
+    await user.type(numberField(), "1200{Enter}");
+    const dock = document.querySelector<HTMLElement>("[data-encore-dock]");
+    if (dock === null) throw new Error("no dock");
+    const results = within(dock).getByRole("button", {
+      name: "See your results",
+    });
+    // Sticky at the bottom, bled over the column's gutters, toasts above it,
+    // and its height the page's bottom scroll inset.
+    expect(dock.className).toMatch(/(^| )sticky( |$)/);
+    expect(dock.className).toMatch(/(^| )bottom-0( |$)/);
+    expect(dock.className).toMatch(/(^| )-mx-4( |$)/);
+    expect(dock).toHaveAttribute("data-toast-anchor");
+    expect(
+      dock.querySelector('[data-scroll-inset="bottom"]'),
+    ).toBeInTheDocument();
+    // After the result card, in reading and focus order.
+    const card = document.querySelector("[data-encore-result]");
+    expect(
+      card !== null &&
+        Boolean(
+          card.compareDocumentPosition(dock) & Node.DOCUMENT_POSITION_FOLLOWING,
+        ),
+    ).toBe(true);
+    // The result line still takes focus (AC-DLY-18), and the dock continues.
+    expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
+    await user.click(results);
+    expect(onContinue).toHaveBeenCalledOnce();
+  });
+
+  describe("scrolling the result into view", () => {
+    /** Lays the result card and the dock out at these boxes, in a window this tall. */
+    function layOut(
+      card: { top: number; height: number },
+      dockHeight: number,
+      windowHeight: number,
+    ) {
+      vi.stubGlobal("innerHeight", windowHeight);
+      const scrollBy = vi.fn();
+      vi.stubGlobal("scrollBy", scrollBy);
+      vi.spyOn(
+        HTMLElement.prototype,
+        "getBoundingClientRect",
+      ).mockImplementation(function (this: HTMLElement) {
+        if (this.hasAttribute("data-encore-result")) {
+          return DOMRect.fromRect({ x: 16, y: card.top, width: 358, ...card });
+        }
+        if (this.hasAttribute("data-encore-dock")) {
+          return DOMRect.fromRect({
+            x: 0,
+            y: windowHeight - dockHeight,
+            width: 390,
+            height: dockHeight,
+          });
+        }
+        return DOMRect.fromRect({ x: 0, y: 0, width: 0, height: 0 });
+      });
+      return scrollBy;
+    }
+
+    it("R2-12 scrolls the least distance that shows the whole result card above the dock", async () => {
+      // 390 by 844: the card's 450 px start at 560, so it ends at 1010; the
+      // dock takes the bottom 80 px, so the card must end by 756 (8 px gap).
+      const scrollBy = layOut({ top: 560, height: 450 }, 80, 844);
+      const { user } = play();
+      await user.type(numberField(), "1200{Enter}");
+      expect(scrollBy).toHaveBeenCalledOnce();
+      expect(scrollBy).toHaveBeenCalledWith({ top: 254, behavior: "instant" });
+      expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
+    });
+
+    it("R2-12 keeps a card taller than the room with its top in view, under the top edge", async () => {
+      // A 1,000 px card at 400 can't fit: its top goes to the edge's 8 px gap.
+      const scrollBy = layOut({ top: 400, height: 1000 }, 80, 844);
+      const { user } = play();
+      await user.type(numberField(), "1200{Enter}");
+      expect(scrollBy).toHaveBeenCalledWith({ top: 392, behavior: "instant" });
+    });
+
+    it("R2-12 leaves a card that already shows above the dock where it is", async () => {
+      const scrollBy = layOut({ top: 200, height: 400 }, 80, 844);
+      const { user } = play();
+      await user.type(numberField(), "1200{Enter}");
+      expect(scrollBy).not.toHaveBeenCalled();
+    });
   });
 });
