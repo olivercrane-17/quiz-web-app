@@ -133,7 +133,7 @@ begin
     format('the alert names the rules the spare breaks: %s', v_spare);
 end
 $$;
-select 'PASS SQL-3 a scheduled Daily naming a retired item publishes the first unused spare in its date''s order, with an alert naming the rules it breaks';
+select 'PASS SQL-3 a scheduled Daily naming a retired item publishes the first unused spare in the spare order of its date, with an alert naming the rules it breaks';
 
 do $$
 begin
