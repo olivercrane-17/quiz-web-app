@@ -609,9 +609,11 @@ function scan(roots: readonly string[]): { scanned: number; found: string[] } {
 }
 
 /**
- * The build half needs a build. CI sets QZ_BUNDLE_SCAN=1 after npm run build
- * (the content-sealed job), and then a missing or empty build fails; without
- * it and without a build the test is skipped, visibly.
+ * The build half needs a build: it runs whenever one is there, and with
+ * QZ_BUNDLE_SCAN=1 a missing or empty build fails it. Without either it is
+ * skipped, visibly. CI scans its build with check:lazy in the verify job
+ * (scripts/checks/lazy-markers.mjs), which reads sealed ids as SEALED_ID
+ * here does.
  */
 const BUILD_REQUIRED = process.env.QZ_BUNDLE_SCAN === "1";
 const BUILT = BUILD_ROOTS.every(

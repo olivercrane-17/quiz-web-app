@@ -25,6 +25,7 @@ import { dirname, join, resolve } from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
+import { ID_PATTERNS } from "../../src/content/schema/primitives.ts";
 import { deriveSealKeys, envelopeText, sealBytes } from "../content/crypto.ts";
 import {
   CheckError,
@@ -493,6 +494,43 @@ describe("the sealed-content scan", () => {
     expect(isReservedExampleId("e.0104")).toBe(false);
     expect(isReservedExampleId("r.party.93")).toBe(true);
     expect(isReservedExampleId("r.party.07")).toBe(false);
+  });
+
+  it("AC-CNT-07 takes every sealed id form the content schema allows, room packs whose names hold digits included, as SQL-3's bundle scan does", async () => {
+    const sealed = [
+      "m.geo.0142",
+      "e.0113",
+      "r.party.07",
+      "r.top-10.01",
+      "r.90s-pop.04",
+      "r.y2k.12",
+      "r.harbour-lights.15",
+    ];
+    for (const id of sealed) {
+      const pattern = id.startsWith("m.")
+        ? ID_PATTERNS.mystery
+        : id.startsWith("e.")
+          ? ID_PATTERNS.encore
+          : ID_PATTERNS.room;
+      expect(pattern.test(id), id).toBe(true);
+      expect(sealedIdsIn(`"${id}"`), id).toEqual([id]);
+    }
+    // Fixtures stay out, and so do worked examples with digits in the pack.
+    expect(sealedIdsIn('"fx.r.fx-party.15" "fx.r.dly.01"')).toEqual([]);
+    expect(isReservedExampleId("r.top-10.93")).toBe(true);
+    expect(isReservedExampleId("r.top-10.07")).toBe(false);
+
+    const build = fakeBuild();
+    build.write(
+      ".next/server/app/index.html",
+      '<!DOCTYPE html><html><body><h1>Today</h1><script>self.__next_f.push([1,"r.top-10.01"])</script></body></html>',
+    );
+    const { problems } = await runCheck({ root: build.root });
+    expect(problems).toEqual([
+      expect.stringContaining(
+        ".next/server/app/index.html holds the sealed id r.top-10.01",
+      ),
+    ]);
   });
 
   it("reads ids as whole words only", () => {

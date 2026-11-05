@@ -99,10 +99,21 @@ export const PACKAGE_MARKERS = [
   },
 ];
 
-/** §5.4's sealed ids: Mysteries, Encores and room questions. */
-const SEALED_ID = /(?<!fx\.)\b(m\.[a-z]+\.\d{4}|e\.\d{4}|r\.[a-z-]+\.\d{2})\b/g;
+/**
+ * §5.4's sealed ids: Mysteries, Encores and room questions. A room pack's
+ * name is kebab case with digits allowed (`r.top-10.01`, `r.y2k.12`), as
+ * ID_PATTERNS.room in src/content/schema/primitives.ts takes it and SQL-3's
+ * bundle scan (scripts/content/release.test.ts) reads it.
+ */
+const ROOM_PACK = "[a-z0-9]+(?:-[a-z0-9]+)*";
+const SEALED_ID = new RegExp(
+  `(?<!fx\\.)\\b(m\\.[a-z]+\\.\\d{4}|e\\.\\d{4}|r\\.${ROOM_PACK}\\.\\d{2})\\b`,
+  "g",
+);
 /** The content guide's worked examples (CONTENT_GUIDE §12.0), which the validator keeps out of content/. */
-const RESERVED_EXAMPLE_ID = /^(?:m\.[a-z]+\.00\d\d|e\.00\d\d|r\.[a-z-]+\.9\d)$/;
+const RESERVED_EXAMPLE_ID = new RegExp(
+  `^(?:m\\.[a-z]+\\.00\\d\\d|e\\.00\\d\\d|r\\.${ROOM_PACK}\\.9\\d)$`,
+);
 
 /** Files the scan can't read as text; nothing sealed travels in a font or an image. */
 const BINARY_EXTENSIONS = new Set(
