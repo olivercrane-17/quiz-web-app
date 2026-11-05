@@ -1,20 +1,21 @@
 /**
  * Extension point (ARCHITECTURE §2.3): the stop screen's claim offer, the
  * in-app claim link (PRD §3.10.4): "Playing inside WhatsApp? Open Knewt in
- * your browser to keep your streak.", with that app's steps (ctx.browser).
+ * your browser to keep your streak.", with that app's steps
+ * (`ctx.browser`) and the sync code below as the fallback. Second in the
+ * offers' priority, after repair.
  *
- * A stub until IDN-2, which keeps the export and fills isEligible and Card
- * (through OfferCard from @/features/offers/client). Until then it is never
- * eligible, so it never shows.
+ * Eligible inside an in-app browser after its first finish there, until
+ * the player takes it, and again a week later at most three times in all
+ * (`claimOfferEligible`). The card loads with dynamic() (./cards.tsx).
  */
 import type { OfferProvider } from "@/features/offers";
 
-function ClaimOfferCard() {
-  return null;
-}
+import { ClaimOfferCard } from "./cards";
+import { claimOfferEligible } from "./eligibility";
 
 export const claimOffer: OfferProvider = {
   id: "claim",
-  isEligible: () => false,
+  isEligible: claimOfferEligible,
   Card: ClaimOfferCard,
 };
