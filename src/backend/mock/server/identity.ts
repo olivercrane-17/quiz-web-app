@@ -27,23 +27,59 @@
  * helpers every other area authenticates with (`authenticate`,
  * `verifyCredential`, `confirmRegistered`) and dates with (`resolveZone`,
  * `playerToday`, the effective today of §8.7). IDN-1 owns the area from
- * Wave 3 and added the limits and low trust; IDN-2 adds sync codes and
- * claims. Counter rows live in `rateCounters`, one per bucket, subject and
- * aligned window, which other areas' limits can share through `hitLimit`.
+ * Wave 3 and added the limits and low trust. Counter rows live in
+ * `rateCounters`, one per bucket, subject and aligned window, which other
+ * areas' limits can share through `hitLimit`.
+ *
+ * IDN-2 added sync codes and claim links (§8.4, §9.2, §9.5), following
+ * `create_sync_code`, `redeem_sync_code`, `create_claim`, `peek_claim` and
+ * `redeem_claim` of supabase/migrations/20261104000400_identity.sql:
+ *
+ * - A player has one sync code and one claim at a time, each stored as a
+ *   hash: a new code ends the old one (AC-SYN-03), and a new claim ends
+ *   the previous token, which then reads `not_found`.
+ * - Redeeming adds a credential for the secret the device minted (`sync`
+ *   or `claim`), so the other device keeps working; the same secret again
+ *   only touches its row. A player keeps the 10 most recently used
+ *   credentials (PRD §3.10.1).
+ * - A claim lasts 10 minutes and redeems once. A used or expired claim is
+ *   `expired` with `current: { used }` (`claim_link_used`); a token nobody
+ *   holds is `not_found`.
+ * - Limits (§8.6), one browser being one IP subject: 5 new codes per
+ *   player a day; 5 failed redemptions per 15 minutes and 20 a day, both
+ *   counted before the code is looked at and given back when it is right
+ *   (AC-SYN-04); 5 claims per player an hour, a retried token counting
+ *   once; 10 peeks and redemptions an hour together.
+ * - Codes are typed (AC-SYN-02): a code that can't be one is
+ *   `invalid_input` without costing an attempt, as the Supabase adapter
+ *   never sends it.
+ * - What a restore answers (`RestoredProfile`): the profile, the streak
+ *   and the last Daily from `identityStreak` and `identityLastDaily`, the
+ *   mock's bodies for the SQL hooks SQL-4 and SQL-6 fill. STK-1 replaces
+ *   `identityStreak` with its streak area's evaluation.
  */
 import type { BrowserContextKind, Platform } from "@/analytics/dictionary";
 import { TUNABLES } from "@/config/tunables";
-import { localDateOf } from "@/engine/time";
+import { addDays, localDateOf } from "@/engine/time";
 import {
+  CROCKFORD_ALPHABET,
   TEST_PLAYER_PREFIX,
+  parseClaimToken,
   parsePlayerId,
   parseSecret,
+  parseSyncCode,
   parseTimeZone,
+  type ClaimPreview,
+  type ClaimToken,
+  type DailyIdentity,
   type EpochMs,
   type LocalDate,
   type PlayerId,
   type Profile,
+  type RestoredProfile,
   type Result,
+  type Secret,
+  type SyncCode,
   type TimeZone,
 } from "@/engine/types";
 
@@ -54,7 +90,15 @@ import type { MockContext } from "../context";
 import type { MockDb } from "../store";
 import type { MockAttemptRow } from "./sealed";
 
-/** The methods this area really implements; the mock contract run skips the rest (§7.5). */
+/**
+ * The methods the shared contract suite runs against this area; it skips
+ * the rest (§7.5). The sync-code and claim methods are built too, but the
+ * suite's tests of them restore on "another device" from
+ * `createContractEnv`, which gives every context its own memory store, so
+ * against the mock that device meets an empty server. They join this list
+ * once the harness lets one test's contexts share a mock server; until
+ * then identity.transfer.test.ts runs the same cases on one shared store.
+ */
 export const MOCK_CAPABILITIES: readonly (keyof IdentityApi)[] = [
   "register",
   "getProfile",
@@ -572,6 +616,283 @@ export function playerToday(
   return today;
 }
 
+// ---------------------------------------------------------------------------
+// Sync codes and claim links (§8.4, §9.2, §9.5)
+// ---------------------------------------------------------------------------
+
+const DAY = 24 * HOUR;
+
+/** How long a claim link works (PRD §3.10.4). */
+export const CLAIM_TTL_MS = 10 * MINUTE;
+/** The device credentials a player keeps; an 11th replaces the least recently used (PRD §3.10.1). */
+export const MAX_CREDENTIALS = 10;
+/** Characters in a sync code (§9.2). */
+const SYNC_CODE_LENGTH = 16;
+
+const { syncRedeem, claim: claimLimits } = TUNABLES.rateLimits;
+
+/** The limits of §8.4 for codes and claims, in SQL's buckets. */
+export const TRANSFER_LIMITS = {
+  /** New sync codes per player a day (`sync_create_1d`). */
+  syncCreate: { bucket: "sync_create_1d", windowMs: DAY, max: 5 },
+  /** Failed redemptions per IP subject per 15 minutes (AC-SYN-04). */
+  syncFail: {
+    bucket: "sync_fail_15m",
+    windowMs: 15 * MINUTE,
+    max: syncRedeem.failuresPerIpPer15Min,
+  },
+  /** Failed redemptions per IP subject a day. */
+  syncDay: { bucket: "sync_1d", windowMs: DAY, max: syncRedeem.failuresPerDay },
+  /** Claims created per player an hour. */
+  claimCreate: {
+    bucket: "claim_player_1h",
+    windowMs: HOUR,
+    max: claimLimits.createdPerPlayerPerHour,
+  },
+  /** Peeks and redemptions per IP subject an hour, together. */
+  claimIp: {
+    bucket: "claim_ip_1h",
+    windowMs: HOUR,
+    max: claimLimits.redemptionsPerIpPerHour,
+  },
+} as const satisfies Record<string, MockLimit>;
+
+/** One player's sync code (§8.3 `private.sync_codes`): only its hash. */
+export interface MockSyncCodeRow {
+  playerId: PlayerId;
+  codeHash: string;
+  createdAt: EpochMs;
+}
+
+/** One player's claim (§8.3 `private.claims`): a new one ends the previous token. */
+export interface MockClaimRow {
+  playerId: PlayerId;
+  tokenHash: string;
+  createdAt: EpochMs;
+  expiresAt: EpochMs;
+  redeemedAt: EpochMs | null;
+}
+
+export interface TransferTables {
+  /** By player id. */
+  syncCodes: Record<string, MockSyncCodeRow>;
+  /** By player id. */
+  claims: Record<string, MockClaimRow>;
+  /** Draws for new codes, so codes repeat run to run for one seed (§7.4). */
+  syncCodeDraws: { next: number };
+}
+
+/** The tables, created on first write. */
+export function transferTables(db: MockDb): TransferTables {
+  db.syncCodes ??= {};
+  db.claims ??= {};
+  db.syncCodeDraws ??= { next: 1 };
+  return db as unknown as TransferTables;
+}
+
+function readTransferTables(
+  db: Readonly<MockDb>,
+): Pick<TransferTables, "syncCodes" | "claims"> {
+  return {
+    syncCodes: (db.syncCodes ?? {}) as Record<string, MockSyncCodeRow>,
+    claims: (db.claims ?? {}) as Record<string, MockClaimRow>,
+  };
+}
+
+/** The subject of a per-player limit. */
+const playerSubject = (playerId: PlayerId) => `player:${playerId}`;
+
+/**
+ * `private.unhit_*` (§8.6): gives back one hit in the current window, for an
+ * attempt that turned out to count for nothing (a right sync code).
+ */
+export function unhitLimit(
+  db: MockDb,
+  limit: MockLimit,
+  subject: string,
+  now: EpochMs,
+): void {
+  const rows = (db.rateCounters ?? {}) as Record<string, MockRateCounterRow>;
+  const key = rateCounterKey(
+    limit.bucket,
+    subject,
+    windowStartOf(now, limit.windowMs),
+  );
+  const row = rows[key];
+  if (row !== undefined && row.hits > 0) row.hits -= 1;
+}
+
+function limited(hit: MockLimitResult, scope: "ip" | "player"): Result<never> {
+  return fail("rate_limited", {
+    retryAfterMs: hit.retryAfterMs,
+    limitScope: scope,
+  });
+}
+
+/**
+ * `private.add_credential`: the same secret again only touches its row;
+ * else a new credential, replacing the player's least recently used one
+ * once it holds 10 (order: last use, creation, hash).
+ */
+export function addCredential(
+  db: MockDb,
+  playerId: PlayerId,
+  secret: Secret,
+  source: "sync" | "claim",
+  now: EpochMs,
+): void {
+  const { credentials } = identityTables(db);
+  const hash = hashSecret(secret);
+  const key = credentialKey(playerId, hash);
+  const existing = credentials[key];
+  if (existing !== undefined) {
+    existing.lastUsedAt = now;
+    return;
+  }
+  const held = Object.entries(credentials)
+    .filter(([, row]) => row.playerId === playerId)
+    .sort(
+      ([, a], [, b]) =>
+        a.lastUsedAt - b.lastUsedAt ||
+        a.createdAt - b.createdAt ||
+        (a.secretHash < b.secretHash
+          ? -1
+          : a.secretHash > b.secretHash
+            ? 1
+            : 0),
+    );
+  if (held.length >= MAX_CREDENTIALS) {
+    const [oldest] = held;
+    if (oldest !== undefined) delete credentials[oldest[0]];
+  }
+  credentials[key] = {
+    playerId,
+    secretHash: hash,
+    source,
+    createdAt: now,
+    lastUsedAt: now,
+  };
+}
+
+/** The player's finished Dailies, newest finish first. */
+function finishedDailiesOf(
+  db: Readonly<MockDb>,
+  playerId: PlayerId,
+): MockAttemptRow[] {
+  const attempts = (db.attempts ?? {}) as Record<string, MockAttemptRow>;
+  return Object.values(attempts)
+    .filter(
+      (attempt) =>
+        attempt.playerId === playerId &&
+        attempt.status === "finished" &&
+        attempt.dailyNumber !== null &&
+        attempt.localDate !== null,
+    )
+    .sort((a, b) => (b.finishedAt ?? 0) - (a.finishedAt ?? 0));
+}
+
+/**
+ * `private.identity_last_daily` (SQL-4's hook): the Daily the player
+ * finished most recently, as the attempt names it, or null.
+ */
+export function identityLastDaily(
+  db: Readonly<MockDb>,
+  playerId: PlayerId,
+): DailyIdentity | null {
+  const [latest] = finishedDailiesOf(db, playerId);
+  if (
+    latest === undefined ||
+    latest.dailyNumber === null ||
+    latest.localDate === null
+  ) {
+    return null;
+  }
+  return { dailyNumber: latest.dailyNumber, date: latest.localDate };
+}
+
+/**
+ * `private.identity_streak` (SQL-6's hook): the streak a restore or a claim
+ * shows. Until STK-1 gives the mock its streak area, it counts the run of
+ * consecutive dates with a finished ranked Daily: `current` while the run
+ * reaches the player's today or yesterday, `best` the longest run. With
+ * no freezes, repairs or protected dates in the mock yet, that is what
+ * the full evaluation (§4.11) gives too.
+ */
+export function identityStreak(
+  db: Readonly<MockDb>,
+  player: MockPlayerRow,
+  now: EpochMs,
+): RestoredProfile["streak"] {
+  const dates = new Set<LocalDate>();
+  for (const attempt of finishedDailiesOf(db, player.id)) {
+    if (
+      attempt.kind === "daily" &&
+      attempt.ranked &&
+      attempt.localDate !== null
+    ) {
+      dates.add(attempt.localDate);
+    }
+  }
+  const runFrom = (end: LocalDate) => {
+    let count = 0;
+    for (let date = end; dates.has(date); date = addDays(date, -1)) count += 1;
+    return count;
+  };
+  let best = 0;
+  for (const date of dates) {
+    if (!dates.has(addDays(date, 1))) best = Math.max(best, runFrom(date));
+  }
+  const today = playerToday(player, player.tz ?? UTC, now);
+  const current = dates.has(today)
+    ? runFrom(today)
+    : runFrom(addDays(today, -1));
+  return { current, best };
+}
+
+/** What a sync-code or claim restore answers (`private.restored_json`). */
+function restoredOf(
+  db: Readonly<MockDb>,
+  player: MockPlayerRow,
+  now: EpochMs,
+): RestoredProfile & { playerId: PlayerId } {
+  return {
+    playerId: player.id,
+    profile: profileOf(player),
+    streak: identityStreak(db, player, now),
+    lastDaily: identityLastDaily(db, player.id),
+  };
+}
+
+/** 16 Crockford characters from the seeded stream (`private.random_code`). */
+function drawSyncCode(ctx: MockContext, draw: number): SyncCode {
+  const rng = ctx.rng.fork(`sync-code:${draw}`);
+  let code = "";
+  for (let n = 0; n < SYNC_CODE_LENGTH; n += 1) {
+    code += CROCKFORD_ALPHABET[rng.int(CROCKFORD_ALPHABET.length)];
+  }
+  const parsed = parseSyncCode(code);
+  if (parsed === null) throw new Error("drew a malformed sync code");
+  return parsed;
+}
+
+/** The claim a token names, by its hash. */
+function claimByToken(
+  claims: Record<string, MockClaimRow>,
+  token: ClaimToken,
+): MockClaimRow | null {
+  const hash = hashSecret(token);
+  return Object.values(claims).find((row) => row.tokenHash === hash) ?? null;
+}
+
+/** `expired` for a used or out-of-date claim, else null (peek_claim, redeem_claim). */
+function claimRefusal(row: MockClaimRow, now: EpochMs): Result<never> | null {
+  if (row.redeemedAt !== null)
+    return fail("expired", { current: { used: true } });
+  if (row.expiresAt <= now)
+    return fail("expired", { current: { used: false } });
+  return null;
+}
+
 export function createIdentityArea(ctx: MockContext): IdentityApi {
   return {
     ...unavailableArea("identity"),
@@ -589,6 +910,193 @@ export function createIdentityArea(ctx: MockContext): IdentityApi {
     async getProfile() {
       const player = ctx.store.read((db) => verifyCredential(ctx, db));
       return player === null ? fail("auth_failed") : ok(profileOf(player));
+    },
+
+    async createSyncCode() {
+      const result = await ctx.store.write(
+        (db): Result<{ code: SyncCode; createdAt: EpochMs }> => {
+          const auth = authenticate(ctx, db, { register: false });
+          if (!auth.ok) return auth.result;
+          const now = ctx.clock.now();
+          const hit = hitLimit(
+            db,
+            TRANSFER_LIMITS.syncCreate,
+            playerSubject(auth.player.id),
+            now,
+          );
+          if (!hit.allowed) return limited(hit, "player");
+          const tables = transferTables(db);
+          const taken = new Set(
+            Object.values(tables.syncCodes).map((row) => row.codeHash),
+          );
+          const draw = (): SyncCode => {
+            const code = drawSyncCode(ctx, tables.syncCodeDraws.next);
+            tables.syncCodeDraws.next += 1;
+            return code;
+          };
+          // A clash with a live code is drawn again, at most 5 times, as SQL does.
+          let code = draw();
+          for (
+            let tries = 1;
+            tries < 5 && taken.has(hashSecret(code));
+            tries += 1
+          ) {
+            code = draw();
+          }
+          // One code per player: the previous one stops working (AC-SYN-03).
+          tables.syncCodes[auth.player.id] = {
+            playerId: auth.player.id,
+            codeHash: hashSecret(code),
+            createdAt: now,
+          };
+          return ok({ code, createdAt: now });
+        },
+        [
+          "players",
+          "credentials",
+          "rateCounters",
+          "syncCodes",
+          "syncCodeDraws",
+        ],
+      );
+      if (result.ok) confirmRegistered(ctx);
+      return result;
+    },
+
+    redeemSyncCode(code: string, newSecret: Secret) {
+      const normalized = parseSyncCode(code);
+      // A code that can't be one costs no attempt: the adapter never sends it.
+      if (normalized === null || parseSecret(newSecret) === null) {
+        return Promise.resolve(fail("invalid_input"));
+      }
+      return ctx.store.write(
+        (db): Result<RestoredProfile & { playerId: PlayerId }> => {
+          const now = ctx.clock.now();
+          const { syncFail, syncDay } = TRANSFER_LIMITS;
+          // Counted before the code is looked at (AC-SYN-04).
+          const failures = hitLimit(db, syncFail, MOCK_IP_SUBJECT, now);
+          if (!failures.allowed) return limited(failures, "ip");
+          const daily = hitLimit(db, syncDay, MOCK_IP_SUBJECT, now);
+          if (!daily.allowed) {
+            unhitLimit(db, syncFail, MOCK_IP_SUBJECT, now);
+            return limited(daily, "ip");
+          }
+          const hash = hashSecret(normalized);
+          const row = Object.values(transferTables(db).syncCodes).find(
+            (entry) => entry.codeHash === hash,
+          );
+          const player =
+            row === undefined
+              ? undefined
+              : identityTables(db).players[row.playerId];
+          if (player === undefined) return fail("not_found");
+          // A right code was no failure: both counts are given back.
+          unhitLimit(db, syncFail, MOCK_IP_SUBJECT, now);
+          unhitLimit(db, syncDay, MOCK_IP_SUBJECT, now);
+          addCredential(db, player.id, newSecret, "sync", now);
+          return ok(restoredOf(db, player, now));
+        },
+        ["credentials", "rateCounters"],
+      );
+    },
+
+    async createClaim(token: ClaimToken) {
+      const result = await ctx.store.write(
+        (db): Result<{ expiresAt: EpochMs }> => {
+          const auth = authenticate(ctx, db, { register: false });
+          if (!auth.ok) return auth.result;
+          if (parseClaimToken(token) === null) return fail("invalid_input");
+          const tables = transferTables(db);
+          const known = claimByToken(tables.claims, token);
+          if (known !== null) {
+            // The token is the call's key: a retry returns the same claim.
+            return known.playerId === auth.player.id
+              ? ok({ expiresAt: known.expiresAt })
+              : fail("conflict");
+          }
+          const now = ctx.clock.now();
+          const hit = hitLimit(
+            db,
+            TRANSFER_LIMITS.claimCreate,
+            playerSubject(auth.player.id),
+            now,
+          );
+          if (!hit.allowed) return limited(hit, "player");
+          // One claim per player: a new one ends the previous token.
+          const row: MockClaimRow = {
+            playerId: auth.player.id,
+            tokenHash: hashSecret(token),
+            createdAt: now,
+            expiresAt: now + CLAIM_TTL_MS,
+            redeemedAt: null,
+          };
+          tables.claims[auth.player.id] = row;
+          return ok({ expiresAt: row.expiresAt });
+        },
+        ["players", "credentials", "rateCounters", "claims"],
+      );
+      if (result.ok) confirmRegistered(ctx);
+      return result;
+    },
+
+    peekClaim(token: ClaimToken) {
+      return ctx.store.write(
+        (db): Result<ClaimPreview> => {
+          const now = ctx.clock.now();
+          const hit = hitLimit(
+            db,
+            TRANSFER_LIMITS.claimIp,
+            MOCK_IP_SUBJECT,
+            now,
+          );
+          if (!hit.allowed) return limited(hit, "ip");
+          if (parseClaimToken(token) === null) return fail("not_found");
+          const row = claimByToken(readTransferTables(db).claims, token);
+          const player =
+            row === null ? undefined : identityTables(db).players[row.playerId];
+          if (row === null || player === undefined) return fail("not_found");
+          const refusal = claimRefusal(row, now);
+          if (refusal !== null) return refusal;
+          return ok({
+            friendlyName: player.friendlyName,
+            nickname: player.nickname,
+            streak: identityStreak(db, player, now).current,
+            lastDaily: identityLastDaily(db, player.id),
+            expiresAt: row.expiresAt,
+          });
+        },
+        ["rateCounters"],
+      );
+    },
+
+    redeemClaim(token: ClaimToken, newSecret: Secret) {
+      if (parseSecret(newSecret) === null) {
+        return Promise.resolve(fail("invalid_input"));
+      }
+      return ctx.store.write(
+        (db): Result<RestoredProfile & { playerId: PlayerId }> => {
+          const now = ctx.clock.now();
+          const hit = hitLimit(
+            db,
+            TRANSFER_LIMITS.claimIp,
+            MOCK_IP_SUBJECT,
+            now,
+          );
+          if (!hit.allowed) return limited(hit, "ip");
+          if (parseClaimToken(token) === null) return fail("not_found");
+          const row = claimByToken(transferTables(db).claims, token);
+          const player =
+            row === null ? undefined : identityTables(db).players[row.playerId];
+          if (row === null || player === undefined) return fail("not_found");
+          const refusal = claimRefusal(row, now);
+          if (refusal !== null) return refusal;
+          // Single use (AC-IAB-04): the store's lock makes this the only redemption.
+          row.redeemedAt = now;
+          addCredential(db, player.id, newSecret, "claim", now);
+          return ok(restoredOf(db, player, now));
+        },
+        ["credentials", "rateCounters", "claims"],
+      );
     },
   };
 }
