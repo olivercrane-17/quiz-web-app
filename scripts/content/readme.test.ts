@@ -1,11 +1,12 @@
 // @vitest-environment node
 /**
- * The contract between SQL-3's content CLIs and content/README.md: every
- * option `content:release` and `content:dedupe` list in their --help is
- * written under the command's own heading in the README, and both keep the
- * behaviour every content command shares (src/content/pipeline/cli.ts):
- * --help prints the usage and exits 0, an unknown option exits 2 with it.
- * Neither run reads the content key: both stop while parsing.
+ * The contract between the content CLIs and content/README.md: every
+ * option `content:release`, `content:dedupe` and `content:batch` list in
+ * their --help is written under the command's own heading in the README,
+ * and each keeps the behaviour every content command shares
+ * (src/content/pipeline/cli.ts): --help prints the usage and exits 0, an
+ * unknown option exits 2 with it. No run reads the content key: each stops
+ * while parsing.
  */
 import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
@@ -55,9 +56,10 @@ function section(command: string): string {
 const COMMANDS = [
   ["content:release", "release"],
   ["content:dedupe", "dedupe"],
+  ["content:batch", "batch"],
 ] as const;
 
-describe("SQL-3's content CLIs and content/README.md", () => {
+describe("the content CLIs and content/README.md", () => {
   for (const [command, script] of COMMANDS) {
     it(`documents every option ${command} --help lists, under its own heading`, () => {
       const help = cli(script, "--help");
@@ -90,6 +92,22 @@ describe("SQL-3's content CLIs and content/README.md", () => {
     for (const flag of ["--sealed", "--cross-pool", "--strict"]) {
       expect(dedupe).toContain(`npm run content:dedupe -- ${flag}`);
     }
+    // CNT-2b: the judgment and retire, each with an example.
+    expect(dedupe).toMatch(
+      /npm run content:dedupe -- --cross-pool-ok --daily \S+ --item \S+ --editor ed-\S+ --reason /,
+    );
+    const batch = section("content:batch");
+    expect(batch).toMatch(
+      /npm run content:batch -- retire --item \S+ --editor ed-\S+ --kind cross_pool --reason /,
+    );
+    for (const flag of ["--allow-frozen", "--today"])
+      expect(batch).toMatch(
+        new RegExp(`npm run content:batch -- retire .*${flag}`),
+      );
+    // When to retire and when to record related_ok, for editors.
+    const guide = section("Cross-pool overlaps: retire or related_ok");
+    expect(guide).toContain("content:batch -- retire");
+    expect(guide).toContain("content:dedupe -- --cross-pool-ok");
     const release = section("content:release");
     for (const flag of [
       "--version",
