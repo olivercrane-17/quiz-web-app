@@ -246,14 +246,15 @@ test.describe("the fonts", () => {
       expect.arrayContaining(["Fraunces", "Atkinson Hyperlegible Next"]),
     );
     // Body text is set in Atkinson, headings and numerals in Fraunces.
+    // Browsers differ on quotes: Firefox quotes every family name, Chromium
+    // only names with spaces, WebKit none.
     await expect(page.locator("body")).toHaveCSS(
       "font-family",
-      /^"Atkinson Hyperlegible Next"/,
+      /^"?Atkinson Hyperlegible Next"?,/,
     );
-    // Firefox quotes every family name it serializes.
     await expect(page.locator(".kn-wordmark-word")).toHaveCSS(
       "font-family",
-      /^"?Fraunces/,
+      /^"?Fraunces"?,/,
     );
   });
 });

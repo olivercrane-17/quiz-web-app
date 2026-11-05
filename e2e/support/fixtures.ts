@@ -24,6 +24,19 @@ const WEBKIT_EXPECTED_ERRORS = [
   /^Viewport argument key "interactive-widget" not recognized and ignored\.$/,
 ];
 
+/**
+ * True for WebKit's report of one of this server's own loads that a
+ * navigation cut off: Next's prefetches (`?_rsc=`) and the identity boot's
+ * `/api/restore`, still in flight when a spec calls `page.goto`. WebKit
+ * reports each as "Fetch API cannot load <url> due to access control
+ * checks." (an uncaught exception, to Playwright), though no access control
+ * applies to a same-origin load and the page has already moved on. A
+ * request to any other host never gets this far: `externalRequests`
+ * aborts it and fails the test.
+ */
+const WEBKIT_CANCELLED_LOAD =
+  /\b127\.0\.0\.1:\d+\/\S* due to access control checks\.$/;
+
 /** The backup cookie's routes (ARCHITECTURE §9.3). */
 const BACKUP_ROUTES = new Set(["/api/restore", "/api/identity"]);
 
@@ -98,6 +111,7 @@ export const test = base.extend<Fixtures>({
       const expected = (text: string, url: string) =>
         browserName === "webkit" &&
         (WEBKIT_EXPECTED_ERRORS.some((pattern) => pattern.test(text)) ||
+          WEBKIT_CANCELLED_LOAD.test(text) ||
           isWebKitBackupRefusal(text, url));
       const watch = (target: Page) => {
         target.on("console", (message) => {
@@ -114,6 +128,7 @@ export const test = base.extend<Fixtures>({
           }
         });
         target.on("pageerror", (error) => {
+          if (expected(error.message, "")) return;
           errors.push(`uncaught exception: ${error.message}`);
         });
       };

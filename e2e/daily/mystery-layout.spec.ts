@@ -304,6 +304,7 @@ test.describe("the guess field at 200% text (R1-03)", () => {
 
     test("a page that overflows sideways is never read as an open keyboard", async ({
       page,
+      browserName,
     }) => {
       // At 320 by 568 with 200% text, a page wider than the screen made the
       // phone's layout viewport 742 px tall: "a keyboard", with none there.
@@ -317,8 +318,13 @@ test.describe("the guess field at 200% text (R1-03)", () => {
       await field.tap();
       await field.pressSequentially("lan");
       await expect(page.getByRole("option").first()).toBeVisible();
-      // The phone widened its layout viewport for the page, as it does.
-      expect(await page.evaluate(() => window.innerWidth)).toBeGreaterThan(320);
+      // Chrome widens its layout viewport for such a page, which is what
+      // read as a keyboard; WebKit keeps it at the screen's width.
+      if (browserName === "chromium") {
+        expect(await page.evaluate(() => window.innerWidth)).toBeGreaterThan(
+          320,
+        );
+      }
       await expect(page.locator('[data-round="mystery"]')).not.toHaveAttribute(
         "data-keyboard",
         "open",
