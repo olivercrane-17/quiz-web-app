@@ -17,16 +17,18 @@ test.describe("smoke", () => {
     expect(consoleErrors).toEqual([]);
   });
 
-  test("responses carry the baseline security headers", async ({ request }) => {
+  // The exact values, path by path, are e2e/security/headers.spec.ts's.
+  test("responses carry the security headers", async ({ request }) => {
     const response = await request.get("/");
     const headers = response.headers();
 
+    expect(headers["content-security-policy"]).toMatch(
+      /^default-src 'self'; .*frame-ancestors 'none'/,
+    );
     expect(headers["x-content-type-options"]).toBe("nosniff");
     expect(headers["x-frame-options"]).toBe("DENY");
-    expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
-    expect(headers["content-security-policy"]).toContain(
-      "frame-ancestors 'none'",
-    );
+    expect(headers["referrer-policy"]).toBe("no-referrer");
+    expect(headers["cross-origin-opener-policy"]).toBe("same-origin");
     expect(headers["permissions-policy"]).toContain("camera=()");
     expect(headers["x-powered-by"]).toBeUndefined();
   });
