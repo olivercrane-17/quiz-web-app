@@ -56,9 +56,10 @@
       "redeem_sync_code",
       "register_player",
       "set_age_band",
+      "set_nickname",
       "t_client_ip"
     ],
-    "why": "Every RPC is a SECURITY DEFINER function in public that anon is meant to call; that is the whole API (§8.2 rule 2). Lint 0028 flags each one for anon and lint 0029 for authenticated, which keeps EXECUTE because migrations never take a grant away (decisions memo §14.4). Each RPC validates its input, caps payloads and rate-limits itself, so both findings are expected for exactly these names. The list mirrors private.rpc_allowlist: npm run sql:bundle checks that the two agree, and the ticket that adds an RPC adds its name to both. SQL-1 adds none; SQL-2 adds the eleven identity RPCs."
+    "why": "Every RPC is a SECURITY DEFINER function in public that anon is meant to call; that is the whole API (§8.2 rule 2). Lint 0028 flags each one for anon and lint 0029 for authenticated, which keeps EXECUTE because migrations never take a grant away (decisions memo §14.4). Each RPC validates its input, caps payloads and rate-limits itself, so both findings are expected for exactly these names. The list mirrors private.rpc_allowlist: npm run sql:bundle checks that the two agree, and the ticket that adds an RPC adds its name to both. SQL-1 adds none; SQL-2 adds the eleven identity RPCs; MOD-1 adds set_nickname."
   },
   "accepted": [
     {
