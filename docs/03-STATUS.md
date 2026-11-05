@@ -42,7 +42,7 @@ Each lane with commits is also pushed to a `backup/lane-<name>` branch on GitHub
 | ENR-1 | `lane/r5-enr1` (`50e448f`) | Built, reviewed and fixed; waits for the next integration |
 | FIX2-DLY, FIX2-MYS, FIX2-PRA, FIX2-DS | `lane/r6-fix{dly,mys,pra,ds}` | Round 2 fixes, building from `lane/r6-docs` |
 | CNT-2b (content tooling) | `lane/r6-cnt2b` | Building; spec below |
-| Mystery re-estimates | content worktree, `content/production` | Four blind estimators replacing the faked estimates of m.sci, m.food, m.geo and m.nat b01 |
+| Mystery re-estimates | `content/production`, backed up to `backup/content-production` | Done: all 113 active items of m.sci, m.food, m.geo and m.nat b01 re-estimated blind and sealed (0066a77); merge into the integration branch next |
 
 Each lane's developer commits work in progress as it goes ("<ticket>: wip ..."), so an interrupted lane
 resumes from its branch. If the container survived, resume each workflow from its run id with the
@@ -80,8 +80,9 @@ Content jobs, in order:
    when the fact really repeats, or record `related_ok` when only a name repeats.
 2. Finish m.food.b02. Items m.food.0202 and 0203 need a pass B check and an editor decision, which also
    clears their C26 errors.
-3. Once the re-estimates land, set the difficulty band edges and plan the re-slotting. Today, about 30
-   items predict below the hard band.
+3. Memo §23 settles the windows: contiguous, following PRD §4.1.6's bands. The pool holds 136 easy, 115
+   medium and 94 hard mysteries, plus 41 below 1.8 whose ladders an editor rewrites. Mystery top-ups aim at
+   hard items first.
 4. Top-ups: encores to 120, room packs to 15 each, and practice back to 100 per category, counting any
    question retired in step 1.
 5. Pass D and the seeded audit (`content:audit`) before anything is scheduled.
