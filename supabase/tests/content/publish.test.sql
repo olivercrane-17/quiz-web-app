@@ -4,8 +4,10 @@
 -- its date's order, with an alert naming the rules it breaks; a gap on the
 -- e2e track never takes a main-track spare; the freeze runs 3 days ahead,
 -- then 7 from switch_on; an opened Daily is never changed; and a challenge
--- pack publishes once 30 Dailies have closed. It plays in 2099, sets aside
--- every real spare set, and writes the config it reads.
+-- pack publishes once 30 served Dailies have closed, from items that played
+-- on one, never from a Daily that reached its date unready and unserved.
+-- It plays in 2099, sets aside every real spare set and served Daily, and
+-- writes the config it reads.
 begin;
 
 select private.t_now('2099-01-01T00:00:00Z');
@@ -189,23 +191,45 @@ $$;
 select 'PASS SQL-3 the freeze runs 3 days ahead and 7 from switch_on, and an opened Daily is never changed';
 
 do $$
+declare
+  v_at timestamptz;
 begin
+  -- Only Dailies that were served count. A live database's own Dailies closed long before 2099, so they are
+  -- set aside here, and no unused spare set is left, so a Daily that reaches its date unready stays unserved.
+  update private.dailies set status = 'scheduled', frozen_at = null
+   where track = 'main' and status = 'frozen' and local_date < '2099-01-01';
+  update private.daily_spares set active = false where track = 'main' and used_for_date is null and active;
+  perform private.t_items('main', array['07']);
   perform private.release_challenge_packs('t-p', 'main', jsonb_build_array(
     jsonb_build_object('id', 'qz-played', 'title', 't', 'theme', 't', 'rounds', private.t_r('main', '03')),
     jsonb_build_object('id', 'qz-unplayed', 'title', 't', 'theme', 't',
-                       'rounds', jsonb_set(private.t_r('main', '03'), '{0,contentId}', '"m.geo.9904"'))));
-  -- Set 03 played on 2099-01-10 (spare.02); m.geo.9904 never played. By 2099-01-30T12:07Z 29 Dailies have closed.
-  perform private.t_now('2099-01-30T12:07:00Z');
-  perform private.release_dailies('t-p', 'main', private.t_days('main', '2099-01-21', '2099-02-05', '03'));
-  perform private.publish_track('main');
-  assert (select c.status from private.challenge_packs c where c.id = 'qz-played') = 'draft', 'a pack published before 30 Dailies closed';
-  perform private.t_now('2099-01-31T12:07:00Z');
+                       'rounds', jsonb_set(private.t_r('main', '03'), '{0,contentId}', '"m.geo.9904"')),
+    jsonb_build_object('id', 'qz-unserved', 'title', 't', 'theme', 't', 'rounds', private.t_r('main', '07'))));
+  -- Set 03 from 2099-01-21, except 2099-01-25: set 07, never ready. The publisher runs twice a day.
+  perform private.t_now('2099-01-20T12:07:00Z');
+  perform private.release_dailies('t-p', 'main', private.t_days('main', '2099-01-21', '2099-02-10', '03'));
+  perform private.release_dailies('t-p', 'main', private.t_days('main', '2099-01-25', '2099-01-25', '07', false));
+  for v_at in select generate_series(timestamptz '2099-01-21T00:07:00Z', '2099-02-05T12:07:00Z', interval '12 hours') loop
+    perform private.t_now(v_at);
+    perform private.publish_track('main');
+  end loop;
+  assert (select d.status = 'scheduled' and d.spare_id is null from private.dailies d
+           where d.track = 'main' and d.local_date = '2099-01-25'), 'the unready Daily was served';
+  assert private.t_alerts('daily_no_spare', 'main:2099-01-25') = 1, 'no daily_no_spare alert for the unserved Daily';
+
+  -- 2099-01-01 to 2099-01-05 were never frozen and 2099-01-25 never served: by 2099-02-05T12:07Z 35 Dailies have
+  -- closed, but only 29 served ones (2099-01-06 to 2099-01-20, and 2099-01-21 to 2099-02-04 but for 2099-01-25).
+  assert (select c.status from private.challenge_packs c where c.id = 'qz-played') = 'draft',
+    'a pack published before 30 served Dailies closed';
+  perform private.t_now('2099-02-06T12:07:00Z');
   perform private.publish_track('main');
   assert (select c.status from private.challenge_packs c where c.id = 'qz-played') = 'published'
-     and (select c.status from private.challenge_packs c where c.id = 'qz-unplayed') = 'draft',
-    'a pack drawn from closed Dailies did not publish, or one naming an unplayed item did';
+     and (select c.status from private.challenge_packs c where c.id = 'qz-unplayed') = 'draft'
+     and (select c.status from private.challenge_packs c where c.id = 'qz-unserved') = 'draft',
+    'a pack drawn from served Dailies did not publish, or one naming an unplayed or unserved item did';
+  assert private.verify_release('t-p', 'main') ->> 'verified' = 'true', 'the published pack does not verify';
 end
 $$;
-select 'PASS SQL-3 a challenge pack publishes once 30 Dailies have closed, drawing only on items that played';
+select 'PASS SQL-3 a challenge pack publishes once 30 served Dailies have closed, drawing only on items that played on one';
 
 rollback;

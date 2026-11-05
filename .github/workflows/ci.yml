@@ -97,12 +97,18 @@ jobs:
   # the one step below receives the key, a repository secret (decisions memo
   # §17). Without it the same command prints "Sealed content validation:
   # not run" and checks the plaintext content alone. Pull requests from
-  # forks never receive secrets, so they skip the job.
+  # forks never receive secrets, so they skip that step.
+  #
+  # Then the bundle scan of §5.4, on a build of its own: no sealed id in
+  # .next/static or .next/server/app (with QZ_BUNDLE_SCAN=1 a missing build
+  # fails it). It comes after the sealed step, so no build has run on the
+  # runner while that step holds the key, and it runs whatever that step
+  # found. Both go once a post-build scan runs in the verify job (SEC-1's
+  # scripts/checks/lazy-markers.mjs).
   content-sealed:
     name: Sealed content check
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       # Full history: the content check compares each answer list's liveAt
       # with the commit that first published its version (§5.2).
@@ -122,9 +128,21 @@ jobs:
         run: npm ci
 
       - name: Sealed content check and cross-pool dedupe
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         env:
           QZ_CONTENT_KEY: ${{ secrets.QZ_CONTENT_KEY }}
         run: npm run content:check -- --sealed
+
+      - name: Build
+        id: build
+        if: ${{ !cancelled() }}
+        run: npm run build
+
+      - name: Bundle scan
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        env:
+          QZ_BUNDLE_SCAN: "1"
+        run: npx vitest run --project=unit scripts/content/release.test.ts -t "bundle scan"
 
   # The browser matrix of ARCHITECTURE §11.8, one browser per leg. Every leg
   # runs on every push: the release criteria need CI green in Chromium,

@@ -4,7 +4,8 @@
 -- every date from 2026-11-01 to 2028-12-31 by the fixture cycle (content/fixtures/README.md), its
 -- spare sets, then verify_release and the release record (SQL-3).
 -- Load it after supabase/seed/config.sql, practice-items.sql and answer-entities.sql, one statement
--- per execute_sql call, in order. Loading it again changes nothing.
+-- per execute_sql call, in order, stopping at the first that fails. Loading it again changes nothing. A
+-- fixture change makes a new release, which loads over this one whatever has opened or frozen (SQL-3).
 
 -- ===== chunk 1/13: answer entities, 370 row(s), 30.4 kB =====
 insert into private.answer_entities (answer_type, entity_id, display, option_label, active)

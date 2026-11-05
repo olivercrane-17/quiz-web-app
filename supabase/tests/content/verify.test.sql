@@ -1,9 +1,10 @@
 -- verify_release (ARCHITECTURE §5.4; SQL-3) fails a release whose schedule
 -- names a missing or inactive mystery, or whose mystery names an inactive
 -- distractor, and the release then stays unrecorded. A Daily or spare set
--- of one track never names another track's items, and a frozen Daily is
--- publish's to replace, not the release's to refuse. It plays in 2099 and
--- writes the config it reads, so it passes on a live database.
+-- of one track never names another track's items, a frozen Daily is
+-- publish's to replace, not the release's to refuse, and a missing entity
+-- is named by its field, never by its id. It plays in 2099 and writes the
+-- config it reads, so it passes on a live database.
 begin;
 
 select private.t_now('2099-01-01T00:00:00Z');
@@ -125,5 +126,25 @@ begin
 end
 $$;
 select 'PASS SQL-3 verify_release holds spare sets to active items and every round to its own track, and leaves frozen Dailies to publish';
+
+do $$
+declare
+  v_refusal text;
+begin
+  -- A mystery whose accepted answer, or one distractor, is missing from its list. An x.<type>.<slug> id spells
+  -- out a name, and verify_release runs for every later release of the track, so it names the field, never the id.
+  perform private.release_dailies('t-v', 'main', jsonb_build_array(
+    private.t_d('2099-01-12', private.t_r('m.geo.9901', 'm.film.9901', 'm.sci.9903', 'e.9901'))));
+  perform private.release_mysteries('t-v', 'main', jsonb_build_array(
+    private.t_m('m.geo.9906', 'country', 1) || '{"accepted_entities": ["x.country.qz-republic-of-zed"]}'
+                                            || '{"distractors": ["x.country.qz-b", "x.country.qz-zz", "x.country.qz-d"]}'));
+  v_refusal := private.t_refusal('t-later', 'main');
+  assert v_refusal like '%"at": "mystery m.geo.9906", "field": "accepted_entities[0]", "problem": "entity_missing"%'
+     and v_refusal like '%"at": "mystery m.geo.9906", "field": "distractors[1]", "problem": "entity_missing"%'
+     and v_refusal not like '%qz-republic-of-zed%' and v_refusal not like '%qz-zz%',
+    format('a missing entity: %s', v_refusal);
+end
+$$;
+select 'PASS SQL-3 verify_release names a missing entity by its field, never by its id';
 
 rollback;

@@ -4,9 +4,10 @@
  * seed and its SQL test match the fixtures; the seed plays the fixture
  * cycle on every date with numbers from the epoch; a release writes content
  * before schedule, then verify_release, then the record, as statements the
- * MCP sends unattended; release and dedupe pass the redaction test; spare
- * orders carry the rules each spare breaks; and no sealed id reaches a
- * bundle.
+ * MCP sends unattended, whatever the content text holds; release and
+ * dedupe pass the redaction test; a release is written only where git
+ * ignores it; spare orders carry the rules each spare breaks; and no sealed
+ * id reaches a bundle.
  */
 import { spawnSync } from "node:child_process";
 import {
@@ -16,6 +17,7 @@ import {
   readFileSync,
   readdirSync,
   statSync,
+  symlinkSync,
   writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
@@ -44,6 +46,7 @@ import {
   envelopeText,
   sealBytes,
 } from "../../src/content/pipeline/seal.ts";
+import { ID_PATTERNS } from "../../src/content/schema/primitives.ts";
 import { normalizeName } from "../../src/engine/suggest/normalize.ts";
 import {
   mcpConfirmationReasons,
@@ -57,11 +60,14 @@ import {
   E2E_SEED_PATH,
   E2E_THROUGH,
   FIXTURE_TEST_PATH,
+  chunkProblems,
   fixtureOutputs,
+  jsonText,
   numberOf,
   readyOn,
   releaseChunks,
   releaseSummary,
+  safeToWrite,
   spareBreaks,
   type FixtureOutputs,
 } from "./release.ts";
@@ -149,6 +155,20 @@ describe("the e2e seed (supabase/seed/e2e-track.sql)", () => {
     // The Dailies' choice rounds load as questions, never as a room pack.
     expect(release.roomPacks.map((pack) => pack.id)).toEqual(["fx-party"]);
   });
+
+  it("SQL-3 the SQL test's week loads the hostable room pack, and tries a pack of the Dailies' choice rounds", () => {
+    const test = fixtures.test.content;
+    const packs = test
+      .split("\n")
+      .filter((line) => line.startsWith("select private.release_room_packs("));
+    expect(packs).toHaveLength(1);
+    expect(packs[0]).toContain('"id":"fx-party"');
+    expect(test).toContain("p.id = any (array['fx-party'])) = 1");
+    expect(test).toContain("room pack fx-leak names question fx.r.dly.01");
+    expect(test).toContain(
+      "PASS SQL-3 the e2e track takes a fixture edit after its first dates opened",
+    );
+  });
 });
 
 describe("the release's statements", () => {
@@ -209,6 +229,39 @@ describe("the release's statements", () => {
     expect(packs).toMatch(/'::jsonb\);$/);
     for (const output of [fixtures.seed, fixtures.test])
       expect(scanForbidden(output.path, output.content)).toEqual([]);
+  });
+
+  it("SQL-3 a semicolon before drop, delete or truncate, or the word execute, in content never stops a chunk", () => {
+    const [first] = fixtures.release.mysteries;
+    if (first === undefined) throw new Error("no fixture mystery");
+    const awkward = {
+      ...first,
+      explanation:
+        "A bowler who fumbles the ball must not stop; drop it and the batter may run.",
+      learn_more:
+        "Execute the plan, then; Truncate nothing; 'Delete' the doubt; EXECUTE \"Drop everything\"",
+      clues: [
+        "execute 'drop",
+        ...first.clues.slice(1, 3),
+        "back\\slash; delete",
+      ],
+    };
+    const release = {
+      ...fixtures.release,
+      mysteries: [awkward, ...fixtures.release.mysteries.slice(1)],
+    };
+    const chunks = releaseChunks(release);
+    expect(chunkProblems(chunks, DEFAULT_CHUNK_BYTES)).toEqual([]);
+    const chunk = chunks.find((c) => c.label === "mysteries")?.sql ?? "";
+    expect(chunk).not.toMatch(/;\s*(?:drop|delete|truncate)\b/i);
+    expect(chunk).not.toMatch(/execute/i);
+    // What the database decodes is the content itself, so its hash is the same.
+    const literal = /'(\[[\s\S]*\])'::jsonb/.exec(chunk)?.[1] ?? "";
+    const rows = JSON.parse(literal.replaceAll("''", "'")) as unknown[];
+    expect(rows[0]).toEqual(awkward);
+    expect(JSON.parse(jsonText(awkward).replaceAll("''", "'"))).toEqual(
+      awkward,
+    );
   });
 
   it("SQL-3 a successful release prints counts only, never content", () => {
@@ -483,11 +536,51 @@ describe("release and dedupe over sealed content with planted failures", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Where a release may be written
+// ---------------------------------------------------------------------------
+
+describe("the output path", () => {
+  it("SQL-3 a release is written only where git ignores it, and never when git refuses to answer", () => {
+    const repo = tempDir("qz-release-out-");
+    spawnSync("git", ["init", "-q"], { cwd: repo });
+    writeFileSync(join(repo, ".gitignore"), "supabase/.generated/\n");
+    mkdirSync(join(repo, "supabase/seed"), { recursive: true });
+    const ignored = join(repo, "supabase/.generated/content-release-7.sql");
+    const committable = join(repo, "supabase/seed/content-release-7.sql");
+    expect(safeToWrite(ignored)).toBe(true);
+    expect(safeToWrite(committable)).toBe(false);
+
+    // Outside every work tree it may write; through a symlink into one it may not.
+    const outside = tempDir("qz-release-outside-");
+    symlinkSync(join(repo, "supabase/seed"), join(outside, "seed"));
+    expect(safeToWrite(join(outside, "content-release-7.sql"))).toBe(true);
+    expect(safeToWrite(join(outside, "seed/content-release-7.sql"))).toBe(
+      false,
+    );
+
+    // A git that exits 128, as git does when it refuses a repository another
+    // user owns: inside the work tree that refuses the write, ignored or not.
+    const bin = tempDir("qz-release-git-");
+    writeFileSync(join(bin, "git"), "#!/bin/sh\nexit 128\n", { mode: 0o755 });
+    const env = { ...process.env, PATH: `${bin}:${process.env.PATH ?? ""}` };
+    expect(safeToWrite(committable, env)).toBe(false);
+    expect(safeToWrite(ignored, env)).toBe(false);
+    expect(safeToWrite(join(outside, "content-release-7.sql"), env)).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // The bundle scan (ARCHITECTURE §5.4)
 // ---------------------------------------------------------------------------
 
-/** §5.4's pattern: a sealed id, not a fixture's. */
-const SEALED_ID = /(?<!fx\.)\b(m\.[a-z]+\.\d{4}|e\.\d{4}|r\.[a-z-]+\.\d{2})\b/;
+/**
+ * §5.4's pattern for a sealed id, not a fixture's, with room ids as
+ * ID_PATTERNS.room takes them (digits too, so r.top-10.01 and r.y2k.12).
+ */
+const SEALED_ID =
+  /(?<!fx\.)\b(m\.[a-z]+\.\d{4}|e\.\d{4}|r\.[a-z0-9]+(?:-[a-z0-9]+)*\.\d{2})\b/;
+const SCANNED = /\.(?:html|js|json|rsc|txt|ts|body|meta|css|map)$/;
+const BUILD_ROOTS = [".next/static", ".next/server/app"];
 
 function filesUnder(dir: string): string[] {
   if (!existsSync(dir)) return [];
@@ -497,30 +590,64 @@ function filesUnder(dir: string): string[] {
   });
 }
 
+/** The scannable files under each root (a folder or one file), and the sealed ids they hold. */
+function scan(roots: readonly string[]): { scanned: number; found: string[] } {
+  const found: string[] = [];
+  let scanned = 0;
+  for (const root of roots) {
+    const abs = join(REPO_ROOT, root);
+    const files =
+      existsSync(abs) && statSync(abs).isFile() ? [abs] : filesUnder(abs);
+    for (const file of files) {
+      if (!SCANNED.test(file)) continue;
+      scanned += 1;
+      const match = SEALED_ID.exec(readFileSync(file, "utf8"));
+      if (match) found.push(`${file.slice(REPO_ROOT.length + 1)}: ${match[0]}`);
+    }
+  }
+  return { scanned, found };
+}
+
+/**
+ * The build half needs a build. CI sets QZ_BUNDLE_SCAN=1 after npm run build
+ * (the content-sealed job), and then a missing or empty build fails; without
+ * it and without a build the test is skipped, visibly.
+ */
+const BUILD_REQUIRED = process.env.QZ_BUNDLE_SCAN === "1";
+const BUILT = BUILD_ROOTS.every(
+  (root) => filesUnder(join(REPO_ROOT, root)).length > 0,
+);
+
 describe("the bundle scan", () => {
-  it("SQL-3 the bundle scan finds no sealed ids in public/, the generated modules or a build", () => {
-    const roots = [
+  it("SQL-3 the bundle scan's pattern takes every sealed id form, room ids with digits included, and no fixture id", () => {
+    const sealed = [
+      "m.geo.0142",
+      "m.sport.9901",
+      "e.0007",
+      "r.top-10.01",
+      "r.90s-pop.04",
+      "r.y2k.12",
+      "r.harbour-lights.15",
+    ];
+    for (const id of sealed) {
+      expect(SEALED_ID.test(`"${id}"`), id).toBe(true);
+      if (id.startsWith("r.")) expect(ID_PATTERNS.room.test(id), id).toBe(true);
+    }
+    for (const id of [
+      "fx.m.geo.0101",
+      "fx.e.0101",
+      "fx.r.dly.01",
+      "fx.r.fx-party.15",
+    ])
+      expect(SEALED_ID.test(`"${id}"`), id).toBe(false);
+  });
+
+  it("SQL-3 the bundle scan finds no sealed ids in public/ or the generated modules", () => {
+    const { scanned, found } = scan([
       "public",
       "src/content/generated",
       "src/backend/mock/fixtures.generated.ts",
-      ".next/static",
-      ".next/server/app",
-    ];
-    const found: string[] = [];
-    let scanned = 0;
-    for (const root of roots) {
-      const abs = join(REPO_ROOT, root);
-      const files =
-        existsSync(abs) && statSync(abs).isFile() ? [abs] : filesUnder(abs);
-      for (const file of files) {
-        if (!/\.(?:html|js|json|rsc|txt|ts|body|meta|css|map)$/.test(file))
-          continue;
-        scanned += 1;
-        const match = SEALED_ID.exec(readFileSync(file, "utf8"));
-        if (match)
-          found.push(`${file.slice(REPO_ROOT.length + 1)}: ${match[0]}`);
-      }
-    }
+    ]);
     expect(scanned).toBeGreaterThan(0);
     expect(found).toEqual([]);
     // A release is written only where git ignores it.
@@ -531,4 +658,18 @@ describe("the bundle scan", () => {
     );
     expect(probe.status).toBe(0);
   });
+
+  it.skipIf(!BUILD_REQUIRED && !BUILT)(
+    "SQL-3 the bundle scan finds no sealed ids in a build (.next/static and .next/server/app)",
+    () => {
+      for (const root of BUILD_ROOTS)
+        expect(
+          filesUnder(join(REPO_ROOT, root)).length,
+          `${root} is missing or empty: run npm run build first`,
+        ).toBeGreaterThan(0);
+      const { scanned, found } = scan(BUILD_ROOTS);
+      expect(scanned).toBeGreaterThan(0);
+      expect(found).toEqual([]);
+    },
+  );
 });

@@ -18,9 +18,20 @@
  * private.verify_release, then private.record_release, which writes the
  * content_releases row last. Answer entities are not in it: they load
  * first, from the committed supabase/seed/answer-entities.sql. The
- * orchestrator sends each chunk as its own execute_sql call, in order. A
- * chunk applies or fails whole, a failed chunk leaves the release
- * unrecorded, and running the same file again changes nothing.
+ * orchestrator sends each chunk as its own execute_sql call, in order, and
+ * stops at the first one that fails. A chunk applies or fails whole, and the
+ * database holds the release together: record_release refuses a release
+ * whose chunks did not all load (each loader notes its chunk), and a version
+ * already recorded loads again only while it is its track's latest release,
+ * when it changes nothing. An older release file is refused at its first
+ * chunk, so it can never put back what a later release changed.
+ *
+ * Each chunk carries its rows as one JSON string literal. The Supabase MCP
+ * stops for a human when a statement holds a `;` followed by DROP, DELETE or
+ * TRUNCATE, string literals included, or a quoted DROP or DELETE after the
+ * word EXECUTE, and content text may hold either. So `;` and the x of
+ * "execute" travel as \u escapes, which jsonb decodes on the way in: the
+ * stored values and their hashes are the same (jsonText).
  *
  * What a release decides:
  *   - Items: every active item, and every retired one so the database marks
@@ -33,11 +44,15 @@
  *     neighbours (§5.1.1): the week rules, recent answers as distractors,
  *     repeats, and the single-Daily rules at that date.
  *   - Spare sets: only those whose every item passed pass D for a spare.
- *   - Room packs: only those whose 15 questions all load.
+ *   - Room packs: only those whose 15 questions all load. The database also
+ *     refuses one that shares a question with a Daily still to close or an
+ *     unused spare set, since a host can show it the day it loads.
  *   - Challenge packs: every pack of the track, as a draft; the database
- *     publishes one once 30 Dailies have closed (PRD §3.6.1).
+ *     publishes one once 30 served Dailies have closed (PRD §3.6.1).
  * Frozen Dailies, and items on them, are refused by the loaders unless
- * --allow-frozen is passed for a correction.
+ * --allow-frozen is passed for a correction. An item that only played on
+ * Dailies that have closed still takes a new review date, or retires,
+ * without it. The e2e track has no such locks: its fixtures are invented.
  *
  * Everything it prints goes through the redacting reporter
  * (scripts/content/lib/report.ts): ids, rule codes, field paths and counts,
@@ -56,7 +71,13 @@
  */
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  realpathSync,
+  writeFileSync,
+} from "node:fs";
 import { readFile, readdir } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -127,6 +148,10 @@ export const FIXTURE_TEST_FROM = "2026-11-14";
 export const FIXTURE_TEST_DAYS = 4;
 /** The clock the generated SQL test runs at: before every Daily it loads opens. */
 export const FIXTURE_TEST_CLOCK = "2026-11-10T00:00:00Z";
+/** Then the publisher freezes the week, and a fixture edit lands once its first Daily has closed. */
+const FIXTURE_FREEZE_CLOCK = "2026-11-13T00:07:00Z";
+const FIXTURE_EDIT_CLOCK = "2026-11-16T00:00:00Z";
+const FIXTURE_EDIT_CLUE = "A fixture clue, reworded after its Daily opened.";
 /** The largest statement written, comfortably inside one MCP execute_sql call. */
 export const DEFAULT_CHUNK_BYTES = 60_000;
 /**
@@ -609,9 +634,10 @@ export interface BuildOptions {
   /** Fixtures: the dates the e2e cycle fills. */
   cycle?: { from: string; through: string };
   /**
-   * Fixtures: only the items the Dailies and spare sets name, the entities
-   * those mysteries name, and no room pack (the generated SQL test, kept
-   * small enough for one execute_sql call beside the migration).
+   * Fixtures: only the items the Dailies and spare sets name, the hostable
+   * room packs with their questions, and the entities those mysteries name
+   * (the generated SQL test, kept small enough for one execute_sql call
+   * beside the migration).
    */
   referencedOnly?: boolean;
   /** The version for a sealed release; a fixture release names itself from its hash. */
@@ -715,11 +741,14 @@ export function buildRelease(options: BuildOptions): BuildResult {
   }
   spares.sort(byId);
 
-  const referenced = new Set(
-    [...dailies, ...spares].flatMap((day) =>
+  const referenced = new Set([
+    ...[...dailies, ...spares].flatMap((day) =>
       day.rounds.map((r) => r.contentId),
     ),
-  );
+    ...bank.packs
+      .filter((pack) => !NOT_HOSTABLE.has(pack.id))
+      .flatMap((pack) => pack.questionIds),
+  ]);
   const keep = <T extends { id: string }>(rows: T[]) =>
     options.referencedOnly === true
       ? rows.filter((row) => referenced.has(row.id))
@@ -737,10 +766,11 @@ export function buildRelease(options: BuildOptions): BuildResult {
   const entities = fixtures
     ? entityRows(bank, options.referencedOnly === true ? named : null, problems)
     : [];
-  const roomPacks =
-    options.referencedOnly === true
-      ? []
-      : roomPackRows(bank, new Set(questions.map((q) => q.id)), notes);
+  const roomPacks = roomPackRows(
+    bank,
+    new Set(questions.map((q) => q.id)),
+    notes,
+  );
 
   if (problems.length > 0) return { release: null, problems, notes };
   const rows: ReleaseRows = {
@@ -854,7 +884,28 @@ function packed<T>(
   return out;
 }
 
-const literal = (value: unknown) => sqlText(JSON.stringify(value));
+/**
+ * A JSON value as the inside of a SQL string literal that the Supabase MCP
+ * sends without asking a human (supabase/README.md §1). The MCP's
+ * destructive-SQL check splits a statement on every `;`, string literals
+ * included, and looks for a quoted DROP or DELETE after the word EXECUTE, so
+ * content such as "must not stop; drop it" would stop a chunk. `;` and the
+ * x of "execute" therefore travel as \u escapes, which jsonb decodes on the
+ * way in: the stored values, and the content_hash the loaders compute from
+ * them, are the same.
+ */
+export function jsonText(value: unknown): string {
+  return JSON.stringify(value)
+    .replaceAll(";", "\\u003b")
+    .replace(
+      /(e)(x)(ecute)/gi,
+      (_, e: string, x: string, rest: string) =>
+        `${e}\\u00${x.charCodeAt(0).toString(16)}${rest}`,
+    )
+    .replaceAll("'", "''");
+}
+
+const literal = (value: unknown) => `'${jsonText(value)}'`;
 
 /** The release's statements, in the fixed order of §5.4. */
 export function releaseChunks(
@@ -890,7 +941,7 @@ export function releaseChunks(
     for (const part of packed(
       rows,
       limit,
-      (row) => JSON.stringify(row).replaceAll("'", "''"),
+      jsonText,
       (rendered) =>
         `select private.${loader.fn}(${v}, ${t}, '[${rendered.join(",")}]'::jsonb${frozen});`,
     ))
@@ -951,8 +1002,10 @@ export function releaseFile(
       `-- Content release ${release.version} for the ${release.track} track, written by npm run content:release (ARCHITECTURE §5.4).`,
       "-- Sealed: git-ignored, and pasted nowhere but the Supabase MCP's execute_sql.",
       "-- Send each chunk as its own execute_sql call, in order: content rows, then schedule rows, then",
-      "-- verify_release, then record_release. Each chunk is one statement, so it applies or fails whole; a",
-      "-- failed chunk leaves the release unrecorded, and sending the file again changes nothing.",
+      "-- verify_release, then record_release. Each chunk is one statement, so it applies or fails whole. Stop",
+      "-- at the first chunk that fails: record_release refuses a release whose chunks did not all load. Sending",
+      "-- the file again changes nothing while it is the track's latest release; once a later release is",
+      "-- recorded, its first chunk is refused, so never send an older release file.",
     ],
     chunks,
   );
@@ -971,13 +1024,19 @@ export function e2eSeedFile(
       `-- every date from ${E2E_FROM} to ${E2E_THROUGH} by the fixture cycle (content/fixtures/README.md), its`,
       "-- spare sets, then verify_release and the release record (SQL-3).",
       "-- Load it after supabase/seed/config.sql, practice-items.sql and answer-entities.sql, one statement",
-      "-- per execute_sql call, in order. Loading it again changes nothing.",
+      "-- per execute_sql call, in order, stopping at the first that fails. Loading it again changes nothing. A",
+      "-- fixture change makes a new release, which loads over this one whatever has opened or frozen (SQL-3).",
     ],
     chunks,
   );
 }
 
-/** supabase/tests/content/fixture-release.test.sql: one week of the fixture release, then its rows. */
+/**
+ * supabase/tests/content/fixture-release.test.sql: one week of the fixture
+ * release, then its rows; then a room pack of the Dailies' choice rounds,
+ * which the database refuses, and a fixture edit after the week's first
+ * Daily opened, which the e2e track takes.
+ */
 export function fixtureTestFile(
   release: Release,
   chunks: readonly Chunk[],
@@ -989,12 +1048,48 @@ export function fixtureTestFile(
       name: string;
       shortName: string;
     }[];
+    /** The questions of the pack that is never hostable (NOT_HOSTABLE). */
+    notHostable: readonly string[];
   },
 ): string {
   const ids = (rows: readonly { id: string }[]) =>
     rows.length === 0
       ? "'{}'::text[]"
       : `array[${rows.map((row) => sqlText(row.id)).join(", ")}]`;
+  const played = new Set(
+    release.dailies.flatMap((daily) => daily.rounds.map((r) => r.contentId)),
+  );
+  const leaked = options.notHostable.filter((id) => played.has(id)).sort()[0];
+  // The edit: the week's first Daily, its first mystery reworded and then
+  // replaced by the first fixture mystery that Daily does not play.
+  const first = release.dailies[0];
+  const round = first?.rounds.findIndex((r) => r.type === "mystery") ?? -1;
+  const edited = release.mysteries.find(
+    (m) => m.id === first?.rounds[round]?.contentId,
+  );
+  const swap = release.mysteries.find(
+    (m) => first?.rounds.every((r) => r.contentId !== m.id) === true,
+  );
+  if (
+    first === undefined ||
+    edited === undefined ||
+    swap === undefined ||
+    leaked === undefined
+  )
+    throw new Error(
+      "the fixture week has no Daily with a mystery to edit, or plays no question of the pack that is never hostable",
+    );
+  const editVersion = sqlText(`${release.version}-edit`);
+  const editedRow = {
+    ...edited,
+    clues: [FIXTURE_EDIT_CLUE, ...edited.clues.slice(1)],
+  };
+  const editedDaily = {
+    ...first,
+    rounds: first.rounds.map((r, i) =>
+      i === round ? { ...r, contentId: swap.id } : r,
+    ),
+  };
   const expected = release.dailies.map((daily) => ({
     date: daily.date,
     number: daily.daily_number,
@@ -1017,7 +1112,8 @@ export function fixtureTestFile(
     "-- the spare sets, verify_release and the release record, in the loaders' order, as supabase/seed/",
     "-- e2e-track.sql loads the whole track. Then the rows: compositions and maximum points as the",
     "-- engine computes them, Daily numbers from the epoch, the cycle dates playing their spare sets,",
-    "-- and the record.",
+    "-- the hostable room pack, and the record. Then a room pack of the Dailies' choice rounds, which the",
+    "-- database refuses, and a fixture edit after the week's first Daily opened, which the e2e track takes.",
     "begin;",
     `select private.t_now(${sqlText(FIXTURE_TEST_CLOCK)});`,
     `insert into private.config (key, value) values ('daily_epoch', ${sqlText(JSON.stringify(options.epoch))})`,
@@ -1052,6 +1148,39 @@ export function fixtureTestFile(
     "end",
     "$$;",
     "select 'PASS SQL-3 the fixture release applies in a dry run with the expected rows, content before schedule';",
+    "-- The Dailies' choice rounds are never a room pack: release.ts sends none (NOT_HOSTABLE), and the database",
+    "-- refuses one anyway while a Daily still to close plays its questions, since a host could show them today.",
+    "do $$",
+    "begin",
+    `  perform private.release_room_packs(${editVersion}, 'e2e', ${literal([{ id: "fx-leak", title: "t", theme: "t", question_ids: options.notHostable }])}::jsonb);`,
+    "  raise exception 'a room pack holding the fixture Dailies'' choice rounds loaded';",
+    "exception",
+    "  when raise_exception then",
+    `    if sqlerrm not like ${sqlText(`%room pack fx-leak names question ${leaked}, which the e2e track plays on a Daily still to close%`)} then`,
+    "      raise;",
+    "    end if;",
+    "end",
+    "$$;",
+    "select 'PASS SQL-3 a room pack never holds the choice rounds of a Daily still to close';",
+    `-- A fixture edit after the first dates opened: the e2e track holds invented content only, so the release`,
+    `-- locks pass it by. ${first.date}'s first mystery is reworded, then replaced, once that Daily has frozen,`,
+    "-- opened and closed.",
+    `select private.t_now(${sqlText(FIXTURE_FREEZE_CLOCK)});`,
+    "select private.publish_track('e2e') is not null as published;",
+    `select private.t_now(${sqlText(FIXTURE_EDIT_CLOCK)});`,
+    `select private.release_mysteries(${editVersion}, 'e2e', '[${jsonText(editedRow)}]'::jsonb);`,
+    `select private.release_dailies(${editVersion}, 'e2e', '[${jsonText(editedDaily)}]'::jsonb);`,
+    "do $$",
+    "begin",
+    `  assert (select m.clues[1] from private.mysteries m where m.id = ${sqlText(edited.id)}) = ${sqlText(FIXTURE_EDIT_CLUE)},`,
+    "    'the reworded clue';",
+    `  assert (select d.status = 'frozen' and d.rounds -> ${round} ->> 'contentId' = ${sqlText(swap.id)} and d.release_version = ${editVersion}`,
+    `            from private.dailies d where d.track = 'e2e' and d.local_date = ${sqlText(first.date)}),`,
+    "    'the closed Daily''s new round';",
+    `  perform private.verify_release(${editVersion}, 'e2e');`,
+    "end",
+    "$$;",
+    "select 'PASS SQL-3 the e2e track takes a fixture edit after its first dates opened';",
     "rollback;",
     "",
   ].join("\n");
@@ -1216,6 +1345,9 @@ export async function fixtureOutputs(
   const test = fixtureTestFile(week.release, weekChunks, {
     epoch,
     categories: bank.categories,
+    notHostable: bank.packs
+      .filter((pack) => NOT_HOSTABLE.has(pack.id))
+      .flatMap((pack) => pack.questionIds),
   });
   const forbidden = [
     ...scanForbidden(E2E_SEED_PATH, seed),
@@ -1227,6 +1359,11 @@ export async function fixtureOutputs(
         .map((f) => `${f.file}:${f.line} ${f.rule}`)
         .join(", ")}`,
     );
+  const asks = mcpConfirmationReasons(test);
+  if (asks.length > 0)
+    throw new Error(
+      `${FIXTURE_TEST_PATH}: the MCP would ask a human to confirm (${asks.join("; ")})`,
+    );
   return {
     seed: { path: E2E_SEED_PATH, content: seed },
     test: { path: FIXTURE_TEST_PATH, content: test },
@@ -1234,20 +1371,42 @@ export async function fixtureOutputs(
   };
 }
 
+/** True when a folder or one above it holds a `.git` entry: inside a git work tree. */
+function underGit(dir: string): boolean {
+  for (let at = dir; ; at = dirname(at)) {
+    if (existsSync(join(at, ".git"))) return true;
+    if (dirname(at) === at) return false;
+  }
+}
+
 /**
- * True when `path` may hold sealed SQL: outside any git work tree, or
- * ignored by git (supabase/.generated/ is, since CNT-0).
+ * True when `path` may hold sealed SQL: outside every git work tree, or
+ * ignored by git (supabase/.generated/ is, since CNT-0). Symlinks are
+ * followed first, so the answer is about where the file would land. Under a
+ * `.git` only `git check-ignore` exit 0 allows the write: 1 is a committable
+ * path, and anything else refuses too, 128 included, which git also answers
+ * when it refuses to work in a repository (one another user owns, say) or
+ * cannot run at all. Without git's answer, a release never risks a commit.
  */
-export function safeToWrite(path: string): boolean {
-  const dir = dirname(path);
-  let probe = dir;
+export function safeToWrite(
+  path: string,
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
+  const target = resolve(path);
+  let probe = dirname(target);
   while (!existsSync(probe)) probe = dirname(probe);
-  const result = spawnSync("git", ["check-ignore", "-q", path], {
-    cwd: probe,
+  const real = existsSync(target)
+    ? realpathSync(target)
+    : join(realpathSync(probe), relative(probe, target));
+  let cwd = dirname(real);
+  while (!existsSync(cwd)) cwd = dirname(cwd);
+  if (!underGit(cwd)) return true;
+  const result = spawnSync("git", ["check-ignore", "-q", "--", real], {
+    cwd,
+    env,
     stdio: "ignore",
   });
-  // 0: ignored; 1: a tracked or committable path; 128: not a git work tree.
-  return result.status === 0 || result.status === 128;
+  return result.status === 0;
 }
 
 /**

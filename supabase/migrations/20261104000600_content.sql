@@ -13,6 +13,12 @@
 --     (Dailies, spare sets), then verify_release, then record_release,
 --     which writes the content_releases row last. Answer entities load
 --     before any release, from supabase/seed/answer-entities.sql.
+--     Each chunk is its own execute_sql call and commits alone, so the
+--     database holds a release together itself: every loader notes its
+--     chunk in release_chunks, and record_release refuses a release whose
+--     chunks did not all load; and a version already recorded loads again
+--     only while it is its track's latest, so an old release file can
+--     never put back what a later release changed.
 --   * publish(), the hourly publisher of §8.7, and content_queue, the
 --     owner's view of what needs a person, with the Daily runway.
 --
@@ -37,8 +43,23 @@
 -- refuses to change the rounds of a frozen Daily, or an item on a frozen or
 -- opened Daily, a used spare set or a published challenge pack, unless the
 -- loader is called with p_allow_frozen (content:release --allow-frozen, for
--- a correction). No release changes the rounds of a Daily whose window has
--- opened: corrections after play go through the admin functions (SQL-9).
+-- a correction). An item that only played on Dailies whose windows have
+-- closed may still take a new review date, or retire, without it. No
+-- release changes the rounds of a Daily whose window has opened:
+-- corrections after play go through the admin functions (SQL-9). And a
+-- published challenge pack names only items that played on a served Daily
+-- that has closed, --allow-frozen or not.
+--
+-- The e2e track is exempt from those locks. It holds invented fixture
+-- content only, and its test players are sandboxed and deleted after a day
+-- (§8.17), so it takes every fixture change, opened and frozen rows
+-- included, and keeps matching the mock backend's fixtures.
+--
+-- Room packs are hostable the moment they load, and a host can show one to
+-- anyone that day. So no question of an active room pack is ever on a
+-- Daily of its track that has not closed, or on an unused spare set: the
+-- loaders refuse it whichever side loads second, and verify_release checks
+-- it again.
 --
 -- Every function here is SECURITY INVOKER in private with an empty
 -- search_path. Only postgres reaches them, through MCP and pg_cron.
@@ -207,8 +228,9 @@ create table if not exists private.daily_spares (
 select private.secure_table('private.daily_spares');
 
 -- PRD §3.6.1: packs drawn from past Dailies. A release loads them as
--- drafts; publish() publishes one once 30 Dailies of its track have
--- closed and every round already played on a closed Daily. None at launch.
+-- drafts; publish() publishes one once 30 served Dailies of its track
+-- have closed and every round already played on one (played_items). None
+-- at launch.
 create table if not exists private.challenge_packs (
   id text primary key check (id ~ '^(fx-)?[a-z0-9]+(-[a-z0-9]+)*$'),
   track text not null default 'main' check (track in ('main', 'e2e')),
@@ -245,6 +267,24 @@ create table if not exists private.content_releases (
   counts jsonb not null check (jsonb_typeof(counts) = 'object')
 );
 select private.secure_table('private.content_releases');
+
+-- One row per loader chunk a release sent: its table (a key of the
+-- release's counts), the hash of its rows and how many there are.
+-- record_release adds them up by table and refuses a release whose chunks
+-- do not match its counts, so a chunk that was skipped, or failed while the
+-- operator carried on, never leaves a release recorded. A chunk sent twice
+-- counts once. About fifteen rows a release, never pruned.
+create table if not exists private.release_chunks (
+  version text not null check (version ~ '^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$'),
+  track text not null check (track in ('main', 'e2e')),
+  loader text not null check (loader in ('mysteries', 'encores', 'sealed_questions', 'room_packs',
+                                         'challenge_packs', 'dailies', 'daily_spares')),
+  rows_hash text not null check (rows_hash ~ '^[0-9a-f]{64}$'),
+  row_count integer not null check (row_count >= 0),
+  loaded_at timestamptz not null default private.now(),
+  primary key (version, loader, rows_hash)
+);
+select private.secure_table('private.release_chunks');
 
 -- The freeze rule of §8.7: days_initial ahead until switch_on, days after
 -- it. switch_on null means DAILY_EPOCH plus 28 days; the owner sets it
@@ -432,8 +472,79 @@ $$;
 
 -- The items a release changes only with p_allow_frozen: those on a Daily
 -- of the track that is frozen or has opened, on a spare set that filled a
--- date, or in a published challenge pack.
-create or replace function private.locked_items(p_track text)
+-- date, or in a published challenge pack. full_lock is false for an item
+-- whose every such Daily (or filled date) has closed and that no
+-- published pack names: it only played, so a release may still move its
+-- review date or retire it (locked_change), which changes nothing anyone
+-- saw. Every other change to it, and any change to a full-lock item,
+-- needs p_allow_frozen.
+create or replace function private.item_locks(p_track text)
+returns table (id text, full_lock boolean)
+language sql
+stable
+set search_path = ''
+as $$
+  select x.id, bool_or(x.full_lock)
+    from (
+      select r ->> 'contentId' as id, private.daily_closes_at(d.local_date) > private.now() as full_lock
+        from private.dailies d
+        cross join lateral jsonb_array_elements(d.rounds) r
+       where d.track = p_track
+         and (d.status = 'frozen' or private.daily_opens_at(d.local_date) <= private.now())
+      union all
+      select r ->> 'contentId', private.daily_closes_at(s.used_for_date) > private.now()
+        from private.daily_spares s
+        cross join lateral jsonb_array_elements(s.rounds) r
+       where s.track = p_track and s.used_for_date is not null
+      union all
+      select r ->> 'contentId', true
+        from private.challenge_packs c
+        cross join lateral jsonb_array_elements(c.rounds) r
+       where c.track = p_track and c.status = 'published'
+    ) x
+   group by x.id
+$$;
+
+-- Whether a release changes a locked item, as two rows of its table in
+-- jsonb. For an item that only played (p_played), a new review date and
+-- retirement do not count.
+create or replace function private.locked_change(p_old jsonb, p_new jsonb, p_played boolean)
+returns boolean
+language sql
+immutable
+set search_path = ''
+as $$
+  select case
+    when p_played then
+      (p_old - array['track', 'status', 'content_hash', 'review_by'])
+        <> (p_new - array['track', 'status', 'content_hash', 'review_by'])
+      or (p_old ->> 'status' is distinct from p_new ->> 'status' and p_new ->> 'status' <> 'retired')
+    else p_old ->> 'content_hash' is distinct from p_new ->> 'content_hash'
+      or p_old ->> 'status' is distinct from p_new ->> 'status'
+  end
+$$;
+
+-- The items that played on a served Daily of the track that has closed: a
+-- frozen one, since publish freezes every Daily it serves and a Daily that
+-- reaches its date unready, with no spare to take it, stays scheduled and
+-- is never served. Challenge packs draw on these only.
+create or replace function private.played_items(p_track text)
+returns text[]
+language sql
+stable
+set search_path = ''
+as $$
+  select coalesce(array_agg(distinct r ->> 'contentId'), '{}')
+    from private.dailies d
+    cross join lateral jsonb_array_elements(d.rounds) r
+   where d.track = p_track and d.status = 'frozen'
+     and private.daily_closes_at(d.local_date) <= private.now()
+$$;
+
+-- The items a Daily of the track that has not closed plays, or an unused
+-- spare set may yet play on some date. None of them may sit in an active
+-- room pack (hostable_questions).
+create or replace function private.upcoming_items(p_track text)
 returns text[]
 language sql
 stable
@@ -444,19 +555,27 @@ as $$
       select r ->> 'contentId' as id
         from private.dailies d
         cross join lateral jsonb_array_elements(d.rounds) r
-       where d.track = p_track
-         and (d.status = 'frozen' or private.daily_opens_at(d.local_date) <= private.now())
+       where d.track = p_track and private.daily_closes_at(d.local_date) > private.now()
       union all
       select r ->> 'contentId'
         from private.daily_spares s
         cross join lateral jsonb_array_elements(s.rounds) r
-       where s.track = p_track and s.used_for_date is not null
-      union all
-      select r ->> 'contentId'
-        from private.challenge_packs c
-        cross join lateral jsonb_array_elements(c.rounds) r
-       where c.track = p_track and c.status = 'published'
+       where s.track = p_track and s.active and s.used_for_date is null
     ) x
+$$;
+
+-- The questions of the track's active room packs, which any host may show
+-- today.
+create or replace function private.hostable_questions(p_track text)
+returns text[]
+language sql
+stable
+set search_path = ''
+as $$
+  select coalesce(array_agg(distinct q.id), '{}')
+    from private.room_packs p
+    cross join lateral unnest(p.question_ids) q(id)
+   where p.track = p_track and p.status = 'active'
 $$;
 
 -- ---------------------------------------------------------------------------
@@ -466,12 +585,30 @@ $$;
 -- rolls back.
 -- ---------------------------------------------------------------------------
 
-create or replace function private.release_args(p_version text, p_track text, p_rows jsonb)
-returns void
-language plpgsql
+-- sha256 of a value's canonical jsonb text: equal content, equal hash.
+create or replace function private.content_hash(p_value jsonb)
+returns text
+language sql
 immutable
 set search_path = ''
 as $$
+  select encode(sha256(convert_to(p_value::text, 'UTF8')), 'hex')
+$$;
+
+-- The checks every loader, verify_release and record_release make first.
+-- A version already recorded is sent again only while it is its track's
+-- latest release, when its loaders change nothing. An older release file
+-- would put back the content and the Dailies a later release changed, so
+-- its first chunk is refused before any row changes.
+create or replace function private.release_args(p_version text, p_track text, p_rows jsonb)
+returns void
+language plpgsql
+stable
+set search_path = ''
+as $$
+declare
+  v_recorded text;
+  v_latest text;
 begin
   if p_version is null or p_version !~ '^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$' then
     raise exception 'content release: % is not a release version', coalesce(p_version, 'null');
@@ -482,17 +619,35 @@ begin
   if p_rows is null or jsonb_typeof(p_rows) <> 'array' then
     raise exception 'content release %: the rows are not a JSON array', p_version;
   end if;
+  select r.track into v_recorded from private.content_releases r where r.version = p_version;
+  if v_recorded is null then
+    return;
+  end if;
+  if v_recorded <> p_track then
+    raise exception 'content release %: that version is recorded on the % track, not %', p_version, v_recorded, p_track;
+  end if;
+  select r.version into v_latest
+    from private.content_releases r
+   where r.track = p_track
+   order by r.applied_at desc, r.version desc
+   limit 1;
+  if v_latest is distinct from p_version then
+    raise exception 'content release %: superseded by release % on the % track, so it is never sent again; generate a new release',
+      p_version, v_latest, p_track;
+  end if;
 end
 $$;
 
--- sha256 of a value's canonical jsonb text: equal content, equal hash.
-create or replace function private.content_hash(p_value jsonb)
-returns text
+-- Notes a loader's chunk in release_chunks for record_release to count.
+create or replace function private.note_chunk(p_version text, p_track text, p_loader text, p_rows jsonb)
+returns void
 language sql
-immutable
+volatile
 set search_path = ''
 as $$
-  select encode(sha256(convert_to(p_value::text, 'UTF8')), 'hex')
+  insert into private.release_chunks (version, track, loader, rows_hash, row_count)
+  values (p_version, p_track, p_loader, private.content_hash(p_rows), jsonb_array_length(p_rows))
+  on conflict (version, loader, rows_hash) do nothing
 $$;
 
 -- The status a release asks for (active or retired), applied over the
@@ -513,7 +668,8 @@ end
 $$;
 
 -- The one refusal every content loader makes: an item moving tracks, or a
--- changed item that is locked (locked_items) without p_allow_frozen.
+-- changed item that is locked (item_locks) without p_allow_frozen. The e2e
+-- track's fixtures are never locked.
 create or replace function private.release_guard(
   p_version text, p_kind text, p_id text, p_stored_track text, p_track text,
   p_changed boolean, p_locked boolean, p_allow_frozen boolean)
@@ -526,7 +682,7 @@ begin
   if p_stored_track <> p_track then
     raise exception 'content release %: % % is on the % track, not %', p_version, p_kind, p_id, p_stored_track, p_track;
   end if;
-  if p_changed and p_locked and not coalesce(p_allow_frozen, false) then
+  if p_changed and p_locked and p_track <> 'e2e' and not coalesce(p_allow_frozen, false) then
     raise exception 'content release %: % % is on a frozen or opened Daily, a used spare set or a published challenge pack, so it is refused; pass --allow-frozen for a correction',
       p_version, p_kind, p_id;
   end if;
@@ -593,14 +749,18 @@ declare
   v_row jsonb;
   v_new private.mysteries;
   v_old private.mysteries;
-  v_locked text[];
+  v_full text[];
+  v_played text[];
   v_changed boolean;
   v_inserted integer := 0;
   v_updated integer := 0;
   v_same integer := 0;
 begin
   perform private.release_args(p_version, p_track, p_rows);
-  v_locked := private.locked_items(p_track);
+  select coalesce(array_agg(l.id) filter (where l.full_lock), '{}'),
+         coalesce(array_agg(l.id) filter (where not l.full_lock), '{}')
+    into v_full, v_played
+    from private.item_locks(p_track) l;
   for v_row in select r from jsonb_array_elements(p_rows) with ordinality x(r, n) order by n loop
     v_new := jsonb_populate_record(null::private.mysteries, v_row);
     if v_new.id is null then
@@ -617,7 +777,8 @@ begin
     end if;
     v_changed := v_old.content_hash <> v_new.content_hash or v_old.status <> v_new.status;
     perform private.release_guard(p_version, 'mystery', v_new.id, v_old.track, p_track,
-      v_changed, v_new.id = any (v_locked), p_allow_frozen);
+      private.locked_change(to_jsonb(v_old), to_jsonb(v_new), v_new.id = any (v_played)),
+      v_new.id = any (v_full) or v_new.id = any (v_played), p_allow_frozen);
     if not v_changed then
       v_same := v_same + 1;
       continue;
@@ -631,6 +792,7 @@ begin
      where m.id = v_new.id;
     v_updated := v_updated + 1;
   end loop;
+  perform private.note_chunk(p_version, p_track, 'mysteries', p_rows);
   return jsonb_build_object('table', 'mysteries', 'rows', jsonb_array_length(p_rows),
     'inserted', v_inserted, 'updated', v_updated, 'unchanged', v_same);
 end
@@ -647,14 +809,18 @@ declare
   v_row jsonb;
   v_new private.encores;
   v_old private.encores;
-  v_locked text[];
+  v_full text[];
+  v_played text[];
   v_changed boolean;
   v_inserted integer := 0;
   v_updated integer := 0;
   v_same integer := 0;
 begin
   perform private.release_args(p_version, p_track, p_rows);
-  v_locked := private.locked_items(p_track);
+  select coalesce(array_agg(l.id) filter (where l.full_lock), '{}'),
+         coalesce(array_agg(l.id) filter (where not l.full_lock), '{}')
+    into v_full, v_played
+    from private.item_locks(p_track) l;
   for v_row in select r from jsonb_array_elements(p_rows) with ordinality x(r, n) order by n loop
     v_new := jsonb_populate_record(null::private.encores, v_row);
     if v_new.id is null then
@@ -671,7 +837,8 @@ begin
     end if;
     v_changed := v_old.content_hash <> v_new.content_hash or v_old.status <> v_new.status;
     perform private.release_guard(p_version, 'encore', v_new.id, v_old.track, p_track,
-      v_changed, v_new.id = any (v_locked), p_allow_frozen);
+      private.locked_change(to_jsonb(v_old), to_jsonb(v_new), v_new.id = any (v_played)),
+      v_new.id = any (v_full) or v_new.id = any (v_played), p_allow_frozen);
     if not v_changed then
       v_same := v_same + 1;
       continue;
@@ -686,6 +853,7 @@ begin
      where e.id = v_new.id;
     v_updated := v_updated + 1;
   end loop;
+  perform private.note_chunk(p_version, p_track, 'encores', p_rows);
   return jsonb_build_object('table', 'encores', 'rows', jsonb_array_length(p_rows),
     'inserted', v_inserted, 'updated', v_updated, 'unchanged', v_same);
 end
@@ -702,14 +870,18 @@ declare
   v_row jsonb;
   v_new private.sealed_questions;
   v_old private.sealed_questions;
-  v_locked text[];
+  v_full text[];
+  v_played text[];
   v_changed boolean;
   v_inserted integer := 0;
   v_updated integer := 0;
   v_same integer := 0;
 begin
   perform private.release_args(p_version, p_track, p_rows);
-  v_locked := private.locked_items(p_track);
+  select coalesce(array_agg(l.id) filter (where l.full_lock), '{}'),
+         coalesce(array_agg(l.id) filter (where not l.full_lock), '{}')
+    into v_full, v_played
+    from private.item_locks(p_track) l;
   for v_row in select r from jsonb_array_elements(p_rows) with ordinality x(r, n) order by n loop
     v_new := jsonb_populate_record(null::private.sealed_questions, v_row);
     if v_new.id is null then
@@ -726,7 +898,8 @@ begin
     end if;
     v_changed := v_old.content_hash <> v_new.content_hash or v_old.status <> v_new.status;
     perform private.release_guard(p_version, 'question', v_new.id, v_old.track, p_track,
-      v_changed, v_new.id = any (v_locked), p_allow_frozen);
+      private.locked_change(to_jsonb(v_old), to_jsonb(v_new), v_new.id = any (v_played)),
+      v_new.id = any (v_full) or v_new.id = any (v_played), p_allow_frozen);
     if not v_changed then
       v_same := v_same + 1;
       continue;
@@ -739,6 +912,7 @@ begin
      where q.id = v_new.id;
     v_updated := v_updated + 1;
   end loop;
+  perform private.note_chunk(p_version, p_track, 'sealed_questions', p_rows);
   return jsonb_build_object('table', 'sealed_questions', 'rows', jsonb_array_length(p_rows),
     'inserted', v_inserted, 'updated', v_updated, 'unchanged', v_same);
 end
@@ -746,7 +920,10 @@ $$;
 
 -- Hostable room packs: { id, title, theme, question_ids }. A pack keeps
 -- its status; rooms copy their questions when created (§8.11), so a
--- changed pack never reaches a room already open.
+-- changed pack never reaches a room already open. An active pack is
+-- hostable as soon as its chunk commits, so it may not name a question
+-- that a Daily of the track still to close, or an unused spare set, plays
+-- (upcoming_items): a host could show it before its date.
 create or replace function private.release_room_packs(p_version text, p_track text, p_rows jsonb)
 returns jsonb
 language plpgsql
@@ -757,9 +934,12 @@ declare
   v_row jsonb;
   v_new private.room_packs;
   v_old private.room_packs;
+  v_upcoming text[];
+  v_clash text;
   v_count integer := 0;
 begin
   perform private.release_args(p_version, p_track, p_rows);
+  v_upcoming := private.upcoming_items(p_track);
   for v_row in select r from jsonb_array_elements(p_rows) with ordinality x(r, n) order by n loop
     v_new := jsonb_populate_record(null::private.room_packs, v_row);
     if v_new.id is null then
@@ -768,18 +948,29 @@ begin
     select * into v_old from private.room_packs p where p.id = v_new.id for update;
     perform private.release_guard(p_version, 'room pack', v_new.id, coalesce(v_old.track, p_track), p_track,
       false, false, false);
+    if coalesce(v_old.status, 'active') = 'active' then
+      select u.q into v_clash from unnest(v_new.question_ids) u(q) where u.q = any (v_upcoming) order by u.q limit 1;
+      if v_clash is not null then
+        raise exception 'content release %: room pack % names question %, which the % track plays on a Daily still to close or holds in an unused spare set, so it is refused; a hostable pack holds no such question',
+          p_version, v_new.id, v_clash, p_track;
+      end if;
+    end if;
     insert into private.room_packs (id, track, title, theme, question_ids)
     values (v_new.id, p_track, v_new.title, v_new.theme, v_new.question_ids)
     on conflict (id) do update
       set title = excluded.title, theme = excluded.theme, question_ids = excluded.question_ids;
     v_count := v_count + 1;
   end loop;
+  perform private.note_chunk(p_version, p_track, 'room_packs', p_rows);
   return jsonb_build_object('table', 'room_packs', 'rows', v_count);
 end
 $$;
 
 -- Challenge packs: { id, title, theme, rounds }, loaded as drafts. A
--- published pack's rounds change only with p_allow_frozen.
+-- published pack's rounds change only with p_allow_frozen, and even then
+-- only to items that played on a served Daily that has closed
+-- (played_items): a pack player must never meet an upcoming Daily's item.
+-- The refusal rolls the chunk back, so the pack keeps its rounds.
 create or replace function private.release_challenge_packs(
   p_version text, p_track text, p_rows jsonb, p_allow_frozen boolean default false)
 returns jsonb
@@ -791,6 +982,8 @@ declare
   v_row jsonb;
   v_rounds jsonb;
   v_old private.challenge_packs;
+  v_changed boolean;
+  v_played text[];
   v_count integer := 0;
 begin
   perform private.release_args(p_version, p_track, p_rows);
@@ -801,8 +994,16 @@ begin
     v_rounds := private.release_rounds(p_version, 'challenge pack ' || (v_row ->> 'id'), v_row -> 'rounds');
     select * into v_old from private.challenge_packs c where c.id = v_row ->> 'id' for update;
     if v_old.id is not null then
+      v_changed := private.bare_rounds(v_old.rounds) <> private.bare_rounds(v_rounds);
       perform private.release_guard(p_version, 'challenge pack', v_old.id, v_old.track, p_track,
-        private.bare_rounds(v_old.rounds) <> private.bare_rounds(v_rounds), v_old.status = 'published', p_allow_frozen);
+        v_changed, v_old.status = 'published', p_allow_frozen);
+      if v_changed and v_old.status = 'published' then
+        v_played := coalesce(v_played, private.played_items(p_track));
+        if exists (select 1 from jsonb_array_elements(v_rounds) r where not (r ->> 'contentId' = any (v_played))) then
+          raise exception 'content release %: challenge pack % is published, and its new rounds name an item no served Daily of the % track has played and closed, so it is refused',
+            p_version, v_old.id, p_track;
+        end if;
+      end if;
     end if;
     insert into private.challenge_packs as c (id, track, title, theme, rounds, composition, max_points)
     values (v_row ->> 'id', p_track, v_row ->> 'title', v_row ->> 'theme', v_rounds,
@@ -813,15 +1014,33 @@ begin
           composition = excluded.composition, max_points = excluded.max_points;
     v_count := v_count + 1;
   end loop;
+  perform private.note_chunk(p_version, p_track, 'challenge_packs', p_rows);
   return jsonb_build_object('table', 'challenge_packs', 'rows', v_count);
 end
+$$;
+
+-- The first item of p_rounds that is one of p_items, or null.
+create or replace function private.first_named(p_rounds jsonb, p_items text[])
+returns text
+language sql
+immutable
+set search_path = ''
+as $$
+  select r ->> 'contentId'
+    from jsonb_array_elements(p_rounds) with ordinality x(r, n)
+   where r ->> 'contentId' = any (p_items)
+   order by n
+   limit 1
 $$;
 
 -- Dailies: { date, daily_number, rounds, ready, spare_order }. The number
 -- must be the one the epoch gives (§8.7). A date a spare already took
 -- keeps it. A frozen Daily takes new rounds only with p_allow_frozen, and
 -- one whose window has opened never does; either keeps its ready flag,
--- which the freeze decided, and takes only a new spare order.
+-- which the freeze decided, and takes only a new spare order. The e2e
+-- track takes new rounds for both. New rounds for a Daily that has not
+-- closed may not name a question of an active room pack
+-- (hostable_questions).
 create or replace function private.release_dailies(
   p_version text, p_track text, p_rows jsonb, p_allow_frozen boolean default false)
 returns jsonb
@@ -839,6 +1058,8 @@ declare
   v_entry jsonb;
   v_old private.dailies;
   v_opened boolean;
+  v_clash text;
+  v_hostable text[];
   v_epoch date := private.daily_epoch();
   v_inserted integer := 0;
   v_updated integer := 0;
@@ -849,6 +1070,7 @@ begin
   if v_epoch is null then
     raise exception 'content release %: daily_epoch is not set; load supabase/seed/config.sql first', p_version;
   end if;
+  v_hostable := private.hostable_questions(p_track);
   for v_row in select r from jsonb_array_elements(p_rows) with ordinality x(r, n) order by n loop
     if coalesce(v_row ->> 'date', '') !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' then
       raise exception 'content release %: a Daily row has no date', p_version;
@@ -882,8 +1104,15 @@ begin
       v_order := v_order || jsonb_build_array(jsonb_build_object('spare', v_entry ->> 'spare', 'breaks', v_entry -> 'breaks'));
     end loop;
 
+    v_clash := case when private.daily_closes_at(v_date) > private.now()
+                    then private.first_named(v_rounds, v_hostable) end;
+
     select * into v_old from private.dailies d where d.track = p_track and d.local_date = v_date for update;
     if v_old.local_date is null then
+      if v_clash is not null then
+        raise exception 'content release %: the % Daily for % plays question %, which an active room pack holds, so it is refused; a host could show it before its date',
+          p_version, p_track, v_date, v_clash;
+      end if;
       insert into private.dailies (track, daily_number, local_date, rounds, composition, max_points,
                                    status, ready, spare_order, release_version)
       values (p_track, v_number, v_date, v_rounds, private.composition_of(v_rounds), private.max_points_of(v_rounds),
@@ -903,13 +1132,17 @@ begin
        where d.track = p_track and d.local_date = v_date;
       v_same := v_same + 1;
     else
-      if v_opened then
+      if v_opened and p_track <> 'e2e' then
         raise exception 'content release %: the % Daily for % has opened, so its rounds never change; correct a played Daily with admin_void_round or admin_correct_key',
           p_version, p_track, v_date;
       end if;
-      if v_old.status = 'frozen' and not coalesce(p_allow_frozen, false) then
+      if v_old.status = 'frozen' and p_track <> 'e2e' and not coalesce(p_allow_frozen, false) then
         raise exception 'content release %: the % Daily for % is frozen, so it is refused; pass --allow-frozen for a correction',
           p_version, p_track, v_date;
+      end if;
+      if v_clash is not null then
+        raise exception 'content release %: the % Daily for % plays question %, which an active room pack holds, so it is refused; a host could show it before its date',
+          p_version, p_track, v_date, v_clash;
       end if;
       update private.dailies d
          set rounds = private.carry_voided(d.rounds, v_rounds), composition = private.composition_of(v_rounds),
@@ -919,6 +1152,7 @@ begin
       v_updated := v_updated + 1;
     end if;
   end loop;
+  perform private.note_chunk(p_version, p_track, 'dailies', p_rows);
   return jsonb_build_object('table', 'dailies', 'rows', jsonb_array_length(p_rows),
     'inserted', v_inserted, 'updated', v_updated, 'unchanged', v_same, 'kept_by_spare', v_kept);
 end
@@ -926,8 +1160,10 @@ $$;
 
 -- Spare sets: { id, rounds }. Only sets whose every item passed pass D
 -- for a spare reach a release (CONTENT_GUIDE §9.9 rule 7). A set that
--- already filled a date takes new rounds only with p_allow_frozen; the
--- Daily it filled keeps its own copy either way.
+-- already filled a date takes new rounds only with p_allow_frozen (on the
+-- e2e track always); the Daily it filled keeps its own copy either way. A
+-- set left unused, which may yet fill a date, may not name a question of
+-- an active room pack (hostable_questions).
 create or replace function private.release_spares(
   p_version text, p_track text, p_rows jsonb, p_allow_frozen boolean default false)
 returns jsonb
@@ -939,17 +1175,25 @@ declare
   v_row jsonb;
   v_rounds jsonb;
   v_old private.daily_spares;
+  v_clash text;
+  v_hostable text[];
   v_inserted integer := 0;
   v_updated integer := 0;
   v_same integer := 0;
 begin
   perform private.release_args(p_version, p_track, p_rows);
+  v_hostable := private.hostable_questions(p_track);
   for v_row in select r from jsonb_array_elements(p_rows) with ordinality x(r, n) order by n loop
     if coalesce(v_row ->> 'id', '') !~ '^spare\.[0-9]{2}$' then
       raise exception 'content release %: a spare row has no spare.<NN> id', p_version;
     end if;
     v_rounds := private.release_rounds(p_version, 'spare ' || (v_row ->> 'id'), v_row -> 'rounds');
     select * into v_old from private.daily_spares s where s.track = p_track and s.id = v_row ->> 'id' for update;
+    v_clash := case when v_old.used_for_date is null then private.first_named(v_rounds, v_hostable) end;
+    if v_clash is not null then
+      raise exception 'content release %: % spare % plays question %, which an active room pack holds, so it is refused; a host could show it before the spare fills a date',
+        p_version, p_track, v_row ->> 'id', v_clash;
+    end if;
     if v_old.id is null then
       insert into private.daily_spares (track, id, rounds, composition, max_points, release_version)
       values (p_track, v_row ->> 'id', v_rounds, private.composition_of(v_rounds), private.max_points_of(v_rounds), p_version);
@@ -959,7 +1203,7 @@ begin
        where s.track = p_track and s.id = v_old.id;
       v_same := v_same + 1;
     else
-      if v_old.used_for_date is not null and not coalesce(p_allow_frozen, false) then
+      if v_old.used_for_date is not null and p_track <> 'e2e' and not coalesce(p_allow_frozen, false) then
         raise exception 'content release %: % spare % filled % already, so it is refused; pass --allow-frozen for a correction',
           p_version, p_track, v_old.id, v_old.used_for_date;
       end if;
@@ -970,6 +1214,7 @@ begin
       v_updated := v_updated + 1;
     end if;
   end loop;
+  perform private.note_chunk(p_version, p_track, 'daily_spares', p_rows);
   return jsonb_build_object('table', 'daily_spares', 'rows', jsonb_array_length(p_rows),
     'inserted', v_inserted, 'updated', v_updated, 'unchanged', v_same);
 end
@@ -990,10 +1235,14 @@ $$;
 --      distractor entities;
 --   3. every active mystery's entities exist on its type's list, and the
 --      e2e track's mysteries name fixture entities only, the main track's
---      none;
---   4. a published challenge pack draws only on Dailies that have closed.
--- The message lists the first problems by date, id and rule word. Answers
--- what it checked.
+--      none (named by field, such as distractors[1], never by entity id:
+--      an x.<type>.<slug> id spells out a name);
+--   4. a published challenge pack draws only on items that played on a
+--      served Daily that has closed (played_items);
+--   5. no active room pack names a question that a Daily still to close or
+--      an unused spare set plays (upcoming_items), whichever loaded last.
+-- The message lists the first problems by date or id, field and rule word.
+-- Answers what it checked.
 create or replace function private.verify_release(p_version text, p_track text)
 returns jsonb
 language plpgsql
@@ -1002,12 +1251,16 @@ set search_path = ''
 as $$
 declare
   v_now timestamptz := private.now();
+  v_played text[];
+  v_upcoming text[];
   v_problems jsonb;
   v_dailies integer;
   v_spares integer;
 begin
   perform private.release_args(p_version, p_track, '[]'::jsonb);
-  select coalesce(jsonb_agg(p order by p ->> 'at', p ->> 'id'), '[]'::jsonb)
+  v_played := private.played_items(p_track);
+  v_upcoming := private.upcoming_items(p_track);
+  select coalesce(jsonb_agg(p order by p ->> 'at', p ->> 'id', p ->> 'field'), '[]'::jsonb)
     into v_problems
     from (
       select jsonb_build_object('at', 'daily ' || d.local_date) || x.p as p
@@ -1037,11 +1290,7 @@ begin
         from private.challenge_packs c
         cross join lateral jsonb_array_elements(c.rounds) r
        where c.track = p_track and c.status = 'published'
-         and not exists (
-           select 1 from private.dailies d
-           cross join lateral jsonb_array_elements(d.rounds) dr
-            where d.track = p_track and private.daily_closes_at(d.local_date) <= v_now
-              and dr ->> 'contentId' = r ->> 'contentId')
+         and not (r ->> 'contentId' = any (v_played))
       union all
       select jsonb_build_object('at', 'room pack ' || rp.id, 'id', q.id, 'problem', 'missing')
         from private.room_packs rp
@@ -1049,10 +1298,23 @@ begin
        where rp.track = p_track
          and not exists (select 1 from private.sealed_questions sq where sq.id = q.id and sq.track = p_track)
       union all
-      select jsonb_build_object('at', 'mystery ' || m.id, 'id', e.id,
+      select jsonb_build_object('at', 'room pack ' || rp.id, 'id', q.id, 'problem', 'daily_question')
+        from private.room_packs rp
+        cross join lateral unnest(rp.question_ids) q(id)
+       where rp.track = p_track and rp.status = 'active' and q.id = any (v_upcoming)
+      union all
+      select jsonb_build_object('at', 'mystery ' || m.id, 'field', e.field,
                'problem', case when (e.id like 'fx.%') <> (p_track = 'e2e') then 'entity_track' else 'entity_missing' end)
         from private.mysteries m
-        cross join lateral unnest(array[m.answer_entity] || m.accepted_entities || m.distractors) e(id)
+        cross join lateral (
+          select 'answer_entity' as field, m.answer_entity as id
+          union all
+          select 'accepted_entities[' || (a.n - 1) || ']', a.id
+            from unnest(m.accepted_entities) with ordinality a(id, n)
+          union all
+          select 'distractors[' || (o.n - 1) || ']', o.id
+            from unnest(m.distractors) with ordinality o(id, n)
+        ) e
        where m.track = p_track and m.status = 'active'
          and ((e.id like 'fx.%') <> (p_track = 'e2e')
               or not exists (select 1 from private.answer_entities a
@@ -1070,12 +1332,13 @@ begin
 end
 $$;
 
--- The last call of a release: verifies the track again, then marks what
--- the release no longer names (scheduled Dailies still to open lose their
--- ready flag; unused spare sets go inactive), with one owner alert when it
--- marks anything, and records the release. A version already recorded
--- with this content answers the earlier record; with other content it is
--- refused.
+-- The last call of a release: verifies the track again, checks that every
+-- chunk of the release loaded (release_chunks against the counts), then
+-- marks what the release no longer names (scheduled Dailies still to open
+-- lose their ready flag; unused spare sets go inactive), with one owner
+-- alert when it marks anything, and records the release. A version
+-- already recorded with this content answers the earlier record; with
+-- other content it is refused.
 create or replace function private.record_release(
   p_version text, p_track text, p_content_hash text, p_counts jsonb)
 returns jsonb
@@ -1086,6 +1349,7 @@ as $$
 declare
   v_old private.content_releases;
   v_checked jsonb;
+  v_short text;
   v_withdrawn jsonb;
   v_inactive jsonb;
 begin
@@ -1105,6 +1369,26 @@ begin
       'applied_at', v_old.applied_at);
   end if;
   v_checked := private.verify_release(p_version, p_track);
+
+  -- Each chunk committed on its own, so a skipped or failed one shows only
+  -- here, as rows loaded short of the counts. Recording then would also
+  -- withdraw every Daily of a Dailies chunk that never loaded.
+  select string_agg(format('%s %s of %s', t.name, coalesce(l.n, 0),
+                           coalesce((p_counts ->> t.name)::integer, 0)), ', ' order by t.ord)
+    into v_short
+    from unnest(array['mysteries', 'encores', 'sealed_questions', 'room_packs', 'challenge_packs',
+                      'dailies', 'daily_spares']) with ordinality t(name, ord)
+    left join (
+      select c.loader, sum(c.row_count)::integer as n
+        from private.release_chunks c
+       where c.version = p_version and c.track = p_track
+       group by c.loader
+    ) l on l.loader = t.name
+   where coalesce(l.n, 0) <> coalesce((p_counts ->> t.name)::integer, 0);
+  if v_short is not null then
+    raise exception 'content release %: its chunks did not all load (rows loaded of rows in the release: %), so it is not recorded and nothing is withdrawn; send every chunk once, in order, then record (if an earlier attempt sent this version cut into other chunks, generate a new release)',
+      p_version, v_short;
+  end if;
 
   with withdrawn as (
     update private.dailies d
@@ -1249,8 +1533,10 @@ $$;
 --   2. The freeze (config freeze): a scheduled Daily up to days_initial
 --      days ahead before switch_on, days after it, freezes when it can
 --      publish, and otherwise stays editable with a daily_unready alert.
---   3. Draft challenge packs publish once 30 Dailies of the track have
---      closed and every round names an active item that played on one.
+--   3. Draft challenge packs publish once 30 served (frozen) Dailies of the
+--      track have closed and every round names an active item that played
+--      on one (played_items). A Daily that reached its date unready with
+--      no spare was never served, so neither it nor its items count.
 --   4. The runway: fewer than runway_alarm Dailies from today leaves a
 --      runway alert, once a day.
 -- Answers what it did.
@@ -1338,19 +1624,18 @@ begin
   end loop;
 
   if (select count(*) from private.dailies d
-       where d.track = p_track and private.daily_closes_at(d.local_date) <= v_now) >= 30 then
-    with published as (
+       where d.track = p_track and d.status = 'frozen' and private.daily_closes_at(d.local_date) <= v_now) >= 30 then
+    with played as (
+      select private.played_items(p_track) as ids
+    ), published as (
       update private.challenge_packs c
          set status = 'published', published_at = v_now
+        from played
        where c.track = p_track and c.status = 'draft'
          and jsonb_array_length(private.round_problems(p_track, c.rounds, null)) = 0
          and not exists (
            select 1 from jsonb_array_elements(c.rounds) r
-            where not exists (
-              select 1 from private.dailies d
-              cross join lateral jsonb_array_elements(d.rounds) dr
-               where d.track = p_track and private.daily_closes_at(d.local_date) <= v_now
-                 and dr ->> 'contentId' = r ->> 'contentId'))
+            where not (r ->> 'contentId' = any (played.ids)))
       returning c.id
     )
     select count(*) into v_packs from published;

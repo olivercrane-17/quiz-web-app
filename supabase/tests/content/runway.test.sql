@@ -1,13 +1,15 @@
 -- AC-OPS-02 (PRD §3.18.6; ARCHITECTURE §8.4, §8.15; SQL-3): with 29
 -- scheduled Dailies left on a track the content queue shows the runway
 -- alarm, and with 30 it doesn't; the hourly publisher leaves a runway alert
--- only below 30. It plays in 2099, after every real Daily, and writes the
--- config it reads, so it passes on a live database.
+-- only below 30. It plays in 2099, after every real Daily, numbers its
+-- Dailies from an epoch of its own so they stay below every real Daily's
+-- number (the key of a track's Dailies), and writes the config it reads, so
+-- it passes on a live database.
 begin;
 
 select private.t_now('2099-03-01T00:07:00Z');
 insert into private.config (key, value)
-values ('daily_epoch', '"2099-01-01"'), ('runway_alarm', '30'), ('egress_sample_rate', '0')
+values ('daily_epoch', '"2099-02-28"'), ('runway_alarm', '30'), ('egress_sample_rate', '0')
 on conflict (key) do update set value = excluded.value;
 insert into private.categories (id, slug, name, short_name)
 values ('geo', 'geography', 'Geography', 'Geography'), ('art', 'art-design', 'Art & Design', 'Art & Design')
@@ -32,7 +34,7 @@ begin
     'learn_more', 'x', 'source_labels', '[]'::jsonb, 'review_by', null, 'status', 'active')));
   -- 30 Dailies from today, 1 to 30 March 2099.
   perform private.release_dailies('t-r', 'main', (
-    select jsonb_agg(jsonb_build_object('date', d::date, 'daily_number', (d::date - date '2099-01-01') + 1,
+    select jsonb_agg(jsonb_build_object('date', d::date, 'daily_number', (d::date - date '2099-02-28') + 1,
              'rounds', '[{"type": "mystery", "difficulty": "easy", "contentId": "m.geo.9901"},
                          {"type": "encore", "difficulty": null, "contentId": "e.9901"}]'::jsonb,
              'ready', true, 'spare_order', '[]'::jsonb))
