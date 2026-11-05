@@ -105,6 +105,51 @@
       "required": false,
       "ticket": "SQL-2",
       "why": "nightly_players finds test players older than a day through this partial index. Until SQL-8 schedules the nightly job, and the table holds enough test players for a plan to choose it, nothing scans it, so INFO 0005 reports it as unused."
+    },
+    {
+      "lint": "unused_index",
+      "schema": "private",
+      "table": "practice_items",
+      "index": "practice_items_category_idx",
+      "required": false,
+      "ticket": "SQL-3",
+      "why": "It covers the foreign key to categories (§8.3: every foreign key indexed, lint 0001) and the per-category reads of calibration and pulls (SQL-9). Nothing reads practice items by category before SQL-9, so INFO 0005 reports it as unused."
+    },
+    {
+      "lint": "unused_index",
+      "schema": "private",
+      "table": "mysteries",
+      "index": "mysteries_category_idx",
+      "required": false,
+      "ticket": "SQL-3",
+      "why": "It covers the foreign key to categories (§8.3, lint 0001), so a category's mysteries are found without a scan. No query reads mysteries by category until the weekly content run's inputs (SQL-9), so INFO 0005 reports it as unused."
+    },
+    {
+      "lint": "unused_index",
+      "schema": "private",
+      "table": "mysteries",
+      "index": "mysteries_answer_idx",
+      "required": false,
+      "ticket": "SQL-3",
+      "why": "It covers the foreign key to answer_entities (§8.3, lint 0001) and finds the mysteries whose answer is an entity, for key corrections and accepted ids (SQL-9). Unused until those run, so INFO 0005 reports it."
+    },
+    {
+      "lint": "unused_index",
+      "schema": "private",
+      "table": "encores",
+      "index": "encores_category_idx",
+      "required": false,
+      "ticket": "SQL-3",
+      "why": "It covers the foreign key to categories (§8.3, lint 0001). Nothing reads encores by category in v1, but an unindexed foreign key is lint 0001, which §8.2 accepts only for player_days.attempt_id, so the index stays and INFO 0005 reports it as unused."
+    },
+    {
+      "lint": "unused_index",
+      "schema": "private",
+      "table": "sealed_questions",
+      "index": "sealed_questions_category_idx",
+      "required": false,
+      "ticket": "SQL-3",
+      "why": "It covers the foreign key to categories (§8.3, lint 0001) and serves room hosting by category (SQL-13). Unused until rooms exist, so INFO 0005 reports it."
     }
   ]
 }
