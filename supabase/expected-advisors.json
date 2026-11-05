@@ -1,20 +1,44 @@
 {
   "about": "The advisor findings we accept on purpose (ARCHITECTURE §8.2 rule 4, §11.6). npm run sql:advisors compares get_advisors output (security and performance) with this file: a finding that matches no entry fails, and a required entry with no finding fails. Every entry says why it is accepted. Edit it in the same pull request as the migration that causes the finding.",
   "live": {
-    "checked": "2026-11-04",
+    "checked": "2026-11-05",
     "applied": [
       "20261031000000_key_escrow",
       "20261104000000_baseline",
-      "20261104000100_helpers"
+      "20261104000100_helpers",
+      "20261104000400_identity"
     ],
-    "security": [],
+    "security": [
+      "anon_security_definer_function_executable public.create_claim",
+      "anon_security_definer_function_executable public.create_sync_code",
+      "anon_security_definer_function_executable public.delete_player",
+      "anon_security_definer_function_executable public.export_my_data",
+      "anon_security_definer_function_executable public.get_profile",
+      "anon_security_definer_function_executable public.peek_claim",
+      "anon_security_definer_function_executable public.redeem_claim",
+      "anon_security_definer_function_executable public.redeem_sync_code",
+      "anon_security_definer_function_executable public.register_player",
+      "anon_security_definer_function_executable public.set_age_band",
+      "anon_security_definer_function_executable public.t_client_ip",
+      "authenticated_security_definer_function_executable public.create_claim",
+      "authenticated_security_definer_function_executable public.create_sync_code",
+      "authenticated_security_definer_function_executable public.delete_player",
+      "authenticated_security_definer_function_executable public.export_my_data",
+      "authenticated_security_definer_function_executable public.get_profile",
+      "authenticated_security_definer_function_executable public.peek_claim",
+      "authenticated_security_definer_function_executable public.redeem_claim",
+      "authenticated_security_definer_function_executable public.redeem_sync_code",
+      "authenticated_security_definer_function_executable public.register_player",
+      "authenticated_security_definer_function_executable public.set_age_band",
+      "authenticated_security_definer_function_executable public.t_client_ip"
+    ],
     "performance": [
-      "unused_index private.rate_counters rate_counters_window_start_idx",
+      "unused_index private.players players_test_created_at_idx",
       "unused_index private.write_keys write_keys_created_at_idx",
       "unused_index private.write_keys write_keys_player_id_idx",
       "unused_index private.rpc_errors rpc_errors_at_idx"
     ],
-    "note": "After SQL-1's baseline and helpers were applied, the security advisor reported nothing and the performance advisor reported INFO 0005 for exactly the four indexes accepted below. The hosted MCP grouped them as one unused_index lint with four findings, which npm run sql:advisors splits into one lint per finding. A restrictive deny-all policy counts as a policy for lint 0008, so the new tables raise no 0008 finding."
+    "note": "After SQL-2's 20261104000400_identity was applied (its attended migration and the owner-only one still wait), the security advisor reported lints 0028 and 0029 for exactly the eleven RPCs in rpc.functions, and the performance advisor reported INFO 0005 for the four indexes listed. rate_counters_window_start_idx is no longer reported: the SQL test runs scan private.rate_counters through it, and index usage statistics survive a transaction that rolls back. Its entry stays, optional, for the hourly prune. The hosted MCP groups each lint's findings ({ name, count, findings }), which npm run sql:advisors splits into one lint per finding. A restrictive deny-all policy counts as a policy for lint 0008, so the new tables raise no 0008 finding."
   },
   "rpc": {
     "lints": [
@@ -62,7 +86,7 @@
       "index": "write_keys_player_id_idx",
       "required": false,
       "ticket": "SQL-1",
-      "why": "delete_player (SQL-2) removes a player's write keys by player id with this index, so the deletion stays an index lookup (AC-DAT-02). Nothing uses it before SQL-2."
+      "why": "delete_player (SQL-2) removes a player's write keys by player id with this index, so the deletion stays an index lookup (AC-DAT-02). Nothing uses it until 20261104000500_identity_attended.sql gives delete_player its deleting body; the unattended version only answers unavailable."
     },
     {
       "lint": "unused_index",
