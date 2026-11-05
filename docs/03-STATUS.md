@@ -33,7 +33,7 @@ root disk.
 
 ## Running at the pause
 
-All of these live only on this container's disk until they merge into the integration branch.
+Each lane with commits is also pushed to a `backup/lane-<name>` branch on GitHub (the owner approved this), and a background job refreshed those every 10 minutes for about two hours after the pause began. Content checkpoints go to `backup/content-production` the same way. Delete a backup branch once its lane merges.
 
 | Work | Branch or place | State at the pause |
 |---|---|---|
