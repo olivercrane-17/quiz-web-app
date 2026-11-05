@@ -8,6 +8,10 @@
  * outside `<main>` is the page's banner landmark. The `(play)` layout adds
  * the skip link and the live regions around it. `<main>` carries the
  * landmark's id only while its route is on screen (`MainLandmark`).
+ *
+ * `.kn-play-main` (shell.css) keeps every play screen's questions and
+ * answers whole: no hyphen splits a word at a line end (RITE round 2,
+ * R2-17), unless a round asks for one on its own text.
  */
 import type { ReactNode } from "react";
 
@@ -28,7 +32,10 @@ export function PlayFrame({ header, children, className }: PlayFrameProps) {
     <>
       <PlayHeader {...header} />
       <MainLandmark
-        className={cx("flex w-full flex-1 flex-col outline-none", className)}
+        className={cx(
+          "kn-play-main flex w-full flex-1 flex-col outline-none",
+          className,
+        )}
       >
         {children}
       </MainLandmark>

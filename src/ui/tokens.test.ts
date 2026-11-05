@@ -167,6 +167,27 @@ const CONTRAST_PAIRS: [string, string, number][] = [
   ["chart-you", "surface", 3],
 ];
 
+/**
+ * The flat marks (RITE round 2, R2-06 and R2-28), which no border outlines
+ * any more: a pill's mark on its wash, the current step's text on its ink
+ * fill and that fill against the page, the inner edge of practice's empty
+ * segments against their wash and the page, a verdict's glyph on its fill,
+ * and placeholder text (globals.css) on every surface a field sits on.
+ */
+const MARK_PAIRS: [string, string, number][] = [
+  ["ink-2", "sunken", 4.5],
+  ["ink", "sunken", 4.5],
+  ["surface", "ink", 4.5],
+  ["ink", "page", 3],
+  ["rule-strong", "sunken", 3],
+  ["rule-strong", "page", 3],
+  ["on-correct", "correct", 4.5],
+  ["incorrect-text", "incorrect-tint", 4.5],
+  ["ink-3", "page", 4.5],
+  ["ink-3", "surface", 4.5],
+  ["ink-3", "sunken", 4.5],
+];
+
 /** Readable text changes the paper; text on it must still hold. */
 const READABLE_PAIRS: [string, string, number][] = [
   ["ink", "page", 4.5],
@@ -201,6 +222,19 @@ describe("design tokens", () => {
     ["dark", readableDark],
   ])("%s theme with readable text", (_name, tokens) => {
     it.each(READABLE_PAIRS)("%s on %s holds %s:1", (fg, bg, target) => {
+      expect(ratio(tokens, fg, bg)).toBeGreaterThanOrEqual(target);
+    });
+  });
+
+  describe.each([
+    ["light", light],
+    ["dark", dark],
+    ["light with high-contrast feedback", contrastLight],
+    ["dark with high-contrast feedback", contrastDark],
+    ["light with readable text", readableLight],
+    ["dark with readable text", readableDark],
+  ])("R2-06 and R2-28 the flat marks, %s", (_name, tokens) => {
+    it.each(MARK_PAIRS)("%s on %s holds %s:1", (fg, bg, target) => {
       expect(ratio(tokens, fg, bg)).toBeGreaterThanOrEqual(target);
     });
   });

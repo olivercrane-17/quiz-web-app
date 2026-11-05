@@ -14,6 +14,7 @@ import { renderWithUser } from "@/test/render";
 import { SHELL_COPY } from "./copy";
 import { LEGAL_LINKS } from "./footer";
 import { NOT_FOUND_METADATA } from "./not-found-metadata";
+import { PagePlaceholder, placeholderLine } from "./page-placeholder";
 import { TABS } from "./tabs";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/no-such-page" }));
@@ -88,12 +89,13 @@ describe("every destination the shell draws", () => {
     expect(routes.get("/practice")?.group).toBe("(tabs)");
   });
 
-  it.each(
-    Object.keys(GROUP_OF)
-      .filter((href) => href !== "/" && !BUILT.has(href))
-      .map((href) => [href]),
-  )(
-    "R1-02 %s shows its title as the one h1, says it isn't ready and offers Go to Today",
+  /** The destinations that are still placeholders: Groups, Me and Settings. */
+  const PLACEHOLDERS = Object.keys(GROUP_OF).filter(
+    (href) => href !== "/" && !BUILT.has(href),
+  );
+
+  it.each(PLACEHOLDERS.map((href) => [href]))(
+    "R1-02 %s shows its title as the one h1, says what's coming and offers Go to Today",
     async (href) => {
       const page = routes.get(href);
       if (page === undefined) throw new Error(`no page for ${href}`);
@@ -102,7 +104,9 @@ describe("every destination the shell draws", () => {
       const headings = screen.getAllByRole("heading", { level: 1 });
       expect(headings).toHaveLength(1);
       expect(headings[0]).toHaveTextContent(String(metadata?.title));
-      expect(screen.getByText(SHELL_COPY.notReady)).toBeVisible();
+      expect(
+        screen.getByText(placeholderLine(String(metadata?.title))),
+      ).toBeVisible();
       expect(
         screen.getByRole("link", { name: SHELL_COPY.goToToday }),
       ).toHaveAttribute("href", "/");
@@ -110,6 +114,66 @@ describe("every destination the shell draws", () => {
       expect(metadata?.robots).toEqual({ index: false });
     },
   );
+
+  it("R2-07 each placeholder destination renders its own line on what's coming and what works now", async () => {
+    const lines = new Map<string, string>();
+    for (const href of PLACEHOLDERS) {
+      const page = routes.get(href);
+      if (page === undefined) throw new Error(`no page for ${href}`);
+      const { default: Page } = await loadPage(page.file);
+      const { container, unmount } = renderWithUser(<Page />);
+      const line = container.querySelector("[data-placeholder-line]");
+      lines.set(href, line?.textContent ?? "");
+      unmount();
+    }
+    // RITE round 2's lines, word for word (docs/playtests/rite-2.md §6).
+    expect(Object.fromEntries(lines)).toEqual({
+      "/g": "Groups are on the way. Until then, paste your result into your group chat.",
+      "/me": "Your streak and past results will live here.",
+      "/settings":
+        "Settings are on the way. Hide stopwatch is in the Daily's menu.",
+    });
+    // Its own line, never another's, and never the general one.
+    expect(new Set(lines.values()).size).toBe(lines.size);
+    expect([...lines.values()]).not.toContain(SHELL_COPY.notReady);
+    // Every line belongs to a destination that is still a placeholder, so
+    // none is left over once its page is built (GRP-1, STA-1, SET-1).
+    const titles = await Promise.all(
+      PLACEHOLDERS.map(async (href) => {
+        const page = routes.get(href);
+        if (page === undefined) throw new Error(`no page for ${href}`);
+        return String((await loadPage(page.file)).metadata?.title);
+      }),
+    );
+    expect(Object.keys(SHELL_COPY.comingSoon).sort()).toEqual(titles.sort());
+  });
+
+  it.each(LEGAL_LINKS.map((link) => [link.href]))(
+    "R2-07 the footer's %s is LGL-1's real page, not a placeholder that needs a line",
+    async (href) => {
+      const page = routes.get(href);
+      if (page === undefined) throw new Error(`no page for ${href}`);
+      const { default: Page } = await loadPage(page.file);
+      const { container } = renderWithUser(<Page />);
+      expect(container.querySelector("[data-placeholder-line]")).toBeNull();
+      expect(screen.queryByText(SHELL_COPY.notReady)).toBeNull();
+    },
+  );
+
+  it("R2-07 a placeholder shows the line it is given, and an unknown one says it isn't ready yet", () => {
+    const { rerender } = renderWithUser(
+      <PagePlaceholder title="Group board" line="Boards come with Groups." />,
+    );
+    expect(screen.getByText("Boards come with Groups.")).toBeVisible();
+    expect(screen.queryByText(SHELL_COPY.notReady)).toBeNull();
+    rerender(<PagePlaceholder title="Group board" />);
+    expect(screen.getByText(SHELL_COPY.notReady)).toBeVisible();
+    // A destination's own line comes by its title, which its stub passes.
+    rerender(<PagePlaceholder title={SHELL_COPY.tabs.groups} />);
+    expect(
+      screen.getByText(SHELL_COPY.comingSoon[SHELL_COPY.tabs.groups]),
+    ).toBeVisible();
+  });
 
   it("R1-09 gives each destination a title of its own, for the route announcer", async () => {
     const titles = await Promise.all(

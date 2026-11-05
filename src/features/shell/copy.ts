@@ -7,6 +7,9 @@
  */
 import { SHELL_CLIENT_COPY } from "./client-copy";
 
+/** The top bar's gear and the page it opens (PRD §6.1). */
+const SETTINGS = "Settings";
+
 export const SHELL_COPY = {
   ...SHELL_CLIENT_COPY,
   /** The product name (DESIGN §0.2). */
@@ -19,7 +22,7 @@ export const SHELL_COPY = {
     "Knewt is a daily trivia game: three Mysteries and an Encore. How few clues do you need?",
   /** The tab bar's landmark name. */
   mainNav: "Main",
-  settings: "Settings",
+  settings: SETTINGS,
   /** The footer's landmark name. */
   footerNav: "About Knewt",
   /** The seven legal and trust pages (PRD §3.14), in DESIGN's footer order. */
@@ -35,8 +38,25 @@ export const SHELL_COPY = {
   /** The host layout under 1024 by 576 (DESIGN §10.4). */
   hostTooSmall:
     "This screen is made for a TV or a big monitor. Make the window bigger, or open Knewt on your phone to play.",
-  /** A route whose feature has not been built yet. */
+  /**
+   * A route whose feature has not been built yet, and has no line of its
+   * own in `comingSoon`.
+   */
   notReady: "This part of Knewt isn't ready yet.",
+  /**
+   * The line a placeholder destination shows in place of `notReady`, by
+   * its title (RITE round 2, R2-07): what's coming there, and what already
+   * works. Groups (GRP-1), Me (STA-1) and Settings (SET-1) are the
+   * destinations the shell draws that are still placeholders; the seven
+   * footer pages are LGL-1's real pages.
+   */
+  comingSoon: {
+    [SHELL_CLIENT_COPY.tabs.groups]:
+      "Groups are on the way. Until then, paste your result into your group chat.",
+    [SHELL_CLIENT_COPY.tabs.me]: "Your streak and past results will live here.",
+    [SETTINGS]:
+      "Settings are on the way. Hide stopwatch is in the Daily's menu.",
+  },
   goToToday: "Go to Today",
   /** Leave on a play screen that isn't built yet; the X shows this as its name. */
   leaveToToday: "Leave and go to Today",

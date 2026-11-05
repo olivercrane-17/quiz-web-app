@@ -919,6 +919,13 @@
     color: inherit;
     font-weight: 800;
   }
+  /* Placeholder text holds 4.5:1 on every surface a field sits on, in both
+   * themes (WCAG 1.4.3; RITE round 2, R2-28). Tailwind's preflight mixes it
+   * from half the text colour, about 3.3:1 on cream, and that is what the
+   * guess field showed. A field's own placeholder utility still wins. */
+  ::placeholder {
+    color: var(--kn-ink-3);
+  }
   @media (forced-colors: active) {
     body::before {
       display: none;

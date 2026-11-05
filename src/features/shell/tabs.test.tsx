@@ -22,7 +22,7 @@ describe("tabForPath", () => {
       { tab: "groups", exact: false },
     ],
     ["/me/achievements", { tab: "me", exact: false }],
-    ["/settings", { tab: "me", exact: false }],
+    ["/me/sync", { tab: "me", exact: false }],
     ["/challenges", { tab: "me", exact: false }],
     ["/create/import", { tab: "me", exact: false }],
   ] as const)("%s belongs to %o", (path, expected) => {
@@ -31,6 +31,13 @@ describe("tabForPath", () => {
 
   it.each(["/daily", "/practice-run", "/gallery", "/s/42/a1b2", ""])(
     "%s belongs to no tab",
+    (path) => {
+      expect(tabForPath(path)).toBeNull();
+    },
+  );
+
+  it.each(["/settings", "/settings/"])(
+    "R2-34 %s marks no tab: the gear opens it from every tab, not from Me",
     (path) => {
       expect(tabForPath(path)).toBeNull();
     },

@@ -3,12 +3,14 @@
  * belongs to.
  *
  * A tab is the current page (`aria-current="page"`) only on its own
- * address; below it (the archive under Today, Settings and the challenge
- * shelf under Me) it marks the current section (`aria-current="true"`).
- * The static shells of §10.1 count as the sections they serve, because a
- * rewritten page is prerendered at its `/shell/...` path while the browser
- * shows the original one: both must pick the same tab, or hydration would
- * not match.
+ * address; below it (the archive under Today, the challenge shelf under
+ * Me) it marks the current section (`aria-current="true"`). Settings marks
+ * no tab: the top bar's gear opens it from every tab, so underlining Me
+ * there said the player was somewhere they hadn't gone (RITE round 2,
+ * R2-34). The static shells of §10.1 count as the sections they serve,
+ * because a rewritten page is prerendered at its `/shell/...` path while
+ * the browser shows the original one: both must pick the same tab, or
+ * hydration would not match.
  */
 import { SHELL_CLIENT_COPY } from "./client-copy";
 
@@ -64,7 +66,7 @@ const SECTIONS: Readonly<Record<TabId, readonly string[]>> = {
   today: ["/archive"],
   practice: ["/practice", "/categories"],
   groups: ["/g", "/shell/group", "/shell/group-settings"],
-  me: ["/me", "/settings", "/challenges", "/create", "/shell/editor"],
+  me: ["/me", "/challenges", "/create", "/shell/editor"],
 };
 
 function within(pathname: string, prefix: string): boolean {

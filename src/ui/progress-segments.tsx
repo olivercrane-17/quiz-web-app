@@ -10,17 +10,19 @@
  * current step carries `aria-current="step"`.
  *
  * Never colour alone: correct shows a check (or the points earned, "+3",
- * when the caller passes a mark, D11), wrong an X and a dashed edge, voided
- * a dash and a dotted edge. The looks are `.kn-progress` and `.kn-step` in
- * `ui.css`, flat progress marks rather than buttons (RITE round 1, R1-08,
- * R1-27): no ledge, no raised fill, no pointer. Pills of 38 by 30 in
- * Fraunces (32 wide under 360 px) that give up width, down to 28 px,
- * before a narrow header would overflow (R1-03); slim 20 px segments for
- * practice, empty wells until answered, then the correct fill or the
- * incorrect tint with its edge. The current step has an ink edge and an
- * eft bar under it, the active tab's mark, so it never looks like keyboard
- * focus. Both fill with their verdict over 200 ms, and both keep their
- * size at 200% text.
+ * when the caller passes a mark, D11), wrong an X, voided a dash. The
+ * looks are `.kn-progress` and `.kn-step` in `ui.css`: flat marks, never
+ * buttons (D11; RITE round 1 R1-08 and R1-27, round 2 R2-06), so no border,
+ * no ledge, no raised fill and no pointer. Pills of 38 by 30 in Fraunces
+ * (32 wide under 360 px) that give up width, down to 28 px, before a
+ * narrow header would overflow (R1-03); slim 20 px segments for practice.
+ * A step not answered yet is a wash (a segment adds a 3:1 edge inside it,
+ * having no text, R2-28); an answered one takes the correct fill or the
+ * incorrect tint. The current step is filled in ink, like the clue
+ * ladder's current rung, with an eft bar under it, the active tab's mark:
+ * nothing about it is an outline, so it never looks like keyboard focus.
+ * Steps fill with their verdict over 200 ms, and keep their size at 200%
+ * text.
  */
 import { cx } from "./cx";
 import { CheckIcon, CrossIcon, DashIcon } from "./icons";
@@ -56,6 +58,27 @@ export interface ProgressSegmentsProps {
   /** `pills`: the Daily header; `bar`: practice's slim segments. */
   variant?: "pills" | "bar";
   className?: string;
+}
+
+/** The mark's text, where the step shows one in place of a glyph. */
+function markText(segment: ProgressSegment): string | undefined {
+  return segment.status === "voided" ? undefined : segment.mark;
+}
+
+/**
+ * How far a pill's mark steps its type down to stay inside the pill at its
+ * narrowest, 28 px (R1-03): one or two characters ("M2", "+3", "E", 🎯)
+ * keep 15 px, three ("13%") take 12 px and more take 10 px. The Encore's
+ * pill may show its % off once it is locked in (RITE round 2, R2-06).
+ */
+export function markFit(
+  mark: string | undefined,
+): "snug" | "tight" | undefined {
+  if (mark === undefined) return undefined;
+  // By code point, so an emoji counts once.
+  const length = [...mark].length;
+  if (length >= 4) return "tight";
+  return length === 3 ? "snug" : undefined;
 }
 
 function Mark({ segment, size }: { segment: ProgressSegment; size: number }) {
@@ -94,6 +117,7 @@ export function ProgressSegments({
           data-current={segment.current ? "" : undefined}
           aria-current={segment.current ? "step" : undefined}
           data-italic={segment.italic ? "" : undefined}
+          data-fit={markFit(markText(segment))}
           className="kn-step"
         >
           <span aria-hidden="true" className="inline-flex">
