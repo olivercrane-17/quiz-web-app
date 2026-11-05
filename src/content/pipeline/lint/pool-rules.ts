@@ -1,15 +1,21 @@
 /**
  * Pool rules across items: batch balance (X03, X06), room packs (X04, X05),
- * the category true/false share (X07) and the schedule (X10 to X14).
+ * the category true/false share (X07), the schedule (X10 to X14) and where
+ * a pool's ascending keys sit (X34).
  */
+import { dirname } from "node:path";
+
+import { ascendingOrder } from "../../../engine/text/metrics.ts";
 import type {
   AnyItem,
   Encore,
+  McItem,
   Mystery,
   RoomQuestion,
 } from "../../schema/items.ts";
 import type { Bank, BankItem, PackInfo } from "../bank.ts";
 import { batchForItem, parseItemId } from "../ids.ts";
+import { repoRelative } from "../layout.ts";
 import type { Finding } from "./types.ts";
 
 function finding(
@@ -143,7 +149,107 @@ export function poolFindings(bank: Bank): Finding[] {
     }
   }
 
+  out.push(...ascendingKeyFindings(bank));
   out.push(...scheduleFindings(bank));
+  return out;
+}
+
+/** X34: the most of a pool's ascending keys one display position may hold. */
+export const ASCENDING_KEY_SHARE = 0.4;
+/** X34 reads a pool once it ships this many ascending keys: below it, one key is 100% somewhere. */
+export const ASCENDING_KEY_MIN = 5;
+
+const LETTERS = "ABCDEFGH";
+
+/**
+ * The display position of an ascending multiple-choice item's key, 0 for
+ * A: the engine sorts the options by sortKey (ARCHITECTURE §4.12), so the
+ * writer's distractors decide it. Null for any other item, or for a set
+ * C18 refuses because it can't be sorted.
+ */
+export function ascendingKeyPosition(item: AnyItem): number | null {
+  const mc: McItem | RoomQuestion | null =
+    "kind" in item
+      ? item.kind === "choice"
+        ? item
+        : null
+      : item.format === "mc"
+        ? item
+        : null;
+  if (mc === null || mc.order !== "ascending") return null;
+  const order = ascendingOrder([mc.answer, ...mc.wrong]);
+  return order === null ? null : order.indexOf(0);
+}
+
+/**
+ * X34 (RITE round 2, R2-23): no display position holds more than 40% of a
+ * pool's ascending keys. Shuffled options move every serve, but ascending
+ * ones sort the same way each time, so a writer's habit of putting the key
+ * second shows up as a tally anyone can keep (Dee's A 4, B 8, C 1, D 1;
+ * CONTENT_GUIDE §4 rule 7 asks writers to vary it, and nothing checked).
+ *
+ * A pool is what ships together, as its build sees it: a content tree's
+ * active practice items, or its room questions, and a fixture tree's items
+ * in play, which every mock build serves. The rule waits for 5 keys, and
+ * never asks for a spread no pool could have: seven keys over three
+ * positions may put three at one. A warning, as the other pool rules are;
+ * the practice pool's finding names the items at the crowded position,
+ * and a sealed pool's names none, because a key's position beside its
+ * sorted options is the key.
+ */
+function ascendingKeyFindings(bank: Bank): Finding[] {
+  const fixtures = bank.layout.kind === "fixtures";
+  const pools = new Map<
+    string,
+    { ids: string[][]; slots: number; sealed: boolean; file: string }
+  >();
+  for (const record of bank.items) {
+    const ships = fixtures
+      ? inPlay(record.item)
+      : record.item.status === "active";
+    if (!ships) continue;
+    const position = ascendingKeyPosition(record.item);
+    if (position === null) continue;
+    const options =
+      "wrong" in record.item ? record.item.wrong.length + 1 : position + 1;
+    const pool = pools.get(record.pool) ?? {
+      ids: [],
+      slots: 0,
+      sealed: record.file.sealed,
+      file:
+        record.pool === "practice"
+          ? repoRelative(bank.layout, bank.layout.practiceDir)
+          : dirname(record.file.rel),
+    };
+    (pool.ids[position] ??= []).push(record.id);
+    pool.slots = Math.max(pool.slots, options);
+    pools.set(record.pool, pool);
+  }
+
+  const out: Finding[] = [];
+  for (const [name, pool] of pools) {
+    const total = pool.ids.reduce((sum, ids) => sum + (ids?.length ?? 0), 0);
+    if (total < ASCENDING_KEY_MIN) continue;
+    const limit = Math.max(
+      total * ASCENDING_KEY_SHARE,
+      Math.ceil(total / pool.slots),
+    );
+    pool.ids.forEach((ids, position) => {
+      if (ids === undefined || ids.length <= limit + 1e-9) return;
+      const letter = LETTERS[position] ?? String(position + 1);
+      const share = Math.round((ids.length / total) * 100);
+      const named = pool.sealed ? "" : `: ${[...ids].sort().join(", ")}`;
+      out.push(
+        finding(
+          "X34",
+          "warn",
+          pool.file,
+          `${name}: ${ids.length} of ${total} ascending keys sit at ${letter} (${share}%); keep every position at ${ASCENDING_KEY_SHARE * 100}% or less, so where the key sits never hints at it (§4 rule 7)${named}`,
+          { sealed: pool.sealed },
+        ),
+      );
+    });
+  }
   return out;
 }
 

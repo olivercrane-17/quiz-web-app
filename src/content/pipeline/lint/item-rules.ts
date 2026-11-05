@@ -1,6 +1,6 @@
 /**
  * Item rules about lengths and structure: C02, C03, C04, C07, C15, C16,
- * C17 and C18.
+ * C17 and C18, and the comparison's size wording (X33).
  */
 import {
   RELATION_WINS,
@@ -10,6 +10,7 @@ import {
 } from "../../schema/items.ts";
 import { charCount, wordCount } from "../text.ts";
 import { choiceOptions, isRoomQuestion } from "./fields.ts";
+import { sizeMeasureOf, type SizeMeasure } from "./measures.ts";
 import type { RuleHit } from "./types.ts";
 
 /** C02: explanations of 35 words or fewer; rooms aim for 25 (§2.9, §7). */
@@ -467,6 +468,45 @@ export function ruleC17(item: AnyItem): RuleHit[] {
     );
   }
   return hits;
+}
+
+/** A size word that says "bigger" without saying by what (§2.6). */
+const SIZE_WORD = /\b(?:bigger|larger|greater|smaller)\b/i;
+/** Words that name what is measured, so a stem with one says by what: "bigger by area". */
+const NAMED_MEASURE =
+  /\b(?:mass|weight|length|height|width|depth|diameter|radius|distance|span|wingspan|circumference|girth|thickness|area|volume)\b/i;
+/** A stem that names the measure, for each kind (§2.6's standard stems). */
+const NAMED_STEM: Readonly<Record<SizeMeasure, string>> = {
+  mass: '"Which is heavier?"',
+  length: '"Which is longer?" or "Which is taller?"',
+  area: '"Which is bigger by area?"',
+};
+
+/**
+ * X33 (RITE round 2, R2-15): a comparison of mass, length or area may not
+ * ask a bare "Which is bigger?". By mass or by size? Each gives a
+ * different fight (§2.6: the stem names the measure when "bigger" could
+ * mean several things; §12.6's fourth bad example). `units` are the
+ * measured units of content/reference/units.json (`sizeUnits`).
+ */
+export function ruleX33(
+  item: AnyItem,
+  units: ReadonlyMap<string, SizeMeasure>,
+): RuleHit[] {
+  if ("kind" in item || item.format !== "comparison") return [];
+  const size = SIZE_WORD.exec(item.stem);
+  if (size === null || NAMED_MEASURE.test(item.stem)) return [];
+  const measure = sizeMeasureOf(item.measure, item.unit, units);
+  if (measure === null) return [];
+  return [
+    {
+      rule: "X33",
+      severity: "error",
+      path: "stem",
+      message: `a comparison of ${measure} asks a bare "${size[0].toLowerCase()}": name the measure, as ${NAMED_STEM[measure]} does (§2.6, §12.6)`,
+      excerpt: item.stem,
+    },
+  ];
 }
 
 const STARTS_WITH_NUMBER = /^\s*-?\d/;

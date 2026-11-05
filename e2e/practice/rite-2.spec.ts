@@ -127,8 +127,10 @@ test.describe("RITE round 2: practice", () => {
     if (box === null) return;
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.down();
-    // Chromium hands a pressed button focus, from the pointer.
-    await expect(options(page).first()).toBeFocused();
+    // Chromium and Firefox hand a pressed button focus, from the pointer
+    // (WebKit never does): not a keyboard, so still no legend.
+    await expect(options(page).first()).toHaveAttribute("data-pressed", "");
+    await expect(legend(page)).toHaveCount(0);
     const heading = await stem(page).boundingBox();
     if (heading !== null) {
       await page.mouse.move(heading.x + 4, heading.y + 4);

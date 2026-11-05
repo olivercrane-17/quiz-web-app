@@ -746,6 +746,119 @@ describe("the practice pool", () => {
     expect(plaintext.sealedSource).toBe("none");
     expect(crossPoolRules(plaintext, options({ launch: true }))).toEqual([]);
   });
+
+  describe("on a fixture tree (content:dedupe --fixtures, RITE round 2)", () => {
+    const MC = "practice/geography/fx.p.geo.0101.json";
+    const CMP = "practice/geography/fx.p.geo.0103.json";
+    /** A practice item that tells the fixture Encore's 212 steps in its explanation. */
+    const tells = (explanation: string) =>
+      fxMc({
+        stem: "Which fixture town keeps a lighthouse on its harbour wall?",
+        answer: "Gorlund",
+        wrong: ["Cindral", "Halvessa", "Istrova"],
+        explanation,
+      });
+
+    it("R2-22 counts the fixture Encores as Daily items: a practice explanation stating one's answer fails X29, and names the practice item", async () => {
+      const bank = await loadFx(
+        fxFiles({
+          [MC]: tells(
+            "Gorlund's lighthouse has 212 steps, raised once the lamp room was moved above the spray.",
+          ),
+        }),
+      );
+      // The near-duplicate score alone misses it: the stem and key say
+      // nothing of the steps.
+      const found = crossPoolRules(bank, options({ fixtureDailies: true }));
+      expect(
+        found.map((f) => `${f.itemId ?? ""} ${f.rule} ${f.severity}`),
+      ).toEqual(["fx.e.0101 X29 error"]);
+      expect(found[0]?.message).toContain(
+        "fx.p.geo.0101 states this Encore's answer",
+      );
+    });
+
+    it("R2-22 wants the subject beside the figure: 212 of something else, or the lighthouse with no figure, passes", async () => {
+      // 212 in an item about something else entirely.
+      const choir = await loadFx(
+        fxFiles({
+          [MC]: fxMc({
+            explanation:
+              "Halvessa's bone flute leads a choir of 212 voices at the spring festival.",
+          }),
+        }),
+      );
+      expect(crossPoolRules(choir, options({ fixtureDailies: true }))).toEqual(
+        [],
+      );
+      for (const explanation of [
+        // The lighthouse, and no figure.
+        "Gorlund's lighthouse has more steps than any tower in the realm.",
+        // Thousands commas or none, the figure must be the Encore's.
+        "Gorlund's lighthouse stands 2,120 paces from the old harbour wall.",
+      ]) {
+        const bank = await loadFx(fxFiles({ [MC]: tells(explanation) }));
+        expect(
+          crossPoolRules(bank, options({ fixtureDailies: true })),
+          explanation,
+        ).toEqual([]);
+      }
+      // The same item with the Encore's own figure fails, commas or not.
+      const told = await loadFx(
+        fxFiles({
+          [MC]: tells("Gorlund's lighthouse: 212 steps to the lamp."),
+        }),
+      );
+      expect(
+        crossPoolRules(told, options({ fixtureDailies: true })),
+      ).toHaveLength(1);
+    });
+
+    it("R2-22 reads a revealed value as player-facing too: a comparison's 212 steps fails", async () => {
+      const comparison = fxComparison({
+        stem: "Which fixture lighthouse has more steps?",
+        a: "The Gorlund lighthouse",
+        b: "The Cindral light",
+        relation: "more",
+        measure: "steps to the lamp room",
+        unit: "steps",
+        values: { a: 212, b: 140 },
+        valueDisplay: { a: "212 steps", b: "140 steps" },
+      });
+      const bank = await loadFx(fxFiles({ [CMP]: comparison }));
+      expect(
+        crossPoolRules(bank, options({ fixtureDailies: true })).map(
+          (f) => f.itemId,
+        ),
+      ).toEqual(["fx.e.0101"]);
+    });
+
+    it("R2-22 runs the near-duplicate check on fixture Mysteries too", async () => {
+      const twin = fxMc({
+        stem: "Which fixture country flies a silver heron above three blue waves?",
+        answer: "Arvenna",
+        wrong: ["Belloria", "Cassova", "Dravenor"],
+      });
+      const bank = await loadFx(fxFiles({ [MC]: twin }));
+      expect(
+        crossPoolRules(bank, options({ fixtureDailies: true })).map(
+          (f) => `${f.itemId ?? ""} ${f.rule}`,
+        ),
+      ).toEqual(["fx.m.geo.0101 X29"]);
+    });
+
+    it("R2-22 leaves a fixture tree alone without fixtureDailies, as content:check's fixture run reads it", async () => {
+      const bank = await loadFx(
+        fxFiles({
+          [MC]: tells("Gorlund's lighthouse has 212 steps up to its lamp."),
+        }),
+      );
+      expect(crossPoolRules(bank, options())).toEqual([]);
+      expect(
+        crossPoolRules(bank, options({ fixtureDailies: true, dedupe: false })),
+      ).toEqual([]);
+    });
+  });
 });
 
 // ---------------------------------------------------------------------------
