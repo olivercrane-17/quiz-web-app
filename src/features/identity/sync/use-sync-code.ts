@@ -100,11 +100,20 @@ export function useSyncCode(
         ? { ...current, busy: true, error: null }
         : current,
     );
+    const asker = readDeviceIdentity();
     const backend = await getBackend();
     const result = await backend.identity.createSyncCode();
     const device = readDeviceIdentity();
     if (result.ok && device !== null) {
-      storeSyncCode(device.playerId, result.value.code, result.value.createdAt);
+      // Another tab may have switched the player meanwhile: the code is the
+      // asker's, so it is kept only if the device still holds that player.
+      if (asker?.playerId === device.playerId) {
+        storeSyncCode(
+          device.playerId,
+          result.value.code,
+          result.value.createdAt,
+        );
+      }
       setView(settle());
       return;
     }
