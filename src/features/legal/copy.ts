@@ -51,7 +51,7 @@ const LICENCE_NAMES: Readonly<Record<string, string>> = {
   "ODbL-1.0": "Open Database License 1.0",
   "ODC-PDDL-1.0": "Open Data Commons Public Domain Dedication 1.0",
   "OFL-1.1": "SIL Open Font License 1.1",
-  "Public domain": "public domain",
+  "Public domain": "Public domain",
   "Unicode-3.0": "Unicode License v3",
 };
 

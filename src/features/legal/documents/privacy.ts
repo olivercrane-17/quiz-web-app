@@ -247,7 +247,7 @@ export function privacyDocument(
               {
                 term: "Network addresses",
                 details: [
-                  `We use your IP address only to slow down abuse, such as a flood of new profiles or reports from one network. New profiles made in bulk from one network join the crowd's numbers after ${lowTrustDays === 1 ? "a day" : `${lowTrustDays} days`}, as [How scoring works](${sectionHref("/how-scoring-works", "honest-play")}) explains. We keep addresses only as salted hashes (an IPv6 address by its /64 block), and we delete each day's salt after 48 hours, after which no hash can be traced back to an address.`,
+                  `We use your IP address only to slow down abuse, such as a flood of new profiles or reports from one network. New profiles made in bulk from one network join the crowd's numbers after ${lowTrustDays === 1 ? "a day" : `${lowTrustDays} days`} or a second Daily, as [How scoring works](${sectionHref("/how-scoring-works", "honest-play")}) explains. We keep addresses only as salted hashes (an IPv6 address by its /64 block), and we delete each day's salt after 48 hours, after which no hash can be traced back to an address.`,
                 ],
               },
             ],

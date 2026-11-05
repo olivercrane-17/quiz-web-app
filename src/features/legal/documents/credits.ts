@@ -75,7 +75,9 @@ function fontItems(): TermItem[] {
 function datasetUse(dataset: DatasetCredit): string {
   const parts: string[] = [];
   if (dataset.listsFrom.length > 0) {
-    parts.push(`Data in our ${listNames(dataset.listsFrom)} lists.`);
+    parts.push(
+      `Data in our ${listNames(dataset.listsFrom)} ${dataset.listsFrom.length === 1 ? "list" : "lists"}.`,
+    );
   }
   if (dataset.listsChecked.length > 0) {
     parts.push(
@@ -91,8 +93,9 @@ function datasetItem(dataset: DatasetCredit): TermItem {
     `${licenceMark(dataset.license)}. Credit: ${dataset.sourceLabel}, version ${dataset.version}.`,
     datasetUse(dataset),
   ];
-  if (dataset.licenseNote !== null)
-    details.push(`Note: ${dataset.licenseNote}.`);
+  if (dataset.licenseNote !== null) {
+    details.push(`Licence note: ${dataset.licenseNote}.`);
+  }
   return {
     term: `[${dataset.title}](${dataset.url})`,
     details,
@@ -100,7 +103,7 @@ function datasetItem(dataset: DatasetCredit): TermItem {
       ? {}
       : {
           licence: {
-            summary: `Read the licence of ${dataset.sourceLabel}`,
+            summary: `${licenceName(dataset.license)} text for ${dataset.title}`,
             text: dataset.licenceText,
           },
         }),
@@ -270,7 +273,7 @@ export function creditsDocument(
         blocks: [
           {
             kind: "p",
-            text: "Knewt runs on open-source software. These packages ship with the app, under these licences:",
+            text: "Knewt runs on open-source software. These are the packages it is built from, with their licences:",
           },
           ...softwareBlocks(),
         ],

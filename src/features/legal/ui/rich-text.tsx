@@ -15,15 +15,23 @@ export const LINK_CLASSES =
 
 const MARKS = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*(.+?)\*\*|`([^`]+)`/g;
 
+/** How a link is drawn: a page of this site, or a plain anchor; null when it isn't allowed. */
+export function linkKind(href: string): "page" | "plain" | null {
+  if (/^\/(?!\/)/.test(href)) return "page";
+  if (/^(#|https:\/\/|mailto:)/.test(href)) return "plain";
+  return null;
+}
+
 function InlineLink({ href, children }: { href: string; children: string }) {
-  if (href.startsWith("/")) {
+  const kind = linkKind(href);
+  if (kind === "page") {
     return (
       <Link href={href as Route} className={LINK_CLASSES}>
         {children}
       </Link>
     );
   }
-  if (/^(#|https:\/\/|mailto:)/.test(href)) {
+  if (kind === "plain") {
     return (
       <a href={href} className={LINK_CLASSES}>
         {children}
