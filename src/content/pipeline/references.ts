@@ -180,11 +180,11 @@ export async function loadReferences(
     slurs: buildSlurMatcher(
       [
         ...(slurs?.terms ?? []).map(rot13),
-        ...(await readLines(join(safetyDir, "slur-terms.txt"))),
+        ...(await readLines(join(safetyDir, "slur-terms.txt"))).map(rot13),
       ],
       [
         ...(slurs?.allowlist ?? []).map(rot13),
-        ...(await readLines(join(safetyDir, "allowlist.txt"))),
+        ...(await readLines(join(safetyDir, "allowlist.txt"))).map(rot13),
       ],
     ),
     problems,
@@ -194,7 +194,8 @@ export async function loadReferences(
 /**
  * The player-facing filter's list (content/safety/, owned by MOD-1,
  * ARCHITECTURE §8.13) is merged in when it exists, so both filters share one
- * list as PRD §3.9.4 asks. One term per line; # starts a comment.
+ * list as PRD §3.9.4 asks. One term per line, ROT13-encoded like slurs.json;
+ * # starts a comment.
  */
 async function readLines(path: string): Promise<string[]> {
   if (!existsSync(path)) return [];
