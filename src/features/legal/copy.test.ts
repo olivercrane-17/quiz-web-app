@@ -74,10 +74,12 @@ describe("the text marks", () => {
     expect(parts[6]).toBe(".");
   });
 
-  it("draws a path on this site as a page link, an anchor, https or mail as a plain one, and refuses the rest", () => {
+  it("draws a path on this site as a page link; an anchor, a section of another page, https or mail as a plain one; and refuses the rest", () => {
     expect(linkKind("/terms")).toBe("page");
+    // A document load, so keyboard and screen-reader focus start at the
+    // section rather than back at the top of the page.
     expect(linkKind("/how-scoring-works#how-scoring-works-corrections")).toBe(
-      "page",
+      "plain",
     );
     expect(linkKind("#privacy-children")).toBe("plain");
     expect(linkKind("https://lucide.dev")).toBe("plain");

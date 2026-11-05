@@ -2,8 +2,13 @@
  * Draws one line of a legal page's text (`../document.ts`): plain words
  * with `[label](href)` links, `**strong**` and `` `code` ``. A path on
  * this site becomes a Next `<Link>`; an anchor, `https:` or `mailto:` a
- * plain `<a>`. Nothing else is interpreted, so the text can never inject
- * markup.
+ * plain `<a>`, and so does a section of another page
+ * (`/how-scoring-works#how-scoring-works-honest-play`). Next scrolls to a
+ * fragment without moving focus, and the shell then puts focus on
+ * `<main>`, so the next Tab would jump back to the top of the page; a
+ * document load lets the browser start keyboard and screen-reader focus at
+ * the section's heading. Nothing else is interpreted, so the text can
+ * never inject markup.
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -17,6 +22,8 @@ const MARKS = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*(.+?)\*\*|`([^`]+)`/g;
 
 /** How a link is drawn: a page of this site, or a plain anchor; null when it isn't allowed. */
 export function linkKind(href: string): "page" | "plain" | null {
+  // A section of another page: a document load, so focus starts there.
+  if (/^\/(?!\/)[^#]*#./.test(href)) return "plain";
   if (/^\/(?!\/)/.test(href)) return "page";
   if (/^(#|https:\/\/|mailto:)/.test(href)) return "plain";
   return null;

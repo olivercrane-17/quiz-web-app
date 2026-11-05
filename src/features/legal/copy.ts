@@ -13,7 +13,15 @@
  * - the contact mailbox below must exist, on the domain the owner picks
  *   (`knewt.app` is DESIGN §0.2's placeholder);
  * - the operator's legal name and address belong on /privacy and /terms
- *   once there is one.
+ *   once there is one;
+ * - /privacy promises EU and UK rights but names no lawful basis for the
+ *   gameplay records, the analytics events or the IP-based abuse checks,
+ *   and no transfer basis for keeping EU and UK players' data in
+ *   us-east-1; the review should supply both (the right to complain to a
+ *   data protection authority is on the page);
+ * - whether content/ and public/content/ stay under the repository's MIT
+ *   licence or get one of their own: /terms says the practice questions
+ *   are MIT until the owner decides.
  */
 import type { LocalDate } from "@/engine/types";
 import { MONTH_NAMES, dateParts } from "@/engine/time";

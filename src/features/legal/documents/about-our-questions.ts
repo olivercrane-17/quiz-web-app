@@ -1,11 +1,22 @@
 /**
  * `/about-our-questions` (PRD §3.14; CONTENT_GUIDE Appendix A item 2,
- * §0.2, §9; decisions memo §10, §15, §18): CONTENT_GUIDE's wording first,
- * then an honest account of how a question is made: AI-assisted drafting,
- * two independent fact-checks (the second on a different model), evidence,
- * tiebreaks with published sources, an editor, the Daily's extra check and
- * the audits; nothing time-sensitive; how to report; how corrections and
- * rescoring work. Plain and factual: we never market Knewt as AI.
+ * §0.2, §3.4, §9; decisions memo §10, §15, §18): CONTENT_GUIDE's wording
+ * first, then an honest account of how a question is made: AI-assisted
+ * drafting, two independent fact-checks (the second on a different model
+ * wherever the model can be chosen: no check record names its model yet),
+ * evidence, including memo §18's path for a risky fact that no dataset
+ * covered once the web searches had run out, tiebreaks with published
+ * sources, an editor, the Daily's extra check and the audits; nothing that
+ * changes often, and review dates for the few facts that could drift; how
+ * to report; how corrections and rescoring work. Plain and factual: we
+ * never market Knewt as AI.
+ *
+ * The lede keeps AC-LGL-02's sentence word for word, though memo §18 let
+ * most of the practice bank's risky facts pass on both checkers' certain
+ * knowledge alone. The Evidence step says so, and the launch report asks
+ * the product team for a truthful sentence in PRD §3.14, AC-LGL-02 and
+ * CONTENT_GUIDE Appendix A item 2. When it lands, change
+ * `QUESTIONS_PROMISE` and the AC-LGL-02 tests together.
  */
 import type { FeatureFlag } from "@/config/features";
 import { VOIDED_MYSTERY_POINTS } from "@/engine/scoring/mystery";
@@ -38,8 +49,8 @@ export function aboutOurQuestionsDocument(
             ordered: true,
             items: [
               "**Drafting.** An AI model drafts each question under our written guide and lists every fact it rests on. A draft the writer can't stand behind is dropped before anyone checks it.",
-              "**Two independent checks.** Two separate fact-checkers each see the question cold, with no notes from the writer or from each other. One confirms every fact. The other tries to break the question, hunting for a second right answer, an outdated fact, a reading that only works in one country, or a clue that gives it away. The second check runs on a different AI model from the writer and the first check, because models that learned from the same text tend to make the same mistakes.",
-              "**Evidence.** A checker's own knowledge counts only when they're certain. Facts that live in open datasets, such as capitals, chemical elements, Nobel Prizes and World Cup results, are checked against those datasets, which our [credits](/credits) list.",
+              "**Two independent checks.** Two separate fact-checkers each see the question cold, with no notes from the writer or from each other. One confirms every fact. The other tries to break the question, hunting for a second right answer, an outdated fact, a reading that only works in one country, or a clue that gives it away. Wherever we can choose the model, the second check runs on a different AI model from the writer and the first check, because models that learned from the same text tend to make the same mistakes.",
+              "**Evidence.** A checker's own knowledge counts only when they're certain. Facts that live in open datasets, such as capitals, chemical elements, Nobel Prizes and World Cup results, are checked against those datasets, which our [credits](/credits) list. When no dataset covers a fact that is easy to get wrong and our web searches have run out, the fact can still pass if both checkers, working separately, are certain of it. Most of our practice questions have at least one fact that passed this way. Every one of them can come up in the audits below, which check a random sample again with web searches.",
               "**Tiebreaks.** When the two checks disagree, or either has a doubt, a third check settles it with published data or a web search. If it can't, the question is cut.",
               "**An editor.** An editor reads the question and both checks before accepting it. Questions that fall short are rewritten or cut, and any change to what you'd see goes back for a fresh check.",
               "**One more check for the Daily.** Before a Daily is locked, a separate check, on a different model where we can, goes over every clue and number in it again against published sources.",
@@ -58,7 +69,7 @@ export function aboutOurQuestionsDocument(
         blocks: [
           {
             kind: "p",
-            text: "We leave out anything that can change, such as who holds an office, who holds a record, prices or populations. A question about how things stand today goes stale, so ours rest on facts that stay put.",
+            text: "We leave out facts that change often, such as who holds an office or a title, records that can still be broken, prices and populations. We ask about a country's capital only when it is single and settled. The few facts we use that could still drift, such as where an organisation has its headquarters, carry a review date, and each gets a fresh check when that date arrives.",
           },
           {
             kind: "p",

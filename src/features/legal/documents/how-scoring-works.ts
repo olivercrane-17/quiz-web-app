@@ -25,7 +25,7 @@ import { judgeEncoreGuess } from "@/engine/scoring/encore";
 import { VOIDED_MYSTERY_POINTS, mysteryPoints } from "@/engine/scoring/mystery";
 import { SHELL_COPY } from "@/features/shell";
 
-import { legalDate, sectionHref, type LegalDocument } from "../document";
+import { legalDate, sectionAnchor, type LegalDocument } from "../document";
 
 /** PRD §3.14's honest-play disclosure, word for word in intent (AC-LGL-02). */
 export const HONEST_PLAY_DISCLOSURE =
@@ -230,7 +230,9 @@ export function howScoringWorksDocument(
             items: [
               "a Mystery solved by a typed guess almost the instant its clue appeared;",
               "the hardest Mystery solved on its first clue after an unusually long look at it;",
-              `a Daily started after your device's time zone changed (see [time zones](${sectionHref("/how-scoring-works", "time-zones")}));`,
+              // A same-page anchor, as the table of contents links, so focus
+              // moves with the scroll.
+              `a Daily started after your device's time zone changed (see [time zones](#${sectionAnchor("/how-scoring-works", "time-zones")}));`,
               `runs from brand-new profiles created in bulk from one network, which join the crowd's numbers once the profile is a day old or has finished a second Daily.`,
             ],
           },

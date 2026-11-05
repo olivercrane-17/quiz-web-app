@@ -19,9 +19,13 @@
  * - **Software**: the open-source notices of every package the app needs
  *   at run time: the `dependencies` of package.json and theirs, as the
  *   lockfile resolves them, leaving out optional and platform-only
- *   packages (native binaries for the build machine, never shipped).
- *   Packages whose licence text is the same, apart from copyright lines,
- *   share one copy of it, and each keeps its own copyright lines.
+ *   packages (native binaries for the build machine, never shipped), plus
+ *   the build-time packages whose own code ships in the pages
+ *   (`SHIPPED_BUILD_PACKAGES`: Tailwind's CSS). Packages whose licence text
+ *   is the same, apart from copyright lines, share one copy of it, and
+ *   each keeps its own copyright lines. A package that ships no licence
+ *   file keeps the copyright lines at the head of its main or module file,
+ *   or, with none there, the author its package.json names.
  *
  * Deterministic: the same inputs give the same bytes, formatted with the
  * repository's Prettier config. `--check` writes nothing and exits 1 when
@@ -30,7 +34,13 @@
  * dataset or a new list source can't leave /credits behind.
  */
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  readFileSync,
+  readdirSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -107,10 +117,18 @@ export interface SoftwarePackage {
   name: string;
   version: string;
   license: string;
-  /** Its copyright lines, as its licence file has them. */
+  /**
+   * Its copyright lines, as its licence file has them, or as the head of
+   * its main or module file has them when it ships no licence file.
+   */
   copyright: string[];
   /** False when the package ships no licence file of its own. */
   licenceFile: boolean;
+  /**
+   * The author its package.json names, kept only for a package with no
+   * licence file and no copyright line in its main or module file.
+   */
+  author: string | null;
 }
 
 export interface SoftwareNotice {
@@ -406,6 +424,31 @@ export function runtimePackages(
   return [...seen].sort();
 }
 
+/**
+ * Build-time packages whose own code ships in every page, so their notice
+ * must travel with it. Tailwind's preflight, theme and utilities are
+ * compiled into the CSS (src/app/globals.css imports "tailwindcss"), and
+ * the lockfile marks the package dev, so the run-time closure leaves it
+ * out. Only the packages themselves: Tailwind's compiler and plugin
+ * (@tailwindcss/node, @tailwindcss/turbopack) never ship.
+ */
+export const SHIPPED_BUILD_PACKAGES: readonly string[] = ["tailwindcss"];
+
+/** The lockfile keys of every package whose code ships, sorted. */
+export function shippedPackages(
+  lock: Lockfile,
+  roots: readonly string[],
+  buildPackages: readonly string[] = SHIPPED_BUILD_PACKAGES,
+): string[] {
+  const keys = new Set(runtimePackages(lock, roots));
+  for (const name of buildPackages) {
+    const key = resolveInLock(lock, name, "");
+    if (key === null) throw new Error(`package-lock.json has no ${name}`);
+    keys.add(key);
+  }
+  return [...keys].sort();
+}
+
 const LICENCE_FILE = /^(licen[cs]e|copying)(\.(md|markdown|txt))?$/i;
 /**
  * A package's own copyright line: "Copyright (c) 2025 Vercel, Inc.",
@@ -420,6 +463,66 @@ const TITLE_LINE =
   /^\s*(#+\s*)?(the\s+)?[a-z0-9 .,-]*licen[cs]e[a-z0-9 .,()-]*$/i;
 /** The Apache appendix's template line, which only some copies keep. */
 const TEMPLATE_LINE = /^\s*copyright \[yyyy\]/i;
+/** A comment's leading marks in a source file: `//`, `/*`, ` * `, `#`. */
+const COMMENT_MARKS = /^\s*(\/\/+|\/\*+|\*+|#+)/;
+/** How far into a main or module file a copyright banner may sit. */
+const BANNER_LINES = 40;
+
+/** The file a package.json entry names, as Node finds it: exact, `.js`, then `index.js`. */
+function entryFile(dir: string, entry: string): string | null {
+  for (const candidate of [
+    join(dir, entry),
+    join(dir, `${entry}.js`),
+    join(dir, entry, "index.js"),
+  ]) {
+    if (existsSync(candidate) && statSync(candidate).isFile()) return candidate;
+  }
+  return null;
+}
+
+/**
+ * Copyright lines in the comment banner at the head of a package's main or
+ * module file ("// Copyright (c) 2009 Kazuhiko Arase"), for a package that
+ * ships no licence file. Empty when neither file has one.
+ */
+export function bannerCopyright(
+  dir: string,
+  packageJson: Record<string, unknown>,
+): string[] {
+  const entries = [packageJson.main, packageJson.module].filter(
+    (entry): entry is string => typeof entry === "string" && entry !== "",
+  );
+  for (const entry of entries.length > 0 ? entries : ["index.js"]) {
+    const path = entryFile(dir, entry);
+    if (path === null) continue;
+    const found = readText(path)
+      .split("\n", BANNER_LINES)
+      .map((line) => line.replace(COMMENT_MARKS, "").trim())
+      .filter((line) => COPYRIGHT_LINE.test(line));
+    if (found.length > 0) return found;
+  }
+  return [];
+}
+
+/** The author's name from package.json, without an email or a URL: "Kazuhiko Arase". */
+export function authorName(
+  packageJson: Record<string, unknown>,
+): string | null {
+  const field = packageJson.author;
+  const raw =
+    typeof field === "string"
+      ? field
+      : typeof field === "object" &&
+          field !== null &&
+          typeof (field as { name?: unknown }).name === "string"
+        ? (field as { name: string }).name
+        : "";
+  const name = raw
+    .replace(/<[^>]*>|\([^)]*\)/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return name === "" ? null : name;
+}
 
 function licenseOf(
   packageJson: Record<string, unknown>,
@@ -457,7 +560,7 @@ function software(repoRoot: string): SoftwareNotice[] {
   const manifest = readJson(join(repoRoot, "package.json")) as {
     dependencies?: Record<string, string>;
   };
-  const keys = runtimePackages(
+  const keys = shippedPackages(
     lock,
     Object.keys(manifest.dependencies ?? {}).sort(),
   );
@@ -482,13 +585,17 @@ function software(repoRoot: string): SoftwareNotice[] {
       .filter((entry) => LICENCE_FILE.test(entry))
       .sort()[0];
     if (file === undefined) {
+      // MIT and its kin ask for the notice to travel with the code, so a
+      // package without a licence file keeps the one its source carries.
+      const copyright = bannerCopyright(dir, packageJson);
       return {
         pkg: {
           name,
           version,
           license: licenseOf(packageJson, info),
-          copyright: [],
+          copyright,
           licenceFile: false,
+          author: copyright.length > 0 ? null : authorName(packageJson),
         },
         text: null,
       };
@@ -504,6 +611,7 @@ function software(repoRoot: string): SoftwareNotice[] {
           .filter((line) => COPYRIGHT_LINE.test(line))
           .map((line) => line.trim()),
         licenceFile: true,
+        author: null,
       },
       text: tidyText(
         lines.filter((line) => !COPYRIGHT_LINE.test(line)).join("\n"),
@@ -578,7 +686,8 @@ export function collectLicenseData(repoRoot: string): LicenseData {
 const HEADER = `/**
  * What /credits shows from other files (LGL-1; PRD §3.14, DESIGN §12.40):
  * the font and icon licences, the open datasets behind the answer lists,
- * and the notices of the open-source packages the app runs on.
+ * and the notices of the open-source packages the app runs on, Tailwind's
+ * CSS included.
  *
  * Generated by \`node scripts/content/licenses.ts\` from src/app/fonts/OFL-*.txt,
  * src/ui/LICENSE-lucide.txt, content/datasets/manifest.json,
@@ -631,10 +740,18 @@ export interface SoftwarePackage {
   readonly name: string;
   readonly version: string;
   readonly license: string;
-  /** Its copyright lines, as its licence file has them. */
+  /**
+   * Its copyright lines, as its licence file has them, or as the head of
+   * its main or module file has them when it ships no licence file.
+   */
   readonly copyright: readonly string[];
   /** False when the package ships no licence file of its own. */
   readonly licenceFile: boolean;
+  /**
+   * The author its package.json names, kept only for a package with no
+   * licence file and no copyright line in its main or module file.
+   */
+  readonly author: string | null;
 }
 
 export interface SoftwareNotice {

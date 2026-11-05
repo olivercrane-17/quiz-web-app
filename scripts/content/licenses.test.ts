@@ -4,8 +4,10 @@
  * the committed module matches a fresh build, so a dependency upgrade, a
  * new dataset or a new answer-list source can't leave /credits behind;
  * every dataset and font is there; dataset licence texts match their pinned
- * hashes; and the run-time closure leaves out dev, optional and
- * platform-only packages.
+ * hashes; the run-time closure leaves out dev, optional and platform-only
+ * packages, while a build-time package whose code ships (Tailwind's CSS)
+ * keeps its notice; and a package without a licence file keeps the
+ * copyright line its source carries.
  */
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
@@ -21,9 +23,13 @@ import {
 import {
   DATASET_LICENCE_DIR,
   LICENSES_OUTPUT,
+  SHIPPED_BUILD_PACKAGES,
+  authorName,
+  bannerCopyright,
   collectLicenseData,
   renderLicenseModule,
   runtimePackages,
+  shippedPackages,
   tidyText,
 } from "./licenses.ts";
 
@@ -122,6 +128,36 @@ describe("the generated licence module", () => {
       expect(notice.text).not.toMatch(/^\s*copyright\s*(\(c\)|©|\d{4})/im);
     }
   });
+
+  it("keeps Tailwind's notice, whose CSS ships in every page, and leaves its compiler out", () => {
+    expect(SHIPPED_BUILD_PACKAGES).toContain("tailwindcss");
+    const packages = collectLicenseData(REPO_ROOT).software.flatMap(
+      (notice) => notice.packages,
+    );
+    const tailwind = packages.find((pkg) => pkg.name === "tailwindcss");
+    expect(tailwind?.license).toBe("MIT");
+    expect(tailwind?.copyright).toEqual(["Copyright (c) Tailwind Labs, Inc."]);
+    const names = packages.map((pkg) => pkg.name);
+    expect(names).not.toContain("@tailwindcss/node");
+    expect(names).not.toContain("@tailwindcss/turbopack");
+  });
+
+  it("keeps the copyright line a package without a licence file carries in its source, or else its author", () => {
+    const packages = collectLicenseData(REPO_ROOT).software.flatMap(
+      (notice) => notice.packages,
+    );
+    // The room QR code's library: "// Copyright (c) 2009 Kazuhiko Arase".
+    const qr = packages.find((pkg) => pkg.name === "qrcode-generator");
+    expect(qr?.licenceFile).toBe(false);
+    expect(qr?.copyright).toEqual(["Copyright (c) 2009 Kazuhiko Arase"]);
+    expect(qr?.author).toBeNull();
+    const env = packages.find((pkg) => pkg.name === "@next/env");
+    expect(env?.copyright).toEqual([]);
+    expect(env?.author).toBe("Next.js Team");
+    for (const pkg of packages.filter((each) => each.licenceFile)) {
+      expect(pkg.author, pkg.name).toBeNull();
+    }
+  });
 });
 
 describe("the run-time closure", () => {
@@ -152,6 +188,57 @@ describe("the run-time closure", () => {
       "node_modules/b",
     ]);
     expect(() => runtimePackages(lock, ["missing"])).toThrow(/missing/);
+    // A build-time package whose code ships joins, dev or not, on its own.
+    expect(shippedPackages(lock, ["app"], ["f"])).toEqual([
+      "node_modules/a",
+      "node_modules/a/node_modules/c",
+      "node_modules/app",
+      "node_modules/b",
+      "node_modules/f",
+    ]);
+    expect(() => shippedPackages(lock, ["app"], ["missing"])).toThrow(
+      /missing/,
+    );
+  });
+
+  it("reads a copyright banner from the head of a main or module file, and an author without email or URL", async () => {
+    const root = await writeTree({
+      "banner/package.json": { name: "banner", main: "dist/lib" },
+      "banner/dist/lib.js": [
+        "//----------------------------------",
+        "//",
+        "// A library",
+        "//",
+        "// Copyright (c) 2009 Someone Else",
+        "//",
+        "// Licensed under the MIT license",
+        "var lib = 1;",
+      ].join("\n"),
+      "block/package.json": { name: "block", module: "index.mjs" },
+      "block/index.mjs":
+        "/*!\n * Copyright 2020 Block Person\n */\nexport {};\n",
+      "none/package.json": { name: "none" },
+      "none/index.js":
+        "module.exports = 1; // copyright (c) 1999 is no banner\n",
+    });
+    const read = (name: string) =>
+      bannerCopyright(
+        join(root, name),
+        JSON.parse(
+          readFileSync(join(root, name, "package.json"), "utf8"),
+        ) as Record<string, unknown>,
+      );
+    expect(read("banner")).toEqual(["Copyright (c) 2009 Someone Else"]);
+    expect(read("block")).toEqual(["Copyright 2020 Block Person"]);
+    expect(read("none")).toEqual([]);
+    expect(authorName({ author: "Next.js Team <support@vercel.com>" })).toBe(
+      "Next.js Team",
+    );
+    expect(
+      authorName({ author: { name: "Ada", url: "https://example.com" } }),
+    ).toBe("Ada");
+    expect(authorName({ author: "Bo (https://bo.example)" })).toBe("Bo");
+    expect(authorName({})).toBeNull();
   });
 
   it("tidies licence texts: Unix line ends, no trailing spaces, one blank line at most", () => {

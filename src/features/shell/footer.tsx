@@ -2,7 +2,10 @@
  * The footer (DESIGN §6.13, PRD §6.1): the seven legal and trust pages
  * (LGL-1, PRD §3.14) as 44 px links, on Today and at the foot of each
  * trust page, where `current` marks the page you're on (`aria-current`),
- * so the links lead from one trust page to the next. Me and Settings
+ * so the links lead from one trust page to the next. The mark is bold
+ * with no underline as well as ink, never colour alone (DESIGN §11), so
+ * it survives forced colours, where every link turns LinkText; the
+ * utilities beat `.kn-footer a` in the components layer. Me and Settings
  * render it too once STA-1 and SET-1 build them. They prefetch once they
  * scroll into view, like every link to a page that exists, so a page's
  * title arrives with it for the route announcer (R1-09).
@@ -39,7 +42,9 @@ export function SiteFooter({
                 <Link
                   href={link.href as Route}
                   aria-current={here ? "page" : undefined}
-                  className={here ? "text-ink" : undefined}
+                  className={
+                    here ? "font-bold text-ink no-underline" : undefined
+                  }
                 >
                   {link.label}
                 </Link>

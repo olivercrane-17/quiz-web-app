@@ -98,6 +98,71 @@ test.describe("AC-LGL-01 the seven trust pages", () => {
         .getByRole("navigation", { name: "About Knewt" })
         .getByRole("link", { name: "Terms" }),
     ).toHaveAttribute("aria-current", "page");
+
+    // The mark is more than colour (DESIGN §11), so it survives forced
+    // colours, where every link turns LinkText.
+    await page.emulateMedia({ forcedColors: "active" });
+    const marks = await page
+      .getByRole("navigation", { name: "About Knewt" })
+      .getByRole("link")
+      .evaluateAll((links) =>
+        links.map((link) => {
+          const style = getComputedStyle(link);
+          return {
+            current: link.getAttribute("aria-current") === "page",
+            shape: `${style.fontWeight} ${style.textDecorationLine}`,
+          };
+        }),
+      );
+    const [current, ...more] = marks.filter((mark) => mark.current);
+    expect(current?.current).toBe(true);
+    expect(more).toEqual([]);
+    // Forced colours paint every link alike (LinkText), so its weight or
+    // its underline has to tell the current page apart.
+    for (const other of marks.filter((mark) => !mark.current)) {
+      expect(other.shape).not.toBe(current?.shape);
+    }
+  });
+
+  test("AC-LGL-01 a link to a section of another trust page starts keyboard focus at that section", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(
+      browserName !== "chromium",
+      "keyboard focus order is checked in Chromium",
+    );
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/privacy");
+    const link = page
+      .locator("article")
+      .getByRole("link", { name: "How scoring works" });
+    await expect(link).toHaveAttribute(
+      "href",
+      "/how-scoring-works#how-scoring-works-honest-play",
+    );
+    await link.focus();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(
+      "/how-scoring-works#how-scoring-works-honest-play",
+    );
+    const heading = page.locator("#how-scoring-works-honest-play");
+    await expect(heading).toBeInViewport();
+
+    // The next Tab goes on from the section, never back to the top.
+    await page.keyboard.press("Tab");
+    const onward = await heading.evaluate((target) => {
+      const focused = document.activeElement;
+      return (
+        focused !== null &&
+        focused !== document.body &&
+        (target.compareDocumentPosition(focused) &
+          Node.DOCUMENT_POSITION_FOLLOWING) !==
+          0
+      );
+    });
+    expect(onward).toBe(true);
+    await expect(heading).toBeInViewport();
   });
 
   // SET-1 builds /settings with its About section (PRD §3.12.1: "Links to
@@ -134,7 +199,7 @@ test.describe("AC-LGL-01 the seven trust pages", () => {
     expect(top).toBeGreaterThanOrEqual(bar);
   });
 
-  test("AC-LGL-01 /credits opens a licence text in place, and no licence runs sideways at 320 px with 200% text", async ({
+  test("AC-LGL-01 /credits opens a licence text in place, and nothing runs sideways at 320 px with 200% text and WCAG's text spacing", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 320, height: 640 });
@@ -152,6 +217,11 @@ test.describe("AC-LGL-01 the seven trust pages", () => {
       for (const details of document.querySelectorAll("details")) {
         details.open = true;
       }
+    });
+    // The text-spacing overrides of WCAG 1.4.12 (DESIGN §10.5, §11).
+    await page.addStyleTag({
+      content: `* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; }
+        p { margin-bottom: 2em !important; }`,
     });
     const overflow = await page.evaluate(
       () =>

@@ -26,10 +26,12 @@ import {
   type LegalPath,
 } from "./document";
 import { LEGAL_DOCUMENTS } from "./documents";
+import { packageLine } from "./documents/credits";
 import {
   LOCAL_STORAGE_LINES,
   SESSION_STORAGE_LINES,
 } from "./documents/privacy";
+import { DATASET_CREDITS } from "./generated/licenses";
 
 const ALL_ON = () => true;
 const ALL_OFF = () => false;
@@ -201,7 +203,14 @@ describe("links and anchors", () => {
         )) {
           if (href.startsWith("https://") || href.startsWith("mailto:"))
             continue;
-          const [target = "", hash] = href.split("#");
+          const [written = "", hash] = href.split("#");
+          // A bare `#anchor` is a section of the page it's on. Written with
+          // the page's own path it would load the page again (see
+          // rich-text.tsx), so a section of this page is always bare.
+          const target = written === "" ? path : written;
+          if (written === path && hash !== undefined) {
+            broken.push(`${path}: ${href} (write #${hash} for this page)`);
+          }
           if (!pages.has(target)) broken.push(`${path}: ${href}`);
           if (hash !== undefined) {
             const anchors = anchorsOf.get(target as LegalPath);
@@ -275,6 +284,83 @@ describe("/privacy describes what the app stores", () => {
     expect(shown).toContain("hello@knewt.app");
   });
 
+  it("says a practice-only player's secret stays on the device, while the id travels with practice answers and analytics events", () => {
+    const shown = text(ALL_OFF);
+    // The first registering write (ARCHITECTURE §8.4 "(auth, registers)":
+    // a Daily, a report or a heart) sends the secret; log_practice_answers
+    // and log_events carry the id alone (§8.4, §3.12).
+    expect(shown).toContain(
+      "The secret first reaches our server when you play something online, such as the Daily, or report or heart a question. Until then it stays on your device, and your player id travels only with the practice answers and analytics events described below.",
+    );
+    expect(shown).not.toMatch(/they never leave your device/);
+  });
+
+  it("names what the server keeps beyond the game itself: zone, browser, devices and hidden time (ARCHITECTURE §8.3, §8.8)", () => {
+    const shown = text(ALL_OFF);
+    expect(shown).toContain("Your time zone and devices");
+    expect(shown).toContain("Your device's time zone (such as Europe/London)");
+    expect(shown).toContain(
+      "when each of your devices was added and last used",
+    );
+    expect(shown).toContain("how long the tab was hidden during each round");
+    expect(shown).toContain("the part of the app you were in");
+    // A zone places a player in a region, so the page never says it
+    // collects no location at all.
+    expect(shown).toContain(
+      "Your precise location, contacts, camera or microphone. Your device's time zone is the closest we come.",
+    );
+  });
+
+  it("keeps practice only as a list of answered questions, for 180 days, the answers going into anonymous counts (ARCHITECTURE §8.12)", () => {
+    const shown = text(ALL_OFF);
+    expect(shown).toContain(
+      "We keep only a list of the questions you've answered, tied to your player id.",
+    );
+    expect(shown).toContain(
+      "Your list of answered practice questions: 180 days after your last practice answer.",
+    );
+  });
+
+  it("says what Download my data holds today and what Delete my data deletes (ARCHITECTURE §3.10, §8.4)", () => {
+    for (const [flags, quizzes] of [
+      [ALL_OFF, false],
+      [ALL_ON, true],
+    ] as const) {
+      const shown = text(flags);
+      const download =
+        shown.split("\n").find((line) => line.startsWith("**Download")) ?? "";
+      // ServerDataExport's arrays, and the account block of export_json.
+      for (const part of [
+        "your profile and devices",
+        "your time zone",
+        "Daily games",
+        "streak history",
+        "Groups and challenges",
+        "the practice data on this device",
+      ]) {
+        expect(download).toContain(part);
+      }
+      expect(download.includes("quizzes")).toBe(quizzes);
+      // No export hook reads these yet (SQL-9, SQL-10).
+      expect(download).toContain(
+        "It doesn't yet include your reports, your hearts, your list of answered practice questions or your analytics events.",
+      );
+      expect(download).not.toMatch(/everything our server holds/);
+      const remove =
+        shown.split("\n").find((line) => line.startsWith("**Delete")) ?? "";
+      expect(remove).toContain(
+        "your reports, your hearts, your list of answered practice questions and your analytics events",
+      );
+      expect(remove.includes("your quizzes")).toBe(quizzes);
+    }
+  });
+
+  it("tells EU and UK players they can complain to their data protection authority", () => {
+    expect(text(ALL_OFF)).toContain(
+      "If you're in the EU or the UK, you can also complain to your data protection authority.",
+    );
+  });
+
   it("lists Beta and Should storage only in builds that have those features", () => {
     const off = text(ALL_OFF);
     for (const key of [
@@ -291,6 +377,86 @@ describe("/privacy describes what the app stores", () => {
     const on = text(ALL_ON);
     expect(on).toContain("Quizzes you save (Beta)");
     expect(on).toContain("Rooms (Beta): 24 hours after the room ends.");
+  });
+});
+
+describe("/credits credits each source the way its licence asks", () => {
+  const credits = LEGAL_DOCUMENTS["/credits"](ALL_OFF);
+  /** The dataset terms that follow a section's subhead, or its first terms block. */
+  const datasetTerms = (sectionId: string, after?: string): string[] => {
+    const blocks =
+      credits.sections.find((section) => section.id === sectionId)?.blocks ??
+      [];
+    const start =
+      after === undefined
+        ? 0
+        : blocks.findIndex(
+            (block) => block.kind === "subhead" && block.text === after,
+          );
+    const terms = blocks.slice(start).find((block) => block.kind === "terms");
+    return terms?.kind === "terms"
+      ? terms.items.map((item) => [item.term, ...item.details].join(" "))
+      : [];
+  };
+
+  it("lists under “The open data in them” only the datasets a list's data comes from; the rest, share-alike ones included, sit with the checking data", () => {
+    const inLists = datasetTerms("answer-lists", "The open data in them");
+    const checking = datasetTerms("fact-checking");
+    for (const dataset of DATASET_CREDITS) {
+      const fromList = dataset.listsFrom.length > 0;
+      expect(
+        inLists.some((term) => term.includes(`[${dataset.title}]`)),
+        dataset.key,
+      ).toBe(fromList);
+      expect(
+        checking.some((term) => term.includes(`[${dataset.title}]`)),
+        dataset.key,
+      ).toBe(!fromList);
+    }
+    // Checked against, nothing copied: ODbL and CC BY-SA data.
+    for (const key of ["mledoze-countries", "ptable"]) {
+      const dataset = DATASET_CREDITS.find((entry) => entry.key === key);
+      expect(dataset?.listsFrom, key).toEqual([]);
+    }
+  });
+
+  it("says the data in a list was selected and adapted, as CC BY 4.0 §3(a)(1)(B) asks", () => {
+    const inLists = datasetTerms("answer-lists", "The open data in them");
+    const geonames = DATASET_CREDITS.find(
+      (dataset) => dataset.key === "geonames-cities",
+    );
+    expect(geonames?.license).toBe("CC-BY-4.0");
+    const term = inLists.find((each) =>
+      each.includes(`[${geonames?.title ?? ""}]`),
+    );
+    expect(term).toContain("Selected and adapted for our Cities list.");
+  });
+
+  it("writes a package's notice as it words it, its author when it has none, and says when it ships no licence file", () => {
+    const base = {
+      name: "pkg",
+      version: "1.0.0",
+      license: "MIT",
+      copyright: [],
+      licenceFile: true,
+      author: null,
+    };
+    expect(
+      packageLine({
+        ...base,
+        licenceFile: false,
+        copyright: ["Copyright (c) 2009 Kazuhiko Arase"],
+      }),
+    ).toBe("`pkg` 1.0.0: Copyright (c) 2009 Kazuhiko Arase");
+    expect(
+      packageLine({ ...base, licenceFile: false, author: "Next.js Team" }),
+    ).toBe(
+      "`pkg` 1.0.0, by Next.js Team (it ships no licence file of its own)",
+    );
+    expect(packageLine({ ...base, licenceFile: false })).toBe(
+      "`pkg` 1.0.0 (it ships no licence file of its own)",
+    );
+    expect(packageLine(base)).toBe("`pkg` 1.0.0");
   });
 });
 

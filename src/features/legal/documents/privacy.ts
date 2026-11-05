@@ -8,6 +8,15 @@
  * own database, and no third-party tracker or ad. Beta and Should features
  * add their lines only when their flag is on, so the page describes the
  * build it ships in.
+ *
+ * The server's side follows the schema (ARCHITECTURE §8.3, §8.4, §8.12 and
+ * supabase/migrations/20261104000400_identity.sql): a player's zone, first
+ * browser contexts and devices; each attempt's zone, context, app version,
+ * hidden time and honest-play flags; practice kept only as a bitset of
+ * answered items for 180 days, the answers themselves folded into
+ * anonymous counts. Download my data says what `export_json` holds today:
+ * reports, hearts, the practice bitset and events have no export hook yet
+ * (a follow-up for SQL-9 and SQL-10, so AC-DAT-01 can hold).
  */
 import type { FeatureFlag } from "@/config/features";
 import { TUNABLES } from "@/config/tunables";
@@ -150,7 +159,7 @@ export function privacyDocument(
           {
             kind: "list",
             items: [
-              "You play as a guest. Your browser makes a random player id and a secret on your first visit. They reach our server only when you first play something online, such as the Daily. If you only ever play Practice, they never leave your device.",
+              "You play as a guest. Your browser makes a random player id and a secret on your first visit. The secret first reaches our server when you play something online, such as the Daily, or report or heart a question. Until then it stays on your device, and your player id travels only with the practice answers and analytics events described below.",
               "We keep your Daily games and your stats on our server, so they survive a cleared browser and can move to a new device.",
               "There is one cookie, and its only job is to back up your profile. No analytics or advertising cookie, ever.",
               "Our own analytics count things like finished Dailies and shares. They go to our own database and nowhere else.",
@@ -179,13 +188,19 @@ export function privacyDocument(
               {
                 term: "Your Daily games",
                 details: [
-                  "For each Daily you play: your guesses, the clue you solved each Mystery on, your Encore number, your score and your times. We also keep your streak history (freezes and repairs included) and the totals behind your stats.",
+                  "For each Daily you play: your guesses, the clue you solved each Mystery on, your Encore number, your score and your times. With them we keep how long the tab was hidden during each round, your time zone and the kind of browser you played in, the app's version, and whether the run stays out of the crowd's numbers. We also keep your streak history (freezes and repairs included) and the totals behind your stats.",
+                ],
+              },
+              {
+                term: "Your time zone and devices",
+                details: [
+                  "Your device's time zone (such as Europe/London), when it last changed and the zone of the last Daily you finished, which decide your local date and which part of the world you're compared with; when you were last active; the kind of browser you first played in and first finished a Daily in (such as inside a messaging app); and when each of your devices was added and last used.",
                 ],
               },
               {
                 term: "Practice answers",
                 details: [
-                  "Your first answer to each practice question: which question it was, whether you got it right, the option you chose, a rough time, the mode, and whether you picked the category yourself. These tell us how hard each question really is. The rest of your practice history stays on your device.",
+                  "When you first answer a practice question, your device sends which question it was, whether you got it right, the option you chose, a rough time, the mode and whether you picked the category. We keep only a list of the questions you've answered, tied to your player id. Whether you got each one right, and the option you chose, go into anonymous counts of how hard each question is. The rest of your practice history stays on your device.",
                 ],
               },
               {
@@ -233,15 +248,15 @@ export function privacyDocument(
                 ],
               },
               {
-                term: "Your sync code",
+                term: "Your sync code and claim links",
                 details: [
-                  "If you make one, we keep only a hash of it. The code itself stays on your device.",
+                  "If you make a sync code, we keep only a hash of it and when you made it. The code itself stays on your device. A link that moves your profile out of an in-app browser works the same way: we keep its hash and when it was made and used.",
                 ],
               },
               {
                 term: "Analytics events",
                 details: [
-                  "Short records of what happened in the app, such as a Daily finished or a share opened. Each one carries your player id, a random id for the browser tab, the time, the app version and the kind of browser you use (such as Android, inside a messaging app), never its full user agent. Events never carry your IP address or anything you typed.",
+                  "Short records of what happened in the app, such as a Daily finished or a share opened. Each one carries your player id, a random id for the browser tab, the time, the app version, the part of the app you were in and the kind of browser you use (such as Android, inside a messaging app), never its full user agent. Events never carry your IP address or anything you typed.",
                 ],
               },
               {
@@ -260,7 +275,7 @@ export function privacyDocument(
         blocks: [
           {
             kind: "p",
-            text: `There is one cookie, \`${BACKUP_COOKIE_NAME}\`. It holds your player id and secret, so your profile survives if your browser clears the site's storage, as some browsers do after a few weeks without a visit. It is set by our own server once you've played something online, scripts on the page can't read it, it is sent only to this site, and it lasts 400 days, renewed at most once a week while you play. It never goes to our database or to anyone else. Delete my data removes it.`,
+            text: `There is one cookie, \`${BACKUP_COOKIE_NAME}\`. It holds your player id and secret, so your profile survives if your browser clears the site's storage, as some browsers do after a few weeks without a visit. Our own server sets it once your profile is saved there, scripts on the page can't read it, it is sent only to this site, and it lasts 400 days, renewed at most once a week while you play. It never goes to our database or to anyone else. Delete my data removes it.`,
           },
           {
             kind: "p",
@@ -282,7 +297,7 @@ export function privacyDocument(
             kind: "list",
             items: [
               "Your name, email address, phone number or birth date.",
-              "Your location, contacts, camera or microphone.",
+              "Your precise location, contacts, camera or microphone. Your device's time zone is the closest we come.",
               "Advertising ids. Knewt has no ads.",
               "Anything for third parties. There are no third-party trackers, analytics tools, fonts or embeds: your browser talks only to this site and to our database.",
             ],
@@ -307,6 +322,7 @@ export function privacyDocument(
               "Analytics events: 7 days, then only daily totals with no player id in them.",
               "Daily games: the round-by-round detail for 30 days, then only the totals and the share code. Each game is deleted 400 days after it ends. Your streak history and stats totals stay with your profile.",
               "Report notes: 180 days.",
+              "Your list of answered practice questions: 180 days after your last practice answer. If you've only played Practice, Delete my data clears this device, and the list on our server goes 180 days after your last answer.",
               ...(rooms ? ["Rooms (Beta): 24 hours after the room ends."] : []),
               "IP address hashes: unreadable after 48 hours, once their salt is deleted.",
               "The backup cookie: 400 days from the last time it was renewed.",
@@ -326,8 +342,8 @@ export function privacyDocument(
           {
             kind: "list",
             items: [
-              "**Download my data** gives you a file with everything our server holds for your profile, plus the practice data on this device.",
-              `**Delete my data** asks twice, then deletes your profile, its secrets and sync code, your Group memberships ${editor ? "and challenges, your quizzes" : "and your challenges"}, and takes your player id off your Daily games. It then clears this device and removes the backup cookie. Totals such as how many people solved a Mystery on clue 2 stay, with nothing in them that points to you.`,
+              `**Download my data** gives you a file with your profile and devices, your time zone, your Daily games and streak history, ${editor ? "your Groups and challenges, and your quizzes" : "and your Groups and challenges"}, plus the practice data on this device. It doesn't yet include your reports, your hearts, your list of answered practice questions or your analytics events.`,
+              `**Delete my data** asks twice, then deletes your profile, its secrets and sync code, your Group memberships and challenges${editor ? ", your quizzes" : ""}, your reports, your hearts, your list of answered practice questions and your analytics events, and takes your player id off your Daily games. It then clears this device and removes the backup cookie. Totals such as how many people solved a Mystery on clue 2 stay, with nothing in them that points to you.`,
             ],
           },
           {
@@ -336,7 +352,7 @@ export function privacyDocument(
           },
           {
             kind: "p",
-            text: `Wherever privacy law gives you more rights, such as in the EU and the UK, you have them here too. Email ${CONTACT_LINK} and we'll help.`,
+            text: `Wherever privacy law gives you more rights, such as in the EU and the UK, you have them here too. Email ${CONTACT_LINK} and we'll help. If you're in the EU or the UK, you can also complain to your data protection authority.`,
           },
         ],
       },

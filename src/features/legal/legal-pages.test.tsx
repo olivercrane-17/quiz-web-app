@@ -208,11 +208,20 @@ describe("AC-LGL-02 the words each page must carry", () => {
       "Questions are drafted with AI assistance. Each one is accepted only after two independent checks, and any fact that is uncertain or easy to get wrong is checked against published data or sources.",
     );
     // The honest account the tech lead asked for: the second check on a
-    // different model, an editor, tiebreaks with evidence, the audits, and
-    // how to report.
+    // different model where we can choose one (no check record names its
+    // model yet, CONTENT_GUIDE §0.2), an editor, tiebreaks with evidence,
+    // the audits, and how to report.
     expect(text).toContain(
-      "The second check runs on a different AI model from the writer",
+      "Wherever we can choose the model, the second check runs on a different AI model from the writer and the first check",
     );
+    // Decisions memo §18: a risky fact no dataset covered could pass on
+    // both checkers' certain knowledge once the searches ran out, and the
+    // page says so rather than letting the lede overstate it.
+    expect(text).toContain(
+      "When no dataset covers a fact that is easy to get wrong and our web searches have run out, the fact can still pass if both checkers, working separately, are certain of it.",
+    );
+    expect(text).not.toMatch(/leave out anything that can change/);
+    expect(text).toContain("carry a review date");
     expect(text).toMatch(/An editor reads the question and both checks/);
     expect(text).toMatch(/a third check settles it with published data/);
     expect(text).toMatch(/Before launch, and every month after, an auditor/);

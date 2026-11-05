@@ -10,6 +10,10 @@
  * the title stays the largest heading at any text size (R1-34). Anchors
  * are prefixed with the page (`sectionAnchor`), so they stay unique among
  * the routes Next keeps hidden in the document.
+ *
+ * Running text keeps to `PROSE_MEASURE`, so lines stay within `body`'s 62
+ * characters (DESIGN §3.2) while the title, the section heads, the table
+ * of contents, the licence texts and the footer use the whole column.
  */
 import type { ReactNode } from "react";
 
@@ -27,13 +31,26 @@ import {
 } from "../document";
 import { LINK_CLASSES, RichText } from "./rich-text";
 
+/**
+ * The longest line of running text: DESIGN §3.2 sets `body` at "at most
+ * 62 characters a line", and the 600 px column held 76 to 85. In ems, not
+ * `ch`: Atkinson's slashed zero, which `ch` measures, is wide, so 62ch is
+ * about 683 px at body size. 25em keeps the longest lines of /privacy,
+ * /terms and /about-our-questions to 61 or 62 characters, and it grows
+ * with 200% text. The design team may read 62 as the typical line rather
+ * than the longest, which would be about 29em.
+ */
+const PROSE_MEASURE = "max-w-[25em]";
+
 /** Components a document places by name (`{ kind: "slot" }`). */
 export type LegalSlots = Readonly<Record<string, ReactNode>>;
 
 function Licence({ licence }: { licence: LicenceText }) {
   return (
     <details className="border-t border-rule">
-      <summary className="min-h-11 cursor-pointer py-2.5 text-body-sm font-bold">
+      {/* A long title such as "(NobelDB/NobelDB-Data)" breaks anywhere,
+          so 200% text with WCAG's text spacing never runs it sideways. */}
+      <summary className="min-h-11 cursor-pointer py-2.5 text-body-sm font-bold wrap-anywhere">
         {licence.summary}
       </summary>
       <pre className="pb-3 text-[0.8125rem] leading-snug wrap-anywhere whitespace-pre-wrap text-ink-2">
@@ -46,11 +63,11 @@ function Licence({ licence }: { licence: LicenceText }) {
 function Term({ item }: { item: TermItem }) {
   return (
     <div className="flex flex-col gap-1">
-      <dt className="font-bold wrap-anywhere">
+      <dt className={cx("font-bold wrap-anywhere", PROSE_MEASURE)}>
         <RichText text={item.term} />
       </dt>
       {item.details.map((detail) => (
-        <dd key={detail} className="wrap-anywhere">
+        <dd key={detail} className={cx("wrap-anywhere", PROSE_MEASURE)}>
           <RichText text={detail} />
         </dd>
       ))}
@@ -67,7 +84,7 @@ function BlockView({ block, slots }: { block: Block; slots: LegalSlots }) {
   switch (block.kind) {
     case "p":
       return (
-        <p>
+        <p className={PROSE_MEASURE}>
           <RichText text={block.text} />
         </p>
       );
@@ -78,6 +95,7 @@ function BlockView({ block, slots }: { block: Block; slots: LegalSlots }) {
           className={cx(
             "flex flex-col gap-2 marker:text-ink-3",
             block.ordered === true ? "list-decimal pl-6" : "list-disc pl-5",
+            PROSE_MEASURE,
           )}
         >
           {block.items.map((item) => (
@@ -105,7 +123,13 @@ function BlockView({ block, slots }: { block: Block; slots: LegalSlots }) {
       if (slot === undefined) {
         throw new Error(`No component given for the "${block.name}" slot`);
       }
-      return <>{slot}</>;
+      // A slot's text in the page's own `body` token and measure (DESIGN
+      // §12.40): How to play sets itself in Tailwind's 16 px `text-base`.
+      return (
+        <div className="[&_h3]:text-body [&_p]:max-w-[25em] [&_p]:text-body">
+          {slot}
+        </div>
+      );
     }
   }
 }
@@ -134,7 +158,7 @@ export function LegalPage({
 
         <div className="flex flex-col gap-3">
           {document.lede.map((line) => (
-            <p key={line}>
+            <p key={line} className={PROSE_MEASURE}>
               <RichText text={line} />
             </p>
           ))}

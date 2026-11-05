@@ -3,7 +3,11 @@
  * License texts, Lucide's ISC licence, the sounds, every open dataset in
  * content/datasets/manifest.json with its licence and the answer lists
  * that name it in their `provenance`, Wikidata where a dataset supplied
- * its ids, and the notices of the open-source packages the app runs on.
+ * its ids, and the notices of the open-source packages the app runs on,
+ * Tailwind's CSS included. Datasets the answer lists only checked against
+ * (mledoze-countries, ptable) sit with the fact-checking data, never under
+ * "The open data in them", and a list's sources are credited as selected
+ * and adapted, as CC BY 4.0 asks.
  * Everything that lives in another file comes from the generated module
  * (`scripts/content/licenses.ts`), so the page can't fall behind a new
  * dataset, list source or dependency.
@@ -75,8 +79,9 @@ function fontItems(): TermItem[] {
 function datasetUse(dataset: DatasetCredit): string {
   const parts: string[] = [];
   if (dataset.listsFrom.length > 0) {
+    // CC BY 4.0 §3(a)(1)(B) asks the credit to say the data was changed.
     parts.push(
-      `Data in our ${listNames(dataset.listsFrom)} ${dataset.listsFrom.length === 1 ? "list" : "lists"}.`,
+      `Selected and adapted for our ${listNames(dataset.listsFrom)} ${dataset.listsFrom.length === 1 ? "list" : "lists"}.`,
     );
   }
   if (dataset.listsChecked.length > 0) {
@@ -110,15 +115,20 @@ function datasetItem(dataset: DatasetCredit): TermItem {
   };
 }
 
-/** "`next` 16.4.3: Copyright (c) 2025 Vercel, Inc.", the notice as the package words it. */
-function packageLine(pkg: SoftwarePackage): string {
-  const copyright =
-    pkg.copyright.length > 0
-      ? `: ${pkg.copyright.join("; ")}`
-      : pkg.licenceFile
-        ? ""
-        : " (it ships no licence file of its own)";
-  return `\`${pkg.name}\` ${pkg.version}${copyright}`;
+/**
+ * "`next` 16.4.3: Copyright (c) 2025 Vercel, Inc.", the notice as the
+ * package words it; with no notice anywhere, the author its package.json
+ * names, and a word when it ships no licence file.
+ */
+export function packageLine(pkg: SoftwarePackage): string {
+  if (pkg.copyright.length > 0) {
+    return `\`${pkg.name}\` ${pkg.version}: ${pkg.copyright.join("; ")}`;
+  }
+  const author = pkg.author === null ? "" : `, by ${pkg.author}`;
+  const noFile = pkg.licenceFile
+    ? ""
+    : " (it ships no licence file of its own)";
+  return `\`${pkg.name}\` ${pkg.version}${author}${noFile}`;
 }
 
 function softwareBlocks(): Block[] {
@@ -186,13 +196,15 @@ export function creditsDocument(
     ),
   ];
   const withWikidata = LIST_CREDITS.filter((list) => list.wikidata);
+  // Under "The open data in them" only what a list's data comes from; a
+  // dataset that was only checked against, share-alike ones such as
+  // mledoze-countries (ODbL) and ptable (CC BY-SA) included, copied
+  // nothing into a list, so it goes with the checking data.
   const listDatasets = DATASET_CREDITS.filter(
-    (dataset) =>
-      dataset.listsFrom.length > 0 || dataset.listsChecked.length > 0,
+    (dataset) => dataset.listsFrom.length > 0,
   );
   const checkingDatasets = DATASET_CREDITS.filter(
-    (dataset) =>
-      dataset.listsFrom.length === 0 && dataset.listsChecked.length === 0,
+    (dataset) => dataset.listsFrom.length === 0,
   );
 
   return {
@@ -260,7 +272,7 @@ export function creditsDocument(
         blocks: [
           {
             kind: "p",
-            text: "Our fact-checkers also compare questions with these open datasets. Nothing from them ships in the app.",
+            text: "Our fact-checkers also compare questions and answer lists with these open datasets. Nothing from them ships in the app.",
           },
           { kind: "terms", items: checkingDatasets.map(datasetItem) },
         ],

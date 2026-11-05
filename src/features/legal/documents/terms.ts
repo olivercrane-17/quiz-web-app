@@ -5,6 +5,13 @@
  * warranty; how the terms change. Sensible defaults without legal review
  * (decisions memo §7, §10); the review flag lives in the launch report,
  * not on the page.
+ *
+ * "Our content" matches the licence the repository grants: LICENSE and
+ * package.json are MIT with no carve-out, and the repository (public,
+ * ARCHITECTURE D10) commits the practice items and packs, so the terms
+ * can't claim them or forbid copying them. Only the sealed Daily content
+ * stays unpublished. Whether content/ and public/content/ keep MIT or get
+ * a licence of their own is the owner's call (launch report).
  */
 import type { FeatureFlag } from "@/config/features";
 import { SHELL_COPY } from "@/features/shell";
@@ -79,7 +86,7 @@ export function termsDocument(
               "harass or threaten anyone, or share someone's personal information;",
               "post anything our [content policy](/content-policy) rules out, in a name or in a quiz;",
               "break into another player's profile or our systems, or get in their way;",
-              "copy our questions in bulk, or scrape the app.",
+              "scrape the app or flood it with automated requests.",
             ],
           },
           {
@@ -120,7 +127,7 @@ export function termsDocument(
         blocks: [
           {
             kind: "p",
-            text: "Knewt's questions, Daily puzzles, words and design, its name and the newt are ours or licensed to us. Share your results and challenge links anywhere you like, but please don't copy our questions in bulk or reuse them somewhere else.",
+            text: "Knewt's code and the practice questions in its public repository are open source under the MIT License. The Daily puzzles are ours, as are Knewt's name and the newt. Share your results and challenge links anywhere you like.",
           },
           {
             kind: "p",
