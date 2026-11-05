@@ -1,0 +1,533 @@
+{
+  "$comment": [
+    "Mystery scoring parity table (ARCHITECTURE §4.13): every row of PRD §4.1.7, both tables, plus invalid, duplicate and out-of-turn actions.",
+    "Replayed by Vitest against the engine's mystery plugin (src/engine/rounds/mystery/scoring-fixture.test.ts) and, from SQL-5, by the SQL parity tests that scripts/sql/gen-parity.ts generates.",
+    "Guesses name entity ids from content/fixtures/answer-lists/country.json, which the e2e track loads. Picks name an option by role (answer, distractor1 to distractor3) because each side draws its own shuffle: parity compares judged results, never shuffles.",
+    "Each step is one round action. expect.verdict is the verdict kind; continue carries the clue now open, whether the four options show, and the roles that come back already guessed. expect.error is a refusal, which consumes nothing: the clue stays where it was.",
+    "outcome is the resolved round (null when a row ends mid-round). prdShareRow is the PRD's illustrative row; DESIGN §6.11 owns the shipped glyphs, and the semantic cells are what both sides check.",
+    "The table holds no clue text: any four clues will do, and public JSON never carries a clues array (scripts/checks/secret-scan.mjs). Each runner supplies its own placeholders."
+  ],
+  "mystery": {
+    "answerType": "country",
+    "answer": "fx.x.country.arvenna",
+    "accepted": ["fx.x.country.elmaris"],
+    "distractors": [
+      "fx.x.country.belloria",
+      "fx.x.country.cassova",
+      "fx.x.country.dravenor"
+    ]
+  },
+  "rows": [
+    {
+      "id": "solve-on-clue-1",
+      "source": "PRD §4.1.7 table 1 row 1",
+      "title": "Guesses the answer on clue 1",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.arvenna",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 1,
+        "points": 4,
+        "cells": ["solved", "unused", "unused", "unused"]
+      },
+      "prdShareRow": "🟩⬜⬜⬜"
+    },
+    {
+      "id": "wrong-then-solve-on-clue-2",
+      "source": "PRD §4.1.7 table 1 row 2",
+      "title": "Wrong guess, then correct on clue 2",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.ostravia",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.arvenna",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 2,
+        "points": 3,
+        "cells": ["passed", "solved", "unused", "unused"]
+      },
+      "prdShareRow": "🟥🟩⬜⬜"
+    },
+    {
+      "id": "next-next-solve-on-clue-3",
+      "source": "PRD §4.1.7 table 1 row 3",
+      "title": "Next clue, Next clue, correct on clue 3",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 3, "options": false }
+        },
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.arvenna",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 3,
+        "points": 2,
+        "cells": ["passed", "passed", "solved", "unused"]
+      },
+      "prdShareRow": "🟥🟥🟩⬜"
+    },
+    {
+      "id": "wrong-wrong-next-pick-right",
+      "source": "PRD §4.1.7 table 1 row 4",
+      "title": "Wrong, wrong, Next clue, picks the right option",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.ostravia",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.pellinor",
+          "expect": { "verdict": "continue", "clue": 3, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": {
+            "verdict": "continue",
+            "clue": 4,
+            "options": true,
+            "disabled": []
+          }
+        },
+        {
+          "intent": "pick",
+          "option": "answer",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 4,
+        "points": 1,
+        "cells": ["passed", "passed", "passed", "solved"]
+      },
+      "prdShareRow": "🟥🟥🟥🟩"
+    },
+    {
+      "id": "three-next-pick-wrong",
+      "source": "PRD §4.1.7 table 1 row 5",
+      "title": "Three Next clues, picks a wrong option",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 3, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 4, "options": true }
+        },
+        {
+          "intent": "pick",
+          "option": "distractor1",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": null,
+        "points": 0,
+        "cells": ["passed", "passed", "passed", "passed"]
+      },
+      "prdShareRow": "🟥🟥🟥🟥"
+    },
+    {
+      "id": "same-guess-twice",
+      "source": "PRD §4.1.7 table 1 row 6",
+      "title": "Guesses the same wrong country twice: the second attempt is refused and the clue isn't used",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.rosmaar",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.rosmaar",
+          "expect": { "error": "already_guessed", "clue": 2 }
+        }
+      ],
+      "outcome": null,
+      "prdShareRow": null
+    },
+    {
+      "id": "options-from-3-next-next-pick-right",
+      "source": "PRD §4.1.7 table 2 row 1",
+      "title": "options_from_clue 3: Next clue, Next clue, picks the right option on clue 3",
+      "optionsFromClue": 3,
+      "steps": [
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": {
+            "verdict": "continue",
+            "clue": 3,
+            "options": true,
+            "disabled": []
+          }
+        },
+        {
+          "intent": "pick",
+          "option": "answer",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 3,
+        "points": 2,
+        "cells": ["passed", "passed", "solved", "unused"]
+      },
+      "prdShareRow": "🟥🟥🟩⬜"
+    },
+    {
+      "id": "options-from-3-wrong-next-wrong-pick-then-right",
+      "source": "PRD §4.1.7 table 2 row 2",
+      "title": "options_from_clue 3: wrong guess, Next clue, a wrong pick on clue 3 (disabled on clue 4), then the right one",
+      "optionsFromClue": 3,
+      "steps": [
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.ostravia",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 3, "options": true }
+        },
+        {
+          "intent": "pick",
+          "option": "distractor1",
+          "expect": {
+            "verdict": "continue",
+            "clue": 4,
+            "options": true,
+            "disabled": ["distractor1"]
+          }
+        },
+        {
+          "intent": "pick",
+          "option": "answer",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 4,
+        "points": 1,
+        "cells": ["passed", "passed", "passed", "solved"]
+      },
+      "prdShareRow": "🟥🟥🟥🟩"
+    },
+    {
+      "id": "options-from-3-next-three-times-pick-right",
+      "source": "PRD §4.1.7 table 2 row 3",
+      "title": "options_from_clue 3: Next clue, Next clue, Next clue on clue 3, picks the right option on clue 4",
+      "optionsFromClue": 3,
+      "steps": [
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 3, "options": true }
+        },
+        {
+          "intent": "next_clue",
+          "expect": {
+            "verdict": "continue",
+            "clue": 4,
+            "options": true,
+            "disabled": []
+          }
+        },
+        {
+          "intent": "pick",
+          "option": "answer",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 4,
+        "points": 1,
+        "cells": ["passed", "passed", "passed", "solved"]
+      },
+      "prdShareRow": "🟥🟥🟥🟩"
+    },
+    {
+      "id": "options-from-3-two-wrong-picks",
+      "source": "PRD §4.1.7 table 2 row 4",
+      "title": "options_from_clue 3: Next clue, Next clue, a wrong pick on clue 3, a wrong pick on clue 4",
+      "optionsFromClue": 3,
+      "steps": [
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 3, "options": true }
+        },
+        {
+          "intent": "pick",
+          "option": "distractor2",
+          "expect": {
+            "verdict": "continue",
+            "clue": 4,
+            "options": true,
+            "disabled": ["distractor2"]
+          }
+        },
+        {
+          "intent": "pick",
+          "option": "distractor3",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": null,
+        "points": 0,
+        "cells": ["passed", "passed", "passed", "passed"]
+      },
+      "prdShareRow": "🟥🟥🟥🟥"
+    },
+    {
+      "id": "guess-not-on-the-list",
+      "source": "PRD §4.1.2 valid guesses only",
+      "title": "A guess of an id that isn't on the list is invalid_entity and consumes nothing",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.not-on-the-list",
+          "expect": { "error": "invalid_entity", "clue": 1 }
+        },
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.arvenna",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 1,
+        "points": 4,
+        "cells": ["solved", "unused", "unused", "unused"]
+      },
+      "prdShareRow": "🟩⬜⬜⬜"
+    },
+    {
+      "id": "accepted-id-solves",
+      "source": "PRD §4.1.2 correctness",
+      "title": "An accepted id solves like the primary answer",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.elmaris",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 2,
+        "points": 3,
+        "cells": ["passed", "solved", "unused", "unused"]
+      },
+      "prdShareRow": "🟥🟩⬜⬜"
+    },
+    {
+      "id": "typed-distractor-comes-back-disabled",
+      "source": "PRD §4.1.2 options",
+      "title": "A distractor guessed by typing comes back already guessed on clue 4 and can't be picked again",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.cassova",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 3, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": {
+            "verdict": "continue",
+            "clue": 4,
+            "options": true,
+            "disabled": ["distractor2"]
+          }
+        },
+        {
+          "intent": "pick",
+          "option": "distractor2",
+          "expect": { "error": "already_guessed", "clue": 4 }
+        },
+        {
+          "intent": "pick",
+          "option": "answer",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 4,
+        "points": 1,
+        "cells": ["passed", "passed", "passed", "solved"]
+      },
+      "prdShareRow": "🟥🟥🟥🟩"
+    },
+    {
+      "id": "options-from-3-repeat-pick-refused",
+      "source": "PRD §4.1.2 duplicates",
+      "title": "options_from_clue 3: picking a disabled option again is already_guessed and consumes nothing",
+      "optionsFromClue": 3,
+      "steps": [
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 3, "options": true }
+        },
+        {
+          "intent": "pick",
+          "option": "distractor1",
+          "expect": {
+            "verdict": "continue",
+            "clue": 4,
+            "options": true,
+            "disabled": ["distractor1"]
+          }
+        },
+        {
+          "intent": "pick",
+          "option": "distractor1",
+          "expect": { "error": "already_guessed", "clue": 4 }
+        },
+        {
+          "intent": "pick",
+          "option": "distractor3",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": null,
+        "points": 0,
+        "cells": ["passed", "passed", "passed", "passed"]
+      },
+      "prdShareRow": "🟥🟥🟥🟥"
+    },
+    {
+      "id": "typing-after-the-options",
+      "source": "PRD §4.1.2 clue 4",
+      "title": "Once the options show, a typed guess and Next clue on clue 4 are refused",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 2, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 3, "options": false }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "verdict": "continue", "clue": 4, "options": true }
+        },
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.arvenna",
+          "expect": { "error": "invalid_input", "clue": 4 }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "error": "invalid_input", "clue": 4 }
+        },
+        {
+          "intent": "pick",
+          "option": "answer",
+          "expect": { "verdict": "resolved" }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 4,
+        "points": 1,
+        "cells": ["passed", "passed", "passed", "solved"]
+      },
+      "prdShareRow": "🟥🟥🟥🟩"
+    },
+    {
+      "id": "pick-before-the-options",
+      "source": "PRD §4.1.2 clue 4",
+      "title": "A pick before the options show is refused",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "pick",
+          "option": "answer",
+          "expect": { "error": "invalid_input", "clue": 1 }
+        }
+      ],
+      "outcome": null,
+      "prdShareRow": null
+    },
+    {
+      "id": "action-after-resolution",
+      "source": "PRD §4.1.4 stale",
+      "title": "Any action after the round resolves is stale",
+      "optionsFromClue": 4,
+      "steps": [
+        {
+          "intent": "guess",
+          "entity": "fx.x.country.arvenna",
+          "expect": { "verdict": "resolved" }
+        },
+        {
+          "intent": "next_clue",
+          "expect": { "error": "stale", "clue": 1 }
+        }
+      ],
+      "outcome": {
+        "solvedOn": 1,
+        "points": 4,
+        "cells": ["solved", "unused", "unused", "unused"]
+      },
+      "prdShareRow": "🟩⬜⬜⬜"
+    }
+  ]
+}

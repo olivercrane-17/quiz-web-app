@@ -7,8 +7,9 @@
  * - Practice and room items: five values of p.
  * - Mysteries: five sets of cumulative shares [s1, s2, s3, s4]. Each clue is
  *   combined on its own and the result is kept non-decreasing; the spread is
- *   the standard deviation of the logits of E / 4, where E = s1 + s2 + s3 + s4
- *   is the expected points (§8.3).
+ *   the standard deviation of the five estimators' expected points, each one's
+ *   E = s1 + s2 + s3 + s4 (§8.3, §8.5), on the points scale §10.2 picks
+ *   Mystery 1 by.
  * - Encores: five { pClose, pExact } pairs; the spread is taken over pClose.
  *
  * The estimator's agent id goes into `verification.estimates` (every run that
@@ -126,8 +127,9 @@ export function applyEstimate(
       );
       for (let k = 1; k < 4; k += 1)
         shares[k] = Math.max(shares[k] ?? 0, shares[k - 1] ?? 0);
+      // §8.5: how far the five disagree on expected points.
       const spread = stdev(
-        sets.map((set) => logit(set.reduce((sum, s) => sum + s, 0) / 4)),
+        sets.map((set) => set.reduce((sum, s) => sum + s, 0)),
       );
       predicted = {
         solveByClue: shares.map((s) => round(s)),

@@ -1,9 +1,18 @@
-import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+import { describe, expect, it, vi } from "vitest";
+
+import type * as FeatureTable from "../config/features";
+import { FEATURE_DEFAULTS, FEATURE_FLAGS } from "../config/features";
 
 import {
   DEFAULT_SUPABASE_PUBLISHABLE_KEY,
   DEFAULT_SUPABASE_URL,
+  LOCAL_APP_VERSION,
   LOCAL_SITE_URL,
+  NO_FEATURES,
+  PUBLIC_ENV_NAMES,
   findPrivilegedPublicKeys,
   isPrivilegedKey,
   parsePublicEnv,
@@ -30,6 +39,8 @@ describe("parsePublicEnv", () => {
           publishableKey: DEFAULT_SUPABASE_PUBLISHABLE_KEY,
         },
         siteUrl: LOCAL_SITE_URL,
+        features: FEATURE_DEFAULTS,
+        appVersion: LOCAL_APP_VERSION,
         issues: [],
       });
     });
@@ -295,6 +306,219 @@ describe("parsePublicEnv", () => {
         expect.stringContaining("NEXT_PUBLIC_SITE_URL"),
       ]);
     });
+  });
+
+  describe("feature flags (NEXT_PUBLIC_FEATURES)", () => {
+    /** The flags a parsed value turns on, in FEATURE_FLAGS order. */
+    function enabled(raw: string): string[] {
+      const { features } = parsePublicEnv({ NEXT_PUBLIC_FEATURES: raw });
+      return FEATURE_FLAGS.filter((flag) => features[flag]);
+    }
+
+    it.each([
+      ["unset", undefined],
+      ["blank", "   "],
+      ["only separators", " , ,, "],
+    ])("keeps the defaults when the value is %s", (_label, raw) => {
+      const env = parsePublicEnv({ NEXT_PUBLIC_FEATURES: raw });
+
+      expect(env.features).toEqual(FEATURE_DEFAULTS);
+      expect(env.issues).toEqual([]);
+    });
+
+    it("turns on exactly the listed flags, and every other flag off", () => {
+      const env = parsePublicEnv({ NEXT_PUBLIC_FEATURES: "rooms,blitz" });
+
+      expect(FEATURE_FLAGS.filter((flag) => env.features[flag])).toEqual([
+        "rooms",
+        "blitz",
+      ]);
+      expect(Object.keys(env.features).sort()).toEqual(
+        [...FEATURE_FLAGS].sort(),
+      );
+      expect(env.issues).toEqual([]);
+    });
+
+    it.each(FEATURE_FLAGS.map((flag) => [flag]))(
+      "can turn %s on by name",
+      (flag) => {
+        expect(enabled(flag)).toEqual([flag]);
+      },
+    );
+
+    it("reads names case-insensitively, trimmed, with hyphens for underscores", () => {
+      expect(enabled(" Rooms , INSTALL-PITCH ,read_aloud,rooms ")).toEqual([
+        "rooms",
+        "install_pitch",
+        "read_aloud",
+      ]);
+    });
+
+    it(`turns every flag off for "${NO_FEATURES}"`, () => {
+      const env = parsePublicEnv({ NEXT_PUBLIC_FEATURES: " NONE " });
+
+      expect(Object.values(env.features)).not.toContain(true);
+      expect(Object.keys(env.features)).toHaveLength(FEATURE_FLAGS.length);
+      expect(env.issues).toEqual([]);
+    });
+
+    it(`honours the flags and reports a "${NO_FEATURES}" listed beside them`, () => {
+      const env = parsePublicEnv({ NEXT_PUBLIC_FEATURES: "none,editor" });
+
+      expect(enabled("none,editor")).toEqual(["editor"]);
+      expect(env.issues).toEqual([
+        expect.stringContaining(`"${NO_FEATURES}" was ignored`),
+      ]);
+    });
+
+    it("reports unknown names and keeps the known ones", () => {
+      const env = parsePublicEnv({ NEXT_PUBLIC_FEATURES: "rooms,romos" });
+
+      expect(enabled("rooms,romos")).toEqual(["rooms"]);
+      expect(env.issues).toEqual([
+        expect.stringMatching(/NEXT_PUBLIC_FEATURES .*\(romos\)/),
+      ]);
+    });
+
+    it("keeps the defaults when no name is known, so a typo can't turn every feature off", () => {
+      const env = parsePublicEnv({ NEXT_PUBLIC_FEATURES: "roms, editr" });
+
+      expect(env.features).toEqual(FEATURE_DEFAULTS);
+      expect(env.issues).toEqual([
+        expect.stringContaining("(roms, editr)"),
+        expect.stringContaining("the default flags apply"),
+      ]);
+    });
+
+    it("reports the flags that are on by default and that a list turns off", async () => {
+      // Every default is off until its owner ships (§2.3), so this case
+      // pretends BLZ-1 has turned Blitz and Survival on.
+      vi.resetModules();
+      vi.doMock("../config/features", async (importOriginal) => {
+        const actual = await importOriginal<typeof FeatureTable>();
+        return {
+          ...actual,
+          FEATURE_DEFAULTS: Object.freeze({
+            ...actual.FEATURE_DEFAULTS,
+            blitz: true,
+            survival: true,
+          }),
+        };
+      });
+      try {
+        const { parsePublicEnv: parse } = await import("./env-parse");
+
+        expect(parse({}).features).toMatchObject({
+          blitz: true,
+          survival: true,
+        });
+        expect(parse({}).issues).toEqual([]);
+
+        // The Beta switch of D19, copied from .env.example as it stands.
+        const beta = parse({ NEXT_PUBLIC_FEATURES: "rooms,editor" });
+        expect(beta.features).toMatchObject({
+          rooms: true,
+          editor: true,
+          blitz: false,
+          survival: false,
+        });
+        expect(beta.issues).toEqual([
+          "NEXT_PUBLIC_FEATURES replaces the defaults, so this build turns off blitz and survival, which are on by default. List them too to keep them on.",
+        ]);
+
+        expect(parse({ NEXT_PUBLIC_FEATURES: "rooms,blitz" }).issues).toEqual([
+          expect.stringContaining(
+            "turns off survival, which is on by default. List it too",
+          ),
+        ]);
+        // Listing them keeps them on, and "none" turns everything off on
+        // purpose: neither one is a surprise.
+        expect(
+          parse({ NEXT_PUBLIC_FEATURES: "rooms,blitz,survival" }).issues,
+        ).toEqual([]);
+        expect(parse({ NEXT_PUBLIC_FEATURES: NO_FEATURES }).issues).toEqual([]);
+      } finally {
+        vi.doUnmock("../config/features");
+        vi.resetModules();
+      }
+    });
+
+    it("hands out a frozen table", () => {
+      expect(
+        Object.isFrozen(
+          parsePublicEnv({ NEXT_PUBLIC_FEATURES: "rooms" }).features,
+        ),
+      ).toBe(true);
+      expect(Object.isFrozen(parsePublicEnv({}).features)).toBe(true);
+    });
+  });
+
+  describe("app version (NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA)", () => {
+    const SHA = "9F1C2D3E4B5A69788796A5B4C3D2E1F0A9B8C7D6";
+
+    it.each([
+      ["unset", undefined],
+      ["blank", "  "],
+    ])(`is "${LOCAL_APP_VERSION}" when the commit is %s`, (_label, raw) => {
+      const env = parsePublicEnv({ NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: raw });
+
+      expect(env.appVersion).toBe(LOCAL_APP_VERSION);
+      expect(env.issues).toEqual([]);
+    });
+
+    it("is the commit Vercel built from, trimmed and lowercased", () => {
+      const env = parsePublicEnv({
+        NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: ` ${SHA} `,
+      });
+
+      expect(env.appVersion).toBe(SHA.toLowerCase());
+      expect(env.issues).toEqual([]);
+    });
+
+    it("accepts an abbreviated commit hash", () => {
+      expect(
+        parsePublicEnv({ NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: "9f1c2d3" })
+          .appVersion,
+      ).toBe("9f1c2d3");
+    });
+
+    it.each([
+      ["a branch name", "main"],
+      ["too short", "9f1c2d"],
+      ["too long", `${SHA}0`],
+      ["not hex", "9f1c2d3g"],
+    ])("reports %s and falls back", (_label, raw) => {
+      const env = parsePublicEnv({ NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: raw });
+
+      expect(env.appVersion).toBe(LOCAL_APP_VERSION);
+      expect(env.issues).toEqual([
+        expect.stringContaining("NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA"),
+      ]);
+    });
+  });
+});
+
+describe(".env.example", () => {
+  /** Every NEXT_PUBLIC_ name it assigns, commented out or not. */
+  function documentedNames(): string[] {
+    const text = readFileSync(resolve(process.cwd(), ".env.example"), "utf8");
+    return [...text.matchAll(/^#?\s*(NEXT_PUBLIC_[A-Z\d_]+)=/gm)].map(
+      (match) => match[1] as string,
+    );
+  }
+
+  it("names every variable in PUBLIC_ENV_NAMES", () => {
+    const documented = new Set(documentedNames());
+
+    expect(PUBLIC_ENV_NAMES.filter((name) => !documented.has(name))).toEqual(
+      [],
+    );
+  });
+
+  it("documents no public variable that the app never reads", () => {
+    const read = new Set<string>(PUBLIC_ENV_NAMES);
+
+    expect(documentedNames().filter((name) => !read.has(name))).toEqual([]);
   });
 });
 

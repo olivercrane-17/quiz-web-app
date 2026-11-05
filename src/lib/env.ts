@@ -14,7 +14,10 @@
  * next.config.ts shares.
  */
 
+import { FEATURE_DEFAULTS, type FeatureFlag } from "../config/features";
+
 import {
+  LOCAL_APP_VERSION,
   LOCAL_SITE_URL,
   parsePublicEnv,
   type BackendMode,
@@ -28,12 +31,15 @@ export {
   DEFAULT_BACKEND_MODE,
   DEFAULT_SUPABASE_PUBLISHABLE_KEY,
   DEFAULT_SUPABASE_URL,
+  LOCAL_APP_VERSION,
   LOCAL_SITE_URL,
+  NO_FEATURES,
   PUBLIC_ENV_NAMES,
   parsePublicEnv,
 } from "./env-parse";
 export type {
   BackendMode,
+  FeatureFlags,
   PublicEnv,
   PublicEnvName,
   PublicEnvSource,
@@ -70,10 +76,14 @@ export function readPublicEnvSource(): Record<
       () => process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     ),
     NEXT_PUBLIC_SITE_URL: read(() => process.env.NEXT_PUBLIC_SITE_URL),
+    NEXT_PUBLIC_FEATURES: read(() => process.env.NEXT_PUBLIC_FEATURES),
     NEXT_PUBLIC_VERCEL_ENV: read(() => process.env.NEXT_PUBLIC_VERCEL_ENV),
     NEXT_PUBLIC_VERCEL_URL: read(() => process.env.NEXT_PUBLIC_VERCEL_URL),
     NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL: read(
       () => process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL,
+    ),
+    NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA: read(
+      () => process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
     ),
   };
 }
@@ -88,6 +98,8 @@ function loadPublicEnv(): PublicEnv {
       backendMode: "off",
       supabase: null,
       siteUrl: LOCAL_SITE_URL,
+      features: FEATURE_DEFAULTS,
+      appVersion: LOCAL_APP_VERSION,
       issues: ["Public configuration could not be read. Backend switched off."],
     };
   }
@@ -131,4 +143,23 @@ export function getSupabaseConfig(): SupabaseConfig | null {
 /** Absolute site URL without a trailing slash. Always a valid URL. */
 export function getSiteUrl(): string {
   return env.siteUrl;
+}
+
+/**
+ * True when a feature flag is on in this build (ARCHITECTURE §10.5, D19):
+ * listed in NEXT_PUBLIC_FEATURES, or on by default when that is unset.
+ * Flags are fixed at build time, so a Beta route module that calls
+ * notFound() when its flag is off prerenders as the not-found page.
+ */
+export function isFeatureEnabled(flag: FeatureFlag): boolean {
+  return env.features[flag];
+}
+
+/**
+ * The build's version for attempt starts and analytics events (PRD §7.1's
+ * `app_version`): the commit SHA a Vercel deployment was built from, or
+ * `local` for any other build.
+ */
+export function getAppVersion(): string {
+  return env.appVersion;
 }

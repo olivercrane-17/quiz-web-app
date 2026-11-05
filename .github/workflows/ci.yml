@@ -28,16 +28,28 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      # Full history: the content check compares each answer list's liveAt
+      # with the commit that first published its version (ARCHITECTURE §5.2,
+      # §5.7), which a shallow clone can't show.
       - name: Check out
         uses: actions/checkout@v7
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
+
+      # Envelopes only in content/sealed/, no plaintext workspace, cache or key
+      # tracked, no key text in any file, and the QZ_CONTENT_KEY secret only
+      # where decisions memo §17 allows it (CNT-0, ARCHITECTURE §5.4 and
+      # §5.7). It needs only Node and git, so it runs first: a failing step
+      # further down can never skip it.
+      - name: Secret scan
+        run: npm run check:secrets
 
       - name: Install dependencies
         run: npm ci
@@ -51,32 +63,105 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      # Vitest's unit, engine and bench projects; the static import checks of
+      # ARCHITECTURE §11.2 run inside them.
       - name: Unit tests
         run: npm test
 
-      # Schemas and lint over content/ and its fixtures (CNT-1, ARCHITECTURE
-      # §5.7). Sealed content is not decrypted here: its messages never quote
-      # item text, but the key is only for the content-sealed job.
+      # src/engine keeps 95% line and 90% branch coverage (ARCHITECTURE §4.1).
+      - name: Engine coverage
+        run: npm run test:coverage
+
+      # Schemas, lint and the cross-file rules over content/ and its fixtures,
+      # the lists' liveAt against git history, the pack and list size budgets,
+      # and the drift check: every content:build output rebuilt in memory and
+      # compared with what is committed (CNT-1, ARCHITECTURE §5.2, §5.3,
+      # §5.7). Sealed content is not decrypted here: the key is only for the
+      # content-sealed job.
       - name: Content check
         run: npm run content:check
-
-      # Envelopes only in content/sealed/, and no plaintext workspace, cache or
-      # key tracked (SQL-3, ARCHITECTURE §5.4).
-      - name: Secret scan
-        run: npm run check:secrets
 
       # Same command Vercel runs, with the default (real) backend config.
       - name: Build
         run: npm run build
 
-      # Gzipped first-load JS per route, from the build above.
+      # Gzipped first-load JS per route, from the build above: 150 kB on /,
+      # 180 kB on the play routes, 200 kB elsewhere (ARCHITECTURE §10.9).
       - name: Bundle budget
         run: npm run check:bundle
 
-  e2e:
-    name: E2E (Playwright)
+      # From the same build: no lazy-only module (a __qz_lazy_ marker, the
+      # Supabase SDK) in any route's first load, and no sealed id under
+      # .next/static, .next/server/app or public/ (ARCHITECTURE §5.4, §10.9;
+      # AC-CNT-07). Sealed text needs the content key, which only the
+      # content-sealed job may hold, so this step scans for ids alone.
+      - name: Lazy markers and sealed scan
+        run: npm run check:lazy
+
+  # The sealed content check (SQL-3, ARCHITECTURE §5.7): content/sealed/
+  # decrypted in memory; the sealed items, the schedule, the spare sets and
+  # the latest audit record validated; and the cross-pool dedupe (X29,
+  # AC-CNT-06). Every line goes through the redacting reporter of §5.4, so
+  # these public logs show ids, rule codes and counts, never content. Only
+  # the one step below receives the key, a repository secret (decisions memo
+  # §17). Without it the same command prints "Sealed content validation:
+  # not run" and checks the plaintext content alone. Pull requests from
+  # forks never receive secrets, so they skip that step.
+  #
+  # The bundle scan of §5.4 runs in the verify job, on its build: check:lazy
+  # (SEC-1's scripts/checks/lazy-markers.mjs) looks for sealed ids under
+  # .next/static, .next/server/app and public/, room packs with digits in
+  # their names included, as scripts/content/release.test.ts reads them. So
+  # this job builds nothing, and no build ever runs beside the key.
+  content-sealed:
+    name: Sealed content check
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    steps:
+      # Full history: the content check compares each answer list's liveAt
+      # with the commit that first published its version (§5.2).
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sealed content check and cross-pool dedupe
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          QZ_CONTENT_KEY: ${{ secrets.QZ_CONTENT_KEY }}
+        run: npm run content:check -- --sealed
+
+  # The browser matrix of ARCHITECTURE §11.8, one browser per leg. Every leg
+  # runs on every push: the release criteria need CI green in Chromium,
+  # WebKit and Firefox (decisions memo §13).
+  e2e:
+    name: E2E (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      # One browser failing never hides another's result.
+      fail-fast: false
+      matrix:
+        include:
+          - browser: chromium
+            projects: --project=desktop-chromium --project=mobile-chromium --project=pwa-chromium
+          - browser: webkit
+            projects: --project=mobile-webkit
+          - browser: firefox
+            projects: --project=desktop-firefox
+    env:
+      # Puts the WebKit and Firefox projects in playwright.config.ts's list.
+      E2E_ALL_BROWSERS: "1"
     steps:
       - name: Check out
         uses: actions/checkout@v7
@@ -92,18 +177,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+      # Once hung for the whole job on its system packages; a stuck install
+      # now fails here and leaves the rest of the job's time unused.
+      - name: Install Playwright ${{ matrix.browser }}
+        timeout-minutes: 10
+        run: npx playwright install --with-deps ${{ matrix.browser }}
 
       # Builds and starts the app with the mock backend (see playwright.config.ts).
       - name: Run E2E tests
-        run: npm run test:e2e
+        run: npm run test:e2e -- ${{ matrix.projects }}
 
       - name: Upload Playwright report
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browser }}
           path: playwright-report/
           retention-days: 14
           if-no-files-found: ignore

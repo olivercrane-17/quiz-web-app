@@ -7,16 +7,20 @@ import type { BatchEntry, Incident } from "../schema/batches.ts";
 import { datasetVersion } from "../schema/datasets.ts";
 import type { RecordInputEntry } from "../schema/inputs.ts";
 import type { AnyItem } from "../schema/items.ts";
-import type {
-  CheckRecord,
-  Pass,
-  Verification,
+import {
+  coldSolveTimes,
+  entryConfirms,
+  evidenceEntries,
+  isExternalSource,
+  type CheckRecord,
+  type Pass,
+  type Verification,
 } from "../schema/verification.ts";
 import { estimatorsOf } from "./acceptance.ts";
 import type { Bank, BankItem } from "./bank.ts";
 import { cloneJson } from "./json.ts";
 import { isMysteryKey, mysteryKeys, rivalsAfterClue3 } from "./mystery-keys.ts";
-import { coldView, packetSha256 } from "./packets.ts";
+import { coldView, servedMismatch, type ServeLog } from "./packets.ts";
 import {
   anyAgentRun,
   batchItems,
@@ -75,13 +79,19 @@ export function barringIncident(
   );
 }
 
-/** Everything that would make `content:record` refuse this record. */
+/**
+ * Everything that would make `content:record` refuse this record. `served`
+ * is the pass's serve log (.cache/packets/<batch>/<pass>/served.json), what
+ * content:packets served and when, which the record's packetSha256 and
+ * stagesServedAt must repeat (§9.4, §9.8).
+ */
 export function checkRecord(
   bank: Bank,
   batch: BatchEntry,
   pass: Pass,
   record: BankItem,
   entry: RecordInputEntry,
+  served: ServeLog | null,
 ): RecordCheck {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -133,13 +143,33 @@ export function checkRecord(
     );
   }
 
-  // The packet the checker saw must be the packet of this item now. The
-  // expected value is never printed: it would let anyone record a check
-  // without opening the packet.
-  if (entry.packetSha256 !== packetSha256(record.id, item, pass)) {
-    errors.push(
-      `packetSha256 does not match pass ${pass} of the current item; rebuild the packet with content:packet and check again`,
+  // The packet the checker saw, stage by stage, must be what content:packets
+  // served, and the item must still be the one it showed (§9.4). The
+  // expected values are never printed: they would let anyone record a check
+  // without taking the packet's stages.
+  errors.push(
+    ...servedMismatch(
+      record.id,
+      item,
+      pass,
+      entry,
+      served !== null &&
+        served.batchId === batch.batchId &&
+        served.pass === pass
+        ? served.items[record.id]
+        : undefined,
+    ),
+  );
+  if (Array.isArray(entry.packetSha256)) {
+    const times = coldSolveTimes(entry.coldSolve);
+    const cold = entry.packetSha256.length - 1;
+    const missing = Array.from({ length: cold }, (_, i) => i + 1).filter(
+      (stage) => !times.has(stage),
     );
+    if (missing.length > 0)
+      errors.push(
+        `the cold solve has no recordedAt for stage(s) ${missing.join(", ")}; each entry is recorded before the next stage is served (§9.4, §9.8)`,
+      );
   }
 
   // Claims: A and B verify every claim; T covers the disputed ones.
@@ -148,7 +178,7 @@ export function checkRecord(
   for (const id of covered) {
     if (!itemClaims.has(id) && !id.startsWith("x")) {
       errors.push(
-        `claim ${id} is not in the item; checker additions use x1, x2 and so on (§9.2)`,
+        `claim ${id} is not in the item; a checker's additions use its pass's prefix, xA1 or xB1 (§9.2)`,
       );
     }
   }
@@ -166,36 +196,50 @@ export function checkRecord(
     item.claims.map((claim) => [claim.id, wording(claim.text)]),
   );
   for (const result of entry.claimResults) {
-    const evidence = result.evidence;
-    if (evidence.kind !== "knowledge") continue;
     const text = claimWording.get(result.claimId);
-    if (text && wording(evidence.restatement) === text)
-      errors.push(
-        `claim ${result.claimId}: the restatement repeats the claim's wording; restate the fact in your own words from your own check (§9.5)`,
-      );
+    for (const evidence of evidenceEntries(result)) {
+      if (evidence.kind !== "knowledge") continue;
+      if (text && wording(evidence.restatement) === text)
+        errors.push(
+          `claim ${result.claimId}: the restatement repeats the claim's wording; restate the fact in your own words from your own check (§9.5)`,
+        );
+    }
   }
 
   // Evidence: dataset records must name a pinned manifest dataset.
-  entry.claimResults.forEach((result) => {
-    const evidence = result.evidence;
-    if (evidence.kind !== "dataset") return;
-    const dataset = bank.manifest?.datasets.find(
-      (d) => d.key === evidence.dataset,
-    );
-    if (!dataset) {
-      errors.push(
-        `claim ${result.claimId}: dataset ${evidence.dataset} is not in content/datasets/manifest.json (§9.6)`,
+  for (const result of entry.claimResults) {
+    for (const evidence of evidenceEntries(result)) {
+      if (evidence.kind !== "dataset") continue;
+      const dataset = bank.manifest?.datasets.find(
+        (d) => d.key === evidence.dataset,
       );
-    } else if (!dataset.evidence) {
-      errors.push(
-        `claim ${result.claimId}: dataset ${evidence.dataset} is for brainstorming and never counts as evidence`,
-      );
-    } else if (evidence.version !== datasetVersion(dataset)) {
-      errors.push(
-        `claim ${result.claimId}: ${evidence.dataset} is pinned at ${datasetVersion(dataset)}, not ${evidence.version}`,
-      );
+      if (!dataset) {
+        errors.push(
+          `claim ${result.claimId}: dataset ${evidence.dataset} is not in content/datasets/manifest.json (§9.6)`,
+        );
+      } else if (!dataset.evidence) {
+        errors.push(
+          `claim ${result.claimId}: dataset ${evidence.dataset} is for brainstorming and never counts as evidence`,
+        );
+      } else if (evidence.version !== datasetVersion(dataset)) {
+        errors.push(
+          `claim ${result.claimId}: ${evidence.dataset} is pinned at ${datasetVersion(dataset)}, not ${evidence.version}`,
+        );
+      }
     }
-  });
+  }
+
+  // A confirmed claim rests on an entry that confirms on its own. A web
+  // call counts at its cited result's tier, or at the lowest tier it could
+  // have relied on, so a summary built on a Tier C page confirms nothing
+  // (§9.5.2), in either record shape.
+  for (const result of entry.claimResults) {
+    if (result.verdict !== "confirmed") continue;
+    if (!evidenceEntries(result).some(entryConfirms))
+      errors.push(
+        `claim ${result.claimId}: confirmed on evidence that confirms nothing: a web call counts at its citedResult's tier, or at the lowest of its tiers when citedResult is null, and Tier C never counts (§9.5.2)`,
+      );
+  }
 
   // Cold solve: shape, and honesty about misses (§9.4 step 1).
   const cold = entry.coldSolve;
@@ -274,8 +318,8 @@ export function checkRecord(
   }
 
   if (pass === "T") {
-    const external = entry.claimResults.every(
-      (result) => result.method !== "knowledge",
+    const external = entry.claimResults.every((result) =>
+      evidenceEntries(result).some(isExternalSource),
     );
     if (!external)
       warnings.push(

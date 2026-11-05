@@ -1,0 +1,446 @@
+/**
+ * npm run sql:bundle -- [--area <name>]... [--all] [--after <migration>]
+ *                       [--applied <list_migrations.json>] [--with <file>]...
+ *                       [--payloads <file>]... [--attended] [--out <file>]
+ *
+ * Prints one script to paste into the Supabase MCP execute_sql tool
+ * (ARCHITECTURE §8.17, §12.1). It is a single transaction that always rolls
+ * back: begin; the chosen migrations (a dry run); each test file of the
+ * chosen areas inside a savepoint; the standing checks and a check that
+ * private.rpc_allowlist matches supabase/expected-advisors.json; any
+ * payloads to record; a select listing every result line; rollback;.
+ * execute_sql shows the last select's rows, so the reply is the PASS lines
+ * (and PAYLOAD lines) plus an "OK <n> checks" row, or the first failing
+ * assertion as an error.
+ *
+ * Migrations to dry-run: --after <stem or version> takes every migration
+ * after it (normally the last applied one), --applied takes the files
+ * missing from pasted list_migrations output, and --with names files.
+ * Owner migrations (*_owner_only.sql) are never bundled.
+ *
+ * Nobody answers the MCP's confirmation during autonomous work, so every
+ * bundled file is scanned first: the project's forbidden words, top-level
+ * transaction control in a migration, and anything the MCP's own
+ * destructive-SQL check would stop for refuse the bundle. Attended
+ * migrations (*_attended.sql) hold such SQL on purpose; --attended includes
+ * them, for a run where someone can answer the confirmation, and prints
+ * what the MCP will ask about. An attended migration can wait unapplied
+ * while later ones are applied, so --attended takes --applied, never
+ * --after alone.
+ *
+ * A test file that names a migration in a `-- requires: <stem>` header line
+ * runs only when that migration is in the bundle or already applied (in
+ * --applied, or a migration at or before --after that is not attended);
+ * otherwise it is skipped with a message, so a bundle never holds a test
+ * that cannot pass.
+ */
+import { readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+import { parseArgs } from "node:util";
+
+import {
+  EXPECTED_ADVISORS,
+  MIGRATIONS_DIR,
+  STANDING_CHECKS,
+  describeFinding,
+  listAreas,
+  listMigrations,
+  listTestFiles,
+  mcpConfirmationReasons,
+  parseAppliedMigrations,
+  parsePayloadFile,
+  parseTestFile,
+  readText,
+  scanForbidden,
+  transactionControlLines,
+  type TestFile,
+} from "./lib.ts";
+
+const USAGE = `Usage: npm run sql:bundle -- [options]
+
+  --area <name>      Tests of supabase/tests/<name>/ (repeatable)
+  --all              Tests of every area
+  --after <stem>     Dry-run every migration after this one (stem or version)
+  --applied <file>   Dry-run every migration missing from list_migrations JSON
+  --with <file>      Dry-run this migration file (repeatable)
+  --payloads <file>  Also print the replies a payload file records (repeatable)
+  --attended         Include *_attended.sql migrations and SQL the MCP will
+                     ask a human to confirm; only for a run someone attends.
+                     Needs --applied (or --with) rather than --after
+  --out <file>       Write the script here instead of printing it
+
+A test whose "-- requires: <stem>" migration is neither bundled nor applied
+is skipped. The standing checks always run last.`;
+
+export interface BundleInput {
+  migrations: { path: string; sql: string }[];
+  tests: TestFile[];
+  /** rpc.functions from supabase/expected-advisors.json, or null to skip that check. */
+  expectedRpcs: string[] | null;
+  /** Payload files, already turned into statements (parsePayloadFile). */
+  payloads?: { path: string; sql: string }[];
+  /** What the bundle holds, for its header. */
+  label: string;
+}
+
+const RESULTS = "qz_test_results";
+
+function sqlString(text: string): string {
+  return `'${text.replaceAll("'", "''")}'`;
+}
+
+/** The generated check that the allowlist and the expected advisor findings name the same RPCs. */
+export function allowlistCheck(expectedRpcs: string[]): TestFile {
+  const names = [...expectedRpcs].sort();
+  const array =
+    names.length === 0
+      ? "'{}'::text[]"
+      : `array[${names.map(sqlString).join(", ")}]::text[]`;
+  return {
+    path: `${EXPECTED_ADVISORS} (generated)`,
+    body: `do $$
+declare
+  v_db text[] := coalesce((select array_agg(a.name order by a.name) from private.rpc_allowlist a), '{}'::text[]);
+  v_expected text[] := ${array};
+begin
+  assert v_db = v_expected, format(
+    'private.rpc_allowlist %s differs from rpc.functions in ${EXPECTED_ADVISORS} %s', v_db, v_expected);
+end
+$$;`,
+    passLines: [
+      "PASS SQL-1 standing: private.rpc_allowlist matches rpc.functions in expected-advisors.json",
+    ],
+    requires: [],
+  };
+}
+
+export function buildBundle(input: BundleInput): string {
+  const out: string[] = [
+    `-- Generated by npm run sql:bundle (${input.label}). Paste it into execute_sql as one call.`,
+    "-- One transaction that always rolls back; the reply lists every PASS line.",
+    "begin;",
+  ];
+  for (const migration of input.migrations) {
+    out.push(
+      "",
+      `-- ===== migration ${migration.path} =====`,
+      migration.sql.trim(),
+    );
+  }
+  out.push(
+    "",
+    `create temporary table ${RESULTS} (n integer generated always as identity, line text not null);`,
+  );
+  const tests = [...input.tests];
+  if (input.expectedRpcs !== null)
+    tests.push(allowlistCheck(input.expectedRpcs));
+  for (const test of tests) {
+    out.push(
+      "",
+      `-- ===== test ${test.path} =====`,
+      "savepoint qz_test;",
+      test.body,
+      "rollback to savepoint qz_test;",
+      `insert into ${RESULTS} (line) values ${test.passLines.map((line) => `(${sqlString(line)})`).join(", ")};`,
+    );
+  }
+  for (const payload of input.payloads ?? []) {
+    out.push("", `-- ===== payloads ${payload.path} =====`, payload.sql);
+  }
+  out.push(
+    "",
+    `select x.line from (select n, line from ${RESULTS} union all select 1000000, 'OK ' || count(*) filter (where line like 'PASS %') || ' checks' from ${RESULTS}) x order by x.n;`,
+    "rollback;",
+    "",
+  );
+  return out.join("\n");
+}
+
+/**
+ * Problems that stop a file from being sent: forbidden words, what the
+ * MCP's destructive-SQL check would stop for (unless the run is attended),
+ * and, in migrations, top-level transaction control.
+ */
+export function sendableProblems(
+  path: string,
+  sql: string,
+  kind: "migration" | "test",
+  attended = false,
+): string[] {
+  const problems = scanForbidden(path, sql).map(describeFinding);
+  if (!attended) {
+    for (const reason of mcpConfirmationReasons(sql)) {
+      problems.push(
+        `${path}: the MCP would ask a human to confirm: ${reason} (an attended file? see supabase/README.md)`,
+      );
+    }
+  }
+  if (kind === "migration") {
+    for (const line of transactionControlLines(sql)) {
+      problems.push(
+        `${path}:${line}: transaction control (apply_migration and dry runs supply the transaction)`,
+      );
+    }
+  }
+  return problems;
+}
+
+interface Selection {
+  migrations: { path: string; stem: string; sql: string }[];
+  /** Attended migrations left out of an unattended run. */
+  skipped: string[];
+  /** Migrations the project has, as far as the options tell. */
+  applied: Set<string>;
+  /** Every migration stem in the repository. */
+  known: Set<string>;
+}
+
+function selectMigrations(
+  root: string,
+  options: {
+    after?: string;
+    applied?: string;
+    with: string[];
+    attended: boolean;
+  },
+): Selection {
+  const { migrations } = listMigrations(root);
+  const chosen = new Set<string>();
+  const skipped = new Set<string>();
+  const applied = new Set<string>();
+  const consider = (file: string, ownerOnly: boolean, attended: boolean) => {
+    if (ownerOnly) return;
+    if (attended && !options.attended) skipped.add(file);
+    else chosen.add(file);
+  };
+  if (
+    options.attended &&
+    options.after !== undefined &&
+    options.applied === undefined
+  ) {
+    throw new Error(
+      "--attended needs --applied with list_migrations output: an attended migration still to apply can sort before --after",
+    );
+  }
+  if (options.after !== undefined) {
+    const after = options.after;
+    const anchor = migrations.find(
+      (migration) => migration.stem === after || migration.version === after,
+    );
+    if (anchor === undefined) {
+      throw new Error(
+        `--after ${after}: no such migration in ${MIGRATIONS_DIR}`,
+      );
+    }
+    for (const migration of migrations) {
+      if (migration.stem > anchor.stem) {
+        consider(migration.file, migration.ownerOnly, migration.attended);
+      } else if (!migration.attended && !migration.ownerOnly) {
+        // Applied in order before the anchor. An attended or owner-only
+        // migration may still wait, so only --applied can say.
+        applied.add(migration.stem);
+      }
+    }
+  }
+  if (options.applied !== undefined) {
+    const listed = new Set(
+      parseAppliedMigrations(JSON.parse(readFileSync(options.applied, "utf8"))),
+    );
+    for (const stem of listed) applied.add(stem);
+    for (const migration of migrations) {
+      if (!listed.has(migration.stem)) {
+        consider(migration.file, migration.ownerOnly, migration.attended);
+      }
+    }
+  }
+  for (const path of options.with) {
+    const file = path.split("/").pop() as string;
+    const migration = migrations.find((candidate) => candidate.file === file);
+    if (migration === undefined) {
+      throw new Error(`--with ${path}: not a migration in ${MIGRATIONS_DIR}`);
+    }
+    if (migration.ownerOnly) {
+      throw new Error(
+        `--with ${path}: owner-only migrations are never bundled`,
+      );
+    }
+    if (migration.attended && !options.attended) {
+      throw new Error(`--with ${path}: an attended migration needs --attended`);
+    }
+    chosen.add(migration.file);
+  }
+  return {
+    migrations: [...chosen].sort().map((file) => {
+      const path = `${MIGRATIONS_DIR}/${file}`;
+      return {
+        path,
+        stem: file.slice(0, -".sql".length),
+        sql: readText(root, path),
+      };
+    }),
+    skipped: [...skipped].sort(),
+    applied,
+    known: new Set(migrations.map((migration) => migration.stem)),
+  };
+}
+
+export function main(argv: string[], root = process.cwd()): number {
+  const { values } = parseArgs({
+    args: argv,
+    options: {
+      area: { type: "string", multiple: true, default: [] },
+      all: { type: "boolean", default: false },
+      after: { type: "string" },
+      applied: { type: "string" },
+      with: { type: "string", multiple: true, default: [] },
+      payloads: { type: "string", multiple: true, default: [] },
+      attended: { type: "boolean", default: false },
+      out: { type: "string" },
+      help: { type: "boolean", default: false },
+    },
+    strict: true,
+  });
+  if (values.help) {
+    console.log(USAGE);
+    return 0;
+  }
+  const attended = values.attended;
+
+  let selection: Selection;
+  try {
+    selection = selectMigrations(root, {
+      ...(values.after === undefined ? {} : { after: values.after }),
+      ...(values.applied === undefined ? {} : { applied: values.applied }),
+      with: values.with,
+      attended,
+    });
+  } catch (error) {
+    console.error(`sql:bundle: refused: ${(error as Error).message}`);
+    return 1;
+  }
+  const { migrations, skipped, applied, known } = selection;
+  for (const file of skipped) {
+    console.error(
+      `sql:bundle: left out ${file}, which only applies attended (add --attended for a run someone attends)`,
+    );
+  }
+  const bundled = new Set(migrations.map((migration) => migration.stem));
+  const areas = values.all ? listAreas(root) : values.area;
+  const testPaths = areas
+    .flatMap((area) => listTestFiles(root, area))
+    .filter((path) => path !== STANDING_CHECKS);
+  testPaths.push(STANDING_CHECKS);
+
+  const problems: string[] = [];
+  for (const migration of migrations) {
+    problems.push(
+      ...sendableProblems(migration.path, migration.sql, "migration", attended),
+    );
+  }
+  const tests: TestFile[] = [];
+  for (const path of testPaths) {
+    const text = readText(root, path);
+    let test: TestFile;
+    try {
+      test = parseTestFile(path, text);
+    } catch (error) {
+      problems.push(...sendableProblems(path, text, "test", attended));
+      problems.push((error as Error).message);
+      continue;
+    }
+    const unknown = test.requires.filter((stem) => !known.has(stem));
+    if (unknown.length > 0) {
+      problems.push(
+        `${path}: requires ${unknown.join(", ")}, which is not a migration in ${MIGRATIONS_DIR}`,
+      );
+      continue;
+    }
+    const missing = test.requires.filter(
+      (stem) => !bundled.has(stem) && !applied.has(stem),
+    );
+    if (missing.length > 0) {
+      console.error(
+        `sql:bundle: skipped ${path}, which needs ${missing.join(", ")}: neither in this bundle nor applied (pass --applied with list_migrations output, and --attended for an attended migration)`,
+      );
+      continue;
+    }
+    problems.push(...sendableProblems(path, text, "test", attended));
+    tests.push(test);
+  }
+  const payloads: { path: string; sql: string }[] = [];
+  for (const path of values.payloads) {
+    const text = readText(root, path);
+    problems.push(...sendableProblems(path, text, "test", attended));
+    try {
+      payloads.push({ path, sql: parsePayloadFile(path, text) });
+    } catch (error) {
+      problems.push((error as Error).message);
+    }
+  }
+  const expected = JSON.parse(readText(root, EXPECTED_ADVISORS)) as {
+    rpc?: { functions?: unknown };
+  };
+  const rpcs = expected.rpc?.functions;
+  if (!Array.isArray(rpcs) || !rpcs.every((name) => typeof name === "string")) {
+    problems.push(
+      `${EXPECTED_ADVISORS}: rpc.functions must be an array of names`,
+    );
+  }
+  if (problems.length > 0) {
+    console.error(
+      "sql:bundle: refused. The MCP would stop at these, or the files break the test shape:",
+    );
+    for (const problem of problems) console.error(`  ${problem}`);
+    return 1;
+  }
+
+  const label = [
+    migrations.length > 0
+      ? `dry run of ${migrations.map((m) => m.path.split("/").pop()).join(", ")}`
+      : "no migrations",
+    `tests: ${areas.length > 0 ? areas.join(", ") : "standing checks only"}`,
+    ...(attended ? ["attended"] : []),
+  ].join("; ");
+  const bundle = buildBundle({
+    migrations,
+    tests,
+    expectedRpcs: rpcs as string[],
+    payloads,
+    label,
+  });
+  const confirmations = mcpConfirmationReasons(bundle);
+  if (confirmations.length > 0 && !attended) {
+    console.error(
+      "sql:bundle: refused. The MCP would ask a human to confirm the bundle:",
+    );
+    for (const reason of confirmations) console.error(`  ${reason}`);
+    return 1;
+  }
+  for (const reason of confirmations) {
+    console.error(`sql:bundle: the MCP will ask to confirm: ${reason}`);
+  }
+  const checks = tests.reduce((sum, test) => sum + test.passLines.length, 1);
+  if (values.out !== undefined) {
+    writeFileSync(values.out, bundle);
+    console.error(
+      `sql:bundle: wrote ${values.out} (${(Buffer.byteLength(bundle) / 1024).toFixed(1)} kB, ${migrations.length} migrations, ${checks} checks${attended ? ", attended" : ""})`,
+    );
+  } else {
+    process.stdout.write(bundle);
+  }
+  return 0;
+}
+
+if (
+  process.argv[1] !== undefined &&
+  import.meta.url === pathToFileURL(resolve(process.argv[1])).href
+) {
+  try {
+    process.exitCode = main(process.argv.slice(2));
+  } catch (error) {
+    console.error(`sql:bundle: ${(error as Error).message}`);
+    console.error(USAGE);
+    process.exitCode = 1;
+  }
+}

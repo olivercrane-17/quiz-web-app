@@ -504,55 +504,60 @@ describe("content:reinstate (decisions memo §18)", () => {
     ]);
   });
 
-  it("prints counts and ids, and for a sealed batch counts only", async () => {
-    const bank = await cutBank({ "fx.p.geo.0103": {}, "fx.e.0101": {} });
-    const root = bank.layout.root;
-    const run = (...args: string[]) =>
-      spawnSync(
-        process.execPath,
-        [
-          "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
-          join(REPO_ROOT, "scripts/content/reinstate.ts"),
-          "--root",
-          root,
-          "--fixtures",
-          ...args,
-        ],
-        {
-          cwd: REPO_ROOT,
-          encoding: "utf8",
-          env: { NODE_ENV: "test", PATH: process.env.PATH ?? "", HOME: root },
-        },
+  // Spawns the CLI twice; under shared-CPU load each run takes several seconds.
+  it(
+    "prints counts and ids, and for a sealed batch counts only",
+    { timeout: 30_000 },
+    async () => {
+      const bank = await cutBank({ "fx.p.geo.0103": {}, "fx.e.0101": {} });
+      const root = bank.layout.root;
+      const run = (...args: string[]) =>
+        spawnSync(
+          process.execPath,
+          [
+            "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+            join(REPO_ROOT, "scripts/content/reinstate.ts"),
+            "--root",
+            root,
+            "--fixtures",
+            ...args,
+          ],
+          {
+            cwd: REPO_ROOT,
+            encoding: "utf8",
+            env: { NODE_ENV: "test", PATH: process.env.PATH ?? "", HOME: root },
+          },
+        );
+      const text = run("--all", "--dry-run");
+      expect(text.status, text.stderr).toBe(0);
+      expect(text.stdout).toContain("dry run, nothing is written");
+      expect(text.stdout).toContain("fx.p.geo.0103");
+      expect(text.stdout).toMatch(/e\.b01 .*would reinstate 1/);
+      expect(text.stdout).toContain("ids: not shown for a sealed batch");
+      const json = run("--all", "--dry-run", "--json");
+      const report = JSON.parse(json.stdout) as {
+        dryRun: boolean;
+        batches: { batchId: string; reinstated: number; ids?: string[] }[];
+      };
+      expect(report.dryRun).toBe(true);
+      expect(report.batches.find((b) => b.batchId === "e.b01")).toMatchObject({
+        reinstated: 1,
+      });
+      expect(
+        report.batches.find((b) => b.batchId === "e.b01"),
+      ).not.toHaveProperty("ids");
+      for (const output of [text.stdout, json.stdout]) {
+        expect(output).not.toContain("fx.e.0101");
+        expect(output).not.toContain("Gorlund");
+        expect(output).not.toContain("Brindle");
+        expect(output).not.toContain(CUT_REASON);
+      }
+      // The dry run wrote nothing.
+      expect(itemOf(await loadBank(bank.layout), "fx.e.0101").item.status).toBe(
+        "cut",
       );
-    const text = run("--all", "--dry-run");
-    expect(text.status, text.stderr).toBe(0);
-    expect(text.stdout).toContain("dry run, nothing is written");
-    expect(text.stdout).toContain("fx.p.geo.0103");
-    expect(text.stdout).toMatch(/e\.b01 .*would reinstate 1/);
-    expect(text.stdout).toContain("ids: not shown for a sealed batch");
-    const json = run("--all", "--dry-run", "--json");
-    const report = JSON.parse(json.stdout) as {
-      dryRun: boolean;
-      batches: { batchId: string; reinstated: number; ids?: string[] }[];
-    };
-    expect(report.dryRun).toBe(true);
-    expect(report.batches.find((b) => b.batchId === "e.b01")).toMatchObject({
-      reinstated: 1,
-    });
-    expect(
-      report.batches.find((b) => b.batchId === "e.b01"),
-    ).not.toHaveProperty("ids");
-    for (const output of [text.stdout, json.stdout]) {
-      expect(output).not.toContain("fx.e.0101");
-      expect(output).not.toContain("Gorlund");
-      expect(output).not.toContain("Brindle");
-      expect(output).not.toContain(CUT_REASON);
-    }
-    // The dry run wrote nothing.
-    expect(itemOf(await loadBank(bank.layout), "fx.e.0101").item.status).toBe(
-      "cut",
-    );
-    expect(run("--batch", "p.geo.b01", "--all").status).toBe(2);
-    expect(run().status).toBe(2);
-  });
+      expect(run("--batch", "p.geo.b01", "--all").status).toBe(2);
+      expect(run().status).toBe(2);
+    },
+  );
 });

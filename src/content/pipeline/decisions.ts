@@ -38,7 +38,11 @@ import {
   type AnyItem,
   type Mystery,
 } from "../schema/items.ts";
-import type { Verification } from "../schema/verification.ts";
+import {
+  evidenceEntries,
+  isExternalSource,
+  type Verification,
+} from "../schema/verification.ts";
 import {
   acceptanceFailures,
   checksOf,
@@ -59,10 +63,16 @@ import {
 } from "./dedupe.ts";
 import type { Pool } from "./ids.ts";
 import { cloneJson, stableStringify } from "./json.ts";
+import { cnt2AcceptHits } from "../../../scripts/content/lint/index.ts";
 import { LINT_VERSION, applyLintAllow, rawItemHits } from "./lint/index.ts";
 import { scheduledDates } from "./lint/pool-rules.ts";
 import { mysteryKeys } from "./mystery-keys.ts";
-import { PACKET_FIELDS, changedSinceChecks, packetSha256 } from "./packets.ts";
+import {
+  PACKET_FIELDS,
+  changedSinceChecks,
+  packetSha256,
+  stageHashes,
+} from "./packets.ts";
 import { mythMatches } from "./references.ts";
 import { anyAgentRun, batchItems, sameAgentRun } from "./register.ts";
 import { saveItems, type SaveOptions } from "./store.ts";
@@ -299,11 +309,20 @@ export function acceptanceScreen(
     });
   }
   const candidate = { ...record, item: next };
-  const raw = rawItemHits(
-    { bank, today: decidedAt.slice(0, 10) },
-    candidate,
-    scheduledDates(bank),
-  );
+  // The whole lint: the pipeline's rules and CNT-2's (scripts/content/lint/),
+  // each at its own severity, so an item accepted now meets every rule
+  // content:check holds it to (ARCHITECTURE §5.2: "active: ... a clean lint").
+  const cnt2 = cnt2AcceptHits(bank, record, next, {
+    guide: options.includeGuide !== false,
+  });
+  const raw = [
+    ...rawItemHits(
+      { bank, today: decidedAt.slice(0, 10) },
+      candidate,
+      scheduledDates(bank),
+    ).filter((hit) => !cnt2.supersedes(hit)),
+    ...cnt2.hits,
+  ];
   const kept = applyLintAllow(next, raw);
   const waived = raw.filter((hit) => !kept.includes(hit));
   const schema = schemaProblems(record.pool, next);
@@ -390,7 +409,9 @@ export function acceptanceScreen(
     const { a, b, t } = checksOf(next);
     const external = [a, b, t].some((check) =>
       check?.claimResults.some(
-        (r) => r.verdict === "confirmed" && r.method !== "knowledge",
+        (r) =>
+          r.verdict === "confirmed" &&
+          evidenceEntries(r).some(isExternalSource),
       ),
     );
     if (external)
@@ -561,8 +582,16 @@ export function decideOne(
         ...verification.checks,
         ...(verification.tiebreak ? [verification.tiebreak] : []),
       ]) {
-        const stamp = packetSha256(record.id, next, check.pass);
-        stamps.push(`pass ${check.pass} ${check.packetSha256} -> ${stamp}`);
+        // A staged record keeps its served times; its stage hashes move to
+        // the reworded item, the old ones going into the trail.
+        const stamp = Array.isArray(check.packetSha256)
+          ? stageHashes(record.id, next, check.pass)
+          : packetSha256(record.id, next, check.pass);
+        const show = (value: string | readonly string[]) =>
+          typeof value === "string" ? value : value.join(",");
+        stamps.push(
+          `pass ${check.pass} ${show(check.packetSha256)} -> ${show(stamp)}`,
+        );
         check.packetSha256 = stamp;
       }
       verification.editor.reason = `${verification.editor.reason} ${TRAIL}${decision.editor} at ${decidedAt} of ${changedKeys.join(", ")}; checks kept, packetSha256 re-stamped: ${stamps.join("; ") || "no checks yet"}]`;

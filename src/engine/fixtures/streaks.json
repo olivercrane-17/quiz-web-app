@@ -1,0 +1,3550 @@
+{
+  "$comment": [
+    "Streak parity table (ARCHITECTURE §4.13): S1 to S13 of PRD §4.4.8; AC-RPR-01 to 04 and 09, AC-STK-08 and 09, AC-FRZ-01 to 05 and AC-INC-03; and our own rows: an evaluation run twice (one freeze spent), a pending date across midnight, an on-time finish over a stored Freeze (refunded) and over Protected, a westward hop that can't reopen a served date, a zone hop 17 and 20 hours after the previous call (both earn credit: memo §14.1 has no 20-hour rule), a second date-line protection inside 30 days, two repairable archive finishes back to back (one repair), an open attempt for D finished on time after D + 1 was played (D Played, by the credit decided at its start; with and without a held freeze), a date-line candidate that a finish created and the next request decided Missed (the stored best never counted it), and one zone under two names (Asia/Calcutta and Asia/Kolkata).",
+    "Replayed by Vitest against the engine (src/engine/streaks/streaks-fixture.test.ts) and, from SQL-6, by the generated SQL parity tests against private.evaluate_streak and private.apply_finish.",
+    "credit: decisions memo §14.1, which replaces AC-STK-09's 20-hour rule. A Daily for local date D is accepted only for D in [utc_today - 1, utc_today + 1]; it earns streak credit only when D is later than the last credited (Played or Repaired) date; a run whose device zone changed since the previous Daily is kept out of the crowd's numbers (zoneChanged, honest-play flag 16) but still earns credit. Zones compare by name up to the tz database's links (src/engine/streaks/zone-links.ts, which SQL's alias map copies), so the same zone under another name, such as Asia/Calcutta for Asia/Kolkata, is no change, here and in the date-line rule.",
+    "finish: applyFinish on its own: the counters before, the finish (kind and the gap status already stored for its date), the counters after and the status written.",
+    "scenarios: a stored start state, then requests in order. A read is a get_streak call; a finish is the streak hook of a finished attempt (on_time: a ranked attempt inside its window; unranked: archive, a challenge of that date, or a resumed abandoned attempt). Both compute the effective today from the request's zone and the latest date served (maxServed), and a finish evaluates first, with an on-time attempt's own date held pending. A finish's kind is on_time when the attempt earned streak credit as it started and its date isn't already Played or Repaired; repair when an unranked play's date is repairable at that moment; else other. An on-time finish carries streakCredit, memo §14.1's rule as dailyCredit applied it at start_daily (attempts.streak_credit), true unless the step says false. Credit is never decided again at the finish, so an attempt for D finished after D + 1 was played still plays D. The figures after a finish (after) are a summary that decides nothing. lastFinish (zone and offset) is stored by every finish, lastRepairAt by a repair, datelineUsedAt by a read or finish that protects a date by the date-line rule.",
+    "start.days expands { from, to, status } ranges (to defaults to from). Missing start fields take the empty ledger's values. Instants are UTC; Europe/London is UTC+0 in November 2026, America/Los_Angeles UTC-8, America/New_York UTC-5, Australia/Sydney UTC+11, Pacific/Auckland UTC+13, Pacific/Kiritimati UTC+14, Asia/Tokyo UTC+9, Asia/Kolkata (and its other name Asia/Calcutta) UTC+5:30 and Etc/GMT+12 UTC-12.",
+    "expect compares only the fields it names. days names stored statuses after the step (null: no status). A repair offer is { date, dailyNumber, until } with DAILY_EPOCH = epoch, and until is local 00:00 on the date + 3 in the request's zone. display is active, paused (exactly when a repair is offered) or broken (a Missed date in the history, no offer, and the current streak below the best, so record-first copy leads until the new run reaches the record). best is the best streak a surface shows, storedBest the one stored (private.streaks.best): the largest chain of decided dates, never below the stored best, which a pending attempt's date or a date-line candidate breaks until it is decided, while best also takes the current chain.",
+    "Choices this table pins down where the PRD leaves room: the date-line candidate is the first gap date the walk decides after the latest Played or Repaired date (an incident that protects it uses the rule up); a request that decides a stored candidate starts no new one; the cooldown needs more than 30 days since the last date-line protection; a date protected by the date-line rule writes no notice (the only protected copy names an outage of ours), and an incident's protected notice is written only while a streak is alive; an undecided date (a pending attempt's or a candidate) links the current chain without counting, but the stored best counts only decided dates; the stored best never goes down; breakTooLong holds only while the break's last date would still be inside a one-date repair window."
+  ],
+  "epoch": "2026-09-21",
+  "credit": [
+    {
+      "id": "credit-today",
+      "title": "a first Daily for the server's UTC date is accepted and earns credit",
+      "date": "2026-11-10",
+      "utcToday": "2026-11-10",
+      "lastCredited": null,
+      "zone": "Europe/London",
+      "previousDailyZone": null,
+      "expect": {
+        "accepted": true,
+        "streakCredit": true,
+        "zoneChanged": false
+      }
+    },
+    {
+      "id": "credit-plus-one",
+      "title": "D = utc_today + 1 (an early morning at UTC+14) is accepted",
+      "date": "2026-11-11",
+      "utcToday": "2026-11-10",
+      "lastCredited": "2026-11-10",
+      "zone": "Pacific/Kiritimati",
+      "previousDailyZone": "Pacific/Kiritimati",
+      "expect": {
+        "accepted": true,
+        "streakCredit": true,
+        "zoneChanged": false
+      }
+    },
+    {
+      "id": "credit-minus-one",
+      "title": "D = utc_today - 1 (an evening at UTC-12) is accepted",
+      "date": "2026-11-09",
+      "utcToday": "2026-11-10",
+      "lastCredited": "2026-11-08",
+      "zone": "Etc/GMT+12",
+      "previousDailyZone": "Etc/GMT+12",
+      "expect": {
+        "accepted": true,
+        "streakCredit": true,
+        "zoneChanged": false
+      }
+    },
+    {
+      "id": "credit-plus-two",
+      "title": "D = utc_today + 2 is refused, so it earns nothing",
+      "date": "2026-11-12",
+      "utcToday": "2026-11-10",
+      "lastCredited": "2026-11-09",
+      "zone": "Pacific/Kiritimati",
+      "previousDailyZone": "Pacific/Kiritimati",
+      "expect": {
+        "accepted": false,
+        "streakCredit": false,
+        "zoneChanged": false
+      }
+    },
+    {
+      "id": "credit-minus-two",
+      "title": "D = utc_today - 2 is refused, so it earns nothing",
+      "date": "2026-11-08",
+      "utcToday": "2026-11-10",
+      "lastCredited": "2026-11-07",
+      "zone": "Etc/GMT+12",
+      "previousDailyZone": "Etc/GMT+12",
+      "expect": {
+        "accepted": false,
+        "streakCredit": false,
+        "zoneChanged": false
+      }
+    },
+    {
+      "id": "credit-same-date",
+      "title": "D equal to the last credited date is accepted but earns no credit",
+      "date": "2026-11-10",
+      "utcToday": "2026-11-10",
+      "lastCredited": "2026-11-10",
+      "zone": "Europe/London",
+      "previousDailyZone": "Europe/London",
+      "expect": {
+        "accepted": true,
+        "streakCredit": false,
+        "zoneChanged": false
+      }
+    },
+    {
+      "id": "credit-backfill",
+      "title": "D before the last credited date can't backfill a missed day, whatever the device says",
+      "date": "2026-11-09",
+      "utcToday": "2026-11-10",
+      "lastCredited": "2026-11-10",
+      "zone": "Etc/GMT+12",
+      "previousDailyZone": "Europe/London",
+      "expect": {
+        "accepted": true,
+        "streakCredit": false,
+        "zoneChanged": true
+      }
+    },
+    {
+      "id": "credit-zone-changed",
+      "title": "a zone change since the previous Daily keeps the run out of the crowd's numbers but still earns credit",
+      "date": "2026-11-11",
+      "utcToday": "2026-11-11",
+      "lastCredited": "2026-11-10",
+      "zone": "Europe/London",
+      "previousDailyZone": "Asia/Tokyo",
+      "expect": {
+        "accepted": true,
+        "streakCredit": true,
+        "zoneChanged": true
+      }
+    },
+    {
+      "id": "credit-zone-changed-east",
+      "title": "an eastward zone change is flagged the same way and earns credit",
+      "date": "2026-11-11",
+      "utcToday": "2026-11-10",
+      "lastCredited": "2026-11-10",
+      "zone": "Pacific/Auckland",
+      "previousDailyZone": "Europe/London",
+      "expect": {
+        "accepted": true,
+        "streakCredit": true,
+        "zoneChanged": true
+      }
+    },
+    {
+      "id": "credit-zone-alias",
+      "title": "the same zone under its other name (Asia/Calcutta after Asia/Kolkata) is no zone change",
+      "date": "2026-11-11",
+      "utcToday": "2026-11-11",
+      "lastCredited": "2026-11-10",
+      "zone": "Asia/Calcutta",
+      "previousDailyZone": "Asia/Kolkata",
+      "expect": {
+        "accepted": true,
+        "streakCredit": true,
+        "zoneChanged": false
+      }
+    },
+    {
+      "id": "credit-zone-alias-kyiv",
+      "title": "nor is Europe/Kyiv after Europe/Kiev, the spelling some browsers still report",
+      "date": "2026-11-11",
+      "utcToday": "2026-11-11",
+      "lastCredited": "2026-11-10",
+      "zone": "Europe/Kyiv",
+      "previousDailyZone": "Europe/Kiev",
+      "expect": {
+        "accepted": true,
+        "streakCredit": true,
+        "zoneChanged": false
+      }
+    }
+  ],
+  "finish": [
+    {
+      "id": "finish-on-time",
+      "title": "an on-time finish stores Played and counts toward the next freeze",
+      "counters": {
+        "freezesHeld": 0,
+        "freezeProgress": 3,
+        "dailiesFinished": 3
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "on_time",
+        "existing": null
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 0,
+          "freezeProgress": 4,
+          "dailiesFinished": 4
+        },
+        "status": "played",
+        "freezeEarned": false,
+        "freezeRefunded": false
+      }
+    },
+    {
+      "id": "finish-seventh",
+      "ac": "AC-FRZ-01",
+      "title": "the 7th counted finish grants a freeze and resets the progress",
+      "counters": {
+        "freezesHeld": 0,
+        "freezeProgress": 6,
+        "dailiesFinished": 6
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "on_time",
+        "existing": null
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 1,
+          "freezeProgress": 0,
+          "dailiesFinished": 7
+        },
+        "status": "played",
+        "freezeEarned": true,
+        "freezeRefunded": false
+      }
+    },
+    {
+      "id": "finish-fourteenth",
+      "ac": "AC-FRZ-01",
+      "title": "the 14th counted finish grants the second freeze",
+      "counters": {
+        "freezesHeld": 1,
+        "freezeProgress": 6,
+        "dailiesFinished": 13
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "on_time",
+        "existing": null
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 2,
+          "freezeProgress": 0,
+          "dailiesFinished": 14
+        },
+        "status": "played",
+        "freezeEarned": true,
+        "freezeRefunded": false
+      }
+    },
+    {
+      "id": "finish-full",
+      "ac": "AC-FRZ-01",
+      "title": "with 2 held a finish grants nothing and progress stays at 0",
+      "counters": {
+        "freezesHeld": 2,
+        "freezeProgress": 0,
+        "dailiesFinished": 20
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "on_time",
+        "existing": null
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 2,
+          "freezeProgress": 0,
+          "dailiesFinished": 21
+        },
+        "status": "played",
+        "freezeEarned": false,
+        "freezeRefunded": false
+      }
+    },
+    {
+      "id": "finish-over-freeze",
+      "title": "an on-time finish over a stored Freeze plays the date and refunds the freeze",
+      "counters": {
+        "freezesHeld": 0,
+        "freezeProgress": 2,
+        "dailiesFinished": 9
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "on_time",
+        "existing": "freeze"
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 1,
+          "freezeProgress": 3,
+          "dailiesFinished": 10
+        },
+        "status": "played",
+        "freezeEarned": false,
+        "freezeRefunded": true
+      }
+    },
+    {
+      "id": "finish-over-freeze-fills",
+      "title": "a refund that fills the second slot leaves progress at 0, so that finish grants nothing more",
+      "counters": {
+        "freezesHeld": 1,
+        "freezeProgress": 6,
+        "dailiesFinished": 13
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "on_time",
+        "existing": "freeze"
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 2,
+          "freezeProgress": 0,
+          "dailiesFinished": 14
+        },
+        "status": "played",
+        "freezeEarned": false,
+        "freezeRefunded": true
+      }
+    },
+    {
+      "id": "finish-over-freeze-capped",
+      "title": "with 2 held, the refund over a stored Freeze is lost to the cap",
+      "counters": {
+        "freezesHeld": 2,
+        "freezeProgress": 0,
+        "dailiesFinished": 20
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "on_time",
+        "existing": "freeze"
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 2,
+          "freezeProgress": 0,
+          "dailiesFinished": 21
+        },
+        "status": "played",
+        "freezeEarned": false,
+        "freezeRefunded": false
+      }
+    },
+    {
+      "id": "finish-over-protected",
+      "title": "an on-time finish over Protected plays the date and refunds nothing",
+      "counters": {
+        "freezesHeld": 1,
+        "freezeProgress": 2,
+        "dailiesFinished": 9
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "on_time",
+        "existing": "protected"
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 1,
+          "freezeProgress": 3,
+          "dailiesFinished": 10
+        },
+        "status": "played",
+        "freezeEarned": false,
+        "freezeRefunded": false
+      }
+    },
+    {
+      "id": "finish-over-missed",
+      "title": "an on-time finish over a Missed date (an open attempt's date that was decided anyway) plays it",
+      "counters": {
+        "freezesHeld": 0,
+        "freezeProgress": 1,
+        "dailiesFinished": 8
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "on_time",
+        "existing": "missed"
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 0,
+          "freezeProgress": 2,
+          "dailiesFinished": 9
+        },
+        "status": "played",
+        "freezeEarned": false,
+        "freezeRefunded": false
+      }
+    },
+    {
+      "id": "finish-repair",
+      "title": "a repair turns Missed into Repaired and counts toward freezes",
+      "counters": {
+        "freezesHeld": 0,
+        "freezeProgress": 6,
+        "dailiesFinished": 6
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "repair",
+        "existing": "missed"
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 1,
+          "freezeProgress": 0,
+          "dailiesFinished": 7
+        },
+        "status": "repaired",
+        "freezeEarned": true,
+        "freezeRefunded": false
+      }
+    },
+    {
+      "id": "finish-repair-freeze-date",
+      "title": "an archive play of a Freeze date changes nothing and refunds nothing",
+      "counters": {
+        "freezesHeld": 0,
+        "freezeProgress": 3,
+        "dailiesFinished": 9
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "repair",
+        "existing": "freeze"
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 0,
+          "freezeProgress": 3,
+          "dailiesFinished": 9
+        },
+        "status": null,
+        "freezeEarned": false,
+        "freezeRefunded": false
+      }
+    },
+    {
+      "id": "finish-repair-nothing",
+      "title": "a repair of a date with no stored status changes nothing",
+      "counters": {
+        "freezesHeld": 1,
+        "freezeProgress": 3,
+        "dailiesFinished": 9
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "repair",
+        "existing": null
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 1,
+          "freezeProgress": 3,
+          "dailiesFinished": 9
+        },
+        "status": null,
+        "freezeEarned": false,
+        "freezeRefunded": false
+      }
+    },
+    {
+      "id": "finish-other",
+      "title": "other (no credit, or a second repair inside 168 hours) changes nothing",
+      "counters": {
+        "freezesHeld": 1,
+        "freezeProgress": 6,
+        "dailiesFinished": 9
+      },
+      "finish": {
+        "date": "2026-11-10",
+        "kind": "other",
+        "existing": "missed"
+      },
+      "expect": {
+        "counters": {
+          "freezesHeld": 1,
+          "freezeProgress": 6,
+          "dailiesFinished": 9
+        },
+        "status": null,
+        "freezeEarned": false,
+        "freezeRefunded": false
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "S1",
+      "title": "played D-3 to D-1, plays D: streak 4",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-07",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezeProgress": 3,
+        "dailiesFinished": 3,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "on_time",
+          "at": "2026-11-10T19:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 4,
+              "best": 4,
+              "display": "active"
+            },
+            "freezeProgress": 4,
+            "dailiesFinished": 4
+          }
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "title": "played to D-1, nothing on D, read on D+1 with 1 freeze: D Freeze, freezes 0, streak unchanged",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 1,
+        "freezeProgress": 2,
+        "dailiesFinished": 9,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "today": "2026-11-11",
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "freeze"
+              }
+            ],
+            "freezesHeld": 0,
+            "current": 9,
+            "best": 9,
+            "display": "active",
+            "repair": null,
+            "paused": null,
+            "notices": [
+              {
+                "kind": "freeze_spent",
+                "date": "2026-11-10"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "title": "played to D-1, nothing on D, read on D+1: D Missed, current 0, displayed Paused at the old count, repair until the end of D+2",
+      "start": {
+        "days": [
+          {
+            "from": "2026-10-18",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezeProgress": 2,
+        "dailiesFinished": 23,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              }
+            ],
+            "freezesHeld": 0,
+            "current": 0,
+            "best": 23,
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-10",
+              "dailyNumber": 51,
+              "until": "2026-11-13T00:00:00Z"
+            },
+            "paused": {
+              "streak": 23,
+              "until": "2026-11-13T00:00:00Z"
+            },
+            "breakTooLong": false,
+            "notices": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "title": "S3, then on D+1 plays D+1 and repairs D: streak old + 2",
+      "start": {
+        "days": [
+          {
+            "from": "2026-10-18",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezeProgress": 2,
+        "dailiesFinished": 23,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "display": "paused",
+            "paused": {
+              "streak": 23,
+              "until": "2026-11-13T00:00:00Z"
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T09:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 1,
+              "best": 23,
+              "display": "paused",
+              "paused": {
+                "streak": 23,
+                "until": "2026-11-13T00:00:00Z"
+              }
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "unranked",
+          "at": "2026-11-11T09:30:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "repair",
+            "after": {
+              "current": 25,
+              "best": 25,
+              "display": "active",
+              "repair": null,
+              "paused": null,
+              "repairBlockedUntil": "2026-11-18T09:30:00Z"
+            },
+            "days": {
+              "2026-11-10": "repaired"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "ac": "AC-RPR-04",
+      "title": "played to D-1, nothing on D or D+1, read on D+2: two Missed dates, no repair, streak 0, Broken",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-02",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-12T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              },
+              {
+                "date": "2026-11-11",
+                "status": "missed"
+              }
+            ],
+            "current": 0,
+            "best": 8,
+            "display": "broken",
+            "repair": null,
+            "paused": null,
+            "breakTooLong": true
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "unranked",
+          "at": "2026-11-12T09:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "other",
+            "after": {
+              "current": 0,
+              "display": "broken",
+              "repair": null
+            },
+            "days": {
+              "2026-11-10": "missed",
+              "2026-11-11": "missed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S6",
+      "ac": "AC-FRZ-03",
+      "title": "played to D-1, nothing on D to D+2, read on D+3 with 2 freezes: D and D+1 Freeze, D+2 Missed and repairable until the end of D+4",
+      "start": {
+        "days": [
+          {
+            "from": "2026-10-27",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 2,
+        "dailiesFinished": 14,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-13T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "freeze"
+              },
+              {
+                "date": "2026-11-11",
+                "status": "freeze"
+              },
+              {
+                "date": "2026-11-12",
+                "status": "missed"
+              }
+            ],
+            "freezesHeld": 0,
+            "current": 0,
+            "best": 14,
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-12",
+              "dailyNumber": 53,
+              "until": "2026-11-15T00:00:00Z"
+            },
+            "paused": {
+              "streak": 14,
+              "until": "2026-11-15T00:00:00Z"
+            },
+            "notices": [
+              {
+                "kind": "freeze_spent",
+                "date": "2026-11-10"
+              },
+              {
+                "kind": "freeze_spent",
+                "date": "2026-11-11"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "S7",
+      "title": "S3 with a repair used 5 days ago: Broken until the 168 hours pass inside the window (D+1 played meanwhile), then Paused with an offer",
+      "start": {
+        "days": [
+          {
+            "from": "2026-10-18",
+            "to": "2026-11-03",
+            "status": "played"
+          },
+          {
+            "from": "2026-11-04",
+            "status": "repaired"
+          },
+          {
+            "from": "2026-11-05",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 23,
+        "lastRepairAt": "2026-11-05T20:00:00Z",
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              }
+            ],
+            "current": 0,
+            "best": 23,
+            "display": "broken",
+            "repair": null,
+            "paused": null,
+            "repairBlockedUntil": "2026-11-12T20:00:00Z",
+            "breakTooLong": false
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T19:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 1,
+              "display": "broken",
+              "repair": null
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-12T19:59:59Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [],
+            "display": "broken",
+            "repair": null,
+            "repairBlockedUntil": "2026-11-12T20:00:00Z"
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-12T20:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-10",
+              "dailyNumber": 51,
+              "until": "2026-11-13T00:00:00Z"
+            },
+            "paused": {
+              "streak": 23,
+              "until": "2026-11-13T00:00:00Z"
+            },
+            "repairBlockedUntil": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "S7-late",
+      "title": "S7 when the cap opens only after the window closes: the break stays final and the new run shows record first",
+      "start": {
+        "days": [
+          {
+            "from": "2026-10-18",
+            "to": "2026-11-03",
+            "status": "played"
+          },
+          {
+            "from": "2026-11-04",
+            "status": "repaired"
+          },
+          {
+            "from": "2026-11-05",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 23,
+        "lastRepairAt": "2026-11-06T08:00:00Z",
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              }
+            ],
+            "display": "broken",
+            "repair": null,
+            "repairBlockedUntil": "2026-11-13T08:00:00Z"
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T20:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 1,
+              "display": "broken",
+              "repair": null
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-12",
+          "play": "on_time",
+          "at": "2026-11-12T20:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 2,
+              "display": "broken",
+              "repair": null
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-13T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [],
+            "current": 2,
+            "best": 23,
+            "display": "broken",
+            "repair": null,
+            "repairBlockedUntil": null,
+            "breakTooLong": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "S8",
+      "title": "played to D-1, a 15-minute heartbeat gap on D, no play on D, 1 freeze: D Protected, freeze kept, streak unchanged",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-03",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 1,
+        "dailiesFinished": 7,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "incidents": [
+            {
+              "start": "2026-11-10T14:00:00Z",
+              "end": "2026-11-10T14:15:00Z"
+            }
+          ],
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "protected"
+              }
+            ],
+            "freezesHeld": 1,
+            "current": 7,
+            "display": "active",
+            "notices": [
+              {
+                "kind": "protected",
+                "date": "2026-11-10"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "S9",
+      "title": "starts D at 23:58 local and finishes at 00:04 on D+1: D Played, and D+1 is still today",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-07",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 3,
+        "freezeProgress": 3,
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T00:02:00Z",
+          "zone": "Europe/London",
+          "pending": ["2026-11-10"],
+          "expect": {
+            "today": "2026-11-11",
+            "written": [],
+            "current": 3,
+            "display": "active"
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "on_time",
+          "at": "2026-11-11T00:04:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "today": "2026-11-11",
+            "after": {
+              "current": 4,
+              "display": "active"
+            },
+            "days": {
+              "2026-11-10": "played",
+              "2026-11-11": null
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T20:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S10",
+      "title": "finishes D in Los Angeles, opens the app in Sydney about 20 hours later on D+2, then plays D+2: D+1 undecided, then Protected by the date-line rule",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-07",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 3,
+        "freezeProgress": 3,
+        "lastFinish": {
+          "zone": "America/Los_Angeles",
+          "offsetMinutes": -480
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "on_time",
+          "at": "2026-11-11T04:00:00Z",
+          "zone": "America/Los_Angeles",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 4
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-12T00:00:00Z",
+          "zone": "Australia/Sydney",
+          "expect": {
+            "today": "2026-11-12",
+            "written": [],
+            "datelineCandidate": {
+              "date": "2026-11-11",
+              "zone": "Australia/Sydney"
+            },
+            "datelineUsed": false,
+            "current": 4,
+            "display": "active",
+            "freezesHeld": 0
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-12",
+          "play": "on_time",
+          "at": "2026-11-12T02:00:00Z",
+          "zone": "Australia/Sydney",
+          "expect": {
+            "kind": "on_time",
+            "before": {
+              "written": [
+                {
+                  "date": "2026-11-11",
+                  "status": "protected"
+                }
+              ],
+              "datelineUsed": true,
+              "datelineCandidate": null,
+              "notices": []
+            },
+            "after": {
+              "current": 5,
+              "display": "active"
+            },
+            "days": {
+              "2026-11-11": "protected"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S11",
+      "title": "in London plays D-1, opens at D+1 00:30 (D Missed), then a request from UTC-12 (local D): today stays D+1 and D can only be repaired",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-05",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 5,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T00:30:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "today": "2026-11-11",
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              }
+            ],
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-10",
+              "dailyNumber": 51,
+              "until": "2026-11-13T00:00:00Z"
+            },
+            "nextDailyAt": "2026-11-12T00:00:00Z"
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T01:00:00Z",
+          "zone": "Etc/GMT+12",
+          "expect": {
+            "today": "2026-11-11",
+            "written": [],
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-10",
+              "dailyNumber": 51,
+              "until": "2026-11-13T12:00:00Z"
+            },
+            "nextDailyAt": "2026-11-12T12:00:00Z"
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "unranked",
+          "at": "2026-11-11T01:30:00Z",
+          "zone": "Etc/GMT+12",
+          "expect": {
+            "kind": "repair",
+            "after": {
+              "current": 6,
+              "display": "active"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S12",
+      "ac": "AC-STK-08",
+      "title": "two eastward jumps of 12 hours or more, 10 days apart, each followed by a second request in the new zone: only the first gap date is Protected",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 9,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T00:00:00Z",
+          "zone": "Pacific/Auckland",
+          "expect": {
+            "today": "2026-11-11",
+            "written": [],
+            "datelineCandidate": {
+              "date": "2026-11-10",
+              "zone": "Pacific/Auckland"
+            },
+            "current": 9,
+            "display": "active"
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T01:00:00Z",
+          "zone": "Pacific/Auckland",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "protected"
+              }
+            ],
+            "datelineUsed": true,
+            "datelineCandidate": null,
+            "current": 9
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T02:00:00Z",
+          "zone": "Pacific/Auckland",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 10
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-12",
+          "play": "on_time",
+          "at": "2026-11-12T19:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "today": "2026-11-12",
+            "after": {
+              "current": 11
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-13",
+          "play": "on_time",
+          "at": "2026-11-13T19:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-14",
+          "play": "on_time",
+          "at": "2026-11-14T19:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-15",
+          "play": "on_time",
+          "at": "2026-11-15T19:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-16",
+          "play": "on_time",
+          "at": "2026-11-16T19:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-17",
+          "play": "on_time",
+          "at": "2026-11-17T19:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "freezeEarned": true,
+            "freezesHeld": 1,
+            "after": {
+              "current": 16
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-19",
+          "play": "on_time",
+          "at": "2026-11-19T19:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "before": {
+              "written": [
+                {
+                  "date": "2026-11-18",
+                  "status": "freeze"
+                }
+              ],
+              "freezesHeld": 0
+            },
+            "freezesHeld": 0,
+            "after": {
+              "current": 17
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-21T00:00:00Z",
+          "zone": "Pacific/Auckland",
+          "expect": {
+            "today": "2026-11-21",
+            "written": [
+              {
+                "date": "2026-11-20",
+                "status": "missed"
+              }
+            ],
+            "datelineCandidate": null,
+            "datelineUsed": false,
+            "freezesHeld": 0,
+            "current": 0,
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-20",
+              "dailyNumber": 61,
+              "until": "2026-11-22T11:00:00Z"
+            },
+            "paused": {
+              "streak": 17,
+              "until": "2026-11-22T11:00:00Z"
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-21T01:00:00Z",
+          "zone": "Pacific/Auckland",
+          "expect": {
+            "written": [],
+            "datelineUsed": false,
+            "display": "paused",
+            "days": {
+              "2026-11-20": "missed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S13",
+      "title": "played to D-1 in London; one request from UTC+14 at D+1 08:00 UTC, then back in London: nothing Protected, D Missed and repairable",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-03",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 7,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Pacific/Kiritimati",
+          "expect": {
+            "today": "2026-11-11",
+            "written": [],
+            "datelineCandidate": {
+              "date": "2026-11-10",
+              "zone": "Pacific/Kiritimati"
+            },
+            "current": 7,
+            "display": "active"
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T09:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              }
+            ],
+            "datelineCandidate": null,
+            "datelineUsed": false,
+            "current": 0,
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-10",
+              "dailyNumber": 51,
+              "until": "2026-11-13T00:00:00Z"
+            },
+            "paused": {
+              "streak": 7,
+              "until": "2026-11-13T00:00:00Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "stk-08-one-request",
+      "ac": "AC-STK-08",
+      "title": "a jump that lasts one request protects nothing, and its candidate then takes a held freeze like any gap date",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-03",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 1,
+        "dailiesFinished": 7,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Pacific/Kiritimati",
+          "expect": {
+            "written": [],
+            "freezesHeld": 1,
+            "datelineCandidate": {
+              "date": "2026-11-10",
+              "zone": "Pacific/Kiritimati"
+            },
+            "notices": []
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T09:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "freeze"
+              }
+            ],
+            "freezesHeld": 0,
+            "datelineCandidate": null,
+            "datelineUsed": false,
+            "current": 7,
+            "display": "active",
+            "notices": [
+              {
+                "kind": "freeze_spent",
+                "date": "2026-11-10"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "stk-08-same-name",
+      "ac": "AC-STK-08",
+      "title": "a jump of 12 hours or more with no change of zone name protects nothing",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-03",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 7,
+        "lastFinish": {
+          "zone": "Pacific/Kiritimati",
+          "offsetMinutes": -600
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Pacific/Kiritimati",
+          "expect": {
+            "today": "2026-11-11",
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              }
+            ],
+            "datelineCandidate": null,
+            "datelineUsed": false,
+            "display": "paused"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stk-08-cooldown",
+      "ac": "AC-STK-08",
+      "title": "exactly 30 days after the last date-line protection the rule is still closed",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-03",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 7,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "datelineUsedAt": "2026-10-12T08:00:00Z",
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Pacific/Kiritimati",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              }
+            ],
+            "datelineCandidate": null,
+            "display": "paused"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stk-08-cooldown-over",
+      "ac": "AC-STK-08",
+      "title": "a second later than 30 days the rule may start a candidate again",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-03",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 7,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "datelineUsedAt": "2026-10-12T07:59:59Z",
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Pacific/Kiritimati",
+          "expect": {
+            "written": [],
+            "datelineCandidate": {
+              "date": "2026-11-10",
+              "zone": "Pacific/Kiritimati"
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T08:05:00Z",
+          "zone": "Pacific/Kiritimati",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "protected"
+              }
+            ],
+            "datelineUsed": true,
+            "current": 7,
+            "display": "active"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stk-08-alias",
+      "ac": "AC-STK-08",
+      "title": "a candidate started in Asia/Kolkata is confirmed by a request that reports Asia/Calcutta, the same zone under its other name: Protected",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-03",
+            "to": "2026-11-10",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 8,
+        "freezeProgress": 1,
+        "lastFinish": {
+          "zone": "America/Los_Angeles",
+          "offsetMinutes": -480
+        },
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-12T04:00:00Z",
+          "zone": "Asia/Kolkata",
+          "expect": {
+            "today": "2026-11-12",
+            "written": [],
+            "datelineCandidate": {
+              "date": "2026-11-11",
+              "zone": "Asia/Kolkata"
+            },
+            "datelineUsed": false,
+            "current": 8,
+            "display": "active"
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-12T05:00:00Z",
+          "zone": "Asia/Calcutta",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-11",
+                "status": "protected"
+              }
+            ],
+            "datelineUsed": true,
+            "datelineCandidate": null,
+            "notices": [],
+            "current": 8,
+            "display": "active",
+            "days": {
+              "2026-11-11": "protected"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "stk-09-hop-17h",
+      "ac": "AC-STK-09",
+      "title": "a zone hop 17 hours after the previous call still earns streak credit (memo §14.1: no 20-hour rule)",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-08",
+            "to": "2026-11-10",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 3,
+        "lastFinish": {
+          "zone": "Asia/Tokyo",
+          "offsetMinutes": 540
+        },
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-10T16:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "today": "2026-11-10",
+            "written": [],
+            "current": 3
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T09:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 4,
+              "display": "active"
+            },
+            "days": {
+              "2026-11-11": "played"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "stk-09-hop-20h",
+      "ac": "AC-STK-09",
+      "title": "the same hop 20 hours after the previous call earns credit the same way",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-08",
+            "to": "2026-11-10",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 3,
+        "lastFinish": {
+          "zone": "Asia/Tokyo",
+          "offsetMinutes": 540
+        },
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-10T16:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "today": "2026-11-10",
+            "written": []
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T12:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 4,
+              "display": "active"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "stk-09-no-backfill",
+      "ac": "AC-STK-09",
+      "title": "an on-time finish whose attempt had no streak credit at its start (a date not later than the last credited date) earns nothing, so a zone change can't backfill a Missed day",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-06",
+            "to": "2026-11-09",
+            "status": "played"
+          },
+          {
+            "from": "2026-11-10",
+            "status": "missed"
+          },
+          {
+            "from": "2026-11-11",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 5,
+        "freezeProgress": 5,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-11"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "on_time",
+          "streakCredit": false,
+          "at": "2026-11-11T11:00:00Z",
+          "zone": "Etc/GMT+12",
+          "expect": {
+            "kind": "other",
+            "today": "2026-11-11",
+            "freezeProgress": 5,
+            "dailiesFinished": 5,
+            "after": {
+              "current": 1,
+              "display": "paused"
+            },
+            "days": {
+              "2026-11-10": "missed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "rpr-01-next-day",
+      "ac": "AC-RPR-01",
+      "title": "a 10-day streak to D-1, no play on D; on D+1 finishes D+1, then D from the archive: streak 12",
+      "start": {
+        "days": [
+          {
+            "from": "2026-10-31",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 10,
+        "freezeProgress": 0,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T10:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "before": {
+              "written": [
+                {
+                  "date": "2026-11-10",
+                  "status": "missed"
+                }
+              ]
+            },
+            "after": {
+              "current": 1,
+              "display": "paused",
+              "paused": {
+                "streak": 10,
+                "until": "2026-11-13T00:00:00Z"
+              }
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "unranked",
+          "at": "2026-11-11T10:30:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "repair",
+            "after": {
+              "current": 12,
+              "best": 12,
+              "display": "active"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "rpr-01-last-minute",
+      "ac": "AC-RPR-01",
+      "title": "the same repair at 23:59 on D+2, after D+1 and D+2 were finished on time: streak 13",
+      "start": {
+        "days": [
+          {
+            "from": "2026-10-31",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 10,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T10:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time"
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-12",
+          "play": "on_time",
+          "at": "2026-11-12T10:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 2,
+              "display": "paused"
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "unranked",
+          "at": "2026-11-12T23:59:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "repair",
+            "after": {
+              "current": 13,
+              "display": "active"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "rpr-02",
+      "ac": "AC-RPR-02",
+      "title": "the same play at 00:00:01 on D+3 is an unranked archive play and the streak stays broken",
+      "start": {
+        "days": [
+          {
+            "from": "2026-10-31",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 10,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T10:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-12",
+          "play": "on_time",
+          "at": "2026-11-12T10:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "unranked",
+          "at": "2026-11-13T00:00:01Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "other",
+            "before": {
+              "written": [],
+              "repair": null,
+              "display": "broken"
+            },
+            "after": {
+              "current": 2,
+              "best": 10,
+              "display": "broken",
+              "repair": null
+            },
+            "days": {
+              "2026-11-10": "missed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "rpr-03",
+      "ac": "AC-RPR-03",
+      "title": "a second repair within 7 x 24 hours of the first is refused, and the cap names when the next one opens",
+      "start": {
+        "days": [
+          {
+            "from": "2026-10-31",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 10,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T10:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "unranked",
+          "at": "2026-11-11T10:30:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "repair",
+            "after": {
+              "current": 12,
+              "repairBlockedUntil": "2026-11-18T10:30:00Z"
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-12",
+          "play": "on_time",
+          "at": "2026-11-12T10:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-13",
+          "play": "on_time",
+          "at": "2026-11-13T10:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "after": {
+              "current": 14
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-15T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-14",
+                "status": "missed"
+              }
+            ],
+            "current": 0,
+            "repair": null,
+            "paused": null,
+            "display": "broken",
+            "repairBlockedUntil": "2026-11-18T10:30:00Z"
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-14",
+          "play": "unranked",
+          "at": "2026-11-15T09:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "other",
+            "after": {
+              "current": 0,
+              "display": "broken"
+            },
+            "days": {
+              "2026-11-14": "missed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "rpr-04",
+      "ac": "AC-RPR-04",
+      "title": "a break of two consecutive uncovered dates offers no repair for either date",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 9,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-12T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              },
+              {
+                "date": "2026-11-11",
+                "status": "missed"
+              }
+            ],
+            "repair": null,
+            "breakTooLong": true,
+            "display": "broken"
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "unranked",
+          "at": "2026-11-12T09:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "other"
+          }
+        }
+      ]
+    },
+    {
+      "id": "rpr-09",
+      "ac": "AC-RPR-09",
+      "title": "while a repair is possible every figure shows the pre-break 23 as paused, never 0; after the repair: 23 + 1 + today = 25",
+      "start": {
+        "days": [
+          {
+            "from": "2026-10-18",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 23,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "current": 0,
+            "display": "paused",
+            "paused": {
+              "streak": 23,
+              "until": "2026-11-13T00:00:00Z"
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T09:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "after": {
+              "current": 1,
+              "display": "paused",
+              "paused": {
+                "streak": 23,
+                "until": "2026-11-13T00:00:00Z"
+              }
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "unranked",
+          "at": "2026-11-11T21:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "repair",
+            "after": {
+              "current": 25,
+              "display": "active",
+              "paused": null,
+              "repair": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "frz-01",
+      "ac": "AC-FRZ-01",
+      "title": "the 7th, 14th and 21st finished Dailies grant a freeze until 2 are held; with 2 held the 21st grants nothing and progress shows 0 of 7",
+      "start": {},
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-01",
+          "play": "on_time",
+          "at": "2026-11-01T12:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "freezesHeld": 0,
+            "freezeProgress": 1
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-02",
+          "play": "on_time",
+          "at": "2026-11-02T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-03",
+          "play": "on_time",
+          "at": "2026-11-03T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-04",
+          "play": "on_time",
+          "at": "2026-11-04T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-05",
+          "play": "on_time",
+          "at": "2026-11-05T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-06",
+          "play": "on_time",
+          "at": "2026-11-06T12:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "freezesHeld": 0,
+            "freezeProgress": 6,
+            "freezeEarned": false
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-07",
+          "play": "on_time",
+          "at": "2026-11-07T12:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "freezesHeld": 1,
+            "freezeProgress": 0,
+            "freezeEarned": true
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-08",
+          "play": "on_time",
+          "at": "2026-11-08T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-09",
+          "play": "on_time",
+          "at": "2026-11-09T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "on_time",
+          "at": "2026-11-10T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-12",
+          "play": "on_time",
+          "at": "2026-11-12T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-13",
+          "play": "on_time",
+          "at": "2026-11-13T12:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "freezesHeld": 1,
+            "freezeProgress": 6
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-14",
+          "play": "on_time",
+          "at": "2026-11-14T12:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "freezesHeld": 2,
+            "freezeProgress": 0,
+            "freezeEarned": true
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-15",
+          "play": "on_time",
+          "at": "2026-11-15T12:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "freezesHeld": 2,
+            "freezeProgress": 0
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-16",
+          "play": "on_time",
+          "at": "2026-11-16T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-17",
+          "play": "on_time",
+          "at": "2026-11-17T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-18",
+          "play": "on_time",
+          "at": "2026-11-18T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-19",
+          "play": "on_time",
+          "at": "2026-11-19T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-20",
+          "play": "on_time",
+          "at": "2026-11-20T12:00:00Z",
+          "zone": "Europe/London"
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-21",
+          "play": "on_time",
+          "at": "2026-11-21T12:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "freezesHeld": 2,
+            "freezeProgress": 0,
+            "freezeEarned": false,
+            "dailiesFinished": 21,
+            "after": {
+              "current": 21,
+              "best": 21,
+              "display": "active"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "frz-02",
+      "ac": "AC-FRZ-02",
+      "title": "one missed date with 1 freeze held: the freeze is spent, the count is unchanged and a freeze notice waits for the next visit",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-03",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 1,
+        "dailiesFinished": 7,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "freeze"
+              }
+            ],
+            "freezesHeld": 0,
+            "current": 7,
+            "display": "active",
+            "notices": [
+              {
+                "kind": "freeze_spent",
+                "date": "2026-11-10"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "frz-03-two",
+      "ac": "AC-FRZ-03",
+      "title": "two missed dates with 2 freezes: both are spent and the streak survives",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 2,
+        "dailiesFinished": 9,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-12T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "freeze"
+              },
+              {
+                "date": "2026-11-11",
+                "status": "freeze"
+              }
+            ],
+            "freezesHeld": 0,
+            "current": 9,
+            "display": "active",
+            "repair": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "frz-03-three",
+      "ac": "AC-FRZ-03",
+      "title": "three missed dates with 2 freezes: the first two are covered, the third breaks the streak and is offered for repair",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 2,
+        "dailiesFinished": 9,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-13T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "freeze"
+              },
+              {
+                "date": "2026-11-11",
+                "status": "freeze"
+              },
+              {
+                "date": "2026-11-12",
+                "status": "missed"
+              }
+            ],
+            "freezesHeld": 0,
+            "current": 0,
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-12",
+              "dailyNumber": 53,
+              "until": "2026-11-15T00:00:00Z"
+            },
+            "paused": {
+              "streak": 9,
+              "until": "2026-11-15T00:00:00Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "frz-04",
+      "ac": "AC-FRZ-04",
+      "title": "with no live streak a missed date spends no freeze (a held freeze, and a chain already broken by a stored Missed date)",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-05",
+            "status": "played"
+          },
+          {
+            "from": "2026-11-06",
+            "status": "missed"
+          }
+        ],
+        "freezesHeld": 1,
+        "dailiesFinished": 5,
+        "maxServed": "2026-11-07"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-08T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-07",
+                "status": "missed"
+              }
+            ],
+            "freezesHeld": 1,
+            "notices": [],
+            "current": 0,
+            "repair": null,
+            "breakTooLong": true,
+            "display": "broken"
+          }
+        }
+      ]
+    },
+    {
+      "id": "frz-05",
+      "ac": "AC-FRZ-05",
+      "title": "a protected date spends no freeze",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 2,
+        "dailiesFinished": 9,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "incidents": [
+            {
+              "start": "2026-11-10T03:00:00Z",
+              "end": "2026-11-10T03:20:00Z"
+            }
+          ],
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "protected"
+              }
+            ],
+            "freezesHeld": 2,
+            "current": 9,
+            "notices": [
+              {
+                "kind": "protected",
+                "date": "2026-11-10"
+              }
+            ],
+            "display": "active"
+          }
+        }
+      ]
+    },
+    {
+      "id": "inc-03",
+      "ac": "AC-INC-03",
+      "title": "a 12-minute heartbeat gap on the player's local date D (11-11 in UTC, 11-10 in New York), no play on D: streak and freezes intact",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-03",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 1,
+        "dailiesFinished": 7,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T13:00:00Z",
+          "zone": "America/New_York",
+          "incidents": [
+            {
+              "start": "2026-11-11T02:00:00Z",
+              "end": "2026-11-11T02:12:00Z"
+            }
+          ],
+          "expect": {
+            "today": "2026-11-11",
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "protected"
+              }
+            ],
+            "freezesHeld": 1,
+            "current": 7,
+            "display": "active"
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-twice",
+      "title": "an evaluation run twice in the same moment spends one freeze and writes one notice",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 2,
+        "dailiesFinished": 9,
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "freeze"
+              }
+            ],
+            "freezesHeld": 1,
+            "notices": [
+              {
+                "kind": "freeze_spent",
+                "date": "2026-11-10"
+              }
+            ]
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [],
+            "freezesHeld": 1,
+            "notices": [],
+            "current": 9,
+            "display": "active"
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-pending-abandoned",
+      "title": "a date whose ranked attempt stays open across midnight is undecided until its window closes, then Missed, and resuming it repairs",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-04",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 6,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T00:10:00Z",
+          "zone": "Europe/London",
+          "pending": ["2026-11-10"],
+          "expect": {
+            "written": [],
+            "current": 6,
+            "display": "active"
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T09:00:00Z",
+          "zone": "Europe/London",
+          "pending": ["2026-11-10"],
+          "expect": {
+            "kind": "on_time",
+            "before": {
+              "written": []
+            },
+            "after": {
+              "current": 7,
+              "best": 7,
+              "storedBest": 6,
+              "display": "active"
+            },
+            "days": {
+              "2026-11-10": null
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T13:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              }
+            ],
+            "current": 1,
+            "best": 6,
+            "storedBest": 6,
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-10",
+              "dailyNumber": 51,
+              "until": "2026-11-13T00:00:00Z"
+            },
+            "paused": {
+              "streak": 6,
+              "until": "2026-11-13T00:00:00Z"
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "unranked",
+          "at": "2026-11-11T14:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "repair",
+            "after": {
+              "current": 8,
+              "best": 8,
+              "display": "active"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-pending-freeze",
+      "title": "the same open attempt with a freeze held: once its window closes the freeze covers the date and the chain stays whole",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-04",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 1,
+        "dailiesFinished": 6,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T09:00:00Z",
+          "zone": "Europe/London",
+          "pending": ["2026-11-10"],
+          "expect": {
+            "kind": "on_time",
+            "freezesHeld": 1,
+            "after": {
+              "current": 7
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T13:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "freeze"
+              }
+            ],
+            "freezesHeld": 0,
+            "current": 7,
+            "display": "active",
+            "notices": [
+              {
+                "kind": "freeze_spent",
+                "date": "2026-11-10"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-pending-late-finish",
+      "title": "D started at 23:58 and left open while D + 1 was played to the end, then finished inside D's window: D is Played by the credit its attempt earned at its start, so no later read finds it Missed",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-04",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 6,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T09:00:00Z",
+          "zone": "Europe/London",
+          "pending": ["2026-11-10"],
+          "expect": {
+            "kind": "on_time",
+            "freezesHeld": 0,
+            "after": {
+              "current": 7,
+              "best": 7,
+              "storedBest": 6,
+              "display": "active"
+            },
+            "days": {
+              "2026-11-10": null,
+              "2026-11-11": "played"
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "on_time",
+          "streakCredit": true,
+          "at": "2026-11-11T10:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "today": "2026-11-11",
+            "before": {
+              "written": [],
+              "notices": []
+            },
+            "after": {
+              "current": 8,
+              "best": 8,
+              "storedBest": 8,
+              "display": "active",
+              "repair": null
+            },
+            "freezesHeld": 0,
+            "dailiesFinished": 8,
+            "days": {
+              "2026-11-10": "played"
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T10:05:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [],
+            "freezesHeld": 0,
+            "notices": [],
+            "current": 8,
+            "best": 8,
+            "display": "active",
+            "repair": null,
+            "days": {
+              "2026-11-10": "played"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-pending-late-finish-freeze",
+      "title": "the same late finish with a freeze held: the freeze stays held, since no gap date is left to cover",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-04",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 1,
+        "dailiesFinished": 6,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-11",
+          "play": "on_time",
+          "at": "2026-11-11T09:00:00Z",
+          "zone": "Europe/London",
+          "pending": ["2026-11-10"],
+          "expect": {
+            "kind": "on_time",
+            "freezesHeld": 1,
+            "after": {
+              "current": 7,
+              "best": 7,
+              "storedBest": 6,
+              "display": "active"
+            },
+            "days": {
+              "2026-11-10": null,
+              "2026-11-11": "played"
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "on_time",
+          "streakCredit": true,
+          "at": "2026-11-11T10:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "kind": "on_time",
+            "today": "2026-11-11",
+            "before": {
+              "written": [],
+              "notices": []
+            },
+            "after": {
+              "current": 8,
+              "best": 8,
+              "storedBest": 8,
+              "display": "active",
+              "repair": null
+            },
+            "freezesHeld": 1,
+            "dailiesFinished": 8,
+            "days": {
+              "2026-11-10": "played"
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T10:05:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "written": [],
+            "freezesHeld": 1,
+            "notices": [],
+            "current": 8,
+            "best": 8,
+            "display": "active",
+            "repair": null,
+            "days": {
+              "2026-11-10": "played"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-candidate-best",
+      "title": "a date-line candidate that a finish created, then decided Missed by a request from the old zone: the stored best never counted the candidate, so it stays at 4",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-07",
+            "to": "2026-11-10",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 4,
+        "freezeProgress": 4,
+        "best": 4,
+        "lastFinish": {
+          "zone": "America/Los_Angeles",
+          "offsetMinutes": -480
+        },
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-12",
+          "play": "on_time",
+          "at": "2026-11-11T22:00:00Z",
+          "zone": "Australia/Sydney",
+          "expect": {
+            "kind": "on_time",
+            "today": "2026-11-12",
+            "before": {
+              "written": [],
+              "datelineCandidate": {
+                "date": "2026-11-11",
+                "zone": "Australia/Sydney"
+              }
+            },
+            "after": {
+              "current": 5,
+              "best": 5,
+              "storedBest": 4,
+              "display": "active"
+            },
+            "days": {
+              "2026-11-11": null,
+              "2026-11-12": "played"
+            }
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-11T23:00:00Z",
+          "zone": "America/Los_Angeles",
+          "expect": {
+            "today": "2026-11-12",
+            "written": [
+              {
+                "date": "2026-11-11",
+                "status": "missed"
+              }
+            ],
+            "datelineUsed": false,
+            "datelineCandidate": null,
+            "current": 1,
+            "best": 4,
+            "storedBest": 4,
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-11",
+              "dailyNumber": 52,
+              "until": "2026-11-14T08:00:00Z"
+            },
+            "paused": {
+              "streak": 4,
+              "until": "2026-11-14T08:00:00Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-over-freeze",
+      "title": "an on-time finish over a stored Freeze plays the date and refunds the freeze",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-04",
+            "to": "2026-11-09",
+            "status": "played"
+          },
+          {
+            "from": "2026-11-10",
+            "status": "freeze"
+          }
+        ],
+        "freezeProgress": 3,
+        "dailiesFinished": 6,
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "on_time",
+          "at": "2026-11-11T05:00:00Z",
+          "zone": "America/Los_Angeles",
+          "expect": {
+            "kind": "on_time",
+            "freezeRefunded": true,
+            "freezesHeld": 1,
+            "freezeProgress": 4,
+            "after": {
+              "current": 7,
+              "display": "active"
+            },
+            "days": {
+              "2026-11-10": "played"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-over-protected",
+      "title": "an on-time finish over a stored Protected date plays it and refunds nothing",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-04",
+            "to": "2026-11-09",
+            "status": "played"
+          },
+          {
+            "from": "2026-11-10",
+            "status": "protected"
+          }
+        ],
+        "freezesHeld": 1,
+        "freezeProgress": 3,
+        "dailiesFinished": 6,
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "on_time",
+          "at": "2026-11-11T05:00:00Z",
+          "zone": "America/Los_Angeles",
+          "expect": {
+            "kind": "on_time",
+            "freezeRefunded": false,
+            "freezesHeld": 1,
+            "after": {
+              "current": 7,
+              "display": "active"
+            },
+            "days": {
+              "2026-11-10": "played"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-westward",
+      "title": "a westward hop can't reopen a served date: after UTC+14 served D+1, London's local D stays an archive date",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 9,
+        "lastFinish": {
+          "zone": "Pacific/Kiritimati",
+          "offsetMinutes": 840
+        },
+        "maxServed": "2026-11-10"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-10T11:00:00Z",
+          "zone": "Pacific/Kiritimati",
+          "expect": {
+            "today": "2026-11-11",
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              }
+            ],
+            "display": "paused"
+          }
+        },
+        {
+          "do": "read",
+          "at": "2026-11-10T12:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "today": "2026-11-11",
+            "written": [],
+            "nextDailyAt": "2026-11-12T00:00:00Z",
+            "repair": {
+              "date": "2026-11-10",
+              "dailyNumber": 51,
+              "until": "2026-11-13T00:00:00Z"
+            },
+            "days": {
+              "2026-11-10": "missed"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-two-repairs",
+      "title": "two repairable archive finishes back to back repair once: the second finds the 168-hour cap closed",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-07",
+            "status": "played"
+          },
+          {
+            "from": "2026-11-08",
+            "status": "missed"
+          },
+          {
+            "from": "2026-11-09",
+            "status": "played"
+          },
+          {
+            "from": "2026-11-10",
+            "status": "missed"
+          }
+        ],
+        "dailiesFinished": 8,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-11"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T01:00:00Z",
+          "zone": "Etc/GMT+12",
+          "expect": {
+            "today": "2026-11-11",
+            "written": [],
+            "display": "paused",
+            "repair": {
+              "date": "2026-11-10",
+              "dailyNumber": 51,
+              "until": "2026-11-13T12:00:00Z"
+            },
+            "paused": {
+              "streak": 1,
+              "until": "2026-11-13T12:00:00Z"
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-10",
+          "play": "unranked",
+          "at": "2026-11-11T01:00:00Z",
+          "zone": "Etc/GMT+12",
+          "expect": {
+            "kind": "repair",
+            "after": {
+              "current": 2,
+              "best": 7,
+              "repair": null,
+              "display": "broken",
+              "repairBlockedUntil": "2026-11-18T01:00:00Z"
+            }
+          }
+        },
+        {
+          "do": "finish",
+          "date": "2026-11-08",
+          "play": "unranked",
+          "at": "2026-11-11T01:00:30Z",
+          "zone": "Etc/GMT+12",
+          "expect": {
+            "kind": "other",
+            "after": {
+              "current": 2
+            },
+            "days": {
+              "2026-11-08": "missed",
+              "2026-11-10": "repaired"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-protected-after-break",
+      "title": "an incident after the streak broke still protects its date, but writes no notice that the streak is safe",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-08",
+            "status": "played"
+          }
+        ],
+        "freezesHeld": 0,
+        "dailiesFinished": 8,
+        "maxServed": "2026-11-08"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-12T08:00:00Z",
+          "zone": "Europe/London",
+          "incidents": [
+            {
+              "start": "2026-11-11T10:00:00Z",
+              "end": "2026-11-11T10:30:00Z"
+            }
+          ],
+          "expect": {
+            "written": [
+              {
+                "date": "2026-11-09",
+                "status": "missed"
+              },
+              {
+                "date": "2026-11-10",
+                "status": "missed"
+              },
+              {
+                "date": "2026-11-11",
+                "status": "protected"
+              }
+            ],
+            "notices": [],
+            "current": 0,
+            "repair": null,
+            "breakTooLong": true,
+            "display": "broken"
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-dateline-after-incident",
+      "title": "when an incident already protects the first gap date, the date-line rule isn't used and the next gap date is ordinary",
+      "start": {
+        "days": [
+          {
+            "from": "2026-11-01",
+            "to": "2026-11-09",
+            "status": "played"
+          }
+        ],
+        "dailiesFinished": 9,
+        "lastFinish": {
+          "zone": "Europe/London",
+          "offsetMinutes": 0
+        },
+        "maxServed": "2026-11-09"
+      },
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-12T00:00:00Z",
+          "zone": "Pacific/Auckland",
+          "incidents": [
+            {
+              "start": "2026-11-10T09:00:00Z",
+              "end": "2026-11-10T09:30:00Z"
+            }
+          ],
+          "expect": {
+            "today": "2026-11-12",
+            "written": [
+              {
+                "date": "2026-11-10",
+                "status": "protected"
+              },
+              {
+                "date": "2026-11-11",
+                "status": "missed"
+              }
+            ],
+            "datelineCandidate": null,
+            "datelineUsed": false,
+            "display": "paused"
+          }
+        }
+      ]
+    },
+    {
+      "id": "own-new-player",
+      "title": "a player with no finish yet has nothing to walk",
+      "start": {},
+      "steps": [
+        {
+          "do": "read",
+          "at": "2026-11-11T08:00:00Z",
+          "zone": "Europe/London",
+          "expect": {
+            "today": "2026-11-11",
+            "written": [],
+            "current": 0,
+            "best": 0,
+            "display": "active",
+            "repair": null,
+            "paused": null,
+            "breakTooLong": false
+          }
+        }
+      ]
+    }
+  ]
+}

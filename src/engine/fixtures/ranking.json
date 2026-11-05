@@ -1,0 +1,241 @@
+{
+  "$comment": [
+    "Ranking parity table (ARCHITECTURE §4.13): the 12 head-to-head pairings of AC-CHL-05, an exact tie included, and the rank key's edges.",
+    "Replayed by Vitest against src/engine/scoring/ranking.ts and social.ts (headToHead), and from SQL-7 by the generated tests against the rank key that finish_attempt_internal stores.",
+    "encore names the Daily's Encore (valueKind, answer, decimals), the same for both sides; null when the composition has none or it was voided, which counts as equal for everyone. Each side gives its points, its guess and its total time in ms; the error is computed exactly from the guess (PRD §4.2.2), never from a rounded display.",
+    "expect: the verdict from you's side (winner you, them or tie; decidedBy points, encore, time or tie), each side's error in millionths (rounded half up, capped at 2^34 - 1) and the SQL rank key points × 2^58 + (2^34 - 1 - errMicro) × 2^24 + (2^24 - 1 - totalMs) as a decimal string. Keys were computed by an independent implementation of the formula.",
+    "keys: single runs at the key's edges. points must be 0 to 31; a key for 32 points is refused."
+  ],
+  "pairings": [
+    {
+      "id": "points-win",
+      "title": "more points wins, whatever the Encore and the time say",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "you": { "points": 10, "guess": 1300, "totalMs": 240000 },
+      "them": { "points": 9, "guess": 1250, "totalMs": 120000 },
+      "expect": {
+        "winner": "you",
+        "decidedBy": "points",
+        "youMicros": 40000,
+        "themMicros": 0,
+        "youKey": "3170533466579949183",
+        "themKey": "2882303761516997439"
+      }
+    },
+    {
+      "id": "points-loss",
+      "title": "fewer points loses, even with a perfect Encore and a faster time",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "you": { "points": 7, "guess": 1250, "totalMs": 100000 },
+      "them": { "points": 11, "guess": 2500, "totalMs": 400000 },
+      "expect": {
+        "winner": "them",
+        "decidedBy": "points",
+        "youMicros": 0,
+        "themMicros": 1000000,
+        "youKey": "2305843009213593951",
+        "themKey": "3458747736604140927"
+      }
+    },
+    {
+      "id": "encore-win",
+      "title": "equal points: the smaller Encore error wins (4% off against 9%)",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "you": { "points": 9, "guess": 1300, "totalMs": 300000 },
+      "them": { "points": 9, "guess": 1362, "totalMs": 200000 },
+      "expect": {
+        "winner": "you",
+        "decidedBy": "encore",
+        "youMicros": 40000,
+        "themMicros": 89600,
+        "youKey": "2882303090428177439",
+        "themKey": "2882302258278363839"
+      }
+    },
+    {
+      "id": "encore-loss",
+      "title": "equal points: a spot-on Encore beats 20% off although it took longer",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "you": { "points": 9, "guess": 1500, "totalMs": 150000 },
+      "them": { "points": 9, "guess": 1250, "totalMs": 400000 },
+      "expect": {
+        "winner": "them",
+        "decidedBy": "encore",
+        "youMicros": 200000,
+        "themMicros": 0,
+        "youKey": "2882300406073767439",
+        "themKey": "2882303761516717439"
+      }
+    },
+    {
+      "id": "encore-same-display",
+      "title": "both read 4% off, but 1,300 (4.0%) beats 1,200 (4.17%): the exact error decides",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "you": { "points": 9, "guess": 1200, "totalMs": 200000 },
+      "them": { "points": 9, "guess": 1300, "totalMs": 300000 },
+      "expect": {
+        "winner": "them",
+        "decidedBy": "encore",
+        "youMicros": 41667,
+        "themMicros": 40000,
+        "youKey": "2882303062460658367",
+        "themKey": "2882303090428177439"
+      }
+    },
+    {
+      "id": "symmetric-error",
+      "title": "double the answer and half of it are both 100% off, so time decides",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "you": { "points": 9, "guess": 2500, "totalMs": 250000 },
+      "them": { "points": 9, "guess": 625, "totalMs": 260000 },
+      "expect": {
+        "winner": "you",
+        "decidedBy": "time",
+        "youMicros": 1000000,
+        "themMicros": 1000000,
+        "youKey": "2882286984300867439",
+        "themKey": "2882286984300857439"
+      }
+    },
+    {
+      "id": "time-win",
+      "title": "equal points and Encore: the faster total time wins",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "you": { "points": 8, "guess": 1250, "totalMs": 180000 },
+      "them": { "points": 8, "guess": 1250, "totalMs": 240000 },
+      "expect": {
+        "winner": "you",
+        "decidedBy": "time",
+        "youMicros": 0,
+        "themMicros": 0,
+        "youKey": "2594073385365225695",
+        "themKey": "2594073385365165695"
+      }
+    },
+    {
+      "id": "time-loss",
+      "title": "equal points and Encore: one millisecond slower loses",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "you": { "points": 8, "guess": 1300, "totalMs": 300000 },
+      "them": { "points": 8, "guess": 1300, "totalMs": 299999 },
+      "expect": {
+        "winner": "them",
+        "decidedBy": "time",
+        "youMicros": 40000,
+        "themMicros": 40000,
+        "youKey": "2594072714276465695",
+        "themKey": "2594072714276465696"
+      }
+    },
+    {
+      "id": "voided-encore",
+      "title": "a voided Encore ties for everyone, so ranking falls to time",
+      "encore": null,
+      "you": { "points": 9, "guess": null, "totalMs": 200000 },
+      "them": { "points": 9, "guess": null, "totalMs": 190000 },
+      "expect": {
+        "winner": "them",
+        "decidedBy": "time",
+        "youMicros": 0,
+        "themMicros": 0,
+        "youKey": "2882303761516917439",
+        "themKey": "2882303761516927439"
+      }
+    },
+    {
+      "id": "years",
+      "title": "a year Encore compares years off: 1 year beats 3 years",
+      "encore": { "valueKind": "year", "answer": 1969, "decimals": 0 },
+      "you": { "points": 6, "guess": 1966, "totalMs": 200000 },
+      "them": { "points": 6, "guess": 1970, "totalMs": 300000 },
+      "expect": {
+        "winner": "them",
+        "decidedBy": "encore",
+        "youMicros": 3000000,
+        "themMicros": 1000000,
+        "youKey": "2017562301413782207",
+        "themKey": "2017595855845682207"
+      }
+    },
+    {
+      "id": "no-encore",
+      "title": "a composition without an Encore ranks on points, then time",
+      "encore": null,
+      "you": { "points": 7, "guess": null, "totalMs": 150000 },
+      "them": { "points": 7, "guess": null, "totalMs": 160000 },
+      "expect": {
+        "winner": "you",
+        "decidedBy": "time",
+        "youMicros": 0,
+        "themMicros": 0,
+        "youKey": "2305843009213543951",
+        "themKey": "2305843009213533951"
+      }
+    },
+    {
+      "id": "exact-tie",
+      "title": "equal on all three keys: a dead heat",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "you": { "points": 9, "guess": 1300, "totalMs": 200000 },
+      "them": { "points": 9, "guess": 1300, "totalMs": 200000 },
+      "expect": {
+        "winner": "tie",
+        "decidedBy": "tie",
+        "youMicros": 40000,
+        "themMicros": 40000,
+        "youKey": "2882303090428277439",
+        "themKey": "2882303090428277439"
+      }
+    }
+  ],
+  "keys": [
+    {
+      "id": "micro-tie",
+      "title": "errors under half a millionth apart tie on the Encore (1e-7 and 2e-7 both round to 0)",
+      "encore": { "valueKind": "quantity", "answer": 10000000, "decimals": 0 },
+      "runs": [
+        { "points": 5, "guess": 10000001, "totalMs": 100000 },
+        { "points": 5, "guess": 10000002, "totalMs": 100000 }
+      ],
+      "expect": {
+        "micros": [0, 0],
+        "keys": ["1729382256910170463", "1729382256910170463"]
+      }
+    },
+    {
+      "id": "half-micro",
+      "title": "an error of exactly half a millionth rounds up, from the exact ratio",
+      "encore": { "valueKind": "quantity", "answer": 2000000, "decimals": 0 },
+      "runs": [{ "points": 5, "guess": 2000001, "totalMs": 100000 }],
+      "expect": { "micros": [1], "keys": ["1729382256893393247"] }
+    },
+    {
+      "id": "time-cap",
+      "title": "total time is capped at 2^24 - 1 ms",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "runs": [{ "points": 9, "guess": 1250, "totalMs": 20000000 }],
+      "expect": { "micros": [0], "keys": ["2882303761500340224"] }
+    },
+    {
+      "id": "error-cap",
+      "title": "the error is capped at 2^34 - 1 millionths",
+      "encore": { "valueKind": "quantity", "answer": 1, "decimals": 0 },
+      "runs": [{ "points": 3, "guess": 999999999999999, "totalMs": 100000 }],
+      "expect": { "micros": [17179869183], "keys": ["864691128471812447"] }
+    },
+    {
+      "id": "largest",
+      "title": "31 points, spot on and no time: the largest key, 2^63 - 1",
+      "encore": { "valueKind": "quantity", "answer": 1250, "decimals": 0 },
+      "runs": [{ "points": 31, "guess": 1250, "totalMs": 0 }],
+      "expect": { "micros": [0], "keys": ["9223372036854775807"] }
+    },
+    {
+      "id": "too-many-points",
+      "title": "a key for 32 points is refused",
+      "encore": null,
+      "runs": [{ "points": 32, "guess": null, "totalMs": 0 }],
+      "expect": { "error": "RangeError" }
+    }
+  ]
+}

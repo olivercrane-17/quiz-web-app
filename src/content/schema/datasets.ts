@@ -35,48 +35,94 @@ const common = {
   knownIssues: z.array(text),
 };
 
-export const GithubDatasetSchema = z.strictObject({
-  ...common,
-  kind: z.literal("github"),
-  repo: z.string().regex(/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/, "owner/name"),
-  /** Found with `git ls-remote`, never a branch name. */
-  commit: z.string().regex(/^[0-9a-f]{40}$/, "a full 40-character commit"),
-  files: z
-    .array(
-      z.strictObject({
-        path: localPath,
-        url: httpsUrl,
-        sha256: sha256Hex,
-        bytes: z.int().min(0),
-      }),
-    )
-    .min(1),
-});
+/** Two files of one dataset never share a local path. */
+function uniquePaths(
+  files: readonly { path: string }[],
+  ctx: z.RefinementCtx,
+): void {
+  const seen = new Set<string>();
+  files.forEach((file, index) => {
+    if (seen.has(file.path))
+      ctx.addIssue({
+        code: "custom",
+        path: ["files", index, "path"],
+        message: `duplicate path ${file.path}`,
+      });
+    seen.add(file.path);
+  });
+}
 
-export const NpmDatasetSchema = z.strictObject({
-  ...common,
-  kind: z.literal("npm"),
-  package: text,
-  version: z
-    .string()
-    .regex(/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/, "an exact version"),
-  tarball: httpsUrl,
-  /** The registry's dist.integrity, checked before anything is extracted. */
-  integrity: z
-    .string()
-    .regex(/^sha512-[A-Za-z0-9+/]+=*$/, "an sha512 SRI string"),
-  files: z
-    .array(
-      z.strictObject({
-        path: localPath,
-        /** The member inside the tarball, such as package/cities.json. */
-        member: localPath,
-        sha256: sha256Hex,
-        bytes: z.int().min(0),
-      }),
-    )
-    .min(1),
-});
+export const GithubDatasetSchema = z
+  .strictObject({
+    ...common,
+    kind: z.literal("github"),
+    repo: z.string().regex(/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/, "owner/name"),
+    /** Found with `git ls-remote`, never a branch name. */
+    commit: z.string().regex(/^[0-9a-f]{40}$/, "a full 40-character commit"),
+    files: z
+      .array(
+        z.strictObject({
+          path: localPath,
+          url: httpsUrl,
+          sha256: sha256Hex,
+          bytes: z.int().min(0),
+        }),
+      )
+      .min(1),
+  })
+  .superRefine((dataset, ctx) => {
+    uniquePaths(dataset.files, ctx);
+    // A pin is a commit (§9.5.1): every file comes from the repository at
+    // that commit, raw or (for Git LFS) through media.githubusercontent.com.
+    const raw = `https://raw.githubusercontent.com/${dataset.repo}/${dataset.commit}/`;
+    const lfs = `https://media.githubusercontent.com/media/${dataset.repo}/${dataset.commit}/`;
+    dataset.files.forEach((file, index) => {
+      if (!file.url.startsWith(raw) && !file.url.startsWith(lfs))
+        ctx.addIssue({
+          code: "custom",
+          path: ["files", index, "url"],
+          message: `a pinned file is fetched from ${dataset.repo} at ${dataset.commit.slice(0, 7)}, raw or through media.githubusercontent.com`,
+        });
+    });
+  });
+
+export const NpmDatasetSchema = z
+  .strictObject({
+    ...common,
+    kind: z.literal("npm"),
+    package: text,
+    version: z
+      .string()
+      .regex(/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/, "an exact version"),
+    tarball: httpsUrl,
+    /** The registry's dist.integrity, checked before anything is extracted. */
+    integrity: z
+      .string()
+      .regex(/^sha512-[A-Za-z0-9+/]+=*$/, "an sha512 SRI string"),
+    files: z
+      .array(
+        z.strictObject({
+          path: localPath,
+          /** The member inside the tarball, such as package/cities.json. */
+          member: localPath,
+          sha256: sha256Hex,
+          bytes: z.int().min(0),
+        }),
+      )
+      .min(1),
+  })
+  .superRefine((dataset, ctx) => {
+    uniquePaths(dataset.files, ctx);
+    // The registry tarball of exactly this package and version.
+    const name = dataset.package.split("/").at(-1) ?? dataset.package;
+    const expected = `https://registry.npmjs.org/${dataset.package}/-/${name}-${dataset.version}.tgz`;
+    if (dataset.tarball !== expected)
+      ctx.addIssue({
+        code: "custom",
+        path: ["tarball"],
+        message: `the tarball of ${dataset.package}@${dataset.version} is ${expected}`,
+      });
+  });
 
 export const DatasetEntrySchema = z.discriminatedUnion("kind", [
   GithubDatasetSchema,

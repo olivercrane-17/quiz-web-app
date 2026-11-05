@@ -1,0 +1,471 @@
+// @vitest-environment node
+/**
+ * Unit tests for the streak engine's edges that the fixture table leaves
+ * implicit: the date-line thresholds, a stored candidate that no longer
+ * applies, zone aliases, incident boundaries, the epoch, DST, the stored
+ * best and the ledger's guards.
+ */
+import { describe, expect, it } from "vitest";
+
+import { startOfLocalDay } from "../time/zone.ts";
+import {
+  parseLocalDate,
+  parseTimeZone,
+  type EpochMs,
+  type LocalDate,
+  type TimeZone,
+} from "../types/ids.ts";
+import {
+  EMPTY_LEDGER,
+  ZONE_LINKS,
+  applyFinish,
+  canonicalZone,
+  chainCount,
+  dailyCredit,
+  datelineAllowed,
+  effectiveToday,
+  evaluateStreak,
+  finishLedger,
+  isRepairable,
+  lastCreditedDate,
+  nextDailyAt,
+  readLedger,
+  repairCapUntil,
+  sameZone,
+  summarizeStreak,
+  type StoredDay,
+  type StreakInput,
+} from "./index.ts";
+import { statusMap } from "./summary.ts";
+
+function d(text: string): LocalDate {
+  const date = parseLocalDate(text);
+  if (date === null) throw new Error(text);
+  return date;
+}
+
+function tz(text: string): TimeZone {
+  const zone = parseTimeZone(text);
+  if (zone === null) throw new Error(text);
+  return zone;
+}
+
+const at = (text: string): EpochMs => Date.parse(text);
+const LONDON = tz("Europe/London");
+const KIRITIMATI = tz("Pacific/Kiritimati");
+const EPOCH = d("2026-09-21");
+
+function played(from: string, to: string): StoredDay[] {
+  const days: StoredDay[] = [];
+  for (let day = Date.parse(from); day <= Date.parse(to); day += 86_400_000) {
+    days.push({
+      date: d(new Date(day).toISOString().slice(0, 10)),
+      status: "played",
+    });
+  }
+  return days;
+}
+
+function input(overrides: Partial<StreakInput> = {}): StreakInput {
+  return {
+    now: at("2026-11-11T08:00:00Z"),
+    today: d("2026-11-11"),
+    dayStart: (date) => startOfLocalDay(date, LONDON),
+    offsetMinutes: 0,
+    lastFinishOffsetMinutes: 0,
+    zone: LONDON,
+    lastFinishZone: LONDON,
+    datelineCandidate: null,
+    datelineUsedAt: null,
+    days: played("2026-11-03", "2026-11-09"),
+    pending: [],
+    freezesHeld: 0,
+    freezeProgress: 0,
+    lastRepairAt: null,
+    incidents: [],
+    epoch: EPOCH,
+    ...overrides,
+  };
+}
+
+const eastward = (overrides: Partial<StreakInput> = {}) =>
+  input({ zone: KIRITIMATI, offsetMinutes: 840, ...overrides });
+
+describe("the date-line rule's thresholds (PRD §4.4.7)", () => {
+  it("needs an offset that grew by 12 hours or more", () => {
+    expect(datelineAllowed(eastward({ offsetMinutes: 719 }))).toBe(false);
+    expect(datelineAllowed(eastward({ offsetMinutes: 720 }))).toBe(true);
+  });
+
+  it("needs a last finish to compare with", () => {
+    expect(datelineAllowed(eastward({ lastFinishZone: null }))).toBe(false);
+    expect(datelineAllowed(eastward({ lastFinishOffsetMinutes: null }))).toBe(
+      false,
+    );
+  });
+
+  it("takes the cooldown from the input when the tunable changes", () => {
+    const usedAt = at("2026-11-01T08:00:00Z");
+    expect(datelineAllowed(eastward({ datelineUsedAt: usedAt }))).toBe(false);
+    expect(
+      datelineAllowed(
+        eastward({ datelineUsedAt: usedAt, datelineCooldownDays: 9 }),
+      ),
+    ).toBe(true);
+  });
+
+  it("starts no candidate on a pending date, and takes the next gap date instead", () => {
+    const evaluation = evaluateStreak(
+      eastward({
+        now: at("2026-11-12T08:00:00Z"),
+        today: d("2026-11-12"),
+        pending: [d("2026-11-10")],
+      }),
+    );
+    expect(evaluation.datelineCandidate).toEqual({
+      date: "2026-11-11",
+      zone: KIRITIMATI,
+    });
+    expect(evaluation.written).toEqual([]);
+  });
+
+  it("drops a stored candidate whose date was decided some other way, and starts no new one", () => {
+    const evaluation = evaluateStreak(
+      eastward({
+        days: [
+          ...played("2026-11-03", "2026-11-09"),
+          { date: d("2026-11-10"), status: "freeze" },
+        ],
+        datelineCandidate: { date: d("2026-11-10"), zone: KIRITIMATI },
+      }),
+    );
+    expect(evaluation.datelineUsed).toBe(false);
+    expect(evaluation.datelineCandidate).toBeNull();
+    expect(evaluation.written).toEqual([]);
+  });
+
+  it("leaves a stored candidate on a still-pending date undecided", () => {
+    const evaluation = evaluateStreak(
+      eastward({
+        pending: [d("2026-11-10")],
+        datelineCandidate: { date: d("2026-11-10"), zone: KIRITIMATI },
+      }),
+    );
+    expect(evaluation.datelineUsed).toBe(false);
+    expect(evaluation.written).toEqual([]);
+  });
+});
+
+describe("one zone under two names (zone-links.ts)", () => {
+  it("compares zones by the tz database's links, not by spelling", () => {
+    const same = [
+      ["Asia/Calcutta", "Asia/Kolkata"],
+      ["Europe/Kiev", "Europe/Kyiv"],
+      ["America/Buenos_Aires", "America/Argentina/Buenos_Aires"],
+      ["Pacific/Enderbury", "Pacific/Kanton"],
+      ["UTC", "Etc/UTC"],
+      ["Etc/GMT", "UTC"],
+      ["US/Eastern", "America/New_York"],
+      ["Europe/London", "Europe/London"],
+    ];
+    for (const [a = "", b = ""] of same) {
+      expect(sameZone(tz(a), tz(b)), `${a} ${b}`).toBe(true);
+      expect(sameZone(tz(b), tz(a)), `${b} ${a}`).toBe(true);
+    }
+    // Distinct places, even where the clocks agree today.
+    expect(sameZone(tz("Europe/London"), tz("Europe/Dublin"))).toBe(false);
+    expect(sameZone(tz("Europe/Bratislava"), tz("Europe/Prague"))).toBe(false);
+    expect(sameZone(LONDON, KIRITIMATI)).toBe(false);
+  });
+
+  it("links only names the zone database knows, each to a zone that is no link itself", () => {
+    expect(ZONE_LINKS.size).toBeGreaterThan(100);
+    for (const [name, zone] of ZONE_LINKS) {
+      expect(parseTimeZone(name), name).not.toBeNull();
+      expect(parseTimeZone(zone), zone).not.toBeNull();
+      expect(ZONE_LINKS.has(zone), zone).toBe(false);
+      expect(canonicalZone(tz(name))).toBe(zone);
+    }
+    expect(canonicalZone(LONDON)).toBe(LONDON);
+  });
+
+  it("lets an alias neither set flag 16 nor count as a new zone name for the date-line rule", () => {
+    const credit = dailyCredit({
+      date: d("2026-11-11"),
+      utcToday: d("2026-11-11"),
+      lastCredited: d("2026-11-10"),
+      zone: tz("Asia/Calcutta"),
+      previousDailyZone: tz("Asia/Kolkata"),
+    });
+    expect(credit).toEqual({
+      accepted: true,
+      streakCredit: true,
+      zoneChanged: false,
+    });
+    expect(
+      datelineAllowed(
+        input({
+          zone: tz("Asia/Calcutta"),
+          offsetMinutes: 1050,
+          lastFinishZone: tz("Asia/Kolkata"),
+          lastFinishOffsetMinutes: 330,
+        }),
+      ),
+    ).toBe(false);
+  });
+});
+
+describe("incident windows", () => {
+  const day = (text: string) => startOfLocalDay(d(text), LONDON);
+
+  it("protect a date only when they overlap its local day", () => {
+    const touching = [
+      { start: day("2026-11-09") + 3_600_000, end: day("2026-11-10") },
+      { start: day("2026-11-11"), end: day("2026-11-11") + 600_000 },
+    ];
+    expect(evaluateStreak(input({ incidents: touching })).written).toEqual([
+      { date: "2026-11-10", status: "missed" },
+    ]);
+    const inside = [{ start: day("2026-11-10"), end: day("2026-11-10") + 1 }];
+    expect(evaluateStreak(input({ incidents: inside })).written).toEqual([
+      { date: "2026-11-10", status: "protected" },
+    ]);
+  });
+});
+
+describe("summarizeStreak", () => {
+  const summary = (days: StoredDay[], overrides = {}) =>
+    summarizeStreak({
+      now: at("2026-11-11T08:00:00Z"),
+      today: d("2026-11-11"),
+      dayStart: (date) => startOfLocalDay(date, LONDON),
+      days,
+      lastRepairAt: null,
+      epoch: EPOCH,
+      ...overrides,
+    });
+
+  it("is all zeros and active for a new player, keeping a stored best", () => {
+    expect(summary([], { best: 5 })).toEqual({
+      current: 0,
+      best: 5,
+      storedBest: 5,
+      repair: null,
+      repairBlockedUntil: null,
+      paused: null,
+      display: "active",
+      breakTooLong: false,
+    });
+  });
+
+  it("stores a best only from decided dates, while the current chain runs through an undecided one", () => {
+    // 11-10's attempt is still open: it links the current chain, but the
+    // best to store waits until it is decided.
+    const days = [
+      ...played("2026-11-04", "2026-11-09"),
+      ...played("2026-11-11", "2026-11-11"),
+    ];
+    const open = summary(days, { today: d("2026-11-12") });
+    expect([open.current, open.best, open.storedBest]).toEqual([7, 7, 6]);
+    const missed = summary(
+      [...days, { date: d("2026-11-10"), status: "missed" as const }],
+      { today: d("2026-11-12") },
+    );
+    expect([missed.current, missed.best, missed.storedBest]).toEqual([1, 6, 6]);
+    const freeze = summary(
+      [...days, { date: d("2026-11-10"), status: "freeze" as const }],
+      { today: d("2026-11-12") },
+    );
+    expect([freeze.current, freeze.best, freeze.storedBest]).toEqual([7, 7, 7]);
+  });
+
+  it("never reports a best below the stored one", () => {
+    expect(summary(played("2026-11-08", "2026-11-10"), { best: 40 }).best).toBe(
+      40,
+    );
+  });
+
+  it("looks no further back than 7 days for a repairable date", () => {
+    const days = [
+      ...played("2026-10-30", "2026-11-01"),
+      { date: d("2026-11-02"), status: "missed" as const },
+      ...played("2026-11-03", "2026-11-10"),
+    ];
+    // A zone function that would hold every window open: only the bound
+    // keeps the 9-day-old Missed date out.
+    const open = summary(days, { dayStart: () => at("2100-01-01T00:00:00Z") });
+    expect(open.repair).toBeNull();
+    expect(open.current).toBe(8);
+  });
+
+  it("offers no repair for a date before DAILY_EPOCH", () => {
+    const days = [
+      ...played("2026-09-17", "2026-09-18"),
+      { date: d("2026-09-19"), status: "missed" as const },
+    ];
+    const early = summary(days, {
+      now: at("2026-09-20T08:00:00Z"),
+      today: d("2026-09-20"),
+    });
+    expect(early.repair).toBeNull();
+    expect(early.display).toBe("broken");
+  });
+
+  it("isRepairable refuses dates that aren't Missed, today, and a Missed date with nothing before it", () => {
+    const days = [
+      { date: d("2026-11-08"), status: "missed" as const },
+      ...played("2026-11-09", "2026-11-09"),
+      { date: d("2026-11-10"), status: "missed" as const },
+    ];
+    const base = {
+      now: at("2026-11-11T08:00:00Z"),
+      today: d("2026-11-11"),
+      dayStart: (date: LocalDate) => startOfLocalDay(date, LONDON),
+      days,
+      lastRepairAt: null,
+      epoch: EPOCH,
+    };
+    expect(isRepairable(base, d("2026-11-10"))).toBe(true);
+    expect(isRepairable(base, d("2026-11-09"))).toBe(false);
+    expect(isRepairable(base, d("2026-11-08"))).toBe(false);
+    expect(
+      isRepairable({ ...base, today: d("2026-11-10") }, d("2026-11-10")),
+    ).toBe(false);
+  });
+
+  it("repairCapUntil reports the cap only while it is closed", () => {
+    const repairedAt = at("2026-11-04T10:00:00Z");
+    expect(repairCapUntil(at("2026-11-11T09:59:59Z"), repairedAt)).toBe(
+      at("2026-11-11T10:00:00Z"),
+    );
+    expect(repairCapUntil(at("2026-11-11T10:00:00Z"), repairedAt)).toBeNull();
+    expect(repairCapUntil(at("2026-11-11T10:00:00Z"), null)).toBeNull();
+  });
+
+  it("chainCount stops at a Missed date and counts nothing before the first finish", () => {
+    const statuses = statusMap([
+      ...played("2026-11-01", "2026-11-02"),
+      { date: d("2026-11-03"), status: "missed" },
+      ...played("2026-11-04", "2026-11-05"),
+      { date: d("2026-11-06"), status: "protected" },
+      ...played("2026-11-07", "2026-11-07"),
+    ]);
+    expect(chainCount(statuses, d("2026-11-07"))).toBe(3);
+    expect(chainCount(statuses, d("2026-11-02"))).toBe(2);
+    expect(chainCount(statuses, d("2026-10-30"))).toBe(0);
+  });
+});
+
+describe("effective today and the next Daily (§8.7)", () => {
+  it("never moves backward", () => {
+    expect(effectiveToday(d("2026-11-10"), d("2026-11-11"))).toBe("2026-11-11");
+    expect(effectiveToday(d("2026-11-12"), d("2026-11-11"))).toBe("2026-11-12");
+    expect(effectiveToday(d("2026-11-12"), null)).toBe("2026-11-12");
+  });
+
+  it("counts to local midnight across a DST change", () => {
+    // London leaves summer time at 02:00 on 25 October 2026.
+    expect(nextDailyAt(d("2026-10-24"), LONDON)).toBe(
+      at("2026-10-24T23:00:00Z"),
+    );
+    expect(nextDailyAt(d("2026-10-25"), LONDON)).toBe(
+      at("2026-10-26T00:00:00Z"),
+    );
+  });
+
+  it("lastCreditedDate is the latest Played or Repaired date", () => {
+    expect(lastCreditedDate([])).toBeNull();
+    expect(
+      lastCreditedDate([
+        { date: d("2026-11-09"), status: "repaired" },
+        { date: d("2026-11-08"), status: "played" },
+        { date: d("2026-11-10"), status: "missed" },
+      ]),
+    ).toBe("2026-11-09");
+  });
+});
+
+describe("the ledger's guards", () => {
+  const request = {
+    at: at("2026-11-11T08:00:00Z"),
+    zone: LONDON,
+    epoch: EPOCH,
+  };
+
+  it("counts a second on-time finish for an already-played date as other", () => {
+    const ledger = {
+      ...EMPTY_LEDGER,
+      days: played("2026-11-09", "2026-11-11"),
+    };
+    const finish = finishLedger(ledger, {
+      ...request,
+      date: d("2026-11-11"),
+      play: "on_time",
+      streakCredit: true,
+    });
+    expect(finish.kind).toBe("other");
+    expect(finish.ledger.dailiesFinished).toBe(0);
+  });
+
+  it("takes an on-time finish's credit from its start, never from the dates played since", () => {
+    // D = 11-10 started at 23:58 (credit at its start: 11-10 is later than
+    // 11-09), left open while 11-11 was played to the end, then finished
+    // inside D's window.
+    const ledger = {
+      ...EMPTY_LEDGER,
+      days: played("2026-11-04", "2026-11-09"),
+      maxServed: d("2026-11-10"),
+    };
+    const nextDay = finishLedger(ledger, {
+      at: at("2026-11-11T09:00:00Z"),
+      zone: LONDON,
+      epoch: EPOCH,
+      pending: [d("2026-11-10")],
+      date: d("2026-11-11"),
+      play: "on_time",
+      streakCredit: true,
+    });
+    const late = {
+      at: at("2026-11-11T10:00:00Z"),
+      zone: LONDON,
+      epoch: EPOCH,
+      date: d("2026-11-10"),
+      play: "on_time" as const,
+    };
+    const credited = finishLedger(nextDay.ledger, {
+      ...late,
+      streakCredit: true,
+    });
+    expect([
+      credited.kind,
+      credited.outcome.status,
+      credited.after.current,
+    ]).toEqual(["on_time", "played", 8]);
+    // Without credit at its start (a date not later than the last credited
+    // one, memo §14.1) the same finish changes nothing.
+    const uncredited = finishLedger(nextDay.ledger, {
+      ...late,
+      streakCredit: false,
+    });
+    expect([uncredited.kind, uncredited.outcome.status]).toEqual([
+      "other",
+      null,
+    ]);
+  });
+
+  it("serves the effective today and remembers it", () => {
+    const read = readLedger(EMPTY_LEDGER, request);
+    expect(read.today).toBe("2026-11-11");
+    expect(read.ledger.maxServed).toBe("2026-11-11");
+    expect(Object.isFrozen(EMPTY_LEDGER)).toBe(true);
+  });
+
+  it("applyFinish returns the counters of finishOutcome", () => {
+    expect(
+      applyFinish(
+        { freezesHeld: 0, freezeProgress: 6, dailiesFinished: 6 },
+        { date: d("2026-11-11"), kind: "on_time", existing: null },
+      ),
+    ).toEqual({ freezesHeld: 1, freezeProgress: 0, dailiesFinished: 7 });
+  });
+});

@@ -97,6 +97,18 @@ export const BATCH_ID_PATTERNS = {
   list: new RegExp(`^l\\.(${TYPE_ALT})\\.b(\\d{2})$`),
 } as const;
 
+/** Spare sets: `spare.<NN>` (ARCHITECTURE §2.4), numbered by the scheduler. */
+export const SPARE_ID_PATTERN = /^spare\.[0-9]{2}$/;
+
+/**
+ * List requests: `lr.<batch>.<NN>`, the mystery, encore or room batch that
+ * needs the entity, then a sequence (CONTENT_GUIDE §2.12). Sealed, because a
+ * request names a mystery's answer or its guesses.
+ */
+export const LIST_REQUEST_ID_PATTERN = new RegExp(
+  `^(?:fx\\.)?lr\\.((?:m\\.(?:${CATEGORY_ALT})|e|r\\.${KEBAB})\\.b\\d{2})\\.(\\d{2})$`,
+);
+
 /** A Wikidata QID, or `x.<type>.<slug>`, optionally `fx.`-prefixed. */
 export const ENTITY_ID_PATTERN = new RegExp(
   `^(?:fx\\.)?(?:Q[1-9][0-9]*|x\\.(${TYPE_ALT})\\.${KEBAB})$`,
@@ -150,6 +162,9 @@ export const answerType = z.enum(ANSWER_TYPES);
 export const entityId = z
   .string()
   .regex(ENTITY_ID_PATTERN, "must be a Wikidata QID or x.<type>.<slug>");
+export const spareId = z
+  .string()
+  .regex(SPARE_ID_PATTERN, "spare set ids are spare.01 to spare.99");
 export const sha256Hex = z
   .string()
   .regex(/^[0-9a-f]{64}$/, "must be a lowercase hex SHA-256");

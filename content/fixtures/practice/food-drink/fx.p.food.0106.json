@@ -1,0 +1,57 @@
+{
+  "id": "fx.p.food.0106",
+  "status": "draft",
+  "category": "food",
+  "tags": ["fixtures", "bread"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 3,
+  "counterintuitive": false,
+  "explanation": "A harvest loaf weighs about 800 g and feeds a family for a day, while a honey bun is a 120 g snack.",
+  "learnMore": "Fixture baking",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "standard",
+      "text": "A harvest loaf: 800 g."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "standard",
+      "text": "A honey bun: 120 g."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "A harvest loaf weighs about 800 g and feeds a family for a day, while a honey bun is a 120 g snack."
+    }
+  ],
+  "writerNotes": "Invented fixture for tests, the mock backend and the e2e track (ARCHITECTURE 5.6). Not a real fact; never scheduled on the main track.",
+  "format": "comparison",
+  "stem": "Which is bigger?",
+  "a": "A harvest loaf",
+  "b": "A honey bun",
+  "answer": "a",
+  "relation": "larger",
+  "measure": "mass",
+  "unit": "g",
+  "values": {
+    "a": 800,
+    "b": 120
+  },
+  "valueDisplay": {
+    "a": "800 g",
+    "b": "120 g"
+  },
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.2,
+    "estimator": "fixture"
+  }
+}

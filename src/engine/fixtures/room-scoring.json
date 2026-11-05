@@ -1,0 +1,474 @@
+{
+  "$comment": [
+    "Room scoring parity table (ARCHITECTURE §4.13, PRD §4.5): every row of PRD §4.5.5 (Classic, T = 20 s), the grace boundaries at 400 and 600 ms (AC-ROM-08), voids, rounding, the ranking and the gap to the player above.",
+    "Replayed by Vitest against src/engine/scoring/room.ts, and from SQL-14 by generated tests against the room answer and reveal RPCs.",
+    "points: one answer. limitMs is the player's T with any +50% extension (null when the timer is off, which always scores as Accuracy). tServerMs runs from the server issuing the options to receiving the answer, tClientMs from the phone rendering them to the press. The effective time is clamp(max(tServer - 400, tClient), 0, T); an answer received after the player's deadline (tServerMs above limitMs) is inside the grace and earns no speed bonus. Speed is round(300 × (1 - t / T)), half up. streakBefore counts consecutive correct answers before this question; expect gives the points, the streak after it and the effective time kept for the ranking's tie-break (null unless correct).",
+    "windows: an answer received offsetMs after the deadline (deadline null: the timer is off): in_time, grace (accepted, no speed bonus) up to 500 ms after, then late (rejected).",
+    "sequences: a run of answers through one game, so streaks carry across questions and a voided question leaves them untouched.",
+    "ranking: score, higher first; then the lower sum of effective times over correct answers; equal on both share the rank (the next rank skips). gaps: the nearest seat ranked ahead and the points between; for the leader, the lead over the next seat."
+  ],
+  "points": [
+    {
+      "id": "prd-t0",
+      "title": "correct at t = 0, first in a row: 700 + 300 + 0 = 1,000",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 400,
+      "tClientMs": 0,
+      "streakBefore": 0,
+      "final": false,
+      "expect": { "points": 1000, "streak": 1, "effectiveMs": 0 }
+    },
+    {
+      "id": "prd-t10",
+      "title": "correct at t = 10 s, first in a row: 700 + 150 = 850",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 10400,
+      "tClientMs": 9000,
+      "streakBefore": 0,
+      "final": false,
+      "expect": { "points": 850, "streak": 1, "effectiveMs": 10000 }
+    },
+    {
+      "id": "prd-t20-grace",
+      "title": "correct at t = 20 s (inside grace), first in a row: 700 + 0 = 700",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 20400,
+      "tClientMs": 20000,
+      "streakBefore": 0,
+      "final": false,
+      "expect": { "points": 700, "streak": 1, "effectiveMs": 20000 }
+    },
+    {
+      "id": "prd-third",
+      "title": "correct at t = 10 s, third in a row: 850 + 100 = 950",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 10400,
+      "tClientMs": 10000,
+      "streakBefore": 2,
+      "final": false,
+      "expect": { "points": 950, "streak": 3, "effectiveMs": 10000 }
+    },
+    {
+      "id": "prd-seventh",
+      "title": "correct at t = 5 s, seventh in a row: 700 + 225 + 250 = 1,175",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 5400,
+      "tClientMs": 5000,
+      "streakBefore": 6,
+      "final": false,
+      "expect": { "points": 1175, "streak": 7, "effectiveMs": 5000 }
+    },
+    {
+      "id": "prd-final",
+      "title": "final question, correct at t = 10 s, second in a row: (850 + 50) × 2 = 1,800",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 10400,
+      "tClientMs": 10000,
+      "streakBefore": 1,
+      "final": true,
+      "expect": { "points": 1800, "streak": 2, "effectiveMs": 10000 }
+    },
+    {
+      "id": "prd-extra-time",
+      "title": "a player with extra time (T = 30 s), correct at t = 15 s: 700 + 150 = 850",
+      "scoring": "classic",
+      "limitMs": 30000,
+      "answer": "correct",
+      "tServerMs": 15400,
+      "tClientMs": 15000,
+      "streakBefore": 0,
+      "final": false,
+      "expect": { "points": 850, "streak": 1, "effectiveMs": 15000 }
+    },
+    {
+      "id": "prd-accuracy",
+      "title": "Accuracy mode, correct, fourth in a row: 1,000 + 150 = 1,150",
+      "scoring": "accuracy",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 3000,
+      "tClientMs": 2500,
+      "streakBefore": 3,
+      "final": false,
+      "expect": { "points": 1150, "streak": 4, "effectiveMs": 2600 }
+    },
+    {
+      "id": "grace-no-speed",
+      "ac": "AC-ROM-08",
+      "title": "an answer 300 ms after the deadline is accepted with no speed bonus (the formula alone would give 2)",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 20300,
+      "tClientMs": 15000,
+      "streakBefore": 0,
+      "final": false,
+      "expect": { "points": 700, "streak": 1, "effectiveMs": 19900 }
+    },
+    {
+      "id": "at-deadline",
+      "title": "an answer received exactly at the deadline is in time and earns the speed its effective time gives",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 20000,
+      "tClientMs": 18000,
+      "streakBefore": 0,
+      "final": false,
+      "expect": { "points": 706, "streak": 1, "effectiveMs": 19600 }
+    },
+    {
+      "id": "server-allowance",
+      "title": "a phone claims at most 400 ms better than the server measured",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 8400,
+      "tClientMs": 6000,
+      "streakBefore": 0,
+      "final": false,
+      "expect": { "points": 880, "streak": 1, "effectiveMs": 8000 }
+    },
+    {
+      "id": "clamp-zero",
+      "title": "the effective time never goes below 0",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 200,
+      "tClientMs": -100,
+      "streakBefore": 0,
+      "final": false,
+      "expect": { "points": 1000, "streak": 1, "effectiveMs": 0 }
+    },
+    {
+      "id": "half-up",
+      "title": "speed rounds half up: 0.5 becomes 1",
+      "scoring": "classic",
+      "limitMs": 30000,
+      "answer": "correct",
+      "tServerMs": 30000,
+      "tClientMs": 29950,
+      "streakBefore": 0,
+      "final": false,
+      "expect": { "points": 701, "streak": 1, "effectiveMs": 29950 }
+    },
+    {
+      "id": "half-up-1-5",
+      "title": "speed rounds half up: 1.5 becomes 2",
+      "scoring": "classic",
+      "limitMs": 30000,
+      "answer": "correct",
+      "tServerMs": 30000,
+      "tClientMs": 29850,
+      "streakBefore": 0,
+      "final": false,
+      "expect": { "points": 702, "streak": 1, "effectiveMs": 29850 }
+    },
+    {
+      "id": "streak-cap",
+      "title": "the streak bonus stops at 250",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 10400,
+      "tClientMs": 10000,
+      "streakBefore": 10,
+      "final": false,
+      "expect": { "points": 1100, "streak": 11, "effectiveMs": 10000 }
+    },
+    {
+      "id": "wrong",
+      "title": "a wrong answer scores 0 and resets the streak",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "wrong",
+      "tServerMs": 4000,
+      "tClientMs": 3800,
+      "streakBefore": 4,
+      "final": false,
+      "expect": { "points": 0, "streak": 0, "effectiveMs": null }
+    },
+    {
+      "id": "none",
+      "title": "no answer scores 0 and resets the streak",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "none",
+      "tServerMs": 0,
+      "tClientMs": 0,
+      "streakBefore": 2,
+      "final": true,
+      "expect": { "points": 0, "streak": 0, "effectiveMs": null }
+    },
+    {
+      "id": "voided",
+      "title": "a voided question is skipped: nobody scores and the streak is unchanged",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answer": "voided",
+      "tServerMs": 4000,
+      "tClientMs": 3800,
+      "streakBefore": 3,
+      "final": false,
+      "expect": { "points": 0, "streak": 3, "effectiveMs": null }
+    },
+    {
+      "id": "timer-off",
+      "title": "with the timer off Accuracy applies even when Classic was picked",
+      "scoring": "classic",
+      "limitMs": null,
+      "answer": "correct",
+      "tServerMs": 45000,
+      "tClientMs": 44000,
+      "streakBefore": 1,
+      "final": false,
+      "expect": { "points": 1050, "streak": 2, "effectiveMs": 44600 }
+    },
+    {
+      "id": "accuracy-final",
+      "title": "Accuracy doubles on the final question too",
+      "scoring": "accuracy",
+      "limitMs": 20000,
+      "answer": "correct",
+      "tServerMs": 9000,
+      "tClientMs": 8800,
+      "streakBefore": 0,
+      "final": true,
+      "expect": { "points": 2000, "streak": 1, "effectiveMs": 8800 }
+    }
+  ],
+  "windows": [
+    {
+      "id": "before",
+      "title": "before the deadline",
+      "offsetMs": -1000,
+      "expect": "in_time"
+    },
+    {
+      "id": "at-deadline",
+      "title": "exactly at the deadline",
+      "offsetMs": 0,
+      "expect": "in_time"
+    },
+    {
+      "id": "grace-400",
+      "ac": "AC-ROM-08",
+      "title": "an answer arriving 400 ms after the deadline is accepted with no speed bonus",
+      "offsetMs": 400,
+      "expect": "grace"
+    },
+    {
+      "id": "grace-500",
+      "title": "500 ms after is the last accepted moment",
+      "offsetMs": 500,
+      "expect": "grace"
+    },
+    {
+      "id": "late-501",
+      "title": "501 ms after is rejected",
+      "offsetMs": 501,
+      "expect": "late"
+    },
+    {
+      "id": "late-600",
+      "ac": "AC-ROM-08",
+      "title": "an answer arriving 600 ms after the deadline is rejected",
+      "offsetMs": 600,
+      "expect": "late"
+    },
+    {
+      "id": "no-deadline",
+      "title": "with the timer off there is no deadline; Reveal ends answering",
+      "offsetMs": null,
+      "expect": "in_time"
+    }
+  ],
+  "sequences": [
+    {
+      "id": "void-keeps-streak",
+      "title": "a voided question leaves the streak as if it never happened",
+      "scoring": "classic",
+      "limitMs": 20000,
+      "answers": [
+        {
+          "answer": "correct",
+          "tServerMs": 10400,
+          "tClientMs": 10000,
+          "final": false
+        },
+        {
+          "answer": "correct",
+          "tServerMs": 10400,
+          "tClientMs": 10000,
+          "final": false
+        },
+        { "answer": "voided", "tServerMs": 0, "tClientMs": 0, "final": false },
+        {
+          "answer": "correct",
+          "tServerMs": 10400,
+          "tClientMs": 10000,
+          "final": false
+        },
+        {
+          "answer": "wrong",
+          "tServerMs": 5400,
+          "tClientMs": 5000,
+          "final": false
+        },
+        {
+          "answer": "correct",
+          "tServerMs": 10400,
+          "tClientMs": 10000,
+          "final": true
+        }
+      ],
+      "expect": {
+        "points": [850, 900, 0, 950, 0, 1700],
+        "streaks": [1, 2, 2, 3, 0, 1],
+        "total": 4400,
+        "correctMs": 40000
+      }
+    }
+  ],
+  "ranking": [
+    {
+      "id": "by-score",
+      "title": "the higher score ranks first",
+      "seats": [
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000a",
+          "name": "Plucky Otter",
+          "score": 2400,
+          "correctMs": 30000
+        },
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000b",
+          "name": "Brave Otter",
+          "score": 3100,
+          "correctMs": 60000
+        },
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000c",
+          "name": "Calm Heron",
+          "score": 1800,
+          "correctMs": 10000
+        }
+      ],
+      "expect": [
+        { "seatId": "00000000-0000-4000-8000-00000000000b", "rank": 1 },
+        { "seatId": "00000000-0000-4000-8000-00000000000a", "rank": 2 },
+        { "seatId": "00000000-0000-4000-8000-00000000000c", "rank": 3 }
+      ]
+    },
+    {
+      "id": "time-breaks-ties",
+      "title": "equal scores: the lower sum of effective times on correct answers ranks first",
+      "seats": [
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000a",
+          "name": "Plucky Otter",
+          "score": 3000,
+          "correctMs": 40000
+        },
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000b",
+          "name": "Brave Otter",
+          "score": 3000,
+          "correctMs": 35000
+        }
+      ],
+      "expect": [
+        { "seatId": "00000000-0000-4000-8000-00000000000b", "rank": 1 },
+        { "seatId": "00000000-0000-4000-8000-00000000000a", "rank": 2 }
+      ]
+    },
+    {
+      "id": "shared-rank",
+      "title": "equal on score and time share the rank, and the next rank skips",
+      "seats": [
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000a",
+          "name": "Plucky Otter",
+          "score": 3000,
+          "correctMs": 40000
+        },
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000b",
+          "name": "Brave Otter",
+          "score": 3000,
+          "correctMs": 40000
+        },
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000c",
+          "name": "Calm Heron",
+          "score": 2000,
+          "correctMs": 10000
+        }
+      ],
+      "expect": [
+        { "seatId": "00000000-0000-4000-8000-00000000000a", "rank": 1 },
+        { "seatId": "00000000-0000-4000-8000-00000000000b", "rank": 1 },
+        { "seatId": "00000000-0000-4000-8000-00000000000c", "rank": 3 }
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "id": "behind-and-ahead",
+      "title": "4th sees 120 behind Calm Heron; the leader sees 80 ahead of Brave Otter",
+      "seats": [
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000a",
+          "name": "Plucky Otter",
+          "score": 2000,
+          "correctMs": 30000
+        },
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000b",
+          "name": "Brave Otter",
+          "score": 1920,
+          "correctMs": 30000
+        },
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000c",
+          "name": "Calm Heron",
+          "score": 1500,
+          "correctMs": 30000
+        },
+        {
+          "seatId": "00000000-0000-4000-8000-00000000000d",
+          "name": "Daring Lynx",
+          "score": 1380,
+          "correctMs": 30000
+        }
+      ],
+      "expect": {
+        "00000000-0000-4000-8000-00000000000a": {
+          "above": null,
+          "below": { "name": "Brave Otter", "gap": 80 }
+        },
+        "00000000-0000-4000-8000-00000000000b": {
+          "above": { "name": "Plucky Otter", "gap": 80 },
+          "below": null
+        },
+        "00000000-0000-4000-8000-00000000000d": {
+          "above": { "name": "Calm Heron", "gap": 120 },
+          "below": null
+        }
+      }
+    }
+  ]
+}

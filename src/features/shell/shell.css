@@ -1,0 +1,386 @@
+/*
+ * The shell (DESIGN §6.13, §1.5): the top bar, the play header, the tab
+ * bar, the wordmark, the skip link and the footer. globals.css imports
+ * this file into the components layer, after the primitives.
+ */
+
+/* Sticky bars carry the page's own paper and grain, aligned to the
+ * viewport like the page's (globals.css), so the bar and the page read as
+ * one sheet while the content scrolls under it. */
+.kn-grain {
+  isolation: isolate;
+  background-color: var(--kn-page);
+}
+.kn-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--kn-grain-image);
+  opacity: var(--kn-grain-opacity);
+  mix-blend-mode: var(--kn-grain-blend);
+}
+@media (forced-colors: active) {
+  .kn-grain::before {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- Top bar */
+
+/* The column a bar's row and the banners under it line up with (DESIGN
+ * §10.1, read by .kn-banner in ui.css): from 768 px the page's 1,120 px,
+ * or a landing's 720 px (`data-column`); below that, 560 px of content.
+ * The reading pages keep the page's column in their bar, the same bar as
+ * every tab page (§6.13), and narrow only their content. The play header
+ * keeps its 720 px column at every width, as the play screens do. */
+.kn-topbar {
+  --kn-column: var(--kn-container-page);
+  position: sticky;
+  top: 0;
+  z-index: var(--kn-z-sticky);
+  padding-top: env(safe-area-inset-top);
+}
+.kn-topbar:where([data-column="play"]) {
+  --kn-column: var(--kn-container-play);
+}
+@media (max-width: 767px) {
+  .kn-topbar {
+    --kn-column: var(--kn-container-narrow);
+  }
+}
+.kn-topbar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  max-width: var(--kn-column);
+  min-height: 56px;
+  margin-inline: auto;
+  padding-inline: max(6px, calc(var(--kn-gutter) - 10px));
+}
+.kn-topbar-end {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  margin-inline-start: auto;
+}
+@media (max-height: 700px) {
+  .kn-topbar-row {
+    min-height: 50px;
+  }
+}
+
+/* A tab page's own title (./top-bar-title.tsx), on phones only (DESIGN
+ * §6.13): in place of the wordmark, a centred display-6 title over a meta
+ * line between the page's icon buttons. The row becomes three columns so
+ * the title stays centred while the sides differ; the page's `end`, when
+ * it has one, replaces the streak chip and Settings. From 768 px the bar
+ * keeps the wordmark and the text tabs. */
+.kn-topbar-title {
+  display: none;
+}
+@media (max-width: 767px) {
+  .kn-topbar[data-titled] .kn-topbar-row {
+    display: grid;
+    grid-template-columns:
+      minmax(max-content, 1fr) minmax(0, auto)
+      minmax(max-content, 1fr);
+  }
+  .kn-topbar[data-titled] .kn-wordmark,
+  .kn-topbar[data-titled="own-end"] .kn-topbar-end {
+    display: none;
+  }
+  .kn-topbar[data-titled] .kn-topbar-title {
+    display: contents;
+  }
+  .kn-topbar-title-start,
+  .kn-topbar-title-end,
+  .kn-topbar[data-titled] .kn-topbar-end {
+    display: flex;
+    grid-row: 1;
+    align-items: center;
+    gap: 2px;
+  }
+  .kn-topbar-title-start {
+    grid-column: 1;
+    justify-self: start;
+  }
+  .kn-topbar-title-end,
+  .kn-topbar[data-titled] .kn-topbar-end {
+    grid-column: 3;
+    justify-self: end;
+  }
+}
+.kn-topbar-heading {
+  display: flex;
+  grid-row: 1;
+  grid-column: 2;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding-block: 6px;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+.kn-topbar-heading-title {
+  font-family: var(--kn-font-display);
+  font-size: var(--kn-text-display-6);
+  font-weight: var(--kn-text-display-6--font-weight);
+  line-height: var(--kn-text-display-6--line-height);
+  letter-spacing: var(--kn-text-display-6--letter-spacing);
+  text-wrap: balance;
+}
+.kn-topbar-heading-meta {
+  color: var(--kn-ink-3);
+  font-size: var(--kn-text-meta);
+  font-weight: var(--kn-text-meta--font-weight);
+  line-height: var(--kn-text-meta--line-height);
+  letter-spacing: var(--kn-text-meta--letter-spacing);
+}
+
+/* The play header: Leave, the run's progress, the stopwatch and More, and
+ * the row under them (practice's ten segments). */
+.kn-playbar {
+  --kn-column: var(--kn-container-play);
+  position: sticky;
+  top: 0;
+  z-index: var(--kn-z-sticky);
+  padding-top: env(safe-area-inset-top);
+}
+.kn-playbar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  max-width: var(--kn-column);
+  min-height: 56px;
+  margin-inline: auto;
+  padding-inline: max(6px, calc(var(--kn-gutter) - 10px));
+}
+/* No end slot: the progress (practice's heading and segments) ends at the
+ * page's gutter, as the content under it does, not at the inset the icon
+ * buttons' own boxes allow for (R1-36). */
+.kn-playbar-row[data-end="none"] {
+  padding-inline-end: var(--kn-gutter);
+}
+/* At the gutters, not the row's icon-button insets, so the segments run
+ * as wide as the screen's content. */
+.kn-playbar-below {
+  width: 100%;
+  max-width: var(--kn-column);
+  margin-inline: auto;
+  padding: 0 var(--kn-gutter) 8px;
+}
+/* Block, so a practice heading and its ten segments take the full width;
+ * the Daily's pills centre themselves. */
+.kn-playbar-progress {
+  flex: 1;
+  min-width: 0;
+}
+.kn-playbar-progress .kn-progress[data-variant="pills"] {
+  justify-content: center;
+}
+.kn-playbar-end {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+}
+
+/* --------------------------------------------------------------- Wordmark */
+
+/* DESIGN §1.5: the mark at 1.24 times the type size (36 px beside 29 px
+ * type) and a 3 px gap; "knewt" in Fraunces 800, tracking -0.03 em. */
+.kn-wordmark {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 3px;
+  min-height: 44px;
+  padding: 4px 6px 4px 4px;
+  border-radius: 12px;
+  color: var(--kn-ink);
+  text-decoration: none;
+}
+.kn-wordmark-word {
+  margin-top: -3px;
+  font-family: var(--kn-font-display);
+  font-size: 29px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+/* ---------------------------------------------------------------- Tab bar */
+
+/* Phones: a bottom bar on surface with a top hairline; 48 px targets, the
+ * active tab in ink with a 28 by 3 eft bar at its top edge. */
+.kn-tabbar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: var(--kn-z-sticky);
+  padding: 4px 8px env(safe-area-inset-bottom);
+  border-top: 1px solid var(--kn-rule);
+  background-color: var(--kn-surface);
+}
+.kn-tabs {
+  display: flex;
+}
+/* A gap between the tabs and a little padding inside each keep two labels
+ * at least 12 px apart, however large the reader's text (R1-34). */
+.kn-tabbar .kn-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 4px;
+}
+.kn-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--kn-ink-3);
+  font-weight: 700;
+  text-decoration: none;
+}
+.kn-tabbar .kn-tab {
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  min-height: 56px;
+  padding: 4px;
+  border-radius: 12px;
+  /* 12 px, growing with the reader's text size only as far as the tab's
+   * width allows (about 17 px at 390 and 14 px at 320 at 200% text), so
+   * "Practice" and "Groups" stay whole words: Chromium has no hyphenation
+   * dictionary on Linux or Windows, and "Groups" has no break point. */
+  font-size: min(0.75rem, 4.3vw);
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: normal;
+  hyphens: manual;
+}
+.kn-tab[data-active] {
+  color: var(--kn-ink);
+}
+.kn-tab-marker {
+  position: absolute;
+  width: 28px;
+  height: 3px;
+  background-color: var(--kn-accent);
+}
+.kn-tabbar .kn-tab-marker {
+  top: -5px;
+  border-radius: 0 0 3px 3px;
+}
+/* The bottom tabs sit against the screen's edge, where a ring outside them
+ * would be cut off: the same 3 px ring, drawn just inside the tab. */
+.kn-tabbar .kn-tab:focus-visible {
+  outline-offset: -3px;
+}
+
+/* From 768 px: text tabs in the top bar, the active one underlined in eft. */
+.kn-toptabs .kn-tabs {
+  align-items: center;
+  gap: 2px;
+}
+.kn-toptabs .kn-tab {
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 12px;
+  font-size: var(--kn-text-label-sm);
+}
+.kn-toptabs .kn-tab-marker {
+  bottom: 2px;
+  left: 12px;
+  right: 12px;
+  width: auto;
+  border-radius: 3px;
+}
+@media (hover: hover) {
+  .kn-tab:not([data-active]):hover {
+    color: var(--kn-ink);
+  }
+}
+@media (forced-colors: active) {
+  .kn-tabbar {
+    border-top-color: CanvasText;
+  }
+  .kn-tab-marker {
+    background-color: Highlight;
+    forced-color-adjust: none;
+  }
+}
+
+/* -------------------------------------------------------------- Skip link */
+
+/* First in every page, visible on focus (DESIGN §6.13). */
+.kn-skip {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: var(--kn-z-dialog);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--kn-radius-lg);
+  background-color: var(--kn-primary);
+  color: var(--kn-on-primary);
+  font-weight: 700;
+  text-decoration: none;
+  translate: 0 -200%;
+}
+.kn-skip:focus,
+.kn-skip:focus-visible {
+  position: fixed;
+  translate: none;
+}
+
+/* --------------------------------------------------------- Tab pages' main */
+
+/* Phones: the last line stays clear of the fixed tab bar, by the bar's
+ * measured height (`--kn-inset-bottom`, ./scroll-inset.tsx) plus 24 px, so
+ * 200% text and the safe area count; its usual height until the page
+ * hydrates. From 768 px the bar is in the header and `md:pb-10` applies. */
+.kn-tabs-main {
+  padding-bottom: calc(
+    var(--kn-inset-bottom, calc(61px + env(safe-area-inset-bottom))) + 24px
+  );
+}
+
+/* ----------------------------------------------------------------- Footer */
+
+/* On Today and Me: the seven legal and trust pages as 44 px links. */
+.kn-footer {
+  margin-top: 40px;
+  padding-block: 8px 18px;
+  border-top: 1px solid var(--kn-rule);
+}
+.kn-footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+}
+.kn-footer a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--kn-ink-3);
+  font-size: var(--kn-text-meta);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--kn-rule-strong);
+  text-underline-offset: 3px;
+}
+@media (hover: hover) {
+  .kn-footer a:hover {
+    color: var(--kn-ink);
+    text-decoration-color: var(--kn-link-underline);
+  }
+}

@@ -1,47 +1,70 @@
 /**
  * Blind packets for fact-checkers (CONTENT_GUIDE §9.4).
  *
- * For each item and pass the tooling builds:
+ * **Stages.** One agent run receives its packet in stages, and the tool
+ * serves the next stage only after the run's draft check record holds the
+ * cold-solve entry for the stage before (scripts/content/packets.ts):
  * - cold stages: what a player sees before answering (the prompt, options
- *   in a per-pass order, the category and answer type). A mystery has four
- *   stages, written as cold-1.json to cold-4.json: stage k holds clues 1 to
- *   k, and the four clue-4 options arrive only with stage 4, so a checker
- *   records candidates clue by clue (the staged clue reveal, ARCHITECTURE
- *   §5.8). Every other item has one stage, cold.json. No stage holds the
- *   key, writerNotes, claims, risk notes, verification or difficulty.
- * - reveal: the full cold view plus the key, the explanation and the item's
- *   claims (with their risk, so checker A knows what needs external
- *   evidence). Still no writerNotes, no rivals or likely guesses, no
- *   estimate and no other checker's record.
+ *   in a per-pass order, the category and answer type). A mystery has four,
+ *   one clue each: stage k holds clues 1 to k, stage 1 also names the answer
+ *   list file and the version that ships, and the four clue-4 options
+ *   arrive with clue 4 (`optionsFromClue` at launch). Every other item has
+ *   one. No cold
+ *   stage holds the key, writerNotes, claims, risk notes, verification or
+ *   difficulty.
+ * - the final stage: the full cold view plus the key, the explanation and
+ *   the item's claims (with their risk, so checker A knows what needs
+ *   external evidence). Still no writerNotes, no rivals or likely guesses,
+ *   no estimate and no other checker's record.
+ *
+ * **Hashes.** Each stage has its own hash, so a record's `packetSha256`
+ * holds one per stage served, in order, and `stagesServedAt` the time each
+ * was served (§9.8). A stage's hash is the SHA-256 of the canonical JSON of
+ * the packet version, the pass, the item id, the stage and the item content
+ * that stage shows: the cold stages' content is key-neutral (options as a
+ * sorted set, no answer field), so a stage's hash says nothing about the
+ * key, and the final stage covers every field a packet shows
+ * (PACKET_FIELDS). Derived text (entity display names, category names,
+ * myth hits) and the option order stay out: a hash can be recomputed
+ * without the content key, and a reference-file change never invalidates a
+ * check. content:record, content:decide and content:check recompute them
+ * from the current item, so an item edited after its checks never goes
+ * active on them.
+ *
+ * Records accepted before staging carry one hash of the whole packet
+ * (`packetSha256`, PACKET_VERSION 2), which stays verifiable.
  *
  * Option order. Options are shuffled with a seed only the key holder can
  * compute, HMAC-SHA256(k_order, "<itemId>|<pass>") with k_order derived from
  * the content key (seal.ts). A public seed would let anyone undo the shuffle
- * and read the key's position off cold.json. Without an order key (hashing,
- * record validation, the estimator's packet, which shows the key anyway)
- * options are sorted, which says nothing about which one is the key.
- *
- * packetSha256 is the SHA-256 of the canonical JSON of the packet version,
- * the pass, the item id and every item field the packets show (PACKET_FIELDS
- * below, across all stages). Derived text such as entity display names,
- * category names and myth hits, and the option order, stay out of it: the
- * hash proves which item content the checker judged, it can be recomputed
- * without the content key, and a reference-file change never invalidates a
- * check. content:record, content:decide and content:check recompute it from
- * the current item, so an item edited after its checks never goes active on
- * them. Changing what a packet shows means a new PACKET_VERSION, and the
- * previous version's hash must stay verifiable for items already accepted.
+ * and read the key's position off a cold stage. Without an order key
+ * (hashing, record validation, the estimator's packet, which shows the key
+ * anyway) options are sorted, which says nothing about which one is the key.
  */
 import { createHash, createHmac } from "node:crypto";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { z } from "zod";
 
 import { CATEGORY_TABLE } from "../schema/categories.ts";
 import type { AnyItem, Mystery } from "../schema/items.ts";
-import { BRIEF_FOR_PASS, type Pass } from "../schema/verification.ts";
+import { isoDateTime, sha256Hex } from "../schema/primitives.ts";
+import {
+  coldSolveTimes,
+  type ColdSolve,
+  type Pass,
+} from "../schema/verification.ts";
 import type { Bank, BankItem } from "./bank.ts";
 import { stableStringify } from "./json.ts";
+import type { Layout } from "./layout.ts";
 import { mythMatches } from "./references.ts";
 
+/** The single-hash packets of records accepted before staging. */
 export const PACKET_VERSION = 2;
+
+/** Staged packets: one hash per stage (§9.4). */
+export const STAGED_PACKET_VERSION = 3;
 
 /** A key that seeds the option order (k_order from seal.ts). */
 export type OrderKey = Uint8Array;
@@ -159,6 +182,7 @@ export function coldStages(
       answerType: item.answerType,
       answerLine: `The answer is ${ANSWER_LINES[item.answerType] ?? item.answerType}.`,
       answerList: `content/answer-lists/${item.answerType}.json`,
+      answerListVersion: bank.lists.get(item.answerType)?.version ?? null,
     };
     return Array.from({ length: MYSTERY_STAGES }, (_, i) => ({
       ...head,
@@ -421,15 +445,261 @@ export function packetEntry(
   };
 }
 
+/**
+ * The item content each stage of a pass's packet shows, in order: the cold
+ * stages, key-neutral (options as a sorted set, never the answer field),
+ * then the final stage with every field a packet shows.
+ */
+export function stageContents(item: AnyItem): Record<string, unknown>[] {
+  const sorted = (values: readonly string[]) =>
+    [...values].sort((x, y) => byText(x, y));
+  const final = packetContent(item);
+  if ("kind" in item && item.kind === "mystery") {
+    const cold = Array.from({ length: MYSTERY_STAGES }, (_, i) => ({
+      category: item.category,
+      kind: item.kind,
+      answerType: item.answerType,
+      clues: item.clues.slice(0, i + 1),
+      ...(i + 1 === MYSTERY_STAGES
+        ? { options: sorted([item.answer, ...item.distractors]) }
+        : {}),
+    }));
+    return [...cold, final];
+  }
+  if ("kind" in item && item.kind === "encore") {
+    return [
+      {
+        category: item.category,
+        kind: item.kind,
+        question: item.question,
+        valueKind: item.valueKind,
+        unit: item.unit,
+        unitShort: item.unitShort,
+        unitLabel: item.unitLabel,
+        decimals: item.decimals,
+      },
+      final,
+    ];
+  }
+  if (item.format === "tf")
+    return [{ category: item.category, format: "tf", stem: item.stem }, final];
+  if (item.format === "comparison")
+    return [
+      {
+        category: item.category,
+        format: "comparison",
+        stem: item.stem,
+        labels: sorted([item.a, item.b]),
+        measure: item.measure,
+        unit: item.unit,
+      },
+      final,
+    ];
+  return [
+    {
+      category: item.category,
+      ...("kind" in item ? { kind: item.kind } : {}),
+      format: "mc",
+      stem: item.stem,
+      options: sorted([item.answer, ...item.wrong]),
+      order: item.order,
+    },
+    final,
+  ];
+}
+
+/** One hash per stage of an item's packet for a pass, in order (§9.4, §9.8). */
+export function stageHashes(
+  itemId: string,
+  item: AnyItem,
+  pass: Pass,
+): string[] {
+  const contents = stageContents(item);
+  return contents.map((content, i) =>
+    createHash("sha256")
+      .update(
+        stableStringify({
+          v: STAGED_PACKET_VERSION,
+          pass,
+          itemId,
+          stage: i + 1,
+          of: contents.length,
+          item: content,
+        }),
+      )
+      .digest("hex"),
+  );
+}
+
+/** True when a recorded packetSha256 still matches the item for its pass. */
+export function packetMatches(
+  itemId: string,
+  item: AnyItem,
+  pass: Pass,
+  recorded: string | readonly string[],
+): boolean {
+  if (typeof recorded === "string")
+    return recorded === packetSha256(itemId, item, pass);
+  const now = stageHashes(itemId, item, pass);
+  return (
+    recorded.length === now.length &&
+    recorded.every((hash, i) => hash === now[i])
+  );
+}
+
 /** The passes whose recorded packetSha256 no longer matches the item. */
 export function changedSinceChecks(itemId: string, item: AnyItem): Pass[] {
   const v = item.verification;
   const records = [...(v?.checks ?? []), ...(v?.tiebreak ? [v.tiebreak] : [])];
   return records
     .filter(
-      (check) => check.packetSha256 !== packetSha256(itemId, item, check.pass),
+      (check) => !packetMatches(itemId, item, check.pass, check.packetSha256),
     )
     .map((check) => check.pass);
+}
+
+/** Each stage's view, the cold stages then the final one, with its hash. */
+export function packetStages(
+  bank: Bank,
+  record: BankItem,
+  pass: Pass,
+  orderKey?: OrderKey,
+): { view: ColdEntry; sha256: string }[] {
+  const views = [
+    ...coldStages(bank, record, pass, orderKey),
+    revealView(bank, record, pass, orderKey),
+  ];
+  const hashes = stageHashes(record.id, record.item, pass);
+  return views.map((view, i) => ({ view, sha256: hashes[i] ?? "" }));
+}
+
+// ---------------------------------------------------------------------------
+// The serve log: what each item's packet has served, and when (§9.4)
+// ---------------------------------------------------------------------------
+
+export const ServedStageSchema = z.strictObject({
+  stage: z.int().min(1),
+  sha256: sha256Hex,
+  servedAt: isoDateTime,
+});
+
+export const ServedItemSchema = z.strictObject({
+  /** How many stages the item's packet has: cold stages plus the final. */
+  stages: z.int().min(2),
+  served: z.array(ServedStageSchema),
+  /** Times the packet was started over (content:packets without --next). */
+  restarts: z.int().min(0),
+});
+export type ServedItem = z.infer<typeof ServedItemSchema>;
+
+export const ServeLogSchema = z.strictObject({
+  batchId: z.string(),
+  pass: z.enum(["A", "B", "T"]),
+  packetVersion: z.literal(STAGED_PACKET_VERSION),
+  items: z.record(z.string(), ServedItemSchema),
+});
+export type ServeLog = z.infer<typeof ServeLogSchema>;
+
+/** The folder of one batch's packets for one pass. */
+export function packetDir(
+  layout: Layout,
+  batchId: string,
+  pass: string,
+): string {
+  return join(layout.packetsDir, batchId, pass);
+}
+
+export const SERVE_LOG = "served.json";
+
+/** The serve log of a batch's pass, or null when no packet was built. */
+export function readServeLog(
+  layout: Layout,
+  batchId: string,
+  pass: Pass,
+): ServeLog | null {
+  const path = join(packetDir(layout, batchId, pass), SERVE_LOG);
+  if (!existsSync(path)) return null;
+  const parsed = ServeLogSchema.safeParse(
+    JSON.parse(readFileSync(path, "utf8")),
+  );
+  return parsed.success ? parsed.data : null;
+}
+
+/** The file one served stage of an item is written to, inside the pass folder. */
+export function stageFile(itemId: string, stage: number): string {
+  return join(itemId, `stage-${stage}.json`);
+}
+
+/**
+ * Why stage `next` may not be served yet: the draft record lacks the
+ * cold-solve entry for the stage before, with its recordedAt, or that entry
+ * was recorded before its stage was served or in the future. Null when it
+ * may be served.
+ */
+export function nextStageBlocked(
+  served: ServedItem,
+  coldSolve: ColdSolve | null | undefined,
+  now: string,
+): string | null {
+  const last = served.served.at(-1);
+  if (!last) return "no stage has been served yet";
+  if (last.stage >= served.stages) return "every stage has been served";
+  const recordedAt = coldSolveTimes(coldSolve).get(last.stage);
+  if (recordedAt === undefined)
+    return `the draft record holds no cold-solve entry for stage ${last.stage} with its recordedAt`;
+  if (Date.parse(recordedAt) < Date.parse(last.servedAt))
+    return `the stage ${last.stage} cold-solve entry is recorded before stage ${last.stage} was served`;
+  if (Date.parse(recordedAt) > Date.parse(now))
+    return `the stage ${last.stage} cold-solve entry is recorded in the future`;
+  return null;
+}
+
+/**
+ * Why a staged record does not match what its packet served (§9.4, §9.8),
+ * empty when it does: every stage served, the record's hashes and served
+ * times those of the serve log, and the item still the one the stages
+ * showed.
+ */
+export function servedMismatch(
+  itemId: string,
+  item: AnyItem,
+  pass: Pass,
+  record: {
+    packetSha256: string | readonly string[];
+    stagesServedAt?: readonly string[] | undefined;
+  },
+  served: ServedItem | undefined,
+): string[] {
+  if (typeof record.packetSha256 === "string")
+    return [
+      "packetSha256 holds one hash per stage served, with stagesServedAt beside it, as content:packets serves them (§9.4, §9.8); take the packet's stages with content:packets -- --next",
+    ];
+  if (!served)
+    return [
+      `no packet of pass ${pass} was served for this item; build it with content:packets and take its stages in turn`,
+    ];
+  const out: string[] = [];
+  if (served.served.length !== served.stages)
+    out.push(
+      `${served.served.length} of the packet's ${served.stages} stages were served; the record comes after the final stage`,
+    );
+  const hashes = served.served.map((stage) => stage.sha256);
+  const times = served.served.map((stage) => stage.servedAt);
+  const same = (a: readonly string[], b: readonly string[] | undefined) =>
+    b !== undefined && a.length === b.length && a.every((v, i) => v === b[i]);
+  if (!same(hashes, record.packetSha256))
+    out.push(
+      "packetSha256 is not the list of hashes content:packets served for this item, in order",
+    );
+  if (!same(times, record.stagesServedAt))
+    out.push(
+      "stagesServedAt is not the list of times content:packets served this item's stages, in order",
+    );
+  if (!packetMatches(itemId, item, pass, hashes))
+    out.push(
+      `the item changed after its pass ${pass} packet was served; build the packet again and check again`,
+    );
+  return out;
 }
 
 const INSTRUCTIONS: Record<Pass, string[]> = {
@@ -444,71 +714,16 @@ const INSTRUCTIONS: Record<Pass, string[]> = {
   ],
 };
 
-const SOLVE_SINGLE =
-  "Solve every item in cold.json before opening reveal.json.";
-const SOLVE_STAGED =
-  "Mysteries come in stages: open cold-1.json, record your guess and every candidate you would consider for each item at clue 1, then open cold-2.json, and so on to cold-4.json, which adds clue 4 and the four options. Never open a stage before recording the one before it. Only then open reveal.json. Candidates other than the answer left after clue 3 go in an ambiguity or second_answer issue, and rule out confirming the uniqueness claim.";
-
-const COMMON_INSTRUCTIONS = [
-  "Write one CheckRecord per item (§9.8) with this item's packetSha256, then run: npm run content:record -- --batch <batch> --pass <pass> --file <records.json>.",
-  "Never edit an item, never search the item's text to find a quiz site, and never cite a source you did not retrieve (§9.4, §9.6).",
-];
-
-export interface PacketFile {
-  /** File name inside .cache/packets/<batch>/<pass>/. */
-  name: string;
-  content: unknown;
-}
-
-/**
- * The files of one batch packet: cold.json (or cold-1.json to cold-4.json
- * for mysteries) and reveal.json, each item carrying its packetSha256.
- */
-export function packetFiles(
+/** What every staged packet file tells the checker. */
+export function stagedInstructions(
   batchId: string,
   pass: Pass,
-  entries: PacketEntry[],
-  generatedAt: string,
-): PacketFile[] {
-  const steps = Math.max(1, ...entries.map((entry) => entry.stages.length));
-  const header = {
-    batchId,
-    pass,
-    brief: BRIEF_FOR_PASS[pass],
-    packetVersion: PACKET_VERSION,
-    generatedAt,
-    instructions: [
-      ...INSTRUCTIONS[pass],
-      steps > 1 ? SOLVE_STAGED : SOLVE_SINGLE,
-      ...COMMON_INSTRUCTIONS,
-    ],
-  };
-  const files: PacketFile[] = [];
-  for (let step = 1; step <= steps; step += 1) {
-    files.push({
-      name: steps === 1 ? "cold.json" : `cold-${step}.json`,
-      content: {
-        ...header,
-        stage: "cold",
-        step,
-        steps,
-        items: entries.flatMap((entry) => {
-          const stage = entry.stages[step - 1];
-          return stage ? [{ packetSha256: entry.packetSha256, ...stage }] : [];
-        }),
-      },
-    });
-  }
-  files.push({
-    name: "reveal.json",
-    content: {
-      ...header,
-      stage: "reveal",
-      items: entries.map((entry) => ({
-        packetSha256: entry.packetSha256,
-        ...entry.reveal,
-      })),
-    },
-  });
-  return files;
+  name = "content:packets",
+): string[] {
+  return [
+    ...INSTRUCTIONS[pass],
+    `Each item comes in stages (CONTENT_GUIDE §9.4): one stage for most items, then the final stage with the key and the claims; a mystery gives one clue per stage, the four options with clue 4. Before asking for the next stage, write the cold-solve entry for the stage you hold, with its recordedAt, in your draft record file (mysteries: perClue, one entry per clue, with every candidate you would consider, checked against the list file); then run: npm run ${name} -- --batch ${batchId} --pass ${pass} --next --record <draft.json>. The tool serves nothing before that entry exists. Candidates other than the answer left after clue 3 go in an ambiguity or second_answer issue, and rule out confirming the uniqueness claim.`,
+    `After the final stage, write one CheckRecord per item (§9.8) with the packetSha256 and stagesServedAt lists the final stage gives, then run: npm run content:record -- --batch ${batchId} --pass ${pass} --file <records.json>.`,
+    "Never edit an item, never search the item's text to find a quiz site, and never cite a source you did not retrieve (§9.4, §9.6).",
+  ];
 }

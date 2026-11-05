@@ -96,33 +96,39 @@ const NUMERIC_DATES = [
 ];
 const SHORT_DATE = /\b(\d{1,2})\/(\d{1,2})\b/g;
 
-export function ruleC08(item: AnyItem): RuleHit[] {
+/** C08 on one field: every numeric date in it. */
+export function numericDateHits(field: TextField): RuleHit[] {
   const hits: RuleHit[] = [];
   const message =
     "write dates with the month spelled out, like 3 April 1968 (L6, §3.3)";
-  for (const field of playerTextFields(item)) {
-    const seen = new Set<number>();
-    for (const pattern of NUMERIC_DATES) {
-      for (const match of field.value.matchAll(pattern)) {
-        seen.add(match.index);
-        hits.push(hit("C08", "error", field, message, match[0]));
-      }
+  const seen = new Set<number>();
+  for (const pattern of NUMERIC_DATES) {
+    for (const match of field.value.matchAll(pattern)) {
+      seen.add(match.index);
+      hits.push(hit("C08", "error", field, message, match[0]));
     }
-    for (const match of field.value.matchAll(SHORT_DATE)) {
-      if (seen.has(match.index)) continue;
-      const [, first = "", second = ""] = match;
-      const padded = (part: string) =>
-        part.length === 2 && part.startsWith("0");
-      if (
-        padded(first) ||
+  }
+  for (const match of field.value.matchAll(SHORT_DATE)) {
+    if (seen.has(match.index)) continue;
+    const [, first = "", second = ""] = match;
+    const padded = (part: string) => part.length === 2 && part.startsWith("0");
+    // A day and a month, in either order: a ratio such as 75/25 is neither.
+    const [a, b] = [Number(first), Number(second)];
+    const plausible = a <= 31 && b <= 31 && (a <= 12 || b <= 12);
+    if (
+      plausible &&
+      (padded(first) ||
         padded(second) ||
-        (first.length === 2 && second.length === 2)
-      ) {
-        hits.push(hit("C08", "error", field, message, match[0]));
-      }
+        (first.length === 2 && second.length === 2))
+    ) {
+      hits.push(hit("C08", "error", field, message, match[0]));
     }
   }
   return hits;
+}
+
+export function ruleC08(item: AnyItem): RuleHit[] {
+  return playerTextFields(item).flatMap(numericDateHits);
 }
 
 /** C09 (L7 and more): time words. */
@@ -224,28 +230,38 @@ const C11_WARNINGS: [RegExp, string][] = [
   [/"/g, "use single quotation marks, so JSON needs no escaping (§2.1)"],
 ];
 
-export function ruleC11(item: AnyItem): RuleHit[] {
+/**
+ * C11 on one field: its errors, one finding per kind of problem, and with
+ * `warnings` the quotation-mark warnings too.
+ */
+export function typographyHits(
+  field: TextField,
+  options: { warnings: boolean } = { warnings: true },
+): RuleHit[] {
   const hits: RuleHit[] = [];
-  for (const field of playerTextFields(item)) {
-    const messages = new Set<string>();
-    for (const [pattern, message] of C11_ERRORS) {
-      const match = field.value.match(
-        new RegExp(pattern.source, pattern.flags.replace("g", "")),
-      );
-      // One finding per field and kind of problem.
-      if (match && !messages.has(message)) {
-        messages.add(message);
-        hits.push(hit("C11", "error", field, message, match[0]));
-      }
-    }
-    for (const [pattern, message] of C11_WARNINGS) {
-      const match = field.value.match(
-        new RegExp(pattern.source, pattern.flags.replace("g", "")),
-      );
-      if (match) hits.push(hit("C11", "warn", field, message, match[0]));
+  const messages = new Set<string>();
+  for (const [pattern, message] of C11_ERRORS) {
+    const match = field.value.match(
+      new RegExp(pattern.source, pattern.flags.replace("g", "")),
+    );
+    // One finding per field and kind of problem.
+    if (match && !messages.has(message)) {
+      messages.add(message);
+      hits.push(hit("C11", "error", field, message, match[0]));
     }
   }
+  if (!options.warnings) return hits;
+  for (const [pattern, message] of C11_WARNINGS) {
+    const match = field.value.match(
+      new RegExp(pattern.source, pattern.flags.replace("g", "")),
+    );
+    if (match) hits.push(hit("C11", "warn", field, message, match[0]));
+  }
   return hits;
+}
+
+export function ruleC11(item: AnyItem): RuleHit[] {
+  return playerTextFields(item).flatMap((field) => typographyHits(field));
 }
 
 /**

@@ -78,6 +78,13 @@ function listSchema<T extends AnswerType>(type: T) {
     .strictObject({
       type: z.literal(type),
       version: isoDate,
+      /**
+       * + The UTC date of the commit that first published this version
+       * (§2.10 rule 5). content:check compares it with git history.
+       * Optional while the lists published before this field existed
+       * catch up; their publish date comes from git history either way.
+       */
+      liveAt: isoDate.optional(),
       provenance: z
         .array(
           z.strictObject({ source: text, license: text, retrievedAt: isoDate }),
@@ -157,6 +164,7 @@ export interface AnswerEntity {
 export interface AnswerList {
   type: AnswerType;
   version: string;
+  liveAt?: string | undefined;
   provenance: { source: string; license: string; retrievedAt: string }[];
   entities: AnswerEntity[];
 }

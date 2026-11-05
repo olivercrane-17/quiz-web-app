@@ -20,7 +20,57 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_claim: {
+        Args: { p_player: string; p_secret: string; p_token: string }
+        Returns: Json
+      }
+      create_sync_code: {
+        Args: { p_player: string; p_secret: string }
+        Returns: Json
+      }
+      delete_player: {
+        Args: { p_player: string; p_secret: string }
+        Returns: Json
+      }
+      export_my_data: {
+        Args: { p_player: string; p_secret: string }
+        Returns: Json
+      }
+      get_profile: {
+        Args: { p_player: string; p_secret: string }
+        Returns: Json
+      }
+      peek_claim: { Args: { p_token: string }; Returns: Json }
+      redeem_claim: {
+        Args: { p_new_secret: string; p_token: string }
+        Returns: Json
+      }
+      redeem_sync_code: {
+        Args: { p_code: string; p_new_secret: string }
+        Returns: Json
+      }
+      register_player: {
+        Args: {
+          p_app: string
+          p_context: string
+          p_player: string
+          p_secret: string
+        }
+        Returns: Json
+      }
+      set_age_band: {
+        Args: {
+          p_band: string
+          p_moment: string
+          p_player: string
+          p_secret: string
+        }
+        Returns: Json
+      }
+      t_client_ip: {
+        Args: { p_player: string; p_secret: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

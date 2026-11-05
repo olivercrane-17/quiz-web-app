@@ -39,6 +39,8 @@ import {
   StopwordsFileSchema,
   VerificationSchema,
 } from "./index.ts";
+import { CLAIM_ID_PATTERN } from "./claims.ts";
+import { countedTier, isExternalSource } from "./verification.ts";
 
 const readJson = (path: string): unknown =>
   JSON.parse(readFileSync(join(REPO_ROOT, path), "utf8"));
@@ -180,13 +182,21 @@ describe("item schemas", () => {
   });
 
   it("ties reviewBy to volatility and refuses fast", () => {
+    // The editor sets a slow item's reviewBy at acceptance (CONTENT_GUIDE
+    // §2.3): a draft or a checking item may hold null, an active one not.
+    expect(
+      PracticeItemSchema.safeParse(fxMc({ volatility: "slow", reviewBy: null }))
+        .success,
+    ).toBe(true);
     expect(
       messages(
         PracticeItemSchema.safeParse(
-          fxMc({ volatility: "slow", reviewBy: null }),
+          fxMc({ volatility: "slow", reviewBy: null, status: "retired" }),
         ),
       ),
-    ).toEqual([expect.stringContaining("needs a reviewBy")]);
+    ).toEqual(
+      expect.arrayContaining([expect.stringContaining("needs a reviewBy")]),
+    );
     expect(
       PracticeItemSchema.safeParse(
         fxMc({ volatility: "slow", reviewBy: "2028-11-01" }),
@@ -411,8 +421,37 @@ describe("claims", () => {
   });
 });
 
+/**
+ * CONTENT_GUIDE §12.15's filled-in record, parsed from the guide itself.
+ * Its packet hashes are placeholders ("<sha256 of stage 1>"), which the
+ * guide says so; they become real-looking hashes here, and nothing else
+ * changes.
+ */
+function guideRecord(): Record<string, unknown> {
+  const guide = readFileSync(join(REPO_ROOT, "docs/CONTENT_GUIDE.md"), "utf8");
+  const section = guide
+    .split(/^### /m)
+    .find((part) => part.startsWith("12.15 "));
+  const block = /```json\s*\n([\s\S]*?)```/.exec(section ?? "")?.[1];
+  if (block === undefined) throw new Error("no JSON block in §12.15");
+  let n = 0;
+  const filled = block.replace(/"<sha256 of [^"]*>"/g, () => {
+    n += 1;
+    return `"${n.toString(16).padStart(64, "0")}"`;
+  });
+  expect(n).toBe(4);
+  return JSON.parse(filled) as Record<string, unknown>;
+}
+
 describe("verification records", () => {
-  it("accepts the §12.15 shape", () => {
+  it("accepts CONTENT_GUIDE §12.15's own record, field for field", () => {
+    const record = guideRecord();
+    expect(messages(VerificationSchema.safeParse(record))).toEqual([]);
+    const [a] = record.checks as Record<string, unknown>[];
+    expect(messages(CheckRecordSchema.safeParse(a))).toEqual([]);
+  });
+
+  it("accepts the one-entry shape that records accepted before the guide's carry", () => {
     expect(messages(CheckRecordSchema.safeParse(check))).toEqual([]);
     expect(
       messages(
@@ -521,12 +560,186 @@ describe("verification records", () => {
     });
     expect(CheckRecordSchema.safeParse(web(["C"], false)).success).toBe(false);
     expect(CheckRecordSchema.safeParse(web(["B"], true)).success).toBe(false);
-    expect(CheckRecordSchema.safeParse(web(["A", "C"], false)).success).toBe(
-      true,
-    );
   });
 
-  it("insists the method matches the evidence kind", () => {
+  it("counts a web call at its cited result's tier, or at the lowest it could have relied on (§9.5.2)", () => {
+    const call = (
+      tiers: string[],
+      citedResult?: { title: string; url: string; tier: string } | null,
+    ) => ({
+      kind: "web",
+      query: "q",
+      results: [
+        { title: "Owner", url: "https://example.org/a" },
+        { title: "Blog", url: "https://example.org/c" },
+      ],
+      summaryExcerpt: "s",
+      ...(citedResult === undefined ? {} : { citedResult }),
+      tiers,
+      conflictReported: false,
+      retrievedAt: "2026-10-31",
+    });
+    const confirmed = (evidence: unknown, method?: string) =>
+      CheckRecordSchema.safeParse({
+        ...check,
+        claimResults: [
+          {
+            claimId: "c1",
+            verdict: "confirmed",
+            ...(method ? { method } : {}),
+            evidence,
+            note: "",
+          },
+        ],
+      });
+    const cited = { title: "Owner", url: "https://example.org/a", tier: "A" };
+    // Tiers A and C with no attribution count at C: no confirmation, in the
+    // guide's array shape or as one entry that names citedResult.
+    expect(confirmed([call(["A", "C"], null)]).success).toBe(false);
+    expect(confirmed(call(["A", "C"], null)).success).toBe(false);
+    expect(messages(confirmed([call(["A", "C"], null)]))).toEqual([
+      expect.stringContaining("a confirmed claim needs an entry that confirms"),
+    ]);
+    // The same call, attributed to the Tier A result, confirms.
+    expect(messages(confirmed([call(["A", "C"], cited)]))).toEqual([]);
+    expect(messages(confirmed(call(["A", "C"], cited), "web"))).toEqual([]);
+    // A cited result is one of the call's results, at one of its tiers.
+    expect(
+      confirmed([
+        call(["A", "C"], { ...cited, url: "https://example.org/elsewhere" }),
+      ]).success,
+    ).toBe(false);
+    expect(confirmed([call(["B", "C"], cited)]).success).toBe(false);
+    // countedTier and isExternalSource say the same wherever evidence is
+    // counted: a record from before citedResult existed still parses, but
+    // its [A, C] call counts at C and is never external evidence.
+    const legacy = call(["A", "C"]);
+    expect(confirmed(legacy, "web").success).toBe(true);
+    expect(countedTier(legacy as never)).toBe("C");
+    expect(isExternalSource(legacy as never)).toBe(false);
+    expect(countedTier(call(["A", "C"], cited) as never)).toBe("A");
+    expect(isExternalSource(call(["A", "C"], cited) as never)).toBe(true);
+    expect(countedTier(call(["A", "B"], null) as never)).toBe("B");
+  });
+
+  it("takes §9.8's calculation entries, checker_doubt issues, addedClaim and pass-prefixed additions", () => {
+    const calculation = {
+      kind: "calculation",
+      expression: "100 × 1.609344",
+      result: 160.9344,
+      constants: ["mile"],
+      claimIds: [],
+    };
+    const doubted = {
+      ...check,
+      claimResults: [
+        {
+          claimId: "c1",
+          verdict: "confirmed",
+          evidence: [calculation],
+          note: "A pure conversion.",
+        },
+        {
+          claimId: "xA1",
+          verdict: "uncertain",
+          evidence: [],
+          note: "",
+          addedClaim: {
+            role: "explanation",
+            text: "The flute is carved from swan bone.",
+            risk: "standard",
+          },
+        },
+      ],
+      issues: [
+        { type: "checker_doubt", severity: "fix", note: "xA1 is uncertain." },
+      ],
+      verdict: "revise",
+    };
+    expect(messages(CheckRecordSchema.safeParse(doubted))).toEqual([]);
+    // An addition under a pass prefix says what it added.
+    const bare = {
+      ...doubted,
+      claimResults: [
+        doubted.claimResults[0],
+        { ...doubted.claimResults[1], addedClaim: undefined },
+      ],
+    };
+    expect(messages(CheckRecordSchema.safeParse(bare))).toEqual([
+      expect.stringContaining("give its role, text and risk in addedClaim"),
+    ]);
+    // A confirmation that rests on nothing confirms nothing.
+    const empty = {
+      ...check,
+      claimResults: [
+        { claimId: "c1", verdict: "confirmed", evidence: [], note: "" },
+      ],
+    };
+    expect(CheckRecordSchema.safeParse(empty).success).toBe(false);
+    // The guide's merge entry for a checker's duplicate addition.
+    expect(
+      messages(
+        VerificationSchema.safeParse({
+          checks: [],
+          merge: {
+            mergedAt: "2026-11-02T10:55:00Z",
+            editor: "ed-1",
+            claims: [
+              { id: "c3", addedBy: "writer" },
+              { id: "xA1", addedBy: "A" },
+              { id: "xB2", addedBy: "B" },
+            ],
+            duplicates: [{ id: "xB2", sameAs: "c3" }],
+            sentToFollowUp: ["xA1"],
+          },
+        }),
+      ),
+    ).toEqual([]);
+    for (const id of ["xA1", "xB12", "xT1", "xD3", "x1", "c4"])
+      expect(CLAIM_ID_PATTERN.test(id), id).toBe(true);
+    for (const id of ["xC1", "xa1", "xA0", "y1"])
+      expect(CLAIM_ID_PATTERN.test(id), id).toBe(false);
+  });
+
+  it("holds one served time per stage hash, and each cold-solve entry inside its stage (§9.4)", () => {
+    const staged = {
+      ...check,
+      packetSha256: ["a".repeat(64), "b".repeat(64)],
+      stagesServedAt: ["2026-11-02T10:00:00Z", "2026-11-02T10:01:30Z"],
+      coldSolve: { ...check.coldSolve, recordedAt: "2026-11-02T10:01:00Z" },
+    };
+    expect(messages(CheckRecordSchema.safeParse(staged))).toEqual([]);
+    expect(
+      messages(
+        CheckRecordSchema.safeParse({
+          ...staged,
+          coldSolve: {
+            ...staged.coldSolve,
+            recordedAt: "2026-11-02T10:02:00Z",
+          },
+        }),
+      ),
+    ).toEqual([expect.stringContaining("before stage 2 was")]);
+    expect(
+      CheckRecordSchema.safeParse({
+        ...staged,
+        stagesServedAt: ["2026-11-02T10:00:00Z"],
+      }).success,
+    ).toBe(false);
+  });
+
+  it("insists the method matches the evidence kind, and goes only with one entry", () => {
+    expect(
+      CheckRecordSchema.safeParse({
+        ...check,
+        claimResults: [
+          {
+            ...check.claimResults[0],
+            evidence: [check.claimResults[0]?.evidence],
+          },
+        ],
+      }).success,
+    ).toBe(false);
     const mismatch = {
       ...check,
       claimResults: [{ ...check.claimResults[0], method: "dataset" }],
@@ -659,11 +872,28 @@ describe("answer lists, schedules and the register", () => {
       status: "assembled",
       predictedPoints: 3.3,
       dayCheck: null,
+      spareOrder: ["spare.07", "spare.02"],
     };
     expect(
       ScheduleMonthSchema.safeParse({ track: "main", dailies: [daily] })
         .success,
     ).toBe(true);
+    // spareOrder (§2.11) holds spare.NN ids, each ranked once. A daily
+    // written before the field existed still parses (X30 warns instead).
+    const { spareOrder: _order, ...noOrder } = daily;
+    expect(
+      ScheduleMonthSchema.safeParse({ track: "main", dailies: [noOrder] })
+        .success,
+    ).toBe(true);
+    for (const spareOrder of [["spare-07"], ["spare.07", "spare.07"]]) {
+      expect(
+        ScheduleMonthSchema.safeParse({
+          track: "main",
+          dailies: [{ ...daily, spareOrder }],
+        }).success,
+        spareOrder.join(","),
+      ).toBe(false);
+    }
     expect(
       ScheduleMonthSchema.safeParse({ track: "main", dailies: [daily, daily] })
         .success,
@@ -675,7 +905,7 @@ describe("answer lists, schedules and the register", () => {
       }).success,
     ).toBe(false);
     const spare = {
-      id: "spare-01",
+      id: "spare.01",
       track: "main",
       rounds: daily.rounds,
       status: "assembled",
@@ -685,6 +915,10 @@ describe("answer lists, schedules and the register", () => {
     expect(SpareSetSchema.safeParse(spare).success).toBe(true);
     const { track: _track, ...noTrack } = spare;
     expect(SpareSetSchema.safeParse(noTrack).success).toBe(false);
+    // Ids are spare.NN as ARCHITECTURE §2.4 names them.
+    expect(SpareSetSchema.safeParse({ ...spare, id: "spare-01" }).success).toBe(
+      false,
+    );
   });
 
   it("types rounds as ARCHITECTURE §3.3 does: mc, tf, comparison, mystery, encore", () => {
@@ -697,6 +931,7 @@ describe("answer lists, schedules and the register", () => {
           status: "assembled",
           predictedPoints: 0,
           dayCheck: null,
+          spareOrder: [],
         },
       ],
     });

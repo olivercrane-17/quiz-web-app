@@ -254,10 +254,17 @@ function validate<T>(file: BankFile, schema: ZodType<T>): T | null {
   return null;
 }
 
-/** Answer lists are validated entity by entity, so one bad entry blocks nothing else. */
+/**
+ * Answer lists are validated entity by entity, so one bad entry blocks
+ * nothing else. The shell holds the file fields of CONTENT_GUIDE §2.10,
+ * `liveAt` included (the UTC date of the commit that first published the
+ * version, which content:check holds against git history and
+ * `content:lists -- --write` sets).
+ */
 const ListShellSchema = z.strictObject({
   type: z.enum(ANSWER_TYPES),
   version: isoDate,
+  liveAt: isoDate.optional(),
   provenance: z
     .array(
       z.strictObject({ source: text, license: text, retrievedAt: isoDate }),
@@ -476,7 +483,9 @@ export function knownContentPath(rel: string): boolean {
     default:
       return (
         parts.length === 1 &&
-        (name === "categories.json" || name === "batches.json")
+        (name === "categories.json" ||
+          name === "batches.json" ||
+          name === "compositions.json")
       );
   }
 }

@@ -19,6 +19,7 @@ import { afterAll, describe, expect, it } from "vitest";
 import type { McItem } from "../schema/items.ts";
 import {
   EDITOR,
+  FX_SELF_CHECK,
   REPO_ROOT,
   fxMc,
   fxRecord,
@@ -127,13 +128,23 @@ describe("the content CLIs", () => {
 
       const dir = join(repo, "content/practice/geography");
       mkdirSync(dir, { recursive: true });
+      // The writer's self-check, every code true: the packet builder
+      // refuses an item without it (§2.3, §9.3).
       writeFileSync(
         join(dir, "p.geo.0101.json"),
-        JSON.stringify(realId(fxMc(), "p.geo.0101"), null, 2),
+        JSON.stringify(
+          { ...realId(fxMc(), "p.geo.0101"), selfCheck: FX_SELF_CHECK },
+          null,
+          2,
+        ),
       );
       writeFileSync(
         join(dir, "p.geo.0102.json"),
-        JSON.stringify({ ...fxTf(), id: "p.geo.0102" }, null, 2),
+        JSON.stringify(
+          { ...fxTf(), id: "p.geo.0102", selfCheck: FX_SELF_CHECK },
+          null,
+          2,
+        ),
       );
       const check = JSON.parse(
         cli(repo, "check", "--batch", "p.geo.b01", "--json", "--writer", writer)
@@ -153,27 +164,77 @@ describe("the content CLIs", () => {
         const packet = JSON.parse(
           cli(repo, "packet", "--batch", "p.geo.b01", "--pass", pass, "--json")
             .out,
-        ) as { items: { itemId: string; packetSha256: string }[] };
+        ) as { items: { itemId: string; stage: number }[] };
         expect(packet.items.map((item) => item.itemId)).toEqual(ids);
+        expect(packet.items.map((item) => item.stage)).toEqual([1, 1]);
       }
+      const packets = join(repo, ".cache/packets/p.geo.b01");
       const cold = readFileSync(
-        join(repo, ".cache/packets/p.geo.b01/A/cold.json"),
+        join(packets, "A/p.geo.0101/stage-1.json"),
         "utf8",
       );
       expect(cold).not.toContain("writerNotes");
       expect(cold).not.toContain('"claims"');
       expect(cold).not.toContain(fxMc().explanation);
-      expect(
-        existsSync(join(repo, ".cache/packets/p.geo.b01/B/reveal.json")),
-      ).toBe(true);
+      // The final stage waits for the cold solve (§9.4).
+      expect(existsSync(join(packets, "B/p.geo.0101/stage-2.json"))).toBe(
+        false,
+      );
 
       const layout = resolveLayout({ repoRoot: repo });
       const bank = await loadBank(layout);
       for (const pass of ["A", "B"] as const) {
+        // Each run records its cold solves, takes the final stage, and
+        // copies what was served into its records.
+        const solved = new Map(
+          ids.map((id) => {
+            const record = bank.itemsById.get(id);
+            if (!record) throw new Error(id);
+            const draft = fxRecord(bank, record, pass);
+            return [
+              id,
+              { ...draft.coldSolve, recordedAt: new Date().toISOString() },
+            ] as const;
+          }),
+        );
+        const draft = join(repo, `draft-${pass}.json`);
+        writeFileSync(
+          draft,
+          JSON.stringify(
+            [...solved].map(([itemId, coldSolve]) => ({ itemId, coldSolve })),
+          ),
+        );
+        const next = cli(
+          repo,
+          "packet",
+          "--batch",
+          "p.geo.b01",
+          "--pass",
+          pass,
+          "--next",
+          "--record",
+          draft,
+        );
+        expect(next.out).toContain("served 2 pass");
+        const log = JSON.parse(
+          readFileSync(join(packets, pass, "served.json"), "utf8"),
+        ) as {
+          items: Record<
+            string,
+            { served: { sha256: string; servedAt: string }[] }
+          >;
+        };
         const records = ids.map((id) => {
           const record = bank.itemsById.get(id);
+          const served = log.items[id]?.served ?? [];
           if (!record) throw new Error(id);
-          return fxRecord(bank, record, pass);
+          return fxRecord(bank, record, pass, {
+            packetSha256: served.map((stage) => stage.sha256),
+            stagesServedAt: served.map((stage) => stage.servedAt),
+            startedAt: served[0]?.servedAt ?? "",
+            finishedAt: new Date().toISOString(),
+            coldSolve: solved.get(id) as never,
+          });
         });
         const bad = join(repo, `bad-${pass}.json`);
         writeFileSync(
