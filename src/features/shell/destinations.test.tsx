@@ -6,6 +6,9 @@ import type { Metadata } from "next";
 import type { ComponentType } from "react";
 import { describe, expect, it, vi } from "vitest";
 
+import { RESTORE_HREF, SYNC_HREF } from "@/features/identity/links";
+import { buildSitemap } from "@/features/legal/routes/sitemap";
+import { isNoindex } from "@/lib/metadata";
 import { renderWithUser } from "@/test/render";
 
 import { SHELL_COPY } from "./copy";
@@ -120,6 +123,60 @@ describe("every destination the shell draws", () => {
     );
     expect(new Set(titles).size).toBe(titles.length);
     expect(titles).not.toContain("undefined");
+  });
+});
+
+/**
+ * IDN-2's two pages sit beside the shell's destinations without being
+ * drawn by the shell: Me (STA-1), Settings (SET-1), each other and the
+ * claim page link to them. They must still agree with LGL-1's footer and
+ * sitemap and with the destinations above.
+ */
+describe("IDN-2's sync code and restore pages beside the shell's destinations", () => {
+  const routes = pages();
+  const IDENTITY_PAGES = [
+    [SYNC_HREF, "(tabs)"],
+    [RESTORE_HREF, "(landing)"],
+  ] as const;
+
+  async function metadataOf(href: string): Promise<Metadata | undefined> {
+    const page = routes.get(href);
+    if (page === undefined) throw new Error(`no page for ${href}`);
+    return (await loadPage(page.file)).metadata;
+  }
+
+  it("R1-02 puts /me/sync in (tabs), under Me, and /restore in (landing), as ARCHITECTURE §10.1 does", () => {
+    for (const [href, group] of IDENTITY_PAGES) {
+      expect(routes.get(href)?.group, href).toBe(group);
+    }
+  });
+
+  it("R1-09 gives each a title of its own, which no shell destination or trust page shares", async () => {
+    const theirs = await Promise.all(
+      IDENTITY_PAGES.map(async ([href]) =>
+        String((await metadataOf(href))?.title),
+      ),
+    );
+    const shell = await Promise.all(
+      Object.keys(GROUP_OF)
+        .filter((href) => href !== "/")
+        .map(async (href) => String((await metadataOf(href))?.title)),
+    );
+    expect(theirs).not.toContain("undefined");
+    expect(new Set(theirs).size).toBe(theirs.length);
+    for (const title of theirs) expect(shell).not.toContain(title);
+  });
+
+  it("keeps both out of search and out of the footer: noindex, and absent from the sitemap with every flag on", async () => {
+    const listed = buildSitemap("https://knewt.example", () => true).map(
+      (entry) => new URL(entry.url).pathname,
+    );
+    expect(listed).toContain("/credits");
+    for (const [href] of IDENTITY_PAGES) {
+      expect(isNoindex(await metadataOf(href)), href).toBe(true);
+      expect(listed).not.toContain(href);
+      expect(LEGAL_LINKS.map((link) => link.href)).not.toContain(href);
+    }
   });
 });
 
