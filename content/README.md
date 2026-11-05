@@ -299,16 +299,23 @@ The editor may not be the batch's writer, a checker or an estimator of the item,
 ### content:dedupe
 
 ```sh
-npm run content:dedupe                           # every pair scoring 0.5 or more, bank and guide examples
+npm run content:dedupe                           # every pair scoring 0.5 or more, bank and guide examples, then X29
 npm run content:dedupe -- --threshold 0.7 --json
 npm run content:dedupe -- --item p.geo.0101      # the nearest neighbour of one item
 npm run content:dedupe -- --write                # record verification.dedupe (unique) on checking items
 npm run content:dedupe -- --item m.geo.0101 --reveal   # your own terminal only: name a pair across the seal
+npm run content:dedupe -- --cross-pool           # only the cross-pool check (X29), no pairs
+npm run content:dedupe -- --strict               # fail on a near-duplicate pair too
+npm run content:dedupe -- --sealed               # content/sealed/ in memory (needs the key), redacted output
 ```
 
 Near-duplicate detection across the whole bank and the worked examples in `docs/CONTENT_GUIDE.md` (read, never written). Each item becomes a set of content words from the text that carries its fact (stem and key, a true/false statement, comparison labels and measure, a mystery's clues and answer, an encore's question), folded, with stopwords and plurals trimmed, plus answer keys. A pair scores the larger of Jaccard similarity and 0.8 times containment; a shared answer lifts it to at least 0.5 + 0.5 times that, and two mysteries with the same answer score at least 0.9. At 0.5 and up, C22 warns and the editor decides. Output is ids and scores only, never item text. `--write` records `verdict: "unique"` only for items below the threshold; flagged ones wait for the editor in `content:decide`.
 
 **Pairs across the seal.** A plaintext item, or a guide example (the guide prints its answers), named next to a sealed item gives the sealed answer away by inference, and the content-sealed job's logs are public. So without `--reveal` such a pair is listed under its sealed id only (`m.geo.0102  a public item`), with no score or reason, in the text and the JSON output alike; `content:check` reports it only on the sealed side ("near-duplicate of a public item") and compares plaintext items with public entries only. `--reveal` (in `content:check` and `content:dedupe`) names both sides, for your own terminal only.
+
+**The cross-pool check** (X29, AC-CNT-06, the one `content:check` runs). Whenever sealed items are loaded (the workspace, or `--sealed`), no practice or room item may share a fact with a Daily item. Each finding is an error named on the sealed side only, printed after the pairs as `error X29 m.geo.0101: ...`, then the counts; when no sealed Daily item is loaded, a note says the check did not run. `--cross-pool` runs this check alone and lists no pairs. `--json` adds `ok`, `crossPoolRan`, `crossPool` and `notes` to `indexed`, `threshold`, `pairs`, `written` and `leftForEditor`. Exit code 1 on any X29 finding; a near-duplicate pair is a C22 warning for the editor and fails the run only with `--strict`; 2 on a bad option.
+
+**`--sealed`** decrypts `content/sealed/` in memory with the content key (`QZ_CONTENT_KEY` or `~/.config/quiz-web-app/content.key`) instead of reading the workspace, and everything then goes through the redacting reporter of ARCHITECTURE §5.4: `error m.geo.0101 X29`, each pair as a C22 warning under one id, a note or two and the counts, and an error thrown while sealed content is open prints one line that says nothing about it. `--item`, `--write` and `--reveal` read the workspace in your own terminal, so they refuse `--sealed` (exit 2). `--skip-guide` leaves the guide's examples out, and `--root <dir>` with `--fixtures` runs over a fixture tree.
 
 ### content:datasets
 
@@ -375,6 +382,28 @@ npm run content:stats -- --sealed
 ```
 
 Counts by pool, category, difficulty band (from `predicted.p` when present, else the seed; mysteries by slot; encores by `predicted.pClose`: easy at 0.5 or more, medium 0.2 to 0.49, hard below 0.2, §8.4), format and status, the answer lists, each batch's progress against its target, and the Daily runway: main-track Dailies scheduled from today, how many in a row, the alarm below 30 (§10.7), how many more Dailies the unscheduled active pool could fill, and the main track's spare sets.
+
+### content:release
+
+```sh
+npm run content:release -- --version 3                  # the sealed release (needs the content key)
+npm run content:release -- --version 3 --json
+npm run content:release -- --version 4 --allow-frozen   # a correction that changes a frozen Daily
+npm run content:release -- --version 3 --out supabase/.generated/r3.sql --chunk-kb 120
+npm run content:release -- --version 3 --today 2026-12-01
+npm run content:release -- --fixtures                   # write the e2e track's seed and its SQL test
+npm run content:release -- --fixtures --check           # compare both with what is committed
+```
+
+The sealed release (SQL-3, ARCHITECTURE §5.4). It decrypts `content/sealed/` in memory with the content key (`QZ_CONTENT_KEY` or `~/.config/quiz-web-app/content.key`; with `QZ_SEALED_PLAINTEXT=1` it reads the workspace instead), validates it as `content:check -- --sealed` does, and writes `supabase/.generated/content-release-<n>.sql`, which git ignores. Nothing is written when the content does not validate, when a chunk could not be sent unattended, or when `--out` names a path git does not ignore, since the file holds sealed plaintext.
+
+- `--version <n>`: letters, digits, `.`, `_` or `-`, starting with a letter or digit, up to 64 characters; it becomes `content_releases.version`.
+- The file is a list of chunks, each one statement of at most `--chunk-kb` kB (default 60, from 4 to 400): content rows (mysteries, encores, sealed questions, room packs, challenge packs), then schedule rows (Dailies, spare sets), then `private.verify_release`, then `private.record_release`, which records the release last. Answer entities load earlier, from `supabase/seed/answer-entities.sql`. Send each chunk as its own `execute_sql` call, in order, and stop at the first that fails. Loading a release again changes nothing, and an older release is refused at its first chunk.
+- `--allow-frozen` lets the loaders change frozen Dailies and the items on them, for a correction; without it they refuse those rows. `--today <date>` sets the date the validation rules read (default: today, UTC).
+- Everything it prints goes through the redacting reporter: ids, rule codes, field paths and counts, never content. `--json` prints that report with the version, the track, the counts, the number of ready Dailies and each chunk's label, rows and bytes.
+- `--fixtures` builds the e2e track's release from `content/fixtures/` instead (§5.6, §8.17) and writes the committed `supabase/seed/e2e-track.sql` and `supabase/tests/content/fixture-release.test.sql`. With `--check` it writes nothing and fails when either file differs from what it would write.
+
+Exit code 1 when the content does not validate, the key is missing, nothing could be written or `--fixtures --check` finds a stale file; 2 on a bad option, as every content command.
 
 ### check:secrets
 
