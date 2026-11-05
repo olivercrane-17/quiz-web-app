@@ -327,7 +327,7 @@ export function privacyDocument(
             kind: "list",
             items: [
               "**Download my data** gives you a file with everything our server holds for your profile, plus the practice data on this device.",
-              "**Delete my data** asks twice, then deletes your profile, its secrets and sync code, your Group memberships, your challenges and your quizzes, and takes your player id off your Daily games. It then clears this device and removes the backup cookie. Totals such as how many people solved a Mystery on clue 2 stay, with nothing in them that points to you.",
+              `**Delete my data** asks twice, then deletes your profile, its secrets and sync code, your Group memberships ${editor ? "and challenges, your quizzes" : "and your challenges"}, and takes your player id off your Daily games. It then clears this device and removes the backup cookie. Totals such as how many people solved a Mystery on clue 2 stay, with nothing in them that points to you.`,
             ],
           },
           {
@@ -350,7 +350,9 @@ export function privacyDocument(
           },
           {
             kind: "p",
-            text: "Players aged 13 to 17 pick from generated names instead of typing their own, and can't share quizzes.",
+            text: editor
+              ? "Players aged 13 to 17 pick from generated names instead of typing their own, and can't share quizzes."
+              : "Players aged 13 to 17 pick from generated names instead of typing their own.",
           },
         ],
       },

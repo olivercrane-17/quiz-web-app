@@ -32,7 +32,7 @@ import {
   SOFTWARE_NOTICES,
   type DatasetCredit,
   type ListCredit,
-  type SoftwareNotice,
+  type SoftwarePackage,
 } from "../generated/licenses";
 
 /** Who made each font, and where it lives (DESIGN §3.1), by licence file. */
@@ -110,9 +110,8 @@ function datasetItem(dataset: DatasetCredit): TermItem {
   };
 }
 
-function packageLine(notice: SoftwareNotice, index: number): string {
-  const pkg = notice.packages[index];
-  if (pkg === undefined) return "";
+/** "`next` 16.4.3: Copyright (c) 2025 Vercel, Inc.", the notice as the package words it. */
+function packageLine(pkg: SoftwarePackage): string {
   const copyright =
     pkg.copyright.length > 0
       ? `: ${pkg.copyright.join("; ")}`
@@ -125,10 +124,9 @@ function packageLine(notice: SoftwareNotice, index: number): string {
 function softwareBlocks(): Block[] {
   return SOFTWARE_NOTICES.flatMap((notice): Block[] => {
     const name = notice.licenses.map(licenceName).join(" or ");
-    const lines = notice.packages.map((_, index) => packageLine(notice, index));
     return [
       { kind: "subhead", text: name },
-      { kind: "list", items: lines },
+      { kind: "list", items: notice.packages.map(packageLine) },
       ...(notice.text === ""
         ? []
         : [
