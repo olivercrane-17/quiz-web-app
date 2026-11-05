@@ -743,7 +743,9 @@ describe("CNT-0 the key and the plaintext stay private", () => {
     expect(envRestore.out).toContain(
       "If it holds the wrong key, unset QZ_CONTENT_KEY and run --restore again.",
     );
-  });
+    // Seven CLI runs: about 2 s alone, and past Vitest's 5 s default in a
+    // full parallel suite on a shared machine under load.
+  }, 30_000);
 
   it("restoring sets the key's folder to mode 0700 even when it already exists", () => {
     const { repo, home } = sealedRepo();
