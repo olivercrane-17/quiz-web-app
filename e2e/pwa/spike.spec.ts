@@ -335,6 +335,11 @@ async function probe(page: Page, url: string) {
 
 test.describe("the service-worker spike", () => {
   test.describe.configure({ timeout: 120_000 });
+  // Rule 1's probe fetches another origin from the page, which a mock
+  // build's Content Security Policy (connect-src 'self', SEC-1) refuses
+  // before the worker could see it. The spike tests the worker's routing,
+  // not the page's policy (e2e/security/headers.spec.ts does that).
+  test.use({ bypassCSP: true });
 
   test("after one online visit, /practice/run plays offline to its results from the spike worker's precache", async ({
     page,

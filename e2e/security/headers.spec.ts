@@ -444,3 +444,59 @@ test.describe("the Content Security Policy in the browser", () => {
     consoleErrors.splice(0, consoleErrors.length);
   });
 });
+
+test.describe("the service worker under the policy", () => {
+  // Every project but pwa-chromium blocks workers, since a worker's own
+  // requests skip the external-request guard. The stub worker makes none.
+  test.use({ serviceWorkers: "allow" });
+
+  test("registers /sw.js for the whole site, as worker-src 'self' and Service-Worker-Allowed allow", async ({
+    page,
+    request,
+    baseURL,
+  }) => {
+    const violations = await watchViolations(page);
+    const register = async (origin: string) => {
+      await page.goto(`${origin}/`);
+      const registered = await page.evaluate(async () => {
+        const registration = await navigator.serviceWorker.register("/sw.js", {
+          scope: "/",
+          updateViaCache: "none",
+        });
+        const worker =
+          registration.installing ??
+          registration.waiting ??
+          registration.active;
+        if (worker === null)
+          return { scope: registration.scope, state: "none" };
+        await new Promise<void>((resolve, reject) => {
+          const timer = setTimeout(
+            () => reject(new Error(`the worker is still ${worker.state}`)),
+            30_000,
+          );
+          const settle = () => {
+            if (worker.state !== "activated") return;
+            clearTimeout(timer);
+            resolve();
+          };
+          worker.addEventListener("statechange", settle);
+          settle();
+        });
+        return { scope: registration.scope, state: worker.state };
+      });
+      const seen = await violations();
+      // Leave before a stub server stops, so no late request meets a closed port.
+      await page.goto("about:blank");
+      return { origin, registered, seen };
+    };
+
+    const served = await request.get("/sw.js");
+    // This build writes no worker yet: register a stub one on the same build.
+    const { origin, registered, seen } = served.ok()
+      ? await register(new URL(baseURL ?? "").origin)
+      : await withStubWorker(baseURL ?? "", register);
+
+    expect(registered).toEqual({ scope: `${origin}/`, state: "activated" });
+    expect(seen).toEqual([]);
+  });
+});
