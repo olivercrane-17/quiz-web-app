@@ -62,7 +62,7 @@ export function accessibilityDocument(
             items: [
               {
                 term: "Theme",
-                details: ["System, Light or Dark."],
+                details: ["Follow your device, or choose Light or Dark."],
               },
               {
                 term: "Reduce motion",

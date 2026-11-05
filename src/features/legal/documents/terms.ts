@@ -77,7 +77,7 @@ export function termsDocument(
             items: [
               "break the law, or help someone else break it;",
               "harass or threaten anyone, or share someone's personal information;",
-              "post anything our [content policy](/content-policy) rules out, in a Group name, a nickname or a quiz;",
+              "post anything our [content policy](/content-policy) rules out, in a name or in a quiz;",
               "break into another player's profile or our systems, or get in their way;",
               "copy our questions in bulk, or scrape the app.",
             ],
@@ -102,7 +102,7 @@ export function termsDocument(
               ]),
           {
             kind: "p",
-            text: "Your quizzes stay yours. When you save one to our server, share it or host it, you give us permission to store it, copy it, show it and serve it to the people you share it with and to the players in your rooms, worldwide and free of charge, for as long as it stays saved. We may also check it against our content policy. The permission ends when you delete the quiz.",
+            text: "Your quizzes stay yours. When you save one to our server or share it (by link or in a room), you give us permission to store it, copy it, show it and serve it to the people you share it with and to the players in your rooms, worldwide and free of charge, for as long as it stays saved. We may also check it against our content policy. The permission ends when you delete the quiz.",
           },
           {
             kind: "p",

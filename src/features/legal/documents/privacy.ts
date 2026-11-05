@@ -151,7 +151,7 @@ export function privacyDocument(
             kind: "list",
             items: [
               "You play as a guest. Your browser makes a random player id and a secret on your first visit. They reach our server only when you first play something online, such as the Daily. If you only ever play Practice, they never leave your device.",
-              "We keep your Daily games, streak and stats on our server, so they survive a cleared browser and can move to a new device.",
+              "We keep your Daily games and your stats on our server, so they survive a cleared browser and can move to a new device.",
               "There is one cookie, and its only job is to back up your profile. No analytics or advertising cookie, ever.",
               "Our own analytics count things like finished Dailies and shares. They go to our own database and nowhere else.",
               "You can download or delete your data at any time in Settings.",
@@ -179,7 +179,7 @@ export function privacyDocument(
               {
                 term: "Your Daily games",
                 details: [
-                  "For each Daily you play: your guesses, the clue you solved each Mystery on, your Encore number, your score and your times. We also keep your streak history, freezes and repairs, and the totals behind your stats.",
+                  "For each Daily you play: your guesses, the clue you solved each Mystery on, your Encore number, your score and your times. We also keep your streak history (freezes and repairs included) and the totals behind your stats.",
                 ],
               },
               {
@@ -229,7 +229,7 @@ export function privacyDocument(
               {
                 term: "Reports and hearts",
                 details: [
-                  "When you report a question: which question, your reason and any note you add (we strip links out of notes). When you heart a question, that you liked it. Nobody else sees either.",
+                  "When you report a question: the question and your reason, with any note you add (we strip links out of notes). When you heart a question, that you liked it. Nobody else sees either.",
                 ],
               },
               {
@@ -241,7 +241,7 @@ export function privacyDocument(
               {
                 term: "Analytics events",
                 details: [
-                  "Short records of what happened in the app, such as a Daily finished, a share opened or a page that loaded slowly. Each one carries your player id, a random id for the browser tab, the time, the app version and the kind of browser (for example Android, inside a messaging app). Events never carry your IP address, your browser's full user agent or anything you typed.",
+                  "Short records of what happened in the app, such as a Daily finished or a share opened. Each one carries your player id, a random id for the browser tab, the time, the app version and the kind of browser you use (such as Android, inside a messaging app), never its full user agent. Events never carry your IP address or anything you typed.",
                 ],
               },
               {
