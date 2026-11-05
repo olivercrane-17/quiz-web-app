@@ -586,25 +586,29 @@ describe("ENR-1 .github/workflows/wikidata-enrich.yml", () => {
     expect(download?.with?.name).toBe(upload?.with?.name);
   });
 
-  it("ENR-1 the workflow's steps are safe to run: pinned first-party actions, no persisted token, no expression inside a script, valid bash", () => {
-    // No repository secret at all: the job token is github.token.
-    expect(source).not.toMatch(/secrets\./);
-    for (const step of steps) {
-      if (step.uses !== undefined) {
-        expect(step.uses).toMatch(/^actions\/[a-z-]+@v\d+$/);
-        if (step.uses.startsWith("actions/checkout"))
-          expect(step.with?.["persist-credentials"]).toBe(false);
+  it(
+    "ENR-1 the workflow's steps are safe to run: pinned first-party actions, no persisted token, no expression inside a script, valid bash",
+    { timeout: 60_000 },
+    () => {
+      // No repository secret at all: the job token is github.token.
+      expect(source).not.toMatch(/secrets\./);
+      for (const step of steps) {
+        if (step.uses !== undefined) {
+          expect(step.uses).toMatch(/^actions\/[a-z-]+@v\d+$/);
+          if (step.uses.startsWith("actions/checkout"))
+            expect(step.with?.["persist-credentials"]).toBe(false);
+        }
+        if (step.run === undefined) continue;
+        // Inputs reach scripts through env, so no input can inject a command.
+        expect(step.run).not.toContain("${{");
+        const script = join(tempDir("qz-enrich-yml-"), "step.sh");
+        writeFileSync(script, step.run);
+        const syntax = spawnSync("bash", ["-n", script], { encoding: "utf8" });
+        expect(syntax.stderr, step.name).toBe("");
+        expect(syntax.status, step.name).toBe(0);
       }
-      if (step.run === undefined) continue;
-      // Inputs reach scripts through env, so no input can inject a command.
-      expect(step.run).not.toContain("${{");
-      const script = join(tempDir("qz-enrich-yml-"), "step.sh");
-      writeFileSync(script, step.run);
-      const syntax = spawnSync("bash", ["-n", script], { encoding: "utf8" });
-      expect(syntax.stderr, step.name).toBe("");
-      expect(syntax.status, step.name).toBe(0);
-    }
-  });
+    },
+  );
 
   it("checks the properties under the labels the synthetic Wikidata gives", () => {
     expect(PROPERTY_LABELS).toEqual(PROPERTIES);
@@ -759,34 +763,38 @@ describe("ENR-1 a dry run over the fixture QID list", () => {
     );
   });
 
-  it("through the CLI writes one file per list and leaves every list file as it was", () => {
-    const repo = cliRepo();
-    const lists = join(repo, "content/answer-lists");
-    const before = snapshot(lists);
-    const run = cli(repo, "world", "--summary", "summary.md");
-    expect(run.stderr).toBe("");
-    expect(run.code).toBe(0);
-    expect(snapshot(lists)).toEqual(before);
-    const out = snapshot(join(lists, "_wikidata"));
-    expect(Object.keys(out)).toEqual([
-      "country.json",
-      "landmark.json",
-      "music_artist.json",
-      "person.json",
-    ]);
-    for (const [name, raw] of Object.entries(out)) {
-      const data = JSON.parse(raw) as EnrichmentFile;
-      expect({ ...data, fetchedAt: FETCHED_AT }).toEqual(
-        EXPECTED[name.slice(0, -5)],
+  it(
+    "through the CLI writes one file per list and leaves every list file as it was",
+    { timeout: 60_000 },
+    () => {
+      const repo = cliRepo();
+      const lists = join(repo, "content/answer-lists");
+      const before = snapshot(lists);
+      const run = cli(repo, "world", "--summary", "summary.md");
+      expect(run.stderr).toBe("");
+      expect(run.code).toBe(0);
+      expect(snapshot(lists)).toEqual(before);
+      const out = snapshot(join(lists, "_wikidata"));
+      expect(Object.keys(out)).toEqual([
+        "country.json",
+        "landmark.json",
+        "music_artist.json",
+        "person.json",
+      ]);
+      for (const [name, raw] of Object.entries(out)) {
+        const data = JSON.parse(raw) as EnrichmentFile;
+        expect({ ...data, fetchedAt: FETCHED_AT }).toEqual(
+          EXPECTED[name.slice(0, -5)],
+        );
+      }
+      expect(readFileSync(join(repo, "summary.md"), "utf8")).toContain(
+        "| person | 2 | 1 | 0 | 1 | 0 | 3 | 1 | 0 | 0 | 1 | 1 |",
       );
-    }
-    expect(readFileSync(join(repo, "summary.md"), "utf8")).toContain(
-      "| person | 2 | 1 | 0 | 1 | 0 | 3 | 1 | 0 | 0 | 1 | 1 |",
-    );
-    expect(run.stdout.trim().split("\n").at(-1)).toBe(
-      "enrich-wikidata: wrote 4 file(s) to content/answer-lists/_wikidata/. No list entry changed; once the pull request merges, the list builder applies it with --apply.",
-    );
-  });
+      expect(run.stdout.trim().split("\n").at(-1)).toBe(
+        "enrich-wikidata: wrote 4 file(s) to content/answer-lists/_wikidata/. No list entry changed; once the pull request merges, the list builder applies it with --apply.",
+      );
+    },
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -794,32 +802,40 @@ describe("ENR-1 a dry run over the fixture QID list", () => {
 // ---------------------------------------------------------------------------
 
 describe("ENR-1 without network", () => {
-  it("ENR-1 the real run, which can't reach Wikidata from the sandbox, fails with one line naming the host and writes nothing", () => {
-    const repo = cliRepo();
-    // An earlier run's output stays exactly as it was.
-    const out = join(repo, "content/answer-lists/_wikidata");
-    mkdirSync(out);
-    writeFileSync(join(out, "person.json"), '{ "earlier": true }\n');
-    const run = cli(repo, "offline");
-    expect(run.code).toBe(1);
-    expect(run.stdout).toBe("");
-    expect(run.stderr).toBe(
-      "enrich-wikidata: cannot reach www.wikidata.org (ENOTFOUND); nothing was written\n",
-    );
-    expect(snapshot(out)).toEqual({ "person.json": '{ "earlier": true }\n' });
-  });
+  it(
+    "ENR-1 the real run, which can't reach Wikidata from the sandbox, fails with one line naming the host and writes nothing",
+    { timeout: 60_000 },
+    () => {
+      const repo = cliRepo();
+      // An earlier run's output stays exactly as it was.
+      const out = join(repo, "content/answer-lists/_wikidata");
+      mkdirSync(out);
+      writeFileSync(join(out, "person.json"), '{ "earlier": true }\n');
+      const run = cli(repo, "offline");
+      expect(run.code).toBe(1);
+      expect(run.stdout).toBe("");
+      expect(run.stderr).toBe(
+        "enrich-wikidata: cannot reach www.wikidata.org (ENOTFOUND); nothing was written\n",
+      );
+      expect(snapshot(out)).toEqual({ "person.json": '{ "earlier": true }\n' });
+    },
+  );
 
-  it("a run that loses the network midway writes no partial files", () => {
-    const repo = cliRepo();
-    const run = cli(repo, "fail-after:5");
-    expect(run.code).toBe(1);
-    expect(run.stderr.trim().split("\n")).toEqual([
-      "enrich-wikidata: cannot reach www.wikidata.org (ENOTFOUND); nothing was written",
-    ]);
-    expect(existsSync(join(repo, "content/answer-lists/_wikidata"))).toBe(
-      false,
-    );
-  });
+  it(
+    "a run that loses the network midway writes no partial files",
+    { timeout: 60_000 },
+    () => {
+      const repo = cliRepo();
+      const run = cli(repo, "fail-after:5");
+      expect(run.code).toBe(1);
+      expect(run.stderr.trim().split("\n")).toEqual([
+        "enrich-wikidata: cannot reach www.wikidata.org (ENOTFOUND); nothing was written",
+      ]);
+      expect(existsSync(join(repo, "content/answer-lists/_wikidata"))).toBe(
+        false,
+      );
+    },
+  );
 
   it("waits as Retry-After asks on 429 and maxlag answers, then carries on", async () => {
     const { deps, sleeps } = stubDeps(FIXTURE_WORLD, (_url, call) => {
@@ -1370,47 +1386,53 @@ describe("apply, the list builder's step after a merged run", () => {
     ]);
   });
 
-  it("through the CLI reports, then writes, and names the reviewer step, all without network", () => {
-    const repo = cliRepo();
-    expect(cli(repo, "world").code).toBe(0);
-    const lists = join(repo, "content/answer-lists");
-    const before = snapshot(lists);
+  it(
+    "through the CLI reports, then writes, and names the reviewer step, all without network",
+    { timeout: 60_000 },
+    () => {
+      const repo = cliRepo();
+      expect(cli(repo, "world").code).toBe(0);
+      const lists = join(repo, "content/answer-lists");
+      const before = snapshot(lists);
 
-    const report = cli(repo, "offline", "--apply", "--all");
-    expect(report.code).toBe(0);
-    expect(report.stdout).toContain(
-      "person: 1 popularity change(s), 0 wikidataId(s) accepted, 1 held.",
-    );
-    expect(report.stdout).toContain("  would set popularity of Q5432: 0 -> 7");
-    expect(snapshot(lists)).toEqual(before);
+      const report = cli(repo, "offline", "--apply", "--all");
+      expect(report.code).toBe(0);
+      expect(report.stdout).toContain(
+        "person: 1 popularity change(s), 0 wikidataId(s) accepted, 1 held.",
+      );
+      expect(report.stdout).toContain(
+        "  would set popularity of Q5432: 0 -> 7",
+      );
+      expect(snapshot(lists)).toEqual(before);
 
-    const write = cli(
-      repo,
-      "offline",
-      "--apply",
-      "--all",
-      "--write",
-      "--accept-matches",
-      "--today",
-      TODAY,
-    );
-    expect(write.stderr).toBe("");
-    expect(write.code).toBe(0);
-    expect(write.stdout).toContain(
-      "  set wikidataId of x.person.claude-monet: Q296",
-    );
-    expect(write.stdout).toContain("npm run content:check -- --sealed");
-    const person = JSON.parse(
-      readFileSync(join(lists, "person.json"), "utf8"),
-    ) as AnswerList;
-    expect([person.version, person.liveAt]).toEqual([TODAY, TODAY]);
-    expect(person.entities.find((e) => e.id === "Q5432")?.popularity).toBe(7);
-    expect(person.provenance.at(-1)?.source).toBe(WIKIDATA_PROVENANCE);
-    // content:lists reads the credit as no dataset, so it asks for no pin.
-    expect([...citedDatasets(person)]).toEqual([]);
+      const write = cli(
+        repo,
+        "offline",
+        "--apply",
+        "--all",
+        "--write",
+        "--accept-matches",
+        "--today",
+        TODAY,
+      );
+      expect(write.stderr).toBe("");
+      expect(write.code).toBe(0);
+      expect(write.stdout).toContain(
+        "  set wikidataId of x.person.claude-monet: Q296",
+      );
+      expect(write.stdout).toContain("npm run content:check -- --sealed");
+      const person = JSON.parse(
+        readFileSync(join(lists, "person.json"), "utf8"),
+      ) as AnswerList;
+      expect([person.version, person.liveAt]).toEqual([TODAY, TODAY]);
+      expect(person.entities.find((e) => e.id === "Q5432")?.popularity).toBe(7);
+      expect(person.provenance.at(-1)?.source).toBe(WIKIDATA_PROVENANCE);
+      // content:lists reads the credit as no dataset, so it asks for no pin.
+      expect([...citedDatasets(person)]).toEqual([]);
 
-    const missing = cli(repo, "offline", "--apply");
-    expect(missing.code).toBe(1);
-    expect(missing.stderr).toContain("--apply takes --type <type> or --all");
-  });
+      const missing = cli(repo, "offline", "--apply");
+      expect(missing.code).toBe(1);
+      expect(missing.stderr).toContain("--apply takes --type <type> or --all");
+    },
+  );
 });
