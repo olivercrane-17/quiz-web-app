@@ -271,3 +271,17 @@ below. They override the PRD, DESIGN.md and §19 where they differ, until those 
 - **FIX2 lanes.** Round 2's fixes run as FIX2-DLY, FIX2-MYS, FIX2-PRA and FIX2-DS, split by owned paths as §20 split
   round 1's. FIX2-DS alone edits `src/ui/**` and `src/features/shell/**`. Round 3 plays a build of the integration
   branch once all four have merged, and if it finds no P0 or P1 confusion it is the last M1 round.
+
+## 23. Assembly windows after the re-estimates (5 November 2026)
+- **The evidence.** Fresh, blind estimates replaced the script-made ones on m.sci, m.food, m.geo and m.nat b01. Over
+  all 386 active mysteries, CONTENT_GUIDE §10.2's windows (Mystery 1 3.2 to 3.6, Mystery 2 2.5 to 2.9, Mystery 3 1.9 to
+  2.3) hold 88, 86 and 61 items; 90 fall in the gaps between them, 53 below 1.9 and 8 above 3.6. Text-only estimates
+  carry an error of roughly 13 to 21 points (research gap 3), so the gaps measure noise more than difficulty.
+- **The decision.** Until real play calibrates the estimates, the windows are contiguous and follow PRD §4.1.6's bands:
+  Mystery 1 from 3.0 to 3.6, Mystery 2 from 2.4 to 3.0, Mystery 3 from 1.8 to 2.4. Inside a window the scheduler (CNT-3)
+  prefers points nearest the old centres (3.4, 2.7 and 2.1) and, for Mystery 1, the lowest spread. Items above 3.6 may
+  fill Mystery 1 last. Items below 1.8 don't schedule; an editor rewrites their ladders and they are re-estimated. The
+  weekly content run (§10.7) re-tunes estimates from play data and may narrow the windows again once it has enough.
+- **What it leaves.** By these windows the pool holds 136 easy, 115 medium and 94 hard items, plus 41 below 1.8. The
+  100 Dailies and 20 spare sets need 120 in each slot, so the mystery top-ups aim at hard items first (art, film, history
+  and language are thinnest), then medium. Rewriting the items below 1.8 is the cheapest source of hard ones.
