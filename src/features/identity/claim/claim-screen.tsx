@@ -88,6 +88,10 @@ function displayName(preview: ClaimPreview): string {
   return preview.nickname ?? preview.friendlyName;
 }
 
+/**
+ * The claim for one token, or the expired copy without one. `ClaimScreen`
+ * keys it by the address's token; component tests render it directly.
+ */
 export function ClaimFlow({ token }: { token: ClaimToken | null }) {
   const [view, setView] = useState<ClaimView>(
     token === null ? { phase: "expired" } : { phase: "loading" },
