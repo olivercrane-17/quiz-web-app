@@ -77,7 +77,7 @@ const FETCHED_AT = "2026-11-09T02:47:12Z";
 const SOURCE = {
   api: "https://www.wikidata.org/w/api.php",
   license: "CC0-1.0",
-};
+} as const;
 
 // ---------------------------------------------------------------------------
 // The fixture QID list
@@ -473,7 +473,12 @@ function cli(repo: string, fetchMode: string, ...args: string[]) {
     {
       cwd: repo,
       encoding: "utf8",
-      env: { PATH: process.env.PATH ?? "", HOME: repo, ENR_FETCH: fetchMode },
+      env: {
+        NODE_ENV: "test",
+        PATH: process.env.PATH ?? "",
+        HOME: repo,
+        ENR_FETCH: fetchMode,
+      },
     },
   );
   return { code: result.status, stdout: result.stdout, stderr: result.stderr };
