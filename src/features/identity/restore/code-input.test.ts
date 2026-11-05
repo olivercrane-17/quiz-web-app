@@ -20,7 +20,7 @@ describe("formatTypedCode", () => {
       "k7qx2m9pt4rw8h10",
       "k7qx 2m9p t4rw 8h10",
       "K7QX-2M9P-T4RW-8HIO",
-      "k7qx–2m9p—t4rw 8hlo",
+      "k7qx\u20132m9p\u2014t4rw 8hlo",
       "  K7QX-2M9P-T4RW-8H10  ",
     ]) {
       expect(formatTypedCode(typed), typed).toBe(code);

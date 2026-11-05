@@ -154,7 +154,9 @@ describe("the claim card", () => {
     const { user, onAccept } = renderCard();
     await user.click(screen.getByRole("button", { name: "Keep my streak" }));
     expect(
-      await screen.findByText(/Making a link needs a connection/),
+      await screen.findByText(/Making a link needs a connection/, {
+        selector: "[data-claim-message]",
+      }),
     ).toBeVisible();
     expect(window.location.pathname).toBe("/daily/42/results");
     await user.click(screen.getByRole("button", { name: "Keep my streak" }));

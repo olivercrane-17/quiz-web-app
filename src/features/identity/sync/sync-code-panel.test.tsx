@@ -129,7 +129,11 @@ describe("SyncCodePanel", () => {
       new Error("denied"),
     );
     await user.click(await screen.findByRole("button", { name: "Copy code" }));
-    expect(await screen.findByText(/We couldn't copy it/)).toBeVisible();
+    expect(
+      await screen.findByText(/We couldn't copy it/, {
+        selector: "[data-sync-copy-failed]",
+      }),
+    ).toBeVisible();
     expect(readSyncRecord(playerId())?.savedAt).toBeNull();
   });
 
@@ -183,6 +187,7 @@ describe("SyncCodePanel", () => {
     expect(
       await screen.findByText(
         /Your sync code needs a connection the first time/,
+        { selector: "[data-sync-error] p" },
       ),
     ).toBeVisible();
     await user.click(screen.getByRole("button", { name: "Try again" }));

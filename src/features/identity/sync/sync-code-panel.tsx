@@ -14,7 +14,7 @@
  * readers hear the code one character at a time, group by group.
  */
 import Link from "next/link";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 import { formatSyncCode, type SyncCode } from "@/engine/types";
 import { announce } from "@/ui/announce";
@@ -123,6 +123,13 @@ export function SyncCodePanel({
   const [copyFailed, setCopyFailed] = useState(false);
   const warningId = useId();
 
+  // A failed request is said in the status region as well as beside it.
+  const error =
+    view.phase === "none" || view.phase === "ready" ? view.error : null;
+  useEffect(() => {
+    if (error !== null) announce(errorText(error));
+  }, [error]);
+
   if (view.phase === "loading") {
     return (
       <div className={className} aria-busy="true" data-sync-panel="loading">
@@ -184,6 +191,7 @@ export function SyncCodePanel({
       markSaved("copy");
     } catch {
       setCopyFailed(true);
+      announce(COPY.sync.copyFailed);
     }
   };
 
@@ -215,7 +223,10 @@ export function SyncCodePanel({
         </Button>
       </div>
       {copyFailed ? (
-        <p className="text-body-sm text-incorrect-text" role="status">
+        <p
+          className="text-body-sm text-incorrect-text"
+          data-sync-copy-failed=""
+        >
           {COPY.sync.copyFailed}
         </p>
       ) : null}

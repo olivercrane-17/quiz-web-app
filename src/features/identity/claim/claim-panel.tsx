@@ -15,6 +15,7 @@ import { useEffect, useId, useRef } from "react";
 
 import type { BrowserContextInfo } from "@/backend";
 import { track } from "@/features/analytics/track";
+import { announce } from "@/ui/announce";
 import { Button } from "@/ui/button";
 import { buttonClasses } from "@/ui/button-classes";
 import { cx } from "@/ui/cx";
@@ -74,6 +75,17 @@ export function ClaimPanel({
     if (live) stepsRef.current?.focus();
   }, [live]);
 
+  // What went wrong, or that the link ran out, goes to the status region.
+  const message =
+    state.phase === "error"
+      ? errorText(state.error)
+      : state.phase === "expired"
+        ? COPY.expired
+        : null;
+  useEffect(() => {
+    if (message !== null) announce(message);
+  }, [message]);
+
   return (
     <section
       aria-labelledby={titleId}
@@ -116,16 +128,18 @@ export function ClaimPanel({
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          {state.phase === "expired" ? (
-            <p className="text-body-sm text-ink-2" role="status">
-              {COPY.expired}
+          {message === null ? null : (
+            <p
+              className={
+                state.phase === "error"
+                  ? "text-body-sm text-incorrect-text"
+                  : "text-body-sm text-ink-2"
+              }
+              data-claim-message=""
+            >
+              {message}
             </p>
-          ) : null}
-          {state.phase === "error" ? (
-            <p className="text-body-sm text-incorrect-text" role="status">
-              {errorText(state.error)}
-            </p>
-          ) : null}
+          )}
           <div className="flex flex-wrap items-center gap-3">
             <Button
               variant="secondary"
