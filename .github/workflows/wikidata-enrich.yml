@@ -25,7 +25,7 @@ on:
         required: false
         default: ""
         type: string
-      pull_request:
+      open_pull_request:
         description: "Open or update the pull request (off: a dry run that only uploads the output)"
         required: false
         default: true
@@ -96,7 +96,7 @@ jobs:
     needs: fetch
     # A scheduled run is on the default branch. A manual run opens a pull
     # request only from the default branch, and only when asked to.
-    if: github.event_name == 'schedule' || (inputs.pull_request && github.ref_name == github.event.repository.default_branch)
+    if: github.event_name == 'schedule' || (inputs.open_pull_request && github.ref_name == github.event.repository.default_branch)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     # The only job that can write, so it installs and runs nothing from npm.

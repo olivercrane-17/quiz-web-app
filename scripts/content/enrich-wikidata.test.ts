@@ -546,7 +546,7 @@ describe("ENR-1 .github/workflows/wikidata-enrich.yml", () => {
     );
     expect(workflow.on.workflow_dispatch.inputs).toEqual({
       type: expect.objectContaining({ type: "string" }),
-      pull_request: expect.objectContaining({ type: "boolean" }),
+      open_pull_request: expect.objectContaining({ type: "boolean" }),
     });
     expect(workflow.permissions).toEqual({ contents: "read" });
     expect(workflow.concurrency).toEqual({
@@ -569,6 +569,12 @@ describe("ENR-1 .github/workflows/wikidata-enrich.yml", () => {
     ]);
 
     expect(prJob?.needs).toBe("fetch");
+    // Every scheduled run; a manual run only on the default branch, when asked.
+    expect(prJob?.if).toContain("github.event_name == 'schedule'");
+    expect(prJob?.if).toContain("inputs.open_pull_request");
+    expect(prJob?.if).toContain(
+      "github.ref_name == github.event.repository.default_branch",
+    );
     expect(prJob?.permissions).toEqual({
       contents: "write",
       "pull-requests": "write",

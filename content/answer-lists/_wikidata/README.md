@@ -8,10 +8,10 @@ Nothing here changes a list entry. The build, the lint and the SQL seed read onl
 
 ## How a run works
 
-The workflow runs weekly (Monday 02:47 UTC) and by hand (Actions, "Wikidata enrichment", "Run workflow"). A manual run can name one list, and with "pull_request" off it is a dry run that only uploads its output as an artifact.
+The workflow runs weekly (Monday 02:47 UTC) and by hand (Actions, "Wikidata enrichment", "Run workflow"). A manual run can name one list, and with "open_pull_request" off it is a dry run that only uploads its output as an artifact.
 
 1. **Fetch** (read-only token). After `npm ci`, the job runs `scripts/content/enrich-wikidata.ts`. The script reads every list and asks Wikidata's Action API, one request at a time, with `maxlag` and a User-Agent that names this repository. It writes the files only once every request has succeeded, so a failed run leaves nothing half-written.
-2. **Pull request** (the only job that can write, and it installs nothing from npm). It commits the files to the branch `bot/wikidata-enrich`, force-pushes, opens or updates one pull request, and starts CI on the branch, because a pull request opened with the job's token starts no workflow run by itself.
+2. **Pull request** (the only job that can write, and it installs nothing from npm). It commits the files to the branch `bot/wikidata-enrich`, force-pushes, opens or updates one pull request, and starts CI on the branch, because a pull request opened with the job's token starts no workflow run by itself. Every run rewrites that branch from the default branch, so nobody commits to it.
 
 The repository must allow GitHub Actions to create pull requests (Settings, Actions, General, Workflow permissions). Until the owner allows it, the job pushes the branch, fails with the link to open the pull request by hand, and the launch report carries the item (ARCHITECTURE §12.5).
 
