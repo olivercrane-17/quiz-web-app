@@ -69,12 +69,19 @@ export const STORAGE_KEYS: readonly KeyDefinition[] = [
   { key: "qz:under13", prefix: false, owner: "SET-1", evictRank: null },
 ];
 
-/** Session-storage keys (§6.2); per tab, so never namespaced by device. */
+/**
+ * Session-storage keys (§6.2); per tab, so never namespaced by device.
+ * Their owners use sessionStorage directly, so only this list (and the
+ * schema test that holds every `qz:` name in src/ to it) keeps /privacy's
+ * storage list complete.
+ */
 export const SESSION_KEYS = [
   "qz:session",
   "qz:practice-intent",
+  "qz:practice-run",
   "qz:server-clock",
   "qz:share-origin",
+  "qz:restore-notice",
 ] as const;
 export type SessionKey = (typeof SESSION_KEYS)[number];
 

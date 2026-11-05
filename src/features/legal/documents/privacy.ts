@@ -111,12 +111,20 @@ export const SESSION_STORAGE_LINES: readonly StorageLine[] = [
     text: "the practice round you just picked.",
   },
   {
+    keys: ["qz:practice-run"],
+    text: "the practice round this tab is playing, so a reload carries on with it.",
+  },
+  {
     keys: ["qz:server-clock"],
     text: "how far your device's clock is from ours.",
   },
   {
     keys: ["qz:share-origin"],
     text: "a shared result you opened, so your own result can be set beside it.",
+  },
+  {
+    keys: ["qz:restore-notice"],
+    text: "after you restore your profile, the welcome-back note Today shows once.",
   },
 ];
 

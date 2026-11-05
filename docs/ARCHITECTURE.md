@@ -1841,7 +1841,7 @@ Fake but well-formed content, prefixed `fx.`: 40 practice items across four cate
 | `qz:host:<roomId>` | Host token for a room this device created (Beta), minted before `create_room` | ROM-2 | pruned after 24 h | hash only |
 | `qz:under13` | `{ since: EpochMs; pendingDelete?: { playerId; secret } }`: the device-side flag left after an Under 13 answer (§9.7) | SET-1 | tiny | the secret only until `delete_player` succeeds |
 
-Session storage: `qz:session` (analytics session id for the tab), `qz:practice-intent` (the next practice run's request), `qz:server-clock` (offset samples), `qz:share-origin` (the Daily number and share code of a share landing whose Play was tapped, for the stop screen's comparison card, PRD §3.1.6 item 1).
+Session storage: `qz:session` (analytics session id for the tab), `qz:practice-intent` (the next practice run's request), `qz:practice-run` (the id of the run this tab is playing, so a reload resumes that run and not another tab's), `qz:server-clock` (offset samples), `qz:share-origin` (the Daily number and share code of a share landing whose Play was tapped, for the stop screen's comparison card, PRD §3.1.6 item 1), `qz:restore-notice` (the note Today shows once after a restore, §9.6). `SESSION_KEYS` in the storage schema lists them, and a schema test holds every `qz:` name in `src/` to the schema, so /privacy describes each.
 
 ```ts
 export interface Settings {
