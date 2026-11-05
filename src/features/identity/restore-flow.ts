@@ -40,9 +40,20 @@ export interface FinishRestoreInput {
 }
 
 export interface FinishRestoreOptions extends AdoptOptions {
-  /** Default: a full navigation to Today. */
+  /** Default: `restoreNavigation.go`, a full navigation to Today. */
   navigate?: (href: string) => void;
 }
+
+/**
+ * How a finished restore leaves for Today: a full navigation, so the boot
+ * starts over from the restored identity. Component tests replace `go`,
+ * since jsdom can't navigate.
+ */
+export const restoreNavigation = {
+  go(href: string): void {
+    window.location.assign(href);
+  },
+};
 
 /**
  * Finishes a restore and loads Today. Resolves false, having changed
@@ -80,6 +91,7 @@ export async function finishRestore(
   track("identity_restored", {
     source: source === "sync" ? "sync_code" : "claim",
   });
-  (options.navigate ?? ((href) => window.location.assign(href)))("/");
+  if (options.navigate === undefined) restoreNavigation.go("/");
+  else options.navigate("/");
   return true;
 }

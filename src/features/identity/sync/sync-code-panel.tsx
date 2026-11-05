@@ -258,7 +258,6 @@ export function SyncCodePanel({
             onClose={() => {
               setConfirming(false);
             }}
-            closeLabel={COPY.cancel}
             actions={
               <>
                 <Button

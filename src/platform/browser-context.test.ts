@@ -11,7 +11,7 @@ import {
   MORE_APP_FIXTURES,
   SAFARI_IOS,
   type UserAgentFixture,
-} from "@/features/identity/testing/user-agents";
+} from "@/features/identity/__fixtures__/user-agents";
 
 import {
   PRIVATE_CHECK_TIMEOUT_MS,

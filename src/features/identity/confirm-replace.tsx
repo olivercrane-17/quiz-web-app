@@ -78,7 +78,6 @@ export function ConfirmReplace({
       title={COPY.restore.confirmTitle}
       description={COPY.restore.confirmBody(streak, via)}
       onClose={onCancel}
-      closeLabel={COPY.cancel}
       actions={
         <>
           <Button variant="primary" onClick={onConfirm}>

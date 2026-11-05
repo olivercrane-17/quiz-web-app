@@ -88,7 +88,7 @@ function displayName(preview: ClaimPreview): string {
   return preview.nickname ?? preview.friendlyName;
 }
 
-function ClaimFlow({ token }: { token: ClaimToken | null }) {
+export function ClaimFlow({ token }: { token: ClaimToken | null }) {
   const [view, setView] = useState<ClaimView>(
     token === null ? { phase: "expired" } : { phase: "loading" },
   );
