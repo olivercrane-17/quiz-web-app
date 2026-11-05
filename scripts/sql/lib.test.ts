@@ -365,4 +365,19 @@ describe("the repository's SQL", () => {
       expect(mcpWouldConfirm(sql), migration.file).toBe(true);
     }
   });
+
+  it("lists every attended migration in supabase/README.md with its purpose (decisions memo §21)", () => {
+    const attended = migrations.filter((m) => m.attended);
+    expect(attended.length).toBeGreaterThan(0);
+    const readme = read("supabase/README.md");
+    for (const migration of attended) {
+      // A row of the attended files' table: | `<file>` | <purpose> |
+      const row = readme
+        .split("\n")
+        .find((line) => line.startsWith(`| \`${migration.file}\``));
+      expect(row, migration.file).toBeDefined();
+      const purpose = row?.split("|")[2]?.trim() ?? "";
+      expect(purpose.length, migration.file).toBeGreaterThan(20);
+    }
+  });
 });
