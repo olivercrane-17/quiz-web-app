@@ -34,8 +34,8 @@
  * the round (D20, R2-02): they act only while focus is on an option, so a
  * letter typed on a heading, or a name typed once the guess field has given
  * way to the options, does nothing. There a key chooses, and Enter or the
- * same key again locks in (`MysteryOptions`). Whatever presses, keys or
- * pointer, arrive while one pick is out, the round sends that one only.
+ * same key again locks in (`MysteryOptions`). While one pick is out, the
+ * round sends no other, whatever is pressed next.
  *
  * The component renders what the run machine holds and sends intents back;
  * it never calls the backend. Announcements of verdicts come from the

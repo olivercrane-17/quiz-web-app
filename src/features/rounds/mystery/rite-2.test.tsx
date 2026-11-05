@@ -125,6 +125,38 @@ function focus(element: HTMLElement) {
 }
 const legend = () => document.querySelector("[data-keys-legend]");
 
+/** A visual viewport the tests can shrink, as an on-screen keyboard does. */
+class FakeViewport extends EventTarget {
+  height = 768;
+  width = 1024;
+  offsetTop = 0;
+  offsetLeft = 0;
+  pageTop = 0;
+  pageLeft = 0;
+  scale = 1;
+  onresize = null;
+  onscroll = null;
+  onscrollend = null;
+}
+
+/** Focuses the guess field, then opens a keyboard over all but 340 px. */
+async function withKeyboardOpen(user: UserEvent) {
+  const viewport = new FakeViewport();
+  vi.stubGlobal("visualViewport", viewport);
+  vi.stubGlobal("scrollBy", vi.fn());
+  await user.click(field());
+  act(() => {
+    viewport.height = 340;
+    viewport.dispatchEvent(new Event("resize"));
+  });
+  await waitFor(() => {
+    expect(document.querySelector('[data-round="mystery"]')).toHaveAttribute(
+      "data-keyboard",
+      "open",
+    );
+  });
+}
+
 function picks(onIntent: RoundComponentProps["onIntent"]) {
   return vi
     .mocked(onIntent)
@@ -488,35 +520,6 @@ describe("Guess takes the one match (D23, R2-13)", () => {
   });
 
   describe("on a phone, with the on-screen keyboard up", () => {
-    class FakeViewport extends EventTarget {
-      height = 768;
-      width = 1024;
-      offsetTop = 0;
-      offsetLeft = 0;
-      pageTop = 0;
-      pageLeft = 0;
-      scale = 1;
-      onresize = null;
-      onscroll = null;
-      onscrollend = null;
-    }
-
-    async function withKeyboardOpen(user: UserEvent) {
-      const viewport = new FakeViewport();
-      vi.stubGlobal("visualViewport", viewport);
-      vi.stubGlobal("scrollBy", vi.fn());
-      await user.click(field());
-      act(() => {
-        viewport.height = 340;
-        viewport.dispatchEvent(new Event("resize"));
-      });
-      await waitFor(() => {
-        expect(
-          document.querySelector('[data-round="mystery"]'),
-        ).toHaveAttribute("data-keyboard", "open");
-      });
-    }
-
     it("R2-13 Go guesses the one highlighted match at once", async () => {
       const { user, onIntent } = play();
       await withKeyboardOpen(user);
@@ -607,5 +610,29 @@ describe("the clue ladder on a narrow column (R2-17)", () => {
       expect(element.className).toContain("hyphens-manual");
       expect(element.className).not.toContain("hyphens-auto");
     }
+  });
+
+  it("R2-17 keeps each number beside its clue while the keyboard is up, so older clues stay one line each", async () => {
+    const { user } = renderWithUser(
+      <MysteryHarness
+        content={odile}
+        entities={peopleLookup}
+        list={people}
+        meta={mysteryMeta({ ordinal: 1 })}
+      />,
+    );
+    await user.click(screen.getByRole("button", { name: /^Next clue/ }));
+    await withKeyboardOpen(user);
+    const rungs = document.querySelectorAll("[data-rung]");
+    expect(rungs).toHaveLength(2);
+    for (const rung of rungs) {
+      expect(rung.className).not.toContain("@max-[18em]/ladder:");
+      expect(rung.querySelector("[data-rail]")?.className).not.toContain(
+        "@max-[18em]/ladder:hidden",
+      );
+    }
+    expect(document.querySelector('[data-rung="past"] p')?.className).toMatch(
+      /line-clamp-1/,
+    );
   });
 });

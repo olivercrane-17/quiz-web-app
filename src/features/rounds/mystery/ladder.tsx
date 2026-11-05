@@ -26,7 +26,8 @@
  * takes the column's whole width: at 200% text on a 390 px phone the
  * numbered gutter took about half of it, and clues ran two words a line
  * (R2-17). A container query decides, so it follows the text size as well
- * as the width.
+ * as the width. While the keyboard is up the numbers stay beside the clues:
+ * height is what's short then, and older clues keep to one line each.
  *
  * A word too long for a line of its own, as "lighthouse's" is at 200% text
  * on a 360 px phone, breaks inside the clue rather than running past the
@@ -84,20 +85,29 @@ function Rung({
   n,
   state,
   tight = false,
+  stack,
   children,
 }: {
   n: number;
   state: "past" | "current";
   /** No room under it: the keyboard is up and the field follows (AC-DLY-32). */
   tight?: boolean;
+  /**
+   * The number may go over the clue when the column is narrow (R2-17). Not
+   * while the keyboard is up: then height is what's short, and older clues
+   * keep to one line each (PRD §3.1.4).
+   */
+  stack: boolean;
   children: ReactNode;
 }) {
   return (
     <li
       data-rung={state}
       className={cx(
+        "relative grid grid-cols-[1.875rem_minmax(0,1fr)] items-start gap-x-2.5",
         // Narrow (R2-17): one column, the number over the clue.
-        "relative grid grid-cols-[1.875rem_minmax(0,1fr)] items-start gap-x-2.5 @max-[18em]/ladder:grid-cols-[minmax(0,1fr)] @max-[18em]/ladder:gap-y-1.5",
+        stack &&
+          "@max-[18em]/ladder:grid-cols-[minmax(0,1fr)] @max-[18em]/ladder:gap-y-1.5",
         tight ? "pt-1" : "py-1",
       )}
     >
@@ -105,9 +115,10 @@ function Rung({
         aria-hidden="true"
         data-rail=""
         className={cx(
+          "absolute top-[2.125rem] -bottom-1 left-[calc(0.9375rem-1px)] w-0.5",
           // The rail runs between the numbers beside the clues; over them,
           // it would cross the text, so the narrow ladder drops it.
-          "absolute top-[2.125rem] -bottom-1 left-[calc(0.9375rem-1px)] w-0.5 @max-[18em]/ladder:hidden",
+          stack && "@max-[18em]/ladder:hidden",
           // Forced colours drop fills and gradients: the rail becomes a border.
           state === "past"
             ? "bg-[color:var(--kn-ink,var(--foreground))] forced-colors:bg-[color:CanvasText] forced-colors:forced-color-adjust-none"
@@ -116,6 +127,7 @@ function Rung({
       />
       <span
         aria-hidden="true"
+        data-rung-number=""
         className={cx(
           "relative z-[1] grid size-[1.875rem] place-items-center rounded-full border-2 text-[0.9375rem] leading-none font-bold transition-colors duration-150",
           DISPLAY_FONT,
@@ -170,6 +182,7 @@ export function ClueLadder({
             n={n}
             state={current ? "current" : "past"}
             tight={current && compact}
+            stack={!compact}
           >
             {current ? (
               <div
