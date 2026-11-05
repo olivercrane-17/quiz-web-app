@@ -6,9 +6,16 @@
  *
  * Then the whole screen over the mock backend, with the echo plugins and
  * probes for the round components: the first-Daily hint as the stopwatch's
- * accessible description (RITE round 1, R1-05).
+ * accessible description (RITE round 1, R1-05), and Leave's words, which
+ * say whether the stopwatch keeps running (round 2, D19, R2-01).
  */
-import { act, cleanup, render, screen } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createMemoryStore, createMockBackend } from "@/backend/mock";
@@ -18,6 +25,7 @@ import {
   parseIdempotencyKey,
   parseTimeZone,
   type BackendErrorCode,
+  type EntityId,
   type IdempotencyKey,
   type TimeZone,
 } from "@/engine/types";
@@ -25,6 +33,7 @@ import type { RoundComponentProps } from "@/features/rounds";
 import { createLocalIdentityProvider } from "@/platform/identity/local";
 import { createServerClock } from "@/platform/server-clock";
 import { createKv, createMemoryStorage } from "@/platform/storage";
+import { LIVE_REGION_IDS } from "@/ui/announce";
 
 import type {
   DailyController,
@@ -269,5 +278,88 @@ describe("the first-Daily hint beside the stopwatch (R1-05)", () => {
     expect(screen.queryByText(HINT)).toBeNull();
     expect(watch).not.toHaveAttribute("aria-describedby");
     expect(watch).toHaveAccessibleDescription("");
+  });
+});
+
+describe("Leave's words, by whether the stopwatch keeps running (D19, R2-01)", () => {
+  /** Animation frames the test runs by hand, for the toast's wait. */
+  let frames: FrameRequestCallback[] = [];
+  const runFrames = (count: number) => {
+    for (let i = 0; i < count; i += 1) {
+      const due = frames;
+      frames = [];
+      for (const frame of due) frame(0);
+    }
+  };
+
+  afterEach(() => {
+    wiring.deps = null;
+    frames = [];
+    document.querySelectorAll("[data-toast]").forEach((toast) => {
+      toast.remove();
+    });
+  });
+
+  /** Presses the X with the navigation stopped, then lands on Today. */
+  function leave(link: HTMLElement): void {
+    vi.stubGlobal("requestAnimationFrame", (frame: FrameRequestCallback) => {
+      frames.push(frame);
+      return frames.length;
+    });
+    window.history.replaceState(null, "", "/daily");
+    // Only the toast matters here, not the router's navigation.
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+    });
+    fireEvent.click(link, { button: 0 });
+    window.history.pushState(null, "", "/");
+    runFrames(3);
+  }
+
+  const statusText = () =>
+    document.getElementById(LIVE_REGION_IDS.polite)?.textContent ?? "";
+
+  it("R2-01 with a clue open, names the X for the running stopwatch, and the toast says it keeps running, in the status region too", async () => {
+    wire(NOW);
+    await playing();
+    const link = screen.getByRole("link", {
+      name: "Leave the Daily. Your progress is saved, and the stopwatch keeps running.",
+    });
+    leave(link);
+    const toast = document.querySelector("[data-toast]");
+    expect(toast).toHaveTextContent("Saved. The stopwatch keeps running.");
+    expect(statusText()).toBe("Saved. The stopwatch keeps running.");
+  });
+
+  it("R2-01 from a reveal, keeps 'Saved': the stopwatch is stopped there", async () => {
+    const { mock } = wire(NOW);
+    const started = await mock.sealed.start(
+      { kind: "today" },
+      wiring.deps!.startContext(),
+    );
+    if (!started.ok) throw new Error(started.error.code);
+    const solved = await mock.sealed.act({
+      attemptId: started.value.attemptId,
+      index: 0,
+      step: 1,
+      intent: {
+        family: "mystery",
+        kind: "guess",
+        entityId: "fx.x.person.odile-marsh" as EntityId,
+      },
+      clientActiveMs: 0,
+      hiddenMs: 0,
+      key: parseIdempotencyKey(
+        "00000000-0000-4000-8000-0000000000ff",
+      ) as IdempotencyKey,
+    });
+    expect(solved.ok && solved.value.verdict.kind).toBe("resolved");
+    await playing();
+    const link = screen.getByRole("link", {
+      name: "Leave the Daily. Your progress is saved.",
+    });
+    leave(link);
+    expect(document.querySelector("[data-toast]")).toHaveTextContent(/^Saved$/);
+    expect(statusText()).toBe("Saved");
   });
 });

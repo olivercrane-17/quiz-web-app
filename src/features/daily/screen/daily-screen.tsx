@@ -25,6 +25,13 @@
  *   there.
  * - A header that fits 200% text on a phone (R1-03, `HeaderStatus`).
  * - "Saved" as a toast once Leave has taken the player to Today (R1-38).
+ *
+ * What RITE round 2 added (FIX2-DLY): Leave says whether the stopwatch keeps
+ * running (D19, R2-01): with a clue or the Encore open, the X is named
+ * "Leave the Daily. Your progress is saved, and the stopwatch keeps
+ * running." and the toast says "Saved. The stopwatch keeps running.", while
+ * a reveal keeps "Saved". From Lock in the stopwatch stops on the finish's
+ * total, the stop screen's time (R2-08).
  * - One `h1` on the route: this screen's own only while no round component
  *   draws its heading (R1-34; `RoundArea` keeps the other half).
  *
@@ -72,7 +79,7 @@ import { rememberFinished } from "../model/handoff";
 import { openRoundNumber } from "../model/labels";
 import { HeaderStatus } from "./header-status";
 import { HowToPlaySheet } from "./how-to-play-sheet";
-import { showToastAfterLeaving } from "./leave-toast";
+import { leaveWords, showToastAfterLeaving } from "./leave-toast";
 import { MoreMenu, type MoreMenuItem } from "./more-menu";
 import { RoundArea, screenTitle } from "./round-area";
 import { Stopwatch } from "./stopwatch";
@@ -385,15 +392,19 @@ export function DailyScreen() {
   const playing = status === "playing" && run !== null;
   /** The first-Daily hint shows, and describes the stopwatch (R1-05). */
   const hinted = playing && snapshot.firstDaily && stopwatchShown;
+  /** Whether leaving now leaves the stopwatch running (D19, R2-01). */
+  const leave = leaveWords(run, playing);
 
   return (
     <PlayFrame
       header={{
         leave: {
           href: "/",
-          label: COPY.leave,
+          label: leave.label,
           onLeave: () => {
-            if (playing) showToastAfterLeaving(COPY.saved, DAILY_PATH);
+            if (leave.toast !== null) {
+              showToastAfterLeaving(leave.toast, DAILY_PATH);
+            }
           },
         },
         progress:

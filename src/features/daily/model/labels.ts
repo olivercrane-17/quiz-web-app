@@ -66,6 +66,26 @@ function outcomeWords(outcome: RoundOutcome): string {
   return outcome.correct ? words.right : words.wrong;
 }
 
+/**
+ * The E pill's mark once the Encore resolves (R2-06): 🎯 inside the
+ * bullseye band, else the % off ("13%", "<1%", ">999%", or "8y" for a year
+ * 8 years out), short enough for the 38 px pill. Round 2 left E blank, so
+ * the header never said how the Encore went.
+ */
+export function encoreMark(
+  outcome: Extract<RoundOutcome, { family: "encore" }>,
+): string {
+  const error = outcome.error;
+  if (error === null) return "E";
+  if (outcome.band === "bullseye")
+    return DAILY_SCREEN_COPY.segment.bullseyeMark;
+  const amount = error.display.replace(/ off$/, "");
+  if (error.kind === "years") {
+    return `${amount.replace(/\s*years?$/, "")}y`;
+  }
+  return amount.replace(/^under\s*/, "<").replace(/^over\s*/, ">");
+}
+
 /** The most rounds the header shows as lettered pills (DESIGN §6.6). */
 export const PILL_ROUNDS_MAX = 6;
 
@@ -79,8 +99,10 @@ export function progressVariant(state: RunState): "pills" | "bar" {
  * slim segment per question when a composition has more rounds than pills
  * fit. A solved Mystery shows the points it earned as "+2" on the correct
  * fill, so the mark can't be read as a clue or Mystery number; a miss shows
- * the X, a withdrawn round a dash. Each has its own screen-reader label
- * ("Mystery 1, solved on clue 3, 2 points").
+ * the X, a withdrawn round a dash; a locked-in Encore shows 🎯 or how far
+ * off it was (R2-06, `encoreMark`). Each has its own screen-reader label
+ * ("Mystery 1, solved on clue 3, 2 points"; "Encore, locked in, 13% off, a
+ * close guess").
  */
 export function progressSegments(state: RunState): ProgressSegment[] {
   const pills = progressVariant(state) === "pills";
@@ -119,8 +141,11 @@ export function progressSegments(state: RunState): ProgressSegment[] {
       return {
         status: "done",
         current,
-        label,
-        ...(pills ? { mark: "E" } : {}),
+        label:
+          outcome.error === null
+            ? label
+            : `${label}, ${words.encoreResult(outcome.error.display, outcome.band)}`,
+        ...(pills ? { mark: encoreMark(outcome) } : {}),
       };
     }
     if (outcome.family === "mystery") {
@@ -157,6 +182,27 @@ export function progressText(state: RunState): string {
     : family === "mystery"
       ? words.mystery(slot.meta.ordinal, slot.meta.ofType)
       : words.choice(slot.meta.ordinal, slot.meta.ofType);
+}
+
+/**
+ * Whether the round's time is counting on the server right now (PRD
+ * §4.1.4, decision D19): a clue or the Encore is open, even with the Daily
+ * closed or How to play open, or Continue has asked for the next one and
+ * the server opens it as the request lands. On a reveal, before the Daily
+ * opens, after a begin_round that failed and once it is finished, it is
+ * stopped. Leave's words say which (R2-01).
+ */
+export function clockRunning(state: RunState | null): boolean {
+  if (state === null) return false;
+  switch (state.phase) {
+    case "active":
+    case "judging":
+      return true;
+    case "opening":
+      return state.failing === null && state.error === null;
+    default:
+      return false;
+  }
 }
 
 /** The open round's number for `how_to_play_open` (PRD §7.2), or "none" between runs. */

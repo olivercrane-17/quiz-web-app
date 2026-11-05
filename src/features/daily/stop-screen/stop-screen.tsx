@@ -3,10 +3,10 @@
 /**
  * The stop screen, greybox (PRD §3.1.6, DESIGN §12.4): the score card with
  * the rows exactly as the share renders them, the legend and the total
- * time, the share text with Share, the rounds, and "Done for today" with
- * the countdown to the next Daily. DLY-3 builds the rest in its order
- * (best moment, percentile, Groups, the histogram, review your misses, the
- * offer card).
+ * time, Share straight under it, the share text, the rounds, and "Done for
+ * today" with the countdown to the next Daily. DLY-3 builds the rest in its
+ * order (best moment, percentile, Groups, the histogram, review your
+ * misses, the offer card).
  *
  * What RITE round 1 added (FIX-DLY): Share itself (R1-01), in a share box
  * a keyboard can select on its own (a read-only text box, so Ctrl+A takes
@@ -17,6 +17,14 @@
  * results heading once they load (R1-34); no Past 7 days link until the
  * archive has a route (R1-02); and nothing that scrolls sideways at 200%
  * text or with text spacing (AC-A11Y-04).
+ *
+ * What RITE round 2 added (FIX2-DLY): Share sits straight under the score
+ * card, still secondary, above the share text box and clear of the dock at
+ * 360 by 640 (PRD §3.1.6, R2-10); the card's rows and legend sit on a cream
+ * inset, so 🟧 shows on the orange card in both themes (R2-09); a miss ends
+ * in ❌ and the legend names it (D22); the Encore row says the closest
+ * Encore breaks a tie before time does (D21, R2-04); and its band reads
+ * "Close guess" (D16, R2-24).
  *
  * The island reads the Daily number from the URL inside <Suspense> (§10.2
  * rule 2) and loads after the client boot; the data refetches on every
@@ -179,7 +187,8 @@ export function RoundRow({ round }: { round: ResolvedRound }) {
   );
 }
 
-function Results({
+/** The finished results: what the stop screen shows once they load. */
+export function Results({
   results,
   nextUnlockAt,
 }: {
@@ -255,33 +264,56 @@ function Results({
         <p className="mt-1 text-sm font-semibold tabular-nums" data-time="">
           {COPY.time(formatStopwatch(summary.totalMs))}
         </p>
+        {/*
+         * The rows and their legend on a cream inset (R2-09): 🟧 nearly
+         * vanished on the eft fill, and ⬜ and ❌ read as they do in a
+         * light chat, in both themes, as the preview image's card does
+         * (DESIGN §6.11). Existing tokens only: the light theme's surface
+         * with its ink, and in the dark the ticket's own cream with the
+         * ticket's inverted ink, which stays dark in both themes.
+         */}
         <div
-          aria-hidden="true"
-          className="mt-3 flex flex-col gap-1 text-base"
-          data-score-rows=""
+          data-score-inset=""
+          className="mt-3 flex flex-col gap-2 rounded-xl bg-surface p-3 text-ink dark:bg-on-ticket dark:text-ticket-invert"
         >
-          {lines.map((line, index) => (
-            <p key={index}>{line}</p>
-          ))}
-          {token === null ? null : (
-            // The token's no-break spaces keep it whole in a chat bubble;
-            // on this card, at 200% text, it may wrap between its words.
-            <p>{token.replaceAll("\u00a0", " ")}</p>
+          <div
+            aria-hidden="true"
+            className="flex flex-col gap-1 text-base"
+            data-score-rows=""
+          >
+            {lines.map((line, index) => (
+              <p key={index}>{line}</p>
+            ))}
+            {token === null ? null : (
+              // The token's no-break spaces keep it whole in a chat bubble;
+              // on this card, at 200% text, it may wrap between its words.
+              <p>{token.replaceAll("\u00a0", " ")}</p>
+            )}
+          </div>
+          {/*
+           * Outside the rows that only repeat the share text: a screen
+           * reader hears the share box read its glyphs by name, and this
+           * says what they mean (D3, D22). The share box names it as a
+           * description too.
+           */}
+          {legend === null ? null : (
+            <p id={LEGEND_ID} className="text-sm" data-legend="">
+              {legend}
+            </p>
           )}
         </div>
-        {/*
-         * Outside the rows that only repeat the share text: a screen reader
-         * hears the share box read its glyphs by name, and this says what
-         * they mean (D3). The share box names it as a description too.
-         */}
-        {legend === null ? null : (
-          // The ticket's own ink, as the time and the rows take it: a
-          // muted grey on the eft fill fails AA contrast in both themes.
-          <p id={LEGEND_ID} className="mt-2 text-sm" data-legend="">
-            {legend}
-          </p>
-        )}
       </Card>
+
+      {/*
+       * Share straight under the card (PRD §3.1.6, DESIGN §12.4), still
+       * secondary: "Done for today" stays the one primary (AC-DLY-14). At
+       * 360 by 640 it sits above the dock with no scroll (R2-10); round 2
+       * found it under the share box, below the fold.
+       */}
+      <div className="flex flex-wrap gap-3" data-share-actions="">
+        <ShareButton payload={payload} surface="stop" />
+        <ChallengeButton attemptId={attempt.attemptId} />
+      </div>
 
       <section
         aria-labelledby="qz-share-heading"
@@ -313,10 +345,6 @@ function Results({
           }}
           className="field-sizing-content w-full resize-none rounded-xl bg-muted p-3 font-sans text-base outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground"
         />
-        <div className="flex flex-wrap gap-3">
-          <ShareButton payload={payload} surface="stop" />
-          <ChallengeButton attemptId={attempt.attemptId} />
-        </div>
       </section>
 
       <section

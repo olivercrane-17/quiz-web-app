@@ -23,6 +23,7 @@ import {
 } from "@/engine/scoring/blitz";
 import { judgeEncoreGuess } from "@/engine/scoring/encore";
 import { VOIDED_MYSTERY_POINTS, mysteryPoints } from "@/engine/scoring/mystery";
+import { STOPWATCH_RULE } from "@/features/daily";
 import { SHELL_COPY } from "@/features/shell";
 
 import { legalDate, sectionAnchor, type LegalDocument } from "../document";
@@ -187,7 +188,9 @@ export function howScoringWorksDocument(
           },
           {
             kind: "p",
-            text: `Total time adds up how long each clue or Encore question was open, up to ${minutes(TUNABLES.timing.roundCapMs)} a round. Reading a reveal never counts, and neither does the time between rounds. Nothing ever times out. Players level on all three share a place.`,
+            // D19 (RITE round 2, R2-01): where the belief that leaving
+            // pauses the clock forms, in How to play's own words.
+            text: `Total time adds up how long each clue or Encore question was open, up to ${minutes(TUNABLES.timing.roundCapMs)} a round. ${STOPWATCH_RULE} Reading a reveal never counts, and neither does the time between rounds. Nothing ever times out. Players level on all three share a place.`,
           },
           {
             kind: "p",

@@ -17,6 +17,7 @@ import {
   answerTypeLine,
   continueLabel,
   elapsedMs,
+  encoreMark,
   formatStopwatch,
   openRoundNumber,
   progressSegments,
@@ -265,6 +266,93 @@ describe("the header pills after decision D11", () => {
     expect(progressSegments(state)[0]).toMatchObject({
       mark: "+1",
       label: "Mystery 1, solved on clue 4, 1 point",
+    });
+  });
+});
+
+describe("the E pill once the Encore resolves (R2-06)", () => {
+  type EncoreOutcome = Extract<
+    NonNullable<RunState["slots"][number]["outcome"]>,
+    { family: "encore" }
+  >;
+
+  const encoreOutcome = (
+    display: string,
+    band: "bullseye" | "close" | null,
+    kind: "relative" | "years" = "relative",
+  ): EncoreOutcome => ({
+    family: "encore",
+    error: { kind, value: 0.13, display },
+    band,
+    voided: false,
+  });
+
+  /** Daily #42 resumed finished, its Encore locked in with `outcome`. */
+  function finishedWith(outcome: EncoreOutcome): RunState {
+    const rounds = daily();
+    const attemptId = parseAttemptId("3f2b8c1e-9d4a-4e6f-8b2c-1a2b3c4d5e6f");
+    if (attemptId === null) throw new Error("setup");
+    const snapshot: AttemptSnapshot = {
+      attemptId,
+      kind: "daily",
+      ranked: true,
+      daily: null,
+      composition: "m3e1",
+      rounds,
+      maxPoints: 12,
+      resolved: [
+        {
+          meta: rounds[3]!,
+          outcome,
+          reveal: { family: "encore" } as unknown as RoundReveal,
+          activeMs: 9_000,
+        },
+      ],
+      current: null,
+      status: "finished",
+      points: 0,
+      startedAt: 0,
+      serverTime: 0,
+    };
+    return reduceRun(fresh(), { type: "resume", at: 1, snapshot }, plugins)
+      .state;
+  }
+
+  it("R2-06 shows the bullseye emoji inside the bullseye band, and says so", () => {
+    const pill = progressSegments(
+      finishedWith(encoreOutcome("4% off", "bullseye")),
+    )[3];
+    expect(pill).toMatchObject({ status: "done", mark: "🎯" });
+    expect(pill?.label).toBe("Encore, locked in, 4% off, a bullseye");
+  });
+
+  it("R2-06 shows the % off outside it, also in the pill's accessible name", () => {
+    const close = progressSegments(
+      finishedWith(encoreOutcome("13% off", "close")),
+    )[3];
+    expect(close).toMatchObject({ mark: "13%" });
+    expect(close?.label).toBe("Encore, locked in, 13% off, a close guess");
+    const far = progressSegments(
+      finishedWith(encoreOutcome("39% off", null)),
+    )[3];
+    expect(far).toMatchObject({ mark: "39%" });
+    expect(far?.label).toBe("Encore, locked in, 39% off");
+  });
+
+  it("R2-06 keeps the mark short enough for the pill at either end of the scale, and for years", () => {
+    expect(encoreMark(encoreOutcome("over 999% off", null))).toBe(">999%");
+    expect(encoreMark(encoreOutcome("under 1% off", "close"))).toBe("<1%");
+    expect(encoreMark(encoreOutcome("8 years off", null, "years"))).toBe("8y");
+    expect(encoreMark(encoreOutcome("Spot on", "bullseye"))).toBe("🎯");
+    expect(
+      encoreMark({ family: "encore", error: null, band: null, voided: false }),
+    ).toBe("E");
+  });
+
+  it("R2-06 leaves an Encore not yet played as its E", () => {
+    expect(progressSegments(fresh())[3]).toMatchObject({
+      status: "upcoming",
+      mark: "E",
     });
   });
 });

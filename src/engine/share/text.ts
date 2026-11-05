@@ -3,11 +3,11 @@
  * text first and the link last, no answers, no clue text, no percentile,
  * streak or time.
  *
- *   Knewt Daily #42 · 9/12 · Encore off by 4% 🎯
+ *   Knewt Daily #42 · 8/12 · Encore off by 4% 🎯
  *   Geography ✅⬜⬜⬜
  *   Film & TV 🟧✅⬜⬜
- *   Science & Tech 🟧🟧✅⬜
- *   https://knewt.app/daily
+ *   Science & Tech 🟧🟧🟧❌
+ *   https://knewt.app/
  *
  * - Line 1: the brand, "Daily #N" (" (archive)" after it for archive plays),
  *   the score out of the Daily's maximum, and the Encore token ("Encore off
@@ -19,12 +19,16 @@
  * - One row per Mystery: the category's short name, a space, then four
  *   glyphs; a voided Mystery reads "History · voided", in words only. A
  *   wrong guess and Next clue cost the same, so both are one *passed* cell
- *   (decision D3), which the glyph sets draw as a used clue, never red.
+ *   (decision D3), which the glyph sets draw as a used clue, never red. A
+ *   miss, four passed cells with no solve, ends in the missed mark instead
+ *   (decision D22, R2-09): 🟧🟧🟧❌, so a friend can tell it from a solve
+ *   that used every clue. The cells themselves don't change.
  * - Consecutive choice rounds collapse into one row, one glyph per question
  *   (`[mc ×9, encore]` shares one row of nine, AC-DLY-09).
- * - The link is the last line, path-only on our origin. Until ENG-2's share
- *   codes exist it is `/daily`; SHR-1 owns this file from Wave 12 and
- *   switches it to `/s/{number}/{code}`.
+ * - The link is the last line, path-only on our origin. Until SHR-1's
+ *   landing exists it is Today, `/` (R2-20: `/daily` started the Daily and
+ *   its clock before a friend knew what it was); SHR-1 owns this file from
+ *   Wave 12 and switches it to `/s/{number}/{code}`.
  *
  * Glyphs and labels come in as data (the glyph sets are DESIGN.md's, in
  * the feature layer), so the bytes can change without touching the rules.
@@ -32,10 +36,26 @@
 import type { CategoryId } from "../types/content.ts";
 import type { RoundOutcome, ShareCell } from "../types/rounds.ts";
 
-/** What each share cell looks like, and the bullseye mark. */
+/** What each share cell looks like, the mark that ends a miss, and the bullseye mark. */
 export interface ShareGlyphs {
   cells: Readonly<Record<ShareCell, string>>;
+  /** The last square of a missed Mystery's row (decision D22): ❌. */
+  missed: string;
   bullseye: string;
+}
+
+/**
+ * A Mystery's cells as glyphs (decision D22): a miss, every cell passed and
+ * none solved, ends in the missed mark; anything else draws cell by cell.
+ */
+export function drawMysteryCells(
+  cells: readonly ShareCell[],
+  glyphs: ShareGlyphs,
+): string {
+  const drawn = cells.map((cell) => glyphs.cells[cell]);
+  const missed = cells.length > 0 && cells.every((cell) => cell === "passed");
+  if (missed) drawn[drawn.length - 1] = glyphs.missed;
+  return drawn.join("");
 }
 
 export interface ShareLabels {
@@ -126,18 +146,20 @@ export function encoreToken(
   return encore.band === "bullseye" ? `${token} ${glyphs.bullseye}` : token;
 }
 
-/** The words of the grid's legend, one per Mystery cell. */
+/** The words of the grid's legend, one per Mystery mark. */
 export interface ShareLegendWords {
   passed: string;
   solved: string;
+  missed: string;
   unused: string;
 }
 
 /**
- * The one-line legend under the stop screen's grid (decision D3), in the
- * player's glyph set: "🟧 clue used · ✅ solved · ⬜ not needed". Null for
- * a grid with no Mystery row it could explain (a choice-only Daily, or
- * Mysteries that were all withdrawn, whose rows are in words).
+ * The one-line legend under the stop screen's grid (decisions D3 and D22),
+ * in the player's glyph set: "🟧 clue used · ✅ solved · ❌ missed · ⬜ not
+ * needed". Null for a grid with no Mystery row it could explain (a
+ * choice-only Daily, or Mysteries that were all withdrawn, whose rows are
+ * in words).
  */
 export function shareLegend(
   rows: readonly ShareRow[],
@@ -146,9 +168,12 @@ export function shareLegend(
 ): string | null {
   const explains = rows.some((row) => row.kind === "mystery" && !row.voided);
   if (!explains) return null;
-  return (["passed", "solved", "unused"] as const)
-    .map((cell) => `${glyphs.cells[cell]} ${words[cell]}`)
-    .join(" · ");
+  return [
+    `${glyphs.cells.passed} ${words.passed}`,
+    `${glyphs.cells.solved} ${words.solved}`,
+    `${glyphs.missed} ${words.missed}`,
+    `${glyphs.cells.unused} ${words.unused}`,
+  ].join(" · ");
 }
 
 export interface DailyShareInput {
@@ -191,7 +216,7 @@ export function shareRowLines(
     const label = labels.category(row.category);
     return row.voided
       ? `${label} · ${labels.voided}`
-      : `${label} ${draw(row.cells)}`;
+      : `${label} ${drawMysteryCells(row.cells, glyphs)}`;
   });
 }
 

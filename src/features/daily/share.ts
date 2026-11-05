@@ -2,10 +2,10 @@
  * The Daily's share text and payload for the stop screen and the finished
  * home card (PRD §3.5.1, DESIGN §6.11), built by the engine's share module
  * from the finished attempt: the brand, the category short names, the
- * glyph set the player's high-contrast setting picks, and a link to
- * `/daily` on our origin until ENG-2's share codes give it
- * `/s/{number}/{code}` (SHR-1). Both surfaces build it here, so they share
- * the same text (AC-SHR-11) and the same origin, `getSiteUrl()`.
+ * glyph set the player's high-contrast setting picks, and a link to Today
+ * on our origin until SHR-1's landing gives it `/s/{number}/{code}`. Both
+ * surfaces build it here, so they share the same text (AC-SHR-11) and the
+ * same origin, `getSiteUrl()`.
  */
 import { getCategories } from "@/content/loaders/categories";
 import {
@@ -26,10 +26,13 @@ export const BRAND = "Knewt";
 /** The label of a row of collapsed choice rounds; DESIGN.md hasn't set one yet. */
 export const CHOICE_ROW_LABEL = "Questions";
 /**
- * The path the share link opens: today's Daily, until ENG-2's share codes
- * exist. Path-only, with no query string or fragment (PRD §3.5.1).
+ * The path the share link opens: Today, until SHR-1's `/s/{number}/{code}`
+ * landing exists (RITE round 2, R2-20). Flow 5.1 starts a friend on a
+ * landing, never on clue 1: `/daily` started the Daily and its stopwatch
+ * before Lena knew what she was looking at, and she never saw Today's card.
+ * Path-only, with no query string or fragment (PRD §3.5.1).
  */
-export const SHARE_PATH = "/daily";
+export const SHARE_PATH = "/";
 
 const SHORT_NAMES: ReadonlyMap<CategoryId, string> = new Map(
   getCategories().map((category) => [category.id, category.shortName]),

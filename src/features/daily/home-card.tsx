@@ -18,6 +18,17 @@
  * own text (AC-SHR-11), built in that chunk. Past 7 days shows once the
  * archive has a route (R1-02).
  *
+ * What RITE round 2 added (FIX2-DLY):
+ * - How to play on the Not started card, which opens the Daily's own sheet
+ *   on Today, before the Daily starts: no attempt is made and no clock runs
+ *   (D25, R2-18). The sheet's chunk loads the first time it opens.
+ * - The In progress card adds "Your stopwatch is still running." while the
+ *   run's round is open, which get_today says (D19, R2-01): leaving never
+ *   paused it.
+ * - "About 4 minutes, untimed", and two rows kept for the round chips, so
+ *   Play doesn't move down when get_today's chips replace the placeholders
+ *   (R2-19).
+ *
  * Size: one of Home's eager islands, with a 4 kB gzipped target, so it
  * imports no engine module (the Daily's number is worked out below, and a
  * test keeps it equal to the engine's), and the backend and the Share
@@ -27,6 +38,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import {
   useEffect,
+  useRef,
   useState,
   useSyncExternalStore,
   type ComponentType,
@@ -42,7 +54,7 @@ import type {
 import { buttonClasses } from "@/ui/button-classes";
 import { Chip } from "@/ui/chip";
 
-import { glyphsFor } from "./glyphs";
+import { drawGridRow, glyphsFor } from "./glyphs";
 import { HOME_CARD_COPY } from "./home-copy";
 import { ARCHIVE_HREF } from "./links";
 import { ANSWER_TYPE_WORDS, DIFFICULTY_WORDS, waitWords } from "./words";
@@ -87,6 +99,16 @@ export function chipText(chip: TodayRoundChip): string {
     : `${what} · ${DIFFICULTY_WORDS[chip.difficulty]}`;
 }
 
+/**
+ * Whether the unfinished run's round is open, its clue or the Encore issued
+ * and its time counting (D19), as get_today says beside the progress's own
+ * fields (the mock's `TodayProgress`, SQL-4's get_today). A backend that
+ * doesn't say counts as not running, so the card never claims it.
+ */
+export function clockRunningOn(card: DailyTodayCard): boolean {
+  return (card.progress as { open?: unknown } | null)?.open === true;
+}
+
 /** "Mystery 2 of 3", "Question 4 of 9", "Encore": where an unfinished run stands. */
 export function progressLine(card: DailyTodayCard): string {
   const index = card.progress?.roundIndex ?? 0;
@@ -113,6 +135,12 @@ interface Loaded {
   receivedAt: number;
   /** The stored high-contrast setting: the mini grid's glyphs (DESIGN §6.11). */
   highContrast: boolean;
+}
+
+/** How to play's sheet, loaded the first time the card opens it (D25). */
+interface HowToPlaySlot {
+  Sheet: ComponentType<{ open: boolean; onClose(): void }>;
+  open: boolean;
 }
 
 /** The finished card's Share: the stop screen's text and the button, loaded together. */
@@ -167,9 +195,33 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
   /** The backend serves no Daily (`unavailable`): nothing to play yet. */
   const [notReady, setNotReady] = useState(false);
   const [share, setShare] = useState<ShareSlot | null>(null);
+  const [howTo, setHowTo] = useState<HowToPlaySlot | null>(null);
+  const howToButton = useRef<HTMLButtonElement>(null);
   // The device's date is only known in the browser; the prerender holds a
   // same-length placeholder, hidden until it is replaced.
   const today = useSyncExternalStore(never, deviceDate, () => null);
+
+  // The sheet gives focus back to what had it; a browser that doesn't focus
+  // a clicked button (Safari) leaves that to the button itself.
+  const howToOpen = howTo?.open ?? false;
+  useEffect(() => {
+    if (howToOpen || howTo === null) return;
+    if (document.activeElement === document.body) howToButton.current?.focus();
+  }, [howTo, howToOpen]);
+
+  const openHowTo = () => {
+    if (howTo !== null) {
+      setHowTo({ ...howTo, open: true });
+      return;
+    }
+    void import("./screen/how-to-play-sheet")
+      .then(({ HowToPlaySheet }) => {
+        setHowTo({ Sheet: HowToPlaySheet, open: true });
+      })
+      .catch(() => {
+        // /how-scoring-works carries the same text, from the footer.
+      });
+  };
 
   useEffect(() => {
     let live = true;
@@ -249,12 +301,31 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
       {COPY.play}
     </Link>
   );
-  let after: ReactNode = null;
+  // Before the Daily starts, the rules can be read with no clock running
+  // (D25): the Daily's own sheet, on Today.
+  let after: ReactNode = (
+    <button
+      ref={howToButton}
+      type="button"
+      aria-haspopup="dialog"
+      onClick={openHowTo}
+      className={buttonClasses({ variant: "text", className: "self-start" })}
+    >
+      {COPY.howToPlay}
+    </button>
+  );
   let body = (
     <>
       <p className="text-base">{rule}</p>
-      {/* Flat labels, never pills that read as controls (R1-27). */}
-      <ul aria-label={COPY.roundsLabel} className="flex flex-wrap gap-2">
+      {/* Flat labels, never pills that read as controls (R1-27). Two
+          rows are kept whatever the chips say, so the placeholders' one
+          row growing to get_today's two never moves Play (R2-19); the
+          chips' own type sets the row, at any text size. */}
+      <ul
+        aria-label={COPY.roundsLabel}
+        data-daily-chips=""
+        className="flex min-h-[calc(2_*_max(24px,_0.975rem_+_4px)_+_0.5rem)] flex-wrap content-start gap-2"
+      >
         {(card?.rounds.map(chipText) ?? COPY.placeholderChips).map(
           (chip, index) => (
             <li key={index} className="flex max-w-full">
@@ -270,6 +341,7 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     // No Play and no chips for a Daily that can't start; Quick play goes
     // first, in the Practice card the marker moves above this one.
     action = null;
+    after = null;
     body = (
       <p className="text-base" {...HOME_PROMOTE_PRACTICE}>
         {COPY.notReady}
@@ -286,7 +358,16 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
         {COPY.continue}
       </Link>
     );
-    body = <></>;
+    // Leaving never paused it (D19): say so while a clue or the Encore is
+    // open, never on a reveal, where the clock is stopped.
+    body = clockRunningOn(card) ? (
+      <p className="text-base" data-daily-clock="">
+        {COPY.stillRunning}
+      </p>
+    ) : (
+      <></>
+    );
+    after = null;
   } else if (card?.finished && loaded !== null) {
     const { points, maxPoints, rows } = card.finished;
     const glyphs = glyphsFor(highContrast);
@@ -303,9 +384,7 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
       <>
         <div aria-hidden="true" className="flex flex-col text-lg leading-tight">
           {rows.map((row, index) => (
-            <span key={index}>
-              {row.map((cell) => glyphs.cells[cell]).join("")}
-            </span>
+            <span key={index}>{drawGridRow(row, glyphs)}</span>
           ))}
         </div>
         {share === null ? null : (
@@ -342,6 +421,14 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
       {body}
       {action}
       {after}
+      {howTo === null ? null : (
+        <howTo.Sheet
+          open={howTo.open}
+          onClose={() => {
+            setHowTo({ ...howTo, open: false });
+          }}
+        />
+      )}
       {ARCHIVE_HREF === null ? null : (
         <Link
           href={ARCHIVE_HREF}

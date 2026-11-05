@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { roundMeta } from "@/engine/run/testing";
+import { drawMysteryCells } from "@/engine/share/text";
 import {
   parseAttemptId,
   parseDailyNumber,
@@ -13,7 +14,12 @@ import {
 
 import { getSiteUrl } from "@/lib/env";
 
-import { DEFAULT_GLYPHS, HIGH_CONTRAST_GLYPHS, glyphsFor } from "./glyphs";
+import {
+  DEFAULT_GLYPHS,
+  HIGH_CONTRAST_GLYPHS,
+  drawGridRow,
+  glyphsFor,
+} from "./glyphs";
 import {
   BRAND,
   SHARE_PATH,
@@ -115,7 +121,7 @@ function finished(overrides: Partial<AttemptSnapshot> = {}): AttemptSnapshot {
 }
 
 describe("the stop screen's share text (PRD §3.5.1, DESIGN §6.11)", () => {
-  it("reads in round order, with the category short names, and links to /daily on our origin", () => {
+  it("R2-20 reads in round order, with the category short names, and links to Today on our origin", () => {
     const text = dailyShareText(finished(), {
       siteUrl: "https://knewt.app/",
       highContrast: false,
@@ -125,7 +131,7 @@ describe("the stop screen's share text (PRD §3.5.1, DESIGN §6.11)", () => {
       "History ✅⬜⬜⬜",
       "Geography 🟧✅⬜⬜",
       "Science & Tech 🟧🟧✅⬜",
-      "https://knewt.app/daily",
+      "https://knewt.app/",
     ]);
     for (const answer of ["Odile Marsh", "Valdoria", "Bismuth", "86.4"]) {
       expect(text).not.toContain(answer);
@@ -171,15 +177,18 @@ describe("the stop screen's share text (PRD §3.5.1, DESIGN §6.11)", () => {
       .split("\n")
       .at(-1);
     expect(link).toBe(`${getSiteUrl()}${SHARE_PATH}`);
-    expect(link).toMatch(/^https?:\/\/[^/?#]+\/daily$/);
+    expect(link).toMatch(/^https?:\/\/[^/?#]+\/$/);
     expect(
       dailySharePayload(finished(), { highContrast: true })
         .text.split("\n")
         .at(-1),
     ).toBe(link);
-    expect(dailyShareLink("https://knewt.app///")).toBe(
-      "https://knewt.app/daily",
-    );
+    expect(dailyShareLink("https://knewt.app///")).toBe("https://knewt.app/");
+  });
+
+  it("R2-20 opens Today until SHR-1's landing exists: dailyShareLink('https://x') is 'https://x/'", () => {
+    expect(SHARE_PATH).toBe("/");
+    expect(dailyShareLink("https://x")).toBe("https://x/");
   });
 });
 
@@ -197,13 +206,55 @@ describe("decision D3 on the stop screen (R1-16)", () => {
     expect(glyphsFor(false)).toBe(DEFAULT_GLYPHS);
   });
 
-  it("R1-16 explains the grid in one line, in the player's glyph set", () => {
+  it("R1-16 R2-09 explains the grid in one line, in the player's glyph set, a miss's ❌ included", () => {
     expect(dailyLegend(finished(), false)).toBe(
-      "🟧 clue used · ✅ solved · ⬜ not needed",
+      "🟧 clue used · ✅ solved · ❌ missed · ⬜ not needed",
     );
     expect(dailyLegend(finished(), true)).toBe(
-      "🟧 clue used · 🟦 solved · ⬜ not needed",
+      "🟧 clue used · 🟦 solved · ❌ missed · ⬜ not needed",
     );
     expect(dailyLegend(finished({ resolved: [ENCORE] }), false)).toBeNull();
+  });
+});
+
+describe("decision D22: a miss ends in ❌ (R2-09)", () => {
+  /** Daily #42 with Geography missed: 3/12. */
+  const withMiss = () =>
+    finished({
+      points: 5,
+      resolved: [
+        ENCORE,
+        mystery(2, "sci", 3, "Bismuth"),
+        mystery(0, "hist", 1, "Odile Marsh"),
+        mystery(1, "geo", null, "Valdoria"),
+      ],
+    });
+
+  it("R2-09 ends a missed Mystery's row in ❌ in the share text, in both glyph sets", () => {
+    for (const highContrast of [false, true]) {
+      const lines = dailyShareText(withMiss(), {
+        siteUrl: "https://knewt.app",
+        highContrast,
+      }).split("\n");
+      expect(lines[2]).toBe("Geography 🟧🟧🟧❌");
+    }
+    expect(DEFAULT_GLYPHS.missed).toBe("❌");
+    expect(HIGH_CONTRAST_GLYPHS.missed).toBe("❌");
+  });
+
+  it("R2-09 draws the mini grid's rows as the share text does: a miss ends in ❌, questions cell by cell", () => {
+    for (const glyphs of [DEFAULT_GLYPHS, HIGH_CONTRAST_GLYPHS]) {
+      for (const row of [
+        ...dailyGrid(withMiss()),
+        ["wrong", "wrong"] as const,
+        ["passed", "passed", "passed", "solved"] as const,
+        [] as const,
+      ]) {
+        expect(drawGridRow(row, glyphs)).toBe(drawMysteryCells(row, glyphs));
+      }
+    }
+    expect(drawGridRow(dailyGrid(withMiss())[1] ?? [], DEFAULT_GLYPHS)).toBe(
+      "🟧🟧🟧❌",
+    );
   });
 });

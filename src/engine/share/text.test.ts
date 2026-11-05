@@ -9,6 +9,7 @@ import type {
 } from "../types/index.ts";
 import {
   buildDailyShareText,
+  drawMysteryCells,
   encoreToken,
   shareErrorWords,
   shareGrid,
@@ -29,12 +30,14 @@ const GLYPHS: ShareGlyphs = {
     correct: "C",
     wrong: "W",
   },
+  missed: "X",
   bullseye: "@",
 };
 /**
- * DESIGN §6.11's bytes after decision D3, as the feature layer passes them
- * in: a used clue is 🟧 in both sets, so a wrong guess and Next clue look
- * alike and neither is red; the high-contrast set keeps 🟧 and 🟦.
+ * DESIGN §6.11's bytes after decisions D3 and D22, as the feature layer
+ * passes them in: a used clue is 🟧 in both sets, so a wrong guess and Next
+ * clue look alike and neither is red; the high-contrast set keeps 🟧 and
+ * 🟦; a miss ends in ❌ in both.
  */
 const DESIGN_GLYPHS: ShareGlyphs = {
   cells: {
@@ -45,6 +48,7 @@ const DESIGN_GLYPHS: ShareGlyphs = {
     correct: "✅",
     wrong: "🟥",
   },
+  missed: "❌",
   bullseye: "🎯",
 };
 const HIGH_CONTRAST_GLYPHS: ShareGlyphs = {
@@ -56,11 +60,13 @@ const HIGH_CONTRAST_GLYPHS: ShareGlyphs = {
     correct: "🟦",
     wrong: "🟧",
   },
+  missed: "❌",
   bullseye: "🎯",
 };
 const LEGEND: ShareLegendWords = {
   passed: "clue used",
   solved: "solved",
+  missed: "missed",
   unused: "not needed",
 };
 const SHORT: Partial<Record<CategoryId, string>> = {
@@ -165,7 +171,7 @@ describe("the Daily share text (PRD §3.5.1, DESIGN §6.11)", () => {
     ]);
   });
 
-  it("reads a miss as four passed squares, a voided Mystery in words, and archive plays as such", () => {
+  it("R2-09 D22 reads a miss as three passed squares and the missed mark, a voided Mystery in words, and archive plays as such", () => {
     const text = buildDailyShareText(
       input({
         archive: true,
@@ -182,7 +188,7 @@ describe("the Daily share text (PRD §3.5.1, DESIGN §6.11)", () => {
     expect(text.split("\n")).toEqual([
       `Knewt Daily${NBSP}#40 (archive) · 6/12 · Encore${NBSP}off${NBSP}by${NBSP}3${NBSP}years`,
       "History RSUU",
-      "Geography RRRR",
+      "Geography RRRX",
       "Science & Tech · voided",
       "https://knewt.app/daily",
     ]);
@@ -298,12 +304,12 @@ describe("decision D3: one glyph for every clue used before the solve", () => {
     const rows = shareRows(outcomes);
     expect(shareRowLines(rows, DESIGN_GLYPHS, LABELS)).toEqual([
       "History 🟧✅⬜⬜",
-      "Geography 🟧🟧🟧🟧",
+      "Geography 🟧🟧🟧❌",
       "Science & Tech 🟧🟧🟧✅",
     ]);
     expect(shareRowLines(rows, HIGH_CONTRAST_GLYPHS, LABELS)).toEqual([
       "History 🟧🟦⬜⬜",
-      "Geography 🟧🟧🟧🟧",
+      "Geography 🟧🟧🟧❌",
       "Science & Tech 🟧🟧🟧🟦",
     ]);
     for (const line of shareRowLines(rows, DESIGN_GLYPHS, LABELS)) {
@@ -314,10 +320,10 @@ describe("decision D3: one glyph for every clue used before the solve", () => {
   it("R1-16 explains the grid in one legend line, in the player's glyph set", () => {
     const rows = shareRows([mystery("geo", 1), mystery("film", null)]);
     expect(shareLegend(rows, DESIGN_GLYPHS, LEGEND)).toBe(
-      "🟧 clue used · ✅ solved · ⬜ not needed",
+      "🟧 clue used · ✅ solved · ❌ missed · ⬜ not needed",
     );
     expect(shareLegend(rows, HIGH_CONTRAST_GLYPHS, LEGEND)).toBe(
-      "🟧 clue used · 🟦 solved · ⬜ not needed",
+      "🟧 clue used · 🟦 solved · ❌ missed · ⬜ not needed",
     );
   });
 
@@ -329,5 +335,37 @@ describe("decision D3: one glyph for every clue used before the solve", () => {
       shareLegend(shareRows([mystery("geo", null, true)]), GLYPHS, LEGEND),
     ).toBeNull();
     expect(shareLegend([], GLYPHS, LEGEND)).toBeNull();
+  });
+});
+
+describe("decision D22: a miss ends in ❌ (RITE round 2, R2-09)", () => {
+  it("R2-09 ends a miss in the missed mark, while a solve on clue 4 and a clue-1 solve draw cell by cell", () => {
+    expect(drawMysteryCells(mysteryCells(null), DESIGN_GLYPHS)).toBe(
+      "🟧🟧🟧❌",
+    );
+    expect(drawMysteryCells(mysteryCells(4), DESIGN_GLYPHS)).toBe("🟧🟧🟧✅");
+    expect(drawMysteryCells(mysteryCells(1), DESIGN_GLYPHS)).toBe("✅⬜⬜⬜");
+    // A wrong guess and Next clue still look the same: the cells are as
+    // they were, and only a miss's last square changes.
+    expect(mysteryCells(null)).toEqual([
+      "passed",
+      "passed",
+      "passed",
+      "passed",
+    ]);
+    expect(drawMysteryCells([], DESIGN_GLYPHS)).toBe("");
+  });
+
+  it("R2-09 keeps ❌ in the high-contrast set, which reads by shape", () => {
+    expect(drawMysteryCells(mysteryCells(null), HIGH_CONTRAST_GLYPHS)).toBe(
+      "🟧🟧🟧❌",
+    );
+  });
+
+  it("R2-09 draws a run of wrong questions cell by cell, never as a miss", () => {
+    const rows = shareRows([choice(false), choice(false)]);
+    expect(shareRowLines(rows, DESIGN_GLYPHS, LABELS)).toEqual([
+      "Questions 🟥🟥",
+    ]);
   });
 });
