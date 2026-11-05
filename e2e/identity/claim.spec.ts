@@ -21,6 +21,7 @@ import {
   WHATSAPP_IOS,
 } from "../../src/features/identity/__fixtures__/user-agents";
 import { expect, test } from "../fixtures";
+import { expectNoSeriousAxe } from "../support/axe";
 import { setDevice } from "../support/devices";
 import { mockInit } from "../support/mock";
 
@@ -68,8 +69,19 @@ async function identityOf(
   );
 }
 
+/**
+ * Today, for a device whose init scenario played today's Daily: the mock
+ * seeds the scenario, and registers the device, once Today loads the
+ * backend, as a real device registers with its own first write.
+ */
+async function openToday(page: Page): Promise<void> {
+  await page.goto("/");
+  await expect(page.locator('[data-daily-card="finished"]')).toBeVisible();
+}
+
 /** In the app: Keep my streak at /me/sync; returns the claim's path. */
 async function makeClaim(app: Page): Promise<string> {
+  await openToday(app);
   await app.goto("/me/sync");
   await expect(
     app.getByRole("heading", { name: "Playing inside WhatsApp?" }),
@@ -89,6 +101,7 @@ test.describe("the claim link (PRD §3.10.4)", () => {
       finished: true,
       userAgent: WHATSAPP_IOS.userAgent,
     });
+    await openToday(app);
     await app.goto("/me/sync");
     // The card says what moves (AC-SYN-07), and the sync code sits below it.
     await expect(app.getByText(WHAT_MOVES).first()).toBeVisible();
@@ -263,6 +276,35 @@ test.describe("the claim link (PRD §3.10.4)", () => {
     await expect(dialog.getByText(WHAT_MOVES)).toBeVisible();
     await dialog.getByRole("button", { name: "Cancel" }).click();
     expect(await identityOf(browser, "safari")).toEqual(before);
+  });
+
+  test("the claim card and the claim page pass axe and fit a 320 px screen", async ({
+    context,
+  }) => {
+    const fits = (page: Page) =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      );
+    const app = await deviceIn(context, "wa", {
+      finished: true,
+      userAgent: WHATSAPP_ANDROID.userAgent,
+    });
+    await app.setViewportSize({ width: 320, height: 640 });
+    const path = await makeClaim(app);
+    await expectNoSeriousAxe(app);
+    expect(await fits(app)).toBe(true);
+
+    const browser = await deviceIn(context, "safari");
+    await browser.setViewportSize({ width: 320, height: 640 });
+    await browser.goto(path);
+    await expect(
+      browser.getByRole("button", { name: "Continue" }),
+    ).toBeVisible();
+    await expectNoSeriousAxe(browser);
+    expect(await fits(browser)).toBe(true);
+    await browser.goto("/shell/claim");
+    await expect(browser.getByText(EXPIRED)).toBeVisible();
+    await expectNoSeriousAxe(browser);
   });
 
   test("on Android, Open in Chrome opens the claim through an intent link", async ({

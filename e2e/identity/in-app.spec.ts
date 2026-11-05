@@ -47,9 +47,14 @@ function useFixture(fixture: UserAgentFixture): void {
   }
 }
 
-/** /me/sync for a player who finished today's Daily. */
+/**
+ * /me/sync for a player who finished today's Daily. The mock seeds the
+ * scenario, and registers the device, once Today loads the backend.
+ */
 async function openSyncAfterAFinish(page: Page): Promise<void> {
   await mockInit(page, { scenario: "finished_today" });
+  await page.goto("/");
+  await expect(page.locator('[data-daily-card="finished"]')).toBeVisible();
   await page.goto("/me/sync");
   await expect(page.locator("[data-sync-screen]")).toBeVisible();
 }

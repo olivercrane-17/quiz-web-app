@@ -12,6 +12,7 @@
 import type { BrowserContext, Page } from "@playwright/test";
 
 import { expect, test } from "../fixtures";
+import { expectNoSeriousAxe } from "../support/axe";
 import { setDevice } from "../support/devices";
 import { mockInit } from "../support/mock";
 
@@ -53,8 +54,19 @@ async function identityOf(
   );
 }
 
+/**
+ * Today, for a device whose init scenario played today's Daily: the mock
+ * seeds the scenario, and registers the device, once Today loads the
+ * backend, as a real device registers with its own first write.
+ */
+async function openToday(page: Page): Promise<void> {
+  await page.goto("/");
+  await expect(page.locator('[data-daily-card="finished"]')).toBeVisible();
+}
+
 /** The device's own code, shown at /me/sync after Show my code. */
 async function makeCode(page: Page): Promise<string> {
+  await openToday(page);
   await page.goto("/me/sync");
   await page.getByRole("button", { name: "Show my code" }).click();
   const well = page.locator("[data-sync-code]");
@@ -269,6 +281,8 @@ test.describe("sync codes (PRD §3.10.2)", () => {
     page,
     mock,
   }) => {
+    // A minute into a 15-minute window, so the window can't end mid-test.
+    await page.clock.install({ time: new Date("2026-11-05T10:01:00Z") });
     /** Failed redemptions the mock server has counted for this browser. */
     const failures = async () => {
       const rows = await mock.inspect<
@@ -290,6 +304,38 @@ test.describe("sync codes (PRD §3.10.2)", () => {
     }
     await page.getByRole("button", { name: "Restore" }).click();
     await expect(error).toHaveText("Too many tries. Please wait 15 minutes.");
+  });
+
+  test("the sync code and restore screens pass axe and fit a 320 px screen", async ({
+    context,
+  }) => {
+    const fits = (page: Page) =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      );
+    const a = await deviceIn(context, "phone-a", { finished: true });
+    await makeCode(a);
+    await expectNoSeriousAxe(a);
+    await a.setViewportSize({ width: 320, height: 640 });
+    await expect(a.locator("[data-sync-code]")).toBeVisible();
+    expect(await fits(a)).toBe(true);
+
+    const c = await deviceIn(context, "phone-c");
+    await c.setViewportSize({ width: 320, height: 640 });
+    await restore(c, "0000-0000-0000-0000");
+    await expect(c.locator("[data-restore-error]")).toBeVisible();
+    await expectNoSeriousAxe(c);
+    expect(await fits(c)).toBe(true);
+    // The confirm step, on a device with practice of its own.
+    await c.evaluate(() => {
+      localStorage.setItem(
+        "qz:d:phone-c:history",
+        JSON.stringify([{ runId: "on-phone-c" }]),
+      );
+    });
+    await restore(c, "K7QX-2M9P-T4RW-8HNC");
+    await expect(c.getByRole("dialog")).toBeVisible();
+    await expectNoSeriousAxe(c);
   });
 
   test("/me/sync has nothing to show before the first Daily", async ({
