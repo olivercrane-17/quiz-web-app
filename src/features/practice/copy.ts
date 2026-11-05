@@ -20,11 +20,13 @@ export const PRACTICE_COPY = {
   /**
    * The greybox hub at /practice (R1-02): its title, and the Quick play
    * card until PRA-2 builds the category grid and the difficulty control.
+   * `later` says those are coming soon: "comes next" read as the step
+   * after Quick play, so Priya thought she'd skipped one (R2-05).
    */
   hub: {
     title: "Practice",
     quickPlayLine: "Ten questions on anything, at every level. Untimed.",
-    later: "Choosing a category and a difficulty comes next.",
+    later: "Coming soon: choose a category and a difficulty.",
   },
   /**
    * Page titles, one per page (DESIGN §11): the hub matches its tab, and a

@@ -60,6 +60,17 @@ export const CHOICE_COPY = {
   error: "We couldn't check that answer. Try again.",
   /** Auto-advance's line on Continue, for screen readers. */
   autoAdvance: "Moving on by itself. Tap anywhere to stay.",
+  /**
+   * The line under the options once a keyboard is in use (D20, R2-02): the
+   * badges' letters answer, one key per answer, while focus is on an
+   * option. The digits still follow D6 and go unsaid. It names only the
+   * letters on screen, so true/false and comparisons read "Keys A and B
+   * answer." and a three-option question "Keys A to C answer."
+   */
+  keysLegend: (options: number) =>
+    options <= 2
+      ? "Keys A and B answer."
+      : `Keys A to ${options === 3 ? "C" : "D"} answer.`,
 } as const;
 
 /** The Wikipedia search the "Learn more" link opens (PRD §3.0.3). */

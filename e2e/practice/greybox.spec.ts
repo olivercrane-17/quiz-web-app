@@ -366,11 +366,15 @@ test.describe("practice greybox", () => {
     await expect(round(page).getByText("Question 5 of 10")).toBeVisible();
   });
 
-  test("keys A to D answer while the question has focus", async ({ page }) => {
+  test("keys A to D answer while an option has focus", async ({ page }) => {
     await startQuickPlay(page);
     await expect(stem(page)).toBeFocused();
-    // The letters always pick (D6); the digits only when no option is a
+    // D20: the keys act only on an option (e2e/practice/rite-2.spec.ts
+    // checks the heading), so a keyboard player Tabs there first. The
+    // letters always pick (D6); the digits only when no option is a
     // number, which e2e/practice/rite-1.spec.ts covers.
+    await page.keyboard.press("Tab");
+    await expect(options(page).first()).toBeFocused();
     await page.keyboard.press("b");
     await expect(options(page).nth(1)).toHaveAttribute(
       "data-state",

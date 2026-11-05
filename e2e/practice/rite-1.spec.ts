@@ -199,8 +199,18 @@ async function textAt200(page: Page) {
   });
 }
 
-/** Answers with a letter key, then continues from the sheet with Enter: a keyboard works at any size. */
+/**
+ * Tabs from the stem, where each question puts focus, to option A: since
+ * D20 (RITE round 2, R2-02) the option keys act only on an option.
+ */
+async function tabToOptions(page: Page) {
+  await page.keyboard.press("Tab");
+  await expect(options(page).first()).toBeFocused();
+}
+
+/** Answers with a letter key from option A, then continues from the sheet with Enter: a keyboard works at any size. */
 async function answerByKey(page: Page, key: string) {
+  await tabToOptions(page);
   await page.keyboard.press(key);
   await expect(sheet(page)).toBeVisible();
   await page.keyboard.press("Enter");
@@ -337,6 +347,8 @@ test.describe("RITE round 1: practice", () => {
       let key = "a";
       let expected = 0;
       const onBridges = /bridges/.test((await stem(page).textContent()) ?? "");
+      // D20: the keys act from an option, so Tab there from the stem first.
+      await tabToOptions(page);
       if (onBridges) {
         // "4" meant four bridges: it must not lock in D, which is 15.
         await page.keyboard.press("4");
@@ -388,6 +400,7 @@ test.describe("RITE round 1: practice", () => {
   }) => {
     await startQuickPlay(page);
     await expect(stem(page)).toBeFocused();
+    await tabToOptions(page);
     await page.keyboard.press("a");
     // Within 300 ms of the answer.
     await page.keyboard.press("Shift+Tab");
@@ -491,6 +504,7 @@ test.describe("RITE round 1: practice", () => {
         await expect(
           round(page).getByText(`Question ${n} of 10`),
         ).toBeVisible();
+        await tabToOptions(page);
         await page.keyboard.press(n % 2 === 0 ? "a" : "b");
         await expect(sheet(page)).toBeVisible();
         // DS-1's sheet rises into place from below its own height: measure
@@ -537,6 +551,7 @@ test.describe("RITE round 1: practice", () => {
         await expect(
           round(page).getByText(`Question ${n} of 10`),
         ).toBeVisible();
+        await tabToOptions(page);
         await page.keyboard.press("a");
         await expect(sheet(page)).toBeVisible();
         // The round fits the sheet in the commit that opens it.
