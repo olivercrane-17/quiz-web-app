@@ -18,7 +18,12 @@
  *   before it costs the address one of its 5 attempts (AC-SYN-04).
  * - deletePlayer answers `unavailable` with a wait until the owner applies
  *   20261104000500_identity_attended.sql (supabase/README.md §9).
- * - setNickname stays `unavailable` until MOD-1 adds `set_nickname`.
+ * - setNickname sends `set_nickname` (MOD-1, 20261104000700_moderation.sql)
+ *   with `p_generated` saying which kind of name it is. The server cleans
+ *   and checks it (age band, 24 characters, the slur filter); a name with
+ *   nothing in it fails `invalid_input` here, as the server would, without
+ *   spending one of the day's 20 calls. A filtered name comes back as
+ *   `blocked_text`, and nothing here keeps or reports the text.
  */
 import {
   parseDailyNumber,
@@ -33,7 +38,7 @@ import {
   type ServerDataExport,
 } from "@/engine/types";
 
-import { fail, unavailable } from "../errors";
+import { fail } from "../errors";
 import type { IdentityApi } from "../types";
 import type { SupabaseContext } from "./context";
 import {
@@ -159,7 +164,19 @@ export function createIdentityArea(
             { auth: "player", write: true },
           ),
 
-    setNickname: () => unavailable(),
+    setNickname: (nickname) => {
+      const generated = "generated" in nickname;
+      const name = generated ? nickname.generated : nickname.custom;
+      return name.trim() === ""
+        ? Promise.resolve(fail("invalid_input"))
+        : rpc(
+            ctx,
+            "set_nickname",
+            { p_nickname: name, p_generated: generated },
+            decodeProfile,
+            { auth: "player", write: true },
+          );
+    },
 
     createSyncCode: () =>
       rpc(ctx, "create_sync_code", {}, decodeSyncCode, {

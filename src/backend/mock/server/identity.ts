@@ -33,6 +33,19 @@
  */
 import type { BrowserContextKind, Platform } from "@/analytics/dictionary";
 import { TUNABLES } from "@/config/tunables";
+import {
+  MODERATION_ALLOWLIST_ROT13,
+  MODERATION_TERMS_ROT13,
+} from "@/content/generated/moderation";
+import { NAME_ADJECTIVES, NAME_ANIMALS } from "@/content/generated/names";
+import { charCount } from "@/engine/text/metrics";
+import {
+  cleanText,
+  createModerationList,
+  isBlocked,
+  rot13,
+  type ModerationList,
+} from "@/engine/text/moderation";
 import { localDateOf } from "@/engine/time";
 import {
   TEST_PLAYER_PREFIX,
@@ -58,6 +71,7 @@ import type { MockAttemptRow } from "./sealed";
 export const MOCK_CAPABILITIES: readonly (keyof IdentityApi)[] = [
   "register",
   "getProfile",
+  "setNickname",
 ];
 
 /** One player (§8.3 `private.players`), as the mock keeps it. */
@@ -383,39 +397,46 @@ export function isBrowserContextInfo(browser: BrowserContextInfo): boolean {
   );
 }
 
-/** Generated friendly names (§3.10.1); MOD-1 loads the reviewed lists. */
-const ADJECTIVES = [
-  "Plucky",
-  "Brave",
-  "Clever",
-  "Quiet",
-  "Swift",
-  "Sunny",
-  "Lucky",
-  "Merry",
-  "Nimble",
-  "Bold",
-  "Calm",
-  "Witty",
-] as const;
-const ANIMALS = [
-  "Otter",
-  "Heron",
-  "Badger",
-  "Fox",
-  "Wren",
-  "Hare",
-  "Newt",
-  "Owl",
-  "Lynx",
-  "Puffin",
-  "Robin",
-  "Seal",
-] as const;
-
+/**
+ * Generated friendly names (§3.10.1) from the reviewed lists of
+ * content/names/ (MOD-1), which `private.name_parts` holds too.
+ */
 function friendlyNameFor(ctx: MockContext, id: PlayerId): string {
   const rng = ctx.rng.fork(`player:${id}`);
-  return `${rng.pick(ADJECTIVES)} ${rng.pick(ANIMALS)}`;
+  return `${rng.pick(NAME_ADJECTIVES)} ${rng.pick(NAME_ANIMALS)}`;
+}
+
+/** An adjective and an animal of the lists, one space between (`private.is_generated_name`). */
+function isGeneratedName(name: string): boolean {
+  const [adjective, animal, ...rest] = name.split(" ");
+  return (
+    rest.length === 0 &&
+    adjective !== undefined &&
+    animal !== undefined &&
+    NAME_ADJECTIVES.includes(adjective) &&
+    NAME_ANIMALS.includes(animal)
+  );
+}
+
+/** set_nickname's limit (§8.4): 20 a player a day, refusals included. */
+export const NICKNAME_LIMIT = {
+  bucket: "nickname_1d",
+  windowMs: 24 * 60 * 60_000,
+  max: 20,
+} as const;
+
+/** The longest display name (PRD §3.12.1), as `set_nickname` counts it once cleaned. */
+const NICKNAME_MAX = 24;
+
+let moderation: ModerationList | null = null;
+
+/** The slur filter's list, decoded once from its ROT13 module. */
+function moderationList(): ModerationList {
+  moderation ??= createModerationList(
+    MODERATION_TERMS_ROT13.map(rot13),
+    MODERATION_ALLOWLIST_ROT13.map(rot13),
+  );
+  return moderation;
 }
 
 export function profileOf(player: MockPlayerRow): Profile {
@@ -589,6 +610,55 @@ export function createIdentityArea(ctx: MockContext): IdentityApi {
     async getProfile() {
       const player = ctx.store.read((db) => verifyCredential(ctx, db));
       return player === null ? fail("auth_failed") : ok(profileOf(player));
+    },
+    /**
+     * `set_nickname` (MOD-1): the credential, then 20 a day, then the name
+     * cleaned to 1 to 24 characters. A generated name is the player's own
+     * friendly name or a pair from the lists, at any band; a custom one
+     * needs 18_plus and the slur filter's pass. The friendly name itself
+     * clears the column.
+     */
+    async setNickname(nickname) {
+      return ctx.store.write(
+        (db): Result<Profile> => {
+          const auth = authenticate(ctx, db, { register: false });
+          if (!auth.ok) return auth.result;
+          const { player } = auth;
+          const hit = hitLimit(
+            db,
+            NICKNAME_LIMIT,
+            `player:${player.id}`,
+            ctx.clock.now(),
+          );
+          if (!hit.allowed) {
+            return fail("rate_limited", {
+              retryAfterMs: hit.retryAfterMs,
+              limitScope: "player",
+            });
+          }
+          const generated = "generated" in nickname;
+          const name = cleanText(
+            generated ? nickname.generated : nickname.custom,
+          );
+          const length = charCount(name);
+          if (length < 1 || length > NICKNAME_MAX) return fail("invalid_input");
+          if (generated) {
+            if (name !== player.friendlyName && !isGeneratedName(name)) {
+              return fail("invalid_input");
+            }
+          } else if (player.ageBand === null) {
+            return fail("age_required");
+          } else if (player.ageBand !== "18_plus") {
+            return fail("age_forbidden");
+          } else if (isBlocked(name, moderationList())) {
+            return fail("blocked_text");
+          }
+          player.nickname =
+            generated && name === player.friendlyName ? null : name;
+          return ok(profileOf(player));
+        },
+        ["players", "credentials", "rateCounters"],
+      );
     },
   };
 }
