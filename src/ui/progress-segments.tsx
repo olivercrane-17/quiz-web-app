@@ -26,6 +26,7 @@
  */
 import { cx } from "./cx";
 import { CheckIcon, CrossIcon, DashIcon } from "./icons";
+import { markFit } from "./mark-fit";
 
 export type SegmentStatus =
   /** Not reached yet (or reached and still open: see `current`). */
@@ -60,25 +61,12 @@ export interface ProgressSegmentsProps {
   className?: string;
 }
 
-/** The mark's text, where the step shows one in place of a glyph. */
+/**
+ * The mark's text, where the step shows one in place of a glyph; a longer
+ * one steps its type down to fit its pill (`markFit`).
+ */
 function markText(segment: ProgressSegment): string | undefined {
   return segment.status === "voided" ? undefined : segment.mark;
-}
-
-/**
- * How far a pill's mark steps its type down to stay inside the pill at its
- * narrowest, 28 px (R1-03): one or two characters ("M2", "+3", "E", 🎯)
- * keep 15 px, three ("13%") take 12 px and more take 10 px. The Encore's
- * pill may show its % off once it is locked in (RITE round 2, R2-06).
- */
-export function markFit(
-  mark: string | undefined,
-): "snug" | "tight" | undefined {
-  if (mark === undefined) return undefined;
-  // By code point, so an emoji counts once.
-  const length = [...mark].length;
-  if (length >= 4) return "tight";
-  return length === 3 ? "snug" : undefined;
 }
 
 function Mark({ segment, size }: { segment: ProgressSegment; size: number }) {

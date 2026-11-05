@@ -900,17 +900,19 @@ test.describe("R1-08 and R1-27 marks, not buttons", () => {
           return {
             cursor: css.cursor,
             shadow: css.boxShadow,
-            outline: css.outlineStyle,
+            outline:
+              css.outlineStyle === "none"
+                ? "none"
+                : `${css.outlineWidth} at ${css.outlineOffset}`,
           };
         }),
       );
     expect(looks).toHaveLength(10);
     for (const look of looks) {
-      expect(look).toEqual({
-        cursor: "default",
-        shadow: "none",
-        outline: "none",
-      });
+      // Nothing that reads like the focus ring: an empty segment's 3:1 edge
+      // (R2-28) is 1 px drawn inside it, never a ring outside.
+      expect(look).toMatchObject({ cursor: "default", shadow: "none" });
+      expect(["none", "1px at -1px"]).toContain(look.outline);
     }
   });
 

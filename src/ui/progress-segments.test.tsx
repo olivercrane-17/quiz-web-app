@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 
 import { renderWithUser } from "@/test/render";
 
-import { ProgressSegments, markFit } from "./progress-segments";
+import { markFit } from "./mark-fit";
+import { ProgressSegments } from "./progress-segments";
 
 describe("ProgressSegments", () => {
   it("names the list and each step, and marks the current one", () => {
