@@ -133,6 +133,13 @@ export const BatchEntrySchema = z
     plan: BatchPlanSchema,
     accepted: count.nullable(),
     cut: count.nullable(),
+    /**
+     * + Items retired after acceptance (CNT-2b), counted with accepted and
+     * cut: at close, and again whenever `content:batch -- retire` takes an
+     * item of a closed batch out of play, which leaves the batch closed and
+     * lowers `accepted`. Absent while none is retired.
+     */
+    retired: count.optional(),
     lastSequence: z.int().min(0).max(99),
     /** + Set by the editor when the batch opens (§9.5.2). */
     searchCaps: RoleCountsSchema.optional(),
@@ -257,6 +264,14 @@ export const BatchEntrySchema = z
         "accepted",
         "accepted and cut are counted at close, and null before; a batch an invalid_check incident reopened keeps its last counts until it closes again",
       );
+    }
+    // Retired items are counted with the rest, never alone. A list batch
+    // counts its entities, whose retired ones close as cut (content:batch).
+    if (batch.retired !== undefined) {
+      if (batch.pool === "list")
+        add("retired", "a list batch counts retired entities as cut");
+      else if (!counted)
+        add("retired", "retired is counted with accepted and cut, at close");
     }
   });
 export type BatchEntry = z.infer<typeof BatchEntrySchema>;

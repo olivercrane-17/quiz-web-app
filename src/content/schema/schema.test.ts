@@ -87,6 +87,24 @@ const check = {
   verdict: "pass",
 };
 
+/** A retirement record, as content:batch -- retire writes it (CNT-2b). */
+const RETIRED = {
+  at: "2026-11-05T10:00:00Z",
+  by: "ed-fx-editor",
+  kind: "cross_pool",
+  reason: "Shares its fact with a Daily item.",
+} as const;
+
+/** A cross-pool judgment, as content:dedupe -- --cross-pool-ok writes it. */
+const JUDGMENT = {
+  itemId: "fx.p.geo.0101",
+  decision: "related_ok",
+  by: "ed-fx-editor",
+  at: "2026-11-05T10:00:00Z",
+  reason: "The same country, but a different fact.",
+  pairSha256: "b".repeat(64),
+} as const;
+
 describe("item schemas", () => {
   it.each([
     ["mc", fxMc()],
@@ -289,7 +307,11 @@ describe("item schemas", () => {
   it("gates by status: drafts need shape only; from checking on, predicted and verification", () => {
     expect(PracticeItemSchema.safeParse(fxMc()).success).toBe(true);
     for (const status of ["checking", "retired"] as const) {
-      expect(messages(PracticeItemSchema.safeParse(fxMc({ status })))).toEqual([
+      const item = fxMc({
+        status,
+        ...(status === "retired" ? { retired: RETIRED } : {}),
+      });
+      expect(messages(PracticeItemSchema.safeParse(item))).toEqual([
         expect.stringContaining("predicted"),
         expect.stringContaining("verification record"),
       ]);
@@ -307,6 +329,120 @@ describe("item schemas", () => {
       RoomQuestionSchema.safeParse({ ...fxRoomQuestion(1), status: "checking" })
         .success,
     ).toBe(false);
+  });
+
+  it("pairs the retired status with its record: when, by which editor, of what kind and why (CNT-2b)", () => {
+    const base = {
+      predicted: { p: 0.7, spread: 0.3, estimator: "v0" },
+      verification: { checks: [] },
+    };
+    // Retired with its record passes; without one, or a record on any other
+    // status, fails on `retired`.
+    expect(
+      messages(
+        PracticeItemSchema.safeParse(
+          fxMc({ ...base, status: "retired", retired: RETIRED }),
+        ),
+      ),
+    ).toEqual([]);
+    expect(
+      messages(
+        PracticeItemSchema.safeParse(fxMc({ ...base, status: "retired" })),
+      ),
+    ).toEqual([expect.stringMatching(/^retired: a retired item records/)]);
+    for (const status of ["draft", "checking", "cut"] as const)
+      expect(
+        messages(
+          PracticeItemSchema.safeParse(
+            fxMc({ ...base, status, retired: RETIRED }),
+          ),
+        ),
+      ).toEqual(["retired: only a retired item carries a retired record"]);
+    // The record's own shape: an editor's id, a known kind, a reason.
+    for (const [patch, path] of [
+      [{ by: "w-fx-writer" }, "retired.by"],
+      [{ kind: "duplicate" }, "retired.kind"],
+      [{ reason: "" }, "retired.reason"],
+      [{ at: "2026-11-05" }, "retired.at"],
+    ] as const) {
+      const result = MysterySchema.safeParse(
+        fxMystery({
+          status: "retired",
+          predicted: {
+            solveByClue: [0.5, 0.8, 0.92, 0.98],
+            spread: 0.3,
+            estimator: "v0",
+          },
+          verification: { checks: [] },
+          retired: { ...RETIRED, ...patch },
+        }),
+      );
+      expect(messages(result).map((m) => m.split(":")[0])).toEqual([path]);
+    }
+  });
+
+  it("keeps cross-pool judgments on Daily items only, one per pair, naming a practice item or a room question (CNT-2b)", () => {
+    const verification = (crossPool: unknown) => ({
+      checks: [],
+      crossPool,
+    });
+    // A mystery or an encore holds them.
+    expect(
+      messages(
+        MysterySchema.safeParse(
+          fxMystery({ verification: verification([JUDGMENT]) }),
+        ),
+      ),
+    ).toEqual([]);
+    expect(
+      messages(
+        EncoreSchema.safeParse(
+          fxEncore({
+            verification: verification([
+              { ...JUDGMENT, itemId: "fx.r.fx-party.03" },
+            ]),
+          }),
+        ),
+      ),
+    ).toEqual([]);
+    // A practice item never does: a public file names no sealed id.
+    expect(
+      messages(
+        PracticeItemSchema.safeParse(
+          fxMc({ verification: verification([JUDGMENT]) }),
+        ),
+      ),
+    ).toEqual([
+      expect.stringMatching(
+        /^verification\.crossPool: a practice item never holds/,
+      ),
+    ]);
+    // A room question's live on the Daily item it sits near.
+    expect(
+      messages(
+        RoomQuestionSchema.safeParse({
+          ...fxRoomQuestion(1),
+          verification: verification([JUDGMENT]),
+        }),
+      ),
+    ).toEqual([
+      expect.stringMatching(/^verification\.crossPool: a room question's/),
+    ]);
+    // One judgment per pair; the other side is a practice item or a room
+    // question; an editor's id; related_ok only; a SHA-256.
+    for (const [entries, path] of [
+      [[JUDGMENT, { ...JUDGMENT, reason: "Again." }], "crossPool.1.itemId"],
+      [[{ ...JUDGMENT, itemId: "fx.m.geo.0102" }], "crossPool.0.itemId"],
+      [[{ ...JUDGMENT, by: "fc-fx-alpha" }], "crossPool.0.by"],
+      [[{ ...JUDGMENT, decision: "duplicate" }], "crossPool.0.decision"],
+      [[{ ...JUDGMENT, pairSha256: "abc" }], "crossPool.0.pairSha256"],
+    ] as const) {
+      expect(
+        messages(VerificationSchema.safeParse(verification(entries))).map(
+          (m) => m.split(":")[0],
+        ),
+      ).toEqual([path]);
+    }
   });
 
   it("requires the encore display units from checking on (ARCHITECTURE §5.2)", () => {
@@ -1010,6 +1146,27 @@ describe("answer lists, schedules and the register", () => {
       entry({ incidents: [{ ...incident, checkers: ["w-fx-writer"] }] })
         .success,
     ).toBe(false);
+  });
+
+  it("counts retired items with accepted and cut, never alone and never in a list batch (CNT-2b)", () => {
+    const register = fxRegister() as { batches: Record<string, unknown>[] };
+    const entry = (index: number, patch: Record<string, unknown>) =>
+      messages(
+        BatchRegisterSchema.safeParse({
+          batches: [{ ...register.batches[index], ...patch }],
+        }),
+      );
+    expect(
+      entry(0, { status: "closed", accepted: 27, cut: 7, retired: 1 }),
+    ).toEqual([]);
+    expect(entry(0, { retired: 1 })).toEqual([
+      "batches.0.retired: retired is counted with accepted and cut, at close",
+    ]);
+    expect(
+      entry(4, { status: "closed", accepted: 30, cut: 2, retired: 1 }),
+    ).toEqual([
+      "batches.0.retired: a list batch counts retired entities as cut",
+    ]);
   });
 });
 
