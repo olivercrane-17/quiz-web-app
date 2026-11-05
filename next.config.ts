@@ -241,14 +241,24 @@ export function securityHeaderOptionsFor(
 }
 
 /*
- * experimental.sri (hash-based Subresource Integrity), evaluated for
- * SEC-1: left off. It adds `integrity` attributes to the `<script src>`
- * tags a page starts with, so it can't stand in for 'unsafe-inline': the
- * inline scripts above stay as they are. Every script we ship is
- * same-origin, served from a content-hashed, immutable URL over HTTPS, so
- * the tampering SRI guards against is already out of reach, while an
- * experimental flag that refuses a chunk whose bytes changed in transit
- * could take a page down mid-question. Revisit when it leaves experimental.
+ * experimental.sri (hash-based Subresource Integrity), evaluated for SEC-1
+ * on a mock build with { algorithm: "sha256" } (5 November 2026): left off.
+ *
+ * - It builds and plays (Home, then the Daily to clue 1, no console error),
+ *   but it covers little. Only the `<script src>` tags Next renders into
+ *   the HTML get an `integrity` attribute: 6 of the 9 in Home's HTML. The
+ *   chunks Turbopack's runtime loads afterwards get none, which is most of
+ *   them: 6 of 28 script tags on Home carried one, and still 6 of 37 once
+ *   the Daily had loaded its backend with import().
+ * - It does nothing for inline scripts, so 'unsafe-inline' stays (see
+ *   contentSecurityPolicy above).
+ * - Every script we ship is same-origin, from a content-hashed, immutable
+ *   URL over HTTPS, so the tampering it guards against is already out of
+ *   reach, while a flag that refuses a chunk whose bytes changed in transit
+ *   (a proxy that rewrites scripts, say) could take a page down
+ *   mid-question.
+ *
+ * Revisit when it leaves experimental and covers runtime-loaded chunks.
  */
 
 const nextConfig: NextConfig = {
