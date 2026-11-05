@@ -665,6 +665,31 @@ describe("ENR-1 a dry run over the fixture QID list", () => {
     );
   });
 
+  it("searches once for namesakes and judges each against its own qualifier", async () => {
+    const lists = [
+      list("person", [
+        entry("x.person.claude-monet", "Claude Monet", {
+          descriptor: "painter",
+          born: 1840,
+        }),
+        entry("x.person.claude-monet-namesake", "Claude Monet", {
+          descriptor: "painter",
+          born: 1841,
+        }),
+      ]),
+    ];
+    const { deps, requests } = stubDeps();
+    const [person] = await fetchEnrichment(lists, deps, NOW);
+    const searches = requests.filter(
+      (r) => r.url.searchParams.get("action") === "wbsearchentities",
+    );
+    expect(searches).toHaveLength(1);
+    expect(person?.candidates.map((c) => [c.id, c.verdict])).toEqual([
+      ["x.person.claude-monet", "match"],
+      ["x.person.claude-monet-namesake", "none"],
+    ]);
+  });
+
   it("skips a statement or a search result it can't read instead of failing the run", async () => {
     const world: SyntheticWorld = {
       ...FIXTURE_WORLD,

@@ -1076,14 +1076,17 @@ export async function fetchEnrichment(
 
   const hits = new Map<AnswerEntity, SearchHit[]>();
   const candidateTypes = new Map<string, Set<AnswerType>>();
+  // Namesakes share one search.
+  const searched = new Map<string, SearchHit[]>();
   for (const list of lists) {
     const todo = list.entities.filter(needsCandidates);
     deps.log(`${list.type}: searching ${todo.length} entries.`);
     for (const [index, entity] of todo.entries()) {
       const keys = namesOf(entity);
-      const kept = (await search(http, entity.name)).filter(
-        (hit) => hitMatch(keys, hit) !== "none",
-      );
+      const found =
+        searched.get(entity.name) ?? (await search(http, entity.name));
+      searched.set(entity.name, found);
+      const kept = found.filter((hit) => hitMatch(keys, hit) !== "none");
       hits.set(entity, kept);
       for (const hit of kept)
         candidateTypes.set(
