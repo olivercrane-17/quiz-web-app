@@ -532,7 +532,11 @@ describe("release and dedupe over sealed content with planted failures", () => {
     outputs.push(reveal.output);
 
     for (const output of outputs) expectClean(output);
-  });
+    // Six CLI runs, each loading and validating the planted bank: about 4 s
+    // alone, and past Vitest's 5 s default under a full parallel suite on a
+    // shared machine. src/content/pipeline/sealed-output.test.ts gives its
+    // CLI runs 30 s for the same reason.
+  }, 30_000);
 });
 
 // ---------------------------------------------------------------------------
