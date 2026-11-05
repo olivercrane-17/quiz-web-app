@@ -1,20 +1,23 @@
 /**
- * Route module (ARCHITECTURE §10.1): one of the seven trust pages (PRD
- * §3.14, DESIGN §12.40), in the (info) group's reading layout:
- * `/content-policy`. A placeholder until LGL-1 writes its text and keeps the
- * default export and the metadata (RITE round 1, R1-02: every footer link
- * opened a bare 404).
- * `src/app/(info)/content-policy/page.tsx` re-exports it.
+ * Route module (ARCHITECTURE §10.1): `/content-policy`, one of the seven trust
+ * pages (PRD §3.14, DESIGN §12.40), fully static in the (info) group's
+ * reading layout, and indexable. Its words are in
+ * `../documents/content-policy.ts`. `src/app/(info)/content-policy/page.tsx` re-exports it.
  */
 import type { Metadata } from "next";
 
-import { PagePlaceholder, SHELL_COPY } from "@/features/shell";
+import { SHELL_COPY } from "@/features/shell";
+import { isFeatureEnabled } from "@/lib/env";
+import { indexable } from "@/lib/metadata";
 
-export const metadata: Metadata = {
-  title: SHELL_COPY.legal.contentPolicy,
-  robots: { index: false },
-};
+import { contentPolicyDocument } from "../documents/content-policy";
+import { LegalPage } from "../ui/legal-page";
+
+export const metadata: Metadata = indexable(
+  SHELL_COPY.legal.contentPolicy,
+  "/content-policy",
+);
 
 export default function ContentPolicyRoute() {
-  return <PagePlaceholder title={SHELL_COPY.legal.contentPolicy} />;
+  return <LegalPage document={contentPolicyDocument(isFeatureEnabled)} />;
 }

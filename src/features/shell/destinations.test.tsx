@@ -47,8 +47,12 @@ const SHELL_LINKS = [
   ...LEGAL_LINKS.map((link) => link.href),
 ];
 
-/** Pages past their placeholder, each with a test of its own below. */
-const BUILT = new Set(["/how-scoring-works"]);
+/**
+ * Pages past their placeholder. The seven trust pages are LGL-1's, tested
+ * in src/features/legal (the one h1, the unique title, the table of
+ * contents and the text each must carry).
+ */
+const BUILT = new Set(LEGAL_LINKS.map((link) => link.href));
 
 /** Where ARCHITECTURE §10.1 puts each destination. */
 const GROUP_OF: Record<string, string> = {
@@ -103,31 +107,6 @@ describe("every destination the shell draws", () => {
       expect(metadata?.robots).toEqual({ index: false });
     },
   );
-
-  it("PRD §3.1.3 /how-scoring-works carries How to play, its five parts one level under the page's h1, and offers Go to Today", async () => {
-    const page = routes.get("/how-scoring-works");
-    if (page === undefined) throw new Error("no page for /how-scoring-works");
-    const { default: Page, metadata } = await loadPage(page.file);
-    renderWithUser(<Page />);
-    const [title, ...others] = screen.getAllByRole("heading", { level: 1 });
-    expect(others).toEqual([]);
-    expect(title).toHaveTextContent(String(metadata?.title));
-    expect(
-      screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent),
-    ).toEqual([
-      "The clue ladder",
-      "The points",
-      "Clue 4",
-      "The Encore",
-      "The ranking",
-    ]);
-    expect(screen.queryByText(SHELL_COPY.notReady)).toBeNull();
-    expect(
-      screen.getByRole("link", { name: SHELL_COPY.goToToday }),
-    ).toHaveAttribute("href", "/");
-    // LGL-1 decides when the trust pages are indexed.
-    expect(metadata?.robots).toEqual({ index: false });
-  });
 
   it("R1-09 gives each destination a title of its own, for the route announcer", async () => {
     const titles = await Promise.all(
