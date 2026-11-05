@@ -217,3 +217,15 @@ where they differ, until those documents are updated.
   calendar time against the usage limit.
 - **FIX-DS.** Round 1 found shell and primitive defects while DS-1 was mid-build. They go to a FIX-DS follow-up on
   DS-1's lane instead of the feature lanes, so two lanes never edit `src/ui/**` or `src/features/shell/**` at once.
+
+## 21. Decisions of 5 November 2026
+- **Deleting data.** Until the owner decides otherwise, routine database work never deletes: rows are overwritten,
+  upserted, blanked or switched off. Genuine deletions, such as a player's "Delete my data" request and the nightly removal
+  of test players, live in migrations named `*_attended.sql` that are applied only in a session the owner attends, each
+  listed with its purpose in `supabase/README.md`. Nothing is ever rewritten or disguised to slip past the database tool's
+  confirmation prompt.
+- **Content Security Policy.** `script-src` keeps `'unsafe-inline'`: Next.js inserts inline scripts that differ per page
+  and per build, so they cannot be hashed in advance, and a per-request nonce would force every page to render on the
+  server. Compensating controls: `script-src-attr 'none'`, a test that fails if anyone adds a hash or nonce (either would
+  silently disable `'unsafe-inline'` and break hydration), and an E2E that loads every route with zero violations. Revisit
+  if the app moves to dynamic rendering.
