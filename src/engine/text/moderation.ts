@@ -9,7 +9,7 @@
  *
  * How a text is read (`normalizeForFilter`), in four passes (`PASSES`),
  * because a digit or symbol may stand for a letter or be just a digit or a
- * mark: "s1ur", "slur1", "s1ur!" and "slu7!" each hide the same word.
+ * mark: "n3wt", "newt1", "n3wt!" and "new7!" each hide the same word.
  *
  * 1. NFKC, which turns fullwidth, styled, circled and superscript letters
  *    and ligatures into plain ones.
@@ -19,12 +19,12 @@
  * 3. The swaps (`FOLD_SWAPS`): 0 reads as o, 1 ! and ¡ as i, | as l, 3 and
  *    € as e, 4 and @ as a, 5 and $ as s, 7 as t. The `swaps` pass reads
  *    every one as a letter; the `bangs` pass first turns the exclamation
- *    marks that end a word into separators ("slu7!" reads "slut"); the
+ *    marks that end a word into separators ("new7!" reads "newt"); the
  *    `edges` pass does that for every swap character that ends a word
- *    ("h3ns!1" reads "hens"); the `plain` pass reads none ("slur1" reads
- *    "slur").
+ *    ("h3ns!1" reads "hens"); the `plain` pass reads none ("newt1" reads
+ *    "newt").
  * 4. Everything that is not a to z separates words.
- * 5. A run of single letters joins into one word ("s l u r", "s.l.u.r").
+ * 5. A run of single letters joins into one word ("n e w t", "n.e.w.t").
  *
  * How a term matches (`createModerationList`, `isBlocked`):
  *

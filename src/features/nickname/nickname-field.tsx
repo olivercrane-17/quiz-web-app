@@ -40,7 +40,7 @@ import { Button } from "@/ui/button";
 import { CrossIcon } from "@/ui/icons";
 
 import { FILTER_SETTLE_MS, NICKNAME_COPY, NICKNAME_MAX_LENGTH } from "./copy";
-import { loadNameFilter, type NameFilter } from "./filter";
+import { loadTextFilter, type TextFilter } from "./filter";
 import { shuffleName } from "./names";
 import { ShuffleIcon } from "./shuffle-icon";
 
@@ -94,7 +94,7 @@ export function NicknameField({
   const [offered, setOffered] = useState<string | null>(null);
   /** The generated name whose text the player cleared from the field. */
   const [emptied, setEmptied] = useState<string | null>(null);
-  const [filter, setFilter] = useState<NameFilter | null>(null);
+  const [filter, setFilter] = useState<TextFilter | null>(null);
   /** The filter's answer is showing for the current run of blocked text. */
   const [noticed, setNoticed] = useState(false);
 
@@ -139,7 +139,7 @@ export function NicknameField({
 
   function needFilter() {
     if (filter !== null) return;
-    loadNameFilter().then(setFilter, () => {
+    loadTextFilter().then(setFilter, () => {
       // Offline, or the chunk failed: the server still checks on save, and
       // the next focus tries again.
     });

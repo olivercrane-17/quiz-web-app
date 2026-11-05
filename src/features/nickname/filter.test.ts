@@ -13,11 +13,11 @@ import { termVariants } from "../../../scripts/codegen/moderation-sql";
 import { MODERATION_TERMS_ROT13 } from "@/content/generated/moderation";
 import { rot13 } from "@/engine/text/moderation";
 
-import { loadNameFilter } from "./filter";
+import { loadTextFilter } from "./filter";
 
-describe("loadNameFilter", () => {
+describe("loadTextFilter", () => {
   it("AC-LNT-03 catches each listed term under each normalization on the client", async () => {
-    const filter = await loadNameFilter();
+    const filter = await loadTextFilter();
     expect(MODERATION_TERMS_ROT13.length).toBeGreaterThan(0);
     const missed: string[] = [];
     MODERATION_TERMS_ROT13.forEach((encoded, t) => {
@@ -33,7 +33,7 @@ describe("loadNameFilter", () => {
   });
 
   it("passes everyday names", async () => {
-    const filter = await loadNameFilter();
+    const filter = await loadTextFilter();
     for (const name of [
       "Dee",
       "Priya",
@@ -49,9 +49,9 @@ describe("loadNameFilter", () => {
   });
 
   it("loads the list once and shares it", async () => {
-    const first = loadNameFilter();
-    expect(loadNameFilter()).toBe(first);
-    expect(await first).toBe(await loadNameFilter());
+    const first = loadTextFilter();
+    expect(loadTextFilter()).toBe(first);
+    expect(await first).toBe(await loadTextFilter());
   });
 
   it("forgets a failed load, so the next call tries again", async () => {
@@ -60,9 +60,9 @@ describe("loadNameFilter", () => {
       throw new Error("offline");
     });
     const offline = await import("./filter");
-    await expect(offline.loadNameFilter()).rejects.toThrow();
+    await expect(offline.loadTextFilter()).rejects.toThrow();
     vi.doUnmock("./filter-list");
-    const filter = await offline.loadNameFilter();
+    const filter = await offline.loadTextFilter();
     expect(filter.isBlocked("Dee")).toBe(false);
   });
 });

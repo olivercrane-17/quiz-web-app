@@ -16,7 +16,7 @@ import { renderWithUser } from "@/test/render";
 import { clearAnnouncements, LIVE_REGION_IDS } from "@/ui/announce";
 
 import { FILTER_SETTLE_MS, NICKNAME_COPY } from "./copy";
-import { loadNameFilter } from "./filter";
+import { loadTextFilter } from "./filter";
 import { NicknameField, type NicknameFieldProps } from "./nickname-field";
 
 vi.mock("./filter", async () => {
@@ -30,7 +30,7 @@ vi.mock("./filter", async () => {
     fixture.allowlist,
   );
   return {
-    loadNameFilter: vi.fn(() =>
+    loadTextFilter: vi.fn(() =>
       Promise.resolve({ isBlocked: (text: string) => isBlocked(text, list) }),
     ),
   };
@@ -282,9 +282,9 @@ describe("NicknameField: custom names", () => {
 describe("NicknameField: filter feedback", () => {
   it("loads the term list only once the field is used", async () => {
     const { user } = renderWithUser(<Field allowCustom />);
-    expect(loadNameFilter).not.toHaveBeenCalled();
+    expect(loadTextFilter).not.toHaveBeenCalled();
     await user.click(screen.getByRole("textbox"));
-    expect(loadNameFilter).toHaveBeenCalled();
+    expect(loadTextFilter).toHaveBeenCalled();
   });
 
   it("answers once typing pauses, keeps the answer while the text stays blocked, and drops it the moment the text is clean", async () => {

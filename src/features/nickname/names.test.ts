@@ -9,7 +9,7 @@ import { describe, expect, it, vi } from "vitest";
 import { NAME_ADJECTIVES, NAME_ANIMALS } from "@/content/generated/names";
 
 import { NICKNAME_MAX_LENGTH } from "./copy";
-import { loadNameFilter } from "./filter";
+import { loadTextFilter } from "./filter";
 import { randomUnit, shuffleName } from "./names";
 
 /** A random source that returns `units` in turn. */
@@ -53,7 +53,7 @@ describe("shuffleName", () => {
 
 describe("the reviewed name lists", () => {
   it("MOD-1 no friendly name holds a listed term (every pair of content/names/, through the client filter)", async () => {
-    const filter = await loadNameFilter();
+    const filter = await loadTextFilter();
     const blocked: string[] = [];
     NAME_ADJECTIVES.forEach((adjective, a) => {
       NAME_ANIMALS.forEach((animal, b) => {
