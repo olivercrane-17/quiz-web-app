@@ -12,6 +12,45 @@ import { mockControls, type RemoteMockControls } from "./mock";
 
 const LOCAL_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]"]);
 
+/**
+ * What WebKit logs as an error for a page that is fine, and that only
+ * WebKit logs. Each entry says why it is expected; nothing else is dropped.
+ *
+ * - The viewport's `interactive-widget=resizes-content`: Chromium honours
+ *   it (the keyboard resizes the layout, so the Mystery's field stays
+ *   above it, DESIGN §10.3), and WebKit reports the key it doesn't know.
+ */
+const WEBKIT_EXPECTED_ERRORS = [
+  /^Viewport argument key "interactive-widget" not recognized and ignored\.$/,
+];
+
+/** The backup cookie's routes (ARCHITECTURE §9.3). */
+const BACKUP_ROUTES = new Set(["/api/restore", "/api/identity"]);
+
+/**
+ * True for WebKit's report that a backup route refused the page (403).
+ * Where WebKit sends no `Sec-Fetch-Site` to a plain-http origin such as
+ * this suite's http://127.0.0.1, the routes refuse its same-origin calls,
+ * as they must refuse any request without it (AC-CKE-03), and the app
+ * takes that as "refused" and carries on (src/platform/identity/backup.ts).
+ * Production is https. The cookie specs skip themselves where this holds
+ * (e2e/identity/cookie.spec.ts, ARCHITECTURE §9.3's test note).
+ */
+function isWebKitBackupRefusal(text: string, url: string): boolean {
+  if (
+    !/^Failed to load resource: the server responded with a status of 403\b/.test(
+      text,
+    )
+  ) {
+    return false;
+  }
+  try {
+    return BACKUP_ROUTES.has(new URL(url).pathname);
+  } catch {
+    return false;
+  }
+}
+
 /** True for http(s) and ws(s) URLs that leave this machine. */
 function isExternal(url: URL): boolean {
   return (
@@ -54,11 +93,16 @@ export interface Fixtures {
 /** Use this `test` (not the one from @playwright/test) in every spec. */
 export const test = base.extend<Fixtures>({
   consoleErrors: [
-    async ({ page, context }, use) => {
+    async ({ page, context, browserName }, use) => {
       const errors: string[] = [];
+      const expected = (text: string, url: string) =>
+        browserName === "webkit" &&
+        (WEBKIT_EXPECTED_ERRORS.some((pattern) => pattern.test(text)) ||
+          isWebKitBackupRefusal(text, url));
       const watch = (target: Page) => {
         target.on("console", (message) => {
           if (message.type() === "error") {
+            if (expected(message.text(), message.location().url)) return;
             errors.push(`console.error: ${message.text()}`);
           } else if (
             message.type() === "warning" &&

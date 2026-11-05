@@ -125,7 +125,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Once hung for the whole job on its system packages; a stuck install
+      # now fails here and leaves the rest of the job's time unused.
       - name: Install Playwright ${{ matrix.browser }}
+        timeout-minutes: 10
         run: npx playwright install --with-deps ${{ matrix.browser }}
 
       # Builds and starts the app with the mock backend (see playwright.config.ts).

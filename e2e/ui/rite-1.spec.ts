@@ -806,6 +806,48 @@ test.describe("R1-08 and R1-27 marks, not buttons", () => {
     expect(looks.filter((look) => look.bar !== null)).toHaveLength(1);
   });
 
+  test("R1-27 the Mystery's worth scale is a mark: a flat disc, and 'points now' under the value it marks", async ({
+    page,
+  }) => {
+    await page.goto("/daily");
+    await expect(page.getByRole("heading", { name: /clue 1/i })).toBeVisible();
+    /** The disc's shadow, and where the label sits against the current value. */
+    const look = () =>
+      page.locator("[data-stake]").evaluate((scale) => {
+        const marker = scale.querySelector("[data-stake-marker]");
+        const now = scale.querySelector('[data-state="now"]');
+        const label = scale.parentElement?.querySelector("[data-stake-label]");
+        if (!marker || !now || !label) return null;
+        const value = now.getBoundingClientRect();
+        const words = label.getBoundingClientRect();
+        const centre = value.left + value.width / 2;
+        return {
+          worth: Number(scale.getAttribute("data-stake")),
+          shadow: getComputedStyle(marker).boxShadow,
+          under: words.top >= scale.getBoundingClientRect().bottom - 1,
+          spans: words.left <= centre + 0.5 && centre - 0.5 <= words.right,
+          inside:
+            words.left >= scale.getBoundingClientRect().left - 0.5 &&
+            words.right <= scale.getBoundingClientRect().right + 0.5,
+        };
+      });
+    for (const worth of [4, 3, 2, 1]) {
+      if (worth < 4) {
+        await page
+          .getByRole("button", { name: /^(Next clue|Last clue)/ })
+          .click();
+      }
+      // Once the disc and the label have slid (320 ms).
+      await expect.poll(look).toEqual({
+        worth,
+        shadow: "none",
+        under: true,
+        spans: true,
+        inside: true,
+      });
+    }
+  });
+
   test("R1-27 a chip and a stopwatch reading look like labels; only a chip that is a link looks like a control", async ({
     page,
   }) => {

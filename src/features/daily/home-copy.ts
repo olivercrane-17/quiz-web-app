@@ -20,9 +20,15 @@ export const HOME_CARD_COPY = {
   /** Before get_today answers (PRD §3.1.7, Loading). */
   placeholderChips: ["Easy", "Medium", "Hard", "Number"],
   play: "Play today's Daily",
-  continueHeading: (dailyNumber: number, round: string) =>
-    `Continue Daily #${dailyNumber} · ${round}`,
-  /** Where an unfinished run stands: "Mystery 2 of 3". */
+  /**
+   * The backend serves no Daily yet (its daily area answers `unavailable`,
+   * as the Supabase adapters do until SQL-4 and SQL-5). The Practice card
+   * moves above the card, so Quick play is first.
+   */
+  notReady: "Today's Daily isn't ready yet. Practice is ready when you are.",
+  /** The line under it says where the run stands (DESIGN §12.1). */
+  continueHeading: (dailyNumber: number) => `Continue Daily #${dailyNumber}`,
+  /** Where an unfinished run stands, on its own line: "Mystery 2 of 3". */
   progress: {
     mystery: (ordinal: number, ofType: number) =>
       ofType > 1 ? `Mystery ${ordinal} of ${ofType}` : "Mystery",

@@ -901,8 +901,11 @@
     text-wrap: pretty;
   }
   /* A 3 px ring at 3 px offset, never removed (DESIGN §11); on the ticket
-   * it takes the ticket's own focus colour (ui.css). */
-  :focus-visible {
+   * it takes the ticket's own focus colour (ui.css). The app's own focus
+   * moves after a key press wear it too, in every browser
+   * (src/ui/focus-ring.ts). */
+  :focus-visible,
+  [data-focus-ring]:focus {
     outline: 3px solid var(--kn-focus);
     outline-offset: 3px;
   }

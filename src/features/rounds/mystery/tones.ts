@@ -79,6 +79,9 @@ export const ENTER = {
 /** The marker on the worth scale slides one step (320 ms, spring). */
 export const SLIDE = `transition-[translate] duration-[320ms] ${SPRING}`;
 
+/** "points now" follows the marker on the same spring. */
+export const LABEL_SLIDE = `transition-[left,translate] duration-[320ms] ${SPRING}`;
+
 /** The moment's entrance, or its reduced form. */
 export function enter(moment: keyof typeof ENTER, reducedMotion: boolean) {
   return reducedMotion ? ENTER.reduced : ENTER[moment];

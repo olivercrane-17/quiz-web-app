@@ -197,7 +197,10 @@ export function MysteryRevealCard({
         <span className={cx("text-[0.9375rem] font-bold", TONE.ink2)}>
           {solved && reveal.solvedOn !== null ? (
             <>
-              {copy.solvedOn(reveal.solvedOn)} ·{" "}
+              {/* No-break spaces: "clue 4 · +1" wraps as one, never
+                  leaving the points alone on a line (320 px, 200% text). */}
+              {copy.solvedOn(reveal.solvedOn)}
+              {"\u00a0·\u00a0"}
               <span
                 aria-hidden="true"
                 data-points={shownPoints ?? undefined}

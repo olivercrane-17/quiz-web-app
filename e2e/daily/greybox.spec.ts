@@ -12,6 +12,8 @@
 import type { Page } from "@playwright/test";
 
 import { expect, test } from "../fixtures";
+import { expectNoSeriousAxe } from "../support/axe";
+import { allowClipboard } from "../support/clipboard";
 import { expectSealedPayloads } from "../support/sealed";
 
 /** 09:00 in London on Sunday 1 November 2026: Daily #42 (spare set 6). */
@@ -130,6 +132,44 @@ test.describe("the Daily screen's start states", () => {
         name: "Leave the Daily. Your progress is saved.",
       }),
     ).toHaveAttribute("href", "/");
+  });
+
+  test("with a backend that serves no Daily yet, Today offers Practice first and the Daily says it isn't ready, never 'on this server'", async ({
+    page,
+  }) => {
+    // What the Supabase build answers until SQL-4 and SQL-5 land.
+    await mockInit(page, {
+      failures: [
+        { method: "daily.today", code: "unavailable", times: 50 },
+        { method: "sealed.start", code: "unavailable", times: 50 },
+      ],
+    });
+    await page.goto("/");
+    const card = page.locator('[data-daily-card="not_ready"]');
+    await expect(card).toContainText(
+      "Today's Daily isn't ready yet. Practice is ready when you are.",
+    );
+    await expect(card.getByRole("link")).toHaveCount(0);
+    // The Practice card moves above the Daily, Quick play first.
+    const promoted = page.locator('[data-practice-card="promoted"]');
+    await expect(promoted).toBeVisible();
+    await expect(page.locator('[data-practice-card="regular"]')).toBeHidden();
+    await expect(
+      promoted.getByRole("link", { name: "Quick play" }),
+    ).toBeVisible();
+
+    await page.goto("/daily");
+    const problem = page.locator('[data-daily-problem="unavailable"]');
+    await expect(
+      problem.getByRole("heading", { name: "Today's Daily isn't ready yet." }),
+    ).toBeVisible();
+    await expect(
+      problem.getByRole("link", { name: "Play practice instead" }),
+    ).toHaveAttribute("href", "/practice");
+    await expect(
+      problem.getByRole("button", { name: "Try again" }),
+    ).toHaveCount(0);
+    await expect(page.getByText(/on this server/)).toHaveCount(0);
   });
 
   test("says the Daily needs a connection when the device is offline", async ({
@@ -326,8 +366,10 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
     await mockInit(page, { scenario: "in_progress_mystery_2" });
     await page.goto("/");
     const card = page.locator("[data-daily-card]");
-    await expect(card.getByRole("heading")).toHaveText(
-      "Continue Daily #42 · Mystery 2 of 3",
+    await expect(card.getByRole("heading")).toHaveText("Continue Daily #42");
+    // Where the run stands, on its own line (DESIGN §12.1).
+    await expect(card.locator("[data-daily-progress]")).toHaveText(
+      "Mystery 2 of 3",
     );
     await expect(card.getByRole("link", { name: "Continue" })).toHaveAttribute(
       "href",
@@ -459,7 +501,11 @@ async function expectNoClipping(page: Page): Promise<void> {
 /** RITE round 1's findings for the Daily (docs/playtests/rite-1.md, FIX-DLY). */
 test.describe("RITE round 1", () => {
   test.describe("Share (R1-01, PRD §3.5.2)", () => {
-    test.use({ permissions: ["clipboard-read", "clipboard-write"] });
+    // Each browser's own way to a clipboard a spec can read (Firefox and
+    // WebKit refuse Chromium's permission names).
+    test.beforeEach(async ({ page, browserName }) => {
+      await allowClipboard(page, browserName);
+    });
 
     test("AC-SHR-05 with navigator.share absent, the stop screen's Share copies its text and logs share_complete with method clipboard", async ({
       page,
@@ -1002,6 +1048,31 @@ test.describe("RITE round 1", () => {
       await expect(page.locator("[data-score]")).toHaveText("9/12");
     });
 
+    test("AC-A11Y-01 a finished stop screen has no serious axe findings, in the light theme and the dark", async ({
+      page,
+    }) => {
+      // The legend sits on the ticket's fill, so it takes the ticket's ink.
+      for (const colorScheme of ["light", "dark"] as const) {
+        // Loaded in the scheme, so no colour is caught mid-transition.
+        await page.emulateMedia({ colorScheme });
+        await page.reload();
+        await expect(page.locator("[data-score]")).toHaveText("9/12");
+        await expect(page.locator("[data-legend]")).toHaveText(
+          "🟧 clue used · ✅ solved · ⬜ not needed",
+        );
+        await page.waitForFunction(() =>
+          document
+            .getAnimations()
+            .every(
+              (animation) =>
+                animation.playState !== "running" ||
+                animation.effect?.getComputedTiming().endTime === Infinity,
+            ),
+        );
+        await expectNoSeriousAxe(page);
+      }
+    });
+
     test("R1-07 the Encore row says the Encore breaks ties and scores no points", async ({
       page,
     }) => {
@@ -1057,66 +1128,76 @@ test.describe("RITE round 1", () => {
       expect(lines.join("\n")).not.toMatch(/\d+:\d\d/);
     });
 
-    test("R1-12 the dock holds Done for today at the bottom, and tabbing never leaves focus under it, at 200% text", async ({
-      page,
-    }) => {
-      await page.setViewportSize({ width: 390, height: 640 });
-      await page.addStyleTag({ content: BIG_TEXT });
-      const dock = page.locator("[data-results-dock]");
-      await expect(
-        dock.getByRole("link", { name: "Done for today" }),
-      ).toBeVisible();
-      // Sticky at the screen's bottom while the results scroll under it,
-      // one button tall even at 200% text.
-      const box = await dock.boundingBox();
-      expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(640.5);
-      expect(box?.height ?? Infinity).toBeLessThan(640 / 4);
-      // Its height is the page's bottom scroll inset (ScrollInset).
-      await expect
-        .poll(() =>
-          page.evaluate(() =>
-            Number.parseFloat(
-              getComputedStyle(document.documentElement).getPropertyValue(
-                "--kn-inset-bottom",
+    // At 390 by 640 with 200% text the share box is taller than the room
+    // above the dock; at 360 by 640 with 100% text it fits, and must clear
+    // the dock whole once Tab reaches it.
+    for (const { width, height, big } of [
+      { width: 390, height: 640, big: true },
+      { width: 360, height: 640, big: false },
+    ]) {
+      test(`R1-12 the dock holds Done for today at the bottom, and tabbing never leaves focus under it, at ${width} by ${height} with ${big ? "200%" : "100%"} text`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width, height });
+        if (big) await page.addStyleTag({ content: BIG_TEXT });
+        const dock = page.locator("[data-results-dock]");
+        await expect(
+          dock.getByRole("link", { name: "Done for today" }),
+        ).toBeVisible();
+        // Sticky at the screen's bottom while the results scroll under it,
+        // one button tall even at 200% text.
+        const box = await dock.boundingBox();
+        expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(
+          height + 0.5,
+        );
+        expect(box?.height ?? Infinity).toBeLessThan(height / 4);
+        // Its height is the page's bottom scroll inset (ScrollInset).
+        await expect
+          .poll(() =>
+            page.evaluate(() =>
+              Number.parseFloat(
+                getComputedStyle(document.documentElement).getPropertyValue(
+                  "--kn-inset-bottom",
+                ),
               ),
             ),
-          ),
-        )
-        .toBeGreaterThanOrEqual(Math.floor(box?.height ?? Infinity));
-      const hidden: string[] = [];
-      for (let step = 0; step < 40; step += 1) {
-        await page.keyboard.press("Tab");
-        const focus = await page.evaluate(() => {
-          const element = document.activeElement;
-          const bar = document.querySelector("[data-results-dock]");
-          const header = document.querySelector("header");
-          if (!(element instanceof HTMLElement) || bar === null) return null;
-          const rect = element.getBoundingClientRect();
-          return {
-            name: element.textContent?.trim().slice(0, 40) ?? "",
-            inDock: bar.contains(element),
-            top: rect.top,
-            bottom: rect.bottom,
-            dockTop: bar.getBoundingClientRect().top,
-            headerBottom: header?.getBoundingClientRect().bottom ?? 0,
-          };
-        });
-        if (focus === null || focus.inDock) break;
-        // Never under the dock (WCAG 2.4.11), and whole above it, with room
-        // for the 3 px ring at its 3 px offset, wherever it can fit there.
-        const room = focus.dockTop - focus.headerBottom;
-        const whole = focus.bottom - focus.top + 12 <= room;
-        if (
-          focus.top > focus.dockTop - 6 ||
-          (whole && focus.bottom > focus.dockTop - 6)
-        ) {
-          hidden.push(
-            `${focus.name}: ${Math.round(focus.top)} to ${Math.round(focus.bottom)}, dock at ${Math.round(focus.dockTop)}`,
-          );
+          )
+          .toBeGreaterThanOrEqual(Math.floor(box?.height ?? Infinity));
+        const hidden: string[] = [];
+        for (let step = 0; step < 40; step += 1) {
+          await page.keyboard.press("Tab");
+          const focus = await page.evaluate(() => {
+            const element = document.activeElement;
+            const bar = document.querySelector("[data-results-dock]");
+            const header = document.querySelector("header");
+            if (!(element instanceof HTMLElement) || bar === null) return null;
+            const rect = element.getBoundingClientRect();
+            return {
+              name: element.textContent?.trim().slice(0, 40) ?? "",
+              inDock: bar.contains(element),
+              top: rect.top,
+              bottom: rect.bottom,
+              dockTop: bar.getBoundingClientRect().top,
+              headerBottom: header?.getBoundingClientRect().bottom ?? 0,
+            };
+          });
+          if (focus === null || focus.inDock) break;
+          // Never under the dock (WCAG 2.4.11), and whole above it, with room
+          // for the 3 px ring at its 3 px offset, wherever it can fit there.
+          const room = focus.dockTop - focus.headerBottom;
+          const whole = focus.bottom - focus.top + 12 <= room;
+          if (
+            focus.top > focus.dockTop - 6 ||
+            (whole && focus.bottom > focus.dockTop - 6)
+          ) {
+            hidden.push(
+              `${focus.name}: ${Math.round(focus.top)} to ${Math.round(focus.bottom)}, dock at ${Math.round(focus.dockTop)}`,
+            );
+          }
         }
-      }
-      expect(hidden).toEqual([]);
-    });
+        expect(hidden).toEqual([]);
+      });
+    }
 
     test("R1-34 the results open on their heading, the route's one h1", async ({
       page,

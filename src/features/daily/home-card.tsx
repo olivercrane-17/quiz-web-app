@@ -2,8 +2,10 @@
 
 /**
  * Today's Daily card (PRD §3.1.7, DESIGN §12.1), greybox: not started, in
- * progress and finished. DLY-2 adds the rest (offline, outage, the played
- * count, the Group line, the first-paint date script).
+ * progress and finished, and not ready: a backend that serves no Daily yet
+ * (`unavailable`, the Supabase adapters until SQL-4 and SQL-5) gets no Play
+ * and the Practice card promoted above it. DLY-2 adds the rest (offline,
+ * outage, the played count, the Group line, the first-paint date script).
  *
  * The number, minutes and rule line render at once from the epoch and the
  * device's date, and Play is live before anything loads: it starts the
@@ -32,6 +34,7 @@ import {
 } from "react";
 
 import type { DailyTodayCard, TodayRoundChip } from "@/engine/types";
+import { HOME_PROMOTE_PRACTICE } from "@/features/home";
 import type {
   ShareButtonProps,
   SharePayload,
@@ -161,6 +164,8 @@ export interface DailyHomeCardProps {
 
 export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
   const [loaded, setLoaded] = useState<Loaded | null>(null);
+  /** The backend serves no Daily (`unavailable`): nothing to play yet. */
+  const [notReady, setNotReady] = useState(false);
   const [share, setShare] = useState<ShareSlot | null>(null);
   // The device's date is only known in the browser; the prerender holds a
   // same-length placeholder, hidden until it is replaced.
@@ -171,12 +176,21 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     void import("./home-data")
       .then((data) => data.loadTodayCard())
       .then(({ card: result, highContrast }) => {
-        if (live && result.ok) {
+        if (!live) return;
+        if (result.ok) {
           setLoaded({
             card: result.value,
             receivedAt: Date.now(),
             highContrast,
           });
+        } else if (
+          // Not a server shedding load for a moment (which says when to
+          // come back): Play stays for that, and the Daily screen copes.
+          result.error.retryAfterMs === null &&
+          (result.error.code === "unavailable" ||
+            result.error.code === "feature_disabled")
+        ) {
+          setNotReady(true);
         }
       })
       .catch(() => {
@@ -217,7 +231,7 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
   const date = card?.daily.date ?? today;
   // Which Daily, and before it starts how long it takes; the dateline
   // above names the day (D18). An unfinished run's heading names the Daily
-  // itself, so it has no line.
+  // itself, so its line says where the run stands instead.
   const line = date === null ? null : dailyLine(date, epoch);
   const dailyNumber = card?.daily.dailyNumber;
   const rule =
@@ -226,7 +240,7 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
       : COPY.ruleChoice;
 
   let heading: string = COPY.heading;
-  let action = (
+  let action: ReactNode = (
     <Link
       href="/daily"
       onPointerDown={warm}
@@ -252,8 +266,17 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     </>
   );
 
-  if (card !== null && status === "in_progress") {
-    heading = COPY.continueHeading(card.daily.dailyNumber, progressLine(card));
+  if (card === null && notReady) {
+    // No Play and no chips for a Daily that can't start; Quick play goes
+    // first, in the Practice card the marker moves above this one.
+    action = null;
+    body = (
+      <p className="text-base" {...HOME_PROMOTE_PRACTICE}>
+        {COPY.notReady}
+      </p>
+    );
+  } else if (card !== null && status === "in_progress") {
+    heading = COPY.continueHeading(card.daily.dailyNumber);
     action = (
       <Link
         href="/daily"
@@ -296,13 +319,19 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
   return (
     <section
       aria-labelledby="qz-daily-card"
-      data-daily-card={status}
+      data-daily-card={card === null && notReady ? "not_ready" : status}
       className="flex flex-col gap-3 rounded-3xl border-2 border-foreground bg-background p-4 shadow-[0_4px_0_0] shadow-foreground/40 sm:p-5"
     >
       <h2 id="qz-daily-card" className="text-xl font-bold">
         {heading}
       </h2>
-      {status === "in_progress" ? null : (
+      {card !== null && status === "in_progress" ? (
+        // Its own line under "Continue Daily #42" (DESIGN §12.1), so a
+        // narrow card never starts a line with the separator.
+        <p className="text-sm font-semibold" data-daily-progress="">
+          {progressLine(card)}
+        </p>
+      ) : (
         <p className="text-sm font-semibold">
           <span className={line === null ? "invisible" : undefined}>
             {line ?? COPY.dailyLine(0)}

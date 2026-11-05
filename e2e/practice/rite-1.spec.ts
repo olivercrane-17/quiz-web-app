@@ -7,6 +7,7 @@ import { devices, type Locator, type Page } from "@playwright/test";
 
 import { MIN_SHEET_BODY_PX } from "../../src/features/rounds/choice/viewport";
 import { expect, test } from "../fixtures";
+import { allowClipboard } from "../support/clipboard";
 import { mockInit } from "../support/mock";
 
 const round = (page: Page) => page.locator('[data-round="choice"]');
@@ -122,6 +123,17 @@ function bandUnderHeader(view: Awaited<ReturnType<typeof layout>>): number {
     .filter((b) => b.bottom > view.headerBottom)
     .sort((a, b) => a.top - b.top)[0];
   return below === undefined ? Infinity : below.top - view.headerBottom;
+}
+
+/**
+ * Waits out the sheet's rise (360 ms from below, DESIGN §7.3). Continue is
+ * on screen once the sheet has risen, and below the fold for its first
+ * frames, which a slow runner can still be in when it measures.
+ */
+async function sheetRisen(page: Page) {
+  await sheet(page).evaluate((element) =>
+    Promise.all(element.getAnimations().map((animation) => animation.finished)),
+  );
 }
 
 async function expectContinueOnScreen(page: Page) {
@@ -436,6 +448,7 @@ test.describe("RITE round 1: practice", () => {
           const atVerdict = await layout(page);
           // No tap: the sheet rises by itself at 1.2 s.
           await expect(sheet(page)).toBeVisible();
+          await sheetRisen(page);
           const withSheet = await layout(page);
           // Nothing above the sheet moved on the page.
           expect(withSheet.options, `question ${n}`).toEqual(atVerdict.options);
@@ -836,7 +849,11 @@ test.describe("RITE round 1: practice", () => {
   });
 
   test.describe("Share on the results (R1-01, PRD §3.5.4)", () => {
-    test.use({ permissions: ["clipboard-read", "clipboard-write"] });
+    // Each browser's own way to a clipboard a spec can read (Firefox and
+    // WebKit refuse Chromium's permission names).
+    test.beforeEach(async ({ page, browserName }) => {
+      await allowClipboard(page, browserName);
+    });
 
     // The results hand the practice text to the share feature's button
     // (src/features/share/share-button.tsx, built by FIX-DLY).
@@ -887,6 +904,7 @@ test.describe("RITE round 1: practice", () => {
 
 /** D12: the explanation whole on screen (not clamped, nothing behind Read more), with Learn more and Continue. */
 async function expectWholeExplanation(page: Page) {
+  await sheetRisen(page);
   await expect(
     sheet(page).getByRole("button", { name: "Read more" }),
   ).toHaveCount(0);

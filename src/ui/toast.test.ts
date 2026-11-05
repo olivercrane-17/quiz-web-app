@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { LIVE_REGION_IDS, clearRouteAnnouncements } from "./announce";
+import { signalRouteChange } from "./route-change";
 import { showToast } from "./toast";
 
 const toasts = () => [
@@ -127,6 +128,37 @@ describe("showToast", () => {
     showToast("Saved");
     expect(toasts()[0]?.style.getPropertyValue("--kn-toast-bottom")).toBe(
       "80px",
+    );
+  });
+
+  it("rises above the next page's bar once the address changes, not the dock it was shown over", () => {
+    Object.defineProperty(Element.prototype, "checkVisibility", {
+      configurable: true,
+      value: () => true,
+    });
+    // The stop screen's dock, 120 px tall.
+    const dock = document.createElement("div");
+    dock.dataset.toastAnchor = "";
+    dock.getBoundingClientRect = () =>
+      ({ top: window.innerHeight - 120 }) as DOMRect;
+    document.body.append(dock);
+    showToast("Copied. Paste it into your group chat.");
+    const [toast] = toasts();
+    expect(toast?.style.getPropertyValue("--kn-toast-bottom")).toBe("136px");
+
+    // "Done for today": a page with no bar at all.
+    dock.remove();
+    signalRouteChange();
+    expect(toast?.style.getPropertyValue("--kn-toast-bottom")).toBe(
+      "calc(16px + env(safe-area-inset-bottom))",
+    );
+
+    // Once it has gone, a later change of address leaves it alone.
+    vi.advanceTimersByTime(4_000);
+    document.body.append(dock);
+    signalRouteChange();
+    expect(toast?.style.getPropertyValue("--kn-toast-bottom")).toBe(
+      "calc(16px + env(safe-area-inset-bottom))",
     );
   });
 

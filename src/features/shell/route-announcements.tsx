@@ -20,6 +20,8 @@
  *   page's first control. Focus that is still on something shown is never
  *   moved (R1-14), and a page that moves focus itself, to a question's
  *   heading say, does so in its own effects, which run after this one.
+ * - It tells a toast that outlived the old page to rise above the new
+ *   page's bar (the tab bar, or none), not the old page's dock.
  *
  * A layout effect, so it runs in the commit that shows the new page and
  * before that page's own effects, which is where every screen announces
@@ -32,6 +34,7 @@ import { usePathname } from "next/navigation";
 import { useLayoutEffect, useRef } from "react";
 
 import { clearRouteAnnouncements } from "@/ui/announce";
+import { signalRouteChange } from "@/ui/route-change";
 import { firstShown, isShown } from "@/ui/shown";
 
 /**
@@ -59,6 +62,7 @@ export function RouteAnnouncements() {
     if (previous.current !== null && previous.current !== pathname) {
       clearRouteAnnouncements();
       catchDroppedFocus();
+      signalRouteChange();
     }
     previous.current = pathname;
   }, [pathname]);

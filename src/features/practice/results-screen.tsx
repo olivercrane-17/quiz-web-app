@@ -31,6 +31,7 @@ import { getKv } from "@/platform/storage";
 import { Button } from "@/ui/button";
 import { buttonClasses } from "@/ui/button-classes";
 import { cx } from "@/ui/cx";
+import { focusWithRing } from "@/ui/focus-ring";
 import { CheckIcon, CrossIcon } from "@/ui/icons";
 import { Loading, Skeleton, SkeletonText } from "@/ui/skeleton";
 
@@ -203,7 +204,8 @@ export function PracticeResultsScreen({
   // Focus would otherwise fall to the page: it goes to the score, the
   // screen's heading (DESIGN §11).
   useEffect(() => {
-    if (ready) headingRef.current?.focus();
+    // With the app's one ring when a key press brought the results (R1-34).
+    if (ready) focusWithRing(headingRef.current);
   }, [ready]);
 
   let body;

@@ -84,6 +84,10 @@ export default defineConfig({
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
   workers: isCI ? 2 : undefined,
+  // On CI, a run that would outlast its job (30 minutes, setup included)
+  // stops here instead, and still prints every failure and writes the
+  // report the job uploads. A job that times out loses both.
+  globalTimeout: isCI ? 22 * 60_000 : 0,
   reporter: [
     ["list"],
     ["html", { open: "never", outputFolder: "playwright-report" }],

@@ -84,6 +84,19 @@ async function shareNatively(text: string): Promise<Shared> {
   }
 }
 
+/**
+ * Brings a focused share box into view whole, not just its caret, which is
+ * all a browser scrolls to when a text box takes focus. With the page's
+ * scroll padding, the box then clears a bar held at the bottom of the
+ * screen, such as the stop screen's dock (R1-12, WCAG 2.4.11). A box that
+ * is already in view stays put.
+ */
+export function revealWholeBox(box: HTMLElement): void {
+  if (typeof box.scrollIntoView === "function") {
+    box.scrollIntoView({ block: "nearest" });
+  }
+}
+
 async function copyToClipboard(text: string): Promise<boolean> {
   try {
     const clipboard =
@@ -172,6 +185,9 @@ export function ShareButton({ payload, surface }: ShareButtonProps) {
             // it is, the box grows to the whole text, wrapped lines included.
             rows={text.split("\n").length}
             data-share-fallback=""
+            onFocus={(event) => {
+              revealWholeBox(event.currentTarget);
+            }}
             onCopy={() => {
               if (copiedByHand.current) return;
               copiedByHand.current = true;

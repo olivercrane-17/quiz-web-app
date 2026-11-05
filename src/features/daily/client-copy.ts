@@ -121,9 +121,14 @@ export const DAILY_SCREEN_COPY = {
     title: "We're having trouble on our side.",
     body: "Your streak is protected today.",
   },
-  unavailable: {
-    title: "This feature isn't available on this server.",
-    body: "Practice works fully.",
+  /**
+   * The backend serves no Daily yet (its daily area answers `unavailable`,
+   * as the Supabase adapters do until SQL-4 and SQL-5): never "on this
+   * server", which means nothing to a player.
+   */
+  notReady: {
+    title: "Today's Daily isn't ready yet.",
+    body: "Practice is ready when you are.",
   },
   failed: {
     title: "Something went wrong with today's Daily.",

@@ -8,7 +8,7 @@
  * probes for the round components: the first-Daily hint as the stopwatch's
  * accessible description (RITE round 1, R1-05).
  */
-import { act, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createMemoryStore, createMockBackend } from "@/backend/mock";
@@ -124,6 +124,57 @@ describe("a start that can't go through", () => {
     expect(
       screen.getByRole("link", { name: "Play practice instead" }),
     ).toHaveAttribute("href", "/practice");
+  });
+
+  it("says the Daily isn't ready yet when the backend serves none, never 'on this server', with Practice and no Try again", () => {
+    show(problem({ code: "unavailable", retrying: false, scope: null }));
+    expect(
+      screen.getByRole("heading", { name: "Today's Daily isn't ready yet." }),
+    ).toBeVisible();
+    expect(screen.getByText("Practice is ready when you are.")).toBeVisible();
+    expect(document.body).not.toHaveTextContent(/on this server/);
+    expect(
+      screen.getByRole("link", { name: "Play practice instead" }),
+    ).toHaveAttribute("href", "/practice");
+    expect(screen.queryByRole("button", { name: "Try again" })).toBeNull();
+  });
+
+  it("AC-DLY-10 a device with no connection gets the offline state, whatever the backend answered, with Try again and Practice", () => {
+    const onLine = vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+    try {
+      for (const code of ["unavailable", "unreachable", "internal"] as const) {
+        cleanup();
+        show(problem({ code, retrying: false, scope: null }));
+        const card = document.querySelector("[data-daily-problem]");
+        expect(card, code).toHaveAttribute("data-daily-problem", "offline");
+        expect(
+          screen.getByRole("heading", {
+            name: "The Daily needs a connection.",
+          }),
+        ).toBeVisible();
+        expect(
+          screen.getByText(
+            "Practice works offline, but it isn't today's Daily.",
+          ),
+        ).toBeVisible();
+        expect(screen.getByRole("button", { name: "Try again" })).toBeVisible();
+        expect(
+          screen.getByRole("link", { name: "Play practice instead" }),
+        ).toHaveAttribute("href", "/practice");
+      }
+      // Back online, the card says what the backend said.
+      onLine.mockReturnValue(true);
+      act(() => {
+        window.dispatchEvent(new Event("online"));
+      });
+      expect(
+        screen.getByRole("heading", {
+          name: "Something went wrong with today's Daily.",
+        }),
+      ).toBeVisible();
+    } finally {
+      onLine.mockRestore();
+    }
   });
 
   it("keeps the unreachable copy, with Practice at once", () => {

@@ -1,4 +1,4 @@
-import { render, within } from "@testing-library/react";
+import { act, render, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { addDays, dailyNumberFor } from "@/engine/time";
@@ -231,6 +231,58 @@ describe("Today's Daily card", () => {
     expect(region()).not.toHaveTextContent("Fewer clues");
   });
 
+  it("not ready: a backend that serves no Daily gets no Play and no chips, and moves Practice above the card", async () => {
+    vi.mocked(loadTodayCard).mockResolvedValue({
+      card: {
+        ok: false,
+        error: {
+          code: "unavailable",
+          retryable: false,
+          retryAfterMs: null,
+          refId: null,
+        },
+      },
+      highContrast: false,
+    });
+    const { region } = renderCard();
+    expect(
+      await within(region()).findByText(
+        "Today's Daily isn't ready yet. Practice is ready when you are.",
+      ),
+    ).toHaveAttribute("data-home-promote", "practice");
+    expect(region()).toHaveAttribute("data-daily-card", "not_ready");
+    expect(within(region()).queryByRole("link")).toBeNull();
+    expect(within(region()).queryByRole("list")).toBeNull();
+    expect(region()).not.toHaveTextContent(/on this server/);
+  });
+
+  it("keeps Play for a server that is only shedding load for a moment", async () => {
+    vi.mocked(loadTodayCard).mockResolvedValue({
+      card: {
+        ok: false,
+        error: {
+          code: "unavailable",
+          retryable: true,
+          retryAfterMs: 5_000,
+          refId: null,
+        },
+      },
+      highContrast: false,
+    });
+    const { region } = renderCard();
+    // Once its answer is in.
+    await act(async () => {
+      await vi.waitFor(() => {
+        expect(loadTodayCard).toHaveBeenCalled();
+      });
+      await vi.mocked(loadTodayCard).mock.results[0]?.value;
+    });
+    expect(
+      within(region()).getByRole("link", { name: "Play today's Daily" }),
+    ).toHaveAttribute("href", "/daily");
+    expect(region()).toHaveAttribute("data-daily-card", "not_started");
+  });
+
   it("in progress: Continue, named for where the run stands", async () => {
     answers(
       card({
@@ -242,9 +294,13 @@ describe("Today's Daily card", () => {
     const { region } = renderCard();
     expect(
       await within(region()).findByRole("heading", {
-        name: "Continue Daily #42 · Mystery 2 of 3",
+        name: "Continue Daily #42",
       }),
     ).toBeVisible();
+    // Where the run stands, on a line of its own (DESIGN §12.1).
+    expect(within(region()).getByText("Mystery 2 of 3")).toHaveAttribute(
+      "data-daily-progress",
+    );
     expect(region()).toHaveAttribute("data-daily-card", "in_progress");
     expect(
       within(region()).getByRole("link", { name: "Continue" }),

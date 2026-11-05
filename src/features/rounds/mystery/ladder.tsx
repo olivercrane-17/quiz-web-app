@@ -54,8 +54,13 @@ export interface ClueLadderProps {
   note?: { id: string; text: string } | null;
 }
 
-/** Clue text: a word too long for its line breaks, never runs past the card (R1-03). */
-const CLUE_TEXT = "wrap-anywhere";
+/**
+ * Clue text: a word too long for its line breaks, never runs past the card
+ * (R1-03). It breaks at a syllable with a hyphen where the browser can
+ * hyphenate (`lang="en"`, so "map-maker", "coast-line"), and anywhere only
+ * when even a syllable won't fit.
+ */
+const CLUE_TEXT = "wrap-anywhere hyphens-auto";
 
 function Rung({
   n,

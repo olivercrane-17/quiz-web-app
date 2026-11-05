@@ -47,7 +47,7 @@ import { track } from "@/features/analytics/track";
 import { ChallengeButton } from "@/features/challenges/challenge-button";
 import { bootClient } from "@/features/identity";
 import { useSafePoint } from "@/features/pwa/safe-point";
-import { ShareButton } from "@/features/share/share-button";
+import { revealWholeBox, ShareButton } from "@/features/share/share-button";
 import { PlayFrame } from "@/features/shell";
 import { ScrollInset } from "@/features/shell/client";
 import { StreakLine } from "@/features/streaks/stop-screen-line";
@@ -275,11 +275,9 @@ function Results({
          * they mean (D3). The share box names it as a description too.
          */}
         {legend === null ? null : (
-          <p
-            id={LEGEND_ID}
-            className="mt-2 text-sm text-muted-foreground"
-            data-legend=""
-          >
+          // The ticket's own ink, as the time and the rows take it: a
+          // muted grey on the eft fill fails AA contrast in both themes.
+          <p id={LEGEND_ID} className="mt-2 text-sm" data-legend="">
             {legend}
           </p>
         )}
@@ -308,6 +306,11 @@ function Results({
           }
           value={payload.text}
           rows={payload.text.split("\n").length + 1}
+          // A browser brings a text box's caret into view on focus, not
+          // the box: the whole box comes clear of the dock (R1-12).
+          onFocus={(event) => {
+            revealWholeBox(event.currentTarget);
+          }}
           className="field-sizing-content w-full resize-none rounded-xl bg-muted p-3 font-sans text-base outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-foreground"
         />
         <div className="flex flex-wrap gap-3">

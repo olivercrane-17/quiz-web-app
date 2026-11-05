@@ -602,6 +602,14 @@ test.describe("the clue ladder at 200% text (R1-03)", () => {
           (element) => element.scrollWidth - element.clientWidth,
         ),
       ).toBeLessThanOrEqual(0);
+      // Such a word breaks at a syllable, with a hyphen, wherever the
+      // browser hyphenates English ("map-maker"), and anywhere only after.
+      expect(
+        await heading.evaluate((element) => {
+          const style = getComputedStyle(element);
+          return [style.hyphens, style.overflowWrap];
+        }),
+      ).toEqual(["auto", "anywhere"]);
       for (const option of await page.locator("[data-options] button").all()) {
         expect((await boxOf(option)).right).toBeLessThanOrEqual(width);
       }

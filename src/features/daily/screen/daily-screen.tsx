@@ -134,12 +134,33 @@ function retryingSilently(problem: StartProblem | null): boolean {
   return problem !== null && problem.retrying && problem.notice === "silent";
 }
 
+/** The device's own word on its connection: false only when it knows it has none. */
+function deviceOnline(): boolean {
+  return typeof navigator === "undefined" || navigator.onLine !== false;
+}
+
+function onConnectionChange(onChange: () => void): () => void {
+  window.addEventListener("online", onChange);
+  window.addEventListener("offline", onChange);
+  return () => {
+    window.removeEventListener("online", onChange);
+    window.removeEventListener("offline", onChange);
+  };
+}
+
 /** The words for a start problem, and whether Practice is offered yet. */
-function problemWords(problem: StartProblem): {
+function problemWords(
+  problem: StartProblem,
+  online: boolean,
+): {
   title: string;
   body: string | null;
   practice: boolean;
 } {
+  // A device without a connection hears that first, whatever the backend
+  // could answer (PRD §3.1.7, decisions memo §2): no other words would be
+  // true, and Practice is what still works.
+  if (!online) return { ...COPY.offline, practice: true };
   if (problem.code === "rate_limited" && problem.retrying) {
     // AC-IDN-04: the network's copy first, Practice only from 30 s.
     if (problem.notice === "plain") {
@@ -156,7 +177,7 @@ function problemWords(problem: StartProblem): {
     problem.code === "offline"
       ? COPY.offline
       : problem.code === "unavailable" || problem.code === "feature_disabled"
-        ? COPY.unavailable
+        ? COPY.notReady
         : problem.code === "no_daily"
           ? COPY.outage
           : problem.code === "unreachable" || problem.code === "timeout"
@@ -174,16 +195,23 @@ export function StartProblemCard({
   controller: DailyController;
 }) {
   const problem = snapshot.problem;
+  // The words follow the device's connection as it drops and comes back.
+  const online = useSyncExternalStore(
+    onConnectionChange,
+    deviceOnline,
+    () => true,
+  );
   if (problem === null) return null;
-  const words = problemWords(problem);
+  const words = problemWords(problem, online);
   const canRetry =
-    problem.code !== "unavailable" && problem.code !== "feature_disabled";
+    !online ||
+    (problem.code !== "unavailable" && problem.code !== "feature_disabled");
   return (
     <Card
       as="section"
       tone="sunken"
       className="flex flex-col gap-3"
-      data-daily-problem={problem.code}
+      data-daily-problem={online ? problem.code : "offline"}
     >
       <h2 className="text-lg font-semibold">{words.title}</h2>
       {words.body === null ? null : <p className="text-base">{words.body}</p>}

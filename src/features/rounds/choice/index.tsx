@@ -98,6 +98,7 @@ import { Button } from "@/ui/button";
 import { buttonClasses } from "@/ui/button-classes";
 import { UI_COPY } from "@/ui/copy";
 import { cx } from "@/ui/cx";
+import { focusWithRing } from "@/ui/focus-ring";
 import { CheckIcon, CrossIcon } from "@/ui/icons";
 import { Sheet } from "@/ui/sheet";
 
@@ -328,7 +329,8 @@ function ChoiceRoundView({
   useLayoutEffect(() => {
     if (startedRevealed) return;
     if (!focusIsElsewhere(rootRef.current)) {
-      stemRef.current?.focus({ preventScroll: true });
+      // The ring shows when a key press brought the question (R1-34).
+      focusWithRing(stemRef.current, { preventScroll: true });
     }
     keepTopBelowHeader(questionRef.current);
   }, [startedRevealed]);
@@ -363,7 +365,7 @@ function ChoiceRoundView({
     const claimed = pressClaimedFocus.current;
     pressClaimedFocus.current = false;
     if (claimed || !focusIsElsewhere(rootRef.current)) {
-      titleRef.current?.focus({ preventScroll: true });
+      focusWithRing(titleRef.current, { preventScroll: true });
     } else if (
       choiceReveal !== null &&
       !spokenAloud.current &&

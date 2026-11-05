@@ -250,9 +250,10 @@ test.describe("the fonts", () => {
       "font-family",
       /^"Atkinson Hyperlegible Next"/,
     );
+    // Firefox quotes every family name it serializes.
     await expect(page.locator(".kn-wordmark-word")).toHaveCSS(
       "font-family",
-      /^Fraunces/,
+      /^"?Fraunces/,
     );
   });
 });

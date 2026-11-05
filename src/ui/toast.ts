@@ -28,6 +28,7 @@
  */
 import { announce, withdrawAnnouncement } from "./announce";
 import { UI_COPY } from "./copy";
+import { onRouteChange } from "./route-change";
 import { firstShown } from "./shown";
 
 export type ToastIcon = "check" | "offline" | "none";
@@ -92,7 +93,13 @@ export function showToast(
   // The status region speaks it; the pill would only repeat it, unless it
   // holds an action that keyboard and screen-reader users must reach.
   if (action === undefined) element.setAttribute("aria-hidden", "true");
-  element.style.setProperty("--kn-toast-bottom", bottomOffset());
+  const place = () => {
+    element.style.setProperty("--kn-toast-bottom", bottomOffset());
+  };
+  place();
+  // A toast that outlives its page rises above the next page's bar, not
+  // the old page's dock (Share, then "Done for today").
+  const stopFollowing = onRouteChange(place);
   if (icon !== "none") element.insertAdjacentHTML("afterbegin", iconSvg(icon));
   const text = document.createElement("span");
   text.textContent = message;
@@ -109,6 +116,7 @@ export function showToast(
     if (gone) return;
     gone = true;
     clearTimeout(timer);
+    stopFollowing();
     document.removeEventListener("keydown", onKeyDown);
     withdrawAnnouncement(spoken);
     element.dataset.leaving = "";

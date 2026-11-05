@@ -8,8 +8,9 @@
  * (AC-IDN-01), 30 new identities from one browser (AC-IDN-05), and the
  * registration copy for both limit scopes (AC-IDN-04).
  *
- * `__Host-` cookies need `Secure`, which Chromium accepts on
- * http://127.0.0.1 (§9.3's test note). "Clearing local storage" clears the
+ * `__Host-` cookies need `Secure`, which Chromium and Firefox accept on
+ * http://127.0.0.1; a WebKit that doesn't skips the cookie specs
+ * (`backupCookieGap`, §9.3's test note). "Clearing local storage" clears the
  * device's `qz:` keys: the mock database (`qz-mock:*`) stands for the
  * server, which a wiped browser doesn't wipe.
  */
@@ -46,6 +47,50 @@ const playButton = (page: Page) =>
   page.getByRole("link", { name: "Play today's Daily" });
 const clueHeading = (page: Page, clue: number) =>
   page.getByRole("heading", { name: new RegExp(`clue ${clue}\\b`, "i") });
+
+/**
+ * Why this browser can't keep the backup cookie on the suite's
+ * http://127.0.0.1, or null when it can (ARCHITECTURE §9.3's test note).
+ * The routes need `Sec-Fetch-Site` on the page's own calls, and the
+ * cookie needs `Secure`: Chromium and Firefox do both on a loopback
+ * origin, WebKit may not. Where it can't, the cookie specs run on the
+ * other two and the launch report lists the gap for the owner's iPhone
+ * check (production is https). Leaves no storage or cookie behind.
+ */
+async function backupCookieGap(page: Page): Promise<string | null> {
+  await page.goto("/privacy");
+  const gap = await page.evaluate(async () => {
+    const restore = await fetch("/api/restore", { cache: "no-store" });
+    if (restore.status === 403) {
+      return "sends no Sec-Fetch-Site to http://127.0.0.1";
+    }
+    document.cookie = "__Host-qz-probe=1; Secure; Path=/; SameSite=Lax";
+    const kept = document.cookie.includes("__Host-qz-probe=1");
+    document.cookie =
+      "__Host-qz-probe=; Max-Age=0; Secure; Path=/; SameSite=Lax";
+    return kept ? null : "keeps no Secure cookie on http://127.0.0.1";
+  });
+  await page.evaluate(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+  });
+  await page.context().clearCookies();
+  await page.goto("about:blank");
+  return gap;
+}
+
+/** Skips a cookie spec in a WebKit that can't keep the cookie here (`backupCookieGap`). */
+async function skipWithoutBackupCookie(
+  page: Page,
+  browserName: string,
+): Promise<void> {
+  if (browserName !== "webkit") return;
+  const gap = await backupCookieGap(page);
+  test.skip(
+    gap !== null,
+    `WebKit ${gap ?? ""}: the cookie specs run on Chromium and Firefox (ARCHITECTURE §9.3)`,
+  );
+}
 
 /** Home has loaded its Daily card from the backend (so the boot has run). */
 async function openHome(page: Page): Promise<void> {
@@ -144,6 +189,10 @@ async function seedRegistrations(
 test.use({ timezoneId: "Europe/London" });
 
 test.describe("the backup cookie (PRD §3.10.3)", () => {
+  test.beforeEach(async ({ page, browserName }) => {
+    await skipWithoutBackupCookie(page, browserName);
+  });
+
   test("AC-CKE-01 after registration, /api/identity sets __Host-pid with HttpOnly, Secure, SameSite=Lax, Path=/ and a Max-Age of 34,560,000", async ({
     page,
     context,
@@ -247,6 +296,7 @@ test.describe("the backup cookie (PRD §3.10.3)", () => {
     page,
     context,
     consoleErrors,
+    browserName,
   }) => {
     await registerFromHome(page);
     const lost = await storedIdentity(page);
@@ -317,12 +367,13 @@ test.describe("the backup cookie (PRD §3.10.3)", () => {
       )
       .toEqual([{ source: "cookie" }]);
 
-    // The unanswered restore is the one error this test expects.
+    // The unanswered restore is the one error this test expects. Chromium
+    // logs a failed response to the console; Firefox logs nothing.
     const index = consoleErrors.findIndex((error) =>
       error.includes("status of 503"),
     );
-    expect(index).toBeGreaterThanOrEqual(0);
-    consoleErrors.splice(index, 1);
+    if (browserName === "chromium") expect(index).toBeGreaterThanOrEqual(0);
+    if (index >= 0) consoleErrors.splice(index, 1);
   });
 
   test("AC-CKE-03 /api/restore returns 403 when Sec-Fetch-Site is cross-site or missing", async ({
@@ -444,6 +495,10 @@ function dropNotFoundReports(errors: string[]): void {
 }
 
 test.describe("one cookie only", () => {
+  test.beforeEach(async ({ page, browserName }) => {
+    await skipWithoutBackupCookie(page, browserName);
+  });
+
   test("AC-CKE-04 no other cookie is ever set by the app, on any route, through registration and a restore", async ({
     page,
     context,
