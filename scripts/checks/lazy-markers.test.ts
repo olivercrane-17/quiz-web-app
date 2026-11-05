@@ -30,6 +30,7 @@ import {
   containsNumber,
   decodeText,
   isReservedExampleId,
+  packageSignatures,
   runCheck,
   sealedIdsIn,
 } from "./lazy-markers.mjs";
@@ -298,6 +299,26 @@ describe("lazy markers", () => {
     );
     await expect(runCheck({ root: build.root })).rejects.toBeInstanceOf(
       CheckError,
+    );
+  });
+
+  it("read a package's version from the copy the SDK resolves, nested under it before the hoisted one", () => {
+    const build = fakeBuild("supabase");
+    build.write(
+      "node_modules/@supabase/supabase-js/node_modules/@supabase/realtime-js/package.json",
+      JSON.stringify({ version: "8.8.8" }),
+    );
+
+    expect(
+      packageSignatures(build.root, "supabase").map((pkg) => pkg.text),
+    ).toEqual([`supabase-js/${SDK_VERSION}`, "realtime-js/8.8.8"]);
+    expect(
+      packageSignatures(build.root, "mock").every((pkg) => !pkg.required),
+    ).toBe(true);
+
+    rmSync(join(build.root, "node_modules"), { recursive: true });
+    expect(() => packageSignatures(build.root, "supabase")).toThrow(
+      /@supabase\/supabase-js.*npm ci/,
     );
   });
 });

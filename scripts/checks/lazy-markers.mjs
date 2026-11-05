@@ -219,11 +219,27 @@ export function declaredMarkers(root) {
 /** Each lazy-only package with the string to look for, from its installed version. */
 export function packageSignatures(root, mode, markers = PACKAGE_MARKERS) {
   return markers.map((marker) => {
-    const manifest = join(root, "node_modules", marker.package, "package.json");
+    // The copy the SDK resolves: nested under it when npm couldn't hoist
+    // that version, otherwise the hoisted one.
+    const manifests = [
+      join(
+        root,
+        "node_modules/@supabase/supabase-js/node_modules",
+        marker.package,
+        "package.json",
+      ),
+      join(root, "node_modules", marker.package, "package.json"),
+    ];
     let version;
-    try {
-      version = JSON.parse(readFileSync(manifest, "utf8")).version;
-    } catch {
+    for (const manifest of manifests) {
+      try {
+        version = JSON.parse(readFileSync(manifest, "utf8")).version;
+        break;
+      } catch {
+        // Try the next place npm may have put it.
+      }
+    }
+    if (typeof version !== "string") {
       throw new CheckError(
         `could not read the version of ${marker.package}. Run "npm ci" first.`,
       );
