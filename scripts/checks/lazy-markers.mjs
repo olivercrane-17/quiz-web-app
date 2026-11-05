@@ -413,11 +413,12 @@ export function sealedNeedles(items, normalize) {
   const addText = (itemId, field, raw) => {
     if (typeof raw !== "string") return -1;
     const normalized = normalize(raw);
-    if (normalized.split(" ").filter(Boolean).length < MIN_TEXT_WORDS) {
+    const words = normalized.split(" ").filter(Boolean);
+    if (words.length < MIN_TEXT_WORDS) {
       skipped += 1;
       return -1;
     }
-    texts.push({ itemId, field, normalized });
+    texts.push({ itemId, field, normalized, words: [...new Set(words)] });
     return texts.length - 1;
   };
   for (const { id, pool, item } of items) {
@@ -447,7 +448,7 @@ export function sealedNeedles(items, normalize) {
 }
 
 /**
- * @typedef {{ itemId: string, field: string, normalized: string }} TextNeedle
+ * @typedef {{ itemId: string, field: string, normalized: string, words: string[] }} TextNeedle
  * @typedef {{ itemId: string, field: string, value: number, question: number }} AnswerNeedle
  * @typedef {{ texts: TextNeedle[], answers: AnswerNeedle[], skipped: number }} Needles
  * @typedef {{ kind: "id" | "text" | "answer", file: string, itemId: string, field: string }} Finding
@@ -482,9 +483,13 @@ export function scanForSealedContent({
       if (needles === null || normalize === null) continue;
 
       const decoded = decodeText(text);
-      const words = ` ${normalize(decoded)} `;
+      const normalized = normalize(decoded);
+      const words = ` ${normalized} `;
+      // Only a text whose every word is in the file can be in it.
+      const present = new Set(normalized.split(" "));
       const found = new Set();
       needles.texts.forEach((needle, index) => {
+        if (!needle.words.every((word) => present.has(word))) return;
         if (words.includes(` ${needle.normalized} `)) {
           found.add(index);
           findings.push({

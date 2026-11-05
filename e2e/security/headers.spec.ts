@@ -16,6 +16,7 @@ import {
   mkdirSync,
   mkdtempSync,
   readdirSync,
+  readFileSync,
   rmSync,
   symlinkSync,
   writeFileSync,
@@ -195,6 +196,27 @@ async function withStubWorker<T>(
   }
 }
 
+/**
+ * Every page route the build under test prerendered, from its route stats,
+ * with a real value for each param and a missing page for the not-found
+ * route.
+ */
+function builtRoutes(): string[] {
+  const stats = JSON.parse(
+    readFileSync(
+      path.join(PROJECT_DIR, ".next/diagnostics/route-bundle-stats.json"),
+      "utf8",
+    ),
+  ) as { route: string }[];
+  return stats
+    .map(({ route }) =>
+      route === "/_not-found"
+        ? "/no-such-page"
+        : route.replaceAll("[number]", "1"),
+    )
+    .sort();
+}
+
 /** Collects every CSP violation the page reports, from before its first script. */
 async function watchViolations(page: Page): Promise<() => Promise<string[]>> {
   await page.addInitScript(() => {
@@ -355,53 +377,69 @@ test.describe("the Content Security Policy in the browser", () => {
     expect(await violations()).toEqual([]);
   });
 
-  test("keeps the page's Origin on the identity routes' POSTs under no-referrer, in fetch's default mode", async ({
+  test("loads every route this build prerendered without a violation", async ({
+    page,
+    consoleErrors,
+  }) => {
+    const violations = await watchViolations(page);
+    const routes = builtRoutes();
+    expect(routes).toContain("/");
+
+    // Beta shells whose flag is off answer with the not-found page, as the
+    // missing page does; their HTML carries the policy all the same.
+    let notFound = 0;
+    for (const route of routes) {
+      const response = await page.goto(route);
+      if (response?.status() === 404) notFound += 1;
+      await page.waitForLoadState("networkidle");
+      expect(await violations(), route).toEqual([]);
+    }
+
+    // The browser reports each not-found page it loaded as a failed load.
+    const isNotFound = (error: string) =>
+      error.includes("Failed to load") && /status of 404\b/.test(error);
+    expect(notFound).toBeGreaterThan(0);
+    expect(consoleErrors.filter(isNotFound).length).toBeLessThanOrEqual(
+      notFound,
+    );
+    const others = consoleErrors.filter((error) => !isNotFound(error));
+    consoleErrors.splice(0, consoleErrors.length, ...others);
+  });
+
+  test("keeps the page's Origin on an identity route's POST under no-referrer, in fetch's default mode", async ({
     page,
     consoleErrors,
     baseURL,
-    browserName,
   }) => {
     await page.goto("/");
-    const originOf = async (mode: RequestMode) => {
-      const request = page.waitForRequest(
-        (candidate) => candidate.headers()["x-qz-probe"] === mode,
-      );
-      const status = await page.evaluate(async (fetchMode) => {
-        const response = await fetch("/api/identity", {
-          method: "POST",
-          mode: fetchMode,
-          credentials: "same-origin",
-          cache: "no-store",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Qz-Probe": fetchMode,
-          },
-          body: "{}",
-        });
-        return response.status;
-      }, mode);
-      return { origin: (await (await request).allHeaders()).origin, status };
-    };
-
-    // src/platform/identity/backup.ts's mode: the page's own origin, so
-    // the route reads the (empty) body and answers 400 rather than 403.
-    expect(await originOf("cors")).toEqual({
-      origin: new URL(baseURL ?? "").origin,
-      status: 400,
-    });
-    if (browserName === "chromium") {
-      // What backup.ts must never do: under no-referrer, a same-origin-mode
-      // POST says `Origin: null`, and the route refuses it [verified in
-      // Chromium; the Fetch spec asks the same of every engine].
-      expect(await originOf("same-origin")).toEqual({
-        origin: "null",
-        status: 403,
+    const request = page.waitForRequest(
+      (candidate) => candidate.headers()["x-qz-probe"] === "backup",
+    );
+    // The call src/platform/identity/backup.ts makes: fetch's default cors
+    // mode. The Fetch spec lets a browser send `Origin: null` for a request
+    // in any other mode under no-referrer, which the route would refuse with
+    // 403 (Chromium sends the origin either way, measured; this test runs on
+    // CI's WebKit and Firefox legs too).
+    const status = await page.evaluate(async () => {
+      const response = await fetch("/api/identity", {
+        method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json", "X-Qz-Probe": "backup" },
+        body: "{}",
       });
-    }
+      return response.status;
+    });
 
-    // The browser reports the refusals this test provoked as failed loads.
+    expect((await (await request).allHeaders()).origin).toBe(
+      new URL(baseURL ?? "").origin,
+    );
+    // Past the same-origin checks, the route reads the empty body: 400, not 403.
+    expect(status).toBe(400);
+
+    // The browser may report the refusal this test provoked as a failed load.
     const provoked = (error: string) =>
-      /status of 40[03]\b/.test(error) && error.includes("Failed to load");
+      /status of 400\b/.test(error) && error.includes("Failed to load");
     expect(consoleErrors.filter((error) => !provoked(error))).toEqual([]);
     consoleErrors.splice(0, consoleErrors.length);
   });
