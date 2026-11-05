@@ -248,10 +248,17 @@ describe("age band and nickname", () => {
     expect(JSON.stringify(t.events)).not.toContain("zorblax");
   });
 
-  it("refuses a name with nothing in it without a call", async () => {
+  it("refuses a missing name, or one with nothing in it, without a call", async () => {
     const t = setup({});
-    for (const nickname of [{ custom: "   " }, { generated: "" }]) {
-      const result = await t.area.setNickname(nickname);
+    for (const nickname of [
+      { custom: "   " },
+      { generated: "" },
+      undefined,
+      null,
+      {},
+      { custom: 7 },
+    ]) {
+      const result = await t.area.setNickname(nickname as never);
       expect(result.ok ? null : result.error.code).toBe("invalid_input");
     }
     expect(t.calls).toEqual([]);

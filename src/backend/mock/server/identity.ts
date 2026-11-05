@@ -62,7 +62,12 @@ import {
 
 import { unavailableArea } from "../../areas";
 import { fail, ok } from "../../errors";
-import type { AppTag, BrowserContextInfo, IdentityApi } from "../../types";
+import type {
+  AppTag,
+  BrowserContextInfo,
+  IdentityApi,
+  NicknameInput,
+} from "../../types";
 import type { MockContext } from "../context";
 import type { MockDb } from "../store";
 import type { MockAttemptRow } from "./sealed";
@@ -418,6 +423,21 @@ function isGeneratedName(name: string): boolean {
   );
 }
 
+/**
+ * A nickname's text and kind, or null for anything that isn't a
+ * `NicknameInput`, which `set_nickname` refuses as a null name or kind.
+ */
+function nicknameParts(
+  nickname: NicknameInput | undefined,
+): { name: string; generated: boolean } | null {
+  if (typeof nickname !== "object" || nickname === null) return null;
+  const generated = "generated" in nickname;
+  const name: unknown = generated
+    ? nickname.generated
+    : (nickname as { custom?: unknown }).custom;
+  return typeof name === "string" ? { name, generated } : null;
+}
+
 /** set_nickname's limit (§8.4): 20 a player a day, refusals included. */
 export const NICKNAME_LIMIT = {
   bucket: "nickname_1d",
@@ -636,10 +656,10 @@ export function createIdentityArea(ctx: MockContext): IdentityApi {
               limitScope: "player",
             });
           }
-          const generated = "generated" in nickname;
-          const name = cleanText(
-            generated ? nickname.generated : nickname.custom,
-          );
+          const parts = nicknameParts(nickname);
+          if (parts === null) return fail("invalid_input");
+          const { generated } = parts;
+          const name = cleanText(parts.name);
           const length = charCount(name);
           if (length < 1 || length > NICKNAME_MAX) return fail("invalid_input");
           if (generated) {

@@ -189,6 +189,17 @@ describe("the mock's friendly names and setNickname", () => {
     ).toBe("ok");
   });
 
+  it("answers a missing name invalid_input, as set_nickname does for a null name or kind, never a TypeError", async () => {
+    const t = await setup();
+    await t.band("18_plus");
+    for (const nickname of [undefined, null, {}, { custom: 7 }]) {
+      expect(code(await t.mock.identity.setNickname(nickname as never))).toBe(
+        "invalid_input",
+      );
+    }
+    expect(t.stored()).toBeNull();
+  });
+
   it("answers an unregistered device auth_failed and registers nothing", async () => {
     const t = await setup();
     t.identity.replace(mintIdentity(t.clock.now()));
