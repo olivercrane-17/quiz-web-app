@@ -83,6 +83,7 @@ import type { RoundRecord } from "../../src/content/schema/schedule.ts";
 import { compositionIdOf } from "../../src/engine/composition.ts";
 import { MYSTERY_MAX_POINTS } from "../../src/engine/scoring/mystery.ts";
 import { dailyNumberFor } from "../../src/engine/time/calendar.ts";
+import { parseLocalDate } from "../../src/engine/types/ids.ts";
 import type { RoundType } from "../../src/engine/types/rounds.ts";
 import { mcpConfirmationReasons, scanForbidden } from "../sql/lib.ts";
 import {
@@ -274,6 +275,13 @@ function addDays(date: string, days: number): string {
   return new Date(Date.parse(`${date}T00:00:00Z`) + days * 86_400_000)
     .toISOString()
     .slice(0, 10);
+}
+
+/** The Daily number of a date (§8.7), or null before the epoch or for a malformed date. */
+export function numberOf(date: string, epoch: string): number | null {
+  const day = parseLocalDate(date);
+  const start = parseLocalDate(epoch);
+  return day === null || start === null ? null : dailyNumberFor(day, start);
 }
 
 function daysBetween(a: string, b: string): number {
@@ -582,7 +590,7 @@ export function cycleRounds(
   dated: ReadonlyMap<string, RoundRecord[]>,
   spares: readonly ScheduleDay[],
 ): RoundRecord[] | null {
-  const dailyNumber = dailyNumberFor(date, epoch);
+  const dailyNumber = numberOf(date, epoch);
   if (dailyNumber === null) return null;
   const row = dated.get(date);
   if (row !== undefined) return row;
@@ -640,7 +648,7 @@ export function buildRelease(options: BuildOptions): BuildResult {
       date = addDays(date, 1)
     ) {
       const rounds = cycleRounds(date, epoch, dated, spareDays);
-      const dailyNumber = dailyNumberFor(date, epoch);
+      const dailyNumber = numberOf(date, epoch);
       if (rounds === null || dailyNumber === null) continue;
       dailies.push({
         date,
@@ -666,7 +674,7 @@ export function buildRelease(options: BuildOptions): BuildResult {
     const ruleOptions = { epoch, compositions: options.compositions };
     for (const day of scheduled) {
       const date = day.date ?? "";
-      const dailyNumber = dailyNumberFor(date, epoch);
+      const dailyNumber = numberOf(date, epoch);
       if (dailyNumber === null) {
         problems.push(
           problem(
@@ -1242,6 +1250,26 @@ export function safeToWrite(path: string): boolean {
   return result.status === 0 || result.status === 128;
 }
 
+/**
+ * What a written release prints: counts, the path and the chunks, never
+ * content (the redacting reporter would hide a message anyway, but these
+ * are notes, which it prints as they are).
+ */
+export function releaseSummary(
+  release: Release,
+  chunks: readonly Chunk[],
+  path: string,
+  allowFrozen: boolean,
+): string[] {
+  const total = chunks.reduce((sum, chunk) => sum + bytes(chunk.sql), 0);
+  const ready = release.dailies.filter((daily) => daily.ready).length;
+  const n = (key: string) => release.counts[key] ?? 0;
+  return [
+    `Release ${release.version} for the ${release.track} track: ${n("mysteries")} mysteries, ${n("encores")} encores, ${n("sealed_questions")} questions, ${n("room_packs")} room packs, ${n("challenge_packs")} challenge packs, ${n("dailies")} Dailies (${ready} ready), ${n("daily_spares")} spare sets.`,
+    `Wrote ${path}: ${chunks.length} chunk(s), ${(total / 1000).toFixed(1)} kB${allowFrozen ? ", frozen rows allowed" : ""}. Send each chunk with execute_sql, in order.`,
+  ];
+}
+
 // ---------------------------------------------------------------------------
 // The command
 // ---------------------------------------------------------------------------
@@ -1437,11 +1465,14 @@ export async function main(argv: string[]): Promise<number> {
     encoding: "utf8",
     mode: 0o600,
   });
-  const total = chunks.reduce((sum, chunk) => sum + bytes(chunk.sql), 0);
   const ready = release.dailies.filter((daily) => daily.ready).length;
   notes.push(
-    `Release ${version} for the ${release.track} track: ${release.counts.mysteries} mysteries, ${release.counts.encores} encores, ${release.counts.sealed_questions} questions, ${release.counts.room_packs} room packs, ${release.counts.challenge_packs} challenge packs, ${release.counts.dailies} Dailies (${ready} ready), ${release.counts.daily_spares} spare sets.`,
-    `Wrote ${repoRelative(layout, out)}: ${chunks.length} chunk(s), ${(total / 1000).toFixed(1)} kB${values["allow-frozen"] === true ? ", frozen rows allowed" : ""}. Send each chunk with execute_sql, in order.`,
+    ...releaseSummary(
+      release,
+      chunks,
+      repoRelative(layout, out),
+      values["allow-frozen"] === true,
+    ),
   );
   return report([], {
     version,

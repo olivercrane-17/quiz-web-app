@@ -89,6 +89,43 @@ jobs:
       - name: Bundle budget
         run: npm run check:bundle
 
+  # The sealed content check (SQL-3, ARCHITECTURE §5.7): content/sealed/
+  # decrypted in memory; the sealed items, the schedule, the spare sets and
+  # the latest audit record validated; and the cross-pool dedupe (X29,
+  # AC-CNT-06). Every line goes through the redacting reporter of §5.4, so
+  # these public logs show ids, rule codes and counts, never content. Only
+  # the one step below receives the key, a repository secret (decisions memo
+  # §17). Without it the same command prints "Sealed content validation:
+  # not run" and checks the plaintext content alone. Pull requests from
+  # forks never receive secrets, so they skip the job.
+  content-sealed:
+    name: Sealed content check
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Full history: the content check compares each answer list's liveAt
+      # with the commit that first published its version (§5.2).
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sealed content check and cross-pool dedupe
+        env:
+          QZ_CONTENT_KEY: ${{ secrets.QZ_CONTENT_KEY }}
+        run: npm run content:check -- --sealed
+
   # The browser matrix of ARCHITECTURE §11.8, one browser per leg. Every leg
   # runs on every push: the release criteria need CI green in Chromium,
   # WebKit and Firefox (decisions memo §13).
