@@ -888,3 +888,71 @@ describe("RITE round 1: what the start and a reload carry", () => {
     );
   });
 });
+
+describe("RITE round 2: one clock (R2-08)", () => {
+  it("R2-08 two wrong guesses and two reloads in Mystery 2: the round counts what the server recorded, and the stopwatch ends on the finish's total", async () => {
+    const h = harness();
+    await started(h);
+    h.clock.advance(20_000);
+    await act(h, guess(ODILE));
+    await next(h);
+    h.clock.advance(12_300);
+    await act(h, guess(entity("fx.x.country.ostravia")));
+    h.reload();
+    await started(h);
+    h.clock.advance(9_400);
+    await act(h, guess(entity("fx.x.country.rosmaar")));
+    expect(h.state().view).toMatchObject({ round: { open: { clue: 3 } } });
+    h.reload();
+    let state = await started(h);
+    // The reload's offset is the server's raw interval, 21.7 s.
+    expect(state.timeOffset).toEqual({ index: 1, ms: 22_000 });
+    h.clock.advance(6_100);
+    await act(h, guess(VALDORIA));
+    state = h.state();
+    // 27.8 s on the server, less 400 ms for each of its four requests:
+    // 26.2 s, recorded as 26 s, never the 22 + 6.1 s the device would add.
+    expect(state.timeOffset).toBeNull();
+    expect(state.run?.slots[1]?.activeMs).toBe(26_000);
+    expect(elapsedMs(state.run!, h.clock.now(), state.timeOffset)).toBe(
+      20_000 + 26_000,
+    );
+
+    await next(h);
+    h.clock.advance(14_000);
+    await act(h, guess(BISMUTH));
+    await next(h);
+    h.clock.advance(8_000);
+    await act(h, { family: "encore", kind: "lock_in", value: 104 });
+    state = h.state();
+    const summary = h.mock.controls.inspect<{ summary: { totalMs: number } }>(
+      `attempts.${state.attemptId}`,
+    ).summary;
+    // Lock in brought the finish's total: the stopwatch stops on it.
+    expect(state.totalMs).toBe(summary.totalMs);
+    expect(state.totalMs).toBe(
+      elapsedMs(state.run!, h.clock.now(), state.timeOffset),
+    );
+  });
+
+  it("R2-08 a backend that reports no recorded time keeps the device's measure, in whole seconds", async () => {
+    const h = harness();
+    const send = h.backend.sealed.act;
+    h.backend.sealed.act = async (input) => {
+      const result = await send(input);
+      if (!result.ok) return result;
+      const { activeMs: _dropped, ...rest } =
+        result.value as typeof result.value & {
+          activeMs?: number;
+        };
+      return { ok: true, value: rest };
+    };
+    await started(h);
+    h.clock.advance(10_600);
+    await act(h, guess(ODILE));
+    const state = h.state();
+    expect(state.run?.slots[0]?.activeMs).toBe(10_600);
+    expect(elapsedMs(state.run!, h.clock.now(), state.timeOffset)).toBe(11_000);
+    expect(state.totalMs).toBeNull();
+  });
+});

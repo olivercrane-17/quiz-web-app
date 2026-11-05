@@ -24,6 +24,9 @@ import {
   progressVariant,
   roundLabel,
   scoreBand,
+  stopwatchMs,
+  wholeSecond,
+  withRecordedTime,
 } from "./labels";
 
 const daily = (): RoundMeta[] =>
@@ -476,6 +479,106 @@ describe("the stopwatch", () => {
     expect(formatStopwatch(0)).toBe("0:00");
     expect(formatStopwatch(83_400)).toBe("1:23");
     expect(formatStopwatch(3_725_000)).toBe("1:02:05");
+  });
+});
+
+describe("one clock for the header and the stop screen (R2-08)", () => {
+  /** Mystery 1 resolved in 90 s, Mystery 2 open at a reload with 30 s on the server. */
+  function resumedOnMystery2(at: number) {
+    const rounds = daily();
+    const attemptId = parseAttemptId("3f2b8c1e-9d4a-4e6f-8b2c-1a2b3c4d5e6f");
+    if (attemptId === null) throw new Error("setup");
+    const snapshot: AttemptSnapshot = {
+      attemptId,
+      kind: "daily",
+      ranked: true,
+      daily: null,
+      composition: "m3e1",
+      rounds,
+      maxPoints: 12,
+      resolved: [
+        {
+          meta: rounds[0]!,
+          outcome: {
+            family: "mystery",
+            solvedOn: 2,
+            points: 3,
+            voided: false,
+            category: "geo",
+            cells: ["passed", "solved", "unused", "unused"],
+          },
+          reveal: mysteryReveal(2),
+          activeMs: 90_000,
+        },
+      ],
+      current: { index: 1, open: mysteryOpen(1, 470_000), activeMs: 30_000 },
+      status: "active",
+      points: 3,
+      startedAt: 0,
+      serverTime: 500_000,
+    };
+    const state = reduceRun(
+      fresh(),
+      { type: "resume", at, snapshot },
+      plugins,
+    ).state;
+    return { state, offset: timeOffsetOf(snapshot) };
+  }
+
+  it("R2-08 a verdict with activeMs 75,000 on a slot that carried a 30,000 offset counts exactly 75,000", () => {
+    const at = 2_000_000;
+    const { state, offset } = resumedOnMystery2(at);
+    expect(offset).toEqual({ index: 1, ms: 30_000 });
+    // The device measured 47.3 s since the reload: with the offset, the
+    // header would count 77.3 s for a round the server recorded as 75 s.
+    const done = resolved(state, at + 47_300, mysteryReveal(3));
+    expect(elapsedMs(done, at + 60_000, offset)).toBe(90_000 + 77_000);
+    const recorded = withRecordedTime(done, offset, 1, 75_000);
+    expect(recorded.offset).toBeNull();
+    expect(recorded.state.slots[1]?.activeMs).toBe(75_000);
+    expect(elapsedMs(recorded.state, at + 60_000, recorded.offset)).toBe(
+      90_000 + 75_000,
+    );
+    // Reading the reveal adds nothing.
+    expect(elapsedMs(recorded.state, at + 600_000, recorded.offset)).toBe(
+      165_000,
+    );
+  });
+
+  it("R2-08 leaves an open round, and another round's offset, as they were", () => {
+    const at = 2_000_000;
+    const { state, offset } = resumedOnMystery2(at);
+    // Round 2 is still open: nothing has been recorded for it yet.
+    expect(withRecordedTime(state, offset, 1, 75_000)).toEqual({
+      state,
+      offset,
+    });
+    // Round 1's time replaced; round 2's offset stays with round 2.
+    const replaced = withRecordedTime(state, offset, 0, 88_000);
+    expect(replaced.offset).toEqual(offset);
+    expect(replaced.state.slots[0]?.activeMs).toBe(88_000);
+    expect(withRecordedTime(state, offset, 0, Number.NaN).state).toBe(state);
+  });
+
+  it("R2-08 adds each resolved round in whole seconds, as the server does", () => {
+    expect(wholeSecond(10_499)).toBe(10_000);
+    expect(wholeSecond(10_500)).toBe(11_000);
+    let state = opened(fresh(), 0, 0);
+    state = resolved(state, 10_600, mysteryReveal(1));
+    state = reduceRun(state, { type: "continue", at: 20_000 }, plugins).state;
+    state = opened(state, 1, 20_000);
+    state = resolved(state, 30_600, mysteryReveal(1));
+    // 10.6 s and 10.6 s: 11 s each, never a 21.2 s that floors to 21.
+    expect(elapsedMs(state, 40_000)).toBe(22_000);
+  });
+
+  it("R2-08 stops on the finish's total once it is known", () => {
+    const state = opened(fresh(), 0, 0);
+    expect(stopwatchMs(state, 61_000, null, null)).toBe(61_000);
+    expect(stopwatchMs(state, 61_000, null, 187_000)).toBe(187_000);
+    expect(formatStopwatch(stopwatchMs(state, 999_000, null, 187_000))).toBe(
+      "3:07",
+    );
   });
 });
 

@@ -405,6 +405,7 @@ export function DailyScreen() {
                   <Stopwatch
                     run={run}
                     offset={snapshot.timeOffset}
+                    total={snapshot.totalMs}
                     expanded={menu?.from === "stopwatch"}
                     menuId={menuId}
                     describedBy={hinted ? hintId : undefined}

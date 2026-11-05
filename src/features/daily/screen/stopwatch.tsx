@@ -7,7 +7,9 @@
  * type at 200% text, and drops its icon under 360 px. It runs only while a
  * round is open and freezes on reveals and between rounds, because that is
  * what breaks ties, and after a reload it picks up from the server's figure
- * (R1-06, `offset`).
+ * (R1-06, `offset`). Each round the server resolves counts the time the
+ * server recorded for it, and from Lock in the stopwatch stops on the
+ * finish's total, the stop screen's time (R2-08, `total`).
  *
  * It is a button: tapping it opens the More menu at "Hide stopwatch"
  * (DESIGN §6.7, R1-05), so the way to hide it is where the eye already is.
@@ -26,7 +28,7 @@ import { systemClock } from "@/platform/clock";
 import { Stopwatch as Watch } from "@/ui/stopwatch";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
-import { elapsedMs, formatStopwatch, type TimeOffset } from "../model/labels";
+import { formatStopwatch, stopwatchMs, type TimeOffset } from "../model/labels";
 
 function everySecond(onChange: () => void): () => void {
   const timer = setInterval(onChange, 1000);
@@ -46,6 +48,11 @@ export interface StopwatchProps {
   run: RunState;
   /** What the open round had before this page loaded (R1-06). */
   offset: TimeOffset | null;
+  /**
+   * The finish's official total once it is known: from Lock in on, the
+   * stopwatch stops on it, so it reads what the stop screen will (R2-08).
+   */
+  total?: number | null;
   /** Opens the More menu at "Hide stopwatch". */
   onOpenMenu(opener: HTMLElement): void;
   /** The More menu is open from here. */
@@ -59,16 +66,18 @@ export interface StopwatchProps {
 export function Stopwatch({
   run,
   offset,
+  total = null,
   onOpenMenu,
   expanded,
   menuId,
   describedBy,
   buttonRef,
 }: StopwatchProps) {
-  const live = run.phase === "active" || run.phase === "judging";
+  const live =
+    total === null && (run.phase === "active" || run.phase === "judging");
   const now = useSyncExternalStore(live ? everySecond : never, second, () => 0);
   const time = formatStopwatch(
-    elapsedMs(run, Math.max(now, run.updatedAt), offset),
+    stopwatchMs(run, Math.max(now, run.updatedAt), offset, total),
   );
   return (
     <Watch
