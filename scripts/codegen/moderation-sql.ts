@@ -27,8 +27,8 @@
  * and one per line, the words of a JSON array that a substring term would
  * block, for the content team's allowlist review (content/safety/README.md).
  */
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 
@@ -46,7 +46,6 @@ import {
   moderationPatterns,
   normalizeForFilter,
   rot13,
-  termAlternatives,
   termMatchOf,
   type FilterPass,
   type ModerationTerm,
@@ -955,8 +954,10 @@ export function main(argv: string[], root = process.cwd()): number {
     }
     return stale.length === 0 ? 0 : 1;
   }
-  for (const { path, content } of stale)
+  for (const { path, content } of stale) {
+    mkdirSync(dirname(join(root, path)), { recursive: true });
     writeFileSync(join(root, path), content);
+  }
   console.error(
     `codegen:moderation: ${inputs.terms.length} term(s), ${inputs.allowlist.length} allowlisted word(s), ${inputs.adjectives.length} x ${inputs.animals.length} names; wrote ${stale.length} file(s)`,
   );
