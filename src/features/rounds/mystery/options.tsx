@@ -26,15 +26,20 @@
  *   a bar docked at the bottom of the screen while the options are in
  *   view, so it sits under the thumb and nothing moves when it wakes: it
  *   reads "Lock in" and is disabled (still focusable, so it can be found)
- *   until an option is chosen. The round sends one pick only
- *   (`MysteryRound`), and a held key never repeats its way into one.
+ *   until an option is chosen. Its label keeps to one line, so the bar is
+ *   as tall before a choice as after, at any text size. The bar sticks
+ *   inside the box that holds the options, so it never rises over the lead
+ *   line or the legend. A second tap on the spot that chose, within
+ *   `DOUBLE_TAP_MS`, never locks in, wherever the bar is by then. The round
+ *   sends one pick only (`MysteryRound`), and a held key never repeats its
+ *   way into one.
  *
  * The line above the options says what is true for the device (D32,
  * R4-03): "Tap one, then Lock in." until a keyboard is in use (`keys`: a
  * key was pressed, or the pointer is a mouse), then "Keys A to D choose.
- * Enter locks in." Both are laid out in the one line, the other unseen, so
- * nothing moves when it changes. It is the group's description too, said
- * once.
+ * Enter locks in." The line holds room for the other wording (drawn by
+ * CSS, so it is in the page's text once), and nothing moves when it
+ * changes. It is the group's description too, said once.
  *
  * Keys (D20, amending D6; R2-02; D28, R3-05). The group listens, never the
  * round: letters and digits act only while focus is in the options group
@@ -56,9 +61,9 @@
  *   clears the mark and what was said of it, and opens a short typing
  *   window (`TYPING_MS`, renewed by each key typed in it, and opened too
  *   when a key moves the mark from one option to another). Three or more
- *   different keys in a row, each within `TYPING_MS` of the last, are a
- *   typed word whatever their letters (R4-11: "Abba", "Dada" and "cab"
- *   are made of option keys alone). Once a word is being typed, an option
+ *   keys in a row, each within `TYPING_MS` of the last, are a typed word
+ *   whatever their letters, a doubled letter counted twice (D31, R4-11:
+ *   "Abba", "Add" and "cab" are made of option keys alone). Once a word is being typed, an option
  *   key inside the window only moves focus, unmarked, and Enter locks
  *   nothing, however long the pause before it: so "Cartographer" or
  *   "Abba" then Enter sends nothing. That holds until a key next chooses
@@ -80,6 +85,7 @@ import {
   useRef,
   useState,
   type KeyboardEvent,
+  type MouseEvent,
   type Ref,
 } from "react";
 
@@ -107,11 +113,18 @@ const DIGIT_KEYS = ["1", "2", "3", "4"] as const;
 export const TYPING_MS = 800;
 
 /**
- * How many different keys in a row, each within `TYPING_MS` of the last,
- * make a typed word whatever their letters (R4-11): two can be a change of
- * mind (A, then B), three are "cab".
+ * How many keys in a row, each within `TYPING_MS` of the last, make a typed
+ * word whatever their letters (D31, R4-11): two can be a change of mind (A,
+ * then B) or the same letter again, three are "cab" or "Add".
  */
 const WORD_KEYS = 3;
+
+/**
+ * How long after a tap chose an option a tap on the same spot is still the
+ * second half of a double tap, and how near it has to land to be one.
+ */
+export const DOUBLE_TAP_MS = 500;
+const DOUBLE_TAP_PX = 24;
 
 /**
  * The chosen option's mark, beside the pressed look AnswerButton draws for
@@ -123,6 +136,17 @@ const CHOSEN_BADGE = cx(
   "[&_.kn-answer-badge]:bg-[color:var(--kn-ink,var(--foreground))] [&_.kn-answer-badge]:text-[color:var(--kn-surface,var(--background))]",
   "forced-colors:[&_.kn-answer-badge]:bg-[color:Highlight] forced-colors:[&_.kn-answer-badge]:text-[color:HighlightText] forced-colors:[&_.kn-answer-badge]:forced-color-adjust-none",
 );
+
+/**
+ * Where a pointer's click landed, or null for a click with no place: a
+ * keyboard's or a screen reader's (`detail` 0, or the page's own corner,
+ * where no option and no button is).
+ */
+function placeOf(event: MouseEvent): { x: number; y: number } | null {
+  if (event.detail === 0) return null;
+  if (event.clientX === 0 && event.clientY === 0) return null;
+  return { x: event.clientX, y: event.clientY };
+}
 
 /** When a key came down, on the clock the typing window is measured by. */
 const keyTime = () => performance.now();
@@ -271,8 +295,14 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   const typingUntil = useRef(0);
   /** Until when a Space just after a key chose still reads as a typed name's space ("B Smith"). */
   const spaceGuardUntil = useRef(0);
-  /** The last printable key and when, and how many different ones have run on (`WORD_KEYS`). */
-  const lastKey = useRef({ key: "", at: Number.NEGATIVE_INFINITY, run: 0 });
+  /** When the last printable key came down, and how many have run on (`WORD_KEYS`). */
+  const lastKey = useRef({ at: Number.NEGATIVE_INFINITY, run: 0 });
+  /** Where and when a pointer last chose an option (`DOUBLE_TAP_MS`). */
+  const chosenByPointer = useRef({
+    at: Number.NEGATIVE_INFINITY,
+    x: 0,
+    y: 0,
+  });
   const buttons = useRef(new Map<number, HTMLButtonElement>());
   /** True while a key moves focus to an option, so `onFocus` can tell it from Tab or a pointer. */
   const keyFocusing = useRef(false);
@@ -313,14 +343,15 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   }
 
   /**
-   * Marks an option and says so (D31, R4-11). Nothing is sent. A key's
-   * own choice is told how a keyboard locks it in, the first key too,
-   * which comes before `keys` has caught up with it.
+   * Marks an option and says so (D31, R4-11). Nothing is sent. Only a
+   * key's own choice is told that Enter locks it in: a click may be a
+   * screen reader's, which sends no keydown, so Enter there would only
+   * choose again.
    */
   function choose(option: OptionView, byKey: boolean) {
     typedSinceChoice.current = false;
     setChosen(option.index);
-    said.current = announce(copy.chosenNamed(option.label, byKey || keys));
+    said.current = announce(copy.chosenNamed(option.label, byKey));
   }
 
   function unmark() {
@@ -404,11 +435,10 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       if (option !== null) event.preventDefault();
       return;
     }
-    // Different keys running on are a word, whatever their letters (R4-11).
+    // Keys running on are a word, whatever their letters (D31, R4-11).
     const prior = lastKey.current;
-    const run =
-      now - prior.at >= TYPING_MS ? 1 : prior.run + (key === prior.key ? 0 : 1);
-    lastKey.current = { key, at: now, run };
+    const run = now - prior.at >= TYPING_MS ? 1 : prior.run + 1;
+    lastKey.current = { at: now, run };
     const word = run >= WORD_KEYS;
     if (option === null) {
       // Any other printable key is typing: it clears the mark and what was
@@ -490,8 +520,10 @@ export function MysteryOptions(props: MysteryOptionsProps) {
         {last ? copy.lastLead : copy.lead}
       </p>
       {/* D32: one line, always drawn, saying what is true for the device.
-          The other wording lies unseen in the same cell, so the line is as
-          tall as either and nothing moves when a first key changes it. */}
+          The same cell holds room for the other wording, so the line is as
+          tall as either and nothing moves when a first key changes it. CSS
+          draws that reserve from an attribute: it is not in the page's
+          text (R4-03). */}
       <p
         id={keysId}
         className={cx("mt-1 grid text-[0.8125rem] font-semibold", TONE.ink2)}
@@ -505,64 +537,87 @@ export function MysteryOptions(props: MysteryOptionsProps) {
         {shortcuts ? (
           <span
             aria-hidden="true"
-            className="invisible col-start-1 row-start-1"
-          >
-            {keys ? copy.tapLegend : copy.legend}
-          </span>
+            data-reserve={keys ? copy.tapLegend : copy.legend}
+            className="invisible col-start-1 row-start-1 after:content-[attr(data-reserve)]"
+          />
         ) : null}
       </p>
       {/* grid-cols-1 is minmax(0, 1fr): the longest word in a label can't
           widen the column past the screen, as "Ferryman" took it to 331 px
           of 296 at 200% text on a 360 px phone (R1-03); it breaks instead. */}
-      <ol className="mt-2 grid grid-cols-1 gap-2.5">
-        {options.map((option, position) => {
-          const state = stateOf(option, props);
-          const isMarked = marked === option.index;
-          return (
-            <li
-              key={option.index}
-              data-option={option.index}
-              data-chosen={isMarked ? "" : undefined}
-              className="min-w-0"
-            >
-              <AnswerButton
-                ref={(button) => {
-                  if (button === null) buttons.current.delete(option.index);
-                  else buttons.current.set(option.index, button);
-                }}
-                index={option.index}
-                state={state}
-                pressed={isMarked}
-                className={isMarked ? CHOSEN_BADGE : undefined}
-                aria-pressed={isMarked}
-                // The badge is the key hint (D6); AnswerButton names the keys
-                // to assistive tech, only while the option is idle.
-                shortcut={shortcuts ? keysFor(position, digits) : null}
-                onPressStart={() => {
-                  if (sound) playEffect("tap");
-                }}
-                // A tap or a click chooses, as a key does (D31). Focus goes
-                // with it where the browser leaves it behind, so Enter then
-                // locks in what was tapped.
-                onCommit={() => {
-                  buttons.current.get(option.index)?.focus();
-                  choose(option, false);
-                }}
-              >
-                {option.label}
-              </AnswerButton>
-            </li>
-          );
-        })}
-      </ol>
-      <LockInBar
-        label={choice === null ? null : choice.label}
-        disabled={choice === null || disabled}
-        busy={busy}
-        onLockIn={() => {
-          if (marked !== null) lockIn(marked);
+      {/* The options and their bar share a box of their own: the sticky
+          bar is held inside it, so it starts at option A and never covers
+          the lead line or the legend above. */}
+      <div
+        data-options-box=""
+        onClickCapture={(event) => {
+          const place = placeOf(event);
+          if (place === null || optionAt(event.target) === null) return;
+          chosenByPointer.current = { at: keyTime(), ...place };
         }}
-      />
+      >
+        <ol className="mt-2 grid grid-cols-1 gap-2.5">
+          {options.map((option, position) => {
+            const state = stateOf(option, props);
+            const isMarked = marked === option.index;
+            return (
+              <li
+                key={option.index}
+                data-option={option.index}
+                data-chosen={isMarked ? "" : undefined}
+                className="min-w-0"
+              >
+                <AnswerButton
+                  ref={(button) => {
+                    if (button === null) buttons.current.delete(option.index);
+                    else buttons.current.set(option.index, button);
+                  }}
+                  index={option.index}
+                  state={state}
+                  pressed={isMarked}
+                  className={isMarked ? CHOSEN_BADGE : undefined}
+                  aria-pressed={isMarked}
+                  // The badge is the key hint (D6); AnswerButton names the keys
+                  // to assistive tech, only while the option is idle.
+                  shortcut={shortcuts ? keysFor(position, digits) : null}
+                  onPressStart={() => {
+                    if (sound) playEffect("tap");
+                  }}
+                  // A tap or a click chooses, as a key does (D31). Focus goes
+                  // with it where the browser leaves it behind, so Enter then
+                  // locks in what was tapped.
+                  onCommit={() => {
+                    buttons.current.get(option.index)?.focus();
+                    choose(option, false);
+                  }}
+                >
+                  {option.label}
+                </AnswerButton>
+              </li>
+            );
+          })}
+        </ol>
+        <LockInBar
+          label={choice === null ? null : choice.label}
+          disabled={choice === null || disabled}
+          busy={busy}
+          onLockIn={(event) => {
+            if (marked === null) return;
+            // The second tap of a double tap on an option, should the bar
+            // ever be under it by then, is not a lock-in (D31).
+            const tap = chosenByPointer.current;
+            const place = placeOf(event);
+            if (
+              place !== null &&
+              keyTime() - tap.at < DOUBLE_TAP_MS &&
+              Math.hypot(place.x - tap.x, place.y - tap.y) < DOUBLE_TAP_PX
+            ) {
+              return;
+            }
+            lockIn(marked);
+          }}
+        />
+      </div>
     </div>
   );
 }

@@ -8,10 +8,16 @@
  * and in the same place before and after a choice, so nothing moves when
  * it wakes. Until an option is chosen it reads "Lock in" and is disabled,
  * still focusable so a keyboard or a screen reader finds it; then it names
- * the choice, "Lock in Cobalt". The bar bleeds over the play column's 16 px
+ * the choice, "Lock in Cobalt". The label keeps to one line and a long name
+ * is cut short with an ellipsis (the whole of it is still the button's
+ * name, and the chosen option shows it in full), so the bar is the same
+ * height before and after a choice at any text size: a bar that grew could
+ * slide under a finger's second tap. The bar bleeds over the play column's 16 px
  * gutters, its height is the page's bottom scroll inset, and toasts rise
  * above it.
  */
+import type { MouseEvent } from "react";
+
 import { ScrollInset } from "@/features/shell/client";
 import { Button } from "@/ui/button";
 
@@ -21,7 +27,7 @@ export interface LockInBarProps {
   label: string | null;
   disabled: boolean;
   busy: boolean;
-  onLockIn(): void;
+  onLockIn(event: MouseEvent<HTMLButtonElement>): void;
 }
 
 export function LockInBar({ label, disabled, busy, onLockIn }: LockInBarProps) {
@@ -42,7 +48,9 @@ export function LockInBar({ label, disabled, busy, onLockIn }: LockInBarProps) {
         data-lock-in=""
         onClick={onLockIn}
       >
-        {label === null ? copy.lockIn : copy.lockInNamed(label)}
+        <span className="block min-w-0 truncate">
+          {label === null ? copy.lockIn : copy.lockInNamed(label)}
+        </span>
       </Button>
     </div>
   );

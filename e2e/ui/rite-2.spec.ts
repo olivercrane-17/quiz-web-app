@@ -27,6 +27,7 @@
 import type { Locator, Page } from "@playwright/test";
 
 import { markFit } from "../../src/ui/mark-fit";
+import { lockInButton, pickFirstOption } from "../daily/clue-4";
 import { expect, test } from "../fixtures";
 
 /** WCAG 2.2 relative luminance of a computed `rgb(...)` colour. */
@@ -115,7 +116,7 @@ async function resolveMysteryOne(page: Page): Promise<void> {
   for (let clue = 1; clue < 4; clue += 1) {
     await page.getByRole("button", { name: /^(Next clue|Last clue)/ }).click();
   }
-  await page.getByRole("button", { name: /^A\. / }).click();
+  await pickFirstOption(page);
   await expect(pills(page).first()).not.toHaveAttribute(
     "data-status",
     "upcoming",
@@ -358,7 +359,7 @@ test.describe("R2-06 pills and chips are flat marks", () => {
             .getByRole("button", { name: /^(Next clue|Last clue)/ })
             .click();
         }
-        await page.getByRole("button", { name: /^A\. / }).click();
+        await pickFirstOption(page);
         await page.getByRole("button", { name: next }).click();
       }
       await page.getByLabel(/your number/i).fill("1000");
@@ -430,6 +431,7 @@ test.describe("R2-06 pills and chips are flat marks", () => {
           .tap();
       }
       await page.getByRole("button", { name: /^A\. / }).tap();
+      await lockInButton(page).tap();
       await expect(
         page.getByRole("button", { name: "Next mystery" }),
       ).toBeVisible();

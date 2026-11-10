@@ -8,6 +8,7 @@
 import type { Page } from "@playwright/test";
 
 import type { MysteryContent } from "../../src/engine/types";
+import { pickOption } from "../daily/clue-4";
 import { expect, test } from "../fixtures";
 
 import { expectNoSeriousAxe } from "./axe";
@@ -217,7 +218,7 @@ test.describe("expectSealedPayloads", () => {
         .getByRole("button", { name: /^(Next clue|Last clue)/ })
         .click();
     }
-    await page.getByRole("button", { name: option }).click();
+    await pickOption(page, option);
   }
 
   test("passes a fixture Daily checked mid-Mystery and once every round resolved", async ({

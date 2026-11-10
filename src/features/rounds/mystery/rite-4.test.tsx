@@ -5,7 +5,7 @@
  * a reload, the legend's line holding its place, a button's own Space) is
  * also measured in e2e/daily/mystery-rite-4.spec.ts.
  */
-import { act, fireEvent, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import type { UserEvent } from "@testing-library/user-event";
 import {
   afterEach,
@@ -35,7 +35,7 @@ import { answerListHandleOf, type MysteryAnswerList } from "../answer-list";
 import type { RoundComponentProps } from "../contracts";
 import { MysteryRound } from ".";
 import { MYSTERY_COPY } from "./copy";
-import { TYPING_MS } from "./options";
+import { DOUBLE_TAP_MS, TYPING_MS } from "./options";
 import {
   MysteryHarness,
   TEST_SETTINGS,
@@ -241,6 +241,80 @@ describe("one way to lock in at clue 4 (D31, R4-01)", () => {
     expect(picks(props.onIntent)).toHaveLength(1);
   });
 
+  it("R4-01 a second tap on the spot that chose, landing on the Lock in button inside DOUBLE_TAP_MS, sends nothing; a tap elsewhere, or later, does", async () => {
+    const pause = pausable();
+    const props = atClue4();
+    render(<MysteryRound {...props} />);
+    const at = { detail: 1, clientX: 180, clientY: 535 };
+    // The first tap chooses; the bar is under the finger for the second.
+    fireEvent.click(option(1), at);
+    expect(pressed()).toEqual([1]);
+    fireEvent.click(lockIn(), at);
+    fireEvent.click(lockIn(), { ...at, clientY: 545 });
+    expect(props.onIntent).not.toHaveBeenCalled();
+    expect(pressed()).toEqual([1]);
+    // The same spot once a double tap is over is a press of the button.
+    pause(DOUBLE_TAP_MS + 1);
+    fireEvent.click(lockIn(), at);
+    expect(picks(props.onIntent)).toEqual([
+      { family: "mystery", kind: "pick", option: 1 },
+    ]);
+  });
+
+  it("R4-01 a tap on an option, then one on the button a thumb's move away, locks in at once; so does Enter or Space on the button", async () => {
+    for (const press of [
+      () =>
+        fireEvent.click(lockIn(), { detail: 1, clientX: 180, clientY: 600 }),
+      () =>
+        fireEvent.click(lockIn(), { detail: 0, clientX: 180, clientY: 535 }),
+    ]) {
+      const props = atClue4();
+      const view = render(<MysteryRound {...props} />);
+      fireEvent.click(option(1), { detail: 1, clientX: 180, clientY: 535 });
+      press();
+      expect(picks(props.onIntent)).toHaveLength(1);
+      view.unmount();
+    }
+  });
+
+  it("R4-01 the Lock in label keeps to one line, cut short if need be, and the whole name is still the button's", async () => {
+    const props = atClue4();
+    const { user } = renderWithUser(<MysteryRound {...props} />);
+    const label = () => lockIn().querySelector("span");
+    expect(label()).toHaveClass("truncate", "min-w-0");
+    await user.click(option(0));
+    expect(label()).toHaveClass("truncate", "min-w-0");
+    expect(label()).toHaveTextContent("Lock in Odile Marsh");
+    expect(lockIn()).toHaveAccessibleName("Lock in Odile Marsh");
+  });
+
+  it("R4-01 the options and the bar share a box of their own, after the lead line and the legend", () => {
+    render(<MysteryRound {...atClue4()} />);
+    const box = document.querySelector("[data-options-box]");
+    expect(box).not.toBeNull();
+    expect(box).toContainElement(option(0));
+    expect(box).toContainElement(lockIn());
+    expect(box).not.toContainElement(
+      document.querySelector<HTMLElement>("[data-options-lead]"),
+    );
+    expect(box).not.toContainElement(legend() as HTMLElement);
+  });
+
+  it("a click chooses and is told the choice alone, with a keyboard in use too: only a key's choice hears Enter locks it in", async () => {
+    setPointer("mouse");
+    const props = atClue4();
+    render(<MysteryRound {...props} />);
+    expect(legend()).toHaveTextContent(new RegExp(`^${KEYS}$`));
+    // A bare click, as a screen reader sends for Enter: no keydown.
+    fireEvent.click(option(1));
+    expect(liveText()).toBe("Liesl Varo chosen.");
+    fireEvent.click(option(1));
+    expect(liveText()).toBe("Liesl Varo chosen.");
+    expect(props.onIntent).not.toHaveBeenCalled();
+    fireEvent.keyDown(option(1), { key: "Enter" });
+    expect(picks(props.onIntent)).toHaveLength(1);
+  });
+
   it("R4-01 Lena's path: the c key, then a tap on A; A is pressed, C isn't, nothing is sent, and Lock in sends A", async () => {
     const props = atClue4();
     const { user } = renderWithUser(<MysteryRound {...props} />);
@@ -390,11 +464,16 @@ describe("the line above the options says what is true for the device (D32, R4-0
     await tapToClue4(user);
     const line = legend()?.parentElement;
     expect(line).not.toBeNull();
-    // Both wordings share the line's one cell, the other unseen, so the
-    // line is as tall as either before and after.
+    // The line's one cell holds room for the other wording, drawn by CSS
+    // from an attribute and so in no text, and is as tall as either.
     const reserve = () => line?.querySelector('[aria-hidden="true"]');
-    expect(reserve()).toHaveTextContent(KEYS);
-    expect(reserve()).toHaveClass("invisible");
+    expect(reserve()).toHaveAttribute("data-reserve", KEYS);
+    expect(reserve()).toBeEmptyDOMElement();
+    expect(reserve()).toHaveClass(
+      "invisible",
+      "after:content-[attr(data-reserve)]",
+    );
+    expect(document.body.textContent).not.toContain(KEYS);
     for (const part of [legend(), reserve()]) {
       expect(part).toHaveClass("col-start-1", "row-start-1");
     }
@@ -407,7 +486,8 @@ describe("the line above the options says what is true for the device (D32, R4-0
     expect(legend()).toHaveTextContent(new RegExp(`^${KEYS}$`));
     expect(legend()).toHaveAttribute("data-keys-legend", "keys");
     expect(legend()?.parentElement).toBe(line);
-    expect(reserve()).toHaveTextContent(TAP);
+    expect(reserve()).toHaveAttribute("data-reserve", TAP);
+    expect(document.body.textContent).not.toContain(TAP);
     expect(optionsGroup()).toHaveAccessibleDescription(`${LAST_LEAD} ${KEYS}`);
     expect(pressed()).toEqual([]);
   });
@@ -452,7 +532,23 @@ describe("the line above the options says what is true for the device (D32, R4-0
 });
 
 describe("clue 4's keyboard edges (R4-11)", () => {
-  for (const word of ["abba", "dada", "Abba", "Dada", "cab", "bad", "abcd"]) {
+  for (const word of [
+    "abba",
+    "dada",
+    "Abba",
+    "Dada",
+    "cab",
+    "bad",
+    "abcd",
+    // A doubled letter is two keys of the word (D31).
+    "add",
+    "Add",
+    "baa",
+    "abb",
+    "aab",
+    "ccd",
+    "aaa",
+  ]) {
     it(`R4-11 ${word} then Enter, a word made of option letters alone, locks nothing and leaves no option pressed`, async () => {
       const props = atClue4();
       const { user } = renderWithUser(<MysteryRound {...props} />);
@@ -520,14 +616,37 @@ describe("clue 4's keyboard edges (R4-11)", () => {
     ]);
   });
 
-  it("R4-11 the same letter twice, or five times, no longer locks in; it stays chosen", async () => {
+  it("R4-11 the same letter twice no longer locks in; it stays chosen, and Enter then locks it in", async () => {
+    const props = atClue4();
+    const { user } = renderWithUser(<MysteryRound {...props} />);
+    await user.keyboard("aa");
+    expect(props.onIntent).not.toHaveBeenCalled();
+    expect(pressed()).toEqual([0]);
+    await user.keyboard("{Enter}");
+    expect(picks(props.onIntent)).toEqual([
+      { family: "mystery", kind: "pick", option: 0 },
+    ]);
+  });
+
+  it("R4-11 a third press of the letter inside TYPING_MS is a typed word: the mark clears and Enter sends nothing; after a pause the letter chooses again", async () => {
+    const pause = pausable();
     const props = atClue4();
     const { user } = renderWithUser(<MysteryRound {...props} />);
     await user.keyboard("cc");
     expect(props.onIntent).not.toHaveBeenCalled();
     expect(pressed()).toEqual([2]);
-    await user.keyboard("ccc");
+    await user.keyboard("c");
+    expect(pressed()).toEqual([]);
+    expect(liveText()).not.toMatch(/chosen/);
+    await user.keyboard("{Enter}");
     expect(props.onIntent).not.toHaveBeenCalled();
+    // Three presses with a pause between them are three choices, not a word.
+    pause();
+    await user.keyboard("c");
+    pause();
+    await user.keyboard("c");
+    pause();
+    await user.keyboard("c");
     expect(pressed()).toEqual([2]);
     // A held key is one press.
     fireEvent.keyDown(option(2), { key: "c", repeat: true });

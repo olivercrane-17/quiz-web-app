@@ -11,6 +11,7 @@
  */
 import type { Page } from "@playwright/test";
 
+import { pickOption } from "./daily/clue-4";
 import { expect, test } from "./fixtures";
 import { setClock } from "./support/clock";
 
@@ -124,7 +125,7 @@ test.describe("Wave 1 exit", () => {
         .getByRole("button", { name: /^(Next clue|Last clue)/ })
         .click();
     }
-    await page.getByRole("button", { name: option }).click();
+    await pickOption(page, option);
   }
 
   test("Quick play from Home runs ten questions to the results screen", async ({
@@ -262,7 +263,7 @@ test.describe("RITE round 1 across the whole Daily", () => {
         .getByRole("button", { name: /^(Next clue|Last clue)/ })
         .click();
     }
-    await page.getByRole("button", { name: option }).click();
+    await pickOption(page, option);
   }
 
   test("R1-06 the stopwatch picks up after a reload: 90 s on Mystery 1, 30 s on Mystery 2, then 2:00", async ({

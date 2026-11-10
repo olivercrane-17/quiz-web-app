@@ -32,12 +32,21 @@ const TAP = "Tap one, then Lock in.";
 
 /** The phone's text size at 200% (PRD §3.12.4, release criterion R2). */
 const LARGE_TEXT = "html { font-size: 200% !important; }";
+/** The phone's text size at `percent`. */
+const textAt = (percent: number) =>
+  `html { font-size: ${String(percent)}% !important; }`;
 
 /** A desk: a mouse that hovers, so a keyboard is likely (D32). */
 const DESK = {
   viewport: { width: 1280, height: 800 },
   hasTouch: false,
   isMobile: false,
+} as const;
+/** The small phone of release criterion R2: touch only. */
+const SMALL_PHONE = {
+  viewport: { width: 360, height: 640 },
+  hasTouch: true,
+  isMobile: true,
 } as const;
 /** Priya's, Marcus's and Lena's phone: touch only. */
 const PHONE = {
@@ -113,6 +122,16 @@ async function actsSent(mock: RemoteMockControls): Promise<number> {
 }
 
 const topOf = async (locator: Locator) => (await locator.boundingBox())?.y;
+
+const lockInBar = (page: Page) => page.locator("[data-lock-in-bar]");
+
+/** Where the page's layout stands: the Lock in bar's box and the document's height. */
+async function layoutOf(page: Page) {
+  return {
+    bar: await lockInBar(page).boundingBox(),
+    height: await page.evaluate(() => document.documentElement.scrollHeight),
+  };
+}
 
 test.describe("one way to lock in at clue 4, on a touch phone (D31, R4-01)", () => {
   test.use(PHONE);
@@ -239,10 +258,13 @@ test.describe("one way to lock in at clue 4, on a touch phone (D31, R4-01)", () 
       element.scrollIntoView({ block: "center" });
     });
     const scrolled = await page.evaluate(() => window.scrollY);
+    const layout = await layoutOf(page);
     await a.tap();
     await expect(a).toHaveAttribute("aria-pressed", "true");
-    // The tap moved nothing, and the bar now names the choice.
+    // The tap moved nothing, and the bar now names the choice: it is as
+    // tall as it was, where it was, and the page is no taller.
     expect(await page.evaluate(() => window.scrollY)).toBe(scrolled);
+    expect(await layoutOf(page)).toEqual(layout);
     await expect(lockIn).toBeInViewport({ ratio: 1 });
     await expect(lockIn).toHaveAccessibleName(`Lock in ${await labelOf(a)}`);
     await expect(a).toBeInViewport({ ratio: 1 });
@@ -263,6 +285,26 @@ test.describe("one way to lock in at clue 4, on a touch phone (D31, R4-01)", () 
     ).toBe(true);
   });
 
+  test("R4-01 the Lock in label is one line: a long name is cut short on screen and whole in the button's name", async ({
+    page,
+  }) => {
+    await openDaily(page);
+    await page.addStyleTag({ content: LARGE_TEXT });
+    await toClue4(page);
+    const lockIn = lockInButton(page);
+    const plain = await lockIn.boundingBox();
+    for (const option of await optionButtons(page).all()) {
+      await option.evaluate((element) => {
+        element.scrollIntoView({ block: "center" });
+      });
+      await option.tap();
+      await expect(lockIn).toHaveAccessibleName(
+        `Lock in ${await labelOf(option)}`,
+      );
+      expect((await lockIn.boundingBox())?.height).toBe(plain?.height);
+    }
+  });
+
   test("R4-14 R4-15 on the phone no key hint shows on a reveal or beside the Encore's field", async ({
     page,
   }) => {
@@ -280,6 +322,117 @@ test.describe("one way to lock in at clue 4, on a touch phone (D31, R4-01)", () 
     await field.fill("80");
     await expect(page.locator("[data-enter-hint]")).toHaveCount(0);
     await expect(field).not.toHaveAccessibleDescription(/Enter locks in/);
+  });
+});
+
+test.describe("the Lock in bar at large text on a small phone (D31, R4-01, after review)", () => {
+  test.use(SMALL_PHONE);
+
+  for (const percent of [100, 150, 200]) {
+    test(`R4-01 at ${String(percent)}% text a double tap on the option just above the bar sends nothing, and the bar and the page keep their size`, async ({
+      page,
+      mock,
+    }) => {
+      await openDaily(page);
+      await page.addStyleTag({ content: textAt(percent) });
+      await toClue4(page);
+      // Scroll until an option lies 12 px above the docked bar, mid-screen.
+      const found = await page.evaluate(() => {
+        const bar = document.querySelector("[data-lock-in-bar]");
+        const limit =
+          document.documentElement.scrollHeight - window.innerHeight;
+        for (let top = 0; top <= limit; top += 8) {
+          window.scrollTo(0, top);
+          const y = (bar?.getBoundingClientRect().top ?? 0) - 12;
+          if (y <= 0 || y >= window.innerHeight) continue;
+          const item = document
+            .elementFromPoint(180, y)
+            ?.closest<HTMLElement>("[data-options] [data-option]");
+          if (item?.dataset.option !== undefined) {
+            return { x: 180, y, index: item.dataset.option };
+          }
+        }
+        return null;
+      });
+      expect(found).not.toBeNull();
+      const point = { x: found?.x ?? 0, y: found?.y ?? 0 };
+      const index = found?.index ?? "";
+      const optionAtPoint = () =>
+        page.evaluate(({ x, y }) => {
+          const item = document
+            .elementFromPoint(x, y)
+            ?.closest<HTMLElement>("[data-options] [data-option]");
+          return item?.dataset.option ?? null;
+        }, point);
+      const layout = await layoutOf(page);
+      const before = await actsSent(mock);
+
+      await page.touchscreen.tap(point.x, point.y);
+      await page.touchscreen.tap(point.x, point.y);
+
+      await expect(
+        page.locator(`[data-options] [data-option="${index}"]`),
+      ).toHaveAttribute("data-chosen", "");
+      // The second tap landed where the first did: still on the option.
+      expect(await optionAtPoint()).toBe(index);
+      expect(await layoutOf(page)).toEqual(layout);
+      await expect(lockInButton(page)).toHaveAccessibleName(/^Lock in ./);
+      await expect(reveal(page)).toHaveCount(0);
+      await expect(round(page)).toHaveAttribute("data-clue", "4");
+      expect(await actsSent(mock)).toBe(before);
+      // The button still sends the one pick.
+      await lockInButton(page).tap();
+      await expect(reveal(page)).toBeVisible();
+      expect(await actsSent(mock)).toBe(before + 1);
+    });
+  }
+
+  test("R4-01 at 200% text, on arrival at clue 4, the bar covers neither the last-clue line nor the legend, and never sits above option A", async ({
+    page,
+  }) => {
+    await openDaily(page);
+    await page.addStyleTag({ content: LARGE_TEXT });
+    await toClue4(page);
+    const covered = () =>
+      page.evaluate(() => {
+        const hits: string[] = [];
+        for (const selector of ["[data-options-lead]", "[data-keys-legend]"]) {
+          const box = document.querySelector(selector)?.getBoundingClientRect();
+          if (box === undefined) {
+            hits.push(`${selector} missing`);
+            continue;
+          }
+          const from = Math.max(box.top, 0) + 1;
+          const to = Math.min(box.bottom, window.innerHeight) - 1;
+          for (let y = from; y <= to; y += 4) {
+            const at = document.elementFromPoint(box.left + 8, y);
+            if (at?.closest("[data-lock-in-bar]") != null) {
+              hits.push(`${selector} at ${String(Math.round(y))}`);
+            }
+          }
+        }
+        return hits;
+      });
+    const barAboveA = async () => {
+      const [bar, a] = [
+        await lockInBar(page).boundingBox(),
+        await optionButtons(page).first().boundingBox(),
+      ];
+      return (bar?.y ?? 0) < (a?.y ?? 0);
+    };
+    expect(await covered()).toEqual([]);
+    expect(await barAboveA()).toBe(false);
+    // And wherever the page is scrolled to.
+    const height = await page.evaluate(
+      () => document.documentElement.scrollHeight,
+    );
+    for (let y = 0; y < height; y += 80) {
+      await page.evaluate((top) => {
+        window.scrollTo(0, top);
+      }, y);
+      expect(await covered()).toEqual([]);
+      expect(await barAboveA()).toBe(false);
+    }
   });
 });
 
@@ -393,7 +546,7 @@ test.describe("one way to lock in at clue 4, with a keyboard (D31, R4-01, R4-11)
     expect(await actsSent(mock)).toBe(before + 1);
   });
 
-  for (const word of ["Abba", "Dada"]) {
+  for (const word of ["Abba", "Dada", "Add"]) {
     test(`R4-11 ${word} then Enter, typed where clue 4 puts focus, locks nothing`, async ({
       page,
       mock,

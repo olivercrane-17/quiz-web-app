@@ -220,7 +220,9 @@ export const MYSTERY_COPY = {
     legend: "Keys A to D choose. Enter locks in.",
     /**
      * Said when an option is chosen, however it was (D31, R4-11): a
-     * keyboard also hears how to lock it in.
+     * choice made by a key also hears how a key locks it in. A tap or a
+     * click hears the choice alone, since a screen reader's click sends no
+     * key and Enter would only choose again; the Lock in button is next.
      */
     chosenNamed: (label: string, keys: boolean) =>
       keys ? `${label} chosen. Enter locks it in.` : `${label} chosen.`,
