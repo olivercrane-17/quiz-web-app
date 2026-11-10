@@ -322,3 +322,24 @@ session that returned no report. M1 doesn't exit yet; round 4 runs five complete
 - **Hide stopwatch is announced**: "Stopwatch hidden. It still runs for tie-breaks."
 - **A hidden tab keeps counting on the Daily header** (D19), and every clock value floors to the second: the header, the
   recorded rounds and the stop screen.
+
+## 27. Decisions after RITE round 4 (10 November 2026)
+Round 4 (`docs/playtests/rite-4.md`) ran five complete sessions: no P0, comprehension 15 of 15, the header equal to the
+stop screen in every run, and one P1 confusion (R4-01), which round 3's own fixes caused. M1 doesn't exit; round 5 follows.
+- **D31, one way to lock in at clue 4 (reverses §22's "commits on release by touch" and D20's same-key-twice).** At clue 4
+  a tap, a click, Space, Enter on an option that isn't chosen, or a letter key only chooses: the option is marked and
+  nothing is sent. A "Lock in <name>" button, or Enter on the chosen option, commits, as the Encore's Lock in does. Choosing
+  another option moves the mark. Pressing the same letter twice no longer locks in. The pick is one shot and a miss scores
+  0, so the extra tap is worth it, and touch, mouse, keyboard and screen reader now share one model. D20's typing guard
+  stays, and three or more keys inside a typing window count as typing (so "Abba" then Enter locks nothing).
+- **D32, key legends only for keyboards.** A key legend shows once a key has been pressed or the device has a fine pointer
+  and a keyboard is likely; never on a touch-only phone. At clue 4, touch players read "Tap one, then Lock in."; keyboard
+  players read "Keys A to D choose. Enter locks in." Practice keeps one tap or one key per answer, and its legend follows
+  the same rule.
+- **D33, honest play against "Take your time".** Before M2 shows the crowd's numbers, the honest-play rule that leaves out
+  a "long look" is reconciled with the header's "Take your time"; SQL-5's owner brings a proposal.
+- **D34, the stop screen until the percentile ships.** One optional line may say that comparisons arrive with more players.
+- **D35, text size.** The play header and the tab bar's text scale with the user's text size (release criterion R2), in M2.
+- **Round 5 method.** All five play the same Daily (pin every driver's time zone); every persona reaches clue 4 in the
+  first Daily and says what will lock in the pick before the reveal; the spread and cross-pool checks are recorded before
+  play; evidence is copied beside the E2E reports.
