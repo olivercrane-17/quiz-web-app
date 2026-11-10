@@ -3423,6 +3423,7 @@ SEC-1 replaces the foundation's minimal policy in `next.config.ts` with this one
 ```text
 default-src 'self';
 script-src 'self' 'unsafe-inline';                                   ('unsafe-eval' added in development only)
+script-src-attr 'none';                                              (no inline event handlers, decisions memo §21)
 style-src 'self' 'unsafe-inline';
 img-src 'self' data: blob:;
 font-src 'self';
