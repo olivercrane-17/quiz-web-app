@@ -1,4 +1,4 @@
-import { readdirSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 
 import { screen, within } from "@testing-library/react";
@@ -14,6 +14,8 @@ import { renderWithUser } from "@/test/render";
 import { SHELL_COPY } from "./copy";
 import { LEGAL_LINKS } from "./footer";
 import { NOT_FOUND_METADATA } from "./not-found-metadata";
+import { PagePlaceholder, placeholderLine } from "./page-placeholder";
+import { SHELL_ROUTES, shellPath } from "./shell-routes";
 import { TABS } from "./tabs";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/no-such-page" }));
@@ -66,6 +68,21 @@ const GROUP_OF: Record<string, string> = {
   ...Object.fromEntries(LEGAL_LINKS.map((link) => [link.href, "(info)"])),
 };
 
+/**
+ * The source of the route module a page file re-exports (`export { default }
+ * from "@/features/..."`), or null when the page file is the screen itself.
+ */
+function routeModuleSource(pageFile: string): string | null {
+  const target = /from "@\/(.+?)"/.exec(readFileSync(pageFile, "utf8"));
+  if (target?.[1] === undefined) return null;
+  return readFileSync(join(process.cwd(), "src", `${target[1]}.tsx`), "utf8");
+}
+
+/** Whether a page is still its placeholder: its route module renders one. */
+function isPlaceholder(pageFile: string): boolean {
+  return /<PagePlaceholder\b/.test(routeModuleSource(pageFile) ?? "");
+}
+
 async function loadPage(
   file: string,
 ): Promise<{ default: ComponentType; metadata?: Metadata }> {
@@ -88,12 +105,28 @@ describe("every destination the shell draws", () => {
     expect(routes.get("/practice")?.group).toBe("(tabs)");
   });
 
-  it.each(
-    Object.keys(GROUP_OF)
-      .filter((href) => href !== "/" && !BUILT.has(href))
-      .map((href) => [href]),
-  )(
-    "R1-02 %s shows its title as the one h1, says it isn't ready and offers Go to Today",
+  /**
+   * The destinations that are still placeholders: Groups, Me and Settings
+   * today. Read from their route modules, so a destination drops out of
+   * these checks on its own the day its feature (GRP-1, STA-1, SET-1)
+   * replaces the placeholder, with no edit in src/features/shell.
+   */
+  const PLACEHOLDERS = Object.keys(GROUP_OF).filter((href) => {
+    if (href === "/" || BUILT.has(href)) return false;
+    const page = routes.get(href);
+    return page !== undefined && isPlaceholder(page.file);
+  });
+
+  /** RITE round 2's lines, word for word (docs/playtests/rite-2.md §6). */
+  const RITE_LINES: Record<string, string> = {
+    "/g": "Groups are on the way. Until then, paste your result into your group chat.",
+    "/me": "Your streak and past results will live here.",
+    "/settings":
+      "Settings are on the way. Hide stopwatch is in the Daily's menu.",
+  };
+
+  it.each(PLACEHOLDERS.map((href) => [href]))(
+    "R1-02 %s shows its title as the one h1, says what's coming and offers Go to Today",
     async (href) => {
       const page = routes.get(href);
       if (page === undefined) throw new Error(`no page for ${href}`);
@@ -102,7 +135,9 @@ describe("every destination the shell draws", () => {
       const headings = screen.getAllByRole("heading", { level: 1 });
       expect(headings).toHaveLength(1);
       expect(headings[0]).toHaveTextContent(String(metadata?.title));
-      expect(screen.getByText(SHELL_COPY.notReady)).toBeVisible();
+      expect(
+        screen.getByText(placeholderLine(String(metadata?.title))),
+      ).toBeVisible();
       expect(
         screen.getByRole("link", { name: SHELL_COPY.goToToday }),
       ).toHaveAttribute("href", "/");
@@ -110,6 +145,112 @@ describe("every destination the shell draws", () => {
       expect(metadata?.robots).toEqual({ index: false });
     },
   );
+
+  it("R2-07 each placeholder destination renders its own line on what's coming and what works now", async () => {
+    const lines = new Map<string, string>();
+    for (const href of PLACEHOLDERS) {
+      const page = routes.get(href);
+      if (page === undefined) throw new Error(`no page for ${href}`);
+      const { default: Page } = await loadPage(page.file);
+      const { container, unmount } = renderWithUser(<Page />);
+      const line = container.querySelector("[data-placeholder-line]");
+      lines.set(href, line?.textContent ?? "");
+      unmount();
+    }
+    // Every destination still a placeholder shows its RITE line; a built
+    // one is no longer checked, and a line left over for it is harmless.
+    expect(Object.fromEntries(lines)).toEqual(
+      Object.fromEntries(
+        Object.entries(RITE_LINES).filter(([href]) =>
+          PLACEHOLDERS.includes(href),
+        ),
+      ),
+    );
+    // Its own line, never another's, and never the general one.
+    expect(new Set(lines.values()).size).toBe(lines.size);
+    expect([...lines.values()]).not.toContain(SHELL_COPY.notReady);
+  });
+
+  /**
+   * The per-user shells (ARCHITECTURE §10.1) whose route module is still a
+   * stub, by address, with the title the stub passes: a link opens one of
+   * them before its feature ships. Read from the source, because a Beta
+   * stub is the not-found page while its flag is off.
+   */
+  const shellStubs = new Map<string, string>();
+  for (const route of SHELL_ROUTES) {
+    const href = shellPath(route.shell);
+    const page = routes.get(href);
+    if (page === undefined) throw new Error(`no page for ${href}`);
+    const source = routeModuleSource(page.file);
+    if (source === null) continue;
+    const title = /<PagePlaceholder\s+title="([^"]+)"/.exec(source);
+    if (title?.[1] !== undefined) shellStubs.set(href, title[1]);
+  }
+
+  it("R2-07 each placeholder shell a link opens has its own line too, never the general one", async () => {
+    expect(shellStubs.size).toBeGreaterThan(0);
+    for (const [href, title] of shellStubs) {
+      expect(placeholderLine(title), href).not.toBe(SHELL_COPY.notReady);
+      const page = routes.get(href);
+      if (page === undefined) throw new Error(`no page for ${href}`);
+      const { default: Page, metadata } = await loadPage(page.file);
+      // A Beta stub with its flag off is the not-found page, with no line.
+      if (metadata === NOT_FOUND_METADATA) continue;
+      const { container, unmount } = renderWithUser(<Page />);
+      expect(
+        container.querySelector("[data-placeholder-line]")?.textContent,
+        href,
+      ).toBe(placeholderLine(title));
+      unmount();
+    }
+  });
+
+  it("R2-07 every page that is still a placeholder has a line of its own, and no two lines are the same", async () => {
+    const titles = await Promise.all(
+      PLACEHOLDERS.map(async (href) => {
+        const page = routes.get(href);
+        if (page === undefined) throw new Error(`no page for ${href}`);
+        return String((await loadPage(page.file)).metadata?.title);
+      }),
+    );
+    // One way only: a line whose page has since been built is left over
+    // and harmless, so the ticket that builds the page needn't edit
+    // src/features/shell (memo §22); the DS owner removes it later.
+    for (const title of new Set([...titles, ...shellStubs.values()])) {
+      const lines: Record<string, string | undefined> = SHELL_COPY.comingSoon;
+      expect(lines[title], title).toBeDefined();
+    }
+    const all = Object.values(SHELL_COPY.comingSoon);
+    expect(new Set(all).size).toBe(all.length);
+  });
+
+  it.each(LEGAL_LINKS.map((link) => [link.href]))(
+    "R2-07 the footer's %s is LGL-1's real page, not a placeholder that needs a line",
+    async (href) => {
+      const page = routes.get(href);
+      if (page === undefined) throw new Error(`no page for ${href}`);
+      const { default: Page } = await loadPage(page.file);
+      const { container } = renderWithUser(<Page />);
+      expect(container.querySelector("[data-placeholder-line]")).toBeNull();
+      expect(screen.queryByText(SHELL_COPY.notReady)).toBeNull();
+    },
+  );
+
+  it("R2-07 a placeholder shows the line it is given, and an unknown one says it isn't ready yet", () => {
+    const { rerender } = renderWithUser(
+      <PagePlaceholder title="Group board" line="Boards come with Groups." />,
+    );
+    expect(screen.getByText("Boards come with Groups.")).toBeVisible();
+    expect(screen.queryByText(SHELL_COPY.notReady)).toBeNull();
+    rerender(<PagePlaceholder title="Somewhere new" />);
+    expect(screen.getByText(SHELL_COPY.notReady)).toBeVisible();
+    // A destination's own line comes by its title, which its stub passes.
+    rerender(<PagePlaceholder title={SHELL_COPY.tabs.groups} />);
+    expect(
+      screen.getByText(SHELL_COPY.comingSoon[SHELL_COPY.tabs.groups]),
+    ).toBeVisible();
+  });
 
   it("R1-09 gives each destination a title of its own, for the route announcer", async () => {
     const titles = await Promise.all(

@@ -276,6 +276,10 @@
   line-height: 1.3;
   letter-spacing: var(--kn-text-lead--letter-spacing);
   text-align: left;
+  /* An answer is never split with a hyphen ("bil-lion", RITE round 2
+   * R2-17), whatever the round around it sets: a word wider than its line
+   * still breaks (`.kn-answer-text`), without one. */
+  hyphens: manual;
   cursor: pointer;
   touch-action: manipulation;
   user-select: none;
@@ -540,51 +544,52 @@
 /* ----------------------------------------------------------------- Chips */
 
 /* DESIGN §6.14 and the prototype's chips: the category chip, hint chips and
- * the band chip. Every tone keeps a visible edge or a word.
+ * the band chip. Every tone carries a word, and an icon where it helps.
  *
- * A chip is a label, so it looks like a printed tag, never a button (RITE
- * round 1, R1-27): a 6 px corner, a hairline or a wash, no raised fill and
- * no pointer. Only a chip that is a link or a button gets the outlined
- * pill of a control (last rules), with its 44 px hit area from
+ * A chip is a label, so it is a flat mark, never a button (D11; RITE round
+ * 1 R1-27, round 2 R2-06): a wash with a 6 px corner, and no border, no
+ * ledge, no raised fill and no pointer. Round 1's hairline tag still read
+ * as a control to all five round-2 players, so no tone that D11 covers has
+ * an edge now; the Beta label keeps DESIGN §6.14's ink-2 outline. Only a
+ * chip that is a link or a button gets the outlined pill of a control
+ * (last rules), with its 44 px hit area from
  * `chipClasses({ interactive: true })`. */
 .kn-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   min-height: 24px;
-  padding: 1px 8px;
-  border: 1px solid var(--kn-rule-strong);
+  padding: 2px 9px;
+  border: 0;
   border-radius: 6px;
-  background-color: transparent;
+  background-color: var(--kn-sunken);
   color: var(--kn-ink-2);
   font-size: 0.8125rem;
   font-weight: 700;
   line-height: 1.2;
   text-decoration: none;
   white-space: nowrap;
-}
-.kn-chip[data-tone="sunken"] {
-  padding: 2px 9px;
-  border-width: 0;
-  background-color: var(--kn-sunken);
+  cursor: default;
 }
 .kn-chip[data-tone="correct"] {
-  border-color: var(--kn-correct-line);
   background-color: var(--kn-correct-tint);
   color: var(--kn-ink);
 }
 /* A count badge ("2 challenges waiting"): a round mark. */
 .kn-chip[data-tone="accent"] {
-  border-color: var(--kn-accent-ledge);
   border-radius: var(--kn-radius-pill);
   background-color: var(--kn-accent);
   color: var(--kn-on-accent);
 }
-/* The Beta label: outlined in ink-2, never orange (DESIGN §6.14). */
+/* The Beta label: a 22 px label outlined in ink-2, never orange (DESIGN
+ * §6.14). D11 and R2-06 flattened the header pills and the round and
+ * category chips; no decision changed the Beta label, so it keeps its
+ * outline and has no wash. */
 .kn-chip[data-tone="beta"] {
   min-height: 22px;
   padding: 0 8px;
-  border-color: var(--kn-ink-2);
+  border: 1px solid var(--kn-ink-2);
+  background-color: transparent;
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.02em;
@@ -612,12 +617,31 @@ button.kn-chip {
 /* DESIGN §6.6: the Daily's four pills and practice's ten segments. They
  * keep their size at 200% text (DESIGN §10.5), so their type is in px.
  *
- * Marks, never controls (RITE round 1, R1-08 and R1-27; D11): flat, with
- * no ledge, no raised fill and no pointer, so nobody taps one expecting it
- * to open a round. The current step carries an eft bar under it, the same
- * "you are here" mark as the active tab, rather than a ring that reads
- * like keyboard focus; `play-accent` turns ink with high-contrast feedback,
- * where orange means wrong (DESIGN §2.1). */
+ * Marks, never controls (D11; RITE round 1 R1-08 and R1-27, round 2
+ * R2-06): flat fills with no border, no ledge and no pointer, so nobody
+ * taps one expecting it to open a round. Round 1's outlined pills still
+ * read as buttons to all five round-2 players. A step not answered yet is
+ * a `sunken` wash; an answered one takes its verdict's fill, and its
+ * check, X, dash or points carry the verdict without colour (DESIGN §11).
+ *
+ * The step open now keeps the `sunken` wash, takes ink text where the
+ * others are ink-2, and has an eft bar under it: the active tab's "you are
+ * here" mark. It is never filled in ink with cream text, the primary
+ * button's pairing ("Play today's Daily", "See your results"), which made
+ * it read as the selected segment of a control (D11). Once resolved it
+ * keeps its verdict's fill and the bar. Nothing about it is a ring outside
+ * it, so it never reads as keyboard focus (R2-06). `play-accent` turns ink
+ * with high-contrast feedback, where orange means wrong (DESIGN §2.1).
+ *
+ * A step locked in with no right or wrong (the Encore) is filled in ink-2
+ * with its mark in `surface`, so after Lock in it no longer looks like a
+ * pill nobody has played (R2-06's "E stays blank").
+ *
+ * Practice's segments hold no text, so one not answered yet, the open one
+ * included, has a 1 px `rule-strong` edge, 3:1 against the wash and the
+ * page (WCAG 1.4.11, R2-28). It is an outline drawn inside the segment, so
+ * it adds no border and never sits outside the segment the way a focus
+ * ring does. */
 .kn-progress {
   display: flex;
   align-items: center;
@@ -636,12 +660,14 @@ button.kn-chip {
   display: inline-grid;
   flex: none;
   place-items: center;
-  border: 1px solid var(--kn-rule-strong);
-  background-color: transparent;
-  color: var(--kn-ink-3);
+  border: 0;
+  background-color: var(--kn-sunken);
+  color: var(--kn-ink-2);
   font-variant-numeric: tabular-nums;
   /* A step fills with its verdict at the 400 ms reveal (DESIGN §7.3). */
-  transition: background-color 200ms var(--kn-ease-out);
+  transition:
+    background-color 200ms var(--kn-ease-out),
+    color 200ms var(--kn-ease-out);
 }
 /* 38 by 30, giving up width before the header would run off a narrow
  * screen (R1-03): never under 28 px, which still fits "+3" and "M3". */
@@ -654,9 +680,18 @@ button.kn-chip {
   font-size: 15px;
   font-weight: 700;
   line-height: 1;
+  white-space: nowrap;
 }
-/* Geometry only: the status rules below colour an answered segment, so
- * only an unanswered one is the empty well. */
+/* A longer mark, such as the Encore's % off once it is locked in (R2-06),
+ * steps down to stay inside the pill at its narrowest (./mark-fit.ts). */
+.kn-progress[data-variant="pills"] .kn-step[data-fit="snug"] {
+  font-size: 12px;
+}
+.kn-progress[data-variant="pills"] .kn-step[data-fit="tight"] {
+  font-size: 10px;
+  letter-spacing: -0.02em;
+}
+/* Geometry only: the status rules below colour each segment. */
 .kn-progress[data-variant="bar"] .kn-step {
   flex: 1;
   min-width: 0;
@@ -665,14 +700,10 @@ button.kn-chip {
   font-size: 11px;
   font-weight: 700;
 }
+/* The empty well's edge (R2-28), inside it, on the open one too. */
 .kn-progress[data-variant="bar"] .kn-step[data-status="upcoming"] {
-  border-width: 1px;
-  border-color: var(--kn-rule);
-  background-color: var(--kn-sunken);
-}
-.kn-progress[data-variant="bar"]
-  .kn-step[data-status="upcoming"][data-current] {
-  border: 2px solid var(--kn-ink);
+  outline: 1px solid var(--kn-rule-strong);
+  outline-offset: -1px;
 }
 /* The verdict glyphs, drawn as heavily as the prototype's (DESIGN §6.6). */
 .kn-progress[data-variant="pills"] .kn-step svg {
@@ -685,30 +716,26 @@ button.kn-chip {
   font-style: italic;
   font-weight: 450;
 }
-/* The one open now: an ink edge, the same flat face. */
-.kn-step[data-current] {
-  border: 2px solid var(--kn-ink);
+/* The one open now and not yet answered: the wash, in ink, with the bar. */
+.kn-step[data-status="upcoming"][data-current] {
   color: var(--kn-ink);
 }
 .kn-step[data-status="correct"] {
-  border: 1.5px solid var(--kn-correct-line);
   background-color: var(--kn-correct);
   color: var(--kn-on-correct);
 }
 .kn-step[data-status="wrong"] {
-  border: 1.5px dashed var(--kn-incorrect-line);
   background-color: var(--kn-incorrect-tint);
   color: var(--kn-incorrect-text);
 }
+/* Withdrawn: the wash and a dash. Locked in with no right or wrong (the
+ * Encore): an ink-2 fill with its mark in `surface`, 4.5:1 and more. */
 .kn-step[data-status="voided"] {
-  border: 1.5px dotted var(--kn-rule-strong);
-  background-color: transparent;
   color: var(--kn-ink-2);
 }
 .kn-step[data-status="done"] {
-  border: 1.5px solid var(--kn-ink-2);
-  background-color: var(--kn-sunken);
-  color: var(--kn-ink);
+  background-color: var(--kn-ink-2);
+  color: var(--kn-surface);
 }
 /* Current, resolved or not: the eft bar under the step. */
 .kn-step[data-current]::after {
@@ -1287,14 +1314,29 @@ button.kn-watch::after {
   .kn-ticket-stub::before {
     border-color: CanvasText;
   }
+  /* The fills drop out, so every step gets an edge back: solid, double
+   * for right, dashed for wrong, dotted for withdrawn. It takes the place
+   * of a well's outline. The step open now stays filled, inverted in the
+   * system's colours, as the clue ladder's current rung is. */
   .kn-step {
-    border-color: CanvasText;
+    border: 1px solid CanvasText;
+  }
+  .kn-progress[data-variant="bar"] .kn-step[data-status="upcoming"] {
+    outline: 0;
+  }
+  .kn-step[data-status="upcoming"][data-current] {
+    background-color: CanvasText;
+    color: Canvas;
+    forced-color-adjust: none;
   }
   .kn-step[data-status="correct"] {
     border: 3px double CanvasText;
   }
   .kn-step[data-status="wrong"] {
     border: 2px dashed CanvasText;
+  }
+  .kn-step[data-status="voided"] {
+    border: 2px dotted CanvasText;
   }
   /* The current step's bar, in the system's highlight colour. */
   .kn-step[data-current]::after {

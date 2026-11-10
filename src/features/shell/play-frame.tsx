@@ -8,6 +8,11 @@
  * outside `<main>` is the page's banner landmark. The `(play)` layout adds
  * the skip link and the live regions around it. `<main>` carries the
  * landmark's id only while its route is on screen (`MainLandmark`).
+ *
+ * `.kn-play-main` (shell.css) sets `hyphens: manual` for everything a
+ * play screen's text inherits (RITE round 2, R2-17). An element with its
+ * own `hyphens` utility still overrides it, as the Mystery's clue text
+ * does until FIX2-MYS drops its `hyphens-auto`.
  */
 import type { ReactNode } from "react";
 
@@ -28,7 +33,10 @@ export function PlayFrame({ header, children, className }: PlayFrameProps) {
     <>
       <PlayHeader {...header} />
       <MainLandmark
-        className={cx("flex w-full flex-1 flex-col outline-none", className)}
+        className={cx(
+          "kn-play-main flex w-full flex-1 flex-col outline-none",
+          className,
+        )}
       >
         {children}
       </MainLandmark>

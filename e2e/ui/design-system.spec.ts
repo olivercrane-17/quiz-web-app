@@ -202,6 +202,10 @@ test.describe("accessibility", () => {
     }) => {
       await page.setViewportSize({ width, height });
       await openToday(page);
+      // Today's late slots settle first, so nothing above a focused link
+      // grows and pushes it under the tab bar between the Tab and the
+      // check (a flake on a loaded machine, at the footer's Terms).
+      await page.waitForLoadState("networkidle");
       await page.evaluate((size) => {
         document.documentElement.style.fontSize = size;
       }, text);
@@ -244,26 +248,34 @@ test.describe("practice's progress segments", () => {
   // A run of first options may hold no right answer; the helper plays on.
   test.describe.configure({ timeout: 120_000 });
 
-  test("fill with their verdict: teal and a check for a right answer, the incorrect tint and a dashed edge for a wrong one", async ({
+  test("fill with their verdict: teal and a check for a right answer, the incorrect tint and an X for a wrong one, flat and edgeless (R2-06)", async ({
     page,
   }) => {
     await page.emulateMedia({ colorScheme: "light" });
     await answerUntilRightAndWrong(page);
     const right = segment(page, "correct").first();
     await expect(right).toHaveCSS("background-color", "rgb(11, 102, 112)");
-    await expect(right).toHaveCSS("border-top-color", "rgb(11, 102, 112)");
+    await expect(right).toHaveCSS("border-top-width", "0px");
     // The cream check on teal: 7.2:1, where the empty well gave it 1.22:1.
     await expect(right.locator("svg")).toHaveCSS("color", "rgb(255, 251, 245)");
     const wrong = segment(page, "wrong").first();
     await expect(wrong).toHaveCSS("background-color", "rgb(248, 224, 225)");
-    await expect(wrong).toHaveCSS("border-top-style", "dashed");
-    await expect(wrong).toHaveCSS("border-top-color", "rgb(180, 42, 60)");
-    // Only an unanswered segment is the empty well.
-    const upcoming = segment(page, "upcoming");
+    await expect(wrong).toHaveCSS("border-top-width", "0px");
+    // The X says it without colour, in the incorrect text colour on its tint.
+    await expect(wrong.locator("svg")).toHaveCSS("color", "rgb(163, 37, 54)");
+    // Only an unanswered segment is the empty well, with its edge inside
+    // (the one open now too, with the bar under it).
+    const upcoming = segment(page, "upcoming").and(
+      page.locator(":not([data-current])"),
+    );
     if ((await upcoming.count()) > 0) {
       await expect(upcoming.last()).toHaveCSS(
         "background-color",
         "rgb(236, 228, 214)",
+      );
+      await expect(upcoming.last()).toHaveCSS(
+        "outline-color",
+        "rgb(138, 127, 112)",
       );
     }
   });
@@ -414,20 +426,28 @@ test.describe("forced colours", () => {
     await page.goto("/daily");
     const current = page.locator('.kn-step[aria-current="step"]');
     await expect(current).toHaveCount(1);
-    // The current pill's mark is its bar, kept in the system's highlight
-    // colour, rather than a ring that reads like focus (R1-08).
-    const bar = await current.evaluate((step) => {
-      const css = getComputedStyle(step, "::after");
+    // The current pill's marks are its bar, kept in the system's highlight
+    // colour, and its fill, inverted in the system's colours as the clue
+    // ladder's current rung is, rather than a ring that reads like focus
+    // (R1-08, R2-06).
+    const look = await current.evaluate((step) => {
+      const css = getComputedStyle(step);
+      const after = getComputedStyle(step, "::after");
       return {
-        content: css.content,
-        height: css.height,
+        content: after.content,
+        height: after.height,
+        bar: after.backgroundColor,
         fill: css.backgroundColor,
+        text: css.color,
       };
     });
-    expect(bar.content).not.toBe("none");
-    expect(bar.height).toBe("3px");
-    expect(bar.fill).not.toBe("rgba(0, 0, 0, 0)");
+    expect(look.content).not.toBe("none");
+    expect(look.height).toBe("3px");
+    expect(look.bar).not.toBe("rgba(0, 0, 0, 0)");
+    expect(look.fill).not.toBe("rgba(0, 0, 0, 0)");
+    expect(look.fill).not.toBe(look.text);
     await expect(current).toHaveCSS("outline-style", "none");
+    // The others get their edge back, since their fills drop out.
     const upcoming = page.locator(".kn-step:not([aria-current])").first();
     await expect(upcoming).toHaveCSS("border-top-style", "solid");
     await expect(upcoming).toHaveCSS("outline-style", "none");

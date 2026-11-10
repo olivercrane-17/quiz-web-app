@@ -203,6 +203,9 @@
   --kn-on-ticket: #1d1a16;
   --kn-ticket-ledge: #b9481f;
   --kn-ticket-card: #ed8c63;
+  /* The score card's inset (R2-09): cream here, charcoal in dark. FIX2-DLY
+   * draws the inset on its card with it; the tokens test holds its pairs. */
+  --kn-card-inset: #fffbf5;
   --kn-ticket-invert: #1d1a16;
   --kn-on-ticket-invert: #f28a5c;
   --kn-focus-on-ticket: #1d1a16;
@@ -278,6 +281,7 @@
     --kn-on-ticket: #f7eee1;
     --kn-ticket-ledge: #5e230c;
     --kn-ticket-card: #873314;
+    --kn-card-inset: #13110e;
     --kn-ticket-invert: #1a1714;
     --kn-on-ticket-invert: #f59466;
     --kn-focus-on-ticket: #f7eee1;
@@ -348,6 +352,7 @@
   --kn-on-ticket: #f7eee1;
   --kn-ticket-ledge: #5e230c;
   --kn-ticket-card: #873314;
+  --kn-card-inset: #13110e;
   --kn-ticket-invert: #1a1714;
   --kn-on-ticket-invert: #f59466;
   --kn-focus-on-ticket: #f7eee1;
@@ -918,6 +923,16 @@
     background: none;
     color: inherit;
     font-weight: 800;
+  }
+  /* Placeholder text holds 4.5:1 on every surface a field sits on, in both
+   * themes (WCAG 1.4.3; RITE round 2, R2-28). Tailwind's preflight mixes it
+   * from half the text colour, about 3.3:1 on cream, and that is what the
+   * guess field showed. A field's own placeholder utility still wins: the
+   * Mystery's guess field adds `placeholder:opacity-60` (2.6:1 light, 3.1:1
+   * dark) until FIX2-MYS drops it; e2e/ui/rite-2.spec.ts holds that check
+   * as fixme. */
+  ::placeholder {
+    color: var(--kn-ink-3);
   }
   @media (forced-colors: active) {
     body::before {

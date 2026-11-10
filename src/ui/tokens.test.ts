@@ -167,6 +167,47 @@ const CONTRAST_PAIRS: [string, string, number][] = [
   ["chart-you", "surface", 3],
 ];
 
+/**
+ * The flat marks (RITE round 2, R2-06 and R2-28), which no border outlines
+ * any more: a pill's mark on its wash (the current step's in ink), a
+ * locked-in Encore's mark in `surface` on its ink-2 fill, the inner edge of
+ * practice's empty segments against their wash and the page, a verdict's
+ * glyph on its fill,
+ * and placeholder text (globals.css) on every surface a field sits on.
+ */
+const MARK_PAIRS: [string, string, number][] = [
+  ["ink-2", "sunken", 4.5],
+  ["ink", "sunken", 4.5],
+  ["surface", "ink-2", 4.5],
+  ["rule-strong", "sunken", 3],
+  ["rule-strong", "page", 3],
+  ["on-correct", "correct", 4.5],
+  ["incorrect-text", "incorrect-tint", 4.5],
+  ["ink-3", "page", 4.5],
+  ["ink-3", "surface", 4.5],
+  ["ink-3", "sunken", 4.5],
+];
+
+/**
+ * The score card's inset (RITE round 2, R2-09): the inset against the
+ * ticket-toned card it sits on, and the rows' text on it.
+ */
+const INSET_PAIRS: [string, string, number][] = [
+  ["card-inset", "ticket", 3],
+  ["ink", "card-inset", 4.5],
+];
+
+/**
+ * 🟧 is drawn by the emoji font, not by a token: approximate fills of the
+ * orange square in the fonts `--kn-font-emoji` names (Apple, Segoe UI and
+ * Noto Color Emoji). On the orange card it nearly vanished (about 1.1 to
+ * 1.5:1, R2-09). On the inset it holds 3:1 in dark. In light no cream can
+ * reach 3:1 against a mid orange, so the inset more than doubles the
+ * card's contrast there and keeps at least 2.2:1, with the legend's words
+ * beside the squares (PRD §3.5.1).
+ */
+const EMOJI_ORANGES = ["#f4900c", "#f7630c", "#f57c00"];
+
 /** Readable text changes the paper; text on it must still hold. */
 const READABLE_PAIRS: [string, string, number][] = [
   ["ink", "page", 4.5],
@@ -197,10 +238,52 @@ describe("design tokens", () => {
   });
 
   describe.each([
+    ["light", light],
+    ["dark", dark],
+    ["light with high-contrast feedback", contrastLight],
+    ["dark with high-contrast feedback", contrastDark],
+    ["light with readable text", readableLight],
+    ["dark with readable text", readableDark],
+  ])("R2-09 the score card's inset, %s", (_name, tokens) => {
+    it.each(INSET_PAIRS)("%s on %s holds %s:1", (fg, bg, target) => {
+      expect(ratio(tokens, fg, bg)).toBeGreaterThanOrEqual(target);
+    });
+  });
+
+  it.each(EMOJI_ORANGES)(
+    "R2-09 🟧 (%s) shows on the inset far better than on the orange card",
+    (orange) => {
+      for (const [theme, tokens, floor] of [
+        ["light", light, 2.2],
+        ["dark", dark, 3],
+      ] as const) {
+        const withOrange = { ...tokens, orange };
+        const onInset = ratio(withOrange, "orange", "card-inset");
+        const onCard = ratio(withOrange, "orange", "ticket");
+        expect(onInset, theme).toBeGreaterThanOrEqual(floor);
+        expect(onInset, theme).toBeGreaterThanOrEqual(onCard * 1.5);
+      }
+    },
+  );
+
+  describe.each([
     ["light", readableLight],
     ["dark", readableDark],
   ])("%s theme with readable text", (_name, tokens) => {
     it.each(READABLE_PAIRS)("%s on %s holds %s:1", (fg, bg, target) => {
+      expect(ratio(tokens, fg, bg)).toBeGreaterThanOrEqual(target);
+    });
+  });
+
+  describe.each([
+    ["light", light],
+    ["dark", dark],
+    ["light with high-contrast feedback", contrastLight],
+    ["dark with high-contrast feedback", contrastDark],
+    ["light with readable text", readableLight],
+    ["dark with readable text", readableDark],
+  ])("R2-06 and R2-28 the flat marks, %s", (_name, tokens) => {
+    it.each(MARK_PAIRS)("%s on %s holds %s:1", (fg, bg, target) => {
       expect(ratio(tokens, fg, bg)).toBeGreaterThanOrEqual(target);
     });
   });

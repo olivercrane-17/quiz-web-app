@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { renderWithUser } from "@/test/render";
 
+import { markFit } from "./mark-fit";
 import { ProgressSegments } from "./progress-segments";
 
 describe("ProgressSegments", () => {
@@ -74,5 +75,34 @@ describe("ProgressSegments", () => {
         name: "Question 4 of 10. 2 right, 1 wrong so far.",
       }),
     ).toHaveAttribute("data-variant", "bar");
+  });
+
+  it("R2-06 steps a longer mark's type down, by character, so the Encore's % off fits its pill", () => {
+    expect(markFit(undefined)).toBeUndefined();
+    for (const mark of ["E", "M3", "+4", "🎯", "4%"]) {
+      expect(markFit(mark), mark).toBeUndefined();
+    }
+    expect(markFit("13%")).toBe("snug");
+    expect(markFit("<1%")).toBe("snug");
+    expect(markFit("100%")).toBe("tight");
+    renderWithUser(
+      <ProgressSegments
+        label="Daily progress"
+        segments={[
+          { status: "correct", mark: "+4", label: "Mystery 1, 4 points" },
+          { status: "wrong", label: "Mystery 2, missed" },
+          { status: "voided", mark: "M3", label: "Mystery 3, withdrawn" },
+          { status: "done", current: true, mark: "13%", label: "Encore" },
+        ]}
+      />,
+    );
+    const steps = screen.getAllByRole("listitem");
+    expect(steps.map((step) => step.getAttribute("data-fit"))).toEqual([
+      null,
+      null,
+      // A withdrawn round shows its dash, never its mark.
+      null,
+      "snug",
+    ]);
   });
 });
