@@ -1,5 +1,5 @@
-import { screen, within } from "@testing-library/react";
-import { createRef, useState, type MouseEvent } from "react";
+import { act, screen, waitFor, within } from "@testing-library/react";
+import { Activity, createRef, useState, type MouseEvent } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { renderWithUser } from "@/test/render";
@@ -85,6 +85,33 @@ describe("Stopwatch", () => {
     await user.click(button);
     expect(onClick).toHaveBeenCalledOnce();
     expect(openedFrom).toBe(button);
+  });
+
+  it("R3-09 leaves nothing behind in a hidden route, and comes back when the route shows", async () => {
+    // Next hides a visited route in <Activity>: the results page kept the
+    // Daily's "Time so far 6:33" in the document.
+    function Route({ mode }: { mode: "visible" | "hidden" }) {
+      return (
+        <Activity mode={mode}>
+          <Stopwatch time="6:33" label="Time so far" />
+        </Activity>
+      );
+    }
+    const { rerender } = renderWithUser(<Route mode="visible" />);
+    expect(screen.getByText("6:33", { exact: false })).toHaveTextContent(
+      "Time so far 6:33",
+    );
+    await act(async () => {
+      rerender(<Route mode="hidden" />);
+    });
+    await waitFor(() => {
+      expect(document.querySelector("[data-stopwatch]")).toBeNull();
+    });
+    expect(document.body).not.toHaveTextContent("Time so far");
+    await act(async () => {
+      rerender(<Route mode="visible" />);
+    });
+    expect(screen.getByText("6:33", { exact: false })).toBeVisible();
   });
 });
 

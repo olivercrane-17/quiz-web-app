@@ -14,4 +14,9 @@ export const SHELL_CLIENT_COPY = {
     groups: "Groups",
     me: "Me",
   },
+  /**
+   * Said when the More menu hides the Daily's stopwatch, which otherwise
+   * just vanished (RITE rounds 2 and 3, R2-29 and R3-09).
+   */
+  stopwatchHidden: "Stopwatch hidden. Show it again from More.",
 } as const;
