@@ -10,7 +10,7 @@
  * CI rebuilds it and fails on any difference (ARCHITECTURE §5.3).
  */
 export const FIXTURE_DATA = {
-  version: "b813db73",
+  version: "730c1587",
   mysteries: [
     {
       id: "fx.m.film.0101",
@@ -29,7 +29,7 @@ export const FIXTURE_DATA = {
       accepted: [],
       clues: [
         "Its hero tends a light on a sea rock for thirty winters, with a grey cat for company.",
-        "This fixture film won the Gold Gull prize in 1988, the year after it came out.",
+        "It won the fixture Gold Gull prize in 1988, the year after it came out.",
         "Its title names the job of whoever tends the lamp at the top of a lighthouse.",
         "One word of its title names the glass room that holds a lighthouse's lamp.",
       ],

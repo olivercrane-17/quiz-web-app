@@ -1580,7 +1580,7 @@ describe("reporting", () => {
 
 describe("X35 clue-4 options against clue 3's letters (RITE round 3, R3-04)", () => {
   /** The fixture Mystery with clue 3 replaced. */
-  const withClue3 = (clue3: string, distractors?: string[]) => {
+  const withClue3 = (clue3: string, distractors?: [string, string, string]) => {
     const base = fxMystery();
     return fxMystery({
       clues: [base.clues[0]!, base.clues[1]!, clue3, base.clues[3]!],
@@ -1617,10 +1617,11 @@ describe("X35 clue-4 options against clue 3's letters (RITE round 3, R3-04)", ()
 
   it("R3-04 passes options that keep clue 3's letters, and says nothing of a clue with no letter rule", async () => {
     const fair = await lint({
-      [MYS]: withClue3(
-        "Its name ends with the letter A.",
-        ["Marisca", "Kestavia", "Fendara"].map(countryId),
-      ),
+      [MYS]: withClue3("Its name ends with the letter A.", [
+        countryId("Marisca"),
+        countryId("Kestavia"),
+        countryId("Fendara"),
+      ]),
     });
     expect(of(fair, "X35")).toEqual([]);
     // The fixture bank's own clue 3 names a river, not a letter.
