@@ -284,7 +284,7 @@ These rules apply to multiple choice, true/false, comparison, the four options o
 - **Timing.** Pressed state in the same frame (INP target 200 ms or less). Lock-in state by 150 ms. Reveal at 400 ms (tunable): the right answer shows a check and the words "Correct answer"; a wrong pick shows an X and "Your answer"; other options dim but keep 4.5:1 text contrast. In sealed modes the reveal waits for the server verdict; past 1.5 s it shows "Checking...". A count-up of points runs from 400 to 900 ms with `tabular-nums`.
 - **Explanation sheet.** Rises at about 1.2 s as an overlay, so nothing shifts. It holds the explanation (35 words or fewer), a "Learn more" link (a Wikipedia search for the answer, opened in a new tab), the heart toggle (§3.13.5) and "Report a problem" (§3.13). It stays until the player taps Continue, which sits where the answers were. Auto-advance is off unless the player turns it on (§3.12), and then waits 2 s plus 0.25 s per word.
 - **Screen readers.** Focus moves to each new question's heading. Verdicts go to a polite status region: "Correct. Paris." or "Not quite. You chose Lyon. The answer is Paris." `role="alert"` is reserved for a lost connection during a sealed round.
-- **Keyboard.** Keys 1 to 4 pick options while focus is inside the question region, and can be switched off (§3.12). Enter activates Continue.
+- **Keyboard.** Keys A to D pick options, matching the badges, and digits 1 to 4 only where no option reads as a number (memo D6). They act only while focus is on an option or its options group (D20), and can be switched off (§3.12). In practice a key answers at once, and a legend above the options says so once a keyboard is in use: "Keys A to D answer at once.", naming only the letters on screen. On a Mystery's options, focus moves to the options group as they appear and the legend "Keys A to D choose. Enter locks in." shows above them from then on; a key chooses, and Enter or the same key again locks it in (D28). Enter activates Continue.
 - **Motion.** A wrong pick gets a soft 6 px, two-cycle shake, which becomes a color fade under reduced motion. Nothing flashes more than three times a second.
 - **Celebration.** Each correct answer: a pop, a count-up and (if sound is on) a chime. A perfect Daily (12/12) gets confetti, lazy-loaded and disabled under reduced motion. Never confetti on every answer, never "so close!" when it wasn't close, and every celebration can be skipped with a tap.
 
@@ -303,7 +303,7 @@ Warm and plain. Short sentences. No guilt, no fake urgency, no shouting in capit
 - One Daily per calendar date, the same for everyone. It unlocks at the player's local midnight and stays "today" for them until their next local midnight (§4.4.1).
 - v1 composition: Mystery 1 (easy), Mystery 2 (medium), Mystery 3 (hard), then the Encore. Score out of 12 from the Mysteries; the Encore scores no points and is the first tiebreaker. Precise rules: Mystery §4.1, Encore §4.2, ranking and percentile §4.3.
 - One ranked run per player per local date. No account, name or tutorial before the first clue.
-- Untimed. A small stopwatch, hideable, measures time; nothing ever times out; time only breaks ties.
+- No time limit. A small stopwatch, hideable, measures time; nothing ever times out; time only breaks ties. The player-facing words are "no time limit", never "untimed", because the stopwatch runs (memo D27).
 - Sealed. Clues are issued one at a time by RPC, and the answer reaches the client only when the round resolves. Validation and scoring happen in Postgres.
 - Free forever. The Daily's code path contains no entitlement, paywall or ad check.
 - Online only. If the backend is unreachable, the Daily shows its offline state and offers Practice. We never fake a Daily offline. (This departs from constraint 1 for the one ranked solo mode; CTO sign-off is open question Q1.)
@@ -402,7 +402,7 @@ The stop screen stays available all day from the home card ("See results"). Perc
 
 | State | Card |
 |---|---|
-| Not started | "Daily #42 · Sunday 1 November · About 4 minutes", the one-line rule "Fewer clues, more points. Then one number.", one chip per round from `get_today` (answer type and difficulty, such as "A film · Medium" and "Encore · a number"; answer types aren't secret, since each Mystery names its type at clue 1), the played count ("4,812 played": finished ranked runs so far today, shown from 50), one Play button above the fold at 360 by 640, and a "Past 7 days" link to `/archive` |
+| Not started | "Daily #42 · Sunday 1 November · About 4 minutes · no time limit" (D27), the one-line rule "Fewer clues, more points. Then one number.", one chip per round from `get_today` (answer type and difficulty, such as "A film · Medium" and "Encore · a number"; answer types aren't secret, since each Mystery names its type at clue 1), the played count ("4,812 played": finished ranked runs so far today, shown from 50), one Play button above the fold at 360 by 640, and a "Past 7 days" link to `/archive` |
 | In progress | "Continue Daily #42 · Mystery 2 of 3", Continue, and the Past 7 days link |
 | Finished | "Done for today · 9/12" with the mini grid, Share (secondary, the same text as §3.5.1, so a player can re-post when the chat wakes up), "See results", one Group line for the first Group in `/g`'s order ("Uni lot: 2nd of 6 so far today", hidden when the player is in no Group), "Next Daily in 5h 12m" and the Past 7 days link |
 | Offline | "The Daily needs a connection. Practice works offline, but it isn't today's Daily." with Try again, and the Practice card promoted. The number, date, minutes and rule line still render; chips show their placeholders, and the played count and Group line are hidden |
@@ -1965,7 +1965,7 @@ Each flow names the route at each step. "One tap" means one activation from the 
 ### 5.2 Returning player, next day
 
 1. Priya opens `/` from her home screen icon or a bookmark. The client finds her identity in local storage (or restores it from the backup cookie) and reads her streak.
-2. The home card shows "Daily #43 · About 4 minutes", the rule line, today's round chips and Play; the streak chip reads "Streak 1".
+2. The home card shows "Daily #43 · About 4 minutes · no time limit", the rule line, today's round chips and Play; the streak chip reads "Streak 1".
 3. She plays and finishes. The score card's streak line reads "Streak 2", and the Groups row shows "Uni lot: 3rd of 4 so far today · 2 not yet". She shares to her uni group.
 4. On her third finish, the offer card proposes the sync code (system browser). On a later stop screen she may see the calendar reminder or the install pitch, one card at a time.
 

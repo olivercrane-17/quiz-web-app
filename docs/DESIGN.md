@@ -86,7 +86,7 @@ Copy in the PRD stays the intended wording; this table is the polished version f
 | Moment | Copy | Notes |
 |---|---|---|
 | Greeting | Good morning. / Good afternoon. / Good evening. | By the player's local time |
-| Daily ticket | Today's Daily · No. 42 · Three Mysteries and an Encore · Fewer clues, more points. Then one number. · About 3 minutes, untimed · 4,812 played | The count shows from 50 finishers |
+| Daily ticket | Today's Daily · No. 42 · Three Mysteries and an Encore · Fewer clues, more points. Then one number. · About 4 minutes · no time limit · 4,812 played | The count shows from 50 finishers. "No time limit", not "untimed": the stopwatch runs, because time breaks ties (memo D27) |
 | Play | Play today's Daily | |
 | First clue, first Daily only | Guess the person from the clue. Type to see suggestions, or tap Next clue for an easier one. | The answer type changes |
 | Stopwatch, first Daily only | Take your time. Time only breaks ties. | |
@@ -425,7 +425,7 @@ Full width minus gutters, at least 56 px tall (built at 60), 12 px gaps, 18 px l
 |---|---|---|---|---|---|
 | Idle | `surface` / 1.5 px `rule-strong`, 4 px ledge | Letter on `sunken` | `ink` 18/600 | | |
 | Hover (pointer) | Border `ink-2` | | | | |
-| Keyboard focus | Focus ring outside the border | | | | Keys 1 to 4 pick while focus is in the question |
+| Keyboard focus | Focus ring outside the border | | | | Keys A to D pick while focus is on an option or its group; digits 1 to 4 only where no option is a number (memo D6, D20). On a Mystery's options the group takes focus as they appear, and a key chooses before Enter locks in (D28) |
 | Pressed | Border `ink`, sinks 2 px, ledge 2 px | | | | Same frame as `pointerdown` |
 | Locked in | 2.5 px `selected` border | | | | By 150 ms; 10 ms haptic if on |
 | Checking (sealed) | Locked look held | | | "Checking…" under the question after 1.5 s | The verdict waits for the server |
@@ -517,7 +517,7 @@ The streak is a tally, never a flame: a flame borrows Duolingo's and Snapchat's 
 ### 6.9 Toasts and status messages
 
 - **Status region:** every screen has one visually hidden polite `role="status"` region for verdicts, counts, confirmations and errors. `role="alert"` is reserved for losing the connection during a sealed round.
-- **Toast:** an ink pill (`primary` fill, `on-primary` text, icon on the left), 16 px above the tab bar or dock, max width 420 px, one at a time, 4 s, tap to dismiss, never covering a primary button. It mirrors its text into the status region. Undo toasts (the editor's delete) stay 10 s with an "Undo" text button.
+- **Toast:** an ink pill (`primary` fill, `on-primary` text, icon on the left), 16 px above the tab bar or dock, max width 420 px, one at a time, 4 s, tap to dismiss, never covering a control. While a control sits under that place and none sits 16 px below the sticky header, the toast shows there instead, and moves back once the bottom is clear; when both places cover a control, it sinks toward the bar, to no less than 4 px above it. It checks again as the page changes, scrolls or resizes (RITE round 3, R3-08). It mirrors its text into the status region. Undo toasts (the editor's delete) stay 10 s with an "Undo" text button.
 - Toasts confirm: "Copied. Paste it into your group chat.", "Saved", "Report sent", "We'll send this when you're back online." Errors never use a toast; they sit next to what failed.
 
 ### 6.10 Sheets, dialogs, offer cards and banners
@@ -558,6 +558,8 @@ https://knewt.app/s/42/k3x9q
 Device tests before M3 exits (PRD Q5): VoiceOver and TalkBack read the block, in particular whether "9/12" is read as a date and "·" as "middle dot"; if either happens, switch to "9 of 12" and commas.
 
 Other share strings (PRD copy): challenge "I scored 9/12 on Knewt Daily #42. Can you beat me?"; group invite "Join our Knewt Group, Uni lot, and compare Daily scores."; practice "Knewt Practice · Geography · Hard · 8/10", "Knewt Blitz · 1,240 points in 60 s", "Knewt Survival · 31 correct".
+
+**The score card's rows** (stop screen) sit with their legend on an inset inside the orange card: cream with ink in light (`card-inset`, `on-card-inset`), charcoal with cream ink in dark. On charcoal every share glyph holds at least 4:1; on a dark-theme cream 🟧 was about 2.1:1 and ⬜ 1:1. In light, 🟧 keeps about 2.3:1 and ⬜ shows by its grey outline, as in a light chat (R2-09, memo §26).
 
 **The Share button** (stop screen, secondary style) shows a 4 by 3 mini grid of the player's own result inside it (6 px squares in the share colours), so it previews what will be posted. Web Share with the clipboard as fallback, then a selected read-only text box with "Copy this text" if both fail. `share_complete` fires only when the share resolves or the copy succeeds.
 
