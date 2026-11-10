@@ -805,6 +805,7 @@ describe("the sealed-content scan", () => {
       encoding: "utf8",
       // Never the machine's own key: HOME is the throwaway build.
       env: {
+        NODE_ENV: "test",
         PATH: process.env.PATH ?? "",
         HOME: build.root,
         QZ_CONTENT_KEY: master.toString("base64"),
