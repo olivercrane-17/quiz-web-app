@@ -301,3 +301,17 @@ below. They override the PRD, DESIGN.md and §19 where they differ, until those 
   rested on a tiebreak with Tier C evidence, which rule 3 doesn't count, and the only path that reopens an active item
   (an invalid_check incident) would wrongly accuse a checker whose work was real. A future tool to reopen an active item
   for a §9.10 re-check would avoid such losses.
+
+## 26. Decisions after RITE round 3 (10 November 2026)
+Round 3 (`docs/playtests/rite-3.md`) found no P0 and no P1 confusion in four reported sessions, one P1 defect, and a fifth
+session that returned no report. M1 doesn't exit yet; round 4 runs five complete sessions on a build with the fixes below.
+- **D27, the Today card's timing.** "About 4 minutes · no time limit" replaces "untimed", since time breaks ties.
+- **D28, focus at clue 4 (amends D20).** When the four options appear, focus moves to the options group, which is labelled
+  by the clue, and the key legend shows from then on, so A then Enter works with no Tab. Typing a name from an option still
+  commits nothing (D20's typing guard stays). The practice legend reads "Keys A to D answer at once."
+- **D29, unfinished tabs.** Placeholder tabs are hidden or clearly marked before launch; not needed for M1.
+- **One clock, properly.** The stopwatch, recorded rounds and the stop screen use one rounding rule, and the header freezes on
+  the value shown when Lock in is pressed. The stop screen shows that same value.
+- **Help pages promise only what exists.** Sentences about a player count, Settings and Reduce motion show once those ship.
+- **A fair fixture Daily for round 4**: a Mystery 1 that no single clue-1 word gives away, and clue-4 distractors that fit the
+  earlier clues, with a lint for the second.
