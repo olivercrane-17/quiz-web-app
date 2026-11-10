@@ -688,8 +688,9 @@ button.kn-chip {
   font-size: 11px;
   font-weight: 700;
 }
-/* The empty well's edge (R2-28), inside it. */
-.kn-progress[data-variant="bar"] .kn-step[data-status="upcoming"] {
+/* The empty well's edge (R2-28), inside it. The one open now is filled. */
+.kn-progress[data-variant="bar"]
+  .kn-step[data-status="upcoming"]:not([data-current]) {
   outline: 1px solid var(--kn-rule-strong);
   outline-offset: -1px;
 }
@@ -704,10 +705,8 @@ button.kn-chip {
   font-style: italic;
   font-weight: 450;
 }
-/* The one open now and not yet answered: ink, like the current rung. Its
- * fill is its edge, so the well's outline goes. */
+/* The one open now and not yet answered: ink, like the current rung. */
 .kn-step[data-status="upcoming"][data-current] {
-  outline: 0;
   background-color: var(--kn-ink);
   color: var(--kn-surface);
 }
@@ -1311,7 +1310,8 @@ button.kn-watch::after {
   .kn-step {
     border: 1px solid CanvasText;
   }
-  .kn-progress[data-variant="bar"] .kn-step[data-status="upcoming"] {
+  .kn-progress[data-variant="bar"]
+    .kn-step[data-status="upcoming"]:not([data-current]) {
     outline: 0;
   }
   .kn-step[data-status="upcoming"][data-current] {

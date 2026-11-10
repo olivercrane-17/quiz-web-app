@@ -178,6 +178,31 @@ test.describe("R2-06 pills and chips are flat marks", () => {
     ).not.toHaveAttribute("tabindex");
   });
 
+  test("R2-06 practice's segments are flat too, and the open question's is filled in ink, with no edge", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await startQuickPlay(page);
+    const segments = page.locator('header ol[data-variant="bar"] > li');
+    await expect(segments).toHaveCount(10);
+    expectFlat(await looksOf(segments), "practice's segments");
+    const current = segments.and(page.locator('[aria-current="step"]'));
+    const look = await current.evaluate((step) => {
+      const css = getComputedStyle(step);
+      const bar = getComputedStyle(step, "::after");
+      return {
+        fill: css.backgroundColor,
+        outline: css.outlineStyle,
+        bar: bar.content === "none" ? null : bar.height,
+      };
+    });
+    expect(look).toEqual({
+      fill: "rgb(29, 26, 22)",
+      outline: "none",
+      bar: "3px",
+    });
+  });
+
   test("R2-06 Today's round chips and the Mystery's category chip are flat labels", async ({
     page,
   }) => {
