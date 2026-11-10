@@ -3567,7 +3567,7 @@ Test identities (`e2e2e2e2-` prefix) are injected into local storage with `addIn
 
 ### 11.9 Traceability
 
-Every test that proves an acceptance criterion carries its id at the start of its title. `scripts/checks/ac-coverage.mjs` lists every AC id in `docs/PRD.md`, greps the test trees, and prints the ones with no test. QA-2 turns it into a release gate: every Must criterion has a passing test or an explicit "not run" with the reason.
+Every test that proves an acceptance criterion carries its id at the start of its title. `scripts/checks/ac-coverage.mjs` (`npm run check:ac`) lists every AC id `docs/PRD.md` defines, reads the titles of the Vitest and Playwright tests under `src/`, `scripts/` and `e2e/` and the `select 'PASS ...'` lines under `supabase/tests/`, and prints, by area, the ids no title starts with, the ids only skipped or fixme tests name, and any id the other docs name that PRD.md does not define. A title starts with an id when the id is in the run of ids that opens it ("R1-16 AC-SHR-02 ..." counts; an id in a comment or mid-title does not). It exits 0 and only reports while Beta areas have no tests; `--strict` exits 1 on any gap, `--only AC-DLY,AC-PRA` scopes it to areas, and `--json` prints the report. QA-2 turns it into a release gate: every Must criterion has a passing test or an explicit "not run" with the reason.
 
 ---
 
