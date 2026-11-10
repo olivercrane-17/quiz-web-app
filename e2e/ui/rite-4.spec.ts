@@ -47,6 +47,15 @@ async function box(locator: Locator): Promise<Box> {
 const toast = (page: Page) => page.locator("[data-toast]:not([data-leaving])");
 const tip = (page: Page) => page.locator("header [data-leave-tip]");
 
+/** 200% text: the root's font size, which every rem follows. */
+async function largeText(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+      document.documentElement.style.fontSize = "200%";
+    });
+  });
+}
+
 /**
  * Samples, every 100 ms while the toast shows (up to `ms`), whether it
  * covers `target`; returns the moments it did.
@@ -232,6 +241,9 @@ test.describe("R4-06 toasts clear of the page's H1", () => {
     expect(pill.top).toBeGreaterThanOrEqual(header.bottom);
     expect(intersects(pill, await box(heading))).toBe(false);
     expect(intersects(pill, await box(share))).toBe(false);
+    // It may sit on the date line under the heading, the first gap that
+    // clears both: accepted (DESIGN §6.9), since anything lower is the
+    // stamp or the score.
     // No control at all under it.
     const covered = await page.evaluate(() => {
       const toast = document.querySelector("[data-toast]:not([data-leaving])");
@@ -261,18 +273,41 @@ test.describe("R4-06 toasts clear of the page's H1", () => {
     expect(covered).toEqual([]);
   });
 
-  test("R4-06 with 'Saved' on Today, the toast keeps off Today's heading too", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await setClock(page, NOV_1, LONDON);
-    await page.goto("/daily");
-    await expect(page.getByRole("heading", { name: /clue 1/i })).toBeVisible();
-    await page.getByRole("link", { name: LEAVE_RUNNING, exact: true }).click();
-    await expect(page).toHaveURL("/");
-    await expect(toast(page)).toBeVisible();
-    const heading = page.locator("main h1").first();
-    await expect(heading).toBeVisible();
-    expect(await coverings(page, heading, 1_500)).toEqual([]);
-  });
+  for (const { viewport, large } of [
+    { viewport: { width: 390, height: 844 }, large: false },
+    // Where "Saved" went under "Good morning." onto the card's title,
+    // the line that says which Daily was saved (review of R4-06).
+    { viewport: { width: 320, height: 568 }, large: false },
+    { viewport: { width: 390, height: 844 }, large: true },
+  ]) {
+    test(`R4-06 with 'Saved' on Today at ${viewport.width} x ${viewport.height}${large ? " and 200% text" : ""}, the toast keeps off Today's heading and the Continue card's title`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport);
+      if (large) await largeText(page);
+      await setClock(page, NOV_1, LONDON);
+      await page.goto("/daily");
+      await expect(
+        page.getByRole("heading", { name: /clue 1/i }),
+      ).toBeVisible();
+      await page
+        .getByRole("link", { name: LEAVE_RUNNING, exact: true })
+        .click();
+      await expect(page).toHaveURL("/");
+      await expect(toast(page)).toBeVisible();
+      const heading = page.locator("main h1").first();
+      await expect(heading).toBeVisible();
+      const title = page.locator("[data-daily-card] h2");
+      await expect(title).toHaveText(/^Continue Daily #/);
+      const resume = page.getByRole("link", { name: /^Continue/ });
+      const [onHeading, onTitle, onResume] = await Promise.all([
+        coverings(page, heading, 1_500),
+        coverings(page, title, 1_500),
+        coverings(page, resume, 1_500),
+      ]);
+      expect(onHeading).toEqual([]);
+      expect(onTitle).toEqual([]);
+      expect(onResume).toEqual([]);
+    });
+  }
 });

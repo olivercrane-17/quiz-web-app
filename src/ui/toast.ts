@@ -27,7 +27,18 @@
  * top to clear Share, the stop screen's "Copied" toast sat on "Daily #51".
  * The heading counts with the controls, and when both places cover one or
  * the other the toast takes the first gap under the top place that clears
- * them all.
+ * them all. Only a heading on screen counts: with the H1 scrolled away
+ * the toast chooses as round 3 left it, in one of its two places. The
+ * first such gap on the stop screen is flush under "Daily #51", over the
+ * date line, which is accepted: the line is the least of that page, and
+ * anything lower is the stamp or the score.
+ *
+ * It keeps off the titles inside the page too, where it can (review of
+ * R4-06): on a small phone, and at 200% text, "Saved" went under "Good
+ * morning." onto "Continue Daily #42", the line that says what was
+ * saved. Every `main h2` on screen is avoided first, with the controls
+ * and the H1; when no place or gap clears them all, it falls back to the
+ * rules above.
  *
  * A toast with an action (the editor's Undo) has no time limit, because a
  * keyboard or screen-reader user reaches it last, at the end of the page
@@ -80,6 +91,8 @@ const CONTROLS =
 const PRIMARY = ".kn-btn-primary, .kn-btn-ticket";
 /** The page's heading, which it keeps clear of as well (R4-06). */
 const HEADING = "h1";
+/** Titles inside the page (Today's "Continue Daily #42"), which it keeps off while there is room. */
+const SUBHEADING = "main h2";
 const LEAVE_MS = 200;
 const DURATION_MS = 4_000;
 
@@ -150,17 +163,26 @@ function overlaps(a: Box, b: Box): boolean {
 
 /**
  * The boxes of the controls on screen, apart from the toast's own: all of
- * them, and the primary actions among them; and the page's heading. A
- * heading kept for screen readers alone (a 1 px box) is nothing to cover.
+ * them, and the primary actions among them; the page's heading; and the
+ * titles inside the page. A heading kept for screen readers alone (a 1 px
+ * box) is nothing to cover, and neither is one scrolled out of view: an
+ * H1 above the screen must not switch on the rule that keeps clear of it.
  */
 function controlBoxes(toast: HTMLElement): {
   all: Box[];
   primary: Box[];
   headings: Box[];
+  subheadings: Box[];
 } {
   const all: Box[] = [];
   const primary: Box[] = [];
   const headings: Box[] = [];
+  const subheadings: Box[] = [];
+  const onScreen = (box: Box & { width: number; height: number }) =>
+    box.width > 1 &&
+    box.height > 1 &&
+    box.bottom > 0 &&
+    box.top < window.innerHeight;
   for (const control of document.querySelectorAll(CONTROLS)) {
     if (toast.contains(control) || !isShown(control)) continue;
     const box = control.getBoundingClientRect();
@@ -172,9 +194,14 @@ function controlBoxes(toast: HTMLElement): {
   for (const heading of document.querySelectorAll(HEADING)) {
     if (!isShown(heading)) continue;
     const box = heading.getBoundingClientRect();
-    if (box.width > 1 && box.height > 1) headings.push(box);
+    if (onScreen(box)) headings.push(box);
   }
-  return { all, primary, headings };
+  for (const heading of document.querySelectorAll(SUBHEADING)) {
+    if (!isShown(heading)) continue;
+    const box = heading.getBoundingClientRect();
+    if (onScreen(box)) subheadings.push(box);
+  }
+  return { all, primary, headings, subheadings };
 }
 
 /**
@@ -199,6 +226,12 @@ function controlBoxes(toast: HTMLElement): {
  * before it settles for less. Only when nothing clears the heading and
  * the primary actions together does it keep off the primary actions
  * alone. Without `headings` it chooses as it did before.
+ *
+ * `subheadings` are the titles inside the page (Today's "Continue Daily
+ * #42"). They are avoided first, with the controls and the heading: the
+ * toast takes a place, a sunk place or, when a heading is on screen, a
+ * gap that clears them too. When there is none it chooses as if they
+ * weren't there.
  */
 export function choosePlace(
   current: ToastPlace,
@@ -209,6 +242,7 @@ export function choosePlace(
   sink?: { anchorTop: number; gap: number; minGap: number },
   primary: readonly Box[] = [],
   headings: readonly Box[] = [],
+  subheadings: readonly Box[] = [],
 ): { place: ToastPlace; bottom: number; top?: number } {
   const left = (viewport.width - size.width) / 2;
   const right = left + size.width;
@@ -227,16 +261,22 @@ export function choosePlace(
   // be, of the primary actions and the heading; last, of the primary
   // actions alone. A tier with a heading in it also looks for a gap
   // between the two places before the next tier settles for less.
-  const tiers: { avoid: readonly Box[]; gaps: boolean }[] = kept
-    ? [
-        { avoid: [...controls, ...headings], gaps: true },
-        { avoid: [...primary, ...headings], gaps: true },
-        { avoid: primary, gaps: true },
-      ]
-    : [
-        { avoid: controls, gaps: false },
-        { avoid: primary, gaps: true },
-      ];
+  // Ahead of those, clear of the titles inside the page as well.
+  const tiers: { avoid: readonly Box[]; gaps: boolean }[] = [
+    ...(subheadings.length > 0
+      ? [{ avoid: [...controls, ...headings, ...subheadings], gaps: kept }]
+      : []),
+    ...(kept
+      ? [
+          { avoid: [...controls, ...headings], gaps: true },
+          { avoid: [...primary, ...headings], gaps: true },
+          { avoid: primary, gaps: true },
+        ]
+      : [
+          { avoid: controls, gaps: false },
+          { avoid: primary, gaps: true },
+        ]),
+  ];
   for (const { avoid, gaps } of tiers) {
     const covers = (box: Box) =>
       avoid.some((control) => overlaps(box, control));
@@ -302,6 +342,7 @@ export function showToast(
         : { anchorTop, gap: GAP_PX, minGap: MIN_GAP_PX },
       controls.primary,
       controls.headings,
+      controls.subheadings,
     );
     element.dataset.place = chosen.place;
     if (chosen.bottom !== spotBottom) {

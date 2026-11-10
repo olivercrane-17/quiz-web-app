@@ -16,7 +16,7 @@ import {
   render,
   screen,
 } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createMemoryStore, createMockBackend } from "@/backend/mock";
 import { createFakeClock } from "@/engine/clock";
@@ -29,6 +29,7 @@ import {
   type IdempotencyKey,
   type TimeZone,
 } from "@/engine/types";
+import { track } from "@/features/analytics/track";
 import type { RoundComponentProps } from "@/features/rounds";
 import { createLocalIdentityProvider } from "@/platform/identity/local";
 import { createServerClock } from "@/platform/server-clock";
@@ -42,6 +43,7 @@ import type {
   StartProblem,
 } from "../model/controller";
 import { DailyScreen, StartProblemCard } from "./daily-screen";
+import { loadHowToPlaySheet } from "./load-how-to-play";
 
 const wiring = vi.hoisted(() => ({
   deps: null as DailyControllerDeps | null,
@@ -60,7 +62,12 @@ vi.mock("../model/browser", () => ({
 vi.mock(import("@/features/rounds/client"), async (importOriginal) => {
   const probe = (family: string) =>
     function Probe(props: RoundComponentProps) {
-      return <h1 data-probe={family}>{props.meta.type}</h1>;
+      // Marked as MYS-1's clue heading is, so focus has its place in the round.
+      return (
+        <h1 data-probe={family} data-focus-target="clue_heading" tabIndex={-1}>
+          {props.meta.type}
+        </h1>
+      );
     };
   return {
     ...(await importOriginal()),
@@ -71,6 +78,16 @@ vi.mock(import("@/features/rounds/client"), async (importOriginal) => {
     },
   };
 });
+
+// How to play's chunk, fetched for real unless a test makes the fetch fail.
+vi.mock(import("./load-how-to-play"), async (importOriginal) => {
+  const real = await importOriginal();
+  return { loadHowToPlaySheet: vi.fn(real.loadHowToPlaySheet) };
+});
+vi.mock(import("@/features/analytics/track"), async (importOriginal) => ({
+  ...(await importOriginal()),
+  track: vi.fn(),
+}));
 
 const NOW = Date.UTC(2026, 10, 1, 9);
 
@@ -365,8 +382,16 @@ describe("Leave's words, by whether the stopwatch keeps running (D19, R2-01)", (
 });
 
 describe("RITE round 4 on the Daily screen", () => {
+  const opens = () =>
+    vi.mocked(track).mock.calls.filter(([name]) => name === "how_to_play_open");
+
+  beforeEach(() => {
+    vi.mocked(track).mockClear();
+  });
+
   afterEach(() => {
     wiring.deps = null;
+    document.querySelector("[data-toast]")?.remove();
   });
 
   it("R4-04 the X carries its tooltip: what leaving does, by whether the stopwatch keeps running", async () => {
@@ -396,5 +421,46 @@ describe("RITE round 4 on the Daily screen", () => {
     const sheet = screen.getByRole("dialog", { name: "How to play" });
     expect(sheet).toHaveTextContent("The clue ladder");
     expect(sheet).toHaveAttribute("id", "qz-how-to-play");
+    // Counted once, now that it is open.
+    expect(opens()).toHaveLength(1);
+  });
+
+  it("AC-DLY-30 when How to play's chunk can't be fetched, nothing opens and nothing is counted: focus goes back to the clue with a toast, and the next press opens it", async () => {
+    wire(NOW);
+    await playing();
+    vi.mocked(loadHowToPlaySheet).mockRejectedValueOnce(
+      new Error("Loading chunk failed"),
+    );
+    fireEvent.click(screen.getByRole("button", { name: /^More/ }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "How to play" }));
+    // While it loads the menu is gone and the More button holds focus.
+    expect(screen.queryByRole("menu")).toBeNull();
+    expect(screen.getByRole("button", { name: /^More/ })).toHaveFocus();
+    await act(async () => {
+      await vi.dynamicImportSettled();
+    });
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(document.querySelector("#qz-how-to-play")).toBeNull();
+    expect(opens()).toHaveLength(0);
+    const toast = document.querySelector("[data-toast]");
+    expect(toast).toHaveTextContent(
+      "How to play didn't load. Check your connection and try again.",
+    );
+    expect(toast?.querySelector('[data-icon="offline"]')).not.toBeNull();
+    // Back on the clue, where closing the sheet would have left it.
+    const clue = document.querySelector<HTMLElement>(
+      '[data-round-area] [data-focus-target="clue_heading"]',
+    );
+    expect(clue).not.toBeNull();
+    expect(clue).toHaveFocus();
+
+    // The fetch works this time: one sheet, one event.
+    fireEvent.click(screen.getByRole("button", { name: /^More/ }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "How to play" }));
+    await act(async () => {
+      await vi.dynamicImportSettled();
+    });
+    expect(screen.getByRole("dialog", { name: "How to play" })).toBeVisible();
+    expect(opens()).toHaveLength(1);
   });
 });

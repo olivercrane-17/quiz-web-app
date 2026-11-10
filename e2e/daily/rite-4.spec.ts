@@ -200,19 +200,20 @@ test.describe("R4-06 the stop screen", () => {
         ).toBeVisible();
       });
 
-      test("R4-06 the page ends a sticky bar's height below its last line, and the share preview's last line scrolls above the bar", async ({
+      test("R4-06 the share preview's last line scrolls above the sticky bar, and the page ends with no empty band", async ({
         page,
       }) => {
+        // The bar is sticky in the page's flow, so it takes its own room
+        // before the last links: the preview always scrolls clear of it,
+        // on the old layout too. What this holds is that no fix pads the
+        // page's end again (a bar's height of padding left 105 px of blank
+        // under the last link, and brought nothing clear that wasn't).
+        // On load at 1280 x 800 the bar still crosses the preview, as any
+        // content at the fold: that is the bar's design (DESIGN §12.4).
         const dock = page.locator("[data-results-dock]");
         const preview = page.locator("[data-share-text]");
         const dockHeight = (await dock.boundingBox())?.height ?? 0;
         expect(dockHeight).toBeGreaterThan(40);
-        const padding = await page
-          .locator("[data-results-page]")
-          .evaluate((element) =>
-            Number.parseFloat(getComputedStyle(element).paddingBottom),
-          );
-        expect(padding).toBeGreaterThanOrEqual(Math.floor(dockHeight) + 24);
         // Scrolled by the keyboard or the wheel as far as needed, the
         // preview's last line clears the bar, with room to spare.
         await preview.evaluate((box) => {
@@ -224,16 +225,24 @@ test.describe("R4-06 the stop screen", () => {
         expect(text).not.toBeNull();
         if (bar === null || text === null) return;
         expect(text.y + text.height).toBeLessThanOrEqual(bar.y);
-        // At the very end of the page the bar has left the content alone.
+        // At the very end of the page the bar has left the content alone:
+        // it sits in its own place, above the last links, which end the
+        // page's usual 24 px from the bottom and no further.
         await page.evaluate(() => {
           window.scrollTo(0, document.documentElement.scrollHeight);
         });
         const last = await page
           .getByRole("link", { name: "Want more? Try a practice round." })
           .boundingBox();
+        const barAtEnd = await dock.boundingBox();
         expect(last).not.toBeNull();
-        if (last === null) return;
+        expect(barAtEnd).not.toBeNull();
+        if (last === null || barAtEnd === null) return;
+        expect(barAtEnd.y + barAtEnd.height).toBeLessThanOrEqual(last.y);
         expect(last.y + last.height).toBeLessThanOrEqual(viewport.height);
+        expect(viewport.height - (last.y + last.height)).toBeLessThanOrEqual(
+          32,
+        );
         expect(
           await page.evaluate(
             () =>

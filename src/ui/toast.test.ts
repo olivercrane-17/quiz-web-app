@@ -520,6 +520,263 @@ describe("showToast", () => {
     }
   });
 
+  it("R4-06 an H1 scrolled out of view doesn't switch the heading rule on: with a lesser control under both places the toast stays in its place, as round 3 left it", () => {
+    Object.defineProperty(Element.prototype, "checkVisibility", {
+      configurable: true,
+      value: () => true,
+    });
+    const original = HTMLElement.prototype.getBoundingClientRect;
+    const rect = (top: number, bottom: number, left = 0, right = 1024) =>
+      ({
+        top,
+        bottom,
+        left,
+        right,
+        width: right - left,
+        height: bottom - top,
+      }) as DOMRect;
+    let headingAt = rect(-200, -168);
+    HTMLElement.prototype.getBoundingClientRect = function (this: HTMLElement) {
+      if (this.dataset.toast !== undefined) return rect(0, 44, 347, 677);
+      if (this.dataset.at === "h1") return headingAt;
+      // A link under the top place (72 to 116) and one under the bottom.
+      if (this.dataset.at === "upper") return rect(60, 130);
+      if (this.dataset.at === "lower") {
+        return rect(window.innerHeight - 70, window.innerHeight - 10);
+      }
+      return rect(0, 0, 0, 0);
+    };
+    const added: HTMLElement[] = [];
+    try {
+      const h1 = document.createElement("h1");
+      h1.dataset.at = "h1";
+      const upper = document.createElement("a");
+      upper.href = "/a";
+      upper.dataset.at = "upper";
+      const lower = document.createElement("a");
+      lower.href = "/b";
+      lower.dataset.at = "lower";
+      document.body.append(h1, upper, lower);
+      added.push(h1, upper, lower);
+      // The heading is above the screen: round 3's choice, its own place.
+      showToast("Saved");
+      expect(toasts().at(-1)).toHaveAttribute("data-place", "bottom");
+      expect(toasts().at(-1)?.style.getPropertyValue("--kn-toast-top")).toBe(
+        "72px",
+      );
+      // Below the screen is no different.
+      headingAt = rect(window.innerHeight + 40, window.innerHeight + 72);
+      showToast("Saved");
+      expect(toasts().at(-1)).toHaveAttribute("data-place", "bottom");
+      expect(toasts().at(-1)?.style.getPropertyValue("--kn-toast-top")).toBe(
+        "72px",
+      );
+      // On screen, even beside the pill, the rule is on: the first gap
+      // under the upper link.
+      headingAt = rect(20, 52, 0, 200);
+      showToast("Saved");
+      expect(toasts().at(-1)).toHaveAttribute("data-place", "top");
+      expect(toasts().at(-1)?.style.getPropertyValue("--kn-toast-top")).toBe(
+        "130px",
+      );
+    } finally {
+      HTMLElement.prototype.getBoundingClientRect = original;
+      for (const element of added) element.remove();
+    }
+  });
+
+  it("R4-06 keeps off a title inside the page when a gap clears it too: 'Saved' under 'Good morning.' no longer sits on 'Continue Daily #42'", () => {
+    // Today at 320 x 568: the pill wraps to 63 px.
+    const viewport = { width: 320, height: 568 };
+    const size = { width: 288, height: 63 };
+    const spots = { bottom: 80, top: 72 };
+    const h1 = { left: 16, right: 304, top: 76, bottom: 115 };
+    const cardTitle = { left: 32, right: 288, top: 149, bottom: 177 };
+    const resume = { left: 32, right: 288, top: 300, bottom: 356 };
+    const practice = { left: 16, right: 304, top: 400, bottom: 500 };
+    // Without the title it stops at the first gap under the heading, on it.
+    expect(
+      choosePlace(
+        "bottom",
+        size,
+        spots,
+        [resume, practice],
+        viewport,
+        undefined,
+        [resume],
+        [h1],
+      ),
+    ).toEqual({ place: "top", bottom: spots.bottom, top: 115 });
+    const chosen = choosePlace(
+      "bottom",
+      size,
+      spots,
+      [resume, practice],
+      viewport,
+      undefined,
+      [resume],
+      [h1],
+      [cardTitle],
+    );
+    expect(chosen).toEqual({ place: "top", bottom: spots.bottom, top: 177 });
+    // And stays there on the next check.
+    expect(
+      choosePlace(
+        "top",
+        size,
+        spots,
+        [resume, practice],
+        viewport,
+        undefined,
+        [resume],
+        [h1],
+        [cardTitle],
+      ),
+    ).toEqual(chosen);
+    // A place that clears the title is taken before any gap.
+    expect(
+      choosePlace(
+        "bottom",
+        size,
+        spots,
+        [resume],
+        viewport,
+        undefined,
+        [resume],
+        [h1],
+        [cardTitle],
+      ),
+    ).toEqual({ place: "bottom", bottom: spots.bottom });
+  });
+
+  it("R4-06 with no room clear of the page's titles, chooses as if they weren't there; and with no H1 on screen it never floats to a gap for one", () => {
+    const viewport = { width: 320, height: 568 };
+    const size = { width: 288, height: 63 };
+    const spots = { bottom: 80, top: 72 };
+    const h1 = { left: 16, right: 304, top: 76, bottom: 115 };
+    const resume = { left: 32, right: 288, top: 300, bottom: 356 };
+    const practice = { left: 16, right: 304, top: 400, bottom: 500 };
+    // At 200% text the card's title fills the room between the heading
+    // and Continue.
+    const tall = { left: 32, right: 288, top: 120, bottom: 290 };
+    expect(
+      choosePlace(
+        "bottom",
+        size,
+        spots,
+        [resume, practice],
+        viewport,
+        undefined,
+        [resume],
+        [h1],
+        [tall],
+      ),
+    ).toEqual(
+      choosePlace(
+        "bottom",
+        size,
+        spots,
+        [resume, practice],
+        viewport,
+        undefined,
+        [resume],
+        [h1],
+      ),
+    );
+    // No H1 on screen: a title under the other place keeps the toast
+    // where round 3 would have put it, in a place, never a gap.
+    const title = { left: 32, right: 288, top: 90, bottom: 118 };
+    const top = { left: 16, right: 304, top: 60, bottom: 80 };
+    expect(
+      choosePlace(
+        "bottom",
+        size,
+        spots,
+        [practice],
+        viewport,
+        undefined,
+        [],
+        [],
+        [title],
+      ),
+    ).toEqual({ place: "top", bottom: spots.bottom });
+    expect(
+      choosePlace(
+        "bottom",
+        size,
+        spots,
+        [top, practice],
+        viewport,
+        undefined,
+        [],
+        [],
+        [title],
+      ),
+    ).toEqual({ place: "bottom", bottom: spots.bottom });
+    // With the bottom place clear of everything it simply stays.
+    expect(
+      choosePlace("top", size, spots, [], viewport, undefined, [], [], [title]),
+    ).toEqual({ place: "bottom", bottom: spots.bottom });
+  });
+
+  it("R4-06 on the page, a title in main counts and one outside main doesn't", () => {
+    Object.defineProperty(Element.prototype, "checkVisibility", {
+      configurable: true,
+      value: () => true,
+    });
+    const original = HTMLElement.prototype.getBoundingClientRect;
+    const rect = (top: number, bottom: number, left = 0, right = 1024) =>
+      ({
+        top,
+        bottom,
+        left,
+        right,
+        width: right - left,
+        height: bottom - top,
+      }) as DOMRect;
+    HTMLElement.prototype.getBoundingClientRect = function (this: HTMLElement) {
+      if (this.dataset.toast !== undefined) return rect(0, 44, 347, 677);
+      // The H1 on screen, left of the pill.
+      if (this.dataset.at === "h1") return rect(20, 52, 0, 200);
+      if (this.dataset.at === "title") return rect(80, 112);
+      if (this.dataset.at === "lower") {
+        return rect(window.innerHeight - 70, window.innerHeight - 10);
+      }
+      return rect(0, 0, 0, 0);
+    };
+    const added: HTMLElement[] = [];
+    try {
+      const h1 = document.createElement("h1");
+      h1.dataset.at = "h1";
+      const lower = document.createElement("a");
+      lower.href = "/b";
+      lower.dataset.at = "lower";
+      const stray = document.createElement("h2");
+      stray.dataset.at = "title";
+      document.body.append(h1, lower, stray);
+      added.push(h1, lower, stray);
+      // An h2 outside main (a sheet's, the footer's) is not the page's.
+      showToast("Saved");
+      expect(toasts().at(-1)).toHaveAttribute("data-place", "top");
+      expect(toasts().at(-1)?.style.getPropertyValue("--kn-toast-top")).toBe(
+        "72px",
+      );
+      const main = document.createElement("main");
+      main.append(stray);
+      document.body.append(main);
+      added.push(main);
+      showToast("Saved");
+      expect(toasts().at(-1)).toHaveAttribute("data-place", "top");
+      // Under the card's title, which ends at 112 px.
+      expect(toasts().at(-1)?.style.getPropertyValue("--kn-toast-top")).toBe(
+        "112px",
+      );
+    } finally {
+      HTMLElement.prototype.getBoundingClientRect = original;
+      for (const element of added) element.remove();
+    }
+  });
+
   it("ignores empty text and returns a dismiss function", () => {
     showToast("   ");
     expect(toasts()).toHaveLength(0);

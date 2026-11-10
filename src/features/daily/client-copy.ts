@@ -43,6 +43,9 @@ export const DAILY_SCREEN_COPY = {
   more: {
     label: "More",
     howToPlay: "How to play",
+    /** How to play's sheet couldn't be fetched (offline, a chunk error): a toast, and the next press tries again. */
+    howToPlayFailed:
+      "How to play didn't load. Check your connection and try again.",
     hideStopwatch: "Hide stopwatch",
     showStopwatch: "Show stopwatch",
   },

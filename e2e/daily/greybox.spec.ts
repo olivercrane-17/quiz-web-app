@@ -986,6 +986,10 @@ test.describe("RITE round 1", () => {
       );
       await page.getByRole("button", { name: "More" }).click();
       await page.getByRole("menuitem", { name: "How to play" }).click();
+      // Counted once the sheet, a chunk of its own, is open.
+      await expect(
+        page.getByRole("dialog", { name: "How to play" }),
+      ).toBeVisible();
       expect(await tracked(page, "how_to_play_open")).toEqual([
         { round: 1, first_daily: false },
       ]);
