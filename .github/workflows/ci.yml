@@ -94,7 +94,8 @@ jobs:
       # Supabase SDK) in any route's first load, and no sealed id under
       # .next/static, .next/server/app or public/ (ARCHITECTURE §5.4, §10.9;
       # AC-CNT-07). Sealed text needs the content key, which only the
-      # content-sealed job may hold, so this step scans for ids alone.
+      # content-sealed job may hold, so this step scans for ids alone; that
+      # job scans a build of its own for the text (decisions memo §17).
       - name: Lazy markers and sealed scan
         run: npm run check:lazy
 
@@ -108,15 +109,23 @@ jobs:
   # not run" and checks the plaintext content alone. Pull requests from
   # forks never receive secrets, so they skip that step.
   #
-  # The bundle scan of §5.4 runs in the verify job, on its build: check:lazy
-  # (SEC-1's scripts/checks/lazy-markers.mjs) looks for sealed ids under
-  # .next/static, .next/server/app and public/, room packs with digits in
-  # their names included, as scripts/content/release.test.ts reads them. So
-  # this job builds nothing, and no build ever runs beside the key.
+  # Then the sealed half of AC-CNT-07's bundle scan (§5.4). The verify job's
+  # check:lazy looks for sealed ids alone, since the key stays out of that
+  # job. Here the app is built with the default config, as Vercel and the
+  # verify job build it, in a step that never sees the key, and only then
+  # does `check:lazy -- --sealed` decrypt content/sealed/ in memory and scan
+  # every file a browser or crawler can fetch (.next/static,
+  # .next/server/app, public/) for any sealed clue, stem, question,
+  # explanation or claim, and any answer (Encore number, Mystery key by
+  # entity id, name or alias, room answer) beside its item's text. It prints
+  # counts and, per finding, the file, the item id and the field, never
+  # text (§5.4's output rule), and fails on a hit. Both key steps also run
+  # when the other fails: a content finding never hides a leak, nor the
+  # reverse.
   content-sealed:
     name: Sealed content check
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       # Full history: the content check compares each answer list's liveAt
       # with the commit that first published its version (§5.2).
@@ -141,13 +150,37 @@ jobs:
           QZ_CONTENT_KEY: ${{ secrets.QZ_CONTENT_KEY }}
         run: npm run content:check -- --sealed
 
+      # Whether the secret is set, which says nothing else about it. Forks,
+      # and pull requests from them, get no secrets: they skip the build and
+      # the scan, whose --sealed refuses to run without the key.
+      - name: Check whether the content key is set
+        id: key
+        if: "!cancelled()"
+        run: echo "present=${{ secrets.QZ_CONTENT_KEY != '' }}" >> "$GITHUB_OUTPUT"
+
+      # Without the key, so nothing sealed can reach the build or its log.
+      - name: Build for the sealed text scan
+        id: build
+        if: "!cancelled() && steps.key.outputs.present == 'true'"
+        timeout-minutes: 10
+        run: npm run build
+
+      - name: Sealed text scan of the build
+        if: "!cancelled() && steps.build.outcome == 'success'"
+        timeout-minutes: 5
+        env:
+          QZ_CONTENT_KEY: ${{ secrets.QZ_CONTENT_KEY }}
+        run: npm run check:lazy -- --sealed
+
   # The browser matrix of ARCHITECTURE §11.8, one browser per leg. Every leg
   # runs on every push: the release criteria need CI green in Chromium,
   # WebKit and Firefox (decisions memo §13).
   e2e:
     name: E2E (${{ matrix.browser }})
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # A retried browser install (up to 18 minutes) plus a full run (16 on
+    # the Chromium leg in run 42036434893).
+    timeout-minutes: 40
     strategy:
       # One browser failing never hides another's result.
       fail-fast: false
@@ -177,11 +210,61 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Once hung for the whole job on its system packages; a stuck install
-      # now fails here and leaves the rest of the job's time unused.
+      # The browser build lives in ~/.cache/ms-playwright, cached per
+      # Playwright version, browser and runner image (Playwright downloads a
+      # build per Ubuntu release). The system packages it needs can't be
+      # cached that way, so they install on every run, from apt.
+      - name: Read the Playwright version
+        id: playwright
+        run: |
+          echo "version=$(node -p 'require("@playwright/test/package.json").version')" >> "$GITHUB_OUTPUT"
+          echo "image=${ImageOS:-unknown}" >> "$GITHUB_OUTPUT"
+
+      - name: Restore Playwright ${{ matrix.browser }}
+        id: browser-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ runner.arch }}-${{ steps.playwright.outputs.image }}-${{ steps.playwright.outputs.version }}-${{ matrix.browser }}
+
+      # An apt mirror once stalled this step past its limit (CI run
+      # 42036434893, Firefox). apt now gives up on a stalled download after
+      # 60 s and retries it, and the whole install gets a second attempt,
+      # each attempt capped at 8 minutes (timeout stops the attempt's whole
+      # process group, and dpkg finishes what it was doing before the
+      # retry), so one bad mirror can't fail the leg. On a cache hit only
+      # the system packages install.
       - name: Install Playwright ${{ matrix.browser }}
-        timeout-minutes: 10
-        run: npx playwright install --with-deps ${{ matrix.browser }}
+        timeout-minutes: 18
+        env:
+          BROWSER: ${{ matrix.browser }}
+          CACHE_HIT: ${{ steps.browser-cache.outputs.cache-hit }}
+        run: |
+          printf 'Acquire::Retries "3";\nAcquire::http::Timeout "60";\nAcquire::https::Timeout "60";\n' |
+            sudo tee /etc/apt/apt.conf.d/80-ci-retries > /dev/null
+          if [ "$CACHE_HIT" = "true" ]; then
+            install=(npx playwright install-deps "$BROWSER")
+          else
+            install=(npx playwright install --with-deps "$BROWSER")
+          fi
+          for attempt in 1 2; do
+            if timeout --kill-after=30s 8m "${install[@]}"; then
+              exit 0
+            fi
+            echo "::warning::Installing Playwright $BROWSER failed on attempt $attempt."
+            sudo dpkg --configure -a || true
+            sleep 15
+          done
+          exit 1
+
+      # Saved as soon as the browser is in, so a failing E2E run still
+      # leaves the cache for the next one.
+      - name: Save Playwright ${{ matrix.browser }}
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ steps.browser-cache.outputs.cache-primary-key }}
 
       # Builds and starts the app with the mock backend (see playwright.config.ts).
       - name: Run E2E tests

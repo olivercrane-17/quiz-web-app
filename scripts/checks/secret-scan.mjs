@@ -43,8 +43,9 @@
  *      workflow hands over every secret at once (toJSON(secrets),
  *      secrets[<expression>], secrets: inherit);
  *    - inside that job, QZ_CONTENT_KEY appears only as the env: entry
- *      `QZ_CONTENT_KEY: ${{ secrets.QZ_CONTENT_KEY }}` of the step that runs
- *      `npm run content:check -- --sealed`, which does nothing else, or in
+ *      `QZ_CONTENT_KEY: ${{ secrets.QZ_CONTENT_KEY }}` of a step that runs
+ *      `npm run content:check -- --sealed` or `npm run check:lazy --
+ *      --sealed` (the build's sealed text scan, OPS-1) and nothing else, or in
  *      `${{ secrets.QZ_CONTENT_KEY != '' }}`, which only says whether it is
  *      set;
  *    - the job declares no environment:, and a workflow that references the
@@ -474,10 +475,14 @@ const BLOCK_SCALAR = /^[|>][1-9+-]*$/;
  * The one command the key may reach: it decrypts in memory and reports only
  * through the redacting reporter (ARCHITECTURE §5.4, §5.7). Another command
  * joins it only if it does the same and writes nothing a later step could
- * publish, which rules out content:release.
+ * publish, which rules out content:release. `npm run check:lazy -- --sealed`
+ * (OPS-1) is such a command: it decrypts in memory to scan a build for
+ * sealed text (AC-CNT-07), names only items, fields and files, and writes
+ * nothing.
  */
 function isSealedCheck(command) {
   const words = command.trim().split(/\s+/);
+  if (words.join(" ") === "npm run check:lazy -- --sealed") return true;
   if (words.slice(0, 4).join(" ") !== "npm run content:check --") return false;
   const flags = words.slice(4);
   return (
@@ -768,7 +773,7 @@ function workflowProblems(text) {
     if (commands.length !== 1 || !isSealedCheck(unquote(commands[0])))
       fail(
         run?.n ?? own[0].n,
-        `the step that receives QZ_CONTENT_KEY must run npm run content:check -- --sealed and nothing else ${MEMO}`,
+        `the step that receives QZ_CONTENT_KEY must run npm run content:check -- --sealed and nothing else (or npm run check:lazy -- --sealed, the build's sealed text scan) ${MEMO}`,
       );
   }
 

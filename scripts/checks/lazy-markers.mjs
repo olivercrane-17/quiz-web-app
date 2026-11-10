@@ -32,14 +32,20 @@
  *    sealed text: Mystery clues, room question stems, Encore questions,
  *    explanations and claims. Texts match as whole tokens after
  *    normalizeName, AC-DLY-04's rule for names, once a file's JSON escapes
- *    and HTML entities are decoded. An Encore's answer matches by
- *    AC-DLY-04's number rules (by value in a JSON file's numbers, as a whole
- *    formatted token in text) wherever its question also appears. A number
- *    alone is no evidence: an answer of 12 matches every "12" in the app,
- *    while beside its question it gives the question away. For the same
- *    reason texts of fewer than four words are left out. A finding names
- *    the item, the field and the file, never the text (§5.4's output rule),
- *    and an error while loading sealed content prints nothing about it.
+ *    and HTML entities are decoded. The answers match wherever one of
+ *    their item's texts also appears: an Encore's by AC-DLY-04's number
+ *    rules (by value in a JSON file's numbers, as a whole formatted token
+ *    in text), a Mystery's key by its entity id and by its entity's name,
+ *    display and aliases (whole tokens after normalizeName), and a room
+ *    question's answer text likewise. An answer alone is no evidence: an
+ *    answer of 12 matches every "12" in the app, and every key is a name in
+ *    the shipped answer lists (§5.5), while beside its clue or question it
+ *    gives the item away. For the same reason texts of fewer than four
+ *    words are left out. A finding names the item, the field and the file,
+ *    never the text (§5.4's output rule), and an error while loading sealed
+ *    content prints nothing about it. CI's content-sealed job runs this on
+ *    a build of its own, made with the default config before the key
+ *    reaches the job (ARCHITECTURE §5.7).
  *
  * Neither check may pass by covering nothing. Both stop when an input they
  * read is missing: a scan root, the prerendered Home page in
@@ -497,14 +503,28 @@ export function jsonHoldsNumber(json, value) {
   return false;
 }
 
+/** `text` as a pattern that matches it whole: not inside a longer id or word. */
+const wholeId = (text) =>
+  new RegExp(
+    `(?<![\\w.-])${text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w-]|\\.\\w)`,
+  );
+
 /**
- * The texts and numbers to look for, from sealed items: each text
+ * The texts and answers to look for, from sealed items: each text
  * normalized, with its item id and field path; each Encore answer with the
- * index of its question's text.
+ * index of its question's text; each Mystery key (its entity id, and the
+ * entity's names from `entityOf`) and each room question's answer text,
+ * with the indexes of the texts of the same item.
+ *
+ * @param {{ id: string, pool: string, item: Record<string, any> }[]} items
+ * @param {(text: string) => string} normalize
+ * @param {(id: string) => { name?: string, display?: string, aliases?: string[] } | null} [entityOf]
+ * @returns {Needles}
  */
-export function sealedNeedles(items, normalize) {
+export function sealedNeedles(items, normalize, entityOf = () => null) {
   const texts = [];
   const answers = [];
+  const keys = [];
   let skipped = 0;
   const addText = (itemId, field, raw) => {
     if (typeof raw !== "string") return -1;
@@ -519,6 +539,7 @@ export function sealedNeedles(items, normalize) {
   };
   for (const { id, pool, item } of items) {
     if (pool !== "mystery" && pool !== "encore" && pool !== "room") continue;
+    const first = texts.length;
     if (Array.isArray(item.clues)) {
       item.clues.forEach((clue, index) => addText(id, `clues[${index}]`, clue));
     }
@@ -539,15 +560,45 @@ export function sealedNeedles(items, normalize) {
         question,
       });
     }
+    const anchors = texts.slice(first).map((_, offset) => first + offset);
+    if (anchors.length === 0 || typeof item.answer !== "string") continue;
+    if (pool === "mystery") {
+      const entity = entityOf(item.answer);
+      const names = [entity?.name, entity?.display, ...(entity?.aliases ?? [])]
+        .filter((name) => typeof name === "string")
+        .map((name) => normalize(name))
+        .filter((name) => name !== "");
+      keys.push({
+        itemId: id,
+        field: "answer",
+        names: [...new Set(names)],
+        ids: [item.answer],
+        anchors,
+        beside: "its clues",
+      });
+    } else if (pool === "room") {
+      const name = normalize(item.answer);
+      if (name !== "") {
+        keys.push({
+          itemId: id,
+          field: "answer",
+          names: [name],
+          ids: [],
+          anchors,
+          beside: "its stem",
+        });
+      }
+    }
   }
-  return { texts, answers, skipped };
+  return { texts, answers, keys, skipped };
 }
 
 /**
  * @typedef {{ itemId: string, field: string, normalized: string, words: string[] }} TextNeedle
  * @typedef {{ itemId: string, field: string, value: number, question: number }} AnswerNeedle
- * @typedef {{ texts: TextNeedle[], answers: AnswerNeedle[], skipped: number }} Needles
- * @typedef {{ kind: "id" | "text" | "answer", file: string, itemId: string, field: string }} Finding
+ * @typedef {{ itemId: string, field: string, names: string[], ids: string[], anchors: number[], beside: string }} KeyNeedle
+ * @typedef {{ texts: TextNeedle[], answers: AnswerNeedle[], keys?: KeyNeedle[], skipped: number }} Needles
+ * @typedef {{ kind: "id" | "text" | "answer", file: string, itemId: string, field: string, beside?: string }} Finding
  * @typedef {{ envValue: string | undefined, keyPath: string }} KeySource
  */
 
@@ -615,6 +666,22 @@ export function scanForSealedContent({
             file,
             itemId: answer.itemId,
             field: answer.field,
+            beside: "its question",
+          });
+        }
+      }
+      for (const key of needles.keys ?? []) {
+        if (!key.anchors.some((index) => found.has(index))) continue;
+        if (
+          key.names.some((name) => words.includes(` ${name} `)) ||
+          key.ids.some((id) => wholeId(id).test(decoded))
+        ) {
+          findings.push({
+            kind: "answer",
+            file,
+            itemId: key.itemId,
+            field: key.field,
+            beside: key.beside,
           });
         }
       }
@@ -624,7 +691,8 @@ export function scanForSealedContent({
 }
 
 /**
- * The sealed items to look for. `fixtures`: a plaintext fixture tree (tests
+ * The sealed items to look for, with a lookup of the answer lists' entities
+ * by id. `fixtures`: a plaintext fixture tree (tests
  * and dry runs), read in the repository that holds it. Otherwise the
  * envelopes in `root`'s content/sealed/, decrypted in memory with the key
  * from `keySource` (QZ_CONTENT_KEY, then the key file). The plaintext
@@ -639,7 +707,12 @@ export async function loadSealedItems({
 }) {
   const { findRepoRoot, resolveLayout } =
     await import("../../src/content/pipeline/layout.ts");
-  const { loadBank } = await import("../../src/content/pipeline/bank.ts");
+  const { entityLookup, loadBank } =
+    await import("../../src/content/pipeline/bank.ts");
+  const loaded = (bank) => ({
+    items: bank.items,
+    entityOf: (id) => entityLookup(bank, id)?.entity ?? null,
+  });
   if (fixtures !== null) {
     const tree = resolve(root, fixtures);
     const layout = resolveLayout({
@@ -647,22 +720,22 @@ export async function loadSealedItems({
       root: tree,
       fixtures: true,
     });
-    return (await loadBank(layout, { sealed: false })).items;
+    return loaded(await loadBank(layout, { sealed: false }));
   }
   const crypto = await import("../content/crypto.ts");
-  const loaded = await crypto.loadMasterKey(
+  const master = await crypto.loadMasterKey(
     keySource ?? crypto.keySourceFromProcess(),
   );
-  if (loaded === null) {
+  if (master === null) {
     throw new CheckError(
       `--sealed needs the content key: ${crypto.missingKeyMessage(1)}.`,
     );
   }
   const bank = await loadBank(resolveLayout({ repoRoot: root }), {
     sealed: true,
-    keys: loaded.keys,
+    keys: master.keys,
   });
-  return bank.items;
+  return loaded(bank);
 }
 
 /**
@@ -697,9 +770,9 @@ export async function runCheck({
   let normalize = null;
   const textScan = sealed || fixtures !== null;
   if (textScan) {
-    let items;
+    let sealedItems;
     try {
-      items = await loadSealedItems({ root, fixtures, keySource });
+      sealedItems = await loadSealedItems({ root, fixtures, keySource });
     } catch (error) {
       if (error instanceof CheckError) throw error;
       // Sealed content may sit in the message (a parse error quotes its input).
@@ -709,7 +782,7 @@ export async function runCheck({
     }
     ({ normalizeName: normalize } =
       await import("../../src/engine/suggest/normalize.ts"));
-    needles = sealedNeedles(items, normalize);
+    needles = sealedNeedles(sealedItems.items, normalize, sealedItems.entityOf);
   }
 
   const scan = scanForSealedContent({ root, needles, normalize });
@@ -718,7 +791,7 @@ export async function runCheck({
     problems.push(
       finding.kind === "id"
         ? `${finding.file} holds the sealed id ${finding.itemId}. Sealed ids never ship (§5.4); a comment or a test that needs one uses an fx. id.`
-        : `${finding.file} holds ${finding.itemId} ${finding.field}${finding.kind === "answer" ? " beside its question" : ""}, which is sealed.`,
+        : `${finding.file} holds ${finding.itemId} ${finding.field}${finding.kind === "answer" ? ` beside ${finding.beside ?? "its question"}` : ""}, which is sealed.`,
     );
   }
   lines.push(
@@ -727,7 +800,7 @@ export async function runCheck({
   lines.push(
     needles === null
       ? "sealed text: not scanned (npm run check:lazy -- --sealed, where the content key is)."
-      : `sealed text: ${needles.texts.length} texts and ${needles.answers.length} Encore answers from ${fixtures === null ? "content/sealed/" : fixtures}, ${needles.skipped} text(s) under ${MIN_TEXT_WORDS} words left out; ${scan.findings.filter((f) => f.kind !== "id").length} finding(s).`,
+      : `sealed text: ${needles.texts.length} texts, ${needles.answers.length} Encore answers and ${needles.keys?.length ?? 0} Mystery keys and room answers from ${fixtures === null ? "content/sealed/" : fixtures}, ${needles.skipped} text(s) under ${MIN_TEXT_WORDS} words left out; ${scan.findings.filter((f) => f.kind !== "id").length} finding(s).`,
   );
   return { problems, lines };
 }
@@ -740,10 +813,12 @@ build lacks one of those folders, its prerendered Home page, or route
 stats for one of its pages.
 
   --sealed   Also look for sealed texts (clues, stems, Encore questions,
-             explanations, claims) and Encore answers beside their
-             questions. Decrypts content/sealed/ in memory with the content
-             key (QZ_CONTENT_KEY or ~/.config/quiz-web-app/content.key).
-             Findings name the item, the field and the file, never the text.`;
+             explanations, claims), and for answers beside their item's
+             texts: Encore numbers, Mystery keys (entity id, name, display,
+             aliases) and room answers. Decrypts content/sealed/ in memory
+             with the content key (QZ_CONTENT_KEY or
+             ~/.config/quiz-web-app/content.key). Findings name the item,
+             the field and the file, never the text.`;
 
 async function main(argv) {
   let values;
