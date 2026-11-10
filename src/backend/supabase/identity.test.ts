@@ -3,7 +3,9 @@
  * method calls with which arguments and credential, and how the replies
  * decode. The replies are the envelopes the identity RPCs really return,
  * recorded with supabase/tests/identity/identity.payloads.sql into
- * __fixtures__/identity.*.json.
+ * __fixtures__/identity.*.json, and set_nickname's with
+ * supabase/tests/moderation/moderation.payloads.sql into
+ * __fixtures__/nickname.*.json.
  */
 import { describe, expect, it, vi } from "vitest";
 
@@ -22,6 +24,8 @@ import claim from "./__fixtures__/identity.claim.json";
 import clientIp from "./__fixtures__/identity.client-ip.json";
 import deleteUnavailable from "./__fixtures__/identity.delete.json";
 import exported from "./__fixtures__/identity.export.json";
+import nicknameBlocked from "./__fixtures__/nickname.blocked.json";
+import nicknameCustom from "./__fixtures__/nickname.custom.json";
 import profileAged from "./__fixtures__/identity.profile-aged.json";
 import profile from "./__fixtures__/identity.profile.json";
 import rateLimited from "./__fixtures__/identity.register-rate-limited.json";
@@ -205,10 +209,58 @@ describe("age band and nickname", () => {
     expect(t.calls).toHaveLength(1);
   });
 
-  it("leaves setNickname unavailable until MOD-1 adds set_nickname", async () => {
+  it("sets a custom nickname through set_nickname and decodes the profile", async () => {
+    const t = setup({ set_nickname: nicknameCustom });
+    const result = await t.area.setNickname({ custom: "Dee" });
+    expect(result).toEqual({
+      ok: true,
+      value: {
+        playerId: nicknameCustom.data.player_id,
+        friendlyName: nicknameCustom.data.friendly_name,
+        nickname: "Dee",
+        ageBand: "18_plus",
+        createdAt: nicknameCustom.data.created_at,
+      },
+    });
+    expect(t.calls).toEqual([
+      {
+        fn: "set_nickname",
+        args: { p_nickname: "Dee", p_generated: false, ...CREDENTIAL },
+      },
+    ]);
+  });
+
+  it("sends a generated name with p_generated, which any age band may choose", async () => {
+    const t = setup({ set_nickname: profileAged });
+    await t.area.setNickname({ generated: "Brave Fox" });
+    expect(t.calls).toEqual([
+      {
+        fn: "set_nickname",
+        args: { p_nickname: "Brave Fox", p_generated: true, ...CREDENTIAL },
+      },
+    ]);
+  });
+
+  it("passes the filter's blocked_text back and reports nothing of the text", async () => {
+    const t = setup({ set_nickname: nicknameBlocked });
+    const result = await t.area.setNickname({ custom: "XXzorblaxYY" });
+    expect(result.ok ? null : result.error.code).toBe("blocked_text");
+    expect(JSON.stringify(t.events)).not.toContain("zorblax");
+  });
+
+  it("refuses a missing name, or one with nothing in it, without a call", async () => {
     const t = setup({});
-    const result = await t.area.setNickname({ generated: "Brave Fox" });
-    expect(result.ok ? null : result.error.code).toBe("unavailable");
+    for (const nickname of [
+      { custom: "   " },
+      { generated: "" },
+      undefined,
+      null,
+      {},
+      { custom: 7 },
+    ]) {
+      const result = await t.area.setNickname(nickname as never);
+      expect(result.ok ? null : result.error.code).toBe("invalid_input");
+    }
     expect(t.calls).toEqual([]);
   });
 });

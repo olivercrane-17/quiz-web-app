@@ -14,6 +14,7 @@ import * as prettier from "prettier";
 
 import { loadBank, type Bank } from "../../../src/content/pipeline/bank.ts";
 import { resolveLayout } from "../../../src/content/pipeline/layout.ts";
+import { ROT13 } from "./modules.ts";
 import {
   PRACTICE_SEED_PATH,
   parseLineFile,
@@ -99,13 +100,15 @@ export async function loadBuildInputs(
         readText(join(repoRoot, "content", "names", "animals.txt")),
       ),
     },
+    // content/safety/ keeps its entries ROT13-encoded (MOD-1), so they are
+    // decoded here, in memory only; the module encodes them again.
     moderation: {
       terms: parseLineFile(
         readText(join(repoRoot, "content", "safety", "slur-terms.txt")),
-      ),
+      ).map(ROT13),
       allowlist: parseLineFile(
         readText(join(repoRoot, "content", "safety", "allowlist.txt")),
-      ),
+      ).map(ROT13),
     },
     categoryIntros: await categoryIntros(repoRoot),
     format: prettierFormatter(repoRoot),

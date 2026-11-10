@@ -18,7 +18,12 @@
  *   before it costs the address one of its 5 attempts (AC-SYN-04).
  * - deletePlayer answers `unavailable` with a wait until the owner applies
  *   20261104000500_identity_attended.sql (supabase/README.md §9).
- * - setNickname stays `unavailable` until MOD-1 adds `set_nickname`.
+ * - setNickname sends `set_nickname` (MOD-1, 20261104000700_moderation.sql)
+ *   with `p_generated` saying which kind of name it is. The server cleans
+ *   and checks it (age band, 24 characters, the slur filter); a missing
+ *   name, or one with nothing in it, fails `invalid_input` here, as the
+ *   server would, without spending one of the day's 20 calls. A filtered name comes back as
+ *   `blocked_text`, and nothing here keeps or reports the text.
  */
 import {
   parseDailyNumber,
@@ -33,8 +38,8 @@ import {
   type ServerDataExport,
 } from "@/engine/types";
 
-import { fail, unavailable } from "../errors";
-import type { IdentityApi } from "../types";
+import { fail } from "../errors";
+import type { IdentityApi, NicknameInput } from "../types";
 import type { SupabaseContext } from "./context";
 import {
   DecodeError,
@@ -128,6 +133,22 @@ export const decodeExport: Decoder<ServerDataExportWithAccount> = (
   return fields;
 };
 
+/**
+ * A nickname's text and kind, or null for anything that isn't a
+ * `NicknameInput`: a caller that passes nothing gets `invalid_input`,
+ * never a thrown TypeError (§7.1).
+ */
+function nicknameParts(
+  nickname: NicknameInput | undefined,
+): { name: string; generated: boolean } | null {
+  if (typeof nickname !== "object" || nickname === null) return null;
+  const generated = "generated" in nickname;
+  const name: unknown = generated
+    ? nickname.generated
+    : (nickname as { custom?: unknown }).custom;
+  return typeof name === "string" ? { name, generated } : null;
+}
+
 /** The identity area over the RPC wrapper; tests pass their own `rpc`. */
 export function createIdentityArea(
   ctx: SupabaseContext,
@@ -159,7 +180,18 @@ export function createIdentityArea(
             { auth: "player", write: true },
           ),
 
-    setNickname: () => unavailable(),
+    setNickname: (nickname) => {
+      const parts = nicknameParts(nickname);
+      return parts === null || parts.name.trim() === ""
+        ? Promise.resolve(fail("invalid_input"))
+        : rpc(
+            ctx,
+            "set_nickname",
+            { p_nickname: parts.name, p_generated: parts.generated },
+            decodeProfile,
+            { auth: "player", write: true },
+          );
+    },
 
     createSyncCode: () =>
       rpc(ctx, "create_sync_code", {}, decodeSyncCode, {

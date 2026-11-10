@@ -480,6 +480,9 @@ export function knownContentPath(rel: string): boolean {
       return parts.length === 2 && name.endsWith(".json");
     case "safety":
       return true;
+    case "names":
+      // Friendly-name parts (ARCHITECTURE §2.1, MOD-1): adjectives.txt, animals.txt.
+      return parts.length === 2 && name.endsWith(".txt");
     default:
       return (
         parts.length === 1 &&

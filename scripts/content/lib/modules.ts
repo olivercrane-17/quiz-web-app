@@ -109,7 +109,8 @@ export function namesModule(names: {
   return [
     header("content/names/adjectives.txt and animals.txt", [
       'Friendly-name parts ("Plucky Otter", ARCHITECTURE §2.1, §5.3), one',
-      "word per entry. Empty until MOD-1 adds the reviewed lists.",
+      "word per entry, reviewed so that no pair holds a listed term",
+      "(content/names/README.md).",
     ]),
     `export const NAME_ADJECTIVES: readonly string[] = ${json(names.adjectives)};`,
     "",
@@ -188,9 +189,9 @@ export function moderationModule(moderation: {
   return [
     header("content/safety/slur-terms.txt and allowlist.txt", [
       "The player-facing slur filter's terms (PRD §3.9.4, ARCHITECTURE",
-      "§8.13), loaded lazily by text/moderation.ts. Terms are ROT13-encoded",
-      "here, as content/reference/slurs.json keeps them, so none shows up",
-      "in a diff, a search or a log. Empty until MOD-1 adds content/safety/.",
+      "§8.13), loaded lazily by src/features/nickname/filter.ts and read",
+      "by the mock backend. Terms are ROT13-encoded here, as content/safety/",
+      "keeps them, so none shows up in a diff, a search or a log.",
     ]),
     `export const MODERATION_TERMS_ROT13: readonly string[] = ${json(moderation.terms)};`,
     "",
