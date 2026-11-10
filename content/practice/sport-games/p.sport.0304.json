@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0304",
-  "status": "draft",
+  "status": "checking",
   "category": "sport",
   "tags": ["swimming", "olympics", "distances"],
   "region": "global",
@@ -54,13 +54,94 @@
     "doubts": true
   },
   "writerNotes": "Subtopic: swimming. Written as an easy item, because the sport pool is short of easy items. lint: clean. claims: four, all high for numbers. datasets: none covers pool sizes; World Aquatics facility rules. c3 is arithmetic on c1 (1500 / 50 = 30 lengths, 29 turns between them). rivalTest: 25 m is the planted confusion (short course); 75 and 100 m are wrong under any reading. Argued against the key: a few older pools were 33 1/3 yards or 55 yards, but 'Olympic-size' means 50 m. Key sits second in ascending order (X34 spread). volatility: evergreen. regional: worldwide. style: Oxford spelling, explanation of 30 words. myths: screened. mystery and encore: not applicable. doubts: none.",
-  "format": "mc",
-  "stem": "How long is an Olympic-size swimming pool?",
-  "answer": "50 metres",
-  "wrong": ["25 metres", "75 metres", "100 metres"],
-  "order": "ascending",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "7b98f403595aecd2f6380527567cf1d6e7b46800909733862bc638e1adb68e9b",
+          "4f2283b60951f7ca1a4f5fd02e16df170335440e61005aeaa50f3dff94e71998"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:47:09.995Z"
+        ],
+        "startedAt": "2026-11-10T03:47:03.000Z",
+        "finishedAt": "2026-11-10T03:47:22.538Z",
+        "coldSolve": {
+          "answerGiven": "50 metres",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:47:08.161Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "World Aquatics facility rules require a long-course competition pool, the kind used at the Olympics, to measure 50 m between the end walls.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered 50 metres cold. Long-course (Olympic) pools are 50 m; this is the defining spec. Both-pass certain rule under memo 18."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "An Olympic pool is neither 25 m (that is short course), 75 m nor 100 m long.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "25 m is the short-course length and the likeliest wrong pick; 75 m and 100 m are not competition pool lengths. All definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "1500 / 50",
+                "result": 30,
+                "constants": [],
+                "claimIds": ["c1"]
+              },
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Thirty lengths need a turn at the end of every length except the final one, so 29 turns.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Arithmetic on c1: 30 lengths, and turns = lengths minus one = 29."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Short-course events, including the short-course world championships, are swum in 25 m pools, the usual size for many club and school pools.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Short course means 25 m by definition in World Aquatics rules; 25 m pools are the commonest training size."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psport03b",
         "model": "claude-sonnet-5-5",
@@ -141,6 +222,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "How long is an Olympic-size swimming pool?",
+  "answer": "50 metres",
+  "wrong": ["25 metres", "75 metres", "100 metres"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.83,
+    "spread": 0.195,
+    "estimator": "v0"
   }
 }

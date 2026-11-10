@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0302",
-  "status": "draft",
+  "status": "checking",
   "category": "sport",
   "tags": ["athletics", "hurdles", "rules"],
   "region": "global",
@@ -53,13 +53,87 @@
     "doubts": true
   },
   "writerNotes": "Subtopic: athletics, rules. lint: clean. claims: four, three high for numbers. datasets: no pinned dataset covers athletics rules; these are World Athletics technical rules, stable for decades. rivalTest: 12 is the natural guess for a race just over 100 m if a player imagines a hurdle every 9 m or so; 15 and 20 suit players who picture more barriers. No reading makes any of them right. Argued against the key: no standard senior 110 m race uses another count; youth races change heights, not the count. Key sits first in ascending order, to spread ascending keys across A to D (lint X34). volatility: evergreen. regional: hurdles races are on every Olympic programme and watched worldwide. style: Oxford spelling, explanation of 33 words. myths: screened, no match. mystery and encore: not applicable. doubts: none.",
-  "format": "mc",
-  "stem": "How many hurdles does a runner clear in the men's 110 metres hurdles?",
-  "answer": "10",
-  "wrong": ["12", "15", "20"],
-  "order": "ascending",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "5cc772f6278d93d158587fb582f9fc6cc9494da4102d2acf9a6e9cb037a7b498",
+          "d9952e75d47bcc222b13f8b611ab3180ee4140b4b609bd0d9195b785205ad0a5"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:46:06.579Z"
+        ],
+        "startedAt": "2026-11-10T03:45:40.000Z",
+        "finishedAt": "2026-11-10T03:46:23.756Z",
+        "coldSolve": {
+          "answerGiven": "10",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:46:04.818Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "A sprint hurdler over 110 m jumps ten barriers between the start and the finish.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "World Athletics rules set ten flights in the 110 m hurdles (13.72 m to the first, 9.14 m between, 14.02 m to the finish: 13.72 + 9 x 9.14 + 14.02 = 110). I answered 10 cold. Certain knowledge, carried under memo 18."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "There are neither 12, 15 nor 20 barriers in the men's sprint hurdles; ten is the fixed count.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The spacing arithmetic above only closes with ten hurdles, so 12, 15 and 20 are all wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Ten flights of barriers are also used in the women's sprint hurdles over 100 m and in the 400 m hurdles for both sexes.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Women's 100 m hurdles: 13 m, 9 x 8.5 m, 10.5 m = 100 m with ten hurdles. 400 m hurdles: 45 m, 9 x 35 m, 40 m = 400 m with ten hurdles. Both hold."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Hurdle events vary by barrier height (for example 1.067 m men's sprint, 0.838 m women's sprint, 0.914 m and 0.762 m in the 400 m) and by distances between barriers, not by the number of barriers.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Consistent with the spacings checked for c1 and c3."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psport03b",
         "model": "claude-sonnet-5-5",
@@ -139,6 +213,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "How many hurdles does a runner clear in the men's 110 metres hurdles?",
+  "answer": "10",
+  "wrong": ["12", "15", "20"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.44,
+    "spread": 0.136,
+    "estimator": "v0"
   }
 }

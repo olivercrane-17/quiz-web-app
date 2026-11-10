@@ -51,5 +51,75 @@
   "stem": "In how many different orders can five different books be arranged in a row on a shelf?",
   "answer": "120",
   "wrong": ["25", "60", "100"],
-  "order": "ascending"
+  "order": "ascending",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "bd8e50c15312dae8196552ae687401241bfca5f606c8ff4070e8d3daec28fa04",
+          "76df1f2edef07002d4c6105a91085d924f14aa1808e21050a9c4d4d809a7d162"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:58:13.424Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "120",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:58:11.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Arranging n distinct objects in a line gives n factorial orderings; for five that is 120.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 'different orders in a row' counts each left to right sequence separately, so mirror images are distinct; 60 would only arise if reversals were identical, which a shelf does not do. 25 is 5 squared and 100 is just round."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Five distinct items have 120 orderings, so 25, 60 and 100 are all wrong.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "No alternative convention makes 25 or 100 right. 60 needs the mirror-image convention which the stem rules out."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Multiplying 5, 4, 3, 2 and 1 gives 120, and that product is written 5! and read five factorial.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "5x4=20, x3=60, x2=120, x1=120."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

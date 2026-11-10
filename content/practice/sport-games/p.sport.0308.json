@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0308",
-  "status": "draft",
+  "status": "checking",
   "category": "sport",
   "tags": ["board-games", "detective-games"],
   "region": "global",
@@ -57,13 +57,106 @@
     "doubts": true
   },
   "writerNotes": "Subtopic: board games. Easy. lint: clean. claims: five; c2 is high for its date. datasets: none covers board games; c2 needs web evidence (Waddingtons released it in the UK in 1949, and Parker Brothers released Clue in the US the same year). rivalTest: Scotland Yard is the other detective board game and a real confusion; Monopoly and Risk are equally famous family games. None has these characters. Argued against the key: the 1949 date is the UK and US release; Pratt filed the patent in 1944 and it was granted in 1947, so 'first sold' is the safe wording. Mustard and Plum have been in every edition, even after Mrs White was replaced in 2016, so the stem does not depend on edition. Sensitivity: the murder is the game's premise, stated plainly. volatility: evergreen. regional: sold worldwide; both names given. style: Oxford spelling, explanation of 34 words. myths: screened. mystery and encore: not applicable. doubts: c2's year if a checker finds a 1948 or 1950 claim; then the stem drops the year. Writer search (2 of 6): query 'Cluedo board game first published 1949 Waddingtons Anthony Pratt'. Results led by Wikipedia's Cluedo and Anthony E. Pratt pages (Tier B), plus V&A collections and History.com. The summary says Waddingtons first produced the game in 1949 after the patent was granted in 1947, which supports c2. Sources disagree on the invention year (1943 or 1944), which the item does not state.",
-  "format": "mc",
-  "stem": "Colonel Mustard and Professor Plum are suspects in which board game, first sold in 1949?",
-  "answer": "Cluedo (Clue)",
-  "wrong": ["Monopoly", "Scotland Yard", "Risk"],
-  "order": "shuffle",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "ca8349ba4b2035f3f0a3066522fdc9935df132b3f9cfab8e8cf09ac6834de5a7",
+          "d0a365589f8239c460ba3cd15847744e6899eede0a180ae3dc192b2a1f955573"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:48:29.528Z"
+        ],
+        "startedAt": "2026-11-10T03:48:23.000Z",
+        "finishedAt": "2026-11-10T03:48:45.042Z",
+        "coldSolve": {
+          "answerGiven": "Cluedo (Clue)",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:48:27.681Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The six original suspects of Cluedo (called Clue in the US and Canada) include Colonel Mustard and Professor Plum.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered cold. The two names are the same in both the UK and US editions (only Reverend Green became Mr. Green in the US)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Waddingtons put Cluedo on sale in Britain in 1949, the same year Parker Brothers launched it as Clue in America.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The game was patented in the mid-1940s but post-war shortages delayed release to 1949; both the UK and US launches fall in 1949, so 'first sold in 1949' holds. Certain knowledge under memo 18."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Neither Mustard nor Plum appears in Monopoly, Risk or Scotland Yard.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Monopoly's mascot is Mr Monopoly; Risk has no characters; Scotland Yard has detectives and Mister X. All definitely wrong. Scotland Yard is a fair crime-themed distractor."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Anthony E. Pratt, a musician from Birmingham, England, came up with the game in the war years.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Pratt devised it during the Second World War (he worked in a factory then, and had played piano at country-house parties). 'English musician' is the standard description."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The goal of Cluedo is to deduce the killer, the weapon used and the room where it happened.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Core rules of the game."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation's 'where players also hunt for the murderer, the weapon and the room' reads as if North America plays differently; 'the same hunt' would be clearer. Not an error."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psport03b",
         "model": "claude-sonnet-5-5",
@@ -162,6 +255,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "Colonel Mustard and Professor Plum are suspects in which board game, first sold in 1949?",
+  "answer": "Cluedo (Clue)",
+  "wrong": ["Monopoly", "Scotland Yard", "Risk"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.9,
+    "spread": 0.342,
+    "estimator": "v0"
   }
 }

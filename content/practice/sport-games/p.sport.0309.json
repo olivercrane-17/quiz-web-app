@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0309",
-  "status": "draft",
+  "status": "checking",
   "category": "sport",
   "tags": ["card-games", "word-origins"],
   "region": "global",
@@ -53,13 +53,197 @@
     "doubts": true
   },
   "writerNotes": "Subtopic: card games (thin in the pool, one or two items). lint: clean. claims: four; three high for etymology. datasets: none covers word origins; c1 and c4 need web evidence (a dictionary such as the OED, Merriam-Webster or Etymonline). rivalTest: the other three suits are the only possible options; clubs is the tempting one because Latin suits include clubs (bastoni), but 'club' is an English word for a cudgel, not a sword. Argued against the key: 'spade' the tool and 'spade' the suit look like one word, which is the surprise; dictionaries give them separate entries, the suit from Italian spade, plural of spada. The shape of the pip (a pike head in French packs) is a separate story that the item does not touch. volatility: evergreen. regional: the four-suit pack is used worldwide. style: Oxford spelling, explanation of 34 words (I left the cups suit out of the explanation because lint C21 reads 'cups' as a unit). myths: screened. mystery and encore: not applicable. doubts: c4 is the claim to watch: some sources say the English tool word and the Italian word share a distant Greek root (spathe). The item only says the suit is not named after the tool, which holds either way; if a checker objects, c4 and the last clause of the explanation can go.",
-  "format": "mc",
-  "stem": "Which suit in a standard pack of playing cards takes its name from an Italian or Spanish word for 'sword'?",
-  "answer": "Spades",
-  "wrong": ["Clubs", "Hearts", "Diamonds"],
-  "order": "shuffle",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "946bf16b442bbf0da5275906bc94f63605307aece5840726b7a764bccff446b7",
+          "8717fedca51ce898046d8f20e0c9afb4e8ad10ef57fbe0dcadbc6046f4511d8a"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:48:52.562Z"
+        ],
+        "startedAt": "2026-11-10T03:48:46.000Z",
+        "finishedAt": "2026-11-10T03:49:43.914Z",
+        "coldSolve": {
+          "answerGiven": "Spades",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:48:50.785Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "web",
+                "query": "etymology of spade digging tool Old English spadu cognate Greek spathe Italian spada",
+                "results": [
+                  {
+                    "title": "Synonyms of spadenext",
+                    "url": "https://www.merriam-webster.com/dictionary/spaded"
+                  },
+                  {
+                    "title": "Synonyms of spadenext",
+                    "url": "https://www.merriam-webster.com/dictionary/spadefuls"
+                  },
+                  {
+                    "title": "www.wikipedia.org",
+                    "url": "https://Www.wikipedia.org/wiki/Spade"
+                  },
+                  {
+                    "title": "Synonyms of spadenext",
+                    "url": "https://www.merriam-webster.com/dictionary/spade"
+                  },
+                  {
+                    "title": "Synonyms of spadenext",
+                    "url": "https://www.merriam-webster.com/dictionary/spaders"
+                  },
+                  {
+                    "title": "Synonyms of spadenext",
+                    "url": "https://www.merriam-webster.com/dictionary/spading"
+                  },
+                  {
+                    "title": "encycloreader.org",
+                    "url": "https://encycloreader.org/r/wikipedia.php?q=Spade"
+                  },
+                  {
+                    "title": "An Etymological Dictionary of Astronomy and Astrophysics",
+                    "url": "https://dictionary.obspm.fr/terms/spade/"
+                  },
+                  {
+                    "title": "Middle English Dictionary Entry",
+                    "url": "https://quod.lib.umich.edu/m/middle-english-dictionary/dictionary/MED41921"
+                  },
+                  {
+                    "title": "en.wiktionary.com",
+                    "url": "https://en.wiktionary.com/wiki/spade"
+                  }
+                ],
+                "summaryExcerpt": "Dictionaries describe the Greek spáthē as akin to the Old English word, meaning a blade-like implement or object. Both trace back to a reconstructed Indo-European root, possibly tied to a verb meaning \"draw, pull out\" (Merriam-Webster's Word History). ... Merriam-Webster notes that Italian spada or Spanish espada means broadsword, both from Latin spatha, from Greek spathē blade. So the Italian word shares the Greek ancestry but was not the source of the English tool word.",
+                "citedResult": {
+                  "title": "Synonyms of spadenext",
+                  "url": "https://www.merriam-webster.com/dictionary/spade",
+                  "tier": "B"
+                },
+                "tiers": ["B", "C"],
+                "conflictReported": false,
+                "retrievedAt": "2026-11-10"
+              },
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "English took the suit name from the Latin-suited packs, where the sword suit is spade in Italian and espadas in Spanish, both from Latin spatha.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered Spades cold. The search summary, attributed to Merriam-Webster (Tier B), gives the card sense from Italian spada / Spanish espada, broadsword, from Latin spatha. Holds."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Hearts and diamonds are named for the French pip shapes, and clubs translates the Latin-suited batons (bastoni, bastos); none means sword.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "All three distractors are definitely wrong; clubs is the nearest temptation because it too comes from the Italian/Spanish suits, but from batons, not swords."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Latin-suited Italian and Spanish decks have four suits: swords, cups, coins and batons (clubs).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Spade, coppe, denari, bastoni in Italian; espadas, copas, oros, bastos in Spanish."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "refuted",
+            "evidence": [
+              {
+                "kind": "web",
+                "query": "etymology of spade digging tool Old English spadu cognate Greek spathe Italian spada",
+                "results": [
+                  {
+                    "title": "Synonyms of spadenext",
+                    "url": "https://www.merriam-webster.com/dictionary/spaded"
+                  },
+                  {
+                    "title": "Synonyms of spadenext",
+                    "url": "https://www.merriam-webster.com/dictionary/spadefuls"
+                  },
+                  {
+                    "title": "www.wikipedia.org",
+                    "url": "https://Www.wikipedia.org/wiki/Spade"
+                  },
+                  {
+                    "title": "Synonyms of spadenext",
+                    "url": "https://www.merriam-webster.com/dictionary/spade"
+                  },
+                  {
+                    "title": "Synonyms of spadenext",
+                    "url": "https://www.merriam-webster.com/dictionary/spaders"
+                  },
+                  {
+                    "title": "Synonyms of spadenext",
+                    "url": "https://www.merriam-webster.com/dictionary/spading"
+                  },
+                  {
+                    "title": "encycloreader.org",
+                    "url": "https://encycloreader.org/r/wikipedia.php?q=Spade"
+                  },
+                  {
+                    "title": "An Etymological Dictionary of Astronomy and Astrophysics",
+                    "url": "https://dictionary.obspm.fr/terms/spade/"
+                  },
+                  {
+                    "title": "Middle English Dictionary Entry",
+                    "url": "https://quod.lib.umich.edu/m/middle-english-dictionary/dictionary/MED41921"
+                  },
+                  {
+                    "title": "en.wiktionary.com",
+                    "url": "https://en.wiktionary.com/wiki/spade"
+                  }
+                ],
+                "summaryExcerpt": "Dictionaries describe the Greek spáthē as akin to the Old English word, meaning a blade-like implement or object. Both trace back to a reconstructed Indo-European root, possibly tied to a verb meaning \"draw, pull out\" (Merriam-Webster's Word History). ... Merriam-Webster notes that Italian spada or Spanish espada means broadsword, both from Latin spatha, from Greek spathē blade. So the Italian word shares the Greek ancestry but was not the source of the English tool word.",
+                "citedResult": {
+                  "title": "Synonyms of spadenext",
+                  "url": "https://www.merriam-webster.com/dictionary/spade",
+                  "tier": "B"
+                },
+                "tiers": ["B", "C"],
+                "conflictReported": false,
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "Overstated. The suit name was borrowed from Italian/Spanish rather than taken from the English tool word (true), but the two are not unrelated: Merriam-Webster (Tier B, cited by the summary) says Greek spathe is akin to Old English spadu, so the tool word and spada/espada share an Indo-European root. The explanation's \"the garden tool has nothing to do with it\" states a too-strong etymology as fact. A fix: \"English borrowed the suit name from Italian spade (swords); the garden-tool word came into English separately, from Old English.\""
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "Explanation and claim c4 say the card suit name is unrelated to the garden spade; the words are distant cognates (both from the root behind Greek spathe). Rewrite to say the suit name was borrowed from Italian rather than named after the tool. The key and distractors are sound."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "fail"
+      },
       {
         "checker": "fc-psport03b",
         "model": "claude-sonnet-5-5",
@@ -145,6 +329,22 @@
         "searchesUsed": 1,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "Which suit in a standard pack of playing cards takes its name from an Italian or Spanish word for 'sword'?",
+  "answer": "Spades",
+  "wrong": ["Clubs", "Hearts", "Diamonds"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.6,
+    "spread": 0.224,
+    "estimator": "v0"
   }
 }

@@ -70,6 +70,108 @@
   "relation": "hotter",
   "measure": "mean surface temperature",
   "unit": "°C",
-  "values": { "a": 464, "b": 167 },
-  "valueDisplay": { "a": "about 464 °C", "b": "about 167 °C" }
+  "values": {
+    "a": 464,
+    "b": 167
+  },
+  "valueDisplay": {
+    "a": "about 464 °C",
+    "b": "about 167 °C"
+  },
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "ae1d9aa3e4d08ffd4a3c7540894276dfb35fb61d849fa29f264a606936ead5c5",
+          "889e029ef9411b300e14bd1f0732408c3d0ac8ab59691b0f10eeeb1e397d4923"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:56:53.311Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "Venus",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:56:44.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Venus's average surface temperature is roughly 464 degrees Celsius, about 737 kelvin, the hottest of any planet.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Matches the NASA planetary fact sheet figure I know (737 K). Rival test: Mercury is closer to the Sun but Venus's greenhouse atmosphere wins; no reading of 'surface, on average' favours Mercury. High-risk number, so it relies on check A's external evidence per memo 18."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Mercury's mean surface temperature is about 167 degrees Celsius (440 K), per the NASA fact sheet.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Mean of a huge day/night swing; the item says mean so no trick. 167 C is the standard published mean. Well below Venus on any figure, so the order cannot flip."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Venus's air is mostly CO2 and is very dense, and it holds in heat through a runaway greenhouse effect.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Atmosphere is about 96.5% carbon dioxide. Textbook."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Lead's melting point sits near 327.5 degrees Celsius, under Venus's roughly 464 degree surface.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "327.5 C is the standard value, so molten lead on Venus's surface is a fair claim."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Mercury's sunlit side peaks near 430 C and its night side falls to about minus 180 C because it has only a trace exosphere.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "NASA Mercury page gives 430 C / -180 C. 'Almost no atmosphere' is right (exosphere)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

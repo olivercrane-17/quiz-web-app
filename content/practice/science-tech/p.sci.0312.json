@@ -58,5 +58,88 @@
   "stem": "Which unit of power is named after the Scottish engineer famous for improving the steam engine?",
   "answer": "Watt",
   "wrong": ["Joule", "Newton", "Volt"],
-  "order": "shuffle"
+  "order": "shuffle",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "5165bd16d819d47a16ab1e9e62ad6be3d3ee33eb9d8e366d4f51e0f9c065ae5c",
+          "bbad3ceb579886153247324c186a7f2d1c3f908bb5d0872ad87ee37827db126b"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:59:02.979Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "Watt",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:59:01.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The SI unit of power, the watt, honours the Scottish engineer James Watt, whose changes made the steam engine far more efficient.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: horsepower is also a power unit named for no person and is not offered; joule, volt and newton measure energy, potential and force. Only one option is a unit of power, and it is named for Watt."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Joule, newton and volt honour James Prescott Joule (English), Isaac Newton (English) and Alessandro Volta (Italian) and measure energy, force and electric potential.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Nationality labels are right. Newton is often called 'English physicist and mathematician'; 'scientist' is fine."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Watt devised the horsepower measure in the late 1700s to show customers how many draught horses an engine replaced.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The account is the standard one; 'coined' is the usual wording."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "A mechanical horsepower equals 745.7 watts, so about 746 W.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The metric horsepower is 735.5 W, but the claim says mechanical, and 745.7 is right. High-risk number, so it leans on check A's external source."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

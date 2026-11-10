@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0311",
-  "status": "draft",
+  "status": "checking",
   "category": "sport",
   "tags": ["winter-olympics", "sliding-sports", "luge"],
   "region": "global",
@@ -50,13 +50,87 @@
     "doubts": true
   },
   "writerNotes": "Subtopic: winter sports. lint: clean. claims: four, all standard. datasets: none applies. rivalTest: three options only, because there are exactly three Olympic sliding sports and a fourth (a non-sliding sport) would be filler (CONTENT_GUIDE §4, rule 9). Skeleton is the planted confusion: same track, opposite position. Argued against the key: no other Olympic event has athletes on their backs, feet forward. I avoided saying bobsleigh crews are 'two or four', since the women's monobob has a crew of one. volatility: evergreen. regional: Winter Olympics coverage is worldwide, though players in warm countries meet these sports less; the three options are the well-known names, so a player can reason from 'lying on top' and 'feet forward'. style: Oxford spelling ('bobsleigh'), explanation of 27 words. myths: screened. mystery and encore: not applicable. doubts: none.",
-  "format": "mc",
-  "stem": "In which Winter Olympic sport do athletes race down an ice track lying on their backs, feet forward?",
-  "answer": "Luge",
-  "wrong": ["Skeleton", "Bobsleigh"],
-  "order": "shuffle",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "66515085fe4c1930e6e6e6aa5a6880cf532fd2a554a1d2d9c56452baeec650c4",
+          "43a4fd2fead4d76d8f21d9354a9fff14dff57208e6b8b5c06a8b360fe29303ca"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:50:09.535Z"
+        ],
+        "startedAt": "2026-11-10T03:50:04.000Z",
+        "finishedAt": "2026-11-10T03:50:19.602Z",
+        "coldSolve": {
+          "answerGiven": "Luge",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:07.750Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Lugers ride supine on a small sled, feet first down the ice channel.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered cold. The supine, feet-first position defines luge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Skeleton sliders go prone and head first, and bobsledders sit in an enclosed sled, so only luge fits the stem.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Skeleton (prone, headfirst) is the classic confusion, so it is a good distractor and definitely wrong; bobsleigh crews sit inside. Three options is fine since only three sliding sports exist."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The three sliding sports share refrigerated artificial ice tracks such as those at Whistler, Lake Placid and Altenberg.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Olympic sliding centres host all three; luge often uses lower start points, but the track is the same."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The pilot at the front steers the bobsleigh with ropes linked to the front runners, and the crew are seated within the shell.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard description of two-man and four-man bobsleigh (and monobob, pilot only)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psport03b",
         "model": "claude-sonnet-5-5",
@@ -136,6 +210,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "In which Winter Olympic sport do athletes race down an ice track lying on their backs, feet forward?",
+  "answer": "Luge",
+  "wrong": ["Skeleton", "Bobsleigh"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.164,
+    "estimator": "v0"
   }
 }

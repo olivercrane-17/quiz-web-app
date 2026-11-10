@@ -62,5 +62,107 @@
   "stem": "Charles Goodyear's vulcanization process, using sulfur and heat, toughened which material?",
   "answer": "Rubber",
   "wrong": ["Steel", "Glass", "Leather"],
-  "order": "shuffle"
+  "order": "shuffle",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "27fe6977cdc301236f07b09fc1f49e742d460783360592d8ddea7303b3e33c59",
+          "7a5edae8ee75ad7ea5f7c65c28cad4bbe9ecc6bde7b2f129bcc0f31f35c0c42e"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:58:23.616Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "Rubber",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:58:21.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Vulcanizing means heating rubber with sulfur so it cross-links, which makes it stronger, springier and steadier.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Textbook chemistry. Goodyear's own recipe used sulfur and heat, as the stem says."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Vulcanization is a rubber process and is not applied to steel, glass or leather.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "A vulcanized fibre material exists but is cellulose, not leather, and is not what the stem describes."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Raw natural rubber goes tacky in heat and stiff and cracking in cold, which is why it needed treating.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The standard motivation for the process."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Goodyear's US patent for the process was granted on 15 June 1844.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "US patent 3,633. High-risk date, so it relies on check A's external source to count."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The word vulcanize, coined by Thomas Hancock's friend William Brockedon, refers to Vulcan, the Roman god of fire and the forge.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Not Goodyear's coinage, but the claim says only the name honours Vulcan, which is correct, and the explanation does not say Goodyear coined it."
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "Goodyear is so tied to tyres that the answer is easy even without the chemistry. Not a correctness problem, and the other three options are all clearly wrong."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

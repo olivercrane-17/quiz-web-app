@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0307",
-  "status": "draft",
+  "status": "checking",
   "category": "sport",
   "tags": ["bowling", "scoring"],
   "region": "global",
@@ -52,13 +52,94 @@
     "doubts": true
   },
   "writerNotes": "Subtopic: rules and scoring (bowling has no item in the pool). Easy. This replaces a tennis 'love' item that sat too close to the guide's r.game-on.90. lint: clean. claims: four; c3 and c4 high for numbers. datasets: none applies; standard ten-pin rules (World Bowling / USBC). rivalTest: Baseball is the planted confusion (it has strikes); darts and curling are other target sports. None scores spares, so the pair 'strikes and spares' points to one sport only. Argued against the key: candlepin and duckpin bowling also use strikes and spares, but they are not options; nine-pin bowling uses different terms. volatility: evergreen. regional: ten-pin bowling centres exist on every continent. style: Oxford spelling, explanation of 34 words. myths: screened. mystery and encore: not applicable. doubts: none.",
-  "format": "mc",
-  "stem": "Strikes and spares are part of the scoring in which game?",
-  "answer": "Ten-pin bowling",
-  "wrong": ["Baseball", "Darts", "Curling"],
-  "order": "shuffle",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "2e02d9910894d9bcaf533173236f43882d4bab3eed46fb0b9603e4031c2ae8c5",
+          "bbcd81884002296f6e38bfc8a2a4396a8b844422ce0479b7a70ca7025771e194"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:48:09.765Z"
+        ],
+        "startedAt": "2026-11-10T03:48:03.000Z",
+        "finishedAt": "2026-11-10T03:48:22.225Z",
+        "coldSolve": {
+          "answerGiven": "Ten-pin bowling",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:48:07.965Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Ten-pin bowling scores frames as strikes, spares or open frames.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered cold. The pairing 'strikes and spares' is unique to bowling games among the options."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "No spare exists in curling, darts or baseball; baseball counts strikes against a batter but has nothing called a spare.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Baseball is the tempting distractor because of 'strikes', but only bowling has both terms, so the stem's pair rules it out. Curling (ends, stones) and darts (legs, sets) have neither."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "A strike means all ten pins fall to the first delivery in a frame; a spare means the second delivery topples whatever pins the first left standing.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard bowling definitions (World Bowling / USBC rules)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The maximum ten-pin score is 300, reached by bowling strikes on all twelve possible deliveries: one in each of frames 1 to 9 and three in the tenth.",
+                "confidence": "certain"
+              },
+              {
+                "kind": "calculation",
+                "expression": "10 × 30",
+                "result": 300,
+                "constants": [],
+                "claimIds": []
+              }
+            ],
+            "note": "Each strike frame scores 10 plus the next two balls; ten frames of 30 make 300, needing 9 + 3 = 12 consecutive strikes."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psport03b",
         "model": "claude-sonnet-5-5",
@@ -144,6 +225,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "Strikes and spares are part of the scoring in which game?",
+  "answer": "Ten-pin bowling",
+  "wrong": ["Baseball", "Darts", "Curling"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.88,
+    "spread": 0.237,
+    "estimator": "v0"
   }
 }

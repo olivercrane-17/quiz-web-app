@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0306",
-  "status": "draft",
+  "status": "checking",
   "category": "sport",
   "tags": ["boxing", "combat-sports", "rules"],
   "region": "global",
@@ -44,13 +44,80 @@
     "doubts": true
   },
   "writerNotes": "Subtopic: combat sports, rules (the pool has a single boxing item). Easy. lint: clean. claims: three, all standard: no number, date, superlative or etymology. datasets: none applies. rivalTest: 'Total knockout' is the tempting folk expansion; 'timed' and 'title' share the T and the form. None is the abbreviation's meaning in any boxing rule book. Argued against the key: none; the expansion is universal. Sensitivity: rules only, no injury detail, no named boxer. volatility: evergreen. regional: boxing is an Olympic sport followed worldwide. style: Oxford spelling, explanation of 32 words. myths: screened. mystery and encore: not applicable. doubts: none.",
-  "format": "mc",
-  "stem": "Boxing results often list a win by TKO. What is TKO short for?",
-  "answer": "Technical knockout",
-  "wrong": ["Total knockout", "Timed knockout", "Title knockout"],
-  "order": "shuffle",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "61ebaed1dea27dd1175bea8e425a4ece671cd3bfa32f2d79288a3f45e0851923",
+          "4f93ca7c7d79f453aac0acf58de98be480ce681895d148f48e26adaf8b6072fa"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:47:52.269Z"
+        ],
+        "startedAt": "2026-11-10T03:47:43.000Z",
+        "finishedAt": "2026-11-10T03:48:02.332Z",
+        "coldSolve": {
+          "answerGiven": "Technical knockout",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:47:50.238Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The abbreviation TKO in boxing results means technical knockout.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered cold; standard boxing terminology."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The T in TKO is 'technical', never 'total', 'timed' or 'title'.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "None of the three distractor expansions is in use; all definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "When a referee, a ringside physician or the fighter's corner halts a fight because the fighter can't go on safely, and no ten-count has finished, the result is a technical knockout.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Correct as a general rule. Some record keepers log a corner retirement between rounds as RTD, which is still classed as a form of TKO, so the claim holds."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "Corner stoppages between rounds are sometimes listed as RTD (retired) in records; the explanation stays true because RTD is counted as a TKO variant."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psport03b",
         "model": "claude-sonnet-5-5",
@@ -117,6 +184,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "Boxing results often list a win by TKO. What is TKO short for?",
+  "answer": "Technical knockout",
+  "wrong": ["Total knockout", "Timed knockout", "Title knockout"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.84,
+    "spread": 0.172,
+    "estimator": "v0"
   }
 }

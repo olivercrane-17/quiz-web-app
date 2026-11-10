@@ -1,7 +1,6 @@
 {
   "id": "p.sport.0312",
-  "status": "draft",
-  "format": "mc",
+  "status": "checking",
   "category": "sport",
   "tags": ["chess", "notation"],
   "region": "global",
@@ -9,18 +8,231 @@
   "reviewBy": null,
   "seededDifficulty": 3,
   "counterintuitive": false,
+  "explanation": "K was already taken by the king, so the knight borrowed the N. Pawns get no letter at all, which is why a move written simply as e4 means a pawn has moved.",
+  "learnMore": "Algebraic notation (chess)",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In English algebraic chess notation, the knight is written as N."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "In English notation the king is K and the rook is R, and pawns have no letter."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The knight uses N because K already stands for the king."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In algebraic notation a pawn move is written with the destination square alone, such as e4."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: chess. lint: clean. claims: four; c4 is high only for the digit in 'e4'. datasets: none applies; FIDE's Laws of Chess, appendix on algebraic notation, use English letters K, Q, R, B, N. rivalTest: King is the planted confusion (a player may think 'N' is an odd choice and guess a piece whose letter is 'taken'); Pawn tempts players who know pawns are the odd one out; Rook is a plain same-kind option. Each is definitely not N. Argued against the key: older descriptive notation sometimes used Kt for the knight, but the stem says 'the letter N', which only the knight has. Other languages use other letters (S for Springer in German), so the stem says 'written in English'. volatility: evergreen. regional: chess is played worldwide; English notation is the international standard in FIDE's Laws. style: Oxford spelling, explanation of 32 words. myths: screened. mystery and encore: not applicable. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "9b6fbbf3131b33cc6bc5c35352390bd50bd5e1bf294c2b31bc6dd2fd66a3b75d",
+          "fb2cfeae8bffe8a40968f88a120c1aa2094e0769af95a92a9a11bfd2d8580424"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:50:26.849Z"
+        ],
+        "startedAt": "2026-11-10T03:50:20.000Z",
+        "finishedAt": "2026-11-10T03:50:38.205Z",
+        "coldSolve": {
+          "answerGiven": "Knight",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:25.237Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "English-language algebraic notation uses the letter N for the knight, as in Nf3.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered cold. FIDE Laws Appendix C (English letters K, Q, R, B, N)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "K marks the king and R the rook, while pawn moves carry no piece letter.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "So Rook, King and Pawn are all definitely wrong for N."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Since the king already owns K, the knight is given N (from its sound) to avoid a clash.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The standard explanation; older descriptive notation used Kt for the same reason before N displaced it."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "A plain pawn advance is recorded only as the square it reaches, for instance e4.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "True for non-capturing pawn moves, which is what the explanation's e4 example shows; captures add the file (exd5) and promotions add the piece, but neither contradicts the explanation as worded."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b2",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "1446a1c992087aecdac7d27335becb33b0b709a45e3571c80d938e4f3ac62c14",
+          "056146c101fd74ae7d25cab50f823230d2f04edb783718cf2c14b0d0c3e51731"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:50:48.812Z"
+        ],
+        "startedAt": "2026-11-10T03:46:00.000Z",
+        "finishedAt": "2026-11-10T03:54:57.000Z",
+        "coldSolve": {
+          "answerGiven": "Knight",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:29.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "English-language chess scoresheets abbreviate the knight with a capital N, since K is spoken for.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: K (king), R (rook) and Q, B are all taken; N is the only letter a knight has in English algebraic notation. In some other languages the knight is S, C or other letters, but the stem fixes English, so no regional second answer."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "King is K and rook is R in English algebraic; a pawn move is written without any piece letter.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Checked each distractor against the stem. Pawn is the only one that could tempt a pedant (P appears in FEN diagrams and old long-form notation), but in written move notation pawns carry no letter and none of the options is N."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Because K was already the king's letter, the knight took the N from the end of its first syllable.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The letter-conflict reasoning is the standard account for N."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "A pawn advance is recorded as only the square it lands on, so e4 alone means a pawn went to e4.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Marked high only because of a stray 'number' reason; it is a notation convention and not a count. Counts only with check A's external evidence under memo 18 if the editor treats it as high."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says pawns get no letter without saying 'in algebraic notation'; the stem already fixes English notation, so this is harmless."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ]
+  },
+  "format": "mc",
   "stem": "In chess notation written in English, which piece is shown by the letter N?",
   "answer": "Knight",
   "wrong": ["King", "Pawn", "Rook"],
   "order": "shuffle",
-  "explanation": "K was already taken by the king, so the knight borrowed the N. Pawns get no letter at all, which is why a move written simply as e4 means a pawn has moved.",
-  "learnMore": "Algebraic notation (chess)",
-  "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "In English algebraic chess notation, the knight is written as N."},
-    {"id": "c2", "role": "distractor", "risk": "standard", "text": "In English notation the king is K and the rook is R, and pawns have no letter."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "The knight uses N because K already stands for the king."},
-    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "number", "text": "In algebraic notation a pawn move is written with the destination square alone, such as e4."}
-  ],
-  "selfCheck": {"lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true},
-  "writerNotes": "Subtopic: chess. lint: clean. claims: four; c4 is high only for the digit in 'e4'. datasets: none applies; FIDE's Laws of Chess, appendix on algebraic notation, use English letters K, Q, R, B, N. rivalTest: King is the planted confusion (a player may think 'N' is an odd choice and guess a piece whose letter is 'taken'); Pawn tempts players who know pawns are the odd one out; Rook is a plain same-kind option. Each is definitely not N. Argued against the key: older descriptive notation sometimes used Kt for the knight, but the stem says 'the letter N', which only the knight has. Other languages use other letters (S for Springer in German), so the stem says 'written in English'. volatility: evergreen. regional: chess is played worldwide; English notation is the international standard in FIDE's Laws. style: Oxford spelling, explanation of 32 words. myths: screened. mystery and encore: not applicable. doubts: none."
+  "predicted": {
+    "p": 0.76,
+    "spread": 0.167,
+    "estimator": "v0"
+  }
 }

@@ -57,6 +57,91 @@
   "relation": "more",
   "measure": "atoms in one molecule",
   "unit": "atoms",
-  "values": { "a": 5, "b": 3 },
-  "valueDisplay": { "a": "5 atoms (CH4)", "b": "3 atoms (CO2)" }
+  "values": {
+    "a": 5,
+    "b": 3
+  },
+  "valueDisplay": {
+    "a": "5 atoms (CH4)",
+    "b": "3 atoms (CO2)"
+  },
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "1026cc24d3699e30d28a421d1abd592df00e836248b4feb33073ac000a165510",
+          "7f59644c775d5efa56e8d1f4532abee47f62ce533a2da7040a9d3b1e8cbbdf77"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:57:19.075Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "A methane molecule",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:57:17.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "CH4 is made of one carbon bonded to four hydrogens, so five atoms.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Formula is unambiguous. Rival test: no common reading of 'atoms in a molecule' changes the count (it is not asking about bonds or electrons)."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "CO2 is a linear molecule with one carbon between two oxygens, three atoms in all.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Trap is that CO2 feels the 'bigger' molecule; the explanation defuses it."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "number=6, 8, 1",
+                "excerpt": "C atomic_mass 12.011; O 15.999; H 1.008",
+                "retrievedAt": "2026-11-10"
+              },
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Adding up atomic masses, CO2 is 12.011 + 2 x 15.999 = 44.0 and CH4 is 12.011 + 4 x 1.008 = 16.04.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Dataset masses give 44.009 and 16.043, so 'about 44' and 'about 16' hold."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

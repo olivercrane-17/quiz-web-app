@@ -1,6 +1,6 @@
 {
   "id": "p.sport.0301",
-  "status": "draft",
+  "status": "checking",
   "category": "sport",
   "tags": ["table-tennis", "equipment", "rules"],
   "region": "global",
@@ -60,13 +60,100 @@
     "doubts": true
   },
   "writerNotes": "Subtopic: racket sports, equipment. lint: clean. claims: five, every one with a number or date marked high. datasets: no pinned dataset covers table tennis equipment; c1, c3 and c4 need web evidence (the ITTF or a reference work). I did not spend a search on it: the 38 mm to 40 mm switch in 2000 is widely documented. rivalTest: 38 mm is the planted trap (the old ball), so a player who half remembers the size picks it; 32 and 35 are spaced like the other distractors and are wrong under any reading. Argued against the key: some writers round the new ball to '40+' after the 2014 change from celluloid to plastic, but the diameter stayed 40 mm; only the material changed. The stem says 'In 2000' so the item is dated. Key sits fourth in ascending order. volatility: dated (the year is in the stem). regional: table tennis is played on every continent. style: Oxford spelling, explanation of 33 words. myths: screened, no match. mystery and encore: not applicable. doubts: the exact month (October 2000) in c4; if a checker cannot place it, c4 can drop to 'in 2000' without touching the explanation, which only says 'after the Sydney Olympics'.",
-  "format": "mc",
-  "stem": "In 2000, table tennis adopted a new official ball. What diameter is that ball?",
-  "answer": "40 mm",
-  "wrong": ["32 mm", "35 mm", "38 mm"],
-  "order": "ascending",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "b0915619c286c248360ceb68bc0b6ff2cd09bb9555a7dee5f74a34b8345458f1",
+          "3c8d269e83c47945c4324bed080f7737ff73efe4860f1d42dabe527b66468178"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:45:07.849Z"
+        ],
+        "startedAt": "2026-11-10T03:44:59.000Z",
+        "finishedAt": "2026-11-10T03:45:47.728Z",
+        "coldSolve": {
+          "answerGiven": "40 mm",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:45:06.283Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Since the ITTF switch in 2000, the regulation ball for sanctioned table tennis is 40 millimetres across.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The ITTF equipment rules have specified a 40 mm ball since the 2000 change; I answered 40 mm cold with high confidence. No dataset covers equipment rules; per memo 18 a direct certain confirmation by both passes carries this high-risk number."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "None of 32, 35 or 38 millimetres is the size of the post-2000 ball; 38 mm was the size it replaced, and 32 and 35 were never regulation sizes in the modern era.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "38 mm is the pre-2000 ball (the most tempting wrong pick); 32 and 35 mm match no standard in force after 2000. Each distractor is definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ball used before the 2000 switch had a 38 millimetre diameter.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The well-known '38 mm to 40 mm' change; checked against my knowledge of ITTF equipment history."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ITTF made the larger ball mandatory in October 2000, straight after the Sydney Games, which were the last Olympics played with the 38 mm ball.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The Sydney Olympics ran 15 September to 1 October 2000 and were the last major event with the 38 mm ball; the 40 mm ball took effect that October. 'October 2000, after Sydney' holds."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ITTF chose a bigger ball so it would travel and spin a little less, giving longer, more watchable rallies for spectators and TV.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The stated motive (slower play, better for television) is the ITTF's widely reported rationale; the explanation's air-resistance wording is physically sound."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psport03b",
         "model": "claude-sonnet-5-5",
@@ -165,6 +252,22 @@
         "searchesUsed": 1,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "In 2000, table tennis adopted a new official ball. What diameter is that ball?",
+  "answer": "40 mm",
+  "wrong": ["32 mm", "35 mm", "38 mm"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.33,
+    "spread": 0.186,
+    "estimator": "v0"
   }
 }

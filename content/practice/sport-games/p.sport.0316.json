@@ -1,7 +1,6 @@
 {
   "id": "p.sport.0316",
-  "status": "draft",
-  "format": "tf",
+  "status": "checking",
   "category": "sport",
   "tags": ["athletics", "throwing", "equipment"],
   "region": "global",
@@ -9,18 +8,348 @@
   "reviewBy": null,
   "seededDifficulty": 5,
   "counterintuitive": true,
-  "stem": "In men's athletics, the hammer, wire and handle included, weighs the same as the shot.",
-  "answer": true,
-  "tfKind": "surprising_truth",
   "explanation": "Both weigh 7.26 kg, which is 16 pounds. The hammer flies much farther because the thrower spins with it on a wire about 1.2 m long before letting go.",
   "learnMore": "Hammer throw",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "high", "riskReason": "counterintuitive", "text": "Under World Athletics rules, the men's hammer (head, wire and handle together) and the men's shot have the same specified weight."},
-    {"id": "c2", "role": "explanation", "risk": "high", "riskReason": "number", "text": "The men's hammer and the men's shot each weigh 7.26 kg."},
-    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "7.26 kg is 16 pounds (16 lb is 7.257 kg)."},
-    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "number", "text": "The men's hammer, measured from the handle to the far side of the head, is about 1.2 metres long."},
-    {"id": "c5", "role": "explanation", "risk": "standard", "text": "Hammer throwers turn several times inside the circle before releasing, which lets the hammer travel much farther than a put shot."}
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "riskReason": "counterintuitive",
+      "text": "Under World Athletics rules, the men's hammer (head, wire and handle together) and the men's shot have the same specified weight."
+    },
+    {
+      "id": "c2",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The men's hammer and the men's shot each weigh 7.26 kg."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "7.26 kg is 16 pounds (16 lb is 7.257 kg)."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "The men's hammer, measured from the handle to the far side of the head, is about 1.2 metres long."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Hammer throwers turn several times inside the circle before releasing, which lets the hammer travel much farther than a put shot."
+    }
   ],
-  "selfCheck": {"lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true},
-  "writerNotes": "Subtopic: athletics, equipment. True/false surprising truth. lint: clean. claims: five; four high. datasets: none covers implement specifications; c1, c2 and c4 need web evidence (World Athletics technical rules: minimum weight 7.260 kg for both men's implements; the hammer's overall length is 1175 to 1215 mm). c3 is a conversion: 16 x 0.45359237 = 7.257 kg. rivalTest: argued for 'false': the hammer looks like a light ball on a long wire, so most players expect it to be lighter, which is the surprise. Argued against the key: the rule gives a minimum weight for competition use; both minimums are 7.260 kg, and the stem's 'wire and handle included' removes the reading that only the head counts. Women's implements also match each other (4 kg), but the stem names men's to stay specific. volatility: evergreen; the 16 lb standard is historic. regional: athletics is global. style: Oxford spelling, explanation of 29 words. myths: screened. mystery and encore: not applicable. doubts: none."
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: athletics, equipment. True/false surprising truth. lint: clean. claims: five; four high. datasets: none covers implement specifications; c1, c2 and c4 need web evidence (World Athletics technical rules: minimum weight 7.260 kg for both men's implements; the hammer's overall length is 1175 to 1215 mm). c3 is a conversion: 16 x 0.45359237 = 7.257 kg. rivalTest: argued for 'false': the hammer looks like a light ball on a long wire, so most players expect it to be lighter, which is the surprise. Argued against the key: the rule gives a minimum weight for competition use; both minimums are 7.260 kg, and the stem's 'wire and handle included' removes the reading that only the head counts. Women's implements also match each other (4 kg), but the stem names men's to stay specific. volatility: evergreen; the 16 lb standard is historic. regional: athletics is global. style: Oxford spelling, explanation of 29 words. myths: screened. mystery and encore: not applicable. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "31ee3e2398a1b739727002ce60ea3ac10d003abad32bc0b666d61d206efa1a57",
+          "4324c6e1a539890e4537d4cdf242b33a1b9901a119f24b745fbaf8c6c911ddf9"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:51:43.350Z"
+        ],
+        "startedAt": "2026-11-10T03:51:37.000Z",
+        "finishedAt": "2026-11-10T03:51:56.698Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:51:41.418Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "World Athletics sets one minimum mass, 7.26 kg, for both the senior men's shot and the complete senior men's hammer (head plus wire plus grip).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered True cold. Both implements are the traditional 16 lb weight; the hammer's mass is specified for the assembled implement. Counterintuitive key, carried by direct certain confirmation under memo 18."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The senior men's shot and the senior men's hammer are each specified at 7.26 kg.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "World Athletics technical rules (shot put and hammer specifications)."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "16 × 0.45359237",
+                "result": 7.25747792,
+                "constants": ["kg_per_pound"],
+                "claimIds": []
+              }
+            ],
+            "note": "Pure conversion: 16 lb = 7.257 kg, rounded to the rulebook's 7.26 kg."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The men's hammer may be at most 121.5 cm long overall, measured from the inside of the grip to the far side of the head, so roughly 1.2 m.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rule maximum is 121.5 cm; 'about 1.2 metres' holds."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Throwers make three or four turns in the circle before letting the hammer go, and it lands far beyond a shot put distance (world records about 86 m against about 23 m).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Correct; the spin plus the long lever is why hammer distances dwarf shot distances."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says the thrower spins 'on a wire about 1.2 m long'; the 1.2 m is the whole implement (grip to far side of head), and the wire alone is shorter. Claim c4 is worded correctly; the explanation could say 'on the end of a wire, about 1.2 m from grip to head'."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b2",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "09c117b368cd133ab17f6493e5042d9fbc81f6ab9af8026b2cd01e9a5e54eeee",
+          "9be36fc7f715c82474cb659d97b38674256e9c4dc8e62ff95945570591076d30"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:50:48.812Z"
+        ],
+        "startedAt": "2026-11-10T03:46:00.000Z",
+        "finishedAt": "2026-11-10T03:54:57.000Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "medium",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:33.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Senior men throw a 7.26 kg shot and a 7.26 kg hammer (head plus wire plus handle), so the two implements are specified at one weight.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 'weighs the same' could be doubted for real implements, since rules give minimum weights and makers tolerate small excesses; but the specified weight is identical, and the claim says so. Younger men's grades (6 kg and 5 kg) also pair shot and hammer at equal weights, so no age-group reading breaks it. Women's are 4 kg each, outside the stem anyway. The result confirms 7.26 kg for the senior men's hammer; my search did not retrieve the official rule text, so this rests on knowledge plus check A's evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "web",
+                "query": "World Athletics technical rule hammer men 7.260 kg shot 7.260 kg length of hammer 1.175 1.215 m",
+                "results": [
+                  {
+                    "title": "Technical Specifications",
+                    "url": "https://www.australianmastersathletics.org.au/?p=5"
+                  },
+                  {
+                    "title": "Suomessa kaytettavat WMAn aita este ja valinemitat 2026",
+                    "url": "https://www.saul.fi/wp-content/uploads/2026/02/Suomessa-kaytettavat-WMAn-aita-este-ja-valinemitat-2026.pdf"
+                  },
+                  {
+                    "title": "Hurdles Specification 2026",
+                    "url": "https://usatfmasters.org/wp/wp-content/uploads/2026/04/Hurdles-Specification-2026.pdf"
+                  },
+                  {
+                    "title": "AMA Technical Specifications",
+                    "url": "https://amahobart2024.pages.dev/wp-content/uploads/2023/07/AMA-Technical-Specifications.pdf"
+                  },
+                  {
+                    "title": "throwing weight rules hammer throw",
+                    "url": "https://www.athleticsdirect.co.uk/throwing-weight-rules-hammer-throw"
+                  },
+                  {
+                    "title": "sportsmatik.com",
+                    "url": "https://sportsmatik.com/sports-corner/sports-equipage-detail/hammer"
+                  },
+                  {
+                    "title": "Hammer throw",
+                    "url": "https://ipfs.ssi.eecc.de/ipns/en.wikipedia-on-ipfs.org/wiki/Hammer_throw"
+                  },
+                  {
+                    "title": "Hammer throw",
+                    "url": "https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.4everland.io/wiki/Hammer_throw.html"
+                  },
+                  {
+                    "title": "Hammer throw",
+                    "url": "https://ultimatepopculture.fandom.com/wiki/Hammer_throw"
+                  },
+                  {
+                    "title": "Portal:Sport of athletics/Selected article/26",
+                    "url": "https://en.wikipedia.com/wiki/Portal:Sport_of_athletics/Selected_article/26"
+                  },
+                  {
+                    "title": "Hammer Throw equipment",
+                    "url": "https://greatestsportingnation.com/content/hammer-throw-equipment"
+                  },
+                  {
+                    "title": "Jump to content",
+                    "url": "https://wiki.riteme.site/wiki/Portal:Sport_of_athletics/Selected_article/26"
+                  },
+                  {
+                    "title": "Jump to content",
+                    "url": "https://wiki.riteme.site/wiki/Hammer_throw"
+                  },
+                  {
+                    "title": "Jump to content",
+                    "url": "https://wiki.riteme.site/wiki/Hammer_Throw"
+                  },
+                  {
+                    "title": "Talk:Hammer throw",
+                    "url": "https://EN.wikipedia.com/wiki/Talk:Hammer_throw"
+                  },
+                  {
+                    "title": "Hammer throw",
+                    "url": "https://kiwix.lema.org/wikipedia_en_all_mini_2024-02/A/Hammer_throw"
+                  }
+                ],
+                "summaryExcerpt": "Under World Athletics rules, senior men compete with a 7.26kg hammer and senior women with a 4kg hammer.",
+                "citedResult": null,
+                "tiers": ["A", "B", "C"],
+                "conflictReported": false,
+                "retrievedAt": "2026-11-10"
+              },
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The men's shot and the men's hammer are both 7.26 kg, the metric version of 16 lb.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The web call counts at Tier C (nothing cited, mixed tiers), so the knowledge entry carries the verdict; flagged for check A's external evidence."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "16 * 0.45359237",
+                "result": 7.25747792,
+                "constants": ["kg_per_pound"],
+                "claimIds": []
+              }
+            ],
+            "note": "Pure conversion; 7.2575 kg rounds to the 7.26 kg the rules specify."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The whole men's hammer, handle grip to the far end of the head, must be between about 1.175 m and 1.215 m, so roughly 1.2 m.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Search gave a nominal 121.5 cm in a World Athletics age-group table, consistent. The claim is about the whole implement, which is correct as written."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Throwers spin three or four times in the circle to build speed, and the hammer lands far beyond a shot putter's best.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Hammer world record is around 86 m against about 23 m for the shot, so 'much farther' holds."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "fix",
+            "note": "The explanation says the thrower spins 'on a wire about 1.2 m long'. About 1.2 m is the length of the whole hammer (c4); the wire alone is shorter, roughly a metre once the head and handle are taken off. Reword to 'a hammer about 1.2 m long', or drop the length."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "revise"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ]
+  },
+  "format": "tf",
+  "stem": "In men's athletics, the hammer, wire and handle included, weighs the same as the shot.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.47,
+    "spread": 0.123,
+    "estimator": "v0"
+  }
 }

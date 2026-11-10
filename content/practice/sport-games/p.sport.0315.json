@@ -1,7 +1,6 @@
 {
   "id": "p.sport.0315",
-  "status": "draft",
-  "format": "mc",
+  "status": "checking",
   "category": "sport",
   "tags": ["golf", "equipment", "physics"],
   "region": "global",
@@ -9,18 +8,229 @@
   "reviewBy": null,
   "seededDifficulty": 2,
   "counterintuitive": false,
-  "stem": "Why are golf balls covered in small dimples?",
-  "answer": "To fly farther",
-  "wrong": ["To make them lighter", "To give a better grip", "To stop them bouncing"],
-  "order": "shuffle",
   "explanation": "Dimples stir up a thin layer of air that clings to the ball, which shrinks the wake dragging behind it. Golfers in the 1800s noticed that scuffed old balls flew better than smooth new ones.",
   "learnMore": "Golf ball",
   "claims": [
-    {"id": "c1", "role": "key", "risk": "standard", "text": "Dimples on a golf ball reduce aerodynamic drag, so the ball travels farther than a smooth ball hit the same way."},
-    {"id": "c2", "role": "distractor", "risk": "standard", "text": "Golf ball dimples are not there to reduce weight, to improve a player's grip or to stop the ball bouncing."},
-    {"id": "c3", "role": "explanation", "risk": "standard", "text": "Dimples make the boundary layer of air around the ball turbulent, so it stays attached longer and the low-pressure wake behind the ball is smaller."},
-    {"id": "c4", "role": "explanation", "risk": "high", "riskReason": "number", "text": "In the 1800s golfers noticed that worn, nicked balls flew farther than smooth new ones, which led to balls being made with patterned surfaces."}
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "Dimples on a golf ball reduce aerodynamic drag, so the ball travels farther than a smooth ball hit the same way."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "Golf ball dimples are not there to reduce weight, to improve a player's grip or to stop the ball bouncing."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "Dimples make the boundary layer of air around the ball turbulent, so it stays attached longer and the low-pressure wake behind the ball is smaller."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "In the 1800s golfers noticed that worn, nicked balls flew farther than smooth new ones, which led to balls being made with patterned surfaces."
+    }
   ],
-  "selfCheck": {"lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true},
-  "writerNotes": "Subtopic: rules and equipment (golf). Easy. lint: clean. claims: four; c4 high for its date. datasets: none applies; c1 and c3 are textbook aerodynamics, c4 needs web evidence (the gutta-percha era, from the mid-1800s, is in Britannica and the R&A's history). rivalTest: each distractor is a plausible function of surface texture; none is the reason. Argued against the key: dimples also help the ball generate lift from backspin, which is part of 'fly farther', so no option conflicts. Players often think dimples are decorative or help grip, so the item rewards reasoning. volatility: evergreen. regional: golf is played worldwide and the physics needs no local knowledge. style: Oxford spelling, explanation of 34 words. myths: screened; no golf myth beyond the acronym, which this item does not touch. mystery and encore: not applicable. doubts: c4's decade wording: I wrote 'the 1800s' rather than a single year to stay at a defensible precision."
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: rules and equipment (golf). Easy. lint: clean. claims: four; c4 high for its date. datasets: none applies; c1 and c3 are textbook aerodynamics, c4 needs web evidence (the gutta-percha era, from the mid-1800s, is in Britannica and the R&A's history). rivalTest: each distractor is a plausible function of surface texture; none is the reason. Argued against the key: dimples also help the ball generate lift from backspin, which is part of 'fly farther', so no option conflicts. Players often think dimples are decorative or help grip, so the item rewards reasoning. volatility: evergreen. regional: golf is played worldwide and the physics needs no local knowledge. style: Oxford spelling, explanation of 34 words. myths: screened; no golf myth beyond the acronym, which this item does not touch. mystery and encore: not applicable. doubts: c4's decade wording: I wrote 'the 1800s' rather than a single year to stay at a defensible precision.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "0bbfe4e1e420068e0bccd5cd039e495b737d6398a8179602c4a50f906266a4c1",
+          "fbaeef000edec2d1f0f242aa39602208d1582cc26191b8256c78fc9c1f1aa00c"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:51:24.396Z"
+        ],
+        "startedAt": "2026-11-10T03:51:17.000Z",
+        "finishedAt": "2026-11-10T03:51:35.917Z",
+        "coldSolve": {
+          "answerGiven": "To fly farther",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:51:22.661Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "A dimpled ball meets far less air resistance than a smooth one at driving speeds, so the same strike carries it a longer distance.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Answered cold. Standard sports aerodynamics; dimples also boost lift from backspin, which adds to distance and does not conflict with the key."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The dimples serve aerodynamics, not lower mass, a better hold for the golfer or less bounce.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Ball mass is capped by the Rules regardless; golfers do not grip the ball; dimples do not affect bounce meaningfully. All three definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Tripping the boundary layer into turbulence delays flow separation over the ball, narrowing the low-pressure wake and cutting pressure drag.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Correct fluid dynamics; the explanation's plain-language version matches."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "In the gutta-percha era of the 19th century, players found that scuffed and cut balls carried better than fresh smooth ones, and makers began giving balls textured surfaces.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The gutty ball (from the late 1840s) story is the well-documented origin of hand-hammered and then moulded patterns, leading to dimples in the early 1900s."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b2",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "2090775300121dd18c5bca499f3e725f51489358251867e95f2094aef28efe6d",
+          "ece0b8d0d61c37cebd4dcfb83a48dfe61d010b72a366fa196782050e3be1a6de"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:50:48.812Z"
+        ],
+        "startedAt": "2026-11-10T03:46:00.000Z",
+        "finishedAt": "2026-11-10T03:54:57.000Z",
+        "coldSolve": {
+          "answerGiven": "To fly farther",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:32.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "A dimpled ball loses less energy to drag than a smooth one and carries noticeably farther off the same swing.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: dimples also help generate lift from backspin, but that too serves distance, so 'fly farther' stays the single best answer."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Dimples do not save weight, add hand grip or cut the bounce; balls have a mass limit regardless of dimples, and nobody holds the ball in play.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Each distractor has no physical rationale. Grip is the only one a casual player might half-believe, but the ball is never gripped."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Dimples trip the thin air layer next to the ball into turbulence, which clings longer to the surface and leaves a narrower low-pressure wake.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard aerodynamics account of the drag crisis."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Players of the gutta-percha era found that scuffed, battered balls outflew fresh smooth ones, so makers began hammering or moulding patterns into new balls.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Stated at the century level, which the history supports (gutties from 1848, patterned by the 1870s to 1880s, dimples patented in 1905). Flagged high only by a stray reason; it contains no number beyond the century."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "Why are golf balls covered in small dimples?",
+  "answer": "To fly farther",
+  "wrong": [
+    "To make them lighter",
+    "To give a better grip",
+    "To stop them bouncing"
+  ],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.174,
+    "estimator": "v0"
+  }
 }

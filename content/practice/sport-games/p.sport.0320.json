@@ -1,7 +1,6 @@
 {
   "id": "p.sport.0320",
-  "status": "draft",
-  "format": "comparison",
+  "status": "checking",
   "category": "sport",
   "tags": ["puzzles", "rubiks-cube", "card-games", "maths"],
   "region": "global",
@@ -9,6 +8,226 @@
   "reviewBy": null,
   "seededDifficulty": 3,
   "counterintuitive": false,
+  "explanation": "Six faces of nine squares make 54 on a classic 3 by 3 by 3 cube. A deck holds four suits of 13 cards, which makes 52.",
+  "learnMore": "Rubik's Cube",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "label",
+      "ref": "a",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A standard 3 by 3 by 3 Rubik's Cube has 54 coloured squares: six faces with nine squares each."
+    },
+    {
+      "id": "c2",
+      "role": "label",
+      "ref": "b",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "A standard deck of playing cards without jokers has 52 cards: four suits of 13."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "number",
+      "text": "6 times 9 is 54, and 4 times 13 is 52."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Subtopic: puzzles and card games. Comparison of two exact counts, which the separation guard allows at any difference (§2.6). lint: clean. claims: three, all high for numbers. datasets: none applies; both counts are definitional and c3 is arithmetic anyone can re-run. rivalTest: the near-tie is the fun: players who reason (6 x 9 against 4 x 13) get it, and others guess. Argued against the key: a Rubik's Cube has 54 visible stickers or tiles including the six centres; other cube sizes (2 by 2, 4 by 4) differ, which is why the explanation names the classic 3 by 3 by 3. 'Standard deck, no jokers' fixes 52. The stem names the relation ('more', lint C17) and both labels are counts. volatility: evergreen. regional: the cube and the 52-card deck are known worldwide. style: Oxford spelling, explanation of 26 words; label a is 34 characters and b 35, under 40. myths: screened. mystery and encore: not applicable. doubts: none.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psport03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "d9177a70dc466a185614df9cb04fc9501341bda6cc585f34009f91f1aa14f343",
+          "c5dd3a098f8c919c489db0b8f87bc755060e0d17ff11063ea4557e33b27f4f89"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:36.004Z",
+          "2026-11-10T03:53:32.529Z"
+        ],
+        "startedAt": "2026-11-10T03:53:26.000Z",
+        "finishedAt": "2026-11-10T03:53:47.646Z",
+        "coldSolve": {
+          "answerGiven": "Coloured squares on a Rubik's Cube",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:53:30.753Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The classic Rubik's Cube shows nine coloured stickers on each of its six sides, 54 in total.",
+                "confidence": "certain"
+              },
+              {
+                "kind": "calculation",
+                "expression": "6 × 9",
+                "result": 54,
+                "constants": [],
+                "claimIds": []
+              }
+            ],
+            "note": "Answered the cube cold. 54 facelets on a 3x3x3 is a defined count. Exact counts are exempt from the 1.1x separation guard (§2.6), so 54 vs 52 is fine."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "A standard deck minus jokers holds 52 cards, thirteen ranks in each of four suits.",
+                "confidence": "certain"
+              },
+              {
+                "kind": "calculation",
+                "expression": "4 × 13",
+                "result": 52,
+                "constants": [],
+                "claimIds": []
+              }
+            ],
+            "note": "Defined count; the label excludes jokers explicitly, so there is no second reading."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "6 × 9",
+                "result": 54,
+                "constants": [],
+                "claimIds": ["c1"]
+              },
+              {
+                "kind": "calculation",
+                "expression": "4 × 13",
+                "result": 52,
+                "constants": [],
+                "claimIds": ["c2"]
+              }
+            ],
+            "note": "Pure arithmetic."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psport03b2",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "9832ec7bab0b40d16536d14da1916ec4c884e24e6bef66e01fcc070e3db3447c",
+          "91ee38742a2969b8dfa163f1b2538ba0096903356315320d13e35ac23c4d59ae"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T02:55:50.702Z",
+          "2026-11-10T03:50:48.812Z"
+        ],
+        "startedAt": "2026-11-10T03:46:00.000Z",
+        "finishedAt": "2026-11-10T03:54:57.000Z",
+        "coldSolve": {
+          "answerGiven": "Coloured squares on a Rubik's Cube",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:50:37.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The classic cube shows nine stickers on each of its six faces, fifty-four in all, centres included.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: bigger puzzles (4x4 has 96, 2x2 has 24) are sold under other names, and the stem says 'a Rubik's Cube', which means the 3x3. The centre squares are coloured too."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "A deck of playing cards has four suits of thirteen, fifty-two cards, once jokers are left out.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The stem excludes jokers explicitly, so 53 or 54 is ruled out."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "6 * 9",
+                "result": 54,
+                "constants": [],
+                "claimIds": ["c1"]
+              },
+              {
+                "kind": "calculation",
+                "expression": "4 * 13",
+                "result": 52,
+                "constants": [],
+                "claimIds": ["c2"]
+              }
+            ],
+            "note": "Arithmetic on the two confirmed counts."
+          }
+        ],
+        "issues": [
+          {
+            "type": "regional",
+            "severity": "note",
+            "note": "'Standard deck' means the 52-card Anglo-American pack. Spanish (40 or 48), German (32) and tarot (78) decks exist, but 'standard' plus 'no jokers' points to 52 worldwide. The counts are exact, so the 54 against 52 gap passes the separation guard."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psport03e",
+        "at": "2026-11-10T03:55:51Z"
+      }
+    ]
+  },
+  "format": "comparison",
   "stem": "Which are there more of?",
   "a": "Coloured squares on a Rubik's Cube",
   "b": "Cards in a standard deck, no jokers",
@@ -16,15 +235,17 @@
   "relation": "more",
   "measure": "how many there are",
   "unit": "items",
-  "values": {"a": 54, "b": 52},
-  "valueDisplay": {"a": "54 squares", "b": "52 cards"},
-  "explanation": "Six faces of nine squares make 54 on a classic 3 by 3 by 3 cube. A deck holds four suits of 13 cards, which makes 52.",
-  "learnMore": "Rubik's Cube",
-  "claims": [
-    {"id": "c1", "role": "label", "ref": "a", "risk": "high", "riskReason": "number", "text": "A standard 3 by 3 by 3 Rubik's Cube has 54 coloured squares: six faces with nine squares each."},
-    {"id": "c2", "role": "label", "ref": "b", "risk": "high", "riskReason": "number", "text": "A standard deck of playing cards without jokers has 52 cards: four suits of 13."},
-    {"id": "c3", "role": "explanation", "risk": "high", "riskReason": "number", "text": "6 times 9 is 54, and 4 times 13 is 52."}
-  ],
-  "selfCheck": {"lint": true, "claims": true, "datasets": true, "rivalTest": true, "volatility": true, "regional": true, "style": true, "myths": true, "mystery": true, "encore": true, "doubts": true},
-  "writerNotes": "Subtopic: puzzles and card games. Comparison of two exact counts, which the separation guard allows at any difference (§2.6). lint: clean. claims: three, all high for numbers. datasets: none applies; both counts are definitional and c3 is arithmetic anyone can re-run. rivalTest: the near-tie is the fun: players who reason (6 x 9 against 4 x 13) get it, and others guess. Argued against the key: a Rubik's Cube has 54 visible stickers or tiles including the six centres; other cube sizes (2 by 2, 4 by 4) differ, which is why the explanation names the classic 3 by 3 by 3. 'Standard deck, no jokers' fixes 52. The stem names the relation ('more', lint C17) and both labels are counts. volatility: evergreen. regional: the cube and the 52-card deck are known worldwide. style: Oxford spelling, explanation of 26 words; label a is 34 characters and b 35, under 40. myths: screened. mystery and encore: not applicable. doubts: none."
+  "values": {
+    "a": 54,
+    "b": 52
+  },
+  "valueDisplay": {
+    "a": "54 squares",
+    "b": "52 cards"
+  },
+  "predicted": {
+    "p": 0.7,
+    "spread": 0.08,
+    "estimator": "v0"
+  }
 }

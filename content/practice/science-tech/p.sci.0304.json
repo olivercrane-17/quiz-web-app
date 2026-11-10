@@ -56,5 +56,88 @@
   "format": "tf",
   "stem": "Where the International Space Station orbits, Earth's gravity is about 90% as strong as on the ground.",
   "answer": true,
-  "tfKind": "surprising_truth"
+  "tfKind": "surprising_truth",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "39a2b045d6a0c2b6d136e96e16dcb919c97586c99f8b95af475f96906373e137",
+          "ba61ecc6bd8aca60a4c270440834de95644d0fc9f7db6756a9d28ae23cf8d40f"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:57:28.995Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:57:27.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Gravitational pull falls with the square of distance from Earth's centre; at about 400 km up (radius 6,371 km) that gives (6371/6771)^2, about 0.885, so near 89% of surface gravity.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "I computed 0.893 at 370 km, 0.885 at 400 km, 0.880 at 420 km and 0.870 at 460 km, so every altitude the station has used rounds to 87 to 89%. 'About 90%' is a fair rounding, and NASA educators repeat it. A pedant could say 89%; the word 'about' covers it. The key is counterintuitive (high risk), so it needs check A's external evidence. My own single search (WebSearch, standard) only returned secondary sources (Sky at Night magazine, a glossary) that say about 90% and one that says 89%, so I treat it as Tier C and rely on knowledge."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Crew and station float because both are in constant free fall around the planet, not because gravity is missing.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard physics."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The station travels at around 7.66 km/s, which is roughly 27,600 km/h.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "7.66 x 3600 = 27,576 km/h, which rounds to 28,000 at 'about'."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ISS flies at an altitude between roughly 370 and 460 km, commonly quoted near 400 to 420 km.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Altitude drifts with drag and reboosts, so 'roughly 400 km' is the safe phrasing and it is used."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

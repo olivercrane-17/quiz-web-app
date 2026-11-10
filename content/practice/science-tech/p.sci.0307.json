@@ -58,5 +58,100 @@
   "stem": "How many elements sit in the first row of the periodic table?",
   "answer": "2",
   "wrong": ["8", "10", "18"],
-  "order": "ascending"
+  "order": "ascending",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "eecaf6209a34e1d364d25eaa143c843797f62403d5f9b9d9feb1a966f25c7679",
+          "e4c24ad524fb86c643d8c32c5028ef7b3c668fdc26c56a791aa1eff2e233275c"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:58:04.437Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "2",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:58:02.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "period=1",
+                "excerpt": "period 1 elements: Hydrogen, Helium",
+                "retrievedAt": "2026-11-10"
+              },
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Only hydrogen and helium make up the top row of the standard periodic table.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: 'row' could mean a short-form Mendeleev table, but no modern table puts 8, 10 or 18 in the first row; the dataset period field matches."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Rows two and three each hold eight elements and rows four and five each hold eighteen, so 8 and 18 name other rows, and no row has ten.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "10 is the width of the d-block, not a row, and never a row length in the standard layout. All three distractors are wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The first electron shell can hold a maximum of two electrons.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "2n^2 with n=1."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "number=3 and number=10",
+                "excerpt": "Li period 2; Ne number 10 period 2",
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "Lithium 3 to neon 10 is eight elements."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }

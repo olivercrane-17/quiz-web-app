@@ -64,6 +64,101 @@
   "relation": "longer",
   "measure": "length in kilometres",
   "unit": "km",
-  "values": { "a": 299792, "b": 384400 },
-  "valueDisplay": { "a": "about 300,000 km", "b": "about 384,400 km" }
+  "values": {
+    "a": 299792,
+    "b": 384400
+  },
+  "valueDisplay": {
+    "a": "about 300,000 km",
+    "b": "about 384,400 km"
+  },
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psci03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "dfdd6420fc608efbcff52cfec19ef77235c0918a5b365d028862e25745812dfb",
+          "697313e7f9bd8abeca71d08c3c7b9deb6c8c3f026573d5ee0e6fc5157b0f658c"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:34.735Z",
+          "2026-11-10T03:57:03.748Z"
+        ],
+        "startedAt": "2026-11-10T03:56:29.000Z",
+        "finishedAt": "2026-11-10T04:00:49.000Z",
+        "coldSolve": {
+          "answerGiven": "The distance from Earth to the Moon",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:57:02.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The speed of light in vacuum is defined as exactly 299,792,458 metres per second, so one second of travel is about 300 thousand km.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Exact by SI definition. 'In a vacuum' is in the claim; in air it is a hair slower, still far under the Moon distance."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The mean centre-to-centre Earth-Moon distance is about 384,400 km; it swings between roughly 356,000 and 407,000 km over an orbit.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: the closest perigee (~356,400 km) still exceeds 299,792 km, so the order holds at every point of the orbit and under both centre-to-centre and surface-to-surface readings (about 6,400+1,700 km less is still ~376,000). Displays 'about' so there is no precision problem."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Moonlight and radio take roughly 1.3 seconds to cover the 384,400 km to the Moon.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "384,400 / 299,792 = 1.28 s. Matches the well-known 1.3 s figure."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "A signal there and back takes around 2.5 seconds, which put a visible lag into Apollo voice exchanges between Houston and the Moon.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Round trip 2.56 s. The claim is about the signal delay, which holds."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The explanation says the pause between each question and its answer was about 2.5 seconds. That is the signal's minimum round trip; the real gap included the speaker's reaction time, so was a little longer. Harmless at 'about', but 'at least 2.5 seconds' would be tighter."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ]
+  }
 }
