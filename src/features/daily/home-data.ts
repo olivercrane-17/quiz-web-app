@@ -13,6 +13,7 @@ import {
   type Result,
   type TimeZone,
 } from "@/engine/types";
+import { track } from "@/features/analytics/track";
 import { bootClient } from "@/features/identity";
 import type { SharePayload } from "@/features/share/share-button";
 import { getSiteUrl } from "@/lib/env";
@@ -77,4 +78,12 @@ export async function loadSharePayload(
  */
 export function warmDaily(): void {
   void bootClient().then(prefetchBackend);
+}
+
+/**
+ * How to play opened from Today (D25): `how_to_play_open` with no round
+ * open (PRD §7.2), here so the analytics dictionary stays out of the card.
+ */
+export function trackHowToPlayOpen(firstDaily: boolean): void {
+  track("how_to_play_open", { round: "none", first_daily: firstDaily });
 }

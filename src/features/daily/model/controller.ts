@@ -173,6 +173,12 @@ export interface DailyControllerDeps {
   backend(): Promise<GameBackend>;
   plugins: PluginRegistry;
   clock: Clock;
+  /**
+   * The server-corrected clock's now (ARCHITECTURE §4.3), which a resumed
+   * round's offset uses to count the response's trip back. Without it the
+   * offset counts from the snapshot's `serverTime`, a few ms short.
+   */
+  serverNow?(): EpochMs;
   /** Runs `callback` after `ms`; returns a cancel function. */
   schedule(callback: () => void, ms: number): () => void;
   /** [0, 1), for retry jitter. */
@@ -246,18 +252,34 @@ export function firstDailyOf(snapshot: AttemptSnapshot): boolean {
   );
 }
 
+/** The most a response's trip back can add to an offset: the server clock's own bound on a round trip. */
+const MAX_TRIP_MS = 60_000;
+
 /**
  * What the round open in a snapshot had on the server's clock before this
  * page loaded (R1-06): its interval so far, or, from a backend that doesn't
  * report one, the time since its current clue was issued, which can only
  * count short. Null with no round open.
+ *
+ * `serverNow` is the server-corrected clock (ARCHITECTURE §4.3) as the
+ * response arrives. The device counts the resumed round from that moment,
+ * so the time between the snapshot's `serverTime` and its arrival is added
+ * here; without it the header restarted behind the server by the response's
+ * trip back (RITE round 2 review, R2-01).
  */
-export function timeOffsetOf(snapshot: AttemptSnapshot): TimeOffset | null {
+export function timeOffsetOf(
+  snapshot: AttemptSnapshot,
+  serverNow: EpochMs | null = null,
+): TimeOffset | null {
   const current = snapshot.current;
   if (current === null || current.open === null) return null;
+  const trip =
+    serverNow === null || !Number.isFinite(serverNow)
+      ? 0
+      : Math.min(Math.max(0, serverNow - snapshot.serverTime), MAX_TRIP_MS);
   const ms =
-    current.activeMs ??
-    Math.max(0, snapshot.serverTime - current.open.issuedAt);
+    (current.activeMs ??
+      Math.max(0, snapshot.serverTime - current.open.issuedAt)) + trip;
   return ms > 0 ? { index: current.index, ms } : null;
 }
 
@@ -384,6 +406,7 @@ export function createDailyController(
   }
 
   const now = (): EpochMs => deps.clock.now();
+  const serverNow = (): EpochMs | null => deps.serverNow?.() ?? null;
 
   async function call<T>(
     fn: (backend: GameBackend) => Promise<Result<T>>,
@@ -513,7 +536,7 @@ export function createDailyController(
     converted = converted || attempt.kind === "archive";
     problem = null;
     firstDaily = firstDailyOf(attempt);
-    timeOffset = timeOffsetOf(attempt);
+    timeOffset = timeOffsetOf(attempt, serverNow());
     totalMs = null;
     deps.onAttempt?.(attempt);
     if (attempt.status === "finished") {
@@ -813,7 +836,7 @@ export function createDailyController(
     movedOn = true;
     earlySummary = null;
     if (result.value.kind === "archive") converted = true;
-    timeOffset = timeOffsetOf(result.value);
+    timeOffset = timeOffsetOf(result.value, serverNow());
     dispatch({ type: "resume", at: now(), snapshot: result.value });
   }
 

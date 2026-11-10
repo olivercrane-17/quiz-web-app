@@ -17,14 +17,21 @@ import {
   chipText,
   clockRunningOn,
   dailyLine,
+  firstDailyOn,
   progressLine,
 } from "./home-card";
-import { loadSharePayload, loadTodayCard, warmDaily } from "./home-data";
+import {
+  loadSharePayload,
+  loadTodayCard,
+  trackHowToPlayOpen,
+  warmDaily,
+} from "./home-data";
 
 vi.mock("./home-data", () => ({
   loadTodayCard: vi.fn(),
   loadSharePayload: vi.fn(),
   warmDaily: vi.fn(),
+  trackHowToPlayOpen: vi.fn(),
 }));
 // SHR-1 builds the button; here it shows what it was handed.
 vi.mock("@/features/share/share-button", () => ({
@@ -477,6 +484,11 @@ describe("RITE round 2 on Today's card", () => {
       "The Encore",
       "The ranking",
     ]);
+    // Opening it logs how_to_play_open once, with no round (PRD §7.2).
+    await vi.waitFor(() => {
+      expect(trackHowToPlayOpen).toHaveBeenCalledTimes(1);
+    });
+    expect(trackHowToPlayOpen).toHaveBeenCalledWith(true);
     // Nothing starts the Daily: no warm-up, no start, only get_today.
     expect(warmDaily).not.toHaveBeenCalled();
     expect(loadTodayCard).toHaveBeenCalledTimes(1);
@@ -487,6 +499,13 @@ describe("RITE round 2 on Today's card", () => {
       within(document.body).queryByRole("dialog", { name: "How to play" }),
     ).toBeNull();
     expect(button).toHaveFocus();
+  });
+
+  it("R2-18 first_daily is false once a finished Daily shows, or when get_today says so", () => {
+    expect(firstDailyOn(null)).toBe(true);
+    expect(firstDailyOn(card())).toBe(true);
+    expect(firstDailyOn(card({ ...FINISHED }))).toBe(false);
+    expect(firstDailyOn({ ...card(), firstDaily: false } as never)).toBe(false);
   });
 
   it("R2-18 D25 offers How to play only before the Daily starts", async () => {

@@ -106,7 +106,25 @@ export function chipText(chip: TodayRoundChip): string {
  * doesn't say counts as not running, so the card never claims it.
  */
 export function clockRunningOn(card: DailyTodayCard): boolean {
+  // Follow-up for the ARCHITECTURE §3.4 owner and SQL-4: add `open: boolean`
+  // to DailyTodayCard.progress (true while the current round's clue or
+  // Encore is issued and unresolved) and drop this cast. Until then the
+  // Supabase get_today never sends it and this line doesn't show there.
   return (card.progress as { open?: unknown } | null)?.open === true;
+}
+
+/**
+ * `first_daily` for How to play opened from Today (PRD §7.2): true unless
+ * the player has finished a Daily, which today's finished card shows, or
+ * get_today says so in a `firstDaily: false` beside its own fields.
+ * Follow-up for the ARCHITECTURE §3.4 owner and SQL-4: add `firstDaily` to
+ * DailyTodayCard (start_daily's flag) and drop this cast; until then a
+ * returning player who opens it before starting counts as first.
+ */
+export function firstDailyOn(card: DailyTodayCard | null): boolean {
+  if (card === null) return true;
+  if (card.status === "finished") return false;
+  return (card as { firstDaily?: unknown }).firstDaily !== false;
 }
 
 /** "Mystery 2 of 3", "Question 4 of 9", "Encore": where an unfinished run stands. */
@@ -209,14 +227,29 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     if (document.activeElement === document.body) howToButton.current?.focus();
   }, [howTo, howToOpen]);
 
+  // Opening the sheet logs how_to_play_open, as the Daily's More menu does
+  // (PRD §3.1.3), with no round open.
+  const logHowTo = () => {
+    const firstDaily = firstDailyOn(loaded?.card ?? null);
+    void import("./home-data")
+      .then((data) => {
+        data.trackHowToPlayOpen(firstDaily);
+      })
+      .catch(() => {
+        // Analytics never stands in the way of the sheet.
+      });
+  };
+
   const openHowTo = () => {
     if (howTo !== null) {
       setHowTo({ ...howTo, open: true });
+      logHowTo();
       return;
     }
     void import("./screen/how-to-play-sheet")
       .then(({ HowToPlaySheet }) => {
         setHowTo({ Sheet: HowToPlaySheet, open: true });
+        logHowTo();
       })
       .catch(() => {
         // /how-scoring-works carries the same text, from the footer.

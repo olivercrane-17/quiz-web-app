@@ -17,6 +17,7 @@ import { bootClient } from "@/features/identity";
 import { preloadAnswerLists } from "@/features/rounds/client";
 import { getAppVersion } from "@/lib/env";
 import { systemClock } from "@/platform/clock";
+import { getServerClock } from "@/platform/server-clock";
 import { uuidV4 } from "@/platform/identity/local";
 import { announce } from "@/ui/announce";
 
@@ -74,6 +75,7 @@ export function browserDeps(): DailyControllerDeps {
     },
     plugins: PLUGINS,
     clock: systemClock,
+    serverNow: () => getServerClock().now(),
     schedule(callback, ms) {
       const timer = setTimeout(callback, ms);
       return () => {

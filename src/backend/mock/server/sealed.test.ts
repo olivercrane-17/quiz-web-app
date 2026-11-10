@@ -870,7 +870,7 @@ describe("a resolved Mystery's misses (R1-22)", () => {
 });
 
 describe("round times in the snapshot (PRD §4.1.4)", () => {
-  it("R1-06 carries each resolved round's server interval and the open round's so far, to the second", async () => {
+  it("R1-06 carries each resolved round's recorded time, to the second, and the open round's so far, less the latency allowance", async () => {
     const t = setup();
     const { attemptId } = await started(t);
     // 90.4 s on Mystery 1: begin plus the solve is 2 requests, so the
@@ -896,7 +896,9 @@ describe("round times in the snapshot (PRD §4.1.4)", () => {
       ok: true,
       value: {
         resolved: [{ meta: { index: 0 }, activeMs: 90_000 }],
-        current: { index: 1, open: { clue: 1 }, activeMs: 30_000 },
+        // 30.2 s open, less 400 ms for its begin and for the request that
+        // will resolve it; not rounded while it runs.
+        current: { index: 1, open: { clue: 1 }, activeMs: 29_400 },
       },
     });
   });
@@ -910,7 +912,8 @@ describe("round times in the snapshot (PRD §4.1.4)", () => {
     const onClue2 = await t.mock.sealed.get(attemptId);
     expect(onClue2.ok && onClue2.value.current).toMatchObject({
       open: { clue: 2 },
-      activeMs: 32_000,
+      // 32 s less 400 ms for each of its two requests and the resolving one.
+      activeMs: 30_800,
     });
     t.clock.advance(20 * 60 * 1000);
     const capped = await t.mock.sealed.get(attemptId);

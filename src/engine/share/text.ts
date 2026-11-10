@@ -161,6 +161,9 @@ export interface ShareLegendWords {
  * choice-only Daily, or Mysteries that were all withdrawn, whose rows are
  * in words).
  */
+/** U+00A0, which keeps a legend entry on one line. */
+const NO_BREAK_SPACE = "\u00a0";
+
 export function shareLegend(
   rows: readonly ShareRow[],
   glyphs: ShareGlyphs,
@@ -168,12 +171,17 @@ export function shareLegend(
 ): string | null {
   const explains = rows.some((row) => row.kind === "mystery" && !row.voided);
   if (!explains) return null;
+  // Each glyph stays with its words: no-break spaces inside an entry, so a
+  // narrow card wraps only at the " · " separators (RITE round 2 review:
+  // "⬜" ended a line at 360 px with "not needed" alone on the next).
   return [
-    `${glyphs.cells.passed} ${words.passed}`,
-    `${glyphs.cells.solved} ${words.solved}`,
-    `${glyphs.missed} ${words.missed}`,
-    `${glyphs.cells.unused} ${words.unused}`,
-  ].join(" · ");
+    [glyphs.cells.passed, words.passed],
+    [glyphs.cells.solved, words.solved],
+    [glyphs.missed, words.missed],
+    [glyphs.cells.unused, words.unused],
+  ]
+    .map((entry) => entry.join(" ").replaceAll(" ", NO_BREAK_SPACE))
+    .join(" · ");
 }
 
 export interface DailyShareInput {

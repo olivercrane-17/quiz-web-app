@@ -282,8 +282,10 @@ export function elapsedMs(
  * Before this, a round resumed after a reload counted the server's raw
  * interval (the offset) plus the device's time since, about 400 ms a
  * request more than the latency allowance lets the server record, and the
- * header ran 2 or 3 s ahead of the stop screen. A round still open, or a
- * time that isn't a number, changes nothing.
+ * header ran 2 or 3 s ahead of the stop screen. The snapshot's offset now
+ * takes that allowance off already, the resolving request's included, so
+ * the recorded whole second never reads less than the header did. A round
+ * still open, or a time that isn't a number, changes nothing.
  */
 export function withRecordedTime(
   state: RunState,

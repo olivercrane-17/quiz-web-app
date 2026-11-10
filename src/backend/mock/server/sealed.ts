@@ -392,10 +392,24 @@ export function recordedRoundMs(row: MockRoundRow): number {
   return toSecond(effectiveRoundMs(row));
 }
 
-/** The open round's server interval so far, from its first issue (PRD §4.1.4), capped. */
+/**
+ * The open round's time so far, as the stopwatch should pick it up after a
+ * reload (R1-06): its server interval from its first issue (PRD §4.1.4)
+ * less the latency allowance for its requests so far and for the one that
+ * will resolve it, capped. That is effectiveRoundMs's server bound if the
+ * round resolved now, so the verdict's recorded time never sets the header
+ * back (RITE round 2 review: a resumed round dropped up to 400 ms a request
+ * at its reveal). It is not rounded: a whole second rounded down read 1:59
+ * after two minutes away, and the device's own measure is never rounded
+ * while a round runs either. Only resolved rounds count whole seconds.
+ */
 function openRoundMs(row: MockRoundRow, now: EpochMs): number {
   if (row.issuedAt === null || row.open === null) return 0;
-  return toSecond(Math.min(Math.max(0, now - row.issuedAt), SHARED.roundCapMs));
+  const allowance = SHARED.latencyAllowanceMs * (row.requests + 1);
+  return Math.min(
+    Math.max(0, now - row.issuedAt - allowance),
+    SHARED.roundCapMs,
+  );
 }
 
 /** The attempt as the client may see it (§3.4): reveals only for resolved rounds. */

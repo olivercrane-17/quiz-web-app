@@ -518,6 +518,35 @@ describe("the stopwatch", () => {
     expect(timeOffsetOf({ ...base, current: null })).toBeNull();
   });
 
+  it("R2-01 adds the response's trip back, on the server's clock, to the resumed round's offset", () => {
+    const attemptId = parseAttemptId("3f2b8c1e-9d4a-4e6f-8b2c-1a2b3c4d5e6f");
+    if (attemptId === null) throw new Error("setup");
+    const snapshot: AttemptSnapshot = {
+      attemptId,
+      kind: "daily",
+      ranked: true,
+      daily: null,
+      composition: "m3e1",
+      rounds: daily(),
+      maxPoints: 12,
+      resolved: [],
+      current: { index: 0, open: mysteryOpen(0, 380_000), activeMs: 119_200 },
+      status: "active",
+      points: 0,
+      startedAt: 0,
+      serverTime: 500_000,
+    };
+    // The response took 350 ms to arrive after the server's snapshot.
+    expect(timeOffsetOf(snapshot, 500_350)).toEqual({ index: 0, ms: 119_550 });
+    // A server clock behind the snapshot adds nothing; a wild one, at most a minute.
+    expect(timeOffsetOf(snapshot, 499_000)).toEqual({ index: 0, ms: 119_200 });
+    expect(timeOffsetOf(snapshot, 10_000_000)).toEqual({
+      index: 0,
+      ms: 179_200,
+    });
+    expect(timeOffsetOf(snapshot, null)).toEqual({ index: 0, ms: 119_200 });
+  });
+
   it("caps a round's time before the reload with the rest of it at 15 minutes", () => {
     const state = opened(fresh(), 0, 0);
     expect(elapsedMs(state, 10 * 60_000, { index: 0, ms: 10 * 60_000 })).toBe(

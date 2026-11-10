@@ -53,10 +53,20 @@ async function stopwatchText(page: Page): Promise<string> {
   return match[1] ?? "";
 }
 
-/** Types `query`, picks the suggestion named `name`, and guesses it. */
+/**
+ * Types `query`, picks the suggestion named `name`, and guesses it. The
+ * screen can move focus to the round's heading just after it shows, which
+ * closes the list, so typing retries until the suggestion is there.
+ */
 async function guess(page: Page, query: string, name: RegExp): Promise<void> {
-  await round(page).getByRole("combobox").fill(query);
-  await page.getByRole("option", { name }).click();
+  const field = round(page).getByRole("combobox");
+  const option = page.getByRole("option", { name });
+  await expect(async () => {
+    await field.click();
+    await field.fill(query);
+    await expect(option).toBeVisible({ timeout: 1_000 });
+  }).toPass();
+  await option.click();
   await round(page).getByRole("button", { name: "Guess", exact: true }).click();
 }
 
@@ -103,6 +113,20 @@ async function inspect<T>(page: Page, path: string): Promise<T> {
   ) as Promise<T>;
 }
 
+/** The analytics events the mock build recorded (`window.__qzTrackLog`). */
+async function trackLog(
+  page: Page,
+): Promise<{ name: string; props: Record<string, unknown> }[]> {
+  return page.evaluate(
+    () =>
+      (
+        window as unknown as {
+          __qzTrackLog?: { name: string; props: Record<string, unknown> }[];
+        }
+      ).__qzTrackLog ?? [],
+  );
+}
+
 /** The daily progress pills, M1 to E. */
 const pills = (page: Page) =>
   page.getByRole("list", { name: "Daily progress" }).getByRole("listitem");
@@ -132,7 +156,15 @@ test.describe("R2-01 the stopwatch while away (D19)", () => {
     await expect(
       round(page).getByRole("heading", { name: /clue 1/i }),
     ).toBeVisible();
-    expect(await stopwatchSeconds(page)).toBeGreaterThanOrEqual(120);
+    // The screen moves focus to the round's heading once it shows.
+    await expect(round(page).getByRole("heading", { level: 1 })).toBeFocused();
+    // The header shows what the round counts: two minutes away, less the
+    // 400 ms latency allowance for the begin and for the guess to come
+    // (R2-08's one clock), so never under 1:59 and never a reading from
+    // before the time away.
+    const resumed = await stopwatchSeconds(page);
+    expect(resumed).toBeGreaterThanOrEqual(119);
+    expect(resumed).toBeLessThanOrEqual(125);
 
     // Solved: on its reveal, the X keeps "Saved", and the clock is stopped.
     await guess(page, "Odile", /Odile Marsh/);
@@ -160,9 +192,12 @@ test.describe("R2-01 the stopwatch while away (D19)", () => {
     await page.getByRole("button", { name: "More" }).click();
     await page.getByRole("menuitem", { name: "How to play" }).click();
     const sheet = page.getByRole("dialog", { name: "How to play" });
-    await expect(sheet).toContainText(
-      "The stopwatch runs while a clue is open, even while you're away or reading this, and stops on every reveal.",
-    );
+    const rule =
+      "The stopwatch runs while a clue is open, even while you're away or reading this, and stops on every reveal.";
+    await expect(sheet).toContainText(rule);
+    // /how-scoring-works carries How to play's text, and says it once.
+    await page.goto("/how-scoring-works");
+    await expect(page.getByText(rule)).toHaveCount(1);
   });
 });
 
@@ -309,7 +344,22 @@ test.describe("one clock (R2-08) and E's pill (R2-06)", () => {
       round(page).getByRole("heading", { name: /clue 3/i }),
     ).toBeVisible();
     await page.clock.fastForward(6_100);
+    // A round resumed after a reload: its verdict brings the time the server
+    // recorded, which never reads less than the header did just before.
+    const beforeVerdict = await stopwatchSeconds(page);
     await guess(page, "Vald", /Valdoria/);
+    await expect(
+      page.getByRole("button", { name: "Next mystery" }),
+    ).toBeVisible();
+    const onReveal = await stopwatchSeconds(page);
+    expect(onReveal).toBeGreaterThanOrEqual(beforeVerdict);
+    // And the header adds each resolved round's recorded time, mid-Daily:
+    // a reload, which reads them back from the server, shows the same.
+    await page.reload();
+    await expect(
+      page.getByRole("button", { name: "Next mystery" }),
+    ).toBeVisible();
+    expect(await stopwatchSeconds(page)).toBe(onReveal);
     await page.getByRole("button", { name: "Next mystery" }).click();
 
     await expect(
@@ -606,6 +656,19 @@ test.describe("Today's card", () => {
       "The Encore",
       "The ranking",
     ]);
+    // Opening it logs one how_to_play_open, with no round open (PRD §7.2).
+    await expect
+      .poll(async () =>
+        (await trackLog(page)).filter(
+          (event) => event.name === "how_to_play_open",
+        ),
+      )
+      .toEqual([
+        {
+          name: "how_to_play_open",
+          props: { round: "none", first_daily: true },
+        },
+      ]);
     // A minute of reading costs nothing: no attempt exists to time it.
     await page.clock.fastForward(60_000);
     expect(await inspect(page, "attempts")).toBeUndefined();

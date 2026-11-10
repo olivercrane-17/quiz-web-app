@@ -207,12 +207,15 @@ describe("decision D3 on the stop screen (R1-16)", () => {
   });
 
   it("R1-16 R2-09 explains the grid in one line, in the player's glyph set, a miss's ❌ included", () => {
-    expect(dailyLegend(finished(), false)).toBe(
+    // Each entry holds together with no-break spaces (R2-10 review).
+    const plain = (text: string | null) => text?.replaceAll("\u00a0", " ");
+    expect(plain(dailyLegend(finished(), false))).toBe(
       "🟧 clue used · ✅ solved · ❌ missed · ⬜ not needed",
     );
-    expect(dailyLegend(finished(), true)).toBe(
+    expect(plain(dailyLegend(finished(), true))).toBe(
       "🟧 clue used · 🟦 solved · ❌ missed · ⬜ not needed",
     );
+    expect(dailyLegend(finished(), false)).toContain("⬜\u00a0not\u00a0needed");
     expect(dailyLegend(finished({ resolved: [ENCORE] }), false)).toBeNull();
   });
 });

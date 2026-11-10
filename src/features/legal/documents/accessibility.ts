@@ -121,7 +121,7 @@ export function accessibilityDocument(
               {
                 term: "Keyboard shortcuts",
                 details: [
-                  `Keys that pick an answer while focus is in a question.${KEYBOARD_SHORTCUTS_SWITCH ? " Turn them off if they get in your way." : ""}`,
+                  `Keys A to D choose an answer while focus is on one of the answers. On the Daily's last clue, Enter or the same key again locks your choice in.${KEYBOARD_SHORTCUTS_SWITCH ? " Turn them off if they get in your way." : ""}`,
                 ],
               },
               {

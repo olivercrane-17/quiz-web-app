@@ -319,11 +319,22 @@ describe("decision D3: one glyph for every clue used before the solve", () => {
 
   it("R1-16 explains the grid in one legend line, in the player's glyph set", () => {
     const rows = shareRows([mystery("geo", 1), mystery("film", null)]);
-    expect(shareLegend(rows, DESIGN_GLYPHS, LEGEND)).toBe(
-      "🟧 clue used · ✅ solved · ❌ missed · ⬜ not needed",
+    // No-break spaces inside each entry: it wraps only at " · ".
+    const nbsp = (text: string) =>
+      text
+        .split(" · ")
+        .map((entry) => entry.replaceAll(" ", "\u00a0"))
+        .join(" · ");
+    const design = shareLegend(rows, DESIGN_GLYPHS, LEGEND);
+    expect(design).toBe(
+      nbsp("🟧 clue used · ✅ solved · ❌ missed · ⬜ not needed"),
     );
     expect(shareLegend(rows, HIGH_CONTRAST_GLYPHS, LEGEND)).toBe(
-      "🟧 clue used · 🟦 solved · ❌ missed · ⬜ not needed",
+      nbsp("🟧 clue used · 🟦 solved · ❌ missed · ⬜ not needed"),
+    );
+    // No plain space between a glyph and its words.
+    expect(design?.split(" · ").every((entry) => !entry.includes(" "))).toBe(
+      true,
     );
   });
 

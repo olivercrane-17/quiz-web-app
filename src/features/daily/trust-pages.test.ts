@@ -37,25 +37,34 @@ function textOf(document: ReturnType<typeof accessibilityDocument>): string[] {
 }
 
 describe("the trust pages' round 2 lines", () => {
-  it("R2-01 D19 How scoring works' total time says the stopwatch runs while a clue is open, even while you're away, in How to play's words", () => {
+  it("R2-01 D19 How scoring works says the stopwatch runs while a clue is open, even while you're away, once, through How to play's own text", () => {
+    // The page's how-to-play slot renders HOW_TO_PLAY, whose ranking part
+    // carries the sentence; its Total time paragraph doesn't repeat it.
+    expect(HOW_TO_PLAY.parts.at(-1)?.body).toContain(
+      "The stopwatch runs while a clue is open, even while you're away or reading this, and stops on every reveal.",
+    );
     const ranking = howScoringWorksDocument(noFlags).sections.find(
       (section) => section.id === "ranking",
     );
     const total = ranking?.blocks.find(
       (block) => block.kind === "p" && block.text.startsWith("Total time"),
     );
-    expect(total?.kind === "p" && total.text).toContain(
-      "The stopwatch runs while a clue is open, even while you're away or reading this, and stops on every reveal.",
+    expect(total?.kind === "p" && total.text).not.toContain(STOPWATCH_RULE);
+    expect(textOf(howScoringWorksDocument(noFlags)).join(" ")).not.toContain(
+      STOPWATCH_RULE,
     );
-    expect(HOW_TO_PLAY.parts.at(-1)?.body).toContain(STOPWATCH_RULE);
   });
 
   it("R2-02 D20 the accessibility statement leaves out 'Turn them off' until Settings has the switch", () => {
     // SET-1 builds the switch and turns this on.
     expect(KEYBOARD_SHORTCUTS_SWITCH).toBe(false);
     const lines = textOf(accessibilityDocument(noFlags));
-    const keys = lines.find((line) => line.startsWith("Keys that pick"));
-    expect(keys).toBe("Keys that pick an answer while focus is in a question.");
+    const keys = lines.find((line) => line.startsWith("Keys A to D"));
+    // D20: keys act only while focus is on an answer, never on a heading.
+    expect(keys).toBe(
+      "Keys A to D choose an answer while focus is on one of the answers. On the Daily's last clue, Enter or the same key again locks your choice in.",
+    );
+    expect(lines.join(" ")).not.toMatch(/in a question/);
     expect(lines.join(" ")).not.toMatch(/Turn them off/);
   });
 });
