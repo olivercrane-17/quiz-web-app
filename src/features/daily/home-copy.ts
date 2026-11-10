@@ -9,7 +9,8 @@ export const HOME_CARD_COPY = {
   heading: "Today's Daily",
   /** No date: Today's dateline names the day once (D18). */
   dailyLine: (dailyNumber: number) => `Daily #${dailyNumber}`,
-  minutes: (minutes: number) => `About ${minutes} minutes`,
+  /** DESIGN §1.4's ticket line: "untimed", which Sam wanted to know (R2-19). */
+  minutes: (minutes: number) => `About ${minutes} minutes, untimed`,
   /** The one-line rule (PRD §3.1.7), for a Daily with Mysteries. */
   rule: "Fewer clues, more points. Then one number.",
   /** The same line for a Daily of questions alone (§3.1.2: composition is data). */
@@ -20,6 +21,8 @@ export const HOME_CARD_COPY = {
   /** Before get_today answers (PRD §3.1.7, Loading). */
   placeholderChips: ["Easy", "Medium", "Hard", "Number"],
   play: "Play today's Daily",
+  /** Opens How to play before the Daily starts: no attempt, no clock (D25). */
+  howToPlay: "How to play",
   /**
    * The backend serves no Daily yet (its daily area answers `unavailable`,
    * as the Supabase adapters do until SQL-4 and SQL-5). The Practice card
@@ -37,6 +40,8 @@ export const HOME_CARD_COPY = {
       ofType > 1 ? `Question ${ordinal} of ${ofType}` : "Question",
   },
   continue: "Continue",
+  /** Under "Mystery 2 of 3" while that round's clue or the Encore is open (D19, R2-01). */
+  stillRunning: "Your stopwatch is still running.",
   doneHeading: (points: number, maxPoints: number) =>
     `Done for today · ${points}/${maxPoints}`,
   gridLabel: "Your result",

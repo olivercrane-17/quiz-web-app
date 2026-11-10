@@ -12,13 +12,26 @@ import {
   type TodayRoundChip,
 } from "@/engine/types";
 
-import { DailyHomeCard, chipText, dailyLine, progressLine } from "./home-card";
-import { loadSharePayload, loadTodayCard } from "./home-data";
+import {
+  DailyHomeCard,
+  chipText,
+  clockRunningOn,
+  dailyLine,
+  firstDailyOn,
+  progressLine,
+} from "./home-card";
+import {
+  loadSharePayload,
+  loadTodayCard,
+  trackHowToPlayOpen,
+  warmDaily,
+} from "./home-data";
 
 vi.mock("./home-data", () => ({
   loadTodayCard: vi.fn(),
   loadSharePayload: vi.fn(),
   warmDaily: vi.fn(),
+  trackHowToPlayOpen: vi.fn(),
 }));
 // SHR-1 builds the button; here it shows what it was handed.
 vi.mock("@/features/share/share-button", () => ({
@@ -403,5 +416,123 @@ describe("Today's Daily card", () => {
     expect(
       within(region()).getByRole("link", { name: "Play today's Daily" }),
     ).toHaveAttribute("href", "/daily");
+  });
+});
+
+describe("RITE round 2 on Today's card", () => {
+  const IN_PROGRESS = {
+    status: "in_progress",
+    attemptId: parseAttemptId("0f8fad5b-d9cb-469f-a165-70867728950e"),
+  } satisfies Partial<DailyTodayCard>;
+
+  it("R2-01 in progress with its clue open, says the stopwatch is still running", async () => {
+    answers(
+      card({
+        ...IN_PROGRESS,
+        // get_today's `open` rides beside the progress's own fields.
+        progress: { roundIndex: 1, of: 4, open: true } as never,
+      }),
+    );
+    const { region } = renderCard();
+    expect(
+      await within(region()).findByText("Your stopwatch is still running."),
+    ).toBeVisible();
+    expect(
+      clockRunningOn(
+        card({ ...IN_PROGRESS, progress: { roundIndex: 3, of: 4 } }),
+      ),
+    ).toBe(false);
+  });
+
+  it("R2-01 in progress on a reveal, says nothing of the stopwatch, which is stopped there", async () => {
+    answers(
+      card({
+        ...IN_PROGRESS,
+        progress: { roundIndex: 1, of: 4, open: false } as never,
+      }),
+    );
+    const { region } = renderCard();
+    await within(region()).findByRole("heading", {
+      name: "Continue Daily #42",
+    });
+    expect(region()).not.toHaveTextContent(/stopwatch/i);
+  });
+
+  it("R2-18 D25 opens How to play on Today before the Daily starts, with no call to start it", async () => {
+    answers(card());
+    const { region } = renderCard();
+    await within(region()).findByText("A person · Easy");
+    const button = within(region()).getByRole("button", {
+      name: "How to play",
+    });
+    expect(button).toHaveAttribute("aria-haspopup", "dialog");
+    act(() => {
+      button.focus();
+      button.click();
+    });
+    const sheet = await within(document.body).findByRole("dialog", {
+      name: "How to play",
+    });
+    expect(
+      within(sheet)
+        .getAllByRole("heading", { level: 3 })
+        .map((heading) => heading.textContent),
+    ).toEqual([
+      "The clue ladder",
+      "The points",
+      "Clue 4",
+      "The Encore",
+      "The ranking",
+    ]);
+    // Opening it logs how_to_play_open once, with no round (PRD §7.2).
+    await vi.waitFor(() => {
+      expect(trackHowToPlayOpen).toHaveBeenCalledTimes(1);
+    });
+    expect(trackHowToPlayOpen).toHaveBeenCalledWith(true);
+    // Nothing starts the Daily: no warm-up, no start, only get_today.
+    expect(warmDaily).not.toHaveBeenCalled();
+    expect(loadTodayCard).toHaveBeenCalledTimes(1);
+    act(() => {
+      within(sheet).getByRole("button", { name: "Close" }).click();
+    });
+    expect(
+      within(document.body).queryByRole("dialog", { name: "How to play" }),
+    ).toBeNull();
+    expect(button).toHaveFocus();
+  });
+
+  it("R2-18 first_daily is false once a finished Daily shows, or when get_today says so", () => {
+    expect(firstDailyOn(null)).toBe(true);
+    expect(firstDailyOn(card())).toBe(true);
+    expect(firstDailyOn(card({ ...FINISHED }))).toBe(false);
+    expect(firstDailyOn({ ...card(), firstDaily: false } as never)).toBe(false);
+  });
+
+  it("R2-18 D25 offers How to play only before the Daily starts", async () => {
+    answers(card({ ...IN_PROGRESS, progress: { roundIndex: 1, of: 4 } }));
+    const { region } = renderCard();
+    await within(region()).findByRole("heading", {
+      name: "Continue Daily #42",
+    });
+    expect(
+      within(region()).queryByRole("button", { name: "How to play" }),
+    ).toBeNull();
+  });
+
+  it("R2-19 says the Daily is untimed, and keeps two rows for the chips so Play never moves down", () => {
+    vi.mocked(loadTodayCard).mockReturnValue(new Promise(() => {}));
+    const { region } = renderCard();
+    expect(
+      within(region()).getByText(/About 6 minutes, untimed/),
+    ).toBeVisible();
+    const chips = within(region()).getByRole("list", {
+      name: "Today's rounds",
+    });
+    // Two rows of the chips' own height (24 px, or more at large text)
+    // and the gap between them: the placeholders' one row holds that room.
+    expect(chips.className).toContain(
+      "min-h-[calc(2_*_max(24px,_0.975rem_+_4px)_+_0.5rem)]",
+    );
+    expect(chips.className).toContain("content-start");
   });
 });

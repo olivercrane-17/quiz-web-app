@@ -9,7 +9,17 @@
 /** The Daily screen (PRD §3.1.3 to §3.1.5, DESIGN §12.2). */
 export const DAILY_SCREEN_COPY = {
   title: "Today's Daily",
-  leave: "Leave the Daily. Your progress is saved.",
+  /**
+   * The X's accessible name (decision D19, R2-01), by whether time is
+   * counting: while a clue or the Encore is open it keeps running, even
+   * with the Daily closed; on a reveal, between rounds and before the Daily
+   * opens it is stopped.
+   */
+  leave: {
+    running:
+      "Leave the Daily. Your progress is saved, and the stopwatch keeps running.",
+    stopped: "Leave the Daily. Your progress is saved.",
+  },
   progress: "Daily progress",
   loading: "Loading today's Daily",
   /** The skeleton between rounds, while begin_round is out. */
@@ -21,8 +31,14 @@ export const DAILY_SCREEN_COPY = {
   stopwatch: "Time so far",
   /** Beside the stopwatch, in the player's first Daily only (PRD §3.1.3, DESIGN §1.4). */
   stopwatchHint: "Take your time. Time only breaks ties.",
-  /** The toast on Leave (DESIGN §6.9), which the X's name already says. */
-  saved: "Saved",
+  /**
+   * The toast on Leave (DESIGN §6.9, D19), which the X's name already says:
+   * leaving with a clue or the Encore open, the clock is still counting.
+   */
+  saved: {
+    running: "Saved. The stopwatch keeps running.",
+    stopped: "Saved",
+  },
   /** The focus-mode header's overflow menu (DESIGN §6.13, PRD §3.1.3). */
   more: {
     label: "More",
@@ -65,6 +81,20 @@ export const DAILY_SCREEN_COPY = {
     },
     missed: "missed",
     lockedIn: "locked in",
+    /**
+     * After "Encore, locked in" (R2-06): how far off, and the band, as the
+     * pill's mark shows them: "13% off, a close guess".
+     */
+    encoreResult: (error: string, band: "bullseye" | "close" | null) => {
+      const off = `${error.charAt(0).toLowerCase()}${error.slice(1)}`;
+      return band === "bullseye"
+        ? `${off}, a bullseye`
+        : band === "close"
+          ? `${off}, a close guess`
+          : off;
+    },
+    /** The E pill's mark inside the bullseye band (R2-06). */
+    bullseyeMark: "🎯",
     right: "right",
     wrong: "not right",
     withdrawn: "withdrawn",
@@ -179,10 +209,11 @@ export const STOP_SCREEN_COPY = {
     `${points} out of ${maxPoints}`,
   shareHeading: "Your share text",
   shareNote: "No answers inside.",
-  /** Under the score card's grid (decision D3), after each glyph. */
+  /** Under the score card's grid (decisions D3 and D22), after each glyph. */
   legend: {
     passed: "clue used",
     solved: "solved",
+    missed: "missed",
     unused: "not needed",
   },
   /** The score card's total time (decision D7): never in the share text. */
@@ -192,8 +223,8 @@ export const STOP_SCREEN_COPY = {
     `Mystery ${ordinal} · ${category}`,
   choiceRow: (ordinal: number) => `Question ${ordinal}`,
   encoreRow: "Encore",
-  /** The Encore row's purpose for a solo player (decision D2, R1-07). */
-  encoreNote: "Breaks ties. Scores no points.",
+  /** The Encore row's purpose and the tiebreak order (decisions D2 and D21, R2-04). */
+  encoreNote: "Breaks ties: closest Encore first, then time. Scores no points.",
   solved: (clue: number, points: number) =>
     `Solved on clue ${clue} · ${points} ${points === 1 ? "point" : "points"}`,
   missed: "Missed · 0 points",
@@ -204,7 +235,8 @@ export const STOP_SCREEN_COPY = {
   wrong: "Not quite",
   encoreLine: (guess: string, answer: string, error: string) =>
     `You said ${guess}, the answer was ${answer}: ${error}`,
-  bands: { bullseye: "Bullseye", close: "Close" },
+  /** "Close guess", never "Close" on a line of its own, which reads as a dismiss button (D16, R2-24). */
+  bands: { bullseye: "Bullseye", close: "Close guess" },
   done: "Done for today",
   nextDaily: (wait: string) => `Next Daily in ${wait}`,
   practice: "Want more? Try a practice round.",

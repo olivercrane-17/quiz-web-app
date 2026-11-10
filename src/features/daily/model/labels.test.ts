@@ -17,6 +17,7 @@ import {
   answerTypeLine,
   continueLabel,
   elapsedMs,
+  encoreMark,
   formatStopwatch,
   openRoundNumber,
   progressSegments,
@@ -24,6 +25,9 @@ import {
   progressVariant,
   roundLabel,
   scoreBand,
+  stopwatchMs,
+  wholeSecond,
+  withRecordedTime,
 } from "./labels";
 
 const daily = (): RoundMeta[] =>
@@ -266,6 +270,93 @@ describe("the header pills after decision D11", () => {
   });
 });
 
+describe("the E pill once the Encore resolves (R2-06)", () => {
+  type EncoreOutcome = Extract<
+    NonNullable<RunState["slots"][number]["outcome"]>,
+    { family: "encore" }
+  >;
+
+  const encoreOutcome = (
+    display: string,
+    band: "bullseye" | "close" | null,
+    kind: "relative" | "years" = "relative",
+  ): EncoreOutcome => ({
+    family: "encore",
+    error: { kind, value: 0.13, display },
+    band,
+    voided: false,
+  });
+
+  /** Daily #42 resumed finished, its Encore locked in with `outcome`. */
+  function finishedWith(outcome: EncoreOutcome): RunState {
+    const rounds = daily();
+    const attemptId = parseAttemptId("3f2b8c1e-9d4a-4e6f-8b2c-1a2b3c4d5e6f");
+    if (attemptId === null) throw new Error("setup");
+    const snapshot: AttemptSnapshot = {
+      attemptId,
+      kind: "daily",
+      ranked: true,
+      daily: null,
+      composition: "m3e1",
+      rounds,
+      maxPoints: 12,
+      resolved: [
+        {
+          meta: rounds[3]!,
+          outcome,
+          reveal: { family: "encore" } as unknown as RoundReveal,
+          activeMs: 9_000,
+        },
+      ],
+      current: null,
+      status: "finished",
+      points: 0,
+      startedAt: 0,
+      serverTime: 0,
+    };
+    return reduceRun(fresh(), { type: "resume", at: 1, snapshot }, plugins)
+      .state;
+  }
+
+  it("R2-06 shows the bullseye emoji inside the bullseye band, and says so", () => {
+    const pill = progressSegments(
+      finishedWith(encoreOutcome("4% off", "bullseye")),
+    )[3];
+    expect(pill).toMatchObject({ status: "done", mark: "🎯" });
+    expect(pill?.label).toBe("Encore, locked in, 4% off, a bullseye");
+  });
+
+  it("R2-06 shows the % off outside it, also in the pill's accessible name", () => {
+    const close = progressSegments(
+      finishedWith(encoreOutcome("13% off", "close")),
+    )[3];
+    expect(close).toMatchObject({ mark: "13%" });
+    expect(close?.label).toBe("Encore, locked in, 13% off, a close guess");
+    const far = progressSegments(
+      finishedWith(encoreOutcome("39% off", null)),
+    )[3];
+    expect(far).toMatchObject({ mark: "39%" });
+    expect(far?.label).toBe("Encore, locked in, 39% off");
+  });
+
+  it("R2-06 keeps the mark short enough for the pill at either end of the scale, and for years", () => {
+    expect(encoreMark(encoreOutcome("over 999% off", null))).toBe(">999%");
+    expect(encoreMark(encoreOutcome("under 1% off", "close"))).toBe("<1%");
+    expect(encoreMark(encoreOutcome("8 years off", null, "years"))).toBe("8y");
+    expect(encoreMark(encoreOutcome("Spot on", "bullseye"))).toBe("🎯");
+    expect(
+      encoreMark({ family: "encore", error: null, band: null, voided: false }),
+    ).toBe("E");
+  });
+
+  it("R2-06 leaves an Encore not yet played as its E", () => {
+    expect(progressSegments(fresh())[3]).toMatchObject({
+      status: "upcoming",
+      mark: "E",
+    });
+  });
+});
+
 describe("the header's words when the pills don't fit (R1-03)", () => {
   it("R1-03 says where the run stands in words: the Mystery of three, the Encore, a question of nine", () => {
     expect(progressText(opened(fresh(), 0, 0))).toBe("Mystery 1 of 3");
@@ -427,6 +518,35 @@ describe("the stopwatch", () => {
     expect(timeOffsetOf({ ...base, current: null })).toBeNull();
   });
 
+  it("R2-01 adds the response's trip back, on the server's clock, to the resumed round's offset", () => {
+    const attemptId = parseAttemptId("3f2b8c1e-9d4a-4e6f-8b2c-1a2b3c4d5e6f");
+    if (attemptId === null) throw new Error("setup");
+    const snapshot: AttemptSnapshot = {
+      attemptId,
+      kind: "daily",
+      ranked: true,
+      daily: null,
+      composition: "m3e1",
+      rounds: daily(),
+      maxPoints: 12,
+      resolved: [],
+      current: { index: 0, open: mysteryOpen(0, 380_000), activeMs: 119_200 },
+      status: "active",
+      points: 0,
+      startedAt: 0,
+      serverTime: 500_000,
+    };
+    // The response took 350 ms to arrive after the server's snapshot.
+    expect(timeOffsetOf(snapshot, 500_350)).toEqual({ index: 0, ms: 119_550 });
+    // A server clock behind the snapshot adds nothing; a wild one, at most a minute.
+    expect(timeOffsetOf(snapshot, 499_000)).toEqual({ index: 0, ms: 119_200 });
+    expect(timeOffsetOf(snapshot, 10_000_000)).toEqual({
+      index: 0,
+      ms: 179_200,
+    });
+    expect(timeOffsetOf(snapshot, null)).toEqual({ index: 0, ms: 119_200 });
+  });
+
   it("caps a round's time before the reload with the rest of it at 15 minutes", () => {
     const state = opened(fresh(), 0, 0);
     expect(elapsedMs(state, 10 * 60_000, { index: 0, ms: 10 * 60_000 })).toBe(
@@ -476,6 +596,106 @@ describe("the stopwatch", () => {
     expect(formatStopwatch(0)).toBe("0:00");
     expect(formatStopwatch(83_400)).toBe("1:23");
     expect(formatStopwatch(3_725_000)).toBe("1:02:05");
+  });
+});
+
+describe("one clock for the header and the stop screen (R2-08)", () => {
+  /** Mystery 1 resolved in 90 s, Mystery 2 open at a reload with 30 s on the server. */
+  function resumedOnMystery2(at: number) {
+    const rounds = daily();
+    const attemptId = parseAttemptId("3f2b8c1e-9d4a-4e6f-8b2c-1a2b3c4d5e6f");
+    if (attemptId === null) throw new Error("setup");
+    const snapshot: AttemptSnapshot = {
+      attemptId,
+      kind: "daily",
+      ranked: true,
+      daily: null,
+      composition: "m3e1",
+      rounds,
+      maxPoints: 12,
+      resolved: [
+        {
+          meta: rounds[0]!,
+          outcome: {
+            family: "mystery",
+            solvedOn: 2,
+            points: 3,
+            voided: false,
+            category: "geo",
+            cells: ["passed", "solved", "unused", "unused"],
+          },
+          reveal: mysteryReveal(2),
+          activeMs: 90_000,
+        },
+      ],
+      current: { index: 1, open: mysteryOpen(1, 470_000), activeMs: 30_000 },
+      status: "active",
+      points: 3,
+      startedAt: 0,
+      serverTime: 500_000,
+    };
+    const state = reduceRun(
+      fresh(),
+      { type: "resume", at, snapshot },
+      plugins,
+    ).state;
+    return { state, offset: timeOffsetOf(snapshot) };
+  }
+
+  it("R2-08 a verdict with activeMs 75,000 on a slot that carried a 30,000 offset counts exactly 75,000", () => {
+    const at = 2_000_000;
+    const { state, offset } = resumedOnMystery2(at);
+    expect(offset).toEqual({ index: 1, ms: 30_000 });
+    // The device measured 47.3 s since the reload: with the offset, the
+    // header would count 77.3 s for a round the server recorded as 75 s.
+    const done = resolved(state, at + 47_300, mysteryReveal(3));
+    expect(elapsedMs(done, at + 60_000, offset)).toBe(90_000 + 77_000);
+    const recorded = withRecordedTime(done, offset, 1, 75_000);
+    expect(recorded.offset).toBeNull();
+    expect(recorded.state.slots[1]?.activeMs).toBe(75_000);
+    expect(elapsedMs(recorded.state, at + 60_000, recorded.offset)).toBe(
+      90_000 + 75_000,
+    );
+    // Reading the reveal adds nothing.
+    expect(elapsedMs(recorded.state, at + 600_000, recorded.offset)).toBe(
+      165_000,
+    );
+  });
+
+  it("R2-08 leaves an open round, and another round's offset, as they were", () => {
+    const at = 2_000_000;
+    const { state, offset } = resumedOnMystery2(at);
+    // Round 2 is still open: nothing has been recorded for it yet.
+    expect(withRecordedTime(state, offset, 1, 75_000)).toEqual({
+      state,
+      offset,
+    });
+    // Round 1's time replaced; round 2's offset stays with round 2.
+    const replaced = withRecordedTime(state, offset, 0, 88_000);
+    expect(replaced.offset).toEqual(offset);
+    expect(replaced.state.slots[0]?.activeMs).toBe(88_000);
+    expect(withRecordedTime(state, offset, 0, Number.NaN).state).toBe(state);
+  });
+
+  it("R2-08 adds each resolved round in whole seconds, as the server does", () => {
+    expect(wholeSecond(10_499)).toBe(10_000);
+    expect(wholeSecond(10_500)).toBe(11_000);
+    let state = opened(fresh(), 0, 0);
+    state = resolved(state, 10_600, mysteryReveal(1));
+    state = reduceRun(state, { type: "continue", at: 20_000 }, plugins).state;
+    state = opened(state, 1, 20_000);
+    state = resolved(state, 30_600, mysteryReveal(1));
+    // 10.6 s and 10.6 s: 11 s each, never a 21.2 s that floors to 21.
+    expect(elapsedMs(state, 40_000)).toBe(22_000);
+  });
+
+  it("R2-08 stops on the finish's total once it is known", () => {
+    const state = opened(fresh(), 0, 0);
+    expect(stopwatchMs(state, 61_000, null, null)).toBe(61_000);
+    expect(stopwatchMs(state, 61_000, null, 187_000)).toBe(187_000);
+    expect(formatStopwatch(stopwatchMs(state, 999_000, null, 187_000))).toBe(
+      "3:07",
+    );
   });
 });
 

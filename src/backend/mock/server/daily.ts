@@ -9,7 +9,9 @@
  *   request zone's date, and nothing is written. It carries one chip per round
  *   (types, difficulty and answer types only: they are public from clue 1
  *   anyway), the played count from 50 finished ranked runs (AC-DLY-33),
- *   the finished score and grid, and when the next Daily unlocks.
+ *   where an unfinished run stands and whether its round is open (its
+ *   stopwatch still running, R2-01), the finished score and grid, and when
+ *   the next Daily unlocks.
  * - `results(attemptId)` is get_daily_results in its basic form: the
  *   caller's finished attempts only, with the cold-start percentile view.
  *
@@ -82,6 +84,26 @@ function encoreOf(attempt: MockAttemptRow): EncoreError | null {
   return encore === undefined || encore.voided ? null : encore.error;
 }
 
+/**
+ * Where an unfinished run stands (PRD §3.1.7), and whether its round is
+ * open: a clue or the Encore issued and not yet resolved, so its time is
+ * still counting (decision D19). The In progress card says so (R2-01).
+ * `open` rides beside the progress's own fields until ARCHITECTURE §3.4
+ * names it, for SQL-4's get_today to return as well.
+ */
+export type TodayProgress = NonNullable<DailyTodayCard["progress"]> & {
+  open: boolean;
+};
+
+function progressOf(attempt: MockAttemptRow): TodayProgress {
+  const row = attempt.rounds[attempt.current];
+  return {
+    roundIndex: attempt.current,
+    of: attempt.rounds.length,
+    open: row !== undefined && row.open !== null && row.reveal === null,
+  };
+}
+
 /** Finished ranked runs of a Daily: the played count, and the cold-start pool. */
 function rankedFinishers(
   attempts: readonly MockAttemptRow[],
@@ -144,10 +166,7 @@ export function createDailyArea(ctx: MockContext): DailyApi {
                 ? "finished"
                 : "in_progress",
           attemptId: attempt?.id ?? null,
-          progress:
-            attempt === null || finished
-              ? null
-              : { roundIndex: attempt.current, of: attempt.rounds.length },
+          progress: attempt === null || finished ? null : progressOf(attempt),
           finished:
             attempt === null || !finished
               ? null

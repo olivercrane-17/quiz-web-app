@@ -187,6 +187,8 @@ export function howScoringWorksDocument(
           },
           {
             kind: "p",
+            // D19 (RITE round 2, R2-01): the page's How to play slot says
+            // the stopwatch runs while you're away, so this doesn't repeat it.
             text: `Total time adds up how long each clue or Encore question was open, up to ${minutes(TUNABLES.timing.roundCapMs)} a round. Reading a reveal never counts, and neither does the time between rounds. Nothing ever times out. Players level on all three share a place.`,
           },
           {

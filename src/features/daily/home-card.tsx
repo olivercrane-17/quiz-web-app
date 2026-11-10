@@ -18,6 +18,17 @@
  * own text (AC-SHR-11), built in that chunk. Past 7 days shows once the
  * archive has a route (R1-02).
  *
+ * What RITE round 2 added (FIX2-DLY):
+ * - How to play on the Not started card, which opens the Daily's own sheet
+ *   on Today, before the Daily starts: no attempt is made and no clock runs
+ *   (D25, R2-18). The sheet's chunk loads the first time it opens.
+ * - The In progress card adds "Your stopwatch is still running." while the
+ *   run's round is open, which get_today says (D19, R2-01): leaving never
+ *   paused it.
+ * - "About 4 minutes, untimed", and two rows kept for the round chips, so
+ *   Play doesn't move down when get_today's chips replace the placeholders
+ *   (R2-19).
+ *
  * Size: one of Home's eager islands, with a 4 kB gzipped target, so it
  * imports no engine module (the Daily's number is worked out below, and a
  * test keeps it equal to the engine's), and the backend and the Share
@@ -27,6 +38,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import {
   useEffect,
+  useRef,
   useState,
   useSyncExternalStore,
   type ComponentType,
@@ -42,7 +54,7 @@ import type {
 import { buttonClasses } from "@/ui/button-classes";
 import { Chip } from "@/ui/chip";
 
-import { glyphsFor } from "./glyphs";
+import { drawGridRow, glyphsFor } from "./glyphs";
 import { HOME_CARD_COPY } from "./home-copy";
 import { ARCHIVE_HREF } from "./links";
 import { ANSWER_TYPE_WORDS, DIFFICULTY_WORDS, waitWords } from "./words";
@@ -87,6 +99,34 @@ export function chipText(chip: TodayRoundChip): string {
     : `${what} · ${DIFFICULTY_WORDS[chip.difficulty]}`;
 }
 
+/**
+ * Whether the unfinished run's round is open, its clue or the Encore issued
+ * and its time counting (D19), as get_today says beside the progress's own
+ * fields (the mock's `TodayProgress`, SQL-4's get_today). A backend that
+ * doesn't say counts as not running, so the card never claims it.
+ */
+export function clockRunningOn(card: DailyTodayCard): boolean {
+  // Follow-up for the ARCHITECTURE §3.4 owner and SQL-4: add `open: boolean`
+  // to DailyTodayCard.progress (true while the current round's clue or
+  // Encore is issued and unresolved) and drop this cast. Until then the
+  // Supabase get_today never sends it and this line doesn't show there.
+  return (card.progress as { open?: unknown } | null)?.open === true;
+}
+
+/**
+ * `first_daily` for How to play opened from Today (PRD §7.2): true unless
+ * the player has finished a Daily, which today's finished card shows, or
+ * get_today says so in a `firstDaily: false` beside its own fields.
+ * Follow-up for the ARCHITECTURE §3.4 owner and SQL-4: add `firstDaily` to
+ * DailyTodayCard (start_daily's flag) and drop this cast; until then a
+ * returning player who opens it before starting counts as first.
+ */
+export function firstDailyOn(card: DailyTodayCard | null): boolean {
+  if (card === null) return true;
+  if (card.status === "finished") return false;
+  return (card as { firstDaily?: unknown }).firstDaily !== false;
+}
+
 /** "Mystery 2 of 3", "Question 4 of 9", "Encore": where an unfinished run stands. */
 export function progressLine(card: DailyTodayCard): string {
   const index = card.progress?.roundIndex ?? 0;
@@ -113,6 +153,12 @@ interface Loaded {
   receivedAt: number;
   /** The stored high-contrast setting: the mini grid's glyphs (DESIGN §6.11). */
   highContrast: boolean;
+}
+
+/** How to play's sheet, loaded the first time the card opens it (D25). */
+interface HowToPlaySlot {
+  Sheet: ComponentType<{ open: boolean; onClose(): void }>;
+  open: boolean;
 }
 
 /** The finished card's Share: the stop screen's text and the button, loaded together. */
@@ -167,9 +213,48 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
   /** The backend serves no Daily (`unavailable`): nothing to play yet. */
   const [notReady, setNotReady] = useState(false);
   const [share, setShare] = useState<ShareSlot | null>(null);
+  const [howTo, setHowTo] = useState<HowToPlaySlot | null>(null);
+  const howToButton = useRef<HTMLButtonElement>(null);
   // The device's date is only known in the browser; the prerender holds a
   // same-length placeholder, hidden until it is replaced.
   const today = useSyncExternalStore(never, deviceDate, () => null);
+
+  // The sheet gives focus back to what had it; a browser that doesn't focus
+  // a clicked button (Safari) leaves that to the button itself.
+  const howToOpen = howTo?.open ?? false;
+  useEffect(() => {
+    if (howToOpen || howTo === null) return;
+    if (document.activeElement === document.body) howToButton.current?.focus();
+  }, [howTo, howToOpen]);
+
+  // Opening the sheet logs how_to_play_open, as the Daily's More menu does
+  // (PRD §3.1.3), with no round open.
+  const logHowTo = () => {
+    const firstDaily = firstDailyOn(loaded?.card ?? null);
+    void import("./home-data")
+      .then((data) => {
+        data.trackHowToPlayOpen(firstDaily);
+      })
+      .catch(() => {
+        // Analytics never stands in the way of the sheet.
+      });
+  };
+
+  const openHowTo = () => {
+    if (howTo !== null) {
+      setHowTo({ ...howTo, open: true });
+      logHowTo();
+      return;
+    }
+    void import("./screen/how-to-play-sheet")
+      .then(({ HowToPlaySheet }) => {
+        setHowTo({ Sheet: HowToPlaySheet, open: true });
+        logHowTo();
+      })
+      .catch(() => {
+        // /how-scoring-works carries the same text, from the footer.
+      });
+  };
 
   useEffect(() => {
     let live = true;
@@ -249,12 +334,38 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
       {COPY.play}
     </Link>
   );
+  // Before the Daily starts, the rules can be read with no clock running
+  // (D25): the Daily's own sheet, on Today. A text button in the heading's
+  // row, with the design system's 44 px hit area (`kn-hit`), so the card
+  // grows by nothing and Play and Quick play stay above the fold at 360 by
+  // 640 (DESIGN §12.1).
+  let howToLink: ReactNode = (
+    <button
+      ref={howToButton}
+      type="button"
+      aria-haspopup="dialog"
+      onClick={openHowTo}
+      className={buttonClasses({
+        variant: "text",
+        className: "kn-hit min-h-6 shrink-0",
+      })}
+    >
+      {COPY.howToPlay}
+    </button>
+  );
   let after: ReactNode = null;
   let body = (
     <>
       <p className="text-base">{rule}</p>
-      {/* Flat labels, never pills that read as controls (R1-27). */}
-      <ul aria-label={COPY.roundsLabel} className="flex flex-wrap gap-2">
+      {/* Flat labels, never pills that read as controls (R1-27). Two
+          rows are kept whatever the chips say, so the placeholders' one
+          row growing to get_today's two never moves Play (R2-19); the
+          chips' own type sets the row, at any text size. */}
+      <ul
+        aria-label={COPY.roundsLabel}
+        data-daily-chips=""
+        className="flex min-h-[calc(2_*_max(24px,_0.975rem_+_4px)_+_0.5rem)] flex-wrap content-start gap-2"
+      >
         {(card?.rounds.map(chipText) ?? COPY.placeholderChips).map(
           (chip, index) => (
             <li key={index} className="flex max-w-full">
@@ -270,6 +381,7 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     // No Play and no chips for a Daily that can't start; Quick play goes
     // first, in the Practice card the marker moves above this one.
     action = null;
+    howToLink = null;
     body = (
       <p className="text-base" {...HOME_PROMOTE_PRACTICE}>
         {COPY.notReady}
@@ -286,7 +398,16 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
         {COPY.continue}
       </Link>
     );
-    body = <></>;
+    // Leaving never paused it (D19): say so while a clue or the Encore is
+    // open, never on a reveal, where the clock is stopped.
+    body = clockRunningOn(card) ? (
+      <p className="text-base" data-daily-clock="">
+        {COPY.stillRunning}
+      </p>
+    ) : (
+      <></>
+    );
+    howToLink = null;
   } else if (card?.finished && loaded !== null) {
     const { points, maxPoints, rows } = card.finished;
     const glyphs = glyphsFor(highContrast);
@@ -303,9 +424,7 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
       <>
         <div aria-hidden="true" className="flex flex-col text-lg leading-tight">
           {rows.map((row, index) => (
-            <span key={index}>
-              {row.map((cell) => glyphs.cells[cell]).join("")}
-            </span>
+            <span key={index}>{drawGridRow(row, glyphs)}</span>
           ))}
         </div>
         {share === null ? null : (
@@ -313,18 +432,25 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
         )}
       </>
     );
+    howToLink = null;
     after = <NextDaily loaded={loaded} />;
   }
 
+  // On short phones (700 px tall or less) the card tightens its gaps and
+  // its padding as the ticket does (DESIGN §12.1), so Play and Quick play
+  // stay above the tab bar at 360 by 640 with today's two rows of chips.
   return (
     <section
       aria-labelledby="qz-daily-card"
       data-daily-card={card === null && notReady ? "not_ready" : status}
-      className="flex flex-col gap-3 rounded-3xl border-2 border-foreground bg-background p-4 shadow-[0_4px_0_0] shadow-foreground/40 sm:p-5"
+      className="flex flex-col gap-3 rounded-3xl border-2 border-foreground bg-background p-4 shadow-[0_4px_0_0] shadow-foreground/40 sm:p-5 [@media(max-height:700px)]:gap-2 [@media(max-height:700px)]:py-[13px]"
     >
-      <h2 id="qz-daily-card" className="text-xl font-bold">
-        {heading}
-      </h2>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+        <h2 id="qz-daily-card" className="text-xl font-bold">
+          {heading}
+        </h2>
+        {howToLink}
+      </div>
       {card !== null && status === "in_progress" ? (
         // Its own line under "Continue Daily #42" (DESIGN §12.1), so a
         // narrow card never starts a line with the separator.
@@ -342,6 +468,14 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
       {body}
       {action}
       {after}
+      {howTo === null ? null : (
+        <howTo.Sheet
+          open={howTo.open}
+          onClose={() => {
+            setHowTo({ ...howTo, open: false });
+          }}
+        />
+      )}
       {ARCHIVE_HREF === null ? null : (
         <Link
           href={ARCHIVE_HREF}

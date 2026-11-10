@@ -33,7 +33,7 @@ import {
   type DailyControllerDeps,
   type DailySnapshot,
 } from "./controller";
-import { elapsedMs } from "./labels";
+import { elapsedMs, formatStopwatch } from "./labels";
 
 const NOV_1 = Date.UTC(2026, 10, 1, 9);
 const UTC = parseTimeZone("UTC") as TimeZone;
@@ -138,10 +138,11 @@ function harness(options: { at?: number; random?: number } = {}): Harness {
     kv: createKv({ storage: createMemoryStorage() }),
     now: () => clock.now(),
   });
+  const serverClock = createServerClock({ base: clock });
   const mock = createMockBackend(
     {
       identity: () => identity,
-      serverClock: createServerClock({ base: clock }),
+      serverClock,
     },
     {
       store: createMemoryStore(),
@@ -170,6 +171,7 @@ function harness(options: { at?: number; random?: number } = {}): Harness {
     backend: async () => backend,
     plugins: createEchoRegistry(),
     clock,
+    serverNow: () => serverClock.now(),
     schedule: timers.schedule,
     random: () => options.random ?? 0.5,
     newKey: () => {
@@ -867,10 +869,12 @@ describe("RITE round 1: what the start and a reload carry", () => {
     h.reload();
     const state = await started(h);
     expect(state.view).toMatchObject({ phase: "active", index: 1 });
-    expect(state.timeOffset).toEqual({ index: 1, ms: 30_000 });
+    // 30 s open on the server, less the 400 ms allowance for its begin and
+    // for the request that will resolve it: what the round counts so far.
+    expect(state.timeOffset).toEqual({ index: 1, ms: 29_200 });
     expect(state.run?.slots[0]?.activeMs).toBe(90_000);
     expect(elapsedMs(state.run!, h.clock.now(), state.timeOffset)).toBe(
-      120_000,
+      119_200,
     );
 
     const reported: number[] = [];
@@ -884,7 +888,83 @@ describe("RITE round 1: what the start and a reload carry", () => {
     // PRD §4.3.3 compares the server's interval with the device's own.
     expect(reported).toEqual([5_000]);
     expect(elapsedMs(h.state().run!, h.clock.now(), h.state().timeOffset)).toBe(
-      125_000,
+      124_200,
     );
+  });
+});
+
+describe("RITE round 2: one clock (R2-08)", () => {
+  it("R2-08 two wrong guesses and two reloads in Mystery 2: the round counts what the server recorded, and the stopwatch ends on the finish's total", async () => {
+    const h = harness();
+    await started(h);
+    h.clock.advance(20_000);
+    await act(h, guess(ODILE));
+    await next(h);
+    h.clock.advance(12_300);
+    await act(h, guess(entity("fx.x.country.ostravia")));
+    h.reload();
+    await started(h);
+    h.clock.advance(9_400);
+    await act(h, guess(entity("fx.x.country.rosmaar")));
+    expect(h.state().view).toMatchObject({ round: { open: { clue: 3 } } });
+    h.reload();
+    let state = await started(h);
+    // The reload's offset is the server's interval, 21.7 s, less 400 ms for
+    // each of its three requests and for the one that will resolve it.
+    expect(state.timeOffset).toEqual({ index: 1, ms: 20_100 });
+    h.clock.advance(6_100);
+    const before = elapsedMs(state.run!, h.clock.now(), state.timeOffset);
+    expect(before).toBe(20_000 + 26_200);
+    await act(h, guess(VALDORIA));
+    state = h.state();
+    // The verdict never sets the header back (RITE round 2 review): the
+    // recorded whole second reads at least what the stopwatch showed.
+    expect(
+      formatStopwatch(elapsedMs(state.run!, h.clock.now(), state.timeOffset)),
+    ).toBe(formatStopwatch(before));
+    // 27.8 s on the server, less 400 ms for each of its four requests:
+    // 26.2 s, recorded as 26 s, never the 22 + 6.1 s the device would add.
+    expect(state.timeOffset).toBeNull();
+    expect(state.run?.slots[1]?.activeMs).toBe(26_000);
+    expect(elapsedMs(state.run!, h.clock.now(), state.timeOffset)).toBe(
+      20_000 + 26_000,
+    );
+
+    await next(h);
+    h.clock.advance(14_000);
+    await act(h, guess(BISMUTH));
+    await next(h);
+    h.clock.advance(8_000);
+    await act(h, { family: "encore", kind: "lock_in", value: 104 });
+    state = h.state();
+    const summary = h.mock.controls.inspect<{ summary: { totalMs: number } }>(
+      `attempts.${state.attemptId}`,
+    ).summary;
+    // Lock in brought the finish's total: the stopwatch stops on it.
+    expect(state.totalMs).toBe(summary.totalMs);
+    expect(state.totalMs).toBe(
+      elapsedMs(state.run!, h.clock.now(), state.timeOffset),
+    );
+  });
+
+  it("R2-08 a backend that reports no recorded time keeps the device's measure, in whole seconds", async () => {
+    const h = harness();
+    const send = h.backend.sealed.act;
+    h.backend.sealed.act = async (input) => {
+      const result = await send(input);
+      if (!result.ok) return result;
+      const { activeMs: _dropped, ...rest } =
+        result.value as typeof result.value & {
+          activeMs?: number;
+        };
+      return { ok: true, value: rest };
+    };
+    await started(h);
+    h.clock.advance(10_600);
+    await act(h, guess(ODILE));
+    const state = h.state();
+    expect(state.run?.slots[0]?.activeMs).toBe(10_600);
+    expect(elapsedMs(state.run!, h.clock.now(), state.timeOffset)).toBe(11_000);
+    expect(state.totalMs).toBeNull();
   });
 });

@@ -29,6 +29,7 @@
  */
 import { describe, it } from "vitest";
 
+import type { Clock } from "@/engine/clock";
 import {
   TEST_PLAYER_PREFIX,
   parsePlayerId,
@@ -150,18 +151,39 @@ export function createTestIdentity(
   };
 }
 
+/** How a contract context is made, beyond its target. */
+export interface ContractEnvOptions {
+  /**
+   * Makes each mock context's server clock, so a suite can play a fixed
+   * fixture Daily on any day (the mock serves the fixture Daily for its
+   * clock's date). The real project keeps its own time, so the real run
+   * ignores it.
+   */
+  readonly mockClock?: () => Clock;
+  /** The identity's random bytes: seeded identities, for a repeatable run. */
+  readonly random?: (bytes: number) => Uint8Array;
+}
+
 export interface ContractEnv {
   readonly target: ContractTarget;
   readonly backend: GameBackend;
   readonly identity: TestIdentity;
+  /** What made this context, so a test can open another of the same kind. */
+  readonly options: ContractEnvOptions;
 }
 
 /** A backend of the target kind, with a fresh test identity and server clock. */
-export function createContractEnv(target: ContractTarget): ContractEnv {
-  const testIdentity = createTestIdentity();
+export function createContractEnv(
+  target: ContractTarget,
+  options: ContractEnvOptions = {},
+): ContractEnv {
+  const testIdentity = createTestIdentity(options.random);
+  const mockClock = target === "mock" ? options.mockClock?.() : undefined;
   const deps = {
     identity: () => testIdentity,
-    serverClock: createServerClock(),
+    serverClock: createServerClock(
+      mockClock === undefined ? undefined : { base: mockClock },
+    ),
   };
   const backend =
     target === "mock"
@@ -169,15 +191,26 @@ export function createContractEnv(target: ContractTarget): ContractEnv {
           store: createMemoryStore(),
           init: { latencyMs: 0 },
           attachControls: false,
+          ...(mockClock === undefined ? {} : { clock: mockClock }),
         })
       : createSupabaseBackend(deps);
-  return { target, backend, identity: testIdentity };
+  return { target, backend, identity: testIdentity, options };
+}
+
+export interface ContractTestOptions {
+  /**
+   * The per-test timeout against the real project, for a test that plays
+   * many identities (the default is REAL_TIMEOUT_MS). The mock run keeps
+   * Vitest's default.
+   */
+  readonly realTimeoutMs?: number;
 }
 
 export type ContractTest<A extends BackendArea> = (
   method: AreaMethod<A>,
   title: string,
   body: (env: ContractEnv) => Promise<void>,
+  options?: ContractTestOptions,
 ) => void;
 
 export interface ContractSuite<A extends BackendArea = BackendArea> {
@@ -193,25 +226,32 @@ export function defineContract<A extends BackendArea>(
   return { area, define };
 }
 
-/** Registers the suite's tests against one target. */
+/**
+ * Registers the suite's tests against one target. `options` holds for every
+ * context a test makes, the first and any it opens beside it (a suite pins
+ * the mock's clock here, so its fixture Daily is the same one every day).
+ */
 export function runContract<A extends BackendArea>(
   suite: ContractSuite<A>,
   target: ContractTarget,
+  options: ContractEnvOptions = {},
 ): void {
   const implemented =
     target === "mock" ? new Set<string>(MOCK_CAPABILITY_MAP[suite.area]) : null;
   describe.skipIf(target === "real" && !REAL_BACKEND)(
     `${suite.area} contract (${target})`,
     () => {
-      suite.define((method, title, body) => {
+      suite.define((method, title, body, testOptions = {}) => {
         const register =
           implemented === null || implemented.has(method) ? it : it.skip;
         register(
           title,
           async () => {
-            await body(createContractEnv(target));
+            await body(createContractEnv(target, options));
           },
-          target === "real" ? REAL_TIMEOUT_MS : undefined,
+          target === "real"
+            ? (testOptions.realTimeoutMs ?? REAL_TIMEOUT_MS)
+            : undefined,
         );
       });
     },

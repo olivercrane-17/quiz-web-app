@@ -15,6 +15,12 @@
  *   the open round's server time so far, which the stopwatch adds
  *   (`timeOffset`, R1-06) while the judge keeps reporting the device's own
  *   measure.
+ * - **One clock (R2-08).** A verdict that resolves a round brings the
+ *   round's recorded time (`recordedMsOf`), which takes the place of the
+ *   device's measure and of the offset a reload left (`withRecordedTime`),
+ *   and the finish's total, once the last verdict or the finish brings it,
+ *   is what the stopwatch shows from Lock in on (`totalMs`): the header's
+ *   last reading is the stop screen's time.
  * - **Commands.** `open_round` calls `beginRound`, `judge` calls `act` with
  *   the round's current step, `finish` uses the summary the last call
  *   returned or asks `finish()` (idempotent), `resync` reloads the
@@ -92,7 +98,7 @@ import {
 } from "@/features/rounds";
 
 import { DAILY_SCREEN_COPY } from "../client-copy";
-import { announcementText, type TimeOffset } from "./labels";
+import { announcementText, withRecordedTime, type TimeOffset } from "./labels";
 
 export type FocusTarget = Extract<RunCommand, { kind: "focus" }>["target"];
 
@@ -148,6 +154,12 @@ export interface DailySnapshot {
    * snapshot said (R1-06): the stopwatch adds it, the judge never reports it.
    */
   timeOffset: TimeOffset | null;
+  /**
+   * The finish's official total time, once the last verdict or the finish
+   * has brought it (R2-08): the stopwatch shows it from Lock in on, so its
+   * last reading is the stop screen's time. Null until then.
+   */
+  totalMs: number | null;
 }
 
 export interface StartContext {
@@ -161,6 +173,12 @@ export interface DailyControllerDeps {
   backend(): Promise<GameBackend>;
   plugins: PluginRegistry;
   clock: Clock;
+  /**
+   * The server-corrected clock's now (ARCHITECTURE §4.3), which a resumed
+   * round's offset uses to count the response's trip back. Without it the
+   * offset counts from the snapshot's `serverTime`, a few ms short.
+   */
+  serverNow?(): EpochMs;
   /** Runs `callback` after `ms`; returns a cancel function. */
   schedule(callback: () => void, ms: number): () => void;
   /** [0, 1), for retry jitter. */
@@ -234,19 +252,47 @@ export function firstDailyOf(snapshot: AttemptSnapshot): boolean {
   );
 }
 
+/** The most a response's trip back can add to an offset: the server clock's own bound on a round trip. */
+const MAX_TRIP_MS = 60_000;
+
 /**
  * What the round open in a snapshot had on the server's clock before this
  * page loaded (R1-06): its interval so far, or, from a backend that doesn't
  * report one, the time since its current clue was issued, which can only
  * count short. Null with no round open.
+ *
+ * `serverNow` is the server-corrected clock (ARCHITECTURE §4.3) as the
+ * response arrives. The device counts the resumed round from that moment,
+ * so the time between the snapshot's `serverTime` and its arrival is added
+ * here; without it the header restarted behind the server by the response's
+ * trip back (RITE round 2 review, R2-01).
  */
-export function timeOffsetOf(snapshot: AttemptSnapshot): TimeOffset | null {
+export function timeOffsetOf(
+  snapshot: AttemptSnapshot,
+  serverNow: EpochMs | null = null,
+): TimeOffset | null {
   const current = snapshot.current;
   if (current === null || current.open === null) return null;
+  const trip =
+    serverNow === null || !Number.isFinite(serverNow)
+      ? 0
+      : Math.min(Math.max(0, serverNow - snapshot.serverTime), MAX_TRIP_MS);
   const ms =
-    current.activeMs ??
-    Math.max(0, snapshot.serverTime - current.open.issuedAt);
+    (current.activeMs ??
+      Math.max(0, snapshot.serverTime - current.open.issuedAt)) + trip;
   return ms > 0 ? { index: current.index, ms } : null;
+}
+
+/**
+ * The recorded time an act() response carries with a verdict that resolved
+ * its round (R2-08), or null: a verdict that leaves the round open carries
+ * none, and neither does a backend that doesn't report it yet. The field
+ * rides beside the response's own until ARCHITECTURE §7.2 names it, as
+ * round_action's `active_ms` (SQL-4, SQL-5).
+ */
+export function recordedMsOf(response: object): number | null {
+  const ms = (response as { activeMs?: unknown }).activeMs;
+  return typeof ms === "number" && Number.isFinite(ms) && ms >= 0 ? ms : null;
 }
 
 /** Choice verdicts, which ChoiceRound announces itself as its reveal shows. */
@@ -318,6 +364,7 @@ export function createDailyController(
   let movedOn = false;
   let firstDaily = false;
   let timeOffset: TimeOffset | null = null;
+  let totalMs: number | null = null;
   /** A FinishSummary that arrived before the Continue that asks for it (§4.5 invariant 6). */
   let earlySummary: FinishSummary | null = null;
   let resyncFailures = 0;
@@ -348,6 +395,7 @@ export function createDailyController(
       movedOn,
       firstDaily,
       timeOffset,
+      totalMs,
     };
   }
 
@@ -358,6 +406,7 @@ export function createDailyController(
   }
 
   const now = (): EpochMs => deps.clock.now();
+  const serverNow = (): EpochMs | null => deps.serverNow?.() ?? null;
 
   async function call<T>(
     fn: (backend: GameBackend) => Promise<Result<T>>,
@@ -487,7 +536,8 @@ export function createDailyController(
     converted = converted || attempt.kind === "archive";
     problem = null;
     firstDaily = firstDailyOf(attempt);
-    timeOffset = timeOffsetOf(attempt);
+    timeOffset = timeOffsetOf(attempt, serverNow());
+    totalMs = null;
     deps.onAttempt?.(attempt);
     if (attempt.status === "finished") {
       status = "finished";
@@ -535,6 +585,7 @@ export function createDailyController(
     run = null;
     movedOn = false;
     earlySummary = null;
+    totalMs = null;
     resyncFailures = 0;
     publish();
     void attemptStart();
@@ -542,7 +593,12 @@ export function createDailyController(
 
   // ----- the run -----------------------------------------------------------
 
-  function dispatch(event: RunEvent): void {
+  /**
+   * Applies `event` to the run and carries out its commands. `settle` runs
+   * after the reducer and before the screen hears of it, for what the
+   * controller adds to the run's own state (a verdict's recorded time).
+   */
+  function dispatch(event: RunEvent, settle?: () => void): void {
     if (!active || run === null) return;
     let transition;
     try {
@@ -568,6 +624,7 @@ export function createDailyController(
       deps.announce(DAILY_SCREEN_COPY.lostConnection, "assertive");
     }
     for (const command of transition.commands) handle(command);
+    settle?.();
     if (run.phase === "finished" && status === "playing") {
       status = "finished";
       if (event.type === "finished" && event.summary !== null) {
@@ -626,7 +683,10 @@ export function createDailyController(
     finished: FinishSummary | null;
     converted: boolean;
   }): void {
-    if (value.finished !== null) earlySummary = value.finished;
+    if (value.finished !== null) {
+      earlySummary = value.finished;
+      totalMs = value.finished.totalMs;
+    }
     if (value.converted) converted = true;
   }
 
@@ -705,12 +765,27 @@ export function createDailyController(
       return;
     }
     noteResponse(result.value);
-    dispatch({
-      type: "verdict",
-      at: now(),
-      key: command.key,
-      verdict: result.value.verdict,
-    });
+    const recorded = recordedMsOf(result.value);
+    dispatch(
+      {
+        type: "verdict",
+        at: now(),
+        key: command.key,
+        verdict: result.value.verdict,
+      },
+      () => {
+        // The server's figure for the round it just resolved, in place of
+        // the device's and the reload's (R2-08). A verdict the run didn't
+        // take (another key's) leaves the round open, and this unchanged.
+        if (recorded === null || run === null) return;
+        ({ state: run, offset: timeOffset } = withRecordedTime(
+          run,
+          timeOffset,
+          command.index,
+          recorded,
+        ));
+      },
+    );
   }
 
   function scheduleRetry(afterMs: number | null): void {
@@ -761,7 +836,7 @@ export function createDailyController(
     movedOn = true;
     earlySummary = null;
     if (result.value.kind === "archive") converted = true;
-    timeOffset = timeOffsetOf(result.value);
+    timeOffset = timeOffsetOf(result.value, serverNow());
     dispatch({ type: "resume", at: now(), snapshot: result.value });
   }
 
@@ -783,6 +858,7 @@ export function createDailyController(
       dispatch({ type: "failed", at: now(), key: null, error: result.error });
       return;
     }
+    totalMs = result.value.totalMs;
     dispatch({ type: "finished", at: now(), summary: result.value });
   }
 

@@ -15,6 +15,14 @@ import { legalDate, type LegalDocument } from "../document";
 /** When this statement was last reviewed against WCAG 2.2 AA. */
 export const ACCESSIBILITY_REVIEWED: LocalDate = legalDate("2026-11-05");
 
+/**
+ * Whether Settings has the switch that turns the answer keys off (PRD
+ * §3.0.3, §3.12). Decision D20 (RITE round 2, R2-02): the statement says
+ * "Turn them off" only once it does, so it never sends a player to a switch
+ * that isn't there. SET-1 turns this on when it builds the switch.
+ */
+export const KEYBOARD_SHORTCUTS_SWITCH = false;
+
 export function accessibilityDocument(
   flags: (flag: FeatureFlag) => boolean,
 ): LegalDocument {
@@ -113,7 +121,7 @@ export function accessibilityDocument(
               {
                 term: "Keyboard shortcuts",
                 details: [
-                  "Keys that pick an answer while focus is in a question. Turn them off if they get in your way.",
+                  `Keys A to D choose an answer while focus is on one of the answers. On the Daily's last clue, Enter or the same key again locks your choice in.${KEYBOARD_SHORTCUTS_SWITCH ? " Turn them off if they get in your way." : ""}`,
                 ],
               },
               {

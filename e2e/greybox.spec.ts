@@ -193,9 +193,11 @@ test.describe("Wave 1 exit", () => {
     expect(text.split("\n")).toEqual([
       "Knewt Daily #42 · 2/12 · Encore off by 4% 🎯",
       "History 🟧🟧🟧✅",
-      "Geography 🟧🟧🟧🟧",
+      // A miss ends in the missed mark since round 2 (D22, R2-09).
+      "Geography 🟧🟧🟧❌",
       "Science & Tech 🟧🟧🟧✅",
-      expect.stringMatching(/^http:\/\/127\.0\.0\.1:\d+\/daily$/),
+      // The link opens Today until SHR-1's landing exists (R2-20).
+      expect.stringMatching(/^http:\/\/127\.0\.0\.1:\d+\/$/),
     ]);
     await expect(
       page.getByRole("link", { name: "Done for today" }),

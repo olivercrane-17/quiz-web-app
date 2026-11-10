@@ -1,11 +1,18 @@
 /**
  * How to play (PRD §3.1.3): the five parts in order, as the Daily's sheet
- * and `/how-scoring-works` both show them (RITE round 1, R1-02 and R1-04).
+ * and `/how-scoring-works` both show them (RITE round 1, R1-02 and R1-04),
+ * with round 2's stopwatch sentence (D19, R2-01) and tiebreak order (D21,
+ * R2-04).
  */
 import { render, screen, within } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
+import {
+  SO_FAR_TODAY,
+  STOP_SCREEN_PERCENTILE,
+  buildHowToPlay,
+} from "./how-to-play";
 import { HOW_TO_PLAY, HowToPlayText } from "./index";
 
 function parts(): { heading: string; text: string }[] {
@@ -44,7 +51,33 @@ describe("How to play", () => {
       /Points come first, then the Encore, then total time/,
     );
     expect(ranking?.text).toMatch(/Nothing counts down/);
-    expect(ranking?.text).toMatch(/“so far today”/);
+  });
+
+  it("R2-01 D19 the ranking part says the stopwatch runs while a clue is open, even while you're away, and stops on every reveal", () => {
+    render(<HowToPlayText />);
+    const ranking = parts().at(-1);
+    expect(ranking?.text).toContain(
+      "The stopwatch runs while a clue is open, even while you're away or reading this, and stops on every reveal.",
+    );
+  });
+
+  it("R2-04 D21 the Encore part says time only counts after the Encore", () => {
+    const encore = HOW_TO_PLAY.parts.find((part) => part.id === "encore");
+    expect(encore?.body).toContain(
+      "If you tie on points, the closer guess ranks higher. Time only counts after that.",
+    );
+  });
+
+  it("R2-04 D21 says nothing of “so far today” while the stop screen shows no percentile, and says it once one does", () => {
+    // Greybox: DLY-3 builds the percentile in M2.
+    expect(STOP_SCREEN_PERCENTILE).toBe(false);
+    render(<HowToPlayText />);
+    expect(screen.getByRole("list").textContent).not.toMatch(/so far today/);
+    const later = buildHowToPlay({ percentile: true });
+    expect(later.parts.at(-1)?.body.at(-1)).toBe(SO_FAR_TODAY);
+    expect(SO_FAR_TODAY).toMatch(/“so far today”/);
+    // The rest is the same text either way.
+    expect(later.parts.slice(0, -1)).toEqual(HOW_TO_PLAY.parts.slice(0, -1));
   });
 
   it("R1-04 tells a newcomer what a wrong guess costs before they make one", () => {
