@@ -371,3 +371,24 @@ One P1 confusion remains (R5-01), again an echo of the previous round's fix, so 
 - **Round 6 method.** Fixes only. A new probe before the first practice answer ("What will happen when you tap or press an
   answer here?"); touch personas on touch-only profiles; each driver in its own profile and process group, never killed
   from outside; the spread test recorded with test names; evidence copied into the repository's playtest evidence index.
+
+## 29. M1 exits (10 November 2026)
+Round 6 (`docs/playtests/rite-6.md`) ran five complete sessions on one build and one Daily: no P0, no P1 confusion,
+comprehension 15 of 15 before any help page, every probe 5 of 5 (the stopwatch while away, the tie order, what locks in at
+clue 4, what a tap does in practice), and the header equal to the stop screen in 7 runs of 7. Fun 7.0 of 10; all five
+would share. PRD §9.3's playtest criterion is met, so **M1 exits**, on one condition.
+- **The condition, R6-01.** A second tap on "Next question" can land on an option of the next question and be scored
+  unread. It is a defect, not a confusion (both players who hit it knew one tap is final), and a Playwright spec
+  reproduces it, so no persona round is needed. Its fix lands before any other M2 practice work.
+- **D39, arming answers.** Pointer answers are ignored for about 700 ms after a new question paints (a tunable,
+  `answers.armMs`); keys aren't delayed; the same guard follows "See your results". Keeping the options in place under the
+  sheet (PRD §3.0.3, R2-14) stays PRA-2's job.
+- **D40, clue 4's line (amends D24).** "Last clue. Pick one of four. Right pick: 1 point. Wrong pick: 0."
+- **D38, settled.** Three option letters inside 2 s clear a choice, and a cleared choice is announced ("Choice cleared.").
+- **D34.** The optional stop-screen line is built with DLY-3's first pass, until the percentile ships.
+- **Exit decisions.** `options_from_clue` stays 4; `daily_minutes` stays 4 (first Dailies ran about 1:26 to 3:45 less
+  time away); the stopwatch stays visible by default (D8); practice keeps one tap per answer (D36).
+- **Still to check for M1's other criterion.** PRD §9.3 also asks that engine unit tests cover §4 completely; QA-1 confirms
+  it with `check:ac` before M2's exit, and nothing in six rounds suggested a gap.
+- **Backlog.** Round 6's P2s go to their owning tickets as listed in rite-6.md's last section. The next persona round is
+  M3's, with a percentile on screen, and it asks comprehension question 4 (§22).

@@ -14,6 +14,7 @@ be recorded here from round 6 on.
 | 3 | `docs/playtests/rite-3.md` | `/home/user/playtest-evidence/rite-3/` | 157 MB | Built 2026-11-10 08:48:14 UTC (`/home/user/playtest-evidence/rite3-build-time.txt`) |
 | 4 | `docs/playtests/rite-4.md` | `/home/user/playtest-evidence/rite-4/` | 173 MB | `ba19192`, built 2026-11-10 13:40:34 UTC (`rite4-build-time.txt`, in the folder and beside it) |
 | 5 | `docs/playtests/rite-5.md` | `/home/user/playtest-evidence/rite-5/` | 178 MB | `f167166`, built 2026-11-10 18:17:53 UTC |
+| 6 | `docs/playtests/rite-6.md` | `/home/user/playtest-evidence/rite-6/` | 182 MB | `63fa3f9`, built 2026-11-10 20:58:25 UTC |
 
 Round N's folder is always `/home/user/playtest-evidence/rite-N/`, with one folder per persona inside it (`dee`,
 `lena`, `marcus`, `priya`, `sam`). The folders are on disk, not in RAM, but they aren't backed up: if the build machine
