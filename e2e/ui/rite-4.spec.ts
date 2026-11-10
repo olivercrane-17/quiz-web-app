@@ -7,6 +7,7 @@
 import type { Locator, Page } from "@playwright/test";
 
 import { expect, test } from "../fixtures";
+import { pickOption } from "../daily/clue-4";
 import { allowClipboard } from "../support/clipboard";
 import { setClock } from "../support/clock";
 import { mockInit } from "../support/mock";
@@ -160,13 +161,10 @@ test.describe("R4-04 the play header's X says what leaving does", () => {
         .getByRole("button", { name: /^(Next clue|Last clue)/ })
         .click();
     }
-    await page.getByRole("button", { name: /Odile Marsh/ }).click();
-    // D31: where the last clue asks for a second step, take it.
-    const lockIn = page.getByRole("button", { name: /^Lock in/ });
-    const next = page.getByRole("button", { name: "Next mystery" });
-    await expect(lockIn.or(next).first()).toBeVisible();
-    if (await lockIn.isVisible()) await lockIn.click();
-    await expect(next).toBeVisible();
+    await pickOption(page, "Odile Marsh");
+    await expect(
+      page.getByRole("button", { name: "Next mystery" }),
+    ).toBeVisible();
     const leave = page.getByRole("link", { name: LEAVE_STOPPED, exact: true });
     await leave.hover();
     await expect(tip(page)).toBeVisible();

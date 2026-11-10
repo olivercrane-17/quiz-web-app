@@ -15,6 +15,7 @@ import { expect, test } from "../fixtures";
 import { allowClipboard } from "../support/clipboard";
 import { localInstant } from "../support/clock";
 import { mockInit } from "../support/mock";
+import { pickOption } from "./clue-4";
 import { stopwatchText } from "./stopwatch";
 
 test.use({ timezoneId: "Europe/London" });
@@ -64,13 +65,8 @@ async function toMystery2(page: Page): Promise<void> {
   for (let clue = 1; clue < 4; clue += 1) {
     await page.getByRole("button", { name: /^(Next clue|Last clue)/ }).click();
   }
-  await page.getByRole("button", { name: /The Lantern Keeper/ }).click();
-  // D31: where the last clue asks for a second step, take it.
-  const lockIn = page.getByRole("button", { name: /^Lock in/ });
-  const next = page.getByRole("button", { name: "Next mystery" });
-  await expect(lockIn.or(next).first()).toBeVisible();
-  if (await lockIn.isVisible()) await lockIn.click();
-  await next.click();
+  await pickOption(page, "The Lantern Keeper");
+  await page.getByRole("button", { name: "Next mystery" }).click();
   await expect(
     round(page).getByRole("heading", { name: /clue 1/i }),
   ).toBeVisible();
