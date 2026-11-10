@@ -278,3 +278,12 @@ below. They override the PRD, DESIGN.md and §19 where they differ, until those 
   JSON string values, so the tool's statement splitter doesn't cut a content load in half; the stored values are
   identical once decoded. That stays, on one condition, which a test enforces: no chunk the release writes contains a
   DROP, DELETE or TRUNCATE statement, decoded or not. A chunk that needs one belongs in an attended migration (§21).
+
+## 25. Small rulings during the round 2 fixes (10 November 2026)
+- **D20's practice legend names only the letters on screen**: "Keys A and B answer." for true or false and comparisons,
+  "Keys A to C answer." for three options, "Keys A to D answer." for four. Its line is reserved while shortcuts are on, so
+  showing it moves nothing (PRD §3.0.3).
+- **Two retired film mysteries** (m.film.0116 and m.film.0123) left the pool rather than being reopened: their accept
+  rested on a tiebreak with Tier C evidence, which rule 3 doesn't count, and the only path that reopens an active item
+  (an invalid_check incident) would wrongly accuse a checker whose work was real. A future tool to reopen an active item
+  for a §9.10 re-check would avoid such losses.
