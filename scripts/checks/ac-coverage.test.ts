@@ -35,32 +35,32 @@ function tree(files: Record<string, string>): string {
 
 const PRD = [
   "# PRD",
-  "- **AC-DLY-01** Given a guest, when they tap Play, then clue 1 shows.",
-  "- **AC-DLY-02** Given a finish, then the stop screen shows.",
-  "- **AC-DLY-07b** Given a miss, then the reveal shows.",
-  "- **AC-ROM-01** Given five phones, then all join.",
+  "- **AC-QZD-01** Given a guest, when they tap Play, then clue 1 shows.",
+  "- **AC-QZD-02** Given a finish, then the stop screen shows.",
+  "- **AC-QZD-07b** Given a miss, then the reveal shows.",
+  "- **AC-QZR-01** Given five phones, then all join.",
   "",
 ].join("\n");
 
 const PLANTED = {
   "docs/PRD.md": PRD,
-  "docs/ARCHITECTURE.md": "Covered by AC-DLY-01 and AC-ZZZ-09.\n",
+  "docs/ARCHITECTURE.md": "Covered by AC-QZD-01 and AC-ZZZ-09.\n",
   "e2e/daily.spec.ts": [
-    'test("AC-DLY-01 one tap on Play opens clue 1", async () => {});',
-    "test.fixme(`AC-DLY-02 the stop screen, later`, async () => {});",
+    'test("AC-QZD-01 one tap on Play opens clue 1", async () => {});',
+    "test.fixme(`AC-QZD-02 the stop screen, later`, async () => {});",
     "",
   ].join("\n"),
   "src/reveal.test.tsx": [
-    'it.each([1, 2])("R1-16 AC-DLY-07b, the reveal %s", () => {});',
-    "// AC-ROM-01 named in a comment only",
-    'it("shows AC-ROM-01 mid-title, which does not count", () => {});',
+    'it.each([1, 2])("R1-16 AC-QZD-07b, the reveal %s", () => {});',
+    "// AC-QZR-01 named in a comment only",
+    'it("shows AC-QZR-01 mid-title, which does not count", () => {});',
     "",
   ].join("\n"),
 };
 
 describe("titles", () => {
   it("reads the ids that open a title, after other ids, and stops at the first word", () => {
-    expect(leadingAcIds("AC-DLY-01 one tap")).toEqual(["AC-DLY-01"]);
+    expect(leadingAcIds("AC-QZD-01 one tap")).toEqual(["AC-QZD-01"]);
     expect(
       leadingAcIds("R2-09 AC-SHR-02, AC-SHR-03 and AC-SHR-04: lines"),
     ).toEqual(["AC-SHR-02", "AC-SHR-03", "AC-SHR-04"]);
@@ -96,12 +96,12 @@ describe("the report", () => {
     const report = acCoverage(root);
     expect(report.defined).toBe(4);
     expect(report.covered).toBe(2);
-    expect(report.missing).toEqual(["AC-ROM-01"]);
-    expect(report.skippedOnly).toEqual(["AC-DLY-02"]);
+    expect(report.missing).toEqual(["AC-QZR-01"]);
+    expect(report.skippedOnly).toEqual(["AC-QZD-02"]);
     expect(report.undefinedIds).toEqual([
       { id: "AC-ZZZ-09", docs: ["docs/ARCHITECTURE.md"] },
     ]);
-    expect(acCoverage(root, ["AC-DLY"]).missing).toEqual([]);
+    expect(acCoverage(root, ["AC-QZD"]).missing).toEqual([]);
   });
 
   it("only reports by default, fails with --strict on a gap, and refuses a bad option", () => {
@@ -114,14 +114,14 @@ describe("the report", () => {
       );
     const plain = run();
     expect(plain.status).toBe(0);
-    expect(plain.stdout).toContain("no test: AC-ROM-01");
-    expect(plain.stdout).toContain("only skipped tests: AC-DLY-02");
+    expect(plain.stdout).toContain("no test: AC-QZR-01");
+    expect(plain.stdout).toContain("only skipped tests: AC-QZD-02");
     expect(plain.stdout).toContain(
       "check:ac: 2 of 4 acceptance criteria have a test whose title starts with their id; 1 have none, 1 only skipped ones.",
     );
     expect(run("--strict").status).toBe(1);
-    expect(run("--strict", "--only", "AC-ROM").status).toBe(1);
-    const json = run("--json", "--strict", "--only", "AC-DLY-01");
+    expect(run("--strict", "--only", "AC-QZR").status).toBe(1);
+    const json = run("--json", "--strict", "--only", "AC-QZD-01");
     expect(json.status).toBe(0);
     expect(JSON.parse(json.stdout)).toMatchObject({
       ok: true,
