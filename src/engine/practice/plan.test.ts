@@ -721,6 +721,35 @@ describe("planPracticeRun: no format twice in a row (RITE round 3)", () => {
     expect(items.map(band).filter((b) => b === "easy")).toHaveLength(4);
   });
 
+  it("R3-12 in Mixed, a comparison never gives way to an item seen within 60 days while it is unseen (AC-PRA-05)", () => {
+    // The only Easy item left to swap in was seen today.
+    const easy = [0.95, 0.94, 0.93, 0.92, 0.91].map((value, i) =>
+      practiceItem({
+        id: `p.geo.000${i + 1}`,
+        p: value,
+        shape: i < 2 ? "comparison" : "mc",
+      }),
+    );
+    const medium = [0.7, 0.66, 0.62, 0.58, 0.54].map((value, i) =>
+      practiceItem({ id: `p.geo.010${i}`, p: value }),
+    );
+    const hard = [0.4, 0.35, 0.3].map((value, i) =>
+      practiceItem({ id: `p.geo.020${i}`, p: value }),
+    );
+    const seenToday = easy.slice(4);
+    const seen = seenAll(seenToday, TODAY_DAY);
+    for (const seed of ["a", "b", "c", "d", "e"]) {
+      const { items, notes } = planPracticeRun(
+        [...easy, ...medium, ...hard],
+        request({ seed, category: "geo", seen }),
+      );
+      expect(items).toHaveLength(10);
+      expect(notes).not.toContain("repeats_mixed_in");
+      expect(items.map((item) => item.id)).not.toContain("p.geo.0005");
+      expect(count(items, "comparison")).toBe(2);
+    }
+  });
+
   it("R3-12 in a chosen band, a comparison that the shuffle puts after another moves, and the opener stays first", () => {
     const medium = Array.from({ length: 10 }, (_, i) =>
       practiceItem({

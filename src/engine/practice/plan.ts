@@ -260,8 +260,10 @@ function openerThenShuffled(
 /**
  * Where positions follow p (Mixed, the ramp), a comparison that would
  * follow another gives way to the next acceptable item of `refill`, neither
- * a comparison nor a true/false, so the run keeps its length and its bands
- * (R3-12). Returns the group with the swap, or null when nothing fits.
+ * a comparison nor a true/false, and no staler than the comparison it
+ * replaces, so the run keeps its length, its bands and its freshness
+ * (R3-12, AC-PRA-05). Returns the group with the swap, or null when nothing
+ * fits.
  */
 function swapOutComparison(
   group: readonly Candidate[],
@@ -275,7 +277,8 @@ function swapOutComparison(
     picker,
     refill,
     1,
-    (c) => !isComparison(c) && c.item.format !== "tf",
+    // No staler than the target: freshness (AC-PRA-05) outranks spacing.
+    (c) => !isComparison(c) && c.item.format !== "tf" && c.tier <= target.tier,
   );
   if (replacement === undefined) {
     picker.take(target);

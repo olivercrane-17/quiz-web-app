@@ -122,38 +122,51 @@ test.describe("RITE round 3: practice", () => {
     expect(await top()).toBeCloseTo(before, 0);
   });
 
-  test.describe("on a phone at 200% text", () => {
-    test.use({ viewport: { width: 390, height: 844 } });
+  // 360 x 640 is the narrowest phone (R1-21): there the legend wraps to
+  // two lines and the Tab scrolls the page.
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 360, height: 640 },
+  ]) {
+    test.describe(`on a ${viewport.width} x ${viewport.height} phone at 200% text`, () => {
+      test.use({ viewport });
 
-    test("R3-07 the legend's box is inside the viewport and above option A, and showing it moves nothing", async ({
-      page,
-    }) => {
-      await startQuickPlay(page);
-      await page.evaluate(() => {
-        document.documentElement.style.fontSize = "200%";
+      test("R3-07 the legend's box is inside the viewport and above option A, and showing it moves nothing", async ({
+        page,
+      }) => {
+        await startQuickPlay(page);
+        await page.evaluate(() => {
+          document.documentElement.style.fontSize = "200%";
+        });
+        await expect(stem(page)).toBeVisible();
+        const before = await options(page).first().boundingBox();
+        const scrolledBefore = await page.evaluate(() => window.scrollY);
+        await page.keyboard.press("Tab");
+        await expect(options(page).first()).toBeFocused();
+        await expect(legend(page)).toBeVisible();
+        await expect(legend(page)).toBeInViewport({ ratio: 1 });
+        const line = await legend(page).boundingBox();
+        const first = await options(page).first().boundingBox();
+        expect(before).not.toBeNull();
+        expect(line).not.toBeNull();
+        expect(first).not.toBeNull();
+        if (line === null || first === null || before === null) return;
+        expect(line.y).toBeGreaterThanOrEqual(0);
+        expect(line.y + line.height).toBeLessThanOrEqual(viewport.height);
+        expect(line.y + line.height).toBeLessThanOrEqual(first.y);
+        // The line was held: option A is where it was before the legend
+        // showed, after any scroll the Tab caused is taken back out.
+        const scrolled = await page.evaluate(() => window.scrollY);
+        expect(first.y + scrolled).toBeCloseTo(before.y + scrolledBefore, 0);
+        // No sideways scroll.
+        const { scrollWidth, clientWidth } = await page.evaluate(() => ({
+          scrollWidth: document.documentElement.scrollWidth,
+          clientWidth: document.documentElement.clientWidth,
+        }));
+        expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
       });
-      await expect(stem(page)).toBeVisible();
-      const before = await options(page).first().boundingBox();
-      const scrolledBefore = await page.evaluate(() => window.scrollY);
-      await page.keyboard.press("Tab");
-      await expect(options(page).first()).toBeFocused();
-      await expect(legend(page)).toBeVisible();
-      await expect(legend(page)).toBeInViewport({ ratio: 1 });
-      const line = await legend(page).boundingBox();
-      const first = await options(page).first().boundingBox();
-      expect(before).not.toBeNull();
-      expect(line).not.toBeNull();
-      expect(first).not.toBeNull();
-      if (line === null || first === null || before === null) return;
-      expect(line.y).toBeGreaterThanOrEqual(0);
-      expect(line.y + line.height).toBeLessThanOrEqual(844);
-      expect(line.y + line.height).toBeLessThanOrEqual(first.y);
-      // The line was held: option A is where it was before the legend
-      // showed, after any scroll the Tab caused is taken back out.
-      const scrolled = await page.evaluate(() => window.scrollY);
-      expect(first.y + scrolled).toBeCloseTo(before.y + scrolledBefore, 0);
     });
-  });
+  }
 
   test("R3-11 a true-or-false miss reads You chose True. in the results, as the option reads", async ({
     page,
