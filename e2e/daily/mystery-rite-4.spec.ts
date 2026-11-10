@@ -29,8 +29,7 @@ const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
 const KEYS = "Keys A to D choose. Enter on your choice locks in.";
 const TAP = "Tap one, then Lock in.";
-const TYPED =
-  "Typing chooses nothing and clears your choice. Press Esc, then A to D.";
+const TYPED = "Typing chooses nothing. Press Esc, then A to D.";
 const LEAVE_RUNNING =
   "Leave the Daily. Your progress is saved, and the stopwatch keeps running.";
 
@@ -397,7 +396,12 @@ test.describe("the Lock in bar at large text on a small phone (D31, R4-01, after
       await expect(reveal(page)).toHaveCount(0);
       await expect(round(page)).toHaveAttribute("data-clue", "4");
       expect(await actsSent(mock)).toBe(before);
-      // The button still sends the one pick.
+      // The button still sends the one pick. A beat first, as a thumb
+      // takes: the driver scrolls the bar to the foot of the screen and
+      // taps at once, which can land within the double tap's reach of the
+      // spot that chose (`DOUBLE_TAP_MS`, 24 px), and that tap is rightly
+      // no lock-in.
+      await page.waitForTimeout(600);
       await lockInButton(page).tap();
       await expect(reveal(page)).toBeVisible();
       expect(await actsSent(mock)).toBe(before + 1);

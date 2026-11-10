@@ -20,8 +20,7 @@ const NOV_10 = new Date("2026-11-10T09:00:00Z");
 
 const KEYS = "Keys A to D choose. Enter on your choice locks in.";
 const TAP = "Tap one, then Lock in.";
-const TYPED =
-  "Typing chooses nothing and clears your choice. Press Esc, then A to D.";
+const TYPED = "Typing chooses nothing. Press Esc, then A to D.";
 
 /** A desk: a mouse that hovers, so a keyboard is likely (D32). */
 const DESK = {

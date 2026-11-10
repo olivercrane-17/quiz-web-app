@@ -61,8 +61,7 @@ const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
 const KEYS = "Keys A to D choose. Enter on your choice locks in.";
 const TAP = "Tap one, then Lock in.";
-const TYPED =
-  "Typing chooses nothing and clears your choice. Press Esc, then A to D.";
+const TYPED = "Typing chooses nothing. Press Esc, then A to D.";
 const NAMES = ["Odile Marsh", "Liesl Varo", "Ennis Ward", "Mira Tolland"];
 
 const liveText = () =>
@@ -301,7 +300,7 @@ describe("the typed-word rule eases after a pause (R5-04, D38)", () => {
     expect(props.onIntent).not.toHaveBeenCalled();
   });
 
-  it("R5-04 when a word trips the rule the line says what was lost, and no option keeps the focus ring", async () => {
+  it("R5-04 when a word trips the rule the line says the keys are off, the mark and the bar's name go, and no option keeps the focus ring", async () => {
     const { user } = render();
     await user.keyboard("da");
     expect(option(0)).toHaveFocus();
@@ -313,6 +312,9 @@ describe("the typed-word rule eases after a pause (R5-04, D38)", () => {
     expect(optionsGroup()).toHaveAccessibleDescription(`${LAST_LEAD} ${TYPED}`);
     for (const button of options()) expect(button).not.toHaveFocus();
     expect(optionsGroup()).toHaveFocus();
+    // What was lost shows where it was.
+    expect(pressed()).toEqual([]);
+    expect(lockIn()).toHaveAccessibleName("Lock in");
     // Later letters of the word leave focus where it is.
     await user.keyboard("bc");
     expect(optionsGroup()).toHaveFocus();

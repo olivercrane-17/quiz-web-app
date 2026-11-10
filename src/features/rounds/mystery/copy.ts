@@ -223,11 +223,14 @@ export const MYSTERY_COPY = {
     /**
      * In the legend's place, and spoken once, after a word was typed among
      * the options (D20's typing guard; D31, D38): the keys choose nothing
-     * until Escape, Tab or a pointer, and whatever was chosen is cleared,
-     * which the line says (R5-04).
+     * until Escape, Tab or a pointer. The words stay as round 4 left them:
+     * the line holds room for its longest wording on every clue 4, and a
+     * longer sentence here cost a touch player two blank lines at 200%
+     * text, where the Lock in bar then left the screen. What was lost
+     * shows where it was: the mark goes, focus returns to the group and
+     * the bar reads plain "Lock in" (R5-04).
      */
-    typedLegend:
-      "Typing chooses nothing and clears your choice. Press Esc, then A to D.",
+    typedLegend: "Typing chooses nothing. Press Esc, then A to D.",
     /**
      * Said when an option is chosen, however it was (D31, R4-11): a
      * choice made by a key also hears how a key locks it in. A tap or a

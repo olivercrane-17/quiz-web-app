@@ -85,8 +85,7 @@ const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
 const KEYS = "Keys A to D choose. Enter on your choice locks in.";
 const TAP = "Tap one, then Lock in.";
-const TYPED_LEGEND =
-  "Typing chooses nothing and clears your choice. Press Esc, then A to D.";
+const TYPED_LEGEND = "Typing chooses nothing. Press Esc, then A to D.";
 const NAMES = ["Odile Marsh", "Liesl Varo", "Ennis Ward", "Mira Tolland"];
 
 const liveText = () =>

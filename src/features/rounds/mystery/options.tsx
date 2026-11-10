@@ -79,8 +79,8 @@
  *   nothing, however long the pause before them: "Cartographer", "Abba" or
  *   "Arvenna" then Enter sends nothing. That holds until Escape, or until
  *   Tab or a pointer reaches an option, and the legend says so while it
- *   does: "Typing chooses nothing and clears your choice. Press Esc, then
- *   A to D." (spoken once, too). Two keys are never a word: A, a pause, B,
+ *   does: "Typing chooses nothing. Press Esc, then A to D." (spoken once,
+ *   too). Two keys are never a word: A, a pause, B,
  *   Enter locks B.
  * - Space inside the typing window, or straight after a key chose ("B
  *   Smith"), is a typed name's space and does nothing. Otherwise it

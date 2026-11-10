@@ -368,7 +368,7 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       await user.keyboard("a");
       expect(document.querySelector("[data-chosen]")).toBeNull();
       expect(document.querySelector("[data-keys-legend]")).toHaveTextContent(
-        "Typing chooses nothing and clears your choice. Press Esc, then A to D.",
+        "Typing chooses nothing. Press Esc, then A to D.",
       );
       await user.keyboard("{Enter}");
       expect(picks(onIntent)).toEqual([]);
