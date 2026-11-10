@@ -1,7 +1,8 @@
 -- set_nickname (ARCHITECTURE §8.4; PRD §3.10.6, §3.12.1; MOD-1): generated
 -- names at any age band, custom names for 18_plus only and only through
 -- the filter, blocked_text that stores nothing, the friendly name clearing
--- the column, cleaning and the 24-character limit, and 20 a player a day.
+-- the column, cleaning and the 24-character limit, 20 a player a day, and
+-- set_age_band clearing a custom name when the band becomes 13_17.
 -- The test loads a list and name parts of its own, since the live ones may
 -- hold anything.
 begin;
@@ -110,8 +111,9 @@ begin
   assert (select p.nickname from private.players p where p.id = v_id) = 'Hence', 'setup: the last name stored';
 
   select count(*) into v_errors from private.rpc_errors;
-  v_reply := public.set_nickname(v_id, v_secret, 'XXzorb.laxYY', false);
+  v_reply := public.set_nickname(v_id, v_secret, 'XX zorb.lax YY', false);
   assert v_reply ->> 'code' = 'blocked_text', format('a substring term: %s', v_reply ->> 'code');
+  assert public.set_nickname(v_id, v_secret, 'XXzorblaxYY', false) ->> 'code' = 'blocked_text', 'inside a word';
   assert position('zorb' in lower(v_reply::text)) = 0, 'the refusal echoes the text';
   assert public.set_nickname(v_id, v_secret, 'my h3n', false) ->> 'code' = 'blocked_text', 'a word term';
   assert (select p.nickname from private.players p where p.id = v_id) = 'Hence', 'a refusal changed the name';
@@ -171,4 +173,36 @@ begin
 end
 $$;
 select 'PASS MOD-1 set_nickname allows 20 calls a player a day, refusals included, and anon may call it';
+
+-- 13 to 17 get generated names only (PRD §3.10.6): moving to 13_17 clears
+-- a custom name, and keeps a generated one.
+do $$
+declare
+  v_id uuid;
+  v_secret text;
+  v_reply jsonb;
+begin
+  perform private.t_nickname_setup();
+  perform private.t_now('2026-11-05T13:00:00Z');
+  perform private.t_request('198.51.100.204');
+  select t.player_id, t.secret into v_id, v_secret from private.t_player('nickname-band') t;
+  assert public.register_player(v_id, v_secret, 'browser', 'none') ->> 'ok' = 'true', 'setup: register';
+  assert public.set_age_band(v_id, v_secret, '18_plus', 'nickname') ->> 'ok' = 'true', 'setup: 18_plus';
+  assert public.set_nickname(v_id, v_secret, 'Dee', false) ->> 'ok' = 'true', 'setup: a custom name';
+
+  v_reply := public.set_age_band(v_id, v_secret, '13_17', 'group');
+  assert v_reply ->> 'ok' = 'true' and v_reply -> 'data' -> 'nickname' = 'null'::jsonb,
+    format('13_17 clears the custom name: %s', v_reply);
+  assert (select p.nickname is null and p.age_band = '13_17' from private.players p where p.id = v_id),
+    'the custom name stayed stored';
+
+  assert public.set_nickname(v_id, v_secret, 'Brave Heron', true) ->> 'ok' = 'true', 'setup: a generated name';
+  assert public.set_age_band(v_id, v_secret, '18_plus', 'group') ->> 'ok' = 'true', 'setup: 18_plus again';
+  v_reply := public.set_age_band(v_id, v_secret, '13_17', 'group');
+  assert v_reply -> 'data' ->> 'nickname' = 'Brave Heron', format('a generated name stays: %s', v_reply);
+  assert public.set_age_band(v_id, v_secret, '13_17', 'group') -> 'data' ->> 'nickname' = 'Brave Heron',
+    'the same band again changes nothing';
+end
+$$;
+select 'PASS MOD-1 set_age_band clears a custom nickname when the band becomes 13_17 and keeps a generated one';
 rollback;

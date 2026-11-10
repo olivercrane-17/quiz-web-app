@@ -289,6 +289,39 @@ export const identityContract = defineContract("identity", (test) => {
     },
   );
 
+  test(
+    "setNickname",
+    "a blank or oversized name is invalid_input and spends none of the day's 20 calls",
+    async (env) => {
+      const profile = value(
+        await env.backend.identity.register(BROWSER),
+        "register",
+      );
+      for (let call = 1; call <= 20; call += 1) {
+        const result = await env.backend.identity.setNickname(
+          call === 20 ? { custom: "x".repeat(8193) } : { custom: " " },
+        );
+        expect(result.ok ? "ok" : result.error.code).toBe("invalid_input");
+      }
+      const chosen = value(
+        await env.backend.identity.setNickname({
+          generated: profile.friendlyName,
+        }),
+        "the friendly name",
+      );
+      expect(chosen.nickname).toBeNull();
+    },
+  );
+
+  test(
+    "setNickname",
+    "an unregistered device's blank name is invalid_input",
+    async (env) => {
+      const result = await env.backend.identity.setNickname({ custom: "" });
+      expect(result.ok ? "ok" : result.error.code).toBe("invalid_input");
+    },
+  );
+
   test("peekClaim", "a token nobody holds is not_found", async (env) => {
     const result = await env.backend.identity.peekClaim(mintToken());
     expect(result.ok ? "ok" : result.error.code).toBe("not_found");

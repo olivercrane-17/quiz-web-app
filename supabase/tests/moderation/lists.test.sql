@@ -3,7 +3,7 @@
 -- or an allowlisted word (active = false, never a removal) takes it out of
 -- the verdict, how the run patterns read, which names count as generated,
 -- and that nothing is ever blocked without a list or a text. The fixture
--- parity tests are in tests/generated/.
+-- and real-list parity tests are in tests/generated/.
 begin;
 
 -- The compiled list follows the active rows.
@@ -26,9 +26,10 @@ begin
   values ('Zorblaxton', true), ('two words', true), ('Zorblaxville', false)
   on conflict (word) do update set active = excluded.active;
   v_list := private.moderation_list();
-  assert v_list.word_re = ' (?:h+e+n+|n+o+ g+o+|n+o+g+o+)(?:s+|e+s+)? ',
+  assert v_list.word_re = ' (?:h+e+n+(?:s+)?|n+o+ ?g+o+(?:s+|e+s+)?) ',
     format('the word pattern is %s', v_list.word_re);
-  assert v_list.substring_re = '(?:z+o+r+b+(?:i+|l+)a+x+)', format('the substring pattern is %s', v_list.substring_re);
+  assert v_list.substring_re = '(?:z+o+r+b+l+a+x+)|(?: (?:z+ ?o+ ?r+ ?b+ ?l+ ?a+ ?x+(?:s+|e+s+)?) )',
+    format('the substring pattern is %s', v_list.substring_re);
   assert v_list.allow = array['zorblaxton']::text[], format('one-word active entries only: %s', v_list.allow);
 
   assert private.text_is_blocked('XXzorblaxYY'), 'an active substring term';
@@ -47,10 +48,16 @@ select 'PASS MOD-1 the compiled list follows the active rows: retired terms and 
 -- The pieces: run patterns, null handling, generated names.
 do $$
 begin
-  assert private.moderation_runs('hen') = 'h+e+n+', 'runs of one';
-  assert private.moderation_runs('quibbler') = 'q+u+(?:i+|l+)b{2,}(?:i+|l+)e+r+', 'a run of two, and i and l';
-  assert private.moderation_runs('ill') = '(?:i+|l+)(?:i{2,}|l{2,})', 'i and l runs stay apart';
-  assert private.moderation_runs('') = '' and private.moderation_runs(null) = '', 'no letters';
+  assert private.moderation_runs('hen', false) = 'h+e+n+', 'runs of one';
+  assert private.moderation_runs('quibbler', false) = 'q+u+i+b{2,}l+e+r+', 'a substring term reads i and l as they are';
+  assert private.moderation_runs('quibbler', true) = 'q+u+(?:i+|l+)b{2,}(?:i+|l+)e+r+', 'a word term: i and l alike';
+  assert private.moderation_runs('ill', true) = '(?:i+|l+)[il]{2,}', 'a double i or l may mix them';
+  assert private.moderation_runs('', true) = '' and private.moderation_runs(null, false) = '', 'no letters';
+  assert private.moderation_spaced('hen') = 'h+ ?e+ ?n+(?:s+)?', 'spaced letters and a plural';
+  assert private.moderation_spaced('box') = 'b+ ?o+ ?x+(?:s+|e+s+)?', 'es after x';
+  assert private.moderation_plural(null) = '(?:s+)?', 'a plural for no letters';
+  assert private.moderation_passes() = array['swaps', 'bangs', 'edges', 'leads', 'trims', 'starts',
+    'finishes', 'ends', 'flips', 'plain']::text[], 'the passes in order';
 
   assert private.fold_text(null) is null, 'fold_text(null)';
   assert private.moderation_words(null, 'swaps') = '{}'::text[], 'no words in null';

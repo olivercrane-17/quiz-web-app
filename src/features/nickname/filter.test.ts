@@ -7,9 +7,16 @@
  * term by its position and a spelling by its number, never by its text,
  * and no title or message here holds a term.
  */
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { describe, expect, it, vi } from "vitest";
 
-import { termVariants } from "../../../scripts/codegen/moderation-sql";
+import {
+  PATHS,
+  parseLines,
+  termVariants,
+} from "../../../scripts/codegen/moderation-sql";
 import { MODERATION_TERMS_ROT13 } from "@/content/generated/moderation";
 import { rot13 } from "@/engine/text/moderation";
 
@@ -30,6 +37,21 @@ describe("loadTextFilter", () => {
       });
     });
     expect(missed).toEqual([]);
+  });
+
+  it("AC-LNT-03 passes every innocent text of content/safety/innocent.txt", async () => {
+    const filter = await loadTextFilter();
+    const lines = parseLines(
+      readFileSync(
+        resolve(import.meta.dirname, "../../..", PATHS.innocent),
+        "utf8",
+      ),
+    );
+    expect(lines.length).toBeGreaterThan(0);
+    const blocked = lines
+      .filter(({ value }) => filter.isBlocked(rot13(value)))
+      .map(({ line }) => `${PATHS.innocent}:${line}`);
+    expect(blocked).toEqual([]);
   });
 
   it("passes everyday names", async () => {

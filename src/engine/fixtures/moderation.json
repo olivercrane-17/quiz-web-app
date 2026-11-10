@@ -17,8 +17,8 @@
   ],
   "allowlist": ["Zorblaxton", "Quibblerstone"],
   "patterns": {
-    "word": " (?:a+n+t+|h+e+n+|k+(?:i+|l+)t+|n+o+ g+o+|n+o+g+o+|o+r+b+|p+a+n+|r+a+m+|r+o+t+|t+a+r+)(?:s+|e+s+)? ",
-    "substring": "(?:b+a+d+w+o+(?:i+|l+)f+|g+(?:i+|l+)(?:i+|l+)m{2,}e+r+|q+u+(?:i+|l+)b{2,}(?:i+|l+)e+r+|z+o+r+b+(?:i+|l+)a+x+)"
+    "word": " (?:a+n+t+(?:s+)?|h+e+n+(?:s+)?|k+(?:i+|l+)t+(?:s+)?|n+o+ ?g+o+(?:s+|e+s+)?|o+r+b+(?:s+)?|p+a+n+(?:s+)?|r+a+m+(?:s+)?|r+o+t+(?:s+)?|t+a+r+(?:s+)?) ",
+    "substring": "(?:b+a+d+w+o+l+f+|g+l+i+m{2,}e+r+|q+u+i+b{2,}l+e+r+|z+o+r+b+l+a+x+)|(?: (?:b+ ?a+ ?d+ ?w+ ?o+ ?l+ ?f+(?:s+)?|g+ ?l+ ?i+ ?m+ ?m+ ?e+ ?r+(?:s+)?|q+ ?u+ ?i+ ?b+ ?b+ ?l+ ?e+ ?r+(?:s+)?|z+ ?o+ ?r+ ?b+ ?l+ ?a+ ?x+(?:s+|e+s+)?) )"
   },
   "cases": [
     { "text": "hen", "blocked": true, "why": "a word term" },
@@ -43,13 +43,13 @@
     {
       "text": "k|t",
       "blocked": true,
-      "why": "swaps: | for l, which stands for i"
+      "why": "swaps: | for l, which stands for i in a word term"
     },
     { "text": "kIt", "blocked": true, "why": "a capital I" },
     {
       "text": "klt",
       "blocked": true,
-      "why": "a run of l stands for a run of i"
+      "why": "in a word term a run of l stands for a run of i"
     },
     {
       "text": "kilt",
@@ -77,8 +77,8 @@
     { "text": "h.3.n", "blocked": true, "why": "separators and swaps" },
     {
       "text": "he n",
-      "blocked": false,
-      "why": "a word term needs whole words: he plus n is not hen"
+      "blocked": true,
+      "why": "a word term split in two: the whole text runs together"
     },
     { "text": "h\u0435n", "blocked": true, "why": "a Cyrillic look-alike" },
     {
@@ -89,7 +89,11 @@
     { "text": "h\u200ben", "blocked": true, "why": "a zero-width space" },
     { "text": "he\u00adn", "blocked": true, "why": "a soft hyphen" },
     { "text": "hens", "blocked": true, "why": "a plural s" },
-    { "text": "rotes", "blocked": true, "why": "a plural es" },
+    {
+      "text": "rotes",
+      "blocked": false,
+      "why": "es is a plural only after s, x, z, h or o"
+    },
     { "text": "hen1", "blocked": true, "why": "a trailing digit" },
     { "text": "hen99", "blocked": true, "why": "trailing digits" },
     { "text": "1hen", "blocked": true, "why": "a leading digit" },
@@ -180,16 +184,88 @@
     { "text": "Quibblerstone", "blocked": false, "why": "an allowlisted word" },
     { "text": "glimmer", "blocked": true, "why": "a term with i and l" },
     { "text": "g1immer", "blocked": true, "why": "1 for l" },
-    { "text": "gIimmer", "blocked": true, "why": "a capital I for l" },
+    { "text": "gIimmer", "blocked": true, "why": "a capital I reads as l" },
     { "text": "glimer", "blocked": false, "why": "the double m is missing" },
     { "text": "bad wolf", "blocked": true, "why": "a long term of two words" },
     { "text": "BadWolfPack", "blocked": true, "why": "inside a word" },
     {
       "text": "the bad, wolfish",
-      "blocked": true,
-      "why": "separators: words run together"
+      "blocked": false,
+      "why": "across words a match starts and ends at word edges, so bad wolfish is not bad wolf"
     },
     { "text": "bad wool", "blocked": false, "why": "another word" },
+    { "text": "@h3n", "blocked": true, "why": "a leading @ before a swap" },
+    {
+      "text": "@r071",
+      "blocked": true,
+      "why": "decoration at both ends, beside a swapped last letter"
+    },
+    {
+      "text": "h\udb40\udc20en",
+      "blocked": true,
+      "why": "a tag character splits nothing"
+    },
+    {
+      "text": "h\u1dc0en",
+      "blocked": true,
+      "why": "a combining mark outside the common blocks"
+    },
+    { "text": "he\u3164n", "blocked": true, "why": "a Hangul filler" },
+    { "text": "\u029c\u1d07\u0274", "blocked": true, "why": "small capitals" },
+    {
+      "text": "\ud83c\udd77\ud83c\udd74\ud83c\udd7d",
+      "blocked": true,
+      "why": "negative squared letters"
+    },
+    {
+      "text": "\ud83c\udd57\ud83c\udd54\ud83c\udd5d",
+      "blocked": true,
+      "why": "negative circled letters"
+    },
+    {
+      "text": "\ud833\udcdd\ud833\udcda\ud833\udce3",
+      "blocked": true,
+      "why": "outlined capitals, newer than the server's Unicode"
+    },
+    {
+      "text": "pa\u043f",
+      "blocked": true,
+      "why": "a Cyrillic look-alike for n"
+    },
+    { "text": "or8", "blocked": true, "why": "swaps: 8 for b" },
+    { "text": "+ar", "blocked": true, "why": "swaps: + for t" },
+    { "text": "no 9o", "blocked": true, "why": "swaps: 9 for g" },
+    { "text": "he-n", "blocked": true, "why": "a word term split by a hyphen" },
+    {
+      "text": "my he n",
+      "blocked": false,
+      "why": "only a whole text runs together, so words in a sentence never join"
+    },
+    {
+      "text": "quibbIer",
+      "blocked": true,
+      "why": "a capital I for l in a substring term"
+    },
+    {
+      "text": "giimmer",
+      "blocked": false,
+      "why": "in a substring term an i never stands for its l"
+    },
+    {
+      "text": "qui bbler",
+      "blocked": true,
+      "why": "a substring term split into whole words"
+    },
+    {
+      "text": "a quib bler",
+      "blocked": true,
+      "why": "a substring term split into whole words inside a sentence"
+    },
+    {
+      "text": "aquib blerz",
+      "blocked": false,
+      "why": "across words a match starts and ends at word edges"
+    },
     { "text": "", "blocked": false, "why": "empty" },
     { "text": "   ", "blocked": false, "why": "spaces only" },
     { "text": "1234!!!", "blocked": false, "why": "digits and marks only" },
@@ -327,6 +403,10 @@
     "pyramid",
     "ceramic",
     "Bertram",
-    "ramen"
+    "ramen",
+    "kites",
+    "panes",
+    "antes",
+    "tares"
   ]
 }

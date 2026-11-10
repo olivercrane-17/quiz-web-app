@@ -66,6 +66,7 @@ function inputs(lists: {
     allowlist,
     encodedTerms: terms.map(rot13),
     encodedAllowlist: allowlist.map(rot13),
+    encodedInnocent: [],
     adjectives: lists.adjectives ?? ["Brave", "Plucky"],
     animals: lists.animals ?? ["Otter", "Newt"],
     fixture,
@@ -85,6 +86,7 @@ function sandbox(): string {
     `# stand-ins\n${["hen", "zorblax", "no go"].map(rot13).join("\n")}\n`,
   );
   put(PATHS.allowlist, `${rot13("zorblaxton")}\n`);
+  put(PATHS.innocent, `# stand-ins\n${rot13("Zorblaxton Road")}\n`);
   put(PATHS.adjectives, "Brave\nPlucky\n");
   put(PATHS.animals, "Otter\nNewt\n");
   put(PATHS.fixture, readFileSync(join(ROOT, PATHS.fixture), "utf8"));
@@ -104,7 +106,10 @@ describe("the committed SQL", () => {
       PATHS.seedModeration,
       PATHS.seedNames,
       PATHS.test,
+      PATHS.foldTest,
+      PATHS.nfkdTest,
       PATHS.listTest,
+      PATHS.listTest2,
     ]);
     const stale = outputs
       .filter(
@@ -154,12 +159,13 @@ describe("the lists in content/", () => {
     expect(validate(real, ROOT)).toEqual([]);
   });
 
-  it("AC-LNT-03 termVariants spells each term ten ways, and the engine catches every one for the fixture list", () => {
+  it("AC-LNT-03 termVariants spells each term up to eighteen ways, and the engine catches every one for the fixture list", () => {
     const list = createModerationList(fixture.terms, fixture.allowlist);
     const missed: string[] = [];
     for (const { term } of fixture.terms) {
       const variants = termVariants(term);
-      expect(new Set(variants).size).toBe(10);
+      expect(new Set(variants).size).toBe(variants.length);
+      expect(variants.length).toBeGreaterThanOrEqual(17);
       variants.forEach((variant, v) => {
         if (!isBlocked(variant, list))
           missed.push(`${term}, spelling ${v + 1}`);
@@ -186,16 +192,36 @@ describe("validate", () => {
     expect(problems.join("\n")).not.toMatch(/hen|zorblax/i);
   });
 
-  it("refuses an allowlist entry with nothing to allow, or one that would hide a word term", () => {
+  it("refuses an allowlist entry with nothing to allow, or one that would hide a term", () => {
     expect(validate(inputs({ allowlist: ["apple", "Zorblaxton"] }))).toEqual([
-      `${PATHS.allowlist}:1: holds no substring term, so it has nothing to allow`,
+      `${PATHS.allowlist}:1: the list does not block it, so it has nothing to allow`,
       `${PATHS.allowlist}:2: an entry is one lower-case word`,
     ]);
-    // "glimmes" holds the substring term and is the word term's plural.
+    // "glimmes" holds the substring term and is that term's plural.
     expect(
       validate(inputs({ terms: ["glimm", "glimme"], allowlist: ["glimmes"] })),
     ).toEqual([
-      `${PATHS.allowlist}:1: is a word term or its plural, which an allowlist must never hide`,
+      `${PATHS.allowlist}:1: is a listed term or its plural, which an allowlist must never hide`,
+    ]);
+    expect(
+      validate(inputs({ allowlist: ["hens", "zorblax", "zorblaxes"] })),
+    ).toEqual([
+      `${PATHS.allowlist}:1: is a listed term or its plural, which an allowlist must never hide`,
+      `${PATHS.allowlist}:2: is a listed term or its plural, which an allowlist must never hide`,
+      `${PATHS.allowlist}:3: is a listed term or its plural, which an allowlist must never hide`,
+    ]);
+  });
+
+  it("accepts an allowlist entry that a word term hits only through repeated letters or a plural", () => {
+    expect(validate(inputs({ allowlist: ["heens", "nogooes"] }))).toEqual([]);
+  });
+
+  it("refuses a term that is a listed word term plus a plural, naming both lines", () => {
+    expect(
+      validate(inputs({ terms: ["hen", "zorblax", "hens", "box", "boxes"] })),
+    ).toEqual([
+      `${PATHS.terms}:3: is line 1 plus a plural, which that word term already matches`,
+      `${PATHS.terms}:5: is line 4 plus a plural, which that word term already matches`,
     ]);
   });
 

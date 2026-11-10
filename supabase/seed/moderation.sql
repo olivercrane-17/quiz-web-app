@@ -9,24 +9,20 @@
 with listed (term, match) as (
   select translate(v.term, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'), v.match
     from (values
-      ('avtabt', 'substring'), ('avttn', 'word'), ('avttnf', 'substring'), ('avttnm', 'substring'),
-      ('avttre', 'substring'), ('avttref', 'substring'), ('cbbsgre', 'substring'),
-      ('cbepu zbaxrl', 'substring'), ('cnxv', 'word'), ('cnxvf', 'word'),
-      ('cvpxnavaal', 'substring'), ('cvxrl', 'word'), ('cvxrlf', 'substring'),
-      ('ent urnq', 'substring'), ('enturnq', 'substring'), ('enturnqf', 'substring'),
-      ('fcnm', 'word'), ('fcvp', 'word'), ('fcvpf', 'word'), ('furznyr', 'substring'),
-      ('gbjry urnq', 'substring'), ('gbjryurnq', 'substring'), ('gbjryurnqf', 'substring'),
-      ('genaal', 'substring'), ('genaavrf', 'substring'), ('jbc', 'word'), ('jbcf', 'word'),
-      ('jbt', 'word'), ('jbtf', 'word'), ('jrgonpx', 'substring'), ('jrgonpxf', 'substring'),
-      ('lvq', 'word'), ('lvqf', 'word'), ('mvccreurnq', 'substring'), ('obbat', 'word'),
-      ('onggl obl', 'substring'), ('ongglzna', 'substring'), ('ornare', 'substring'),
-      ('ornaref', 'substring'), ('pnzry wbpxrl', 'substring'), ('puevfg xvyyre', 'substring'),
-      ('puvat pubat', 'substring'), ('puvaxl', 'substring'), ('qnexl', 'word'),
-      ('qnexvr', 'substring'), ('qntb', 'word'), ('qntbf', 'word'), ('snttbg', 'substring'),
-      ('snttbgf', 'substring'), ('tbbx', 'word'), ('tbbxf', 'word'), ('tlccb', 'word'),
-      ('tlccbf', 'substring'), ('whatyr ohaal', 'substring'), ('wvtnobb', 'substring'),
-      ('xnssve', 'substring'), ('xnssvef', 'substring'), ('xvxr', 'word'), ('xvxrf', 'word'),
-      ('zhmmvr', 'substring')
+      ('avtabt', 'substring'), ('avttn', 'word'), ('avttnm', 'substring'), ('avttre', 'substring'),
+      ('avttref', 'substring'), ('cbbsgre', 'substring'), ('cbepu zbaxrl', 'substring'),
+      ('cnxv', 'word'), ('cvpxnavaal', 'substring'), ('cvxrl', 'word'), ('ent urnq', 'substring'),
+      ('enturnq', 'substring'), ('enturnqf', 'substring'), ('fcnm', 'word'), ('fcvp', 'word'),
+      ('furznyr', 'substring'), ('gbjry urnq', 'substring'), ('gbjryurnq', 'substring'),
+      ('gbjryurnqf', 'substring'), ('genaal', 'substring'), ('genaavrf', 'substring'),
+      ('jbc', 'word'), ('jbt', 'word'), ('jrgonpx', 'substring'), ('jrgonpxf', 'substring'),
+      ('lvq', 'word'), ('mvccreurnq', 'substring'), ('obbat', 'word'), ('onggl obl', 'substring'),
+      ('ongglzna', 'substring'), ('ornare', 'substring'), ('ornaref', 'substring'),
+      ('pnzry wbpxrl', 'substring'), ('puevfg xvyyre', 'substring'), ('puvat pubat', 'substring'),
+      ('puvaxl', 'substring'), ('qnexl', 'word'), ('qnexvr', 'substring'), ('qntb', 'word'),
+      ('snttbg', 'substring'), ('snttbgf', 'substring'), ('tbbx', 'word'), ('tlccb', 'word'),
+      ('whatyr ohaal', 'substring'), ('wvtnobb', 'substring'), ('xnssve', 'substring'),
+      ('xnssvef', 'substring'), ('xvxr', 'word'), ('zhmmvr', 'substring')
     ) as v (term, match)
 ), loaded as (
   insert into private.moderation_terms as t (term, match, active)
@@ -41,6 +37,22 @@ update private.moderation_terms
  where active
    and term not in (select l.term from listed l);
 
+with listed (word) as (
+  select translate(v.word, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm')
+    from (values
+      ('favttre'), ('favttrerq'), ('favttrere'), ('favttreref'), ('favttrevat'), ('favttrevatyl'),
+      ('favttrevatf'), ('favttref'), ('ornarel'), ('ornarevrf'), ('zhmmvre'), ('zhmmvrfg'),
+      ('jbbcf')
+    ) as v (word)
+), loaded as (
+  insert into private.moderation_allow as a (word, active)
+  select l.word, true
+    from listed l
+  on conflict (word) do update
+    set active = true
+  returning a.word
+)
 update private.moderation_allow
    set active = false
- where active;
+ where active
+   and word not in (select l.word from listed l);

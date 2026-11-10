@@ -445,6 +445,9 @@ export const NICKNAME_LIMIT = {
   max: 20,
 } as const;
 
+/** private.payload_cap('default'): set_nickname refuses a longer name before anything else. */
+const PAYLOAD_CAP = 8192;
+
 /** The longest display name (PRD §3.12.1), as `set_nickname` counts it once cleaned. */
 const NICKNAME_MAX = 24;
 
@@ -639,6 +642,17 @@ export function createIdentityArea(ctx: MockContext): IdentityApi {
      * clears the column.
      */
     async setNickname(nickname) {
+      // What the Supabase adapter refuses before it calls (a missing or
+      // blank name) and what set_nickname refuses before it authenticates
+      // (over_cap): invalid_input, without spending one of the day's calls.
+      const parts = nicknameParts(nickname);
+      if (
+        parts === null ||
+        parts.name.trim() === "" ||
+        new TextEncoder().encode(parts.name).length > PAYLOAD_CAP
+      ) {
+        return fail("invalid_input");
+      }
       return ctx.store.write(
         (db): Result<Profile> => {
           const auth = authenticate(ctx, db, { register: false });
@@ -656,8 +670,6 @@ export function createIdentityArea(ctx: MockContext): IdentityApi {
               limitScope: "player",
             });
           }
-          const parts = nicknameParts(nickname);
-          if (parts === null) return fail("invalid_input");
           const { generated } = parts;
           const name = cleanText(parts.name);
           const length = charCount(name);

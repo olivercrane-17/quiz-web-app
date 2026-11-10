@@ -5,21 +5,29 @@
  * (MOD-1; ARCHITECTURE §4.13, §8.13, §8.16):
  *
  * - the generated block of the newest migration that holds one:
- *   `private.fold_text` and `private.moderation_swaps`, the folding table and
- *   the swaps of src/engine/text/moderation.ts as translate() maps, so both
- *   sides fold identically;
+ *   `private.fold_text`, `private.moderation_pass_text`,
+ *   `private.moderation_swaps`, `private.moderation_plural` and
+ *   `private.moderation_passes`, from the tables of
+ *   src/engine/text/moderation.ts, so both sides read text identically;
  * - supabase/seed/moderation.sql from content/safety/: the terms and the
  *   allowlist stay ROT13-encoded in the file, as on disk, and translate()
  *   decodes them as they load;
  * - supabase/seed/name-parts.sql from content/names/;
  * - supabase/tests/generated/moderation.test.sql: AC-LNT-03's parity tests.
- *   Each reading step must match the engine on sample texts, and the
- *   fixture's stand-in list (src/engine/fixtures/moderation.json) must
- *   compile to the engine's sources and give every case the engine's
+ *   The swaps and words of each pass must match the engine on sample texts,
+ *   and the fixture's stand-in list (src/engine/fixtures/moderation.json)
+ *   must compile to the engine's sources and give every case the engine's
  *   verdict;
- * - supabase/tests/generated/moderation-list.test.sql: the real list must
- *   catch each of its terms under each normalization (`termVariants`,
- *   ROT13-encoded there too), and no friendly name may hold a listed term.
+ * - moderation-fold.test.sql and moderation-nfkd.test.sql: fold_text must
+ *   match the engine on every table row, removal and character read only
+ *   through NFKD;
+ * - moderation-list.test.sql and moderation-list-2.test.sql: the real list
+ *   must compile to the engine's sources (by md5) and catch each of its
+ *   terms under each normalization (`termVariants`, ROT13-encoded there
+ *   too), and every text of content/safety/innocent.txt and every friendly
+ *   name must pass.
+ *
+ * Each generated test fits one execute_sql call beside the migration.
  *
  * Every list is checked before anything is written (`validate`). Messages
  * name files and lines, never a decoded term. `--check` writes nothing and
@@ -27,17 +35,21 @@
  * and one per line, the words of a JSON array that a substring term would
  * block, for the content team's allowlist review (content/safety/README.md).
  */
+import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 
 import {
+  FLIP_CAPITAL,
   FOLD_BASE,
+  FOLD_FLIPS,
   FOLD_SWAPS,
   PASSES,
-  TRAILING_BANGS,
-  TRAILING_SWAPS,
+  PASS_SEPARATORS,
+  PLURAL_ES_AFTER,
+  REMOVED_RANGES,
   allowedWords,
   applySwaps,
   createModerationList,
@@ -46,9 +58,12 @@ import {
   moderationPatterns,
   normalizeForFilter,
   rot13,
+  termLetters,
   termMatchOf,
   type FilterPass,
+  type FoldEntry,
   type ModerationTerm,
+  type PassSeparator,
   type TermMatch,
 } from "../../src/engine/text/moderation.ts";
 import {
@@ -60,6 +75,7 @@ import {
 export const PATHS = {
   terms: "content/safety/slur-terms.txt",
   allowlist: "content/safety/allowlist.txt",
+  innocent: "content/safety/innocent.txt",
   adjectives: "content/names/adjectives.txt",
   animals: "content/names/animals.txt",
   fixture: "src/engine/fixtures/moderation.json",
@@ -67,7 +83,10 @@ export const PATHS = {
   seedModeration: "supabase/seed/moderation.sql",
   seedNames: "supabase/seed/name-parts.sql",
   test: "supabase/tests/generated/moderation.test.sql",
+  foldTest: "supabase/tests/generated/moderation-fold.test.sql",
+  nfkdTest: "supabase/tests/generated/moderation-nfkd.test.sql",
   listTest: "supabase/tests/generated/moderation-list.test.sql",
+  listTest2: "supabase/tests/generated/moderation-list-2.test.sql",
 } as const;
 
 export const BLOCK_BEGIN = "-- generated:moderation-sql:begin";
@@ -97,6 +116,8 @@ export interface Inputs {
   /** The ROT13 lines as the files hold them, for the seed. */
   encodedTerms: string[];
   encodedAllowlist: string[];
+  /** Innocent texts the real list must pass, ROT13 as the file holds them. */
+  encodedInnocent: string[];
   adjectives: string[];
   animals: string[];
   fixture: Fixture;
@@ -124,6 +145,7 @@ export function readInputs(root: string): Inputs {
     allowlist: encodedAllowlist.map(rot13),
     encodedTerms,
     encodedAllowlist,
+    encodedInnocent: parseLines(read(root, PATHS.innocent)).map((e) => e.value),
     adjectives: parseLines(read(root, PATHS.adjectives)).map((e) => e.value),
     animals: parseLines(read(root, PATHS.animals)).map((e) => e.value),
     fixture: JSON.parse(read(root, PATHS.fixture)) as Fixture,
@@ -137,9 +159,34 @@ function linesOf(root: string | null, path: string, count: number): number[] {
 }
 
 /**
+ * The index of the term whose letters, plus a plural the engine reads
+ * (s, or es after the letters that take it), are `letters`.
+ */
+function pluralOf(
+  letters: string,
+  terms: ReadonlyMap<string, number>,
+): number | undefined {
+  for (const suffix of ["s", "es"]) {
+    if (!letters.endsWith(suffix)) continue;
+    const stem = letters.slice(0, -suffix.length);
+    const index = terms.get(stem);
+    if (index === undefined) continue;
+    if (
+      suffix === "s" ||
+      PLURAL_ES_AFTER.includes(stem.charAt(stem.length - 1))
+    ) {
+      return index;
+    }
+  }
+  return undefined;
+}
+
+/**
  * Everything wrong with the lists, or nothing. A term must be lower-case
- * words of letters and unique; an allowlist entry one word that holds a
- * substring term and no word term; a name part a capitalized word of 2 to
+ * words of letters, unique, and not a listed word term plus a plural; an
+ * allowlist entry one word that the list blocks (a substring term inside
+ * it, or a word term only through repeated letters or a plural) and that
+ * is not a term or a term's plural; a name part a capitalized word of 2 to
  * 11 letters, unique, with every pair short enough and passing the filter.
  * The fixture must declare the matches and the sources the engine gives.
  */
@@ -163,13 +210,24 @@ export function validate(inputs: Inputs, root: string | null = null): string[] {
     }
     seen.set(term, index);
   });
-  const substrings = createModerationList(
-    inputs.terms.filter((t) => termMatchOf(t) === "substring"),
-    [],
-  );
-  const words = createModerationList(
-    inputs.terms.filter((t) => termMatchOf(t) === "word"),
-    [],
+  // A term that is a listed word term plus its plural adds nothing: the
+  // word term already matches it, and as a longer term it would match
+  // inside words too.
+  const wordLetters = new Map<string, number>();
+  inputs.terms.forEach((term, index) => {
+    if (termMatchOf(term) === "word") wordLetters.set(termLetters(term), index);
+  });
+  inputs.terms.forEach((term, index) => {
+    const twin = pluralOf(termLetters(term), wordLetters);
+    if (twin !== undefined && twin !== index) {
+      problems.push(
+        `${PATHS.terms}:${termLines[index]}: is line ${termLines[twin]} plus a plural, which that word term already matches`,
+      );
+    }
+  });
+  const unallowed = createModerationList(inputs.terms, []);
+  const termIndex = new Map<string, number>(
+    inputs.terms.map((term, index) => [termLetters(term), index]),
   );
   const allowLines = linesOf(root, PATHS.allowlist, inputs.allowlist.length);
   inputs.allowlist.forEach((entry, index) => {
@@ -178,13 +236,16 @@ export function validate(inputs: Inputs, root: string | null = null): string[] {
       problems.push(
         `${PATHS.allowlist}:${line}: an entry is one lower-case word`,
       );
-    } else if (!isBlocked(entry, substrings)) {
+    } else if (!isBlocked(entry, unallowed)) {
       problems.push(
-        `${PATHS.allowlist}:${line}: holds no substring term, so it has nothing to allow`,
+        `${PATHS.allowlist}:${line}: the list does not block it, so it has nothing to allow`,
       );
-    } else if (isBlocked(entry, words)) {
+    } else if (
+      termIndex.has(termLetters(entry)) ||
+      pluralOf(termLetters(entry), termIndex) !== undefined
+    ) {
       problems.push(
-        `${PATHS.allowlist}:${line}: is a word term or its plural, which an allowlist must never hide`,
+        `${PATHS.allowlist}:${line}: is a listed term or its plural, which an allowlist must never hide`,
       );
     }
   });
@@ -236,6 +297,13 @@ export function validate(inputs: Inputs, root: string | null = null): string[] {
       }
     });
   });
+  const nfkd = nfkdLetters();
+  const digest = createHash("sha256").update(nfkd).digest("hex");
+  if (digest !== NFKD_SNAPSHOT.sha256) {
+    problems.push(
+      `src/engine/text/moderation.ts: this runtime (Unicode ${process.versions.unicode ?? "unknown"}) reads ${[...nfkd].length} characters as letters only through NFKD, not the ${NFKD_SNAPSHOT.count} last checked against the server; dry-run supabase/tests/generated/moderation-nfkd.test.sql, add what the server lacks to NEWER_COMPATIBILITY, then update NFKD_SNAPSHOT`,
+    );
+  }
   const { fixture } = inputs;
   for (const term of fixture.terms) {
     if (termMatchOf(term.term) !== term.match) {
@@ -349,26 +417,68 @@ function header(sources: string, about: string[]): string {
 // The migration block
 // ---------------------------------------------------------------------------
 
-/** private.fold_text and private.moderation_swaps, from the engine's tables. */
+/** A regular-expression bracket class of code point ranges, as SQL text. */
+function rangeClass(ranges: readonly (readonly [number, number])[]): string {
+  return `[${ranges
+    .map(([first, last]) =>
+      first === last
+        ? String.fromCodePoint(first)
+        : `${String.fromCodePoint(first)}-${String.fromCodePoint(last)}`,
+    )
+    .join("")}]`;
+}
+
+/** What a separating step replaces each match with, as SQL text. */
+function sqlReplacement(keep: PassSeparator["keep"]): string {
+  if (keep === "before") return "'\\1 '";
+  if (keep === "after") return "' \\1'";
+  return "' '";
+}
+
+/**
+ * The generated functions, from the engine's tables: private.fold_text,
+ * private.moderation_pass_text, private.moderation_swaps,
+ * private.moderation_plural and private.moderation_passes.
+ */
 export function foldBlock(): string {
-  const kept = FOLD_BASE.filter((entry) => entry.to !== "");
-  const removed = FOLD_BASE.filter((entry) => entry.to === "");
-  const ascii = (entries: typeof FOLD_BASE) =>
-    entries.filter((entry) => (entry.from.codePointAt(0) as number) < 0x80);
-  const from = (entries: typeof FOLD_BASE) =>
+  const ascii = FOLD_BASE.filter(
+    (entry) => (entry.from.codePointAt(0) as number) < 0x80,
+  );
+  const asciiRemoved = REMOVED_RANGES.filter(([first]) => first < 0x80).flatMap(
+    ([first, last]) =>
+      Array.from({ length: Math.min(last, 0x7f) - first + 1 }, (_, i) =>
+        String.fromCodePoint(first + i),
+      ),
+  );
+  const from = (entries: readonly FoldEntry[]) =>
     entries.map((entry) => entry.from).join("");
-  const to = (entries: typeof FOLD_BASE) =>
+  const to = (entries: readonly FoldEntry[]) =>
     entries.map((entry) => entry.to).join("");
   const swapFrom = sqlText(from(FOLD_SWAPS));
   const swapTo = sqlText(to(FOLD_SWAPS));
+  const swapped = (inner: string) =>
+    [`translate(`, `      ${inner},`, `      ${swapFrom}, ${swapTo})`].join(
+      "\n",
+    );
+  const separated = (pass: keyof typeof PASS_SEPARATORS) =>
+    PASS_SEPARATORS[pass].reduce(
+      (inner, { source, keep }) =>
+        `regexp_replace(${inner}, ${sqlText(source)}, ${sqlReplacement(keep)}, 'g')`,
+      "p_folded",
+    );
+  const removedCount = REMOVED_RANGES.reduce(
+    (sum, [first, last]) => sum + last - first + 1,
+    0,
+  );
   return [
     BLOCK_BEGIN,
     "-- Written by npm run codegen:moderation from src/engine/text/moderation.ts. Edit the",
     "-- engine and regenerate; never edit this block.",
     "",
-    `-- Steps 1 and 2 (the engine's foldText): NFKC, then the folding table, ${kept.length}`,
-    `-- characters to their letters and ${removed.length} removed. ASCII text skips NFKC, which`,
-    "-- changes no ASCII, and uses the table's ASCII rows alone.",
+    "-- Steps 1 to 3 (the engine's foldText): NFKD, then the removals (every combining mark,",
+    `-- default-ignorable character and control: ${removedCount} code points in ${REMOVED_RANGES.length} ranges), then the`,
+    `-- folding table, ${FOLD_BASE.length} characters to their letters or digits. ASCII text skips NFKD,`,
+    "-- which changes no ASCII, and uses the table's and the removals' ASCII rows alone.",
     "create or replace function private.fold_text(p_text text)",
     "returns text",
     "language sql",
@@ -378,19 +488,34 @@ export function foldBlock(): string {
     "  select case",
     "    when octet_length(p_text) = char_length(p_text) then",
     "      translate(p_text,",
-    `        ${sqlTextWrapped(from([...ascii(kept), ...ascii(removed)]), "        ")},`,
-    `        ${sqlTextWrapped(to(ascii(kept)), "        ")})`,
+    `        ${sqlTextWrapped(`${from(ascii)}${asciiRemoved.join("")}`, "        ")},`,
+    `        ${sqlTextWrapped(to(ascii), "        ")})`,
     "    else",
-    "      translate(normalize(p_text, nfkc),",
-    `        ${sqlTextWrapped(from([...kept, ...removed]), "        ")},`,
-    `        ${sqlTextWrapped(to(kept), "        ")})`,
+    "      translate(",
+    "        regexp_replace(normalize(p_text, nfkd),",
+    `          ${sqlTextWrapped(rangeClass(REMOVED_RANGES), "          ")},`,
+    "          '', 'g'),",
+    `        ${sqlTextWrapped(from(FOLD_BASE), "        ")},`,
+    `        ${sqlTextWrapped(to(FOLD_BASE), "        ")})`,
     "  end",
     "$$;",
     "",
-    "-- Step 3 for one pass (the engine's applySwaps): swaps reads every swap",
-    "-- character as its letter; bangs first turns the exclamation marks that end",
-    "-- a word into separators, and edges every swap character that ends a word;",
-    "-- plain reads none.",
+    "-- What a pass folds (the engine's passText): the text itself, or for the flips pass the",
+    `-- text with each capital ${FLIP_CAPITAL.from} read as ${FLIP_CAPITAL.to}.`,
+    "create or replace function private.moderation_pass_text(p_text text, p_pass text)",
+    "returns text",
+    "language sql",
+    "immutable",
+    "set search_path = ''",
+    "as $$",
+    `  select case when p_pass = 'flips' then replace(p_text, ${sqlText(FLIP_CAPITAL.from)}, ${sqlText(FLIP_CAPITAL.to)}) else p_text end`,
+    "$$;",
+    "",
+    "-- Step 4 for one pass (the engine's applySwaps): swaps reads every swap character as its",
+    "-- letter; bangs first turns the exclamation marks that end a word into separators, edges",
+    "-- every swap character that ends a word, leads every one that starts a word, trims both,",
+    "-- starts only the text's first, finishes only its last and ends both; flips reads the i and l look-alikes the other",
+    "-- way round first; plain reads none. An unknown pass reads nothing (null).",
     "create or replace function private.moderation_swaps(p_folded text, p_pass text)",
     "returns text",
     "language sql",
@@ -400,13 +525,40 @@ export function foldBlock(): string {
     "  select case p_pass",
     "    when 'plain' then p_folded",
     `    when 'swaps' then translate(p_folded, ${swapFrom}, ${swapTo})`,
-    "    when 'bangs' then translate(",
-    `      regexp_replace(p_folded, ${sqlText(TRAILING_BANGS)}, ' ', 'g'),`,
-    `      ${swapFrom}, ${swapTo})`,
-    "    when 'edges' then translate(",
-    `      regexp_replace(p_folded, ${sqlText(TRAILING_SWAPS)}, ' ', 'g'),`,
-    `      ${swapFrom}, ${swapTo})`,
+    ...(
+      [
+        "bangs",
+        "edges",
+        "leads",
+        "trims",
+        "starts",
+        "finishes",
+        "ends",
+      ] as const
+    ).map((pass) => `    when '${pass}' then ${swapped(separated(pass))}`),
+    `    when 'flips' then ${swapped(`translate(p_folded, ${sqlText(from(FOLD_FLIPS))}, ${sqlText(to(FOLD_FLIPS))})`)}`,
     "  end",
+    "$$;",
+    "",
+    "-- What a term may add (the engine's pluralSuffix): s, or es after the letters that take it.",
+    "create or replace function private.moderation_plural(p_letters text)",
+    "returns text",
+    "language sql",
+    "immutable",
+    "set search_path = ''",
+    "as $$",
+    `  select case when right(coalesce(p_letters, ''), 1) <> '' and strpos(${sqlText(PLURAL_ES_AFTER)}, right(p_letters, 1)) > 0`,
+    "    then '(?:s+|e+s+)?' else '(?:s+)?' end",
+    "$$;",
+    "",
+    "-- The passes every text is read in, in the engine's order (PASSES).",
+    "create or replace function private.moderation_passes()",
+    "returns text[]",
+    "language sql",
+    "immutable",
+    "set search_path = ''",
+    "as $$",
+    `  select ${sqlArray(PASSES)}`,
     "$$;",
     BLOCK_END,
   ].join("\n");
@@ -571,24 +723,58 @@ const MARKS: Readonly<Record<string, string>> = {
 };
 const LEET: Readonly<Record<string, string>> = {
   a: "4",
+  b: "8",
   e: "3",
+  g: "9",
   i: "1",
   l: "|",
   o: "0",
   s: "$",
   t: "7",
 };
-/** Cyrillic letters that look like these Latin ones. */
+/** Cyrillic and Armenian letters that look like these Latin ones. */
 const CYRILLIC: Readonly<Record<string, number>> = {
   a: 0x0430,
   c: 0x0441,
   e: 0x0435,
+  g: 0x0581,
   i: 0x0456,
   k: 0x043a,
+  n: 0x043f,
   o: 0x043e,
   p: 0x0440,
+  r: 0x0433,
+  u: 0x057d,
+  w: 0x0448,
   x: 0x0445,
   y: 0x0443,
+};
+/** Small capitals, as nickname generators write them (x has none). */
+const SMALL: Readonly<Record<string, number>> = {
+  a: 0x1d00,
+  b: 0x0299,
+  c: 0x1d04,
+  d: 0x1d05,
+  e: 0x1d07,
+  f: 0xa730,
+  g: 0x0262,
+  h: 0x029c,
+  i: 0x026a,
+  j: 0x1d0a,
+  k: 0x1d0b,
+  l: 0x029f,
+  m: 0x1d0d,
+  n: 0x0274,
+  o: 0x1d0f,
+  p: 0x1d18,
+  r: 0x0280,
+  s: 0xa731,
+  t: 0x1d1b,
+  u: 0x1d1c,
+  v: 0x1d20,
+  w: 0x1d21,
+  y: 0x028f,
+  z: 0x1d22,
 };
 
 /** Each letter of a term through `f`; spaces kept. */
@@ -596,11 +782,20 @@ function eachLetter(term: string, f: (letter: string) => string): string {
   return [...term].map((c) => (c === " " ? c : f(c))).join("");
 }
 
+/** The term with `inserted` at its middle. */
+function splitMiddle(term: string, inserted: string): string {
+  const middle = Math.floor(term.length / 2);
+  return `${term.slice(0, middle)}${inserted}${term.slice(middle)}`;
+}
+
 /**
  * A listed term under each normalization of AC-LNT-03, as a player might
  * type it: case, diacritics, swaps, repeats, separators (dots, spaced
  * letters), look-alike letters, a hidden character between letters, a
- * plural, and swaps ending in an exclamation mark.
+ * plural, swaps ending in an exclamation mark, small capitals, negative
+ * squared letters, a tag character, a combining mark or a space splitting
+ * it in the middle, an @ before the swaps (and a 1 after), and a doubled l
+ * written lI. Spellings that come out the same are listed once.
  */
 export function termVariants(term: string): string[] {
   const letters = (separator: string, between: string) =>
@@ -608,43 +803,113 @@ export function termVariants(term: string): string[] {
       .split(" ")
       .map((word) => [...word].join(separator))
       .join(between);
+  const leet = eachLetter(term, (c) => LEET[c] ?? c);
   return [
-    term.toUpperCase(),
-    eachLetter(term, (c) => MARKS[c] ?? c),
-    eachLetter(term, (c) => LEET[c] ?? c),
-    eachLetter(term, (c) => c.repeat(3)),
-    letters(".", " "),
-    letters(" ", "   "),
-    eachLetter(term, (c) =>
-      CYRILLIC[c] === undefined ? c : String.fromCodePoint(CYRILLIC[c]),
-    ),
-    letters(String.fromCodePoint(0x200b), " "),
-    `${term}s`,
-    `${eachLetter(term, (c) => LEET[c] ?? c)}!`,
+    ...new Set([
+      term.toUpperCase(),
+      eachLetter(term, (c) => MARKS[c] ?? c),
+      leet,
+      eachLetter(term, (c) => c.repeat(3)),
+      letters(".", " "),
+      letters(" ", "   "),
+      eachLetter(term, (c) =>
+        CYRILLIC[c] === undefined ? c : String.fromCodePoint(CYRILLIC[c]),
+      ),
+      letters(String.fromCodePoint(0x200b), " "),
+      `${term}s`,
+      `${leet}!`,
+      eachLetter(term, (c) =>
+        SMALL[c] === undefined ? c : String.fromCodePoint(SMALL[c]),
+      ),
+      eachLetter(term, (c) =>
+        String.fromCodePoint(0x1f170 + c.charCodeAt(0) - 0x61),
+      ),
+      splitMiddle(term, String.fromCodePoint(0xe0020)),
+      splitMiddle(term, String.fromCodePoint(0x1dc0)),
+      splitMiddle(term, " "),
+      `@${leet}`,
+      `@${leet}1`,
+      term.replaceAll("ll", "lI"),
+    ]),
   ];
 }
 
-/** Sample texts for the step-by-step checks: every table row, every removal, ASCII, swaps. */
+/**
+ * What nfkdLetters() gives under Unicode 17.0 (Node 22): the set of
+ * characters supabase/tests/generated/moderation-nfkd.test.sql sends
+ * through the server's fold_text. When a runtime upgrade changes it,
+ * validate() stops codegen: dry-run that test on the live project, add
+ * the characters the server reads differently to NEWER_COMPATIBILITY in
+ * the engine, and update this.
+ */
+export const NFKD_SNAPSHOT = {
+  count: 2429,
+  sha256: "6aac8e52872e482cd4c96c259705ee98d834f5d669be347754c788be47efea52",
+} as const;
+
+let nfkdCache: string | null = null;
+
+/**
+ * Every code point the engine reads as a letter, digit or swap character
+ * only through NFKD (it is not a table row and NFKD changes it), as one
+ * string. The server's normalize() follows an older Unicode, so the
+ * parity test sends all of them through fold_text.
+ */
+export function nfkdLetters(): string {
+  if (nfkdCache !== null) return nfkdCache;
+  const reads = new RegExp(
+    `[a-z0-9${escapeClass(FOLD_SWAPS.map((e) => e.from).join(""))}]`,
+  );
+  const table = new Set(FOLD_BASE.map((entry) => entry.from));
+  let out = "";
+  for (let code = 0x80; code <= 0x10ffff; code += 1) {
+    if (code >= 0xd800 && code <= 0xdfff) continue;
+    const char = String.fromCodePoint(code);
+    if (table.has(char) || char.normalize("NFKD") === char) continue;
+    if (reads.test(foldText(char))) out += char;
+  }
+  nfkdCache = out;
+  return out;
+}
+
+function escapeClass(chars: string): string {
+  return chars.replace(/[\\\]^-]/g, (c) => `\\${c}`);
+}
+
+/**
+ * Sample texts for the step-by-step checks: every table row, the first
+ * and last code point of every removed range, every character read only
+ * through NFKD, ASCII, swaps and decorations.
+ */
+/** Where stepSamples().fold holds nfkdLetters(). */
+const NFKD_SAMPLE = 2;
+
 export function stepSamples(): {
   fold: string[];
   swaps: string[];
   words: string[];
 } {
-  const kept = FOLD_BASE.filter((entry) => entry.to !== "");
-  const removed = FOLD_BASE.filter((entry) => entry.to === "");
   const printable = Array.from({ length: 0x7f - 0x20 }, (_, i) =>
     String.fromCharCode(0x20 + i),
   ).join("");
+  const removed = REMOVED_RANGES.flatMap(([first, last]) =>
+    first === last ? [first] : [first, last],
+  )
+    .map((code) => `x${String.fromCodePoint(code)}`)
+    .join("");
   return {
     fold: [
-      kept.map((entry) => entry.from).join(""),
-      removed.map((entry) => `x${entry.from}`).join(""),
+      FOLD_BASE.map((entry) => entry.from).join(""),
+      removed,
+      nfkdLetters(),
       printable,
       `Ce${String.fromCodePoint(0x0301)}line ${String.fromCodePoint(0xfb01)}ne ${String.fromCodePoint(0xff28, 0xff49)} ${String.fromCodePoint(0x1d42c)}x`,
     ],
     swaps: [
       FOLD_SWAPS.map((entry) => entry.from).join(" "),
       "h3ll0 w0r1d! $|@7 r07! h3n!1 b0b5 5ad 4!! x|y",
+      "@n3wt !h3n $$7 a+b 8e9 d4 6o @r071 +",
+      "!x7 1 @a|1",
     ],
     words: [
       "H.E.N and Heeeen, h e n!",
@@ -653,6 +918,8 @@ export function stepSamples(): {
       `zorb${String.fromCodePoint(0x200b)}lax ${String.fromCodePoint(0x0436)}x y z`,
       "  ",
       "2026 *** !!!",
+      "GIimmer kIt k|t zorb1ax @r071",
+      `${String.fromCodePoint(0x029c, 0x1d07, 0x0274)} ${String.fromCodePoint(0x1f177, 0x1f174, 0x1f17d)} h${String.fromCodePoint(0xe0020)}en`,
     ],
   };
 }
@@ -703,18 +970,53 @@ function sqlTextArray(values: readonly string[]): string {
   return `array[${values.map(sqlText).join(", ")}]::text[]`;
 }
 
+/**
+ * fold_text on sample texts: the table, the removals and ASCII
+ * (`which` "table"), or every character the engine reads only through
+ * NFKD ("nfkd"), which the server's older Unicode may not know.
+ */
+export function foldTest(which: "table" | "nfkd"): string {
+  const samples = stepSamples().fold;
+  const chosen =
+    which === "nfkd"
+      ? [samples[NFKD_SAMPLE] as string]
+      : samples.filter((_, index) => index !== NFKD_SAMPLE);
+  const asserts = chosen.flatMap((text, index) => [
+    `  assert private.fold_text(${sqlTextWrapped(text, "      ")})`,
+    `    = ${sqlTextWrapped(foldText(text), "      ")},`,
+    `    'fold_text, ${which} sample ${index + 1}';`,
+  ]);
+  const about =
+    which === "nfkd"
+      ? [
+          "AC-LNT-03: fold_text reads every character that the engine reads as a letter, digit or swap only",
+          "through NFKD as the engine does. PostgreSQL's normalize() follows an older Unicode than Node and the",
+          "browsers, so a character it does not know fails here until the engine's table names it",
+          "(NEWER_COMPATIBILITY).",
+        ]
+      : [
+          "AC-LNT-03: fold_text matches the engine's foldText on every table row, the first and last code point",
+          "of every removed range, printable ASCII and a few NFKD forms.",
+        ];
+  return `${[
+    header("src/engine/text/moderation.ts", about),
+    "begin;",
+    "",
+    "do $$",
+    "begin",
+    ...asserts,
+    "end",
+    "$$;",
+    `select 'PASS AC-LNT-03 fold_text matches the engine on ${which === "nfkd" ? `the ${[...(chosen[0] as string)].length} characters read only through NFKD` : "the table, the removals and ASCII"}';`,
+    "rollback;",
+  ].join("\n")}\n`;
+}
+
 export function parityTest(inputs: Inputs): string {
   const { fixture } = inputs;
   const patterns = moderationPatterns(fixture.terms);
   const samples = stepSamples();
   const stepAsserts: string[] = [];
-  samples.fold.forEach((text, index) => {
-    stepAsserts.push(
-      `  assert private.fold_text(${sqlTextWrapped(text, "      ")})`,
-      `    = ${sqlTextWrapped(foldText(text), "      ")},`,
-      `    'fold_text, sample ${index + 1}';`,
-    );
-  });
   samples.swaps.forEach((text, index) => {
     for (const pass of PASSES) {
       const folded = foldText(text);
@@ -735,10 +1037,11 @@ export function parityTest(inputs: Inputs): string {
   });
   const out = [
     header(`${PATHS.fixture} and src/engine/text/moderation.ts`, [
-      "AC-LNT-03: SQL's filter returns the engine's verdicts on the same inputs. First each reading step on",
-      "sample texts; then the fixture's stand-in list, which must compile to the sources the engine builds and",
-      "give every case the engine's verdict while the innocent words pass. The list loads inside the transaction;",
-      "moderation-list.test.sql holds the real list to the same rules.",
+      "AC-LNT-03: SQL's filter returns the engine's verdicts on the same inputs. First the swaps and the words",
+      "read on sample texts (moderation-fold.test.sql and moderation-nfkd.test.sql check fold_text); then the",
+      "fixture's stand-in list, which must compile to the sources the engine builds and give every case the",
+      "engine's verdict while the innocent words pass. The list loads inside the transaction;",
+      "moderation-list.test.sql and moderation-list-2.test.sql hold the real list to the same rules.",
     ]),
     "begin;",
     "",
@@ -747,7 +1050,7 @@ export function parityTest(inputs: Inputs): string {
     ...stepAsserts,
     "end",
     "$$;",
-    "select 'PASS AC-LNT-03 fold_text, the swaps and the words read match the engine step for step';",
+    "select 'PASS AC-LNT-03 the swaps and the words read match the engine step for step';",
     "",
     "do $$",
     "declare",
@@ -791,24 +1094,45 @@ export function parityTest(inputs: Inputs): string {
 }
 
 /**
- * The real list's tests: each term caught under each normalization, its
- * spellings ROT13-encoded as in content/safety/ (the engine meets the same
- * spellings in scripts/codegen/moderation-sql.test.ts), and every friendly
- * name passing. Messages give counts, never a term.
+ * The real list's tests, in two files that each fit one dry run beside the
+ * migration. Part 1: the list compiles to the engine's sources (compared
+ * by md5) and catches the first half of its terms under each
+ * normalization. Part 2: the second half, then every innocent text and
+ * every friendly name passes. Spellings stay ROT13-encoded as in
+ * content/safety/ (the engine meets the same spellings in
+ * src/features/nickname/filter.test.ts). Messages give counts, never a term.
  */
-export function listTest(inputs: Inputs): string {
+export function listTest(inputs: Inputs, part: 1 | 2 = 1): string {
   const realTerms = inputs.encodedTerms.map((encoded, index) => ({
     literal: decoded(sqlText(encoded)),
     match: termMatchOf(inputs.terms[index] as string),
   }));
-  const variants = inputs.terms.flatMap((term) =>
+  const half = Math.ceil(inputs.terms.length / 2);
+  const chosen =
+    part === 1 ? inputs.terms.slice(0, half) : inputs.terms.slice(half);
+  const variants = chosen.flatMap((term) =>
     termVariants(term).map((variant) => sqlText(rot13(variant))),
   );
+  const patterns = moderationPatterns(inputs.terms);
+  const md5 = (source: string | null) =>
+    source === null
+      ? "null"
+      : `'${createHash("md5").update(source).digest("hex")}'`;
+  const first = part === 1 ? 1 : half + 1;
+  const last = part === 1 ? half : inputs.terms.length;
   const out = [
     header("content/safety/ and content/names/", [
-      "AC-LNT-03 for the real list, which stays ROT13-encoded here as in content/safety/ and loads inside the",
-      "transaction: SQL catches each listed term under each normalization, as the engine does with the same",
-      "spellings. Then every friendly name from content/names/ passes. Messages give counts, never a term.",
+      `AC-LNT-03 for the real list, part ${part} of 2. The list stays ROT13-encoded here as in content/safety/ and`,
+      "loads inside the transaction. " +
+        (part === 1
+          ? "SQL compiles it to the engine's sources (compared by md5, so neither is printed)"
+          : "SQL catches the second half of its terms under each normalization, as the engine"),
+      part === 1
+        ? "and catches the first half of its terms under each normalization, as the engine does with the same"
+        : "does with the same spellings; then every innocent text of content/safety/innocent.txt and every",
+      part === 1
+        ? "spellings. Messages give counts, never a term."
+        : "friendly name from content/names/ passes. Messages give counts, never a term.",
     ]),
     "begin;",
     "",
@@ -822,7 +1146,13 @@ export function listTest(inputs: Inputs): string {
       inputs.encodedAllowlist.map((e) => decoded(sqlText(e))),
     ),
     "  v_list := private.moderation_list();",
-    `  assert cardinality(v_list.allow) = ${allowedWords(inputs.allowlist).length}, 'the allowlist loads';`,
+    ...(part === 1
+      ? [
+          `  assert cardinality(v_list.allow) = ${allowedWords(inputs.allowlist).length}, 'the allowlist loads';`,
+          `  assert md5(v_list.word_re) is not distinct from ${md5(patterns.word)}, 'the word pattern differs from the engine''s';`,
+          `  assert md5(v_list.substring_re) is not distinct from ${md5(patterns.substring)}, 'the substring pattern differs from the engine''s';`,
+        ]
+      : []),
     "  select count(*) into v_missed",
     "    from (values",
     wrap(
@@ -834,23 +1164,47 @@ export function listTest(inputs: Inputs): string {
     "  assert v_missed = 0, format('%s spellings of listed terms passed the filter', v_missed);",
     "end",
     "$$;",
-    `select 'PASS AC-LNT-03 the list catches each of its ${inputs.terms.length} terms under each normalization (${termVariants("ab").length} spellings each)';`,
-    "",
-    "do $$",
-    "declare",
-    "  v_list private.moderation_list := private.moderation_list();",
-    "  v_blocked integer;",
-    "begin",
-    "  select count(*) into v_blocked",
-    `    from unnest(${sqlArray(inputs.adjectives)}) as a (word)`,
-    `   cross join unnest(${sqlArray(inputs.animals)}) as b (word)`,
-    "   where private.text_blocked_by(a.word || ' ' || b.word, v_list);",
-    "  assert v_blocked = 0, format('%s friendly names hold a listed term', v_blocked);",
-    "end",
-    "$$;",
-    `select 'PASS MOD-1 no friendly name holds a listed term (all ${inputs.adjectives.length * inputs.animals.length} pairs of content/names/ checked)';`,
-    "rollback;",
+    part === 1
+      ? `select 'PASS AC-LNT-03 the list compiles to the engine sources and catches terms ${first} to ${last} of ${inputs.terms.length} under each normalization (${variants.length} spellings)';`
+      : `select 'PASS AC-LNT-03 the list catches terms ${first} to ${last} of ${inputs.terms.length} under each normalization (${variants.length} spellings)';`,
   ];
+  if (part === 2) {
+    out.push(
+      "",
+      "do $$",
+      "declare",
+      "  v_list private.moderation_list := private.moderation_list();",
+      "  v_blocked integer;",
+      "begin",
+      "  select count(*) into v_blocked",
+      "    from (values",
+      wrap(
+        inputs.encodedInnocent.map((text) => `(${sqlText(text)})`),
+        "      ",
+      ),
+      "    ) as v (text)",
+      `   where private.text_blocked_by(${decoded("v.text")}, v_list);`,
+      "  assert v_blocked = 0, format('%s innocent texts were blocked', v_blocked);",
+      "end",
+      "$$;",
+      `select 'PASS AC-LNT-03 the list passes the ${inputs.encodedInnocent.length} innocent texts of ${PATHS.innocent}';`,
+      "",
+      "do $$",
+      "declare",
+      "  v_list private.moderation_list := private.moderation_list();",
+      "  v_blocked integer;",
+      "begin",
+      "  select count(*) into v_blocked",
+      `    from unnest(${sqlArray(inputs.adjectives)}) as a (word)`,
+      `   cross join unnest(${sqlArray(inputs.animals)}) as b (word)`,
+      "   where private.text_blocked_by(a.word || ' ' || b.word, v_list);",
+      "  assert v_blocked = 0, format('%s friendly names hold a listed term', v_blocked);",
+      "end",
+      "$$;",
+      `select 'PASS MOD-1 no friendly name holds a listed term (all ${inputs.adjectives.length * inputs.animals.length} pairs of content/names/ checked)';`,
+    );
+  }
+  out.push("rollback;");
   return `${out.join("\n")}\n`;
 }
 
@@ -875,7 +1229,10 @@ export function generate(root: string): Output[] {
     { path: PATHS.seedModeration, content: moderationSeed(inputs) },
     { path: PATHS.seedNames, content: namePartsSeed(inputs) },
     { path: PATHS.test, content: parityTest(inputs) },
-    { path: PATHS.listTest, content: listTest(inputs) },
+    { path: PATHS.foldTest, content: foldTest("table") },
+    { path: PATHS.nfkdTest, content: foldTest("nfkd") },
+    { path: PATHS.listTest, content: listTest(inputs, 1) },
+    { path: PATHS.listTest2, content: listTest(inputs, 2) },
   ];
 }
 

@@ -161,7 +161,8 @@ describe("the mock's friendly names and setNickname", () => {
       custom: term.toUpperCase(),
     });
     expect(code(result)).toBe("blocked_text");
-    expect(t.stored()).toBe("Dee");
+    // Never toBe(term): a failure must not print the refused name.
+    expect(t.stored() === "Dee", "the refused name was stored").toBe(true);
   });
 
   it("allows 20 calls a day, refusals included, then refuses until the next day", async () => {
@@ -198,6 +199,28 @@ describe("the mock's friendly names and setNickname", () => {
       );
     }
     expect(t.stored()).toBeNull();
+  });
+
+  it("refuses a blank or oversized name before it authenticates or counts the call, as the adapter and set_nickname do", async () => {
+    const t = await setup();
+    for (let call = 1; call <= 20; call += 1) {
+      const nickname =
+        call === 20
+          ? { custom: "x".repeat(8193) }
+          : { custom: " ".repeat(call % 3) };
+      expect(code(await t.mock.identity.setNickname(nickname))).toBe(
+        "invalid_input",
+      );
+    }
+    expect(
+      code(
+        await t.mock.identity.setNickname({ generated: t.player.friendlyName }),
+      ),
+    ).toBe("ok");
+    t.identity.replace(mintIdentity(t.clock.now()));
+    expect(code(await t.mock.identity.setNickname({ custom: "" }))).toBe(
+      "invalid_input",
+    );
   });
 
   it("answers an unregistered device auth_failed and registers nothing", async () => {
