@@ -19,6 +19,7 @@ import type { Browser, Page } from "@playwright/test";
 import { expect, test } from "../fixtures";
 import { setClock } from "../support/clock";
 import { mockInit } from "../support/mock";
+import { pickOption } from "./clue-4";
 import { readAndPress } from "./stopwatch";
 
 test.use({ timezoneId: "Europe/London" });
@@ -76,7 +77,7 @@ async function toOptionsAndPick(page: Page, name: RegExp): Promise<void> {
   for (let clue = 1; clue < 4; clue += 1) {
     await page.getByRole("button", { name: /^(Next clue|Last clue)/ }).click();
   }
-  await page.getByRole("button", { name }).click();
+  await pickOption(page, name);
 }
 
 /** Plays #42's three Mysteries on Next clue and their right options, then opens the Encore. */

@@ -25,7 +25,12 @@ import {
 import { renderWithUser } from "@/test/render";
 
 import type { RoundComponentProps } from "../contracts";
-import { EncoreHarness, TEST_SETTINGS, encoreMeta } from "../mystery/testing";
+import {
+  EncoreHarness,
+  TEST_SETTINGS,
+  encoreMeta,
+  setPointer,
+} from "../mystery/testing";
 import { EncoreRound } from ".";
 import {
   ENCORE_COPY,
@@ -1028,5 +1033,52 @@ describe("EncoreRound after RITE round 2", () => {
       await user.type(numberField(), "1200{Enter}");
       expect(scrollBy).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe("EncoreRound after RITE round 4", () => {
+  const hint = () => document.querySelector("[data-enter-hint]");
+  const QUESTION = "How long is the fixture Coast Road, in kilometres? km";
+
+  it("R4-15 once a keyboard is in use, Enter locks in. shows beside the preview and is in the field's description", async () => {
+    setPointer("mouse");
+    const { user, onIntent } = play();
+    expect(hint()).toHaveTextContent(/^Enter locks in\.$/);
+    expect(ENCORE_COPY.enterLocksIn).toBe("Enter locks in.");
+    expect(numberField()).toHaveAccessibleDescription(
+      `${QUESTION} Enter locks in.`,
+    );
+    // It sits in the preview's line, which was always there: nothing moves.
+    expect(hint()?.parentElement).toHaveAttribute("data-encore-line");
+    await user.type(numberField(), "1200");
+    expect(numberField()).toHaveAccessibleDescription(
+      `${QUESTION} You're answering 1,200 km Enter locks in.`,
+    );
+    // And it is true: Enter in the field sends the one answer.
+    await user.keyboard("{Enter}");
+    expect(onIntent).toHaveBeenCalledWith({
+      family: "encore",
+      kind: "lock_in",
+      value: 1200,
+    });
+    // On the result there is nothing left to lock in.
+    expect(hint()).toBeNull();
+  });
+
+  it("R4-15 on a touch phone the keypad's own keys bring no key hint (D32); a key outside the field does", async () => {
+    setPointer("touch");
+    const { user } = play();
+    expect(hint()).toBeNull();
+    await user.type(numberField(), "12");
+    expect(hint()).toBeNull();
+    expect(numberField()).toHaveAccessibleDescription(
+      `${QUESTION} You're answering 12 km`,
+    );
+    // Tab out of the field is still a key in a field; the next key, on
+    // Lock in, can only be a keyboard's.
+    await user.tab();
+    expect(hint()).toBeNull();
+    await user.keyboard("{Shift}");
+    expect(hint()).toHaveTextContent("Enter locks in.");
   });
 });

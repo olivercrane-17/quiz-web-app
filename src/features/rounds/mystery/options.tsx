@@ -272,7 +272,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   /** Until when a Space just after a key chose still reads as a typed name's space ("B Smith"). */
   const spaceGuardUntil = useRef(0);
   /** The last printable key and when, and how many different ones have run on (`WORD_KEYS`). */
-  const lastKey = useRef({ key: "", at: 0, run: 0 });
+  const lastKey = useRef({ key: "", at: Number.NEGATIVE_INFINITY, run: 0 });
   const buttons = useRef(new Map<number, HTMLButtonElement>());
   /** True while a key moves focus to an option, so `onFocus` can tell it from Tab or a pointer. */
   const keyFocusing = useRef(false);
@@ -475,7 +475,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
         ) {
           typedSinceChoice.current = false;
           typingUntil.current = 0;
-          lastKey.current.at = 0;
+          lastKey.current.at = Number.NEGATIVE_INFINITY;
         }
       }}
     >

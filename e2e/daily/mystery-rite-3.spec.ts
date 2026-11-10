@@ -273,7 +273,10 @@ test.describe("Enter after a typed name (D20's typing guard, R3-05 after review)
     expect(await actsSent(mock)).toBe(before);
   });
 
-  test("R3-05 cc still sends one pick, for C", async ({ page, mock }) => {
+  test("R3-05 cc sends nothing since D31, and Enter then sends one pick, for C", async ({
+    page,
+    mock,
+  }) => {
     await openDaily(page, { width: 1280, height: 800 });
     await toClue4ByKeyboard(page);
     const c = optionsGroup(page).getByRole("button").nth(2);
@@ -282,6 +285,9 @@ test.describe("Enter after a typed name (D20's typing guard, R3-05 after review)
     await page.keyboard.press("c");
     await expect(c).toBeFocused();
     await page.keyboard.press("c");
+    await expect(c).toHaveAttribute("aria-pressed", "true");
+    expect(await actsSent(mock)).toBe(before);
+    await page.keyboard.press("Enter");
     const reveal = page.locator("[data-reveal]");
     await expect(reveal).toBeVisible();
     await expect(reveal).toContainText(label);
