@@ -51,7 +51,9 @@ export const SHELL_COPY = {
    * footer pages are LGL-1's real pages. The rest are the per-user shells
    * (ARCHITECTURE §10.1) that a link opens once its feature ships: a
    * group's board, a challenge, a room, a shared quiz. Each key is the
-   * title its stub passes, and goes when the stub does.
+   * title its stub passes. Once a feature replaces its stub, the line is
+   * left over and harmless, and the DS owner removes it: the building
+   * ticket needn't touch src/features/shell (memo §22).
    */
   comingSoon: {
     [SHELL_CLIENT_COPY.tabs.groups]:

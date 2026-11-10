@@ -10,7 +10,7 @@
  * - `correct`: the band chip ("Bullseye") on the correct tint, always
  *   beside its word.
  * - `accent`: a round count badge ("2 challenges waiting").
- * - `beta`: the "Beta" label, smaller and heavier, in ink-2, never orange.
+ * - `beta`: the "Beta" label, outlined in ink-2, never orange (DESIGN §6.14).
  *
  * A chip that is a link or a button (`<Link className={chipClasses({
  * interactive: true })}>`) gets the outlined pill of a control instead,

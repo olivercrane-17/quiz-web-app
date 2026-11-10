@@ -263,8 +263,8 @@ test.describe("practice's progress segments", () => {
     await expect(wrong).toHaveCSS("border-top-width", "0px");
     // The X says it without colour, in the incorrect text colour on its tint.
     await expect(wrong.locator("svg")).toHaveCSS("color", "rgb(163, 37, 54)");
-    // Only an unanswered segment is the empty well, with its edge inside;
-    // the one open now is filled in ink.
+    // Only an unanswered segment is the empty well, with its edge inside
+    // (the one open now too, with the bar under it).
     const upcoming = segment(page, "upcoming").and(
       page.locator(":not([data-current])"),
     );

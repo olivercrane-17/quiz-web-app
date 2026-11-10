@@ -18,9 +18,10 @@
  * narrow header would overflow (R1-03); slim 20 px segments for practice.
  * A step not answered yet is a wash (a segment adds a 3:1 edge inside it,
  * having no text, R2-28); an answered one takes the correct fill or the
- * incorrect tint. The current step is filled in ink, like the clue
- * ladder's current rung, with an eft bar under it, the active tab's mark:
- * nothing about it is an outline, so it never looks like keyboard focus.
+ * incorrect tint, and a locked-in Encore (`done`) an ink-2 fill. The
+ * current step keeps the wash with its mark in ink and an eft bar under
+ * it, the active tab's mark: never the primary button's ink-and-cream
+ * pairing (D11), and never a ring, so it never looks like keyboard focus.
  * Steps fill with their verdict over 200 ms, and keep their size at 200%
  * text.
  */

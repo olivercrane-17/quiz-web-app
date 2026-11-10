@@ -68,6 +68,21 @@ const GROUP_OF: Record<string, string> = {
   ...Object.fromEntries(LEGAL_LINKS.map((link) => [link.href, "(info)"])),
 };
 
+/**
+ * The source of the route module a page file re-exports (`export { default }
+ * from "@/features/..."`), or null when the page file is the screen itself.
+ */
+function routeModuleSource(pageFile: string): string | null {
+  const target = /from "@\/(.+?)"/.exec(readFileSync(pageFile, "utf8"));
+  if (target?.[1] === undefined) return null;
+  return readFileSync(join(process.cwd(), "src", `${target[1]}.tsx`), "utf8");
+}
+
+/** Whether a page is still its placeholder: its route module renders one. */
+function isPlaceholder(pageFile: string): boolean {
+  return /<PagePlaceholder\b/.test(routeModuleSource(pageFile) ?? "");
+}
+
 async function loadPage(
   file: string,
 ): Promise<{ default: ComponentType; metadata?: Metadata }> {
@@ -90,10 +105,25 @@ describe("every destination the shell draws", () => {
     expect(routes.get("/practice")?.group).toBe("(tabs)");
   });
 
-  /** The destinations that are still placeholders: Groups, Me and Settings. */
-  const PLACEHOLDERS = Object.keys(GROUP_OF).filter(
-    (href) => href !== "/" && !BUILT.has(href),
-  );
+  /**
+   * The destinations that are still placeholders: Groups, Me and Settings
+   * today. Read from their route modules, so a destination drops out of
+   * these checks on its own the day its feature (GRP-1, STA-1, SET-1)
+   * replaces the placeholder, with no edit in src/features/shell.
+   */
+  const PLACEHOLDERS = Object.keys(GROUP_OF).filter((href) => {
+    if (href === "/" || BUILT.has(href)) return false;
+    const page = routes.get(href);
+    return page !== undefined && isPlaceholder(page.file);
+  });
+
+  /** RITE round 2's lines, word for word (docs/playtests/rite-2.md §6). */
+  const RITE_LINES: Record<string, string> = {
+    "/g": "Groups are on the way. Until then, paste your result into your group chat.",
+    "/me": "Your streak and past results will live here.",
+    "/settings":
+      "Settings are on the way. Hide stopwatch is in the Daily's menu.",
+  };
 
   it.each(PLACEHOLDERS.map((href) => [href]))(
     "R1-02 %s shows its title as the one h1, says what's coming and offers Go to Today",
@@ -127,13 +157,15 @@ describe("every destination the shell draws", () => {
       lines.set(href, line?.textContent ?? "");
       unmount();
     }
-    // RITE round 2's lines, word for word (docs/playtests/rite-2.md §6).
-    expect(Object.fromEntries(lines)).toEqual({
-      "/g": "Groups are on the way. Until then, paste your result into your group chat.",
-      "/me": "Your streak and past results will live here.",
-      "/settings":
-        "Settings are on the way. Hide stopwatch is in the Daily's menu.",
-    });
+    // Every destination still a placeholder shows its RITE line; a built
+    // one is no longer checked, and a line left over for it is harmless.
+    expect(Object.fromEntries(lines)).toEqual(
+      Object.fromEntries(
+        Object.entries(RITE_LINES).filter(([href]) =>
+          PLACEHOLDERS.includes(href),
+        ),
+      ),
+    );
     // Its own line, never another's, and never the general one.
     expect(new Set(lines.values()).size).toBe(lines.size);
     expect([...lines.values()]).not.toContain(SHELL_COPY.notReady);
@@ -150,12 +182,8 @@ describe("every destination the shell draws", () => {
     const href = shellPath(route.shell);
     const page = routes.get(href);
     if (page === undefined) throw new Error(`no page for ${href}`);
-    const target = /from "@\/(.+?)"/.exec(readFileSync(page.file, "utf8"));
-    if (target === null) continue;
-    const source = readFileSync(
-      join(process.cwd(), "src", `${target[1]}.tsx`),
-      "utf8",
-    );
+    const source = routeModuleSource(page.file);
+    if (source === null) continue;
     const title = /<PagePlaceholder\s+title="([^"]+)"/.exec(source);
     if (title?.[1] !== undefined) shellStubs.set(href, title[1]);
   }
@@ -178,7 +206,7 @@ describe("every destination the shell draws", () => {
     }
   });
 
-  it("R2-07 every line belongs to a page that is still a placeholder, one line each, so none is left over once its page is built", async () => {
+  it("R2-07 every page that is still a placeholder has a line of its own, and no two lines are the same", async () => {
     const titles = await Promise.all(
       PLACEHOLDERS.map(async (href) => {
         const page = routes.get(href);
@@ -186,9 +214,13 @@ describe("every destination the shell draws", () => {
         return String((await loadPage(page.file)).metadata?.title);
       }),
     );
-    expect(Object.keys(SHELL_COPY.comingSoon).sort()).toEqual(
-      [...new Set([...titles, ...shellStubs.values()])].sort(),
-    );
+    // One way only: a line whose page has since been built is left over
+    // and harmless, so the ticket that builds the page needn't edit
+    // src/features/shell (memo §22); the DS owner removes it later.
+    for (const title of new Set([...titles, ...shellStubs.values()])) {
+      const lines: Record<string, string | undefined> = SHELL_COPY.comingSoon;
+      expect(lines[title], title).toBeDefined();
+    }
     const all = Object.values(SHELL_COPY.comingSoon);
     expect(new Set(all).size).toBe(all.length);
   });

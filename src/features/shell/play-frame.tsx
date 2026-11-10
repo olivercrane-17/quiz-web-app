@@ -9,9 +9,10 @@
  * the skip link and the live regions around it. `<main>` carries the
  * landmark's id only while its route is on screen (`MainLandmark`).
  *
- * `.kn-play-main` (shell.css) keeps every play screen's questions and
- * answers whole: no hyphen splits a word at a line end (RITE round 2,
- * R2-17), unless a round asks for one on its own text.
+ * `.kn-play-main` (shell.css) sets `hyphens: manual` for everything a
+ * play screen's text inherits (RITE round 2, R2-17). An element with its
+ * own `hyphens` utility still overrides it, as the Mystery's clue text
+ * does until FIX2-MYS drops its `hyphens-auto`.
  */
 import type { ReactNode } from "react";
 

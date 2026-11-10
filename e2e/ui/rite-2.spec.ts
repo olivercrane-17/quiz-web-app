@@ -6,16 +6,24 @@
  *
  * - R2-06: the Daily's pills, Today's round chips and the Mystery's
  *   category chip are flat marks (D11): no border, no ledge, no pointer,
- *   in every state; the current pill is filled in ink with a bar under
- *   it, never ringed like keyboard focus; a longer mark (the Encore's % off
- *   to come) stays inside its pill; and a tap on the stopwatch on a 390 px
- *   phone opens the More menu at Hide stopwatch, as DESIGN §6.7 says.
+ *   in every state; the current pill keeps the wash with ink text and a
+ *   bar under it, never the primary button's fill and never ringed like
+ *   keyboard focus; a locked-in Encore's pill is filled, unlike a pill
+ *   nobody has played; a longer mark (the Encore's % off to come) stays
+ *   inside its pill; and a tap on the stopwatch on a 390 px phone opens
+ *   the More menu at Hide stopwatch, as DESIGN §6.7 says. The Beta label
+ *   keeps DESIGN §6.14's ink-2 outline.
  * - R2-07: Groups, Me and Settings each say what's coming there and what
  *   works now, instead of "This part of Knewt isn't ready yet."
  * - R2-17: question and option text is never split with a hyphen, at 200%
- *   text on a phone included, whatever a round around it asks for.
- * - R2-28: placeholder text holds 4.5:1 on every surface a field sits on,
- *   and practice's empty segments have a 3:1 edge.
+ *   text on a phone included. The Mystery's clue text, where the personas
+ *   met it, sets its own `hyphens-auto` (FIX2-MYS's ladder.tsx): that check
+ *   is fixme until FIX2-MYS merges.
+ * - R2-28: the guess field Sam measured takes its placeholder colour
+ *   from the design system (ink-3, 4.5:1 on its frame), and practice's
+ *   empty segments have a 3:1 edge. The field also adds its own
+ *   `placeholder:opacity-60` (FIX2-MYS's combobox.tsx), so the shown
+ *   placeholder's contrast is fixme until FIX2-MYS merges.
  * - R2-34: Settings marks no tab.
  */
 import type { Locator, Page } from "@playwright/test";
@@ -32,6 +40,28 @@ function luminance(colour: string): number {
     return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
   }) as [number, number, number];
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+/** A computed colour's channels and alpha. */
+function rgba(colour: string): [number, number, number, number] {
+  const parts = /^rgba?\((\d+), (\d+), (\d+)(?:, ([\d.]+))?\)/.exec(colour);
+  if (parts === null) throw new Error(`not an rgb colour: ${colour}`);
+  return [
+    Number(parts[1]),
+    Number(parts[2]),
+    Number(parts[3]),
+    parts[4] === undefined ? 1 : Number(parts[4]),
+  ];
+}
+
+/** `colour` at `opacity` (times its own alpha) laid over the opaque `ground`. */
+function blend(colour: string, opacity: number, ground: string): string {
+  const [r, g, b, a] = rgba(colour);
+  const [gr, gg, gb] = rgba(ground);
+  const alpha = a * opacity;
+  const mix = (top: number, under: number) =>
+    Math.round(top * alpha + under * (1 - alpha));
+  return `rgb(${mix(r, gr)}, ${mix(g, gg)}, ${mix(b, gb)})`;
 }
 
 function contrast(a: string, b: string): number {
@@ -123,12 +153,12 @@ test.describe("R2-06 pills and chips are flat marks", () => {
     expectFlat(await looksOf(pills(page)), "pills at Mystery 2");
   });
 
-  test("R2-06 the current pill is filled in ink, with the bar under it, never ringed like keyboard focus", async ({
+  test("R2-06 the current pill is the wash with ink text and the bar under it, never the primary button's fill, never ringed like keyboard focus", async ({
     page,
   }) => {
-    for (const [scheme, ink] of [
-      ["light", "rgb(29, 26, 22)"],
-      ["dark", "rgb(243, 235, 222)"],
+    for (const [scheme, wash, ink, ink2] of [
+      ["light", "rgb(236, 228, 214)", "rgb(29, 26, 22)", "rgb(78, 70, 61)"],
+      ["dark", "rgb(19, 17, 14)", "rgb(243, 235, 222)", "rgb(206, 195, 179)"],
     ] as const) {
       await page.emulateMedia({ colorScheme: scheme });
       await page.goto("/daily");
@@ -139,25 +169,44 @@ test.describe("R2-06 pills and chips are flat marks", () => {
         const bar = getComputedStyle(step, "::after");
         return {
           fill: css.backgroundColor,
+          text: css.color,
           outline: css.outlineStyle,
           border: css.borderTopWidth,
           bar: bar.content === "none" ? null : bar.height,
         };
       });
       expect(look, scheme).toEqual({
-        fill: ink,
+        fill: wash,
+        text: ink,
         outline: "none",
         border: "0px",
         bar: "3px",
       });
-      // The pills not open now are washes, so the ink one stands out.
+      // Not the primary button's pairing ("Play today's Daily", "See your
+      // results"), which read as the selected segment of a control (D11).
+      const primary = await page.evaluate(() => {
+        const probe = document.createElement("button");
+        probe.className = "kn-btn kn-btn-primary";
+        document.querySelector("header")?.append(probe);
+        const css = getComputedStyle(probe);
+        const pair = { fill: css.backgroundColor, text: css.color };
+        probe.remove();
+        return pair;
+      });
+      expect(look.fill, scheme).not.toBe(primary.fill);
+      expect(look.text, scheme).not.toBe(primary.text);
+      // The pills not open now are the same wash in ink-2, without the bar.
       const others = await page
         .locator('header .kn-step:not([aria-current="step"])')
         .evaluateAll((steps) =>
-          steps.map((step) => getComputedStyle(step).backgroundColor),
+          steps.map((step) => ({
+            text: getComputedStyle(step).color,
+            bar: getComputedStyle(step, "::after").content,
+          })),
         );
-      expect(others).toHaveLength(3);
-      expect(others, scheme).not.toContain(ink);
+      expect(others, scheme).toEqual(
+        Array.from({ length: 3 }, () => ({ text: ink2, bar: "none" })),
+      );
     }
     // Keyboard focus is the page's 3 px ring, an outline outside the
     // element (globals.css, worn after a key press); the current pill has
@@ -178,7 +227,7 @@ test.describe("R2-06 pills and chips are flat marks", () => {
     ).not.toHaveAttribute("tabindex");
   });
 
-  test("R2-06 practice's segments are flat too, and the open question's is filled in ink, with no edge", async ({
+  test("R2-06 practice's segments are flat too, and the open question's is the edged wash with the bar under it", async ({
     page,
   }) => {
     await page.emulateMedia({ colorScheme: "light" });
@@ -192,13 +241,14 @@ test.describe("R2-06 pills and chips are flat marks", () => {
       const bar = getComputedStyle(step, "::after");
       return {
         fill: css.backgroundColor,
-        outline: css.outlineStyle,
+        outline: `${css.outlineWidth} at ${css.outlineOffset}`,
         bar: bar.content === "none" ? null : bar.height,
       };
     });
+    // The empty well's 1 px edge inside it (R2-28), never a ring outside.
     expect(look).toEqual({
-      fill: "rgb(29, 26, 22)",
-      outline: "none",
+      fill: "rgb(236, 228, 214)",
+      outline: "1px at -1px",
       bar: "3px",
     });
   });
@@ -228,14 +278,24 @@ test.describe("R2-06 pills and chips are flat marks", () => {
         return {
           border: Number.parseFloat(css.borderTopWidth),
           cursor: css.cursor,
+          fill: css.backgroundColor,
+          edge: css.borderTopColor,
+          text: css.color,
         };
       });
     });
-    expect(looks.slice(0, 3)).toEqual([
-      { border: 0, cursor: "default" },
+    expect(looks.slice(0, 2)).toMatchObject([
       { border: 0, cursor: "default" },
       { border: 0, cursor: "default" },
     ]);
+    // The Beta label keeps DESIGN §6.14's outline in ink-2, on no wash,
+    // and is no control.
+    expect(looks[2]).toMatchObject({
+      border: 1,
+      cursor: "default",
+      fill: "rgba(0, 0, 0, 0)",
+    });
+    expect(looks[2]?.edge).toBe(looks[2]?.text);
     expect(looks[3]?.border).toBeGreaterThan(0);
     expect(looks[3]?.cursor).toBe("pointer");
   });
@@ -278,6 +338,59 @@ test.describe("R2-06 pills and chips are flat marks", () => {
     );
     expect(spills).toEqual([]);
   });
+
+  for (const scheme of ["light", "dark"] as const) {
+    test(`R2-06 after Lock in, the Encore's pill is filled, so it no longer looks like a pill nobody has played, in the ${scheme} theme`, async ({
+      page,
+    }) => {
+      test.setTimeout(90_000);
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.goto("/daily");
+      const encore = pills(page).nth(3);
+      await expect(encore).toHaveAttribute("data-status", "upcoming");
+      const unplayed = await encore.evaluate(
+        (step) => getComputedStyle(step).backgroundColor,
+      );
+      for (const next of ["Next mystery", "Next mystery", "On to the Encore"]) {
+        await expect(
+          page.getByRole("button", { name: /^Next clue/ }),
+        ).toBeVisible();
+        for (let clue = 1; clue < 4; clue += 1) {
+          await page
+            .getByRole("button", { name: /^(Next clue|Last clue)/ })
+            .click();
+        }
+        await page.getByRole("button", { name: /^A\. / }).click();
+        await page.getByRole("button", { name: next }).click();
+      }
+      await page.getByLabel(/your number/i).fill("1000");
+      await page.getByRole("button", { name: "Lock in" }).click();
+      const results = page.getByRole("button", { name: "See your results" });
+      await expect(results).toBeVisible();
+      await expect(encore).toHaveAttribute("data-status", "done");
+      // The step fills over 200 ms; read it once the fill has landed.
+      await encore.evaluate((step) =>
+        Promise.all(step.getAnimations().map((motion) => motion.finished)),
+      );
+      const look = await encore.evaluate((step) => {
+        const css = getComputedStyle(step);
+        return {
+          fill: css.backgroundColor,
+          text: css.color,
+          border: css.borderTopWidth,
+        };
+      });
+      const primary = await results.evaluate(
+        (button) => getComputedStyle(button).backgroundColor,
+      );
+      // Still a flat mark, but no longer the unplayed wash, and not the
+      // primary button's fill either.
+      expect(look.border).toBe("0px");
+      expect(look.fill, scheme).not.toBe(unplayed);
+      expect(look.fill, scheme).not.toBe(primary);
+      expect(contrast(look.text, look.fill)).toBeGreaterThanOrEqual(4.5);
+    });
+  }
 
   test.describe("on a 390 px phone", () => {
     test.use({
@@ -450,6 +563,34 @@ test.describe("R2-17 no hyphens in questions and options", () => {
     expect(hyphens).toEqual(["manual"]);
   });
 
+  // The reproductions ("This fix- / ture coun- / try", "Its ti- / tle")
+  // are clue text, which sets its own `hyphens-auto` in FIX2-MYS's
+  // ladder.tsx; FIX2-MYS's lane changes it to `hyphens-manual`.
+  test.fixme("R2-17 every clue's title, body and note keeps its words whole, at 390×844 with 200% text (until FIX2-MYS merges)", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/daily");
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+    });
+    for (let clue = 1; clue < 4; clue += 1) {
+      await page
+        .getByRole("button", { name: /^(Next clue|Last clue)/ })
+        .click();
+    }
+    // The open clue's title, the clues before it and any note under it.
+    const clueText = page
+      .getByRole("list", { name: "Clues" })
+      .locator("[data-clue-card] h2, li > p:not([data-stamp])");
+    await expect(clueText.first()).toBeVisible();
+    expect(await clueText.count()).toBeGreaterThanOrEqual(4);
+    const hyphens = await clueText.evaluateAll((parts) => [
+      ...new Set(parts.map((part) => getComputedStyle(part).hyphens)),
+    ]);
+    expect(hyphens).toEqual(["manual"]);
+  });
+
   test("R2-17 an option keeps its words whole even inside a round that asks for hyphens", async ({
     page,
   }) => {
@@ -473,35 +614,86 @@ test.describe("R2-17 no hyphens in questions and options", () => {
 });
 
 test.describe("R2-28 contrast", () => {
+  // The field Sam measured: FIX2-MYS's combobox.tsx adds
+  // `placeholder:opacity-60` over globals.css's ink-3, 2.6:1 in light and
+  // 3.1:1 in dark; without it, 6.3:1 and 6.0:1.
   for (const scheme of ["light", "dark"] as const) {
-    test(`R2-28 placeholder text holds 4.5:1 on every surface a field sits on, in the ${scheme} theme`, async ({
+    test.fixme(`R2-28 the Daily's guess field shows its placeholder at 4.5:1 on its frame, in the ${scheme} theme (until FIX2-MYS merges)`, async ({
       page,
     }) => {
       await page.emulateMedia({ colorScheme: scheme });
-      await page.goto("/");
-      const pairs = await page.evaluate(() =>
-        ["page", "surface", "sunken"].map((surface) => {
-          const field = document.createElement("input");
-          field.placeholder = "Start typing a person";
-          field.style.backgroundColor = `var(--kn-${surface})`;
-          document.querySelector("main")?.append(field);
-          const pair = {
-            surface,
-            text: getComputedStyle(field, "::placeholder").color,
-            opacity: getComputedStyle(field, "::placeholder").opacity,
-            ground: getComputedStyle(field).backgroundColor,
-          };
-          field.remove();
-          return pair;
-        }),
-      );
-      for (const { surface, text, opacity, ground } of pairs) {
-        expect(opacity, surface).toBe("1");
-        expect(
-          contrast(text, ground),
-          `${text} on ${ground} (${surface})`,
-        ).toBeGreaterThanOrEqual(4.5);
-      }
+      await page.goto("/daily");
+      const field = page.getByRole("combobox");
+      await expect(field).toBeVisible();
+      const look = await field.evaluate((input) => {
+        const placeholder = getComputedStyle(input, "::placeholder");
+        // The field is transparent; the frame under it gives the ground.
+        let ground = "rgba(0, 0, 0, 0)";
+        for (
+          let element: Element | null = input;
+          element !== null;
+          element = element.parentElement
+        ) {
+          const fill = getComputedStyle(element).backgroundColor;
+          if (fill !== "rgba(0, 0, 0, 0)" && fill !== "transparent") {
+            ground = fill;
+            break;
+          }
+        }
+        return {
+          text: placeholder.color,
+          opacity: Number(placeholder.opacity),
+          ground,
+        };
+      });
+      const shown = blend(look.text, look.opacity, look.ground);
+      expect(
+        contrast(shown, look.ground),
+        `${look.text} at ${look.opacity} on ${look.ground}`,
+      ).toBeGreaterThanOrEqual(4.5);
+    });
+  }
+
+  // The half DS owns, on the real field: the placeholder's colour comes
+  // from globals.css's `::placeholder` (ink-3), not from the round. Its
+  // opacity is the round's own utility and is the fixme above.
+  for (const scheme of ["light", "dark"] as const) {
+    test(`R2-28 the Daily's guess field takes its placeholder colour from the design system, 4.5:1 on its frame before any opacity of its own, in the ${scheme} theme`, async ({
+      page,
+    }) => {
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.goto("/daily");
+      const field = page.getByRole("combobox");
+      await expect(field).toBeVisible();
+      const look = await field.evaluate((input) => {
+        let ground = "rgba(0, 0, 0, 0)";
+        for (
+          let element: Element | null = input;
+          element !== null;
+          element = element.parentElement
+        ) {
+          const fill = getComputedStyle(element).backgroundColor;
+          if (fill !== "rgba(0, 0, 0, 0)" && fill !== "transparent") {
+            ground = fill;
+            break;
+          }
+        }
+        const probe = document.createElement("span");
+        probe.style.color = "var(--kn-ink-3)";
+        document.body.append(probe);
+        const ink3 = getComputedStyle(probe).color;
+        probe.remove();
+        return {
+          text: getComputedStyle(input, "::placeholder").color,
+          ink3,
+          ground,
+        };
+      });
+      expect(look.text, scheme).toBe(look.ink3);
+      expect(
+        contrast(look.text, look.ground),
+        `${look.text} on ${look.ground}`,
+      ).toBeGreaterThanOrEqual(4.5);
     });
   }
 

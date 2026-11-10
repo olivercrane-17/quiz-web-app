@@ -189,10 +189,15 @@
   align-items: center;
   gap: 2px;
 }
-/* A play screen's main (./play-frame.tsx): its questions, options and
- * reveals never split a word with a hyphen at a line end, which made clues
- * read "bil-lion" and "coun- / try" (RITE round 2, R2-17). A word wider
- * than its line still breaks where each element allows it. */
+/* A play screen's main (./play-frame.tsx) inherits `hyphens: manual`, so
+ * text that sets nothing of its own (questions, practice's options,
+ * reveals) never splits a word with a hyphen at a line end (RITE round 2,
+ * R2-17). Answer options set it themselves (`.kn-answer` in ui.css). An
+ * element with its own `hyphens` utility overrides this: the Mystery's
+ * clue text does (`hyphens-auto` in the round's ladder.tsx) until FIX2-MYS
+ * drops it, so the clue reproductions ("This fix- / ture coun- / try")
+ * are not fixed here; e2e/ui/rite-2.spec.ts holds that check as fixme.
+ * A word wider than its line still breaks where each element allows it. */
 .kn-play-main {
   hyphens: manual;
 }
