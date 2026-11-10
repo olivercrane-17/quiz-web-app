@@ -217,8 +217,11 @@ function setup(props: HarnessProps = {}) {
 const spoken = () =>
   document.getElementById("qz-live-polite")?.textContent ?? "";
 
-/** D20's line under the options, or null while it isn't shown. */
+/** D20's line above the options, or null while it isn't shown. */
 const legend = () => document.querySelector("[data-keys-legend]");
+
+/** The legend's held line, shown or not: there while shortcuts are on. */
+const keyLine = () => document.querySelector<HTMLElement>("[data-keys-line]");
 
 /**
  * D20: the option keys act only on an option, so a keyboard player Tabs
@@ -481,20 +484,20 @@ describe("ChoiceRound", () => {
       expect(onIntent).toHaveBeenCalledOnce();
     });
 
-    it("R2-02 shows Keys A to D answer. under the options after the first key in them, until the answer locks", async () => {
+    it("R2-02 shows Keys A to D answer at once. above the options after the first key in them, until the answer locks", async () => {
       const { user, container } = setup();
       // A new question: focus on the heading, nothing typed yet.
       expect(legend()).toBeNull();
       // The first key in the options is the Tab that reaches option A.
       await tabToOptions(user);
       const line = legend();
-      expect(line).toHaveTextContent(/^Keys A to D answer\.$/);
+      expect(line).toHaveTextContent(/^Keys A to D answer at once\.$/);
       expect(line).toBeVisible();
-      // A line of its own, under the options, drawn by the round, not by
-      // an option's AnswerButton.
+      // A line of its own, above the options (R3-07), drawn by the round,
+      // not by an option's AnswerButton.
       const list = screen.getByRole("list");
       expect(list.contains(line)).toBe(false);
-      expect(list.nextElementSibling).toBe(line);
+      expect(list.previousElementSibling).toBe(line);
       expect(
         container.querySelector("[data-question]")?.contains(line ?? null),
       ).toBe(true);
@@ -514,15 +517,15 @@ describe("ChoiceRound", () => {
       // A key that answers nothing still says a keyboard is in use.
       await user.keyboard("x");
       expect(onIntent).not.toHaveBeenCalled();
-      expect(legend()).toHaveTextContent("Keys A to D answer.");
+      expect(legend()).toHaveTextContent("Keys A to D answer at once.");
     });
 
-    it("R2-02 names only the letters on screen: Keys A and B answer. on true or false", async () => {
+    it("R2-02 names only the letters on screen: Keys A and B answer at once. on true or false", async () => {
       const { user } = setup({ content: TRUE_FALSE });
       await tabToOptions(user);
-      expect(legend()).toHaveTextContent(/^Keys A and B answer\.$/);
-      expect(CHOICE_COPY.keysLegend(3)).toBe("Keys A to C answer.");
-      expect(CHOICE_COPY.keysLegend(4)).toBe("Keys A to D answer.");
+      expect(legend()).toHaveTextContent(/^Keys A and B answer at once\.$/);
+      expect(CHOICE_COPY.keysLegend(3)).toBe("Keys A to C answer at once.");
+      expect(CHOICE_COPY.keysLegend(4)).toBe("Keys A to D answer at once.");
     });
 
     it("R2-02 a tap or a click answers without ever showing the legend", async () => {
@@ -549,7 +552,107 @@ describe("ChoiceRound", () => {
       await numbers.user.keyboard("4");
       expect(numbers.onIntent).not.toHaveBeenCalled();
       // The legend names the letters, which do answer here.
-      expect(legend()).toHaveTextContent("Keys A to D answer.");
+      expect(legend()).toHaveTextContent("Keys A to D answer at once.");
+    });
+  });
+
+  describe("RITE round 3: practice keys (R3-07, D28)", () => {
+    it("R3-07 focus an option and press b: focus moves off option A to the answer, then to the feedback heading", async () => {
+      const { user, option, onIntent } = setup();
+      // Dee's repro: focus on A, then the letter for B.
+      await tabToOptions(user);
+      expect(option(/Venus/)).toHaveFocus();
+      await user.keyboard("b");
+      expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+        family: "choice",
+        kind: "answer",
+        option: 1,
+      });
+      // The ring never stays on the option the key didn't answer.
+      expect(option(/Venus/)).not.toHaveFocus();
+      expect(option(/Uranus/)).toHaveFocus();
+      wait(SHEET_AFTER_MS);
+      expect(
+        screen.getByRole("heading", { level: 2, name: "Right. It's Uranus." }),
+      ).toHaveFocus();
+    });
+
+    it("R3-07 an Enter that follows a letter answer lands on no other control: it completes the reveal, then continues", async () => {
+      const { user, option, onIntent, onContinue } = setup();
+      await tabToOptions(user);
+      await user.keyboard("b");
+      // The verdict is in (judged on the device): a fresh Enter on the
+      // answer completes the reveal at once, and the sheet's title takes
+      // focus. It answers nothing and continues nothing.
+      await user.keyboard("{Enter}");
+      expect(
+        screen.getByRole("heading", { level: 2, name: "Right. It's Uranus." }),
+      ).toHaveFocus();
+      expect(onContinue).not.toHaveBeenCalled();
+      expect(option(/Venus/)).toHaveAttribute("data-state", "dimmed");
+      // Only the next one continues.
+      await user.keyboard("{Enter}");
+      expect(onContinue).toHaveBeenCalledOnce();
+      expect(onIntent).toHaveBeenCalledOnce();
+    });
+
+    it("R3-07 an Enter inside the beat, before the verdict, does nothing on the locked answer", async () => {
+      const { user, option, onIntent, onContinue } = setup({ judge: false });
+      await tabToOptions(user);
+      await user.keyboard("b");
+      expect(option(/Uranus/)).toHaveFocus();
+      await user.keyboard("{Enter}");
+      expect(onIntent).toHaveBeenCalledOnce();
+      expect(onContinue).not.toHaveBeenCalled();
+      expect(option(/Uranus/)).toHaveAttribute("data-state", "locked");
+      expect(option(/Uranus/)).toHaveFocus();
+    });
+
+    it("R3-07 a letter that names the focused option leaves focus where it is until the sheet opens", async () => {
+      const { user, option } = setup();
+      await tabToOptions(user);
+      await user.keyboard("a");
+      expect(option(/Venus/)).toHaveFocus();
+      wait(SHEET_AFTER_MS);
+      expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
+    });
+
+    it("R3-07 holds the legend's line above the options, so the first key never moves them, nor the lock-in from 768 px", async () => {
+      const { user } = setup();
+      const list = screen.getByRole("list");
+      const line = keyLine();
+      // Held, and hidden from everyone, before any key.
+      expect(line).not.toBeNull();
+      expect(list.previousElementSibling).toBe(line);
+      expect(line).toHaveAttribute("aria-hidden", "true");
+      expect(line?.className).toContain("invisible");
+      expect(line?.className).toContain("min-h-5");
+      expect(line?.className).not.toContain("hidden ");
+      expect(line?.className).not.toContain("max-md:hidden");
+      await tabToOptions(user);
+      expect(keyLine()).toBe(line);
+      expect(line).not.toHaveAttribute("aria-hidden");
+      expect(line?.className).not.toContain("invisible");
+      await user.keyboard("c");
+      // The answer is in: the words go, the line stays from 768 px. On a
+      // phone it goes with the thumb-zone spacer, as the options close up
+      // under the stem (R1-21).
+      expect(keyLine()).toBe(line);
+      expect(line).toHaveAttribute("aria-hidden", "true");
+      expect(line?.className).toContain("invisible");
+      expect(line?.className).toContain("max-md:hidden");
+      wait(SHEET_AFTER_MS);
+      expect(keyLine()).toBe(line);
+    });
+
+    it("R3-07 the legend reads Keys A to D answer at once. (D28), naming only the letters on screen", async () => {
+      const four = setup();
+      await tabToOptions(four.user);
+      expect(legend()).toHaveTextContent(/^Keys A to D answer at once\.$/);
+      four.unmount();
+      const two = setup({ content: COMPARISON });
+      await tabToOptions(two.user);
+      expect(legend()).toHaveTextContent(/^Keys A and B answer at once\.$/);
     });
   });
 
@@ -855,13 +958,24 @@ describe("ChoiceRound", () => {
     // Open: the question fills the column and the options anchor at its foot.
     expect(question).not.toHaveAttribute("data-settled");
     expect(question?.className).toContain("flex-1");
-    expect(list.className).toContain("mt-auto");
+    // With shortcuts on, the legend's held line sits on top of the options
+    // and carries their anchor (R3-07).
+    const keysLine = keyLine();
+    expect(keysLine?.className).toContain("mt-auto");
+    expect(list.className).not.toContain("mt-auto");
     await user.click(option(/Venus/));
     // Locked in: the options close up under the stem at once.
     expect(option(/Venus/)).toHaveAttribute("data-state", "locked");
     expect(question).toHaveAttribute("data-settled");
     expect(question?.className).not.toContain("flex-1");
+    expect(keysLine?.className).not.toContain("mt-auto");
     expect(list.className).not.toContain("mt-auto");
+  });
+
+  it("R1-21 anchors the options themselves at the thumb zone's foot with shortcuts off", () => {
+    setup({ settings: { shortcuts: false } });
+    expect(keyLine()).toBeNull();
+    expect(screen.getByRole("list").className).toContain("mt-auto");
   });
 
   it("R1-21 puts the sheet at the foot of the round, where the answers were", async () => {

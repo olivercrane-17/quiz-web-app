@@ -15,7 +15,16 @@
  *    break a rule is passed over for the next one. When the easiest pick is
  *    a true/false, it gives way to another item, because it can be neither
  *    first nor anywhere else.
- * 5. Option order is the choice plugin's job when the round opens, from the
+ * 5. No format twice in a row (RITE round 3, R3-12): the two comparisons a
+ *    run may hold never sit back to back, so "Which is heavier?" never
+ *    follows "Which is heavier?". Multiple choice is most of a run and may
+ *    follow itself; the one true/false can't meet another. Where the order
+ *    is free (after a chosen band's opener) the later comparison moves to a
+ *    seeded place between two other formats; where it is fixed by p (Mixed's
+ *    peak-end shape, the ramp) it gives way to the next item of its own band
+ *    and slots that is neither a comparison nor a true/false, and stays
+ *    when there is none, since a full run matters more than the spacing.
+ * 6. Option order is the choice plugin's job when the round opens, from the
  *    round's fork of the run seed (AC-PRA-04).
  *
  * Shapes, by difficulty:
@@ -199,14 +208,119 @@ function withoutTrueFalseOpener(
   return replaceWith(group, top, picker, refill, accept);
 }
 
-/** The opener (the easiest, never a true/false), then the rest shuffled. */
+const isComparison = (c: Candidate | undefined): boolean =>
+  c?.item.format === "comparison";
+
+/**
+ * The position of a comparison that directly follows another, or -1 (R3-12).
+ * With at most two comparisons in a run there is at most one such pair.
+ */
+export function backToBackComparison(
+  picks: readonly { item: PracticeItem }[],
+): number {
+  for (let i = 1; i < picks.length; i += 1) {
+    if (
+      picks[i]?.item.format === "comparison" &&
+      picks[i - 1]?.item.format === "comparison"
+    ) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+/**
+ * The opener (the easiest, never a true/false), then the rest shuffled,
+ * with the later of two back-to-back comparisons moved to a seeded place
+ * where neither neighbour is a comparison (R3-12). The opener stays first.
+ */
 function openerThenShuffled(
   group: readonly Candidate[],
   rng: Rng,
 ): Candidate[] {
   const opener = sorted(group, easiestFirst)[0];
   if (opener === undefined) return [];
-  return [opener, ...rng.shuffle(group.filter((c) => c !== opener))];
+  const picks = [opener, ...rng.shuffle(group.filter((c) => c !== opener))];
+  const at = backToBackComparison(picks);
+  const moving = picks[at];
+  if (moving === undefined) return picks;
+  const rest = picks.filter((_, i) => i !== at);
+  // Inserting at `slot` puts it between rest[slot - 1] and rest[slot].
+  const slots: number[] = [];
+  for (let slot = 1; slot <= rest.length; slot += 1) {
+    if (!isComparison(rest[slot - 1]) && !isComparison(rest[slot])) {
+      slots.push(slot);
+    }
+  }
+  const slot = slots[rng.int(slots.length)];
+  if (slot === undefined) return picks;
+  return [...rest.slice(0, slot), moving, ...rest.slice(slot)];
+}
+
+/**
+ * Where positions follow p (Mixed, the ramp), a comparison that would
+ * follow another gives way to the next acceptable item of `refill`, neither
+ * a comparison nor a true/false, and no staler than the comparison it
+ * replaces, so the run keeps its length, its bands and its freshness
+ * (R3-12, AC-PRA-05). Returns the group with the swap, or null when nothing
+ * fits.
+ */
+function swapOutComparison(
+  group: readonly Candidate[],
+  target: Candidate,
+  picker: Picker,
+  refill: readonly Candidate[],
+): Candidate[] | null {
+  if (!group.includes(target)) return null;
+  picker.release(target);
+  const [replacement] = takeFrom(
+    picker,
+    refill,
+    1,
+    // No staler than the target: freshness (AC-PRA-05) outranks spacing.
+    (c) => !isComparison(c) && c.item.format !== "tf" && c.tier <= target.tier,
+  );
+  if (replacement === undefined) {
+    picker.take(target);
+    return null;
+  }
+  return group.map((c) => (c === target ? replacement : c));
+}
+
+/**
+ * Mixed and the ramp: arranges the groups, and when two comparisons land
+ * back to back, swaps the later one (else the earlier one, unless that
+ * would leave a true/false opening the run) out of its group for another
+ * item of its refill, then arranges again (R3-12).
+ */
+function arrangeApart(
+  groups: Candidate[][],
+  refills: readonly (readonly Candidate[])[],
+  picker: Picker,
+  arrange: (groups: readonly Candidate[][]) => Candidate[],
+): Candidate[] {
+  const picks = arrange(groups);
+  const at = backToBackComparison(picks);
+  if (at < 0) return picks;
+  for (const target of [picks[at], picks[at - 1]]) {
+    if (target === undefined) continue;
+    const g = groups.findIndex((group) => group.includes(target));
+    const swapped = swapOutComparison(
+      groups[g] ?? [],
+      target,
+      picker,
+      refills[g] ?? [],
+    );
+    if (swapped === null) continue;
+    const next = groups.map((group, i) => (i === g ? swapped : group));
+    const result = arrange(next);
+    if (result[0]?.item.format !== "tf") return result;
+    // Undo: the swap left a true/false on top.
+    const replacement = swapped.find((c) => !groups[g]?.includes(c));
+    if (replacement !== undefined) picker.release(replacement);
+    picker.take(target);
+  }
+  return picks;
 }
 
 function eligibleItems(
@@ -358,18 +472,36 @@ function planMixed(
     }
   }
 
-  const tenth = sorted(medium, easiestFirst)[0];
-  const [hardest, second, ...others] = sorted(hard, hardestFirst);
-  const hardGroup: Candidate[] = [];
-  if (hardest !== undefined && second !== undefined) {
-    hardGroup.push(
-      ...(hardestAtEight ? [hardest, second] : [second, hardest]),
-      ...others,
+  const arrange = ([
+    easyPicks = [],
+    mediumPicks = [],
+    hardPicks = [],
+  ]: readonly Candidate[][]) => {
+    const tenth = sorted(mediumPicks, easiestFirst)[0];
+    const openingPicks = sorted(
+      [...easyPicks, ...sorted(mediumPicks, easiestFirst).slice(1)],
+      easiestFirst,
     );
-  } else if (hardest !== undefined) {
-    hardGroup.push(hardest);
-  }
-  const picks = [...opening(), ...hardGroup, ...(tenth ? [tenth] : [])];
+    const [hardest, second, ...others] = sorted(hardPicks, hardestFirst);
+    const hardGroup: Candidate[] = [];
+    if (hardest !== undefined && second !== undefined) {
+      hardGroup.push(
+        ...(hardestAtEight ? [hardest, second] : [second, hardest]),
+        ...others,
+      );
+    } else if (hardest !== undefined) {
+      hardGroup.push(hardest);
+    }
+    return [...openingPicks, ...hardGroup, ...(tenth ? [tenth] : [])];
+  };
+  // A swap draws from the item's own band only, so the run keeps 4 Easy,
+  // 4 Medium and 2 Hard (AC-PRA-13).
+  const picks = arrangeApart(
+    [easy, medium, hard],
+    [easyBand, mediumBand, hardBand],
+    picker,
+    arrange,
+  );
   return { picks, exhausted: false };
 }
 
@@ -417,7 +549,12 @@ function planRamp(
       (refills[first] ?? []).flat(),
     );
   }
-  const picks = groups.flatMap((group) => sorted(group, easiestFirst));
+  const picks = arrangeApart(
+    groups,
+    refills.map((sources) => sources.flat()),
+    picker,
+    (arranged) => arranged.flatMap((group) => sorted(group, easiestFirst)),
+  );
   return { picks, exhausted: false };
 }
 

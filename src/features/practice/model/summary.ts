@@ -29,7 +29,8 @@ export interface ResultRow {
   answer: string | null;
   /**
    * The player's pick, when it was wrong, as it reads after "You chose"
-   * (R1-25): "the Masons' Guild", "AD 45".
+   * (R1-25): "the Masons' Guild", "AD 45", and "True" as its option reads
+   * (R3-11).
    */
   chosen: string | null;
 }
@@ -54,11 +55,13 @@ export function resultRows(
       correct: question.correct,
       item,
       answer,
+      // A true/false pick keeps the option's own case, "You chose True."
+      // as the option reads (R3-11); other picks read mid-sentence.
       chosen:
         question.correct || pick === null || item === null
           ? null
           : item.format === "tf"
-            ? pick.toLowerCase()
+            ? pick
             : midSentence(pick, item.category),
     };
   });

@@ -27,12 +27,12 @@ async function startQuickPlay(page: Page) {
   await expect(stem(page)).toBeFocused();
 }
 
-/** The legend D20 asks for, for the options on screen. */
+/** The legend D20 asks for, in D28's words, for the options on screen. */
 async function expectedLegend(page: Page): Promise<string> {
   const count = await options(page).count();
   return count <= 2
-    ? "Keys A and B answer."
-    : `Keys A to ${count === 3 ? "C" : "D"} answer.`;
+    ? "Keys A and B answer at once."
+    : `Keys A to ${count === 3 ? "C" : "D"} answer at once.`;
 }
 
 /** Every option still open: nothing was answered. */
@@ -87,7 +87,7 @@ test.describe("RITE round 2: practice", () => {
     await expectNothingAnswered(page);
   });
 
-  test("R2-02 the legend shows under the options after the first key in them, and goes once the answer locks", async ({
+  test("R2-02 the legend shows above the options (R3-07) after the first key in them, and goes once the answer locks", async ({
     page,
   }) => {
     await startQuickPlay(page);
@@ -96,13 +96,13 @@ test.describe("RITE round 2: practice", () => {
     await page.keyboard.press("Tab");
     await expect(legend(page)).toBeVisible();
     await expect(legend(page)).toHaveText(await expectedLegend(page));
-    // Under the options, inside the question.
+    // Above the options, inside the question (R3-07).
     const list = await round(page).locator("[data-question] ol").boundingBox();
     const line = await legend(page).boundingBox();
     expect(list).not.toBeNull();
     expect(line).not.toBeNull();
     if (list !== null && line !== null) {
-      expect(line.y).toBeGreaterThanOrEqual(list.y + list.height);
+      expect(line.y + line.height).toBeLessThanOrEqual(list.y);
     }
     // It stays while focus moves between the options.
     await page.keyboard.press("Tab");

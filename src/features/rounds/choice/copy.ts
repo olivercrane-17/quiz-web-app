@@ -61,16 +61,18 @@ export const CHOICE_COPY = {
   /** Auto-advance's line on Continue, for screen readers. */
   autoAdvance: "Moving on by itself. Tap anywhere to stay.",
   /**
-   * The line under the options once a keyboard is in use (D20, R2-02): the
-   * badges' letters answer, one key per answer, while focus is on an
-   * option. The digits still follow D6 and go unsaid. It names only the
-   * letters on screen, so true/false and comparisons read "Keys A and B
-   * answer." and a three-option question "Keys A to C answer."
+   * The line above the options once a keyboard is in use (D20, R2-02; D28's
+   * words, R3-07): in practice one key answers at once, unlike the Daily's
+   * last clue, where a key chooses and Enter locks in. The badges' letters
+   * answer while focus is on an option; the digits still follow D6 and go
+   * unsaid. It names only the letters on screen (§25), so true/false and
+   * comparisons read "Keys A and B answer at once." and a three-option
+   * question "Keys A to C answer at once."
    */
   keysLegend: (options: number) =>
     options <= 2
-      ? "Keys A and B answer."
-      : `Keys A to ${options === 3 ? "C" : "D"} answer.`,
+      ? "Keys A and B answer at once."
+      : `Keys A to ${options === 3 ? "C" : "D"} answer at once.`,
 } as const;
 
 /** The Wikipedia search the "Learn more" link opens (PRD §3.0.3). */
