@@ -23,9 +23,11 @@
  * - The row never runs wider than the screen (R1-03): the progress shrinks
  *   first (the Daily's pills give up their spare width), and the end slot
  *   keeps its size.
- * - With an end slot, hiding the stopwatch is said aloud (`StopwatchChoice`,
- *   R3-09). The stopwatch itself renders nothing once its route is hidden
- *   (`@/ui/stopwatch`), so a results page carries no "Time so far" region.
+ * - The stopwatch in its end slot renders nothing once its route is hidden
+ *   (`@/ui/stopwatch`), so a results page carries no "Time so far" region
+ *   (R3-09); hiding it is said aloud by the play layout's
+ *   `StopwatchChoice`, not here, since this module reaches every route
+ *   that imports the shell's barrel, Today included.
  */
 import type { Route } from "next";
 import Link from "next/link";
@@ -36,7 +38,6 @@ import { buttonClasses } from "@/ui/button-classes";
 import { CrossIcon } from "@/ui/icons";
 
 import { ScrollInset } from "./scroll-inset";
-import { StopwatchChoice } from "./stopwatch-choice";
 
 export interface PlayHeaderProps {
   leave: {
@@ -72,12 +73,7 @@ export function PlayHeader({ leave, progress, end, below }: PlayHeaderProps) {
           <CrossIcon size={24} />
         </Link>
         <div className="kn-playbar-progress">{progress}</div>
-        {end === undefined ? null : (
-          <div className="kn-playbar-end">
-            {end}
-            <StopwatchChoice />
-          </div>
-        )}
+        {end === undefined ? null : <div className="kn-playbar-end">{end}</div>}
       </div>
       {below === undefined ? null : (
         <div className="kn-playbar-below">{below}</div>

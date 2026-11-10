@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { getSettingsStore } from "@/platform/settings/store";
 import { LIVE_REGION_IDS, clearAnnouncements } from "@/ui/announce";
 
-import { PlayHeader } from "./play-header";
+import PlayLayout from "./routes/play-layout";
 
 const polite = () => document.getElementById(LIVE_REGION_IDS.polite);
 
@@ -15,18 +15,17 @@ afterEach(() => {
   clearAnnouncements();
 });
 
-function header(end?: boolean) {
+function playScreen() {
   return (
-    <PlayHeader
-      leave={{ href: "/", label: "Leave the Daily" }}
-      end={end === true ? <button type="button">More</button> : undefined}
-    />
+    <PlayLayout>
+      <main>A play screen</main>
+    </PlayLayout>
   );
 }
 
 describe("StopwatchChoice", () => {
   it("R3-09 says 'Stopwatch hidden. Show it again from More.' when Hide stopwatch hides it", () => {
-    render(header(true));
+    render(playScreen());
     act(() => {
       getSettingsStore().update({ stopwatch: "hidden" });
     });
@@ -35,21 +34,15 @@ describe("StopwatchChoice", () => {
     );
   });
 
-  it("R3-09 says nothing when the stopwatch comes back, or for a header with no end slot", () => {
+  it("R3-09 says nothing when the stopwatch comes back, or for a Daily opened with it hidden", () => {
     act(() => {
       getSettingsStore().update({ stopwatch: "hidden" });
     });
     // A Daily that opens with it already hidden says nothing either.
-    const { unmount } = render(header(true));
+    render(playScreen());
+    expect(polite()?.textContent ?? "").toBe("");
     act(() => {
       getSettingsStore().update({ stopwatch: "shown" });
-    });
-    expect(polite()?.textContent ?? "").toBe("");
-    unmount();
-
-    render(header(false));
-    act(() => {
-      getSettingsStore().update({ stopwatch: "hidden" });
     });
     expect(polite()?.textContent ?? "").toBe("");
   });

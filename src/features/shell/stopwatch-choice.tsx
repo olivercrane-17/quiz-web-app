@@ -6,13 +6,11 @@
  * removed it without a word, so a screen reader heard focus land on More
  * and nothing about what had changed.
  *
- * The play header renders it beside its end slot, where the stopwatch and
- * the More menu live; the screen keeps the choice in the settings store,
- * and this listens there, so the screen needs no change of its own. It
- * speaks only for a change made while it is mounted, so loading a Daily
- * with the stopwatch already hidden says nothing. A hidden route's copy
- * stops listening as Next hides it (its effects are cleaned up), so one
- * choice is said once. It renders nothing.
+ * The (play) layout renders it once, for every play screen; the screen
+ * keeps the choice in the settings store, and this listens there, so the
+ * screen needs no change of its own. It speaks only for a change made
+ * while it is mounted, so loading a Daily with the stopwatch already
+ * hidden says nothing. It renders nothing.
  */
 import { useEffect } from "react";
 
