@@ -1,0 +1,67 @@
+{
+  "id": "p.lang.0301",
+  "status": "draft",
+  "format": "mc",
+  "category": "lang",
+  "tags": ["alphabets", "radio", "spelling-alphabets", "aviation"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 2,
+  "counterintuitive": false,
+  "stem": "In the NATO phonetic alphabet, used by pilots and radio operators, which word stands for the letter X?",
+  "answer": "X-ray",
+  "wrong": ["Xylophone", "Xenon", "Xanthippe"],
+  "order": "shuffle",
+  "explanation": "Two of its words are spelled oddly on purpose: Alfa, because some speakers would not read 'ph' as f, and Juliett, so French speakers sound the final t.",
+  "learnMore": "NATO phonetic alphabet",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "standard",
+      "text": "In the NATO (ICAO radiotelephony) spelling alphabet, the code word for the letter X is X-ray, written Xray in some versions."
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "high",
+      "text": "Xylophone, Xenon and Xanthippe are not the NATO code word for X; Xanthippe was the X word of an older international alphabet of the 1920s.",
+      "riskReason": "date"
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The NATO alphabet spells Alfa without 'ph' because speakers unfamiliar with English spelling might not pronounce 'ph' as f."
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The NATO alphabet spells Juliett with a double t so that French speakers do not treat a single final t as silent."
+    },
+    {
+      "id": "c5",
+      "role": "explanation",
+      "risk": "standard",
+      "text": "The prescribed spellings Alfa and Juliett are deliberate, not errors."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 5 listed; the two spelling reasons are high (etymology), c2 high (date, it names the 1920s alphabet), the key and c5 standard. datasets: no pinned dataset covers spelling alphabets. One WebSearch, 'NATO phonetic alphabet why Alfa and Juliett spelled that way': the Wikipedia NATO phonetic alphabet article (Tier B) says Alfa and Juliett are spelled to avoid mispronunciation by people unfamiliar with English orthography, Juliett's tt for French speakers who may treat a single final t as silent, and that NATO writes X-ray as Xray. rivalTest: argued for Xanthippe, the X word of the 1927 international alphabet, but the stem names NATO, whose word is X-ray in ICAO's list and Xray in NATO's own spelling; both are the same word, so the key holds. Xylophone and Xenon are plausible guesses with no standing. volatility: evergreen, the alphabet has been fixed since the 1950s; no time words. regional: used in aviation and radio worldwide and widely heard in films. style: Oxford spelling, straight quotes, explanation 28 words. myths: screened against myths.json, no match. mystery and encore: nothing of either kind in a practice item. doubts: the Xray spelling in NATO documents is a variant of the same word; noted in c1. Checked against every Daily item with content:dedupe."
+}

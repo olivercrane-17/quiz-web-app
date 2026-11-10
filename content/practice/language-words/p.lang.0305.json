@@ -1,0 +1,61 @@
+{
+  "id": "p.lang.0305",
+  "status": "draft",
+  "format": "mc",
+  "category": "lang",
+  "tags": ["wordplay", "grammar", "greek", "puzzles"],
+  "region": "global",
+  "volatility": "evergreen",
+  "reviewBy": null,
+  "seededDifficulty": 1,
+  "counterintuitive": false,
+  "stem": "What is the name for a word made by rearranging the letters of another, as 'silent' is from 'listen'?",
+  "answer": "Anagram",
+  "wrong": ["Palindrome", "Homophone", "Acronym"],
+  "order": "shuffle",
+  "explanation": "Rearranged, 'dormitory' gives 'dirty room' and 'astronomer' gives 'moon starer'. The word comes from Greek ana, 'back' or 'anew', and gramma, 'letter'.",
+  "learnMore": "Anagram",
+  "claims": [
+    {
+      "id": "c1",
+      "role": "key",
+      "risk": "high",
+      "text": "A word formed by rearranging the letters of another word is called an anagram, and 'silent' is an anagram of 'listen'.",
+      "riskReason": "quotation"
+    },
+    {
+      "id": "c2",
+      "role": "distractor",
+      "risk": "standard",
+      "text": "A palindrome reads the same backwards, a homophone sounds like another word, and an acronym is formed from initial letters; none is a rearrangement."
+    },
+    {
+      "id": "c3",
+      "role": "explanation",
+      "risk": "high",
+      "text": "'Dormitory' and 'dirty room' use exactly the same letters, as do 'astronomer' and 'moon starer'.",
+      "riskReason": "quotation"
+    },
+    {
+      "id": "c4",
+      "role": "explanation",
+      "risk": "high",
+      "riskReason": "etymology",
+      "text": "The word anagram comes from Greek ana, 'back' or 'anew', and gramma, 'letter'."
+    }
+  ],
+  "selfCheck": {
+    "lint": true,
+    "claims": true,
+    "datasets": true,
+    "rivalTest": true,
+    "volatility": true,
+    "regional": true,
+    "style": true,
+    "myths": true,
+    "mystery": true,
+    "encore": true,
+    "doubts": true
+  },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 4 listed; the etymology is high, c1 and c3 high at the quotation floor; the letter counts are a calculation anyone can redo. I counted twice: listen and silent each have e, i, l, n, s, t; dormitory and dirty room each have d, i, m, t, y once and o, r twice (9 letters); astronomer and moon starer each have a, e, m, n, s, t once and o, r twice (10 letters). datasets: none covers wordplay. rivalTest: palindrome, homophone and acronym are the word-type names players mix up; none means a rearrangement, so the key stands. volatility: evergreen. regional: the term is taught in schools and puzzles everywhere English is used. style: Oxford spelling, straight quotes, explanation 22 words. myths: no match. mystery and encore: not applicable. doubts: the bank already has a palindrome item (anagram is a distractor there) and homophone and acronym items; this one asks for a different term, so it is not a duplicate. Checked against every Daily item with content:dedupe."
+}
