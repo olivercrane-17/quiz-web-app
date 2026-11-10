@@ -216,8 +216,11 @@ test.describe("Wave 1 exit", () => {
     });
     await page.goto("/daily");
     const round = page.locator("[data-round-area]");
-    // MysteryRound's own position line: "Mystery 2 of 3", then its difficulty.
-    await expect(round.getByText(/^Mystery 2 of 3/)).toBeVisible();
+    // MysteryRound's own position line, as drawn: "Mystery 2 of 3". Screen
+    // readers get one hidden name beside it, "Mystery 2 of 3, Medium" (R3-09).
+    await expect(
+      round.getByText("Mystery 2 of 3", { exact: true }),
+    ).toBeVisible();
     await expect(round.getByRole("heading", { name: /clue 2/i })).toBeVisible();
     await expect(round.getByText(/Not Ostravia/)).toHaveCount(1);
     const actions = () =>
@@ -236,7 +239,9 @@ test.describe("Wave 1 exit", () => {
     const before = await actions();
 
     await page.reload();
-    await expect(round.getByText(/^Mystery 2 of 3/)).toBeVisible();
+    await expect(
+      round.getByText("Mystery 2 of 3", { exact: true }),
+    ).toBeVisible();
     await expect(round.getByRole("heading", { name: /clue 2/i })).toBeVisible();
     await expect(round.getByRole("heading", { name: /clue 3/i })).toHaveCount(
       0,
@@ -274,7 +279,9 @@ test.describe("RITE round 1 across the whole Daily", () => {
     await page.getByRole("option", { name: /Odile Marsh/ }).click();
     await round.getByRole("button", { name: "Guess", exact: true }).click();
     await page.getByRole("button", { name: "Next mystery" }).click();
-    await expect(round.getByText(/^Mystery 2 of 3/)).toBeVisible();
+    await expect(
+      round.getByText("Mystery 2 of 3", { exact: true }),
+    ).toBeVisible();
     await expect(round.getByRole("heading", { name: /clue 1/i })).toBeVisible();
     await page.clock.fastForward(30_000);
     // DS-1's stopwatch reads "Time so far" to screen readers before the time.
@@ -282,7 +289,9 @@ test.describe("RITE round 1 across the whole Daily", () => {
     await expect(watch).toHaveText(/\b2:0[0-2]$/);
 
     await page.reload();
-    await expect(round.getByText(/^Mystery 2 of 3/)).toBeVisible();
+    await expect(
+      round.getByText("Mystery 2 of 3", { exact: true }),
+    ).toBeVisible();
     // Not 0:00: the server's figure for both rounds came back with the page.
     await expect(watch).toHaveText(/\b2:0[0-3]$/);
   });
