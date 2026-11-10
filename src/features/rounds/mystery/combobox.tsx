@@ -701,7 +701,7 @@ export function GuessCombobox({
                 // The placeholder is set smaller than the typed name, so the
                 // longest short noun (D14) fits beside Guess at 360 px; a
                 // narrow field draws its own, which can wrap (above).
-                "absolute inset-0 w-full truncate rounded-none border-0 bg-transparent pt-[1.375rem] pr-1 pb-1 pl-2.5 text-[1.1875rem] font-bold outline-none placeholder:text-[0.9375rem] placeholder:font-semibold placeholder:opacity-60 @max-[18em]/guess:placeholder:text-transparent",
+                "absolute inset-0 w-full truncate rounded-none border-0 bg-transparent pt-[1.375rem] pr-1 pb-1 pl-2.5 text-[1.1875rem] font-bold outline-none placeholder:text-[0.9375rem] placeholder:font-semibold @max-[18em]/guess:placeholder:text-transparent",
                 TONE.ink,
               )}
             />

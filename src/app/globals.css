@@ -927,10 +927,10 @@
   /* Placeholder text holds 4.5:1 on every surface a field sits on, in both
    * themes (WCAG 1.4.3; RITE round 2, R2-28). Tailwind's preflight mixes it
    * from half the text colour, about 3.3:1 on cream, and that is what the
-   * guess field showed. A field's own placeholder utility still wins: the
-   * Mystery's guess field adds `placeholder:opacity-60` (2.6:1 light, 3.1:1
-   * dark) until FIX2-MYS drops it; e2e/ui/rite-2.spec.ts holds that check
-   * as fixme. */
+   * guess field showed. A field's own placeholder utility would still win,
+   * so no field adds a placeholder opacity (the Mystery's guess field
+   * dropped its `placeholder:opacity-60`, 2.6:1 light, 3.1:1 dark);
+   * e2e/ui/rite-2.spec.ts checks what shows. */
   ::placeholder {
     color: var(--kn-ink-3);
   }

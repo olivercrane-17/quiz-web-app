@@ -16,14 +16,12 @@
  * - R2-07: Groups, Me and Settings each say what's coming there and what
  *   works now, instead of "This part of Knewt isn't ready yet."
  * - R2-17: question and option text is never split with a hyphen, at 200%
- *   text on a phone included. The Mystery's clue text, where the personas
- *   met it, sets its own `hyphens-auto` (FIX2-MYS's ladder.tsx): that check
- *   is fixme until FIX2-MYS merges.
+ *   text on a phone included, the Mystery's clue text too, where the
+ *   personas met it (FIX2-MYS's ladder.tsx sets `hyphens-manual`).
  * - R2-28: the guess field Sam measured takes its placeholder colour
  *   from the design system (ink-3, 4.5:1 on its frame), and practice's
- *   empty segments have a 3:1 edge. The field also adds its own
- *   `placeholder:opacity-60` (FIX2-MYS's combobox.tsx), so the shown
- *   placeholder's contrast is fixme until FIX2-MYS merges.
+ *   empty segments have a 3:1 edge. The field adds no opacity of its own,
+ *   so the placeholder shows at that contrast.
  * - R2-34: Settings marks no tab.
  */
 import type { Locator, Page } from "@playwright/test";
@@ -564,9 +562,8 @@ test.describe("R2-17 no hyphens in questions and options", () => {
   });
 
   // The reproductions ("This fix- / ture coun- / try", "Its ti- / tle")
-  // are clue text, which sets its own `hyphens-auto` in FIX2-MYS's
-  // ladder.tsx; FIX2-MYS's lane changes it to `hyphens-manual`.
-  test.fixme("R2-17 every clue's title, body and note keeps its words whole, at 390×844 with 200% text (until FIX2-MYS merges)", async ({
+  // are clue text, which FIX2-MYS's ladder.tsx sets with `hyphens-manual`.
+  test("R2-17 every clue's title, body and note keeps its words whole, at 390×844 with 200% text", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -614,11 +611,11 @@ test.describe("R2-17 no hyphens in questions and options", () => {
 });
 
 test.describe("R2-28 contrast", () => {
-  // The field Sam measured: FIX2-MYS's combobox.tsx adds
-  // `placeholder:opacity-60` over globals.css's ink-3, 2.6:1 in light and
-  // 3.1:1 in dark; without it, 6.3:1 and 6.0:1.
+  // The field Sam measured: combobox.tsx once added `placeholder:opacity-60`
+  // over globals.css's ink-3, 2.6:1 in light and 3.1:1 in dark; without
+  // it, 6.3:1 and 6.0:1.
   for (const scheme of ["light", "dark"] as const) {
-    test.fixme(`R2-28 the Daily's guess field shows its placeholder at 4.5:1 on its frame, in the ${scheme} theme (until FIX2-MYS merges)`, async ({
+    test(`R2-28 the Daily's guess field shows its placeholder at 4.5:1 on its frame, in the ${scheme} theme`, async ({
       page,
     }) => {
       await page.emulateMedia({ colorScheme: scheme });
@@ -655,8 +652,8 @@ test.describe("R2-28 contrast", () => {
   }
 
   // The half DS owns, on the real field: the placeholder's colour comes
-  // from globals.css's `::placeholder` (ink-3), not from the round. Its
-  // opacity is the round's own utility and is the fixme above.
+  // from globals.css's `::placeholder` (ink-3), not from the round. The
+  // test above checks what shows, opacity included.
   for (const scheme of ["light", "dark"] as const) {
     test(`R2-28 the Daily's guess field takes its placeholder colour from the design system, 4.5:1 on its frame before any opacity of its own, in the ${scheme} theme`, async ({
       page,
