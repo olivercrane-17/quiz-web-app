@@ -6,6 +6,11 @@
  * a request outside fetch's default mode under this policy), and LGL-1's
  * credits page, whose licence texts and contents links must still work.
  * Each page arrives with the policy, and nothing it loads carries a Referer.
+ *
+ * A WebKit that keeps no Secure cookie on the suite's http://127.0.0.1
+ * (ARCHITECTURE §9.3's test note) leaves out only the check that the
+ * backup cookie was stored (`keepsSecureCookieHere`); the POST's Origin,
+ * its missing Referer and its 204 are asserted in every browser.
  */
 import type { Page, Request } from "@playwright/test";
 
@@ -32,11 +37,43 @@ function watchReferers(page: Page): () => Promise<string[]> {
   };
 }
 
+/**
+ * Whether this browser keeps a Secure cookie on the suite's
+ * http://127.0.0.1 (ARCHITECTURE §9.3's test note). Chromium and Firefox
+ * do, so they always assert the backup cookie; a WebKit that doesn't can
+ * never hold `__Host-pid` here, so only that assertion is left out, noted
+ * on the test, and the launch report's iPhone check covers it (production
+ * is https). The probe sets and expires a cookie of its own from the page,
+ * touching neither the app's storage nor its cookie.
+ */
+async function keepsSecureCookieHere(
+  page: Page,
+  browserName: string,
+): Promise<boolean> {
+  if (browserName !== "webkit") return true;
+  const kept = await page.evaluate(() => {
+    document.cookie = "__Host-qz-probe=1; Secure; Path=/; SameSite=Lax";
+    const stored = document.cookie.includes("__Host-qz-probe=1");
+    document.cookie =
+      "__Host-qz-probe=; Max-Age=0; Secure; Path=/; SameSite=Lax";
+    return stored;
+  });
+  if (!kept) {
+    test.info().annotations.push({
+      type: "webkit-cookie-gap",
+      description:
+        "WebKit keeps no Secure cookie on http://127.0.0.1: the backup cookie assertion runs on Chromium and Firefox (ARCHITECTURE §9.3)",
+    });
+  }
+  return kept;
+}
+
 test.describe("Referrer-Policy: no-referrer on round 5's pages", () => {
   test("IDN-2's sync code shows at /me/sync, and a restore at /restore posts the backup cookie with the page's Origin and no Referer", async ({
     page,
     context,
     baseURL,
+    browserName,
   }) => {
     // Another device in this context, its own namespace, has played today.
     const other = await context.newPage();
@@ -74,9 +111,10 @@ test.describe("Referrer-Policy: no-referrer on round 5's pages", () => {
     expect((await request.response())?.status()).toBe(204);
     // Today took over, as the restored player, with its note.
     await expect(page.locator("[data-restore-notice] p")).toBeVisible();
-    expect((await context.cookies()).map((cookie) => cookie.name)).toEqual([
-      "__Host-pid",
-    ]);
+    const cookies = (await context.cookies()).map((cookie) => cookie.name);
+    expect(cookies).toEqual(
+      (await keepsSecureCookieHere(page, browserName)) ? ["__Host-pid"] : [],
+    );
     expect(await referers()).toEqual([]);
   });
 

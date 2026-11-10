@@ -12,7 +12,10 @@
  * the focus and is announced.
  *
  * Device namespaces never touch the backup cookie (§9.1), so the cookie
- * test restores on the page's own, unnamespaced device.
+ * test restores on the page's own, unnamespaced device. A WebKit that keeps
+ * no Secure cookie on the suite's http://127.0.0.1 (ARCHITECTURE §9.3's
+ * test note) skips only that test's cookie assertion
+ * (`keepsSecureCookieHere`); the POST, its 204 and the restore still run.
  */
 import type { BrowserContext, Page } from "@playwright/test";
 
@@ -20,6 +23,37 @@ import { expect, test } from "../fixtures";
 import { expectNoSeriousAxe } from "../support/axe";
 import { setDevice } from "../support/devices";
 import { mockInit } from "../support/mock";
+
+/**
+ * Whether this browser keeps a Secure cookie on the suite's
+ * http://127.0.0.1 (ARCHITECTURE §9.3's test note). Chromium and Firefox
+ * do, so they always assert the backup cookie; a WebKit that doesn't can
+ * never hold `__Host-pid` here, so only that assertion is left out, noted
+ * on the test, and the launch report's iPhone check covers it (production
+ * is https). The probe sets and expires a cookie of its own from the page,
+ * touching neither the app's storage nor its cookie.
+ */
+async function keepsSecureCookieHere(
+  page: Page,
+  browserName: string,
+): Promise<boolean> {
+  if (browserName !== "webkit") return true;
+  const kept = await page.evaluate(() => {
+    document.cookie = "__Host-qz-probe=1; Secure; Path=/; SameSite=Lax";
+    const stored = document.cookie.includes("__Host-qz-probe=1");
+    document.cookie =
+      "__Host-qz-probe=; Max-Age=0; Secure; Path=/; SameSite=Lax";
+    return stored;
+  });
+  if (!kept) {
+    test.info().annotations.push({
+      type: "webkit-cookie-gap",
+      description:
+        "WebKit keeps no Secure cookie on http://127.0.0.1: the backup cookie assertion runs on Chromium and Firefox (ARCHITECTURE §9.3)",
+    });
+  }
+  return kept;
+}
 
 /** The seed whose first code holds both a 1 and a 0 (AC-SYN-02's I and O). */
 const CODE_SEED = "ac-syn-02-0";
@@ -321,6 +355,7 @@ test.describe("sync codes (PRD §3.10.2)", () => {
   test("a restore posts the restored identity to the backup cookie", async ({
     page,
     context,
+    browserName,
   }) => {
     const a = await deviceIn(context, "phone-a", { finished: true });
     const code = await makeCode(a);
@@ -337,10 +372,15 @@ test.describe("sync codes (PRD §3.10.2)", () => {
     const restored = await identityOf(page, null);
     expect(restored).toMatchObject({ playerId, source: "sync" });
     const cookies = await context.cookies();
-    expect(cookies.map((cookie) => cookie.name)).toEqual(["__Host-pid"]);
-    expect(cookies[0]?.value).toBe(
-      `v1.${restored?.playerId}.${restored?.secret}`,
-    );
+    if (await keepsSecureCookieHere(page, browserName)) {
+      expect(cookies.map((cookie) => cookie.name)).toEqual(["__Host-pid"]);
+      expect(cookies[0]?.value).toBe(
+        `v1.${restored?.playerId}.${restored?.secret}`,
+      );
+    } else {
+      // Still no other cookie (AC-CKE-04).
+      expect(cookies).toEqual([]);
+    }
   });
 
   test("a wrong code says so, and the sixth failure in 15 minutes says to wait", async ({
