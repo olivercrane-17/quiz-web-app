@@ -15,6 +15,7 @@ import {
   accessibilityDocument,
 } from "@/features/legal/documents/accessibility";
 import { howScoringWorksDocument } from "@/features/legal/documents/how-scoring-works";
+import { privacyDocument } from "@/features/legal/documents/privacy";
 import { termsDocument } from "@/features/legal/documents/terms";
 
 import {
@@ -148,5 +149,31 @@ describe("the help pages promise only what exists (RITE round 3, R3-06)", () => 
     ).join("\n");
     expect(built).not.toMatch(/coming later/);
     expect(built).toContain("delete your data in Settings");
+  });
+
+  it("R3-06 the privacy page marks Download my data and Delete my data as coming later until Settings is built, and says who to email meanwhile", () => {
+    const privacy = (shipped?: { settings: boolean }) =>
+      textOf(privacyDocument(noFlags, shipped)).join("\n");
+    const now = privacy();
+    expect(now).not.toMatch(/at any time in Settings/);
+    expect(now).not.toMatch(/Settings has two buttons/);
+    expect(now).toContain(
+      "Downloading and deleting your data from Settings is coming later. Until then, email",
+    );
+    expect(now).toContain("Taking or deleting your data (coming later)");
+    expect(now).toContain("Settings will have two buttons for this.");
+    // The retention list names no button nobody can press.
+    expect(now).not.toMatch(/Delete my data clears this device/);
+    // What the buttons will do stays written out.
+    expect(now).toContain("**Download my data**");
+    expect(now).toContain("**Delete my data**");
+    // SET-1 builds Settings, and nothing is marked.
+    const built = privacy({ settings: true });
+    expect(built).not.toMatch(/coming later/);
+    expect(built).toContain(
+      "You can download or delete your data at any time in Settings.",
+    );
+    expect(built).toContain("Settings has two buttons for this:");
+    expect(built).toContain("Delete my data clears this device");
   });
 });

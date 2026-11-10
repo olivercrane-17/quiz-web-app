@@ -288,4 +288,16 @@ test.describe("R3-06 the help pages promise only what exists", () => {
       "Sharing a quiz you made, or hosting one in a room, needs you to be 18 or older.",
     );
   });
+
+  test("R3-06 the privacy page marks downloading and deleting from Settings as coming later", async ({
+    page,
+  }) => {
+    const text = await mainText(page, "/privacy");
+    expect(text).toContain(
+      "Downloading and deleting your data from Settings is coming later.",
+    );
+    expect(text).toContain("Taking or deleting your data (coming later)");
+    expect(text).not.toContain("at any time in Settings");
+    expect(text).not.toContain("Settings has two buttons");
+  });
 });

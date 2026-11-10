@@ -17,6 +17,12 @@
  * anonymous counts. Download my data says what `export_json` holds today:
  * reports, hearts, the practice bitset and events have no export hook yet
  * (a follow-up for SQL-9 and SQL-10, so AC-DAT-01 can hold).
+ *
+ * The page promises only what the app shows (RITE round 3, R3-06, as the
+ * Terms and the accessibility statement do): until SET-1 builds Settings,
+ * Download my data and Delete my data are marked "coming later", with the
+ * contact address as the way to ask meanwhile. What the two buttons will
+ * do stays written out, since the retention list leans on it.
  */
 import type { FeatureFlag } from "@/config/features";
 import { TUNABLES } from "@/config/tunables";
@@ -25,6 +31,7 @@ import { BACKUP_COOKIE_NAME } from "@/platform/identity/cookie";
 import { CONTACT_LINK } from "../copy";
 import { legalDate, sectionHref, type LegalDocument } from "../document";
 import { SHELL_COPY } from "@/features/shell";
+import { SETTINGS_CONTROLS } from "./accessibility";
 
 /** One line of the storage list: the key as code, then what it holds. */
 export interface StorageLine {
@@ -146,6 +153,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 export function privacyDocument(
   flags: (flag: FeatureFlag) => boolean,
+  shipped: { settings: boolean } = { settings: SETTINGS_CONTROLS },
 ): LegalDocument {
   const rooms = flags("rooms");
   const editor = flags("editor");
@@ -154,7 +162,7 @@ export function privacyDocument(
   return {
     path: "/privacy",
     title: SHELL_COPY.legal.privacy,
-    updated: legalDate("2026-11-05"),
+    updated: legalDate("2026-11-10"),
     lede: [
       "Knewt works without an account. We never ask for your name, email, phone number or birthday, and the app has no ads and no trackers.",
       "This page lists what we do keep and why, where it lives, how long it stays and how you can take it with you or delete it.",
@@ -171,7 +179,9 @@ export function privacyDocument(
               "We keep your Daily games and your stats on our server, so they survive a cleared browser and can move to a new device.",
               "There is one cookie, and its only job is to back up your profile. No analytics or advertising cookie, ever.",
               "Our own analytics count things like finished Dailies and shares. They go to our own database and nowhere else.",
-              "You can download or delete your data at any time in Settings.",
+              shipped.settings
+                ? "You can download or delete your data at any time in Settings."
+                : `Downloading and deleting your data from Settings is coming later. Until then, email ${CONTACT_LINK} and we'll help.`,
             ],
           },
         ],
@@ -330,7 +340,9 @@ export function privacyDocument(
               "Analytics events: 7 days, then only daily totals with no player id in them.",
               "Daily games: the round-by-round detail for 30 days, then only the totals and the share code. Each game is deleted 400 days after it ends. Your streak history and stats totals stay with your profile.",
               "Report notes: 180 days.",
-              "Your list of answered practice questions: 180 days after your last practice answer. If you've only played Practice, Delete my data clears this device, and the list on our server goes 180 days after your last answer.",
+              shipped.settings
+                ? "Your list of answered practice questions: 180 days after your last practice answer. If you've only played Practice, Delete my data clears this device, and the list on our server goes 180 days after your last answer."
+                : "Your list of answered practice questions: 180 days after your last practice answer.",
               ...(rooms ? ["Rooms (Beta): 24 hours after the room ends."] : []),
               "IP address hashes: unreadable after 48 hours, once their salt is deleted.",
               "The backup cookie: 400 days from the last time it was renewed.",
@@ -341,11 +353,15 @@ export function privacyDocument(
       },
       {
         id: "your-data",
-        heading: "Taking or deleting your data",
+        heading: shipped.settings
+          ? "Taking or deleting your data"
+          : "Taking or deleting your data (coming later)",
         blocks: [
           {
             kind: "p",
-            text: "Settings has two buttons for this:",
+            text: shipped.settings
+              ? "Settings has two buttons for this:"
+              : `Settings will have two buttons for this. They are coming later; until then, email ${CONTACT_LINK} and we'll help.`,
           },
           {
             kind: "list",
