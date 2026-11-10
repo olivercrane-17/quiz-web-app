@@ -10,10 +10,11 @@
  * The line (RITE round 2, R2-07): a stub may pass its own. Otherwise a
  * destination the shell draws takes its line from `SHELL_COPY.comingSoon`
  * by its title, so Groups says what to do with a result until Groups
- * exist, and Settings where Hide stopwatch is. Those stubs belong to the
- * tickets that build the pages (GRP-1, STA-1, SET-1), and the title they
- * pass already names the destination. Anything else says it isn't ready
- * yet.
+ * exist, and Settings where Hide stopwatch is. The per-user shells a link
+ * opens (a group's board, a challenge, a room, a shared quiz) have lines
+ * too. Those stubs belong to the tickets that build the pages (GRP-1,
+ * STA-1, SET-1 and the rest), and the title they pass already names the
+ * destination. Anything else says it isn't ready yet.
  */
 import Link from "next/link";
 import type { ReactNode } from "react";

@@ -377,6 +377,33 @@ test.describe("R2-07 placeholders say what's coming", () => {
   });
 });
 
+test.describe("R2-07 a link's placeholder says what's coming too", () => {
+  test("R2-07 a group's board and a challenge, opened from a link, each say what's coming and what works now", async ({
+    page,
+  }) => {
+    const LINKS = [
+      [
+        "/g/abc123",
+        "Group board",
+        "Group boards come with Groups. Until then, compare results in your group chat.",
+      ],
+      [
+        "/c/abc123",
+        "Challenge",
+        "Challenges are on the way. Until then, send a friend your Daily result.",
+      ],
+    ] as const;
+    for (const [path, title, line] of LINKS) {
+      await page.goto(path);
+      const main = page.getByRole("main");
+      await expect(
+        main.getByRole("heading", { level: 1, name: title }),
+      ).toBeVisible();
+      await expect(main.locator("[data-placeholder-line]")).toHaveText(line);
+    }
+  });
+});
+
 test.describe("R2-17 no hyphens in questions and options", () => {
   test("R2-17 practice's question and options are never split with a hyphen, at 200% text on a phone", async ({
     page,

@@ -1,4 +1,4 @@
-import { readdirSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 
 import { screen, within } from "@testing-library/react";
@@ -15,6 +15,7 @@ import { SHELL_COPY } from "./copy";
 import { LEGAL_LINKS } from "./footer";
 import { NOT_FOUND_METADATA } from "./not-found-metadata";
 import { PagePlaceholder, placeholderLine } from "./page-placeholder";
+import { SHELL_ROUTES, shellPath } from "./shell-routes";
 import { TABS } from "./tabs";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/no-such-page" }));
@@ -136,8 +137,48 @@ describe("every destination the shell draws", () => {
     // Its own line, never another's, and never the general one.
     expect(new Set(lines.values()).size).toBe(lines.size);
     expect([...lines.values()]).not.toContain(SHELL_COPY.notReady);
-    // Every line belongs to a destination that is still a placeholder, so
-    // none is left over once its page is built (GRP-1, STA-1, SET-1).
+  });
+
+  /**
+   * The per-user shells (ARCHITECTURE §10.1) whose route module is still a
+   * stub, by address, with the title the stub passes: a link opens one of
+   * them before its feature ships. Read from the source, because a Beta
+   * stub is the not-found page while its flag is off.
+   */
+  const shellStubs = new Map<string, string>();
+  for (const route of SHELL_ROUTES) {
+    const href = shellPath(route.shell);
+    const page = routes.get(href);
+    if (page === undefined) throw new Error(`no page for ${href}`);
+    const target = /from "@\/(.+?)"/.exec(readFileSync(page.file, "utf8"));
+    if (target === null) continue;
+    const source = readFileSync(
+      join(process.cwd(), "src", `${target[1]}.tsx`),
+      "utf8",
+    );
+    const title = /<PagePlaceholder\s+title="([^"]+)"/.exec(source);
+    if (title !== null) shellStubs.set(href, title[1]);
+  }
+
+  it("R2-07 each placeholder shell a link opens has its own line too, never the general one", async () => {
+    expect(shellStubs.size).toBeGreaterThan(0);
+    for (const [href, title] of shellStubs) {
+      expect(placeholderLine(title), href).not.toBe(SHELL_COPY.notReady);
+      const page = routes.get(href);
+      if (page === undefined) throw new Error(`no page for ${href}`);
+      const { default: Page, metadata } = await loadPage(page.file);
+      // A Beta stub with its flag off is the not-found page, with no line.
+      if (metadata === NOT_FOUND_METADATA) continue;
+      const { container, unmount } = renderWithUser(<Page />);
+      expect(
+        container.querySelector("[data-placeholder-line]")?.textContent,
+        href,
+      ).toBe(placeholderLine(title));
+      unmount();
+    }
+  });
+
+  it("R2-07 every line belongs to a page that is still a placeholder, one line each, so none is left over once its page is built", async () => {
     const titles = await Promise.all(
       PLACEHOLDERS.map(async (href) => {
         const page = routes.get(href);
@@ -145,7 +186,11 @@ describe("every destination the shell draws", () => {
         return String((await loadPage(page.file)).metadata?.title);
       }),
     );
-    expect(Object.keys(SHELL_COPY.comingSoon).sort()).toEqual(titles.sort());
+    expect(Object.keys(SHELL_COPY.comingSoon).sort()).toEqual(
+      [...new Set([...titles, ...shellStubs.values()])].sort(),
+    );
+    const all = Object.values(SHELL_COPY.comingSoon);
+    expect(new Set(all).size).toBe(all.length);
   });
 
   it.each(LEGAL_LINKS.map((link) => [link.href]))(
@@ -166,7 +211,7 @@ describe("every destination the shell draws", () => {
     );
     expect(screen.getByText("Boards come with Groups.")).toBeVisible();
     expect(screen.queryByText(SHELL_COPY.notReady)).toBeNull();
-    rerender(<PagePlaceholder title="Group board" />);
+    rerender(<PagePlaceholder title="Somewhere new" />);
     expect(screen.getByText(SHELL_COPY.notReady)).toBeVisible();
     // A destination's own line comes by its title, which its stub passes.
     rerender(<PagePlaceholder title={SHELL_COPY.tabs.groups} />);

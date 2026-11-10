@@ -48,7 +48,10 @@ export const SHELL_COPY = {
    * its title (RITE round 2, R2-07): what's coming there, and what already
    * works. Groups (GRP-1), Me (STA-1) and Settings (SET-1) are the
    * destinations the shell draws that are still placeholders; the seven
-   * footer pages are LGL-1's real pages.
+   * footer pages are LGL-1's real pages. The rest are the per-user shells
+   * (ARCHITECTURE §10.1) that a link opens once its feature ships: a
+   * group's board, a challenge, a room, a shared quiz. Each key is the
+   * title its stub passes, and goes when the stub does.
    */
   comingSoon: {
     [SHELL_CLIENT_COPY.tabs.groups]:
@@ -56,6 +59,31 @@ export const SHELL_COPY = {
     [SHELL_CLIENT_COPY.tabs.me]: "Your streak and past results will live here.",
     [SETTINGS]:
       "Settings are on the way. Hide stopwatch is in the Daily's menu.",
+    "Group board":
+      "Group boards come with Groups. Until then, compare results in your group chat.",
+    "Group invite":
+      "Group invites are on the way. Until then, play today's Daily and share your result.",
+    "Group settings":
+      "Group settings come with Groups. Until then, today's Daily is ready to play.",
+    Challenge:
+      "Challenges are on the way. Until then, send a friend your Daily result.",
+    "Challenge play":
+      "Playing a friend's challenge is on the way. Until then, try today's Daily.",
+    "Head-to-head":
+      "Head-to-head results come with challenges. Until then, compare Daily results in your chat.",
+    "Edit quiz":
+      "Making your own quiz is on the way. Until then, try Quick play in Practice.",
+    "Shared quiz":
+      "Shared quizzes are on the way. Until then, Quick play in Practice is ready.",
+    "Shared quiz play":
+      "Playing a shared quiz is on the way. Until then, today's Daily is ready.",
+    "Shared quiz result":
+      "Shared quiz results are on the way. Your Daily result is on Today.",
+    Room: "Rooms are on the way. Until then, play today's Daily on your phone.",
+    "Joining a room":
+      "Joining a room is on the way. Until then, Practice has Quick play.",
+    "Host screen":
+      "Hosting on a big screen is on the way. Until then, play today's Daily on your phone or computer.",
   },
   goToToday: "Go to Today",
   /** Leave on a play screen that isn't built yet; the X shows this as its name. */
