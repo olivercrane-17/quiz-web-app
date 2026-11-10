@@ -16,6 +16,7 @@ import { z } from "zod";
 import { AddedClaimSchema, CLAIM_ID_PATTERN, additionPass } from "./claims.ts";
 import {
   ANSWER_TYPES,
+  ID_PATTERNS,
   agentId,
   isoDate,
   isoDateTime,
@@ -716,6 +717,37 @@ export const CorrectionSchema = z.strictObject({
   rechecks: z.array(z.int().min(0)),
 });
 
+/** The editor's call on one cross-pool pair (CNT-2b). */
+export const CROSS_POOL_DECISIONS = ["related_ok"] as const;
+
+/** A practice item or a room question: what a Daily item is judged against. */
+const crossPoolItemId = z
+  .string()
+  .refine(
+    (id) => ID_PATTERNS.practice.test(id) || ID_PATTERNS.room.test(id),
+    "names a practice item or a room question",
+  );
+
+/**
+ * + An editor's judgment on one pair the cross-pool check flags (CNT-2b,
+ * X29, AC-CNT-06, CONTENT_GUIDE §10.5): this Daily item and the practice or
+ * room item `itemId` share an entity but state different facts. It lives on
+ * the sealed Daily item, never on the public one (ARCHITECTURE §5.4).
+ * `pairSha256` hashes both items' packet fields (PACKET_FIELDS), so the
+ * judgment lapses when either item changes, and X29 reports the pair again
+ * (src/content/pipeline/crosspool.ts). `content:dedupe -- --cross-pool-ok`
+ * writes it.
+ */
+export const CrossPoolJudgmentSchema = z.strictObject({
+  itemId: crossPoolItemId,
+  decision: z.enum(CROSS_POOL_DECISIONS),
+  by: agentId("ed"),
+  at: isoDateTime,
+  reason: text,
+  pairSha256: sha256Hex,
+});
+export type CrossPoolJudgment = z.infer<typeof CrossPoolJudgmentSchema>;
+
 export const VerificationSchema = z
   .strictObject({
     /** Passes A and B, at most one of each. */
@@ -732,8 +764,21 @@ export const VerificationSchema = z
     followUps: z.array(FollowUpRecordSchema).optional(),
     dailyChecks: z.array(DailyCheckRecordSchema).optional(),
     corrections: z.array(CorrectionSchema).optional(),
+    /** + Daily items only: the editor's cross-pool judgments (CNT-2b). */
+    crossPool: z.array(CrossPoolJudgmentSchema).optional(),
   })
   .superRefine((verification, ctx) => {
+    const judged = new Set<string>();
+    verification.crossPool?.forEach((judgment, index) => {
+      if (judged.has(judgment.itemId))
+        ctx.addIssue({
+          code: "custom",
+          path: ["crossPool", index, "itemId"],
+          message:
+            "one judgment per pair: a new one replaces the old (content:dedupe -- --cross-pool-ok)",
+        });
+      judged.add(judgment.itemId);
+    });
     const passes = verification.checks.map((check) => check.pass);
     passes.forEach((pass, index) => {
       if (pass === "T") {

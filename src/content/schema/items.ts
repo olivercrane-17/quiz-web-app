@@ -17,15 +17,41 @@ import {
   ITEM_STATUSES,
   LIST_REQUEST_ID_PATTERN,
   VOLATILITIES,
+  agentId,
   answerType,
   categoryCode,
   isoDate,
+  isoDateTime,
   region,
   share,
   tag,
   text,
 } from "./primitives.ts";
 import { VerificationSchema, type Verification } from "./verification.ts";
+
+/**
+ * Why an active item left play (CNT-2b): `cross_pool`, it shares a fact
+ * with a Daily item (X29, AC-CNT-06, CONTENT_GUIDE §10.5); `recheck`, a
+ * report, freshness or audit re-check failed it (§9.10); `other`, anything
+ * else, such as a changed key that moves to a new id (§2.12).
+ */
+export const RETIRE_KINDS = ["cross_pool", "recheck", "other"] as const;
+export type RetireKind = (typeof RETIRE_KINDS)[number];
+
+/**
+ * + The retirement record (CNT-2b), written by `content:batch -- retire`
+ * when an active item leaves play: when, by which editor, of what kind and
+ * why. A retired item keeps its id, checks and history, and the id is never
+ * reused (§2.12). On a practice item the record sits in a public file, so
+ * its reason never names a sealed item (ARCHITECTURE §5.4).
+ */
+export const RetiredRecordSchema = z.strictObject({
+  at: isoDateTime,
+  by: agentId("ed"),
+  kind: z.enum(RETIRE_KINDS),
+  reason: text,
+});
+export type RetiredRecord = z.infer<typeof RetiredRecordSchema>;
 
 /** The estimator's output for practice and room items (§8.5). */
 export const PredictedRateSchema = z.strictObject({
@@ -101,6 +127,8 @@ export type SelfCheck = z.infer<typeof SelfCheckSchema>;
 const commonShape = {
   id: z.string(),
   status: z.enum(ITEM_STATUSES),
+  /** + On a retired item, and only there (CNT-2b). */
+  retired: RetiredRecordSchema.optional(),
   category: categoryCode,
   tags: z.array(tag).min(1).max(6),
   region,
@@ -170,6 +198,7 @@ export const RELATION_WINS: Record<ComparisonRelation, "higher" | "lower"> = {
 interface ItemLike {
   id: string;
   status: string;
+  retired?: RetiredRecord | undefined;
   volatility: string;
   reviewBy: string | null;
   selfCheck?: SelfCheck | undefined;
@@ -177,6 +206,15 @@ interface ItemLike {
   verification?: Verification | undefined;
   predicted?: unknown;
 }
+
+/**
+ * Where an item's kind keeps cross-pool judgments: a Daily item (a mystery
+ * or an encore) holds them, naming the practice or room item it was judged
+ * against; a practice item never does, because a public file must not name
+ * a sealed id (ARCHITECTURE §5.4), and a room question's judgments live on
+ * the Daily item it sits near, so each pair has one place.
+ */
+type CrossPoolHost = "daily" | "public" | "room";
 
 type Ctx = z.RefinementCtx;
 
@@ -193,12 +231,37 @@ function isNonDecreasing(values: readonly number[]): boolean {
 }
 
 /** Rules shared by every item kind. */
-function refineCommon(item: ItemLike, ctx: Ctx, idPattern: RegExp): void {
+function refineCommon(
+  item: ItemLike,
+  ctx: Ctx,
+  idPattern: RegExp,
+  host: CrossPoolHost,
+): void {
   if (!idPattern.test(item.id)) {
     issue(
       ctx,
       ["id"],
       `id ${JSON.stringify(item.id)} does not match ${idPattern.source}`,
+    );
+  }
+  // A retired item says when, by whom and why it left play (CNT-2b), and
+  // only a retired item carries that record.
+  if (item.status === "retired" && item.retired === undefined) {
+    issue(
+      ctx,
+      ["retired"],
+      "a retired item records when, by which editor, of what kind and why it was retired; content:batch -- retire writes it",
+    );
+  } else if (item.status !== "retired" && item.retired !== undefined) {
+    issue(ctx, ["retired"], "only a retired item carries a retired record");
+  }
+  if (host !== "daily" && item.verification?.crossPool !== undefined) {
+    issue(
+      ctx,
+      ["verification", "crossPool"],
+      host === "public"
+        ? "a practice item never holds cross-pool judgments: they live on the sealed Daily item, because a public file never names a sealed id (ARCHITECTURE §5.4)"
+        : "a room question's cross-pool judgments live on the Daily item it sits near (content:dedupe -- --cross-pool-ok)",
     );
   }
   // The editor sets a slow item's reviewBy at acceptance (§2.3), so a
@@ -321,7 +384,7 @@ export const McItemSchema = z
     predicted: PredictedRateSchema.optional(),
   })
   .superRefine((item, ctx) => {
-    refineCommon(item, ctx, ID_PATTERNS.practice);
+    refineCommon(item, ctx, ID_PATTERNS.practice, "public");
     refineChoiceClaims(item.claims, ctx);
   });
 
@@ -335,7 +398,7 @@ export const TfItemSchema = z
     predicted: PredictedRateSchema.optional(),
   })
   .superRefine((item, ctx) => {
-    refineCommon(item, ctx, ID_PATTERNS.practice);
+    refineCommon(item, ctx, ID_PATTERNS.practice, "public");
     requireRole(ctx, item.claims, "key", "the key is a claim (§9.2)");
   });
 
@@ -360,7 +423,7 @@ export const ComparisonItemSchema = z
     predicted: PredictedRateSchema.optional(),
   })
   .superRefine((item, ctx) => {
-    refineCommon(item, ctx, ID_PATTERNS.practice);
+    refineCommon(item, ctx, ID_PATTERNS.practice, "public");
     if (item.exactDates !== undefined) {
       for (const side of ["a", "b"] as const) {
         if (Number(item.exactDates[side].slice(0, 4)) !== item.values[side]) {
@@ -439,7 +502,7 @@ export const MysterySchema = z
     predicted: MysteryPredictedSchema.optional(),
   })
   .superRefine((item, ctx) => {
-    refineCommon(item, ctx, ID_PATTERNS.mystery);
+    refineCommon(item, ctx, ID_PATTERNS.mystery, "daily");
     requireRole(
       ctx,
       item.claims,
@@ -532,7 +595,7 @@ export const EncoreSchema = z
     predicted: EncorePredictedSchema.optional(),
   })
   .superRefine((item, ctx) => {
-    refineCommon(item, ctx, ID_PATTERNS.encore);
+    refineCommon(item, ctx, ID_PATTERNS.encore, "daily");
     if (GATED_STATUSES.has(item.status)) {
       for (const field of ["unitShort", "unitLabel"] as const) {
         if (item[field] === undefined) {
@@ -581,7 +644,7 @@ export const RoomQuestionSchema = z
     predicted: PredictedRateSchema.optional(),
   })
   .superRefine((item, ctx) => {
-    refineCommon(item, ctx, ID_PATTERNS.room);
+    refineCommon(item, ctx, ID_PATTERNS.room, "room");
     refineChoiceClaims(item.claims, ctx);
   });
 export type RoomQuestion = z.infer<typeof RoomQuestionSchema>;

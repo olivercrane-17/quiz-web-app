@@ -413,7 +413,7 @@ export function lintBank(bank: Bank, options: LintOptions = {}): Finding[] {
     }
   }
 
-  findings.push(...poolFindings(bank));
+  findings.push(...poolFindings(bank, ctx.today));
 
   // C22: near-duplicates. Without --reveal a plaintext item is compared with
   // public entries only, and a sealed item whose nearest is public learns

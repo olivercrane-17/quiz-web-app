@@ -16,6 +16,7 @@ import type {
 import type { Bank, BankItem, PackInfo } from "../bank.ts";
 import { batchForItem, parseItemId } from "../ids.ts";
 import { repoRelative } from "../layout.ts";
+import { dailyHasClosed } from "../schedule-locks.ts";
 import type { Finding } from "./types.ts";
 
 function finding(
@@ -75,7 +76,14 @@ export function bandOf(item: AnyItem): "easy" | "medium" | "hard" {
       : "hard";
 }
 
-export function poolFindings(bank: Bank): Finding[] {
+/**
+ * `today` (a UTC date, by default the current one) says which Dailies have
+ * closed: an item retired after it played may stay on those (X10).
+ */
+export function poolFindings(
+  bank: Bank,
+  today: string = new Date().toISOString().slice(0, 10),
+): Finding[] {
   const out: Finding[] = [];
   const byBatch = itemsByBatch(bank);
 
@@ -150,7 +158,7 @@ export function poolFindings(bank: Bank): Finding[] {
   }
 
   out.push(...ascendingKeyFindings(bank));
-  out.push(...scheduleFindings(bank));
+  out.push(...scheduleFindings(bank, today));
   return out;
 }
 
@@ -330,7 +338,7 @@ function daysBetween(a: string, b: string): number {
 
 const SLOT_FOR: Record<string, number> = { easy: 1, medium: 2, hard: 3 };
 
-function scheduleFindings(bank: Bank): Finding[] {
+function scheduleFindings(bank: Bank, today: string): Finding[] {
   const out: Finding[] = [];
   const lastUsed = new Map<string, string>();
   const lastAnswer = new Map<string, string>();
@@ -379,7 +387,12 @@ function scheduleFindings(bank: Bank): Finding[] {
           `round ${round.contentId} is a ${item.format} choice item in a ${round.type} round`,
         );
       }
-      if (item.status !== "active")
+      // An item retired after it played stays on the Dailies that have
+      // closed: the schedule is their history, and the database keeps the
+      // item, marked retired, for the attempts that name it (§5.5, §8.7).
+      const playedThenRetired =
+        item.status === "retired" && dailyHasClosed(daily.date, today);
+      if (item.status !== "active" && !playedThenRetired)
         add(
           "X10",
           `round ${round.contentId} is ${item.status}, not active (§0.2)`,
