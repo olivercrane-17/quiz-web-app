@@ -215,63 +215,88 @@ test.describe("R3-08 toasts clear of the page's controls", () => {
       await expect(toast(page)).toHaveAttribute("data-place", "top");
       // Let it finish rising in.
       await page.waitForTimeout(400);
-      const edge = await toast(page).evaluate((pill) => {
-        const rgb = (value: string) =>
-          (value.match(/[\d.]+/g) ?? []).slice(0, 4).map(Number);
-        const luminance = ([r = 0, g = 0, b = 0]: number[]) => {
-          const [lr, lg, lb] = [r, g, b].map((c) => {
-            const s = c / 255;
-            return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-          });
-          return 0.2126 * (lr ?? 0) + 0.7152 * (lg ?? 0) + 0.0722 * (lb ?? 0);
-        };
-        const contrast = (a: number[], b: number[]) => {
-          const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-          return ((hi ?? 0) + 0.05) / ((lo ?? 0) + 0.05);
-        };
+      const measure = () =>
+        toast(page).evaluate((pill) => {
+          const rgb = (value: string) =>
+            (value.match(/[\d.]+/g) ?? []).slice(0, 4).map(Number);
+          const luminance = ([r = 0, g = 0, b = 0]: number[]) => {
+            const [lr, lg, lb] = [r, g, b].map((c) => {
+              const s = c / 255;
+              return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+            });
+            return 0.2126 * (lr ?? 0) + 0.7152 * (lg ?? 0) + 0.0722 * (lb ?? 0);
+          };
+          const contrast = (a: number[], b: number[]) => {
+            const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+            return ((hi ?? 0) + 0.05) / ((lo ?? 0) + 0.05);
+          };
+          const style = getComputedStyle(pill);
+          const ring = rgb(style.borderTopColor);
+          const fill = rgb(style.backgroundColor);
+          const { left, right, top, bottom } = pill.getBoundingClientRect();
+          // What is painted just outside the pill's edge, on each side.
+          const under = (x: number, y: number) => {
+            let element: Element | null =
+              document
+                .elementsFromPoint(x, y)
+                .find((found) => !pill.contains(found)) ?? null;
+            while (element !== null) {
+              const colour = rgb(getComputedStyle(element).backgroundColor);
+              if ((colour[3] ?? 1) > 0.5) return colour;
+              element = element.parentElement;
+            }
+            return rgb(getComputedStyle(document.body).backgroundColor);
+          };
+          const middle = (left + right) / 2;
+          const around = [
+            under(middle, top + 1),
+            under(middle, bottom - 1),
+            under(left + 1, (top + bottom) / 2),
+            under(right - 1, (top + bottom) / 2),
+          ];
+          // The pill's edge shows where its ring meets what is under it or,
+          // where the ring merges with that (charcoal on the dark page), where
+          // the ring meets the fill. A transparent ring is what is under it.
+          const opaque = (ring[3] ?? 1) > 0.5;
+          return {
+            edge: Math.min(
+              ...around.map((colour) => {
+                const seen = opaque ? ring : colour;
+                return Math.max(contrast(seen, colour), contrast(fill, seen));
+              }),
+            ),
+            onItsOwnColour: around.filter(
+              (colour) => contrast(fill, colour) < 1.5,
+            ).length,
+          };
+        });
+      // On the page as it is: the dark header, the card and its charcoal
+      // inset (memo §26).
+      expect((await measure()).edge).toBeGreaterThanOrEqual(3);
+      // And on a surface of its own colour, the worst case its ring is for:
+      // a strip of the pill's own fill, laid under it and a little past it
+      // on every side (a cream button or ticket label in dark).
+      await toast(page).evaluate((pill) => {
+        const { left, top, width, height } = pill.getBoundingClientRect();
         const style = getComputedStyle(pill);
-        const ring = rgb(style.borderTopColor);
-        const fill = rgb(style.backgroundColor);
-        const { left, right, top, bottom } = pill.getBoundingClientRect();
-        // What is painted just outside the pill's edge, on each side.
-        const under = (x: number, y: number) => {
-          let element: Element | null =
-            document
-              .elementsFromPoint(x, y)
-              .find((found) => !pill.contains(found)) ?? null;
-          while (element !== null) {
-            const colour = rgb(getComputedStyle(element).backgroundColor);
-            if ((colour[3] ?? 1) > 0.5) return colour;
-            element = element.parentElement;
-          }
-          return rgb(getComputedStyle(document.body).backgroundColor);
-        };
-        const middle = (left + right) / 2;
-        const around = [
-          under(middle, top + 1),
-          under(middle, bottom - 1),
-          under(left + 1, (top + bottom) / 2),
-          under(right - 1, (top + bottom) / 2),
-        ];
-        // The pill's edge shows where its ring meets what is under it or,
-        // where the ring merges with that (charcoal on the dark page), where
-        // the ring meets the fill. A transparent ring is what is under it.
-        const opaque = (ring[3] ?? 1) > 0.5;
-        return {
-          edge: Math.min(
-            ...around.map((colour) => {
-              const seen = opaque ? ring : colour;
-              return Math.max(contrast(seen, colour), contrast(fill, seen));
-            }),
-          ),
-          onItsOwnColour: around.filter(
-            (colour) => contrast(fill, colour) < 1.5,
-          ).length,
-        };
+        const strip = document.createElement("div");
+        strip.setAttribute("data-test-backdrop", "");
+        Object.assign(strip.style, {
+          position: "fixed",
+          left: `${left - 8}px`,
+          top: `${top - 8}px`,
+          width: `${width + 16}px`,
+          height: `${height + 16}px`,
+          background: style.backgroundColor,
+          zIndex: style.zIndex,
+        });
+        // Before the pill in the page, so at the same z-index it paints
+        // under it.
+        pill.parentElement?.insertBefore(strip, pill);
       });
-      // It does sit on something of its own colour: the card's cream inset.
-      expect(edge.onItsOwnColour).toBeGreaterThan(0);
-      expect(edge.edge).toBeGreaterThanOrEqual(3);
+      const onOwn = await measure();
+      expect(onOwn.onItsOwnColour).toBe(4);
+      expect(onOwn.edge).toBeGreaterThanOrEqual(3);
     });
   }
 
