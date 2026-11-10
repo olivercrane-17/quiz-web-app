@@ -67,6 +67,15 @@ export type Database = {
         }
         Returns: Json
       }
+      set_nickname: {
+        Args: {
+          p_generated: boolean
+          p_nickname: string
+          p_player: string
+          p_secret: string
+        }
+        Returns: Json
+      }
       t_client_ip: {
         Args: { p_player: string; p_secret: string }
         Returns: Json
