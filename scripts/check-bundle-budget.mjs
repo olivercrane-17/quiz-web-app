@@ -40,12 +40,17 @@ export const DEFAULT_BUDGET = 200_000;
 /**
  * Routes over budget when the per-route budgets arrived (SEC-1, measured on
  * the mock and Supabase builds of 5 November 2026), each held to a ceiling.
- * Raise a ceiling only with a reason in review; delete a waiver once its
- * route fits its budget.
+ * Raise a ceiling only with a reason in review; lower one when its route
+ * shrinks, and delete a waiver once its route fits its budget. /daily's
+ * stands: 226.6 kB with sideEffects set, since it plays every round.
  */
 export const WAIVERS = new Map([
   ["/daily", { ceiling: 230_000, measured: 223_000, until: "PERF-1" }],
-  ["/practice/run", { ceiling: 225_000, measured: 219_300, until: "PERF-1" }],
+  // Integration 8 (10 November 2026): package.json's sideEffects field lets
+  // the bundler leave the Mystery and Encore UI out of this route, which
+  // reached it through the rounds' barrel. 196.6 kB on both builds, down
+  // from 223.7 kB, so the ceiling came down from 225 kB with it.
+  ["/practice/run", { ceiling: 202_000, measured: 196_600, until: "PERF-1" }],
 ]);
 
 /**
