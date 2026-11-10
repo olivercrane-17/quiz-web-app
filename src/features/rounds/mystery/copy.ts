@@ -4,8 +4,9 @@
  * the rest, and the decisions after RITE rounds 1 and 2
  * (02-PRODUCT-DECISIONS §19, §22) override both: D10's three stamps, D14's
  * short placeholder nouns and D17's "No matches" line; D20's key legend,
- * D24's clue-4 line and D26's match count. One ellipsis character, never
- * three dots.
+ * D24's clue-4 line and D26's match count; and round 4's (§27): D31's Lock
+ * in button and D32's "Tap one, then Lock in." where no keyboard is in
+ * use. One ellipsis character, never three dots.
  *
  * `mysteryAnnouncementText` turns the plugin's announcement data into the
  * status message ("Not Heat. Clue 3 is in. Now worth 2. ..."), so every
@@ -206,16 +207,28 @@ export const MYSTERY_COPY = {
      */
     lastLead: `Last clue. Pick one of four. ${ONE_PICK}`,
     /**
-     * D20: under the options once a keyboard is in use, and the options'
-     * description: a key chooses, Enter (or the same key again) locks in.
-     * Digits choose too where no option reads as a number (D6); each
-     * option names its own keys in `aria-keyshortcuts`.
+     * D32: the line above the options on a device with no keyboard in use,
+     * where a tap chooses and the button under the options locks in (D31).
+     */
+    tapLegend: "Tap one, then Lock in.",
+    /**
+     * D20, D32: the same line once a keyboard is in use, and the options'
+     * description: a key chooses, Enter locks in. Digits choose too where
+     * no option reads as a number (D6); each option names its own keys in
+     * `aria-keyshortcuts`.
      */
     legend: "Keys A to D choose. Enter locks in.",
-    /** The chosen option's description, read as a key moves focus to it (D20). */
-    chosen: "Chosen. Enter locks it in.",
-    /** Said when a key chooses the option that already has focus, which reads nothing new. */
-    chosenNamed: (label: string) => `${label} chosen. Enter locks it in.`,
+    /**
+     * Said when an option is chosen, however it was (D31, R4-11): a
+     * choice made by a key also hears how a key locks it in. A tap or a
+     * click hears the choice alone, since a screen reader's click sends no
+     * key and Enter would only choose again; the Lock in button is next.
+     */
+    chosenNamed: (label: string, keys: boolean) =>
+      keys ? `${label} chosen. Enter locks it in.` : `${label} chosen.`,
+    /** The button under the options, before a choice and once it names one (D31). */
+    lockIn: "Lock in",
+    lockInNamed: (label: string) => `Lock in ${label}`,
   },
 
   errors: {
@@ -249,6 +262,11 @@ export const MYSTERY_COPY = {
     youPicked: (name: string) => `You picked ${name}`,
     sources: (labels: readonly string[]) =>
       `${labels.length === 1 ? "Source" : "Sources"}: ${labels.join(", ")}`,
+    /**
+     * Beside the reveal's button once a keyboard is in use (R4-14): Enter
+     * on the answer moves on, so the next press is never a surprise.
+     */
+    enterContinues: "Enter continues.",
     learnMore: "Learn more",
     /** The rest of the link's name: what it searches, and that it opens a tab. */
     learnMoreAbout: (name: string) =>

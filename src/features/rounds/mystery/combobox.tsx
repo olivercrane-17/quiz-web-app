@@ -788,6 +788,17 @@ export function GuessCombobox({
                 key={row.entityId}
                 id={optionId(index)}
                 role="option"
+                // The row's name, said as it is written: "The Broken
+                // Lighthouse, 1972". Left to the row's own parts, each a
+                // box of its own, it read "The Broken Lighthouse , 1972"
+                // (R4-17).
+                aria-label={[
+                  name,
+                  row.alreadyGuessed ? words.alreadyGuessed : aside,
+                  row.typo ? words.typo : null,
+                ]
+                  .filter((part) => part !== null)
+                  .join(", ")}
                 aria-selected={isActive}
                 aria-disabled={row.alreadyGuessed || undefined}
                 data-entity={row.entityId}
@@ -847,14 +858,14 @@ export function GuessCombobox({
                   </span>
                   {row.alreadyGuessed ? (
                     <>
-                      <span className="sr-only">,</span>{" "}
+                      {" "}
                       <span className="ml-auto shrink-0 text-sm font-semibold whitespace-nowrap @max-[18em]/guess:ml-0 @max-[18em]/guess:basis-full @max-[18em]/guess:whitespace-normal">
                         {words.alreadyGuessed}
                       </span>
                     </>
                   ) : aside === null ? null : (
                     <>
-                      <span className="sr-only">,</span>{" "}
+                      {" "}
                       <span
                         data-row-aside=""
                         className={cx(
@@ -872,7 +883,7 @@ export function GuessCombobox({
                   )}
                   {row.typo ? (
                     <>
-                      <span className="sr-only">,</span>{" "}
+                      {" "}
                       <span
                         data-typo-mark=""
                         className={cx(

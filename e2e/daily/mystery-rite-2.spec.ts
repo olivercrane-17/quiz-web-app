@@ -12,6 +12,7 @@ import type { Locator, Page } from "@playwright/test";
 
 import { expect, test } from "../fixtures";
 import type { RemoteMockControls } from "../support/mock";
+import { lockInButton, optionButtons, pickFirstOption } from "./clue-4";
 
 /** 09:00 in London on Wednesday 4 November 2026: Daily #45. */
 const NOV_4 = new Date("2026-11-04T09:00:00Z");
@@ -138,7 +139,7 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
     ).toBeVisible();
     await expect(page.locator("[data-reveal]")).toHaveCount(0);
     await expect(page.locator("[data-chosen]")).toHaveCount(0);
-    for (const option of await group.getByRole("button").all()) {
+    for (const option of await optionButtons(page).all()) {
       await expect(option).toHaveAttribute("data-state", "idle");
     }
 
@@ -158,7 +159,10 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
     await openDaily(page, { width: 1280, height: 800 });
     await toClue(page, 4);
     const legend = page.locator("[data-keys-legend]");
-    // D28 (amending D20): shown from the moment the options are.
+    // D28 (amending D20): shown from the moment the options are, where a
+    // keyboard is in use (D32): a desk has a mouse, and on a touch device
+    // the first key brings it.
+    await page.keyboard.press("Shift");
     await expect(legend).toBeVisible();
     await expect(legend).toHaveText(LEGEND);
     const before = await actsSent(mock);
@@ -177,7 +181,11 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
     const c = options.getByRole("button").nth(2);
     await expect(c).toBeFocused();
     await expect(page.locator('[data-chosen][data-option="2"]')).toHaveCount(1);
-    await expect(c).toHaveAccessibleDescription("Chosen. Enter locks it in.");
+    // The choice is said (R4-11), and the button under the options names it.
+    await expect(page.getByRole("status")).toContainText(
+      /chosen\. Enter locks it in\.$/,
+    );
+    await expect(lockInButton(page)).toHaveAccessibleName(/^Lock in \S/);
     // Its place: under the options' lead and above the options, inside the screen.
     const firstOption = await boxOf(options.getByRole("button").first());
     const line = await boxOf(legend);
@@ -185,16 +193,14 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
     expect(line.right).toBeLessThanOrEqual(1280);
     await expect(legend).toBeInViewport();
 
-    // The legend stays wherever focus goes; the mark goes with the focus.
+    // The legend stays wherever focus goes, and since D31 so does the mark.
     await page.getByRole("heading", { level: 2 }).click();
-    await expect(page.locator("[data-chosen]")).toHaveCount(0);
+    await expect(page.locator('[data-chosen][data-option="2"]')).toHaveCount(1);
     await expect(legend).toBeVisible();
     expect(await actsSent(mock)).toBe(before);
 
-    // Choose, then Enter: one pick, for C.
-    await page.keyboard.press("Tab");
-    await page.keyboard.press("c");
-    await expect(c).toBeFocused();
+    // Back on the chosen option, Enter: one pick, for C.
+    await c.focus();
     await page.keyboard.press("Enter");
     await expect(page.locator("[data-reveal]")).toBeVisible();
     await expect(page.locator("[data-reveal]")).toContainText(
@@ -237,23 +243,33 @@ test.describe("the clue-4 keys (D20, R2-02)", () => {
     await expect(round).toHaveAttribute("data-clue", "4");
     await expect(page.locator("[data-reveal]")).toHaveCount(0);
     expect(await actsSent(mock)).toBe(before);
-    for (const option of await group.getByRole("button").all()) {
+    for (const option of await optionButtons(page).all()) {
       await expect(option).toHaveAttribute("data-state", "idle");
     }
   });
 
-  test("R2-02 at 360 by 640 with 200% text, the legend is on screen once a key chooses", async ({
+  test("R2-02 at 360 by 640 with 200% text, once a key chooses, the chosen option and the Lock in button that names it are on screen", async ({
     page,
   }) => {
     await openDaily(page, { width: 360, height: 640 });
     await page.addStyleTag({ content: LARGE_TEXT });
     await toClue(page, 4);
     await expect(optionsGroup(page)).toBeFocused();
+    // The legend is on screen beside the first option (mystery-rite-3 has
+    // A's case). Since D31 the Lock in bar is what stays in sight by C: the
+    // chosen option shows whole above it, and the bar names the choice.
     await page.keyboard.press("Tab");
     await page.keyboard.press("c");
-    const options = optionsGroup(page);
-    await expect(options.getByRole("button").nth(2)).toBeFocused();
-    await expect(page.locator("[data-keys-legend]")).toBeInViewport();
+    const c = optionButtons(page).nth(2);
+    await expect(c).toBeFocused();
+    await expect(c).toBeInViewport({ ratio: 1 });
+    const bar = lockInButton(page);
+    await expect(bar).toBeInViewport({ ratio: 1 });
+    await expect(bar).toHaveAccessibleName(
+      `Lock in ${(await c.locator(".kn-answer-text").textContent()) ?? ""}`,
+    );
+    const [option, button] = [await boxOf(c), await boxOf(bar)];
+    expect(option.bottom).toBeLessThanOrEqual(button.top);
   });
 });
 
@@ -265,7 +281,7 @@ test.describe("See your results after Lock in (R2-12)", () => {
     // Daily #45's Mysteries out on Next clue and option A, to the Encore.
     for (const next of ["Next mystery", "Next mystery", "On to the Encore"]) {
       await toClue(page, 4);
-      await page.getByRole("button", { name: /^A\. / }).click();
+      await pickFirstOption(page);
       await page.getByRole("button", { name: next }).click();
     }
     await expect(page.locator('[data-round="encore"]')).toBeVisible();

@@ -81,7 +81,7 @@ describe("the trust pages' round 2 lines", () => {
     const keys = lines.find((line) => line.startsWith("Keys A to D"));
     // D20: keys act only while focus is on an answer, never on a heading.
     expect(keys).toBe(
-      "Keys A to D choose an answer while focus is on one of the answers. On the Daily's last clue, Enter or the same key again locks your choice in.",
+      "Keys A to D choose an answer while focus is on one of the answers. On the Daily's last clue a key only chooses: the Lock in button, or Enter on your chosen answer, locks it in.",
     );
     expect(lines.join(" ")).not.toMatch(/in a question/);
     expect(lines.join(" ")).not.toMatch(/Turn them off/);

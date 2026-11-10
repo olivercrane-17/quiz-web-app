@@ -15,6 +15,7 @@ import { expect, test } from "../fixtures";
 import { expectNoSeriousAxe } from "../support/axe";
 import { allowClipboard } from "../support/clipboard";
 import { expectSealedPayloads } from "../support/sealed";
+import { pickFirstOption, pickOption } from "./clue-4";
 
 /** 09:00 in London on Sunday 1 November 2026: Daily #42 (spare set 6). */
 const NOV_1 = new Date("2026-11-01T09:00:00Z");
@@ -242,7 +243,7 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
         .getByRole("button", { name: /^(Next clue|Last clue)/ })
         .click();
     }
-    await page.getByRole("button", { name: pattern }).click();
+    await pickOption(page, pattern);
   }
 
   test("a typed guess finds its suggestions, and a wrong one keeps the field and survives a reload", async ({
@@ -866,7 +867,7 @@ test.describe("RITE round 1", () => {
             .getByRole("button", { name: /^(Next clue|Last clue)/ })
             .click();
         }
-        await page.getByRole("button", { name: /^A\. / }).click();
+        await pickFirstOption(page);
         await page.getByRole("button", { name: next }).click();
       }
       await expect(words).toHaveText("Encore");
@@ -1341,9 +1342,7 @@ test.describe("RITE round 1", () => {
           .click();
       }
       // A wrong pick: Mira Tolland, one of the three decoys.
-      await page
-        .getByRole("button", { name: /^[A-D]\. Mira Tolland$/ })
-        .click();
+      await pickOption(page, "Mira Tolland");
       const expectTheMisses = async () => {
         await expect(page.locator('[data-verdict="missed"]')).toHaveText(
           "This one got away.",

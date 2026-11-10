@@ -33,7 +33,12 @@ import type { RoundComponentProps } from "../contracts";
 import { MysteryRound } from ".";
 import { MYSTERY_COPY } from "./copy";
 import { TYPING_MS } from "./options";
-import { MysteryHarness, TEST_SETTINGS, mysteryMeta } from "./testing";
+import {
+  MysteryHarness,
+  TEST_SETTINGS,
+  mysteryMeta,
+  setPointer,
+} from "./testing";
 
 let people: MysteryAnswerList;
 let peopleLookup: EntityLookup;
@@ -64,6 +69,8 @@ beforeAll(async () => {
 
 beforeEach(() => {
   clearAnnouncements();
+  // A desk with a mouse: the key legend shows from the start (D32).
+  setPointer("mouse");
 });
 
 const liveText = () =>
@@ -116,7 +123,11 @@ function withOptions(
   };
 }
 
-const optionButtons = () => within(optionsGroup()).getAllByRole("button");
+/** The four options; the Lock in button under them is `lockInButton` (D31). */
+const optionButtons = () =>
+  within(optionsGroup()).getAllByRole("button").slice(0, 4);
+const lockInButton = () =>
+  within(optionsGroup()).getByRole("button", { name: /^Lock in/ });
 const option = (position: number) => {
   const button = optionButtons()[position];
   if (button === undefined) throw new Error(`no option ${String(position)}`);
@@ -174,8 +185,9 @@ describe("the clue-4 keys (D20, R2-02)", () => {
   it("R2-02 a key on the heading or the page sends no pick and chooses nothing", async () => {
     const props = withOptions();
     const { user } = renderWithUser(<MysteryRound {...props} />);
-    // The round arrives on its heading, where Sam's "c" spent a question.
-    expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
+    // The round's heading, where Sam's "c" spent a question. (A round
+    // drawn with its options showing starts on them: R4-11.)
+    focus(screen.getByRole("heading", { level: 1 }));
     await user.keyboard("c");
     // The clue's own heading, where focus lands as the options arrive.
     focus(screen.getByRole("heading", { level: 2 }));
@@ -236,10 +248,10 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     await user.keyboard("c");
     const c = option(2);
     expect(c).toHaveFocus();
-    // Marked: its item, the pressed look, and a description read with the focus.
+    // Marked: its item, the pressed look, and the status says so (R4-11).
     expect(chosenItem()).toHaveAttribute("data-option", "2");
     expect(c).toHaveAttribute("data-pressed");
-    expect(c).toHaveAccessibleDescription("Chosen. Enter locks it in.");
+    expect(liveText()).toBe("Ennis Ward chosen. Enter locks it in.");
     expect(c.className).toMatch(/kn-answer-badge/);
     expect(option(0)).not.toHaveAttribute("data-pressed");
     expect(props.onIntent).not.toHaveBeenCalled();
@@ -248,14 +260,15 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     expect(picks(props.onIntent)).toEqual([
       { family: "mystery", kind: "pick", option: 2 },
     ]);
-    // Only one pick is ever sent while it is out: Enter again, the same key
-    // again, another key and a click all wait for the round to answer.
+    // Only one pick is ever sent while it is out: Enter again, another key,
+    // a click and the Lock in button all wait for the round to answer.
     await user.keyboard("{Enter}cca{Enter}");
     await user.click(option(3));
+    await user.click(lockInButton());
     expect(picks(props.onIntent)).toHaveLength(1);
   });
 
-  it("R2-02 the same key again locks in, and a held key never does", async () => {
+  it("R2-02 a held key never locks in, and since D31 nor does the same key again: Enter does", async () => {
     const props = withOptions();
     const { user } = renderWithUser(<MysteryRound {...props} />);
     focus(option(0));
@@ -265,8 +278,12 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     expect(chosenItem()).toHaveAttribute("data-option", "2");
     fireEvent.keyDown(option(2), { key: "c", repeat: true });
     expect(props.onIntent).not.toHaveBeenCalled();
-    // A second press of the same key locks it in.
+    // A second press of the same key changes nothing (D31, R4-11c).
     await user.keyboard("c");
+    expect(chosenItem()).toHaveAttribute("data-option", "2");
+    expect(props.onIntent).not.toHaveBeenCalled();
+    // A held Enter locks in once.
+    await user.keyboard("{Enter>5/}");
     expect(picks(props.onIntent)).toEqual([
       { family: "mystery", kind: "pick", option: 2 },
     ]);
@@ -284,16 +301,25 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     await user.keyboard("d");
     expect(option(3)).toHaveFocus();
     expect(chosenItem()).toHaveAttribute("data-option", "3");
+    expect(liveText()).toBe("Mira Tolland chosen. Enter locks it in.");
     expect(option(1)).not.toHaveAttribute("data-pressed");
     expect(props.onIntent).not.toHaveBeenCalled();
-    // Digits choose too while no option is a number (D6).
-    await user.keyboard("1");
+    // Digits choose too while no option is a number (D6). After a pause: a
+    // third key straight on would make a typed word of them (R4-11).
+    const now = vi
+      .spyOn(performance, "now")
+      .mockReturnValue(performance.now() + 2 * TYPING_MS);
+    try {
+      await user.keyboard("1");
+    } finally {
+      now.mockRestore();
+    }
     expect(option(0)).toHaveFocus();
     expect(chosenItem()).toHaveAttribute("data-option", "0");
     expect(props.onIntent).not.toHaveBeenCalled();
   });
 
-  it("R2-02 Escape, or focus moving to another option, clears the mark, so Enter locks in what has focus", async () => {
+  it("R2-02 Escape clears the mark; since D31 focus moving leaves it, and Enter on another option only chooses that one", async () => {
     const props = withOptions();
     const { user } = renderWithUser(<MysteryRound {...props} />);
     focus(option(0));
@@ -301,20 +327,21 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     await user.keyboard("{Escape}");
     expect(chosenItem()).toBeNull();
     expect(option(2)).toHaveFocus();
-    // Chosen again, then Tab: D has focus, and nothing is marked.
+    expect(liveText()).toBe("");
+    // Chosen again, then Tab: D has focus, and C is still the chosen one.
     await user.keyboard("c");
     await user.tab();
     expect(option(3)).toHaveFocus();
-    expect(chosenItem()).toBeNull();
-    // "c" now chooses C again rather than lock it in.
-    await user.keyboard("c");
-    expect(option(2)).toHaveFocus();
-    expect(props.onIntent).not.toHaveBeenCalled();
-    // Focus leaving the options clears it too.
+    expect(chosenItem()).toHaveAttribute("data-option", "2");
+    // Focus leaving the options leaves the mark too.
     focus(screen.getByRole("heading", { level: 2 }));
-    expect(chosenItem()).toBeNull();
-    // Tab and Enter, with no key, lock in the focused option, as any button.
+    expect(chosenItem()).toHaveAttribute("data-option", "2");
+    // Enter on an option that isn't the chosen one moves the mark to it
+    // and sends nothing; Enter again locks it in.
     focus(option(1));
+    await user.keyboard("{Enter}");
+    expect(chosenItem()).toHaveAttribute("data-option", "1");
+    expect(props.onIntent).not.toHaveBeenCalled();
     await user.keyboard("{Enter}");
     expect(picks(props.onIntent)).toEqual([
       { family: "mystery", kind: "pick", option: 1 },
@@ -348,7 +375,7 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     }
   });
 
-  it("R2-02 after typing, a pause, then a key and the same key again lock in", async () => {
+  it("R2-02 after typing, a pause, then a key chooses and Enter locks in", async () => {
     const props = withOptions();
     const { user } = renderWithUser(<MysteryRound {...props} />);
     const now = vi.spyOn(performance, "now").mockReturnValue(1000);
@@ -365,7 +392,7 @@ describe("the clue-4 keys (D20, R2-02)", () => {
       await user.keyboard("b");
       expect(chosenItem()).toHaveAttribute("data-option", "1");
       expect(props.onIntent).not.toHaveBeenCalled();
-      await user.keyboard("b");
+      await user.keyboard("{Enter}");
       expect(picks(props.onIntent)).toEqual([
         { family: "mystery", kind: "pick", option: 1 },
       ]);
@@ -374,7 +401,7 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     }
   });
 
-  it("R2-02 Space chooses the focused option, and locks it in only once it is chosen", async () => {
+  it("R2-02 Space chooses the focused option, and since D31 never locks it in", async () => {
     const props = withOptions();
     const { user } = renderWithUser(<MysteryRound {...props} />);
     focus(option(1));
@@ -384,20 +411,24 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     expect(liveText()).toBe("Liesl Varo chosen. Enter locks it in.");
     expect(props.onIntent).not.toHaveBeenCalled();
     await user.keyboard(" ");
+    expect(chosenItem()).toHaveAttribute("data-option", "1");
+    expect(props.onIntent).not.toHaveBeenCalled();
+    await user.keyboard("{Enter}");
     expect(picks(props.onIntent)).toEqual([
       { family: "mystery", kind: "pick", option: 1 },
     ]);
   });
 
   it("R2-02 shows the legend above the options, and the group's description says the same", () => {
-    // D28 (amending D20): the legend shows from the moment the options do.
+    // D28 (amending D20): the legend shows from the moment the options do,
+    // where a keyboard is likely (D32).
     renderWithUser(<MysteryRound {...withOptions()} />);
     const group = optionsGroup();
     expect(group).toHaveAccessibleDescription(`${LAST_LEAD} ${LEGEND}`);
     expect(MYSTERY_COPY.options.legend).toBe(LEGEND);
     const line = legend();
     expect(line).toHaveTextContent(LEGEND);
-    expect(line).toHaveAttribute("data-keys-legend", "shown");
+    expect(line).toHaveAttribute("data-keys-legend", "keys");
     expect(line?.className).not.toMatch(/(^| )hidden( |$)/);
     // Drawn in the round's own markup, under the lead and above the
     // options (on screen at 200% text on a phone), never in an option.
@@ -411,15 +442,24 @@ describe("the clue-4 keys (D20, R2-02)", () => {
           )
         : false,
     ).toBe(true);
-    // Its words are the description's: screen readers hear them once.
-    expect(line).toHaveAttribute("aria-hidden", "true");
+    // Its words are the description's, and in the page once (R4-03): the
+    // line itself is what the group names.
+    expect(line).not.toHaveAttribute("aria-hidden");
+    expect(group.getAttribute("aria-describedby")).toContain(
+      line?.parentElement?.id ?? "no id",
+    );
+    expect(
+      [...document.querySelectorAll("p, span")].filter(
+        (node) => node.textContent === LEGEND && node.children.length === 0,
+      ),
+    ).toHaveLength(1);
   });
 
   it("R2-02 sends one pick until the round answers, and another after an error", async () => {
     const props = withOptions();
     const { user, rerender } = renderWithUser(<MysteryRound {...props} />);
     focus(option(0));
-    await user.keyboard("bb");
+    await user.keyboard("b");
     await user.keyboard("{Enter}");
     expect(picks(props.onIntent)).toHaveLength(1);
     // The round is judging: every option waits, B locked.
@@ -436,12 +476,14 @@ describe("the clue-4 keys (D20, R2-02)", () => {
       />,
     );
     expect(option(1)).toHaveAttribute("data-state", "idle");
+    // B is still the chosen one: Enter on it, or Lock in, sends it again.
+    expect(lockInButton()).toHaveAccessibleName("Lock in Liesl Varo");
     focus(option(1));
     await user.keyboard("{Enter}");
     expect(picks(props.onIntent)).toHaveLength(2);
   });
 
-  it("R2-02 leaves keys and legend out with shortcuts off; Enter on an option still locks it in", async () => {
+  it("R2-02 leaves the letter keys and their legend out with shortcuts off; Enter still chooses, then locks in", async () => {
     const props = withOptions({
       context: {
         ...withOptions().context,
@@ -453,9 +495,14 @@ describe("the clue-4 keys (D20, R2-02)", () => {
     await user.keyboard("cc");
     expect(option(0)).toHaveFocus();
     expect(chosenItem()).toBeNull();
-    expect(legend()).toBeNull();
-    // Only the lead describes the group: no keys to name.
-    expect(optionsGroup()).toHaveAccessibleDescription(LAST_LEAD);
+    // No keys to name: the line says how a pick is made without them.
+    expect(legend()).toHaveTextContent(/^Tap one, then Lock in\.$/);
+    expect(optionsGroup()).toHaveAccessibleDescription(
+      `${LAST_LEAD} Tap one, then Lock in.`,
+    );
+    await user.keyboard("{Enter}");
+    expect(chosenItem()).toHaveAttribute("data-option", "0");
+    expect(props.onIntent).not.toHaveBeenCalled();
     await user.keyboard("{Enter}");
     expect(picks(props.onIntent)).toEqual([
       { family: "mystery", kind: "pick", option: 0 },

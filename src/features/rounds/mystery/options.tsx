@@ -2,86 +2,103 @@
 
 /**
  * The four options of a Mystery's last clue (PRD §3.1.4, §3.0.3; DESIGN
- * §6.2, §12.2): answer buttons A to D on CORE-0b's AnswerButton, which
- * commits on release. An option the player already guessed shows disabled
- * with "Already guessed"; the picked option holds its locked look while the
- * server judges it, and the others wait, disabled. Their line says what the
- * pick is worth knowing: on clue 4, "Last clue. Pick one of four. One pick:
- * a wrong one scores 0." (D24, R2-16); with options from clue 3, a later
- * clue is still to come, so "Pick one of four".
+ * §6.2, §12.2): answer buttons A to D on CORE-0b's AnswerButton, and under
+ * them the Lock in button. An option the player already guessed shows
+ * disabled with "Already guessed"; the picked option holds its locked look
+ * while the server judges it, and the others wait, disabled. Their line
+ * says what the pick is worth knowing: on clue 4, "Last clue. Pick one of
+ * four. One pick: a wrong one scores 0." (D24, R2-16); with options from
+ * clue 3, a later clue is still to come, so "Pick one of four".
  *
- * Keys (D20, amending D6; RITE round 2, R2-02; D28, RITE round 3, R3-05).
- * The group listens, never the round: letters and digits act only while
- * focus is in the options group (on the group itself or on an option), so a
- * key pressed on a heading, the page or anywhere else does nothing (WCAG
- * 2.1.4's "active only on focus", until Settings has the switch). As the
- * options arrive focus goes to the group (D28), which is labelled by the
- * clue's heading and described by its lead line and the legend, so a
- * screen reader hears the new clue first and A then Enter works with no
- * Tab. The group carries the `clue_heading` focus target while it shows.
+ * One way to lock in, for every input (D31, RITE round 4, R4-01; it
+ * reverses §22's "commits on release by touch" and D20's same key twice).
+ * The pick is one shot and a miss scores 0, so it takes two steps, as the
+ * Encore's does:
  *
- * - A key chooses: focus moves to that option, which is marked (the
- *   pressed look, an inked badge, and "Chosen. Enter locks it in." as its
- *   description, read as focus lands on it). Nothing is sent.
- * - Enter, or the same key pressed again with nothing typed in between,
- *   locks the chosen option in. A held key never repeats its way into a
- *   lock-in, and the round sends one pick only (`MysteryRound`).
- * - Typing among the options is not a lock-in (R2-02 after review): any
- *   other printable key clears the mark and opens a short typing window
- *   (`TYPING_MS`, renewed by each key typed in it, and opened too when a
- *   key moves the mark from one option to another). Inside it an option
- *   key only chooses, and Space does nothing, so a name typed with focus
- *   on an option ("Odile Marsh", "Cartographer", "Abby") sends nothing.
- *   Once a name's other letters have been typed, an option key inside the
- *   window only moves focus, unmarked, since Enter won't lock it in (next
- *   point); a run of option keys alone ("b", "d", "a") still moves the
- *   mark. A Space straight after a key chose ("B Smith") is typing too. Space
- *   otherwise acts like a key for the focused option: it chooses it, and
- *   only once it is chosen does Space lock it in, as Enter does.
+ * - **Choose.** A tap, a click, Space, Enter on an option that isn't
+ *   chosen, or its letter chooses an option: it is marked (the pressed
+ *   look, an inked badge, `aria-pressed="true"`) and "Cobalt chosen." is
+ *   announced. Nothing is sent. Choosing another option moves the mark;
+ *   Tab moves focus and leaves the mark where it is; the same letter, or
+ *   the same tap, again changes nothing.
+ * - **Lock in.** The "Lock in Cobalt" button under the options, or Enter on
+ *   the chosen option, sends the one pick. The button is always there, in
+ *   a bar docked at the bottom of the screen while the options are in
+ *   view, so it sits under the thumb and nothing moves when it wakes: it
+ *   reads "Lock in" and is disabled (still focusable, so it can be found)
+ *   until an option is chosen. Its label keeps to one line, so the bar is
+ *   as tall before a choice as after, at any text size. The bar sticks
+ *   inside the box that holds the options, so it never rises over the lead
+ *   line or the legend. A second tap on the spot that chose, within
+ *   `DOUBLE_TAP_MS`, never locks in, wherever the bar is by then. The round
+ *   sends one pick only (`MysteryRound`), and a held key never repeats its
+ *   way into one.
+ *
+ * The line above the options says what is true for the device (D32,
+ * R4-03): "Tap one, then Lock in." until a keyboard is in use (`keys`: a
+ * key was pressed, or the pointer is a mouse), then "Keys A to D choose.
+ * Enter locks in." The line holds room for the other wording (drawn by
+ * CSS, so it is in the page's text once), and nothing moves when it
+ * changes. It is the group's description too, said once.
+ *
+ * Keys (D20, amending D6; R2-02; D28, R3-05). The group listens, never the
+ * round: letters and digits act only while focus is in the options group
+ * (on the group itself or on an option), so a key pressed on a heading,
+ * the page or the Lock in button does nothing (WCAG 2.1.4's "active only
+ * on focus", until Settings has the switch). As the options arrive, and
+ * when a reload or Continue brings the round back with them showing
+ * (R4-11), focus goes to the group (D28), which is labelled by the clue's
+ * heading and described by its lead line and the legend, so a screen
+ * reader hears the new clue first and A then Enter works with no Tab.
+ *
  * - Letters A to D match the badges; digits 1 to 4 choose only when no
  *   option reads as a number, so "4" can never mean option D when four is
  *   an answer (D6, R1-13). Each option names its keys in
  *   `aria-keyshortcuts` ("C 3", or "C"), and the badge is the one hint
- *   drawn on it.
- * - Enter after a typed name is not a lock-in either (R3-05 after review):
- *   once a name has been typed since a key last chose on its own (or since
- *   Tab or a pointer reached an option), Enter commits nothing on an
- *   option that isn't marked, so "Cartographer" then Enter sends nothing,
- *   however long the pause; inside the typing window it commits nothing
- *   at all unless the option was marked with nothing typed since.
+ *   drawn on it. A key moves focus to the option it chooses.
+ * - Typing among the options is not a choice (D20's typing guard, R2-02
+ *   and R3-05 after review). Any printable key that names no option
+ *   clears the mark and what was said of it, and opens a short typing
+ *   window (`TYPING_MS`, renewed by each key typed in it, and opened too
+ *   when a key moves the mark from one option to another). Three or more
+ *   keys in a row, each within `TYPING_MS` of the last, are a typed word
+ *   whatever their letters, a doubled letter counted twice (D31, R4-11:
+ *   "Abba", "Add" and "cab" are made of option keys alone). Once a word is being typed, an option
+ *   key inside the window only moves focus, unmarked, and Enter locks
+ *   nothing, however long the pause before it: so "Cartographer" or
+ *   "Abba" then Enter sends nothing. That holds until a key next chooses
+ *   on its own, or Tab or a pointer reaches an option. Inside the typing
+ *   window Enter acts only on the chosen option, so A then B then Enter (a
+ *   change of mind) still locks B.
+ * - Space inside the typing window, or straight after a key chose ("B
+ *   Smith"), is a typed name's space and does nothing. Otherwise it
+ *   chooses the focused option, and never locks in.
  * - On the group itself, before any option has focus, a key chooses as it
  *   does from an option (focus moves to it), Space opens the typing window
  *   (a first Space still scrolls the page; one inside a typed name does
  *   nothing), and Enter does nothing.
- * - Escape, or focus moving on, clears the mark: what Enter locks in is
- *   always the option that has focus. The chosen option is exposed as
- *   `aria-pressed="true"` as well as by its description (R3-09).
- * - From the moment the options appear, while shortcuts are on, the line
- *   above them, under their lead, says how (D28): "Keys A to D choose.
- *   Enter locks in." Its line is always drawn, so nothing moves when focus
- *   or a key reaches the options (above, so a phone at 200% text still
- *   shows it beside the option a key moves to). The group's description
- *   says the same, for screen readers. Pointers are untouched: a tap still
- *   commits on release.
+ * - Escape clears the mark.
  */
 import {
+  useEffect,
   useId,
-  useLayoutEffect,
   useRef,
   useState,
   type KeyboardEvent,
+  type MouseEvent,
   type Ref,
 } from "react";
 
 import type { OptionView } from "@/engine/types";
 import { HAPTICS, vibrate } from "@/platform/haptics";
 import { playEffect } from "@/platform/sound";
-import { announce } from "@/ui/announce";
+import { announce, withdrawAnnouncement } from "@/ui/announce";
 import { AnswerButton, type AnswerState } from "@/ui/answer-button";
 import { cx } from "@/ui/cx";
 
 import { MYSTERY_COPY } from "./copy";
-import { focusTargetProps } from "./focus";
+import { focusTargetProps, type FocusTarget } from "./focus";
+import { LockInBar } from "./lock-in";
 import { TONE } from "./tones";
 
 const LETTER_KEYS = ["a", "b", "c", "d"] as const;
@@ -96,6 +113,20 @@ const DIGIT_KEYS = ["1", "2", "3", "4"] as const;
 export const TYPING_MS = 800;
 
 /**
+ * How many keys in a row, each within `TYPING_MS` of the last, make a typed
+ * word whatever their letters (D31, R4-11): two can be a change of mind (A,
+ * then B) or the same letter again, three are "cab" or "Add".
+ */
+const WORD_KEYS = 3;
+
+/**
+ * How long after a tap chose an option a tap on the same spot is still the
+ * second half of a double tap, and how near it has to land to be one.
+ */
+export const DOUBLE_TAP_MS = 500;
+const DOUBLE_TAP_PX = 24;
+
+/**
  * The chosen option's mark, beside the pressed look AnswerButton draws for
  * `pressed`: its badge turns ink with the letter in the page's colour, so
  * the mark is a fill and a shape, never a hue alone. Forced colours paint
@@ -105,6 +136,20 @@ const CHOSEN_BADGE = cx(
   "[&_.kn-answer-badge]:bg-[color:var(--kn-ink,var(--foreground))] [&_.kn-answer-badge]:text-[color:var(--kn-surface,var(--background))]",
   "forced-colors:[&_.kn-answer-badge]:bg-[color:Highlight] forced-colors:[&_.kn-answer-badge]:text-[color:HighlightText] forced-colors:[&_.kn-answer-badge]:forced-color-adjust-none",
 );
+
+/**
+ * Where a pointer's click landed, or null for a click with no place: a
+ * keyboard's or a screen reader's (`detail` 0, or the page's own corner,
+ * where no option and no button is).
+ */
+function placeOf(event: MouseEvent): { x: number; y: number } | null {
+  if (event.detail === 0) return null;
+  if (event.clientX === 0 && event.clientY === 0) return null;
+  return { x: event.clientX, y: event.clientY };
+}
+
+/** When a key came down, on the clock the typing window is measured by. */
+const keyTime = () => performance.now();
 
 /** An option that reads as a number: its label starts with a digit ("15", "1,250 km", "1917"). */
 function readsAsNumber(label: string): boolean {
@@ -165,6 +210,8 @@ export interface MysteryOptionsProps {
   busy: boolean;
   disabled: boolean;
   shortcuts: boolean;
+  /** A keyboard is in use (D32, `useKeysInUse`): the legend names the keys. */
+  keys: boolean;
   sound: boolean;
   haptics: boolean;
   /**
@@ -175,6 +222,14 @@ export interface MysteryOptionsProps {
   labelledBy?: string;
   /** The group, which the round focuses as the options arrive (D28). */
   groupRef?: Ref<HTMLDivElement>;
+  /**
+   * The focus command that lands on the group: the clue's while the round
+   * runs, and the round's own when a reload brought it back with the
+   * options showing (R4-11).
+   */
+  focusTarget?: FocusTarget;
+  /** Runs once the options are drawn: the round focuses and shows them. */
+  onReady?: () => void;
   onPick(index: number): void;
 }
 
@@ -207,23 +262,26 @@ function optionAt(target: EventTarget | null): number | null {
 export function MysteryOptions(props: MysteryOptionsProps) {
   const leadId = useId();
   const keysId = useId();
-  const chosenId = useId();
   const {
     options,
     last,
     busy,
     disabled,
     shortcuts,
+    keys,
     sound,
     haptics,
     labelledBy,
     groupRef,
+    focusTarget = "clue_heading",
+    onReady,
     onPick,
   } = props;
+  const copy = MYSTERY_COPY.options;
   const digits = digitsPick(options);
   const locked = busy || disabled;
 
-  /** The option a key chose, waiting for Enter or the same key (D20). */
+  /** The chosen option, waiting for Lock in or Enter (D31). */
   const [chosen, setChosen] = useState<number | null>(null);
   // A new set of options (clue 4 after a wrong pick on clue 3) starts unchosen.
   const setKey = setKeyOf(options);
@@ -237,159 +295,182 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   const typingUntil = useRef(0);
   /** Until when a Space just after a key chose still reads as a typed name's space ("B Smith"). */
   const spaceGuardUntil = useRef(0);
+  /** When the last printable key came down, and how many have run on (`WORD_KEYS`). */
+  const lastKey = useRef({ at: Number.NEGATIVE_INFINITY, run: 0 });
+  /** Where and when a pointer last chose an option (`DOUBLE_TAP_MS`). */
+  const chosenByPointer = useRef({
+    at: Number.NEGATIVE_INFINITY,
+    x: 0,
+    y: 0,
+  });
   const buttons = useRef(new Map<number, HTMLButtonElement>());
-  /** The option a key chose, to focus once it is drawn as chosen, so its description is read with it. */
-  const focusNext = useRef<number | null>(null);
-  /** True while a key moves focus to the option it chose, so `onFocus` can tell it from Tab or a pointer. */
+  /** True while a key moves focus to an option, so `onFocus` can tell it from Tab or a pointer. */
   const keyFocusing = useRef(false);
   /**
-   * Whether a name has been typed since a key last chose an option on its
-   * own, outside the typing window, or focus last reached an option by Tab
-   * or a pointer (R3-05 after review). While it holds, Enter on an option
-   * that isn't marked commits nothing, so "Cartographer" then Enter, with
-   * focus left on an option by its letters, sends no pick, even after a
-   * pause.
+   * Whether a word has been typed since a key last chose an option on its
+   * own, or focus last reached an option by Tab or a pointer (R3-05 after
+   * review, R4-11). While it holds, Enter commits and chooses nothing, so
+   * "Cartographer" or "Abba" then Enter, with focus left on an option by
+   * its letters, sends no pick, even after a pause.
    */
   const typedSinceChoice = useRef(false);
-  useLayoutEffect(() => {
-    const index = focusNext.current;
-    if (index === null) return;
-    focusNext.current = null;
-    keyFocusing.current = true;
-    buttons.current.get(index)?.focus();
-    keyFocusing.current = false;
-  }, [chosen]);
+  /** What was last said of the choice, taken back when typing clears the mark (R4-11). */
+  const said = useRef<HTMLElement | null>(null);
 
+  // Once drawn: the round focuses the group and scrolls the options into view.
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
+
+  /** The chosen option, unless it can no longer be picked. */
+  const choice =
+    options.find(
+      (option) => option.index === chosen && !option.alreadyGuessed,
+    ) ?? null;
   /** The option that is marked and still idle: AnswerButton exposes it as `aria-pressed` (R3-09). */
-  const marked =
-    chosen !== null &&
-    options.some(
-      (option) => option.index === chosen && stateOf(option, props) === "idle",
-    )
-      ? chosen
-      : null;
+  const marked = choice !== null && !locked ? choice.index : null;
+
   function lockIn(index: number) {
     if (haptics) vibrate(HAPTICS.lockIn);
     onPick(index);
   }
 
+  /** Moves focus to an option as a key's doing. */
+  function focusByKey(index: number) {
+    keyFocusing.current = true;
+    buttons.current.get(index)?.focus();
+    keyFocusing.current = false;
+  }
+
+  /**
+   * Marks an option and says so (D31, R4-11). Nothing is sent. Only a
+   * key's own choice is told that Enter locks it in: a click may be a
+   * screen reader's, which sends no keydown, so Enter there would only
+   * choose again.
+   */
+  function choose(option: OptionView, byKey: boolean) {
+    typedSinceChoice.current = false;
+    setChosen(option.index);
+    said.current = announce(copy.chosenNamed(option.label, byKey));
+  }
+
+  function unmark() {
+    setChosen(null);
+    withdrawAnnouncement(said.current);
+    said.current = null;
+  }
+
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    if (!shortcuts || event.nativeEvent.isComposing) return;
+    if (event.nativeEvent.isComposing) return;
     // Keys act only while focus is in the group: on an option (D20), or on
     // the group itself, where focus lands as the options arrive (D28).
+    // Never on the Lock in button, whose Enter and Space are its own.
     const from = optionAt(event.target);
     const onGroup = event.target === event.currentTarget;
     if (from === null && !onGroup) return;
     if (event.altKey || event.ctrlKey || event.metaKey) return;
     if (locked) return;
-    if (event.key === "Escape") {
+    const { key } = event;
+    if (key === "Escape") {
       if (chosen === null) return;
       event.preventDefault();
-      setChosen(null);
+      unmark();
       return;
     }
-    const now = performance.now();
+    const now = keyTime();
     const typing = now < typingUntil.current;
-    if (event.key === "Enter" && from !== null) {
-      // D20's typing guard (D28, R3-05 after review): Enter after a typed
-      // name is the name's end, not a lock-in, however long the pause. It
-      // locks in only an option a key chose on its own (marked), or one
-      // Tab or a pointer reached, with nothing typed since.
-      if (typedSinceChoice.current || (typing && chosen !== from)) {
-        event.preventDefault();
-        typingUntil.current = now + TYPING_MS;
-        return;
-      }
-    }
-    if (event.key === " " && from === null) {
-      // No option has focus: a space is typing. Inside a typed name it does
-      // nothing; a first space still scrolls the page, as it would anywhere
-      // (R3-05 after review), and opens the typing window.
-      if (typing) {
-        event.preventDefault();
-        typedSinceChoice.current = true;
-      }
-      typingUntil.current = now + TYPING_MS;
-      return;
-    }
-    if (event.key === " " && from !== null) {
-      // Space is a letter in a typed name: inside the typing window it does
-      // nothing, and otherwise it chooses the focused option before it can
-      // lock it in, so a name with a space can't press the button.
-      if (typing || now < spaceGuardUntil.current) {
-        event.preventDefault();
-        typingUntil.current = now + TYPING_MS;
-        typedSinceChoice.current = true;
-        return;
-      }
-      if (chosen === from) return; // The native click locks it in.
+    if (key === "Enter") {
+      // On the group, before any option has focus, Enter does nothing.
+      if (from === null) return;
+      // Never the button's own click: Enter chooses first, and only then
+      // locks in (D31).
       event.preventDefault();
       if (event.repeat) return;
-      const label = options.find((item) => item.index === from)?.label;
-      typedSinceChoice.current = false;
-      setChosen(from);
-      if (label !== undefined) {
-        announce(MYSTERY_COPY.options.chosenNamed(label));
+      // D20's typing guard (D28, R3-05 after review): Enter after a typed
+      // word is the word's end, however long the pause, and inside the
+      // typing window it acts only on the option already chosen.
+      if (typedSinceChoice.current || (typing && chosen !== from)) {
+        typingUntil.current = now + TYPING_MS;
+        return;
       }
+      if (marked === from) {
+        lockIn(from);
+        return;
+      }
+      const option = options.find((item) => item.index === from);
+      if (option !== undefined && !option.alreadyGuessed) choose(option, true);
       return;
     }
-    const option = optionForKey(event.key, options);
-    if (option === null) {
-      // Any other printable key is typing: it clears the mark, so "the same
-      // key again" never spans letters typed in between.
-      if (event.key.length === 1) {
-        typingUntil.current = now + TYPING_MS;
-        // A key for an already-guessed option aims at an option, not a
-        // name: it chooses nothing, but leaves Enter as it was.
-        if (optionNamedBy(event.key, options) === undefined) {
+    if (key === " ") {
+      if (from === null) {
+        // No option has focus: a space is typing. Inside a typed name it
+        // does nothing; a first space still scrolls the page, as it would
+        // anywhere (R3-05 after review), and opens the typing window.
+        if (typing) {
+          event.preventDefault();
           typedSinceChoice.current = true;
         }
-        setChosen(null);
+        typingUntil.current = now + TYPING_MS;
+        return;
       }
+      // On an option Space never clicks: it chooses, here (D31).
+      event.preventDefault();
+      if (typing || now < spaceGuardUntil.current) {
+        // A letter in a typed name ("B Smith").
+        typingUntil.current = now + TYPING_MS;
+        typedSinceChoice.current = true;
+        return;
+      }
+      if (event.repeat) return;
+      const option = options.find((item) => item.index === from);
+      if (option !== undefined && !option.alreadyGuessed) choose(option, true);
+      return;
+    }
+    // The letters and digits are the shortcuts Settings can switch off;
+    // Enter, Space and Escape above are any button's keys.
+    if (!shortcuts || key.length !== 1) return;
+    // A held key repeats: the first press counted, and a repeat is no second press.
+    const option = optionForKey(key, options);
+    if (event.repeat) {
+      if (option !== null) event.preventDefault();
+      return;
+    }
+    // Keys running on are a word, whatever their letters (D31, R4-11).
+    const prior = lastKey.current;
+    const run = now - prior.at >= TYPING_MS ? 1 : prior.run + 1;
+    lastKey.current = { at: now, run };
+    const word = run >= WORD_KEYS;
+    if (option === null) {
+      // Any other printable key is typing: it clears the mark and what was
+      // said of it.
+      typingUntil.current = now + TYPING_MS;
+      // A key for an already-guessed option aims at an option, not a name:
+      // it chooses nothing, but on its own leaves Enter as it was.
+      if (word || optionNamedBy(key, options) === undefined) {
+        typedSinceChoice.current = true;
+      }
+      unmark();
       return;
     }
     event.preventDefault();
-    // A held key repeats: the first press chose, and a repeat is no second press.
-    if (event.repeat) return;
-    if (typing) {
-      // Still typing: an option key only chooses, and keeps the window open.
+    if (word || (typing && typedSinceChoice.current)) {
+      // Inside a typed word an option key only moves focus to its option.
+      // Nothing is marked, so nothing says "Enter locks it in" over a
+      // letter of a name ("Mira Tolland", "Abba"), where Enter does nothing.
       typingUntil.current = now + TYPING_MS;
-      if (typedSinceChoice.current) {
-        // Inside a typed name it only moves focus to its option. Nothing is
-        // marked, so nothing says "Enter locks it in" over a letter of a
-        // name ("Mira Tolland"), where Enter commits nothing.
-        if (chosen !== null) setChosen(null);
-        if (from !== option.index) {
-          keyFocusing.current = true;
-          buttons.current.get(option.index)?.focus();
-          keyFocusing.current = false;
-        }
-        return;
-      }
-    } else if (chosen === option.index) {
-      lockIn(option.index);
+      typedSinceChoice.current = true;
+      unmark();
+      if (from !== option.index) focusByKey(option.index);
       return;
-    } else {
-      // A key chose on its own: Enter may lock it in.
-      typedSinceChoice.current = false;
-      // The mark moving between options reads as typing too ("Abby").
-      if (chosen !== null) typingUntil.current = now + TYPING_MS;
     }
-    if (chosen === option.index) return;
+    // The mark moving between options may be a word's start ("Abby").
+    if (chosen !== null && chosen !== option.index) {
+      typingUntil.current = now + TYPING_MS;
+    }
     spaceGuardUntil.current = now + TYPING_MS;
-    setChosen(option.index);
-    if (from === option.index) {
-      // Focus stays put, so nothing new would be read: say it.
-      announce(MYSTERY_COPY.options.chosenNamed(option.label));
-    } else {
-      focusNext.current = option.index;
-    }
+    if (from !== option.index) focusByKey(option.index);
+    choose(option, true);
   }
-
-  const describedBy = [labelledBy === undefined ? null : leadId]
-    .concat(shortcuts ? keysId : null)
-    .filter((id) => id !== null)
-    .join(" ");
 
   return (
     <div
@@ -397,31 +478,35 @@ export function MysteryOptions(props: MysteryOptionsProps) {
       role="group"
       tabIndex={-1}
       aria-labelledby={labelledBy ?? leadId}
-      aria-describedby={describedBy === "" ? undefined : describedBy}
-      {...focusTargetProps("clue_heading")}
+      aria-describedby={
+        labelledBy === undefined ? keysId : `${leadId} ${keysId}`
+      }
+      {...focusTargetProps(focusTarget)}
       data-options=""
       data-digits={shortcuts && digits ? "" : undefined}
       // Focused as the options arrive (D28): the ring the clue card draws
       // for its heading, around the whole group.
       className="group/options rounded-[14px] outline-offset-[3px] focus-visible:outline-[3px] focus-visible:outline-[color:var(--kn-focus,var(--foreground))]"
       onKeyDown={onKeyDown}
+      onKeyUp={(event) => {
+        // Where a button clicks as Space comes up, it doesn't here: Space
+        // was dealt with on the way down.
+        if (event.key === " " && optionAt(event.target) !== null) {
+          event.preventDefault();
+        }
+      }}
       onFocus={(event) => {
-        // Focus moved to another option: Enter locks in what has focus.
-        const index = optionAt(event.target);
         // Reached by Tab or a pointer, or the group focused afresh as a set
-        // of options arrives: nothing is typed yet.
+        // of options arrives: nothing is typed yet. The mark stays where it
+        // is (D31).
         if (
-          (index !== null && !keyFocusing.current) ||
+          (optionAt(event.target) !== null && !keyFocusing.current) ||
           event.target === event.currentTarget
         ) {
           typedSinceChoice.current = false;
+          typingUntil.current = 0;
+          lastKey.current.at = Number.NEGATIVE_INFINITY;
         }
-        setChosen((current) => (current === index ? current : null));
-      }}
-      onBlur={(event) => {
-        const next = event.relatedTarget;
-        if (next instanceof Node && event.currentTarget.contains(next)) return;
-        setChosen(null);
       }}
     >
       <p
@@ -432,71 +517,107 @@ export function MysteryOptions(props: MysteryOptionsProps) {
           TONE.ink3,
         )}
       >
-        {last ? MYSTERY_COPY.options.lastLead : MYSTERY_COPY.options.lead}
+        {last ? copy.lastLead : copy.lead}
       </p>
-      {shortcuts ? (
-        <p id={keysId} className="sr-only">
-          {MYSTERY_COPY.options.legend}
-        </p>
-      ) : null}
-      {/* Referenced while an option is chosen; hidden, it is read only as that description. */}
-      <p id={chosenId} hidden>
-        {MYSTERY_COPY.options.chosen}
-      </p>
-      {shortcuts ? (
-        // D28: from the moment the options appear, in a line of its own
-        // under the lead and above the options, always drawn, so nothing
-        // moves; on screen beside them at 200% text on a phone. Screen
-        // readers hear the same words as the group's description.
-        <p
-          aria-hidden="true"
-          data-keys-legend="shown"
-          className={cx("mt-1 text-[0.8125rem] font-semibold", TONE.ink2)}
+      {/* D32: one line, always drawn, saying what is true for the device.
+          The same cell holds room for the other wording, so the line is as
+          tall as either and nothing moves when a first key changes it. CSS
+          draws that reserve from an attribute: it is not in the page's
+          text (R4-03). */}
+      <p
+        id={keysId}
+        className={cx("mt-1 grid text-[0.8125rem] font-semibold", TONE.ink2)}
+      >
+        <span
+          data-keys-legend={shortcuts && keys ? "keys" : "tap"}
+          className="col-start-1 row-start-1"
         >
-          {MYSTERY_COPY.options.legend}
-        </p>
-      ) : null}
+          {shortcuts && keys ? copy.legend : copy.tapLegend}
+        </span>
+        {shortcuts ? (
+          <span
+            aria-hidden="true"
+            data-reserve={keys ? copy.tapLegend : copy.legend}
+            className="invisible col-start-1 row-start-1 after:content-[attr(data-reserve)]"
+          />
+        ) : null}
+      </p>
       {/* grid-cols-1 is minmax(0, 1fr): the longest word in a label can't
           widen the column past the screen, as "Ferryman" took it to 331 px
           of 296 at 200% text on a 360 px phone (R1-03); it breaks instead. */}
-      <ol className="mt-2 grid grid-cols-1 gap-2.5">
-        {options.map((option, position) => {
-          const state = stateOf(option, props);
-          const isMarked = marked === option.index;
-          return (
-            <li
-              key={option.index}
-              data-option={option.index}
-              data-chosen={isMarked ? "" : undefined}
-              className="min-w-0"
-            >
-              <AnswerButton
-                ref={(button) => {
-                  if (button === null) buttons.current.delete(option.index);
-                  else buttons.current.set(option.index, button);
-                }}
-                index={option.index}
-                state={state}
-                pressed={isMarked}
-                className={isMarked ? CHOSEN_BADGE : undefined}
-                aria-describedby={isMarked ? chosenId : undefined}
-                aria-pressed={isMarked}
-                // The badge is the key hint (D6); AnswerButton names the keys
-                // to assistive tech, only while the option is idle.
-                shortcut={shortcuts ? keysFor(position, digits) : null}
-                onPressStart={() => {
-                  if (sound) playEffect("tap");
-                }}
-                onCommit={() => {
-                  lockIn(option.index);
-                }}
+      {/* The options and their bar share a box of their own: the sticky
+          bar is held inside it, so it starts at option A and never covers
+          the lead line or the legend above. */}
+      <div
+        data-options-box=""
+        onClickCapture={(event) => {
+          const place = placeOf(event);
+          if (place === null || optionAt(event.target) === null) return;
+          chosenByPointer.current = { at: keyTime(), ...place };
+        }}
+      >
+        <ol className="mt-2 grid grid-cols-1 gap-2.5">
+          {options.map((option, position) => {
+            const state = stateOf(option, props);
+            const isMarked = marked === option.index;
+            return (
+              <li
+                key={option.index}
+                data-option={option.index}
+                data-chosen={isMarked ? "" : undefined}
+                className="min-w-0"
               >
-                {option.label}
-              </AnswerButton>
-            </li>
-          );
-        })}
-      </ol>
+                <AnswerButton
+                  ref={(button) => {
+                    if (button === null) buttons.current.delete(option.index);
+                    else buttons.current.set(option.index, button);
+                  }}
+                  index={option.index}
+                  state={state}
+                  pressed={isMarked}
+                  className={isMarked ? CHOSEN_BADGE : undefined}
+                  aria-pressed={isMarked}
+                  // The badge is the key hint (D6); AnswerButton names the keys
+                  // to assistive tech, only while the option is idle.
+                  shortcut={shortcuts ? keysFor(position, digits) : null}
+                  onPressStart={() => {
+                    if (sound) playEffect("tap");
+                  }}
+                  // A tap or a click chooses, as a key does (D31). Focus goes
+                  // with it where the browser leaves it behind, so Enter then
+                  // locks in what was tapped.
+                  onCommit={() => {
+                    buttons.current.get(option.index)?.focus();
+                    choose(option, false);
+                  }}
+                >
+                  {option.label}
+                </AnswerButton>
+              </li>
+            );
+          })}
+        </ol>
+        <LockInBar
+          label={choice === null ? null : choice.label}
+          disabled={choice === null || disabled}
+          busy={busy}
+          onLockIn={(event) => {
+            if (marked === null) return;
+            // The second tap of a double tap on an option, should the bar
+            // ever be under it by then, is not a lock-in (D31).
+            const tap = chosenByPointer.current;
+            const place = placeOf(event);
+            if (
+              place !== null &&
+              keyTime() - tap.at < DOUBLE_TAP_MS &&
+              Math.hypot(place.x - tap.x, place.y - tap.y) < DOUBLE_TAP_PX
+            ) {
+              return;
+            }
+            lockIn(marked);
+          }}
+        />
+      </div>
     </div>
   );
 }

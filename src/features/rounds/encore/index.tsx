@@ -17,7 +17,9 @@
  * reader hears the number meant rather than every keystroke; the field's
  * description holds it too. The field asks for the numeric keypad
  * (`inputmode` numeric, or decimal when decimals are allowed), and Enter
- * locks in too. Locking in sends the parsed value once; the guess can't
+ * locks in too: once a keyboard is in use, "Enter locks in." says so at
+ * the right of the line under the field, and in the field's description
+ * (R4-15, D32). Locking in sends the parsed value once; the guess can't
  * change afterwards. Focusing the field reads the question with it, so a
  * desktop pointer (where the field takes focus on arrival) still hears
  * what is asked.
@@ -88,6 +90,8 @@ import {
   keepFocusOnControls,
 } from "../mystery/focus";
 import { TargetIcon } from "../mystery/icons";
+import { useKeysInUse } from "../mystery/keys";
+import { loadLateParts, useLateParts } from "../mystery/late";
 import {
   LearnMoreLink,
   SourcesLine,
@@ -106,7 +110,6 @@ import {
   encoreAnnouncementText,
   parseErrorText,
 } from "./copy";
-import { NumberLine } from "./number-line";
 
 export { encoreAnnouncementText, ENCORE_COPY };
 
@@ -218,6 +221,7 @@ function EncorePlay({
   const previewId = `${ids}-preview`;
   const errorId = `${ids}-error`;
   const questionId = `${ids}-question`;
+  const enterId = `${ids}-enter`;
   const headingRef = useRef<HTMLHeadingElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
@@ -229,6 +233,8 @@ function EncorePlay({
   const busy = status === "judging" || status === "checking";
   const offline = status === "offline";
   const locked = result !== null || busy;
+  // R4-15: said only where a keyboard is in use, never on a touch-only phone (D32).
+  const enterHint = useKeysInUse() && result === null;
   const keyboard = useOnScreenKeyboard(fieldFocused && result === null);
 
   const rules = { decimals: encore.decimals, valueKind: encore.valueKind };
@@ -245,6 +251,8 @@ function EncorePlay({
   useEffect(() => {
     if (arrived.current) return;
     arrived.current = true;
+    // The result's number line, well before it is due (`late.ts`).
+    void loadLateParts();
     if (result !== null) return;
     if (finePointer()) inputRef.current?.focus();
     else headingRef.current?.focus();
@@ -375,6 +383,7 @@ function EncorePlay({
               unitWord === "" ? null : unitId,
               previewing ? previewId : null,
               invalid ? errorId : null,
+              enterHint ? enterId : null,
             ]
               .filter((part) => part !== null)
               .join(" ")}
@@ -424,7 +433,7 @@ function EncorePlay({
           region of its own. */}
       <p
         data-encore-line=""
-        className="mt-2.5 min-h-[1.4em] text-[0.9375rem] font-semibold"
+        className="mt-2.5 flex min-h-[1.4em] flex-wrap gap-x-3 text-[0.9375rem] font-semibold"
       >
         {invalid && !parsed.ok ? (
           <span
@@ -442,6 +451,15 @@ function EncorePlay({
           <span id={previewId} className={TONE.ink2}>
             {ENCORE_COPY.previewLead}{" "}
             <strong className={TONE.ink}>{amount}</strong>
+          </span>
+        ) : null}
+        {enterHint ? (
+          <span
+            id={enterId}
+            data-enter-hint=""
+            className={cx("ml-auto", TONE.ink2)}
+          >
+            {ENCORE_COPY.enterLocksIn}
           </span>
         ) : null}
       </p>
@@ -624,6 +642,9 @@ function EncoreResult({
   const headingRef = useRef<HTMLHeadingElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const dockRef = useRef<HTMLDivElement>(null);
+  // The number line loads apart from the round (`late.ts`), asked for as
+  // the Encore opens. The result line above it says the same in words.
+  const NumberLine = useLateParts()?.NumberLine;
   // The result line takes focus (AC-DLY-18) without the browser's scroll,
   // and the card comes into view above the dock (R2-12): a layout effect,
   // so it never paints anywhere else.
@@ -692,16 +713,21 @@ function EncoreResult({
             </span>
           </p>
         )}
-        <NumberLine
-          valueKind={kind}
-          guess={result.guess}
-          answer={result.answer}
-          median={crowd?.medianGuess ?? null}
-          bands={bands}
-          unitShort={result.unitShort}
-          decimals={encore.decimals}
-          reducedMotion={reducedMotion}
-        />
+        {NumberLine === undefined ? (
+          // The line's room, so the card doesn't grow when it arrives.
+          <div aria-hidden="true" className="mt-3 min-h-[5.125rem]" />
+        ) : (
+          <NumberLine
+            valueKind={kind}
+            guess={result.guess}
+            answer={result.answer}
+            median={crowd?.medianGuess ?? null}
+            bands={bands}
+            unitShort={result.unitShort}
+            decimals={encore.decimals}
+            reducedMotion={reducedMotion}
+          />
+        )}
         {/* D16: both band lines stay, as the line's legend. */}
         <BandHints bands={bands} valueKind={kind} legend className="mt-3" />
         <p className="mt-3 text-base leading-normal text-pretty">

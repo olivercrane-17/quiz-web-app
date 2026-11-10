@@ -48,6 +48,11 @@ export const ENCORE_COPY = {
     group: "How the Encore is judged",
   },
   lockIn: "Lock in",
+  /**
+   * Under the field once a keyboard is in use (R4-15, D32): Enter in the
+   * field locks the one answer in, and nothing said so.
+   */
+  enterLocksIn: "Enter locks in.",
   errors: {
     not_number: "Numbers only, please.",
     not_positive: "Positive numbers only.",

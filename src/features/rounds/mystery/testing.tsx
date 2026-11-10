@@ -38,7 +38,29 @@ import {
 import { EncoreRound } from "../encore";
 import { encoreAnnouncementText } from "../encore/copy";
 import { mysteryAnnouncementText, mysteryMissed } from "./copy";
+import { resetKeysInUse } from "./keys";
+import { loadLateParts } from "./late";
 import { MysteryRound } from ".";
+
+// The late parts (options, crowd chart, number line) load apart from the
+// rounds: here before any test draws one.
+await loadLateParts();
+
+/**
+ * The device a test plays on (D32): one with a mouse, where a keyboard is
+ * likely and the key legends show from the start, or a touch-only one,
+ * where they wait for a first key. Each call starts a fresh page, with no
+ * key pressed yet.
+ */
+export function setPointer(kind: "mouse" | "touch"): void {
+  window.matchMedia = ((query: string) => ({
+    matches: kind === "mouse" && query === "(hover: hover) and (pointer: fine)",
+    media: query,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+  })) as unknown as typeof window.matchMedia;
+  resetKeysInUse();
+}
 
 export const TEST_SETTINGS: PlaySettings = {
   ...playSettingsFrom(DEFAULT_SETTINGS, false),

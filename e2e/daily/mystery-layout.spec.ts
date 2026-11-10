@@ -15,6 +15,7 @@ import type { Locator, Page } from "@playwright/test";
 import { expect, test } from "../fixtures";
 import { expectNoSeriousAxe } from "../support/axe";
 import { mockInit } from "../support/mock";
+import { pickFirstOption, pickOption } from "./clue-4";
 
 /** 09:00 in London on Wednesday 4 November 2026: Daily #45. */
 const NOV_4 = new Date("2026-11-04T09:00:00Z");
@@ -99,7 +100,7 @@ async function toClue(page: Page, clue: number) {
 async function toTheEncore(page: Page) {
   for (const next of ["Next mystery", "Next mystery", "On to the Encore"]) {
     await toClue(page, 4);
-    await page.getByRole("button", { name: /^A\. / }).click();
+    await pickFirstOption(page);
     await page.getByRole("button", { name: next }).click();
   }
   await expect(page.locator('[data-round="encore"]')).toBeVisible();
@@ -505,9 +506,7 @@ test.describe("the reveal under the sticky header (R1-12)", () => {
   /** Picks `answer` among clue 4's options and waits for the reveal to settle. */
   async function pickOnClue4(page: Page, answer: string) {
     await toClue(page, 4);
-    await page
-      .getByRole("button", { name: new RegExp(`^[A-D]\\. ${answer}`) })
-      .click();
+    await pickOption(page, answer);
     await expect(page.locator("[data-reveal]")).toBeVisible();
     // The stamp lands at 680 ms; measure where it comes to rest.
     await page.waitForFunction(() =>

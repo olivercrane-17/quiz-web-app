@@ -18,6 +18,7 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "../fixtures";
 import { localInstant } from "../support/clock";
 import { mockControls, mockInit } from "../support/mock";
+import { chooseOption, pickOption } from "./clue-4";
 import { readAndPress, stopwatchText } from "./stopwatch";
 
 test.use({ timezoneId: "Europe/London" });
@@ -57,7 +58,7 @@ async function toOptionsAndPick(page: Page, name: RegExp): Promise<void> {
   for (let clue = 1; clue < 4; clue += 1) {
     await page.getByRole("button", { name: /^(Next clue|Last clue)/ }).click();
   }
-  await page.getByRole("button", { name }).click();
+  await pickOption(page, name);
 }
 
 const SET_A = [
@@ -91,7 +92,7 @@ async function toTheEncore(
       ).toBeVisible();
       await page.getByRole("button", { name: /^Next clue/ }).click();
       await page.getByRole("button", { name: /^Last clue/ }).click();
-      await page.getByRole("button", { name: answer }).click();
+      await pickOption(page, answer);
     } else {
       await toOptionsAndPick(page, answer);
     }
@@ -178,7 +179,9 @@ test.describe("R3-01 one clock: the header at Lock in is the stop screen's time"
     await mockControls(page).failNext("sealed.act", "unreachable", {
       times: 1,
     });
-    const reading = await readAndPress(page, "The Lantern Keeper", {
+    // D31: the option is chosen first; Lock in is the press that sends it.
+    await chooseOption(page, "The Lantern Keeper");
+    const reading = await readAndPress(page, "Lock in The Lantern Keeper", {
       contains: true,
     });
     await expect(

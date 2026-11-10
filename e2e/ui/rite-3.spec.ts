@@ -18,6 +18,7 @@
  */
 import type { Locator, Page } from "@playwright/test";
 
+import { pickOption } from "../daily/clue-4";
 import { expect, test } from "../fixtures";
 import { allowClipboard } from "../support/clipboard";
 import { setClock } from "../support/clock";
@@ -97,7 +98,7 @@ async function toOptionsAndPick(page: Page, name: RegExp): Promise<void> {
   for (let clue = 1; clue < 4; clue += 1) {
     await page.getByRole("button", { name: /^(Next clue|Last clue)/ }).click();
   }
-  await page.getByRole("button", { name }).click();
+  await pickOption(page, name);
 }
 
 /** Plays #42 to its stop screen on Next clue and the right options. */

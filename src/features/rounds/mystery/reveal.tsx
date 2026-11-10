@@ -17,13 +17,17 @@
  * explanation, the sources line when the item has source labels, the crowd
  * chart, Learn more, the heart and report actions, and Continue. Focus
  * lands on the answer heading (AC-DLY-18), and Enter there continues (PRD
- * §3.0.3), so the keyboard never has to tab past the actions.
+ * §3.0.3), so the keyboard never has to tab past the actions. Once a
+ * keyboard is in use, "Enter continues." shows under the button and is the
+ * heading's description (R4-14): Dee pressed Enter on the answer, didn't
+ * know it had moved her on, and her next Enter spent a clue of the next
+ * Mystery.
  *
  * The guesses, the pick and the stamp come from the round's misses, which
  * the reveal itself carries, so a reveal that a reload or Leave and
  * Continue brings back reads as the live one did (R1-22, D10).
  */
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 
 import { TUNABLES } from "@/config/tunables";
 import type { MysteryOpen, MysteryReveal } from "@/engine/rounds/mystery";
@@ -38,9 +42,10 @@ import { CrossIcon } from "@/ui/icons";
 
 import type { PlaySettings } from "../contracts";
 import { MYSTERY_COPY, mysteryMissed, solvedStamp } from "./copy";
-import { CrowdChart } from "./crowd";
 import { continueOnEnter, focusTargetProps } from "./focus";
 import { ArrowRightIcon, TickIcon } from "./icons";
+import { useKeysInUse } from "./keys";
+import { loadLateParts, useLateParts } from "./late";
 import { RoundKicker } from "./kicker";
 import {
   LearnMoreLink,
@@ -135,6 +140,14 @@ export function MysteryRevealCard({
   const history = revealHistory(reveal, lastOpen);
   const rows = clueRows(reveal, history);
   const copy = MYSTERY_COPY.reveal;
+  const enterHintId = useId();
+  const keys = useKeysInUse();
+  // The crowd chart loads apart from the round (`late.ts`); a reveal that
+  // a reload opens on asks for it itself.
+  const CrowdChart = useLateParts()?.CrowdChart;
+  useEffect(() => {
+    void loadLateParts();
+  }, []);
 
   // One cue per reveal, as it lands.
   const cued = useRef(false);
@@ -232,6 +245,7 @@ export function MysteryRevealCard({
         ref={headingRef}
         tabIndex={-1}
         {...focusTargetProps("reveal_heading")}
+        aria-describedby={keys ? enterHintId : undefined}
         className={cx(
           "text-[clamp(1.625rem,7.7vw,1.875rem)] leading-[1.02] font-bold tracking-[-0.02em] text-balance outline-none",
           solved ? "mt-2.5" : "mt-0.5",
@@ -336,11 +350,13 @@ export function MysteryRevealCard({
       </p>
       <SourcesLine labels={reveal.sourceLabels} format={copy.sources} />
 
-      <CrowdChart
-        crowd={reveal.crowd}
-        solvedOn={reveal.solvedOn}
-        minN={TUNABLES.crowd.minN}
-      />
+      {CrowdChart === undefined ? null : (
+        <CrowdChart
+          crowd={reveal.crowd}
+          solvedOn={reveal.solvedOn}
+          minN={TUNABLES.crowd.minN}
+        />
+      )}
 
       <div className="mt-3 flex flex-wrap items-center gap-1">
         <RevealActions
@@ -362,6 +378,18 @@ export function MysteryRevealCard({
         {continueLabel}
         <ArrowRightIcon size={20} />
       </Button>
+      {keys ? (
+        <p
+          id={enterHintId}
+          data-enter-hint=""
+          className={cx(
+            "mt-2 text-center text-[0.8125rem] font-semibold",
+            TONE.ink2,
+          )}
+        >
+          {copy.enterContinues}
+        </p>
+      ) : null}
     </section>
   );
 }

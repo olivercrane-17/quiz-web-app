@@ -106,6 +106,9 @@ export function NumberLine(props: NumberLineProps) {
       role="img"
       aria-label={label}
       data-number-line={line.scale}
+      // Loaded apart from the rounds (`late.ts`): check:lazy fails if this
+      // module is ever back in a route's first load.
+      data-chunk="__qz_lazy_rounds_late__"
       data-motion={reducedMotion ? "reduce" : undefined}
       className="mt-3"
     >

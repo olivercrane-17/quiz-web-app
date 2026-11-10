@@ -32,6 +32,7 @@
  */
 import type { CDPSession, Page } from "@playwright/test";
 
+import { pickFirstOption } from "../daily/clue-4";
 import { expect, test } from "../fixtures";
 import { setClock } from "../support/clock";
 
@@ -659,7 +660,7 @@ test.describe("R1-09 text from the page you just left", () => {
           .getByRole("button", { name: /^(Next clue|Last clue)/ })
           .click();
       }
-      await page.getByRole("button", { name: /^A\. / }).click();
+      await pickFirstOption(page);
       await page.getByRole("button", { name: next }).click();
     }
     await page.getByLabel(/your number/i).fill("1000");
