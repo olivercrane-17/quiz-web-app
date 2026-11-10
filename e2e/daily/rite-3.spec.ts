@@ -110,7 +110,8 @@ async function lockInMatchesStopScreen(page: Page): Promise<void> {
   // A little over 2 s on the Encore, so it too ends mid-second.
   await page.waitForTimeout(1_200);
   await page.getByLabel(/your number/i).fill("90");
-  const reading = await readAndPress(page, "Lock in");
+  // The button names the number since D37: "Lock in 90 km".
+  const reading = await readAndPress(page, "Lock in", { contains: true });
   await expect(
     page.getByRole("button", { name: "See your results" }),
   ).toBeVisible();

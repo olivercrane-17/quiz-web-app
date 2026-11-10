@@ -450,7 +450,7 @@ function EncorePlay({
           region of its own. */}
       <p
         data-encore-line=""
-        className="mt-2.5 flex min-h-[1.4em] flex-wrap gap-x-3 text-[0.9375rem] font-semibold"
+        className="mt-2.5 flex min-h-[1.5em] flex-wrap gap-x-3 text-[0.9375rem] font-semibold"
       >
         {invalid && !parsed.ok ? (
           <span

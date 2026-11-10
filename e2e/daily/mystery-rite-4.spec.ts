@@ -27,9 +27,10 @@ const NOV_4 = new Date("2026-11-04T09:00:00Z");
 
 const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
-const KEYS = "Keys A to D choose. Enter locks in.";
+const KEYS = "Keys A to D choose. Enter on your choice locks in.";
 const TAP = "Tap one, then Lock in.";
-const TYPED = "Typing chooses nothing. Press Esc, then A to D.";
+const TYPED =
+  "Typing chooses nothing and clears your choice. Press Esc, then A to D.";
 const LEAVE_RUNNING =
   "Leave the Daily. Your progress is saved, and the stopwatch keeps running.";
 
@@ -863,7 +864,8 @@ test.describe("one way to lock in at clue 4, with a keyboard (D31, R4-01, R4-11)
     await expect(field).toHaveAccessibleDescription(/Enter locks in\.$/);
     // It sits in the preview's line, right under the field, and that line
     // keeps its place when the preview arrives.
-    const lockIn = page.getByRole("button", { name: "Lock in", exact: true });
+    // Plain "Lock in", then "Lock in 80 km" (D37): one button, one place.
+    const lockIn = page.locator('[data-round="encore"] [data-lock-in]');
     const top = await topOf(lockIn);
     await field.fill("80");
     await expect(page.getByText("You're answering")).toBeVisible();
