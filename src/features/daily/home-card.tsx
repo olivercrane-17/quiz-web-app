@@ -302,14 +302,19 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     </Link>
   );
   // Before the Daily starts, the rules can be read with no clock running
-  // (D25): the Daily's own sheet, on Today.
+  // (D25): the Daily's own sheet, on Today. A text button one line tall
+  // with the design system's 44 px hit area (`kn-hit`), so the card grows
+  // by a line and Quick play stays above the fold at 360 by 640.
   let after: ReactNode = (
     <button
       ref={howToButton}
       type="button"
       aria-haspopup="dialog"
       onClick={openHowTo}
-      className={buttonClasses({ variant: "text", className: "self-start" })}
+      className={buttonClasses({
+        variant: "text",
+        className: "kn-hit min-h-6 self-start",
+      })}
     >
       {COPY.howToPlay}
     </button>
