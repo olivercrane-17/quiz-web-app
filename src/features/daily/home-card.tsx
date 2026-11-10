@@ -302,10 +302,11 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     </Link>
   );
   // Before the Daily starts, the rules can be read with no clock running
-  // (D25): the Daily's own sheet, on Today. A text button one line tall
-  // with the design system's 44 px hit area (`kn-hit`), so the card grows
-  // by a line and Quick play stays above the fold at 360 by 640.
-  let after: ReactNode = (
+  // (D25): the Daily's own sheet, on Today. A text button in the heading's
+  // row, with the design system's 44 px hit area (`kn-hit`), so the card
+  // grows by nothing and Play and Quick play stay above the fold at 360 by
+  // 640 (DESIGN §12.1).
+  let howToLink: ReactNode = (
     <button
       ref={howToButton}
       type="button"
@@ -313,12 +314,13 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
       onClick={openHowTo}
       className={buttonClasses({
         variant: "text",
-        className: "kn-hit min-h-6 self-start",
+        className: "kn-hit min-h-6 shrink-0",
       })}
     >
       {COPY.howToPlay}
     </button>
   );
+  let after: ReactNode = null;
   let body = (
     <>
       <p className="text-base">{rule}</p>
@@ -346,7 +348,7 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     // No Play and no chips for a Daily that can't start; Quick play goes
     // first, in the Practice card the marker moves above this one.
     action = null;
-    after = null;
+    howToLink = null;
     body = (
       <p className="text-base" {...HOME_PROMOTE_PRACTICE}>
         {COPY.notReady}
@@ -372,7 +374,7 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
     ) : (
       <></>
     );
-    after = null;
+    howToLink = null;
   } else if (card?.finished && loaded !== null) {
     const { points, maxPoints, rows } = card.finished;
     const glyphs = glyphsFor(highContrast);
@@ -397,18 +399,25 @@ export function DailyHomeCard({ epoch, minutes }: DailyHomeCardProps) {
         )}
       </>
     );
+    howToLink = null;
     after = <NextDaily loaded={loaded} />;
   }
 
+  // On short phones (700 px tall or less) the card tightens its gaps and
+  // its padding as the ticket does (DESIGN §12.1), so Play and Quick play
+  // stay above the tab bar at 360 by 640 with today's two rows of chips.
   return (
     <section
       aria-labelledby="qz-daily-card"
       data-daily-card={card === null && notReady ? "not_ready" : status}
-      className="flex flex-col gap-3 rounded-3xl border-2 border-foreground bg-background p-4 shadow-[0_4px_0_0] shadow-foreground/40 sm:p-5"
+      className="flex flex-col gap-3 rounded-3xl border-2 border-foreground bg-background p-4 shadow-[0_4px_0_0] shadow-foreground/40 sm:p-5 [@media(max-height:700px)]:gap-2 [@media(max-height:700px)]:py-[13px]"
     >
-      <h2 id="qz-daily-card" className="text-xl font-bold">
-        {heading}
-      </h2>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+        <h2 id="qz-daily-card" className="text-xl font-bold">
+          {heading}
+        </h2>
+        {howToLink}
+      </div>
       {card !== null && status === "in_progress" ? (
         // Its own line under "Continue Daily #42" (DESIGN §12.1), so a
         // narrow card never starts a line with the separator.

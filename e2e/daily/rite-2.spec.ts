@@ -203,10 +203,10 @@ test.describe("R2-03 one clue-4 order per player", () => {
             JSON.stringify({
               v: 1,
               playerId: id,
-              secret: `r2-03-${id.slice(-12)}-pinned-secret-for-e2e`.slice(
-                0,
-                43,
-              ),
+              // 43 base64url characters ending in one whose low two bits
+              // are zero, as a minted secret has, or the identity layer
+              // quarantines it and mints a new player.
+              secret: `${"A".repeat(30)}${id.slice(-12)}A`,
               registered: false,
               createdAt: at,
               source: "minted",
@@ -252,6 +252,13 @@ test.describe("R2-03 one clue-4 order per player", () => {
           "attempts",
         );
         seen.push({ attempt: Object.keys(attempts)[0] ?? "", labels });
+        // The attempt is the pinned player's, not a new one minted over
+        // an identity the device refused.
+        expect(
+          Object.values(attempts).map(
+            (attempt) => (attempt as { playerId: string }).playerId,
+          ),
+        ).toEqual([player.playerId]);
         expect(labels[player.key]).toContain("Odile Marsh");
         expect(errors).toEqual([]);
       } finally {

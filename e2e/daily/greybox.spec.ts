@@ -320,7 +320,8 @@ test.describe("playing the fixture Dailies (Wave 1 exit)", () => {
     );
     expect(lines[0]).toMatch(/^Knewt Daily.#56 · 9\/9 · Encore/);
     expect(lines.slice(1, -1)).toEqual([`Questions ${"✅".repeat(9)}`]);
-    expect(lines.at(-1)).toMatch(/\/daily$/);
+    // The link opens Today until SHR-1's landing exists (R2-20).
+    expect(lines.at(-1)).toMatch(/^http:\/\/127\.0\.0\.1:\d+\/$/);
   });
 
   test("AC-DLY-09 [mc ×5, mystery, encore] scores out of 9 and shares five choice glyphs, then a Mystery row", async ({
@@ -541,10 +542,15 @@ test.describe("RITE round 1", () => {
       await withoutWebShare(page);
       await mockInit(page, { scenario: "finished_today" });
       await page.goto("/daily/42/results");
-      // The results open on their heading (R1-34); the share box is next.
+      // The results open on their heading (R1-34). Since round 2, Share
+      // sits straight under the score card (R2-10), so it comes first and
+      // the share box after it.
       await expect(
         page.getByRole("heading", { level: 1, name: "Daily #42" }),
       ).toBeFocused();
+      await page.keyboard.press("Tab");
+      const share = page.getByRole("button", { name: "Share", exact: true });
+      await expect(share).toBeFocused();
       await page.keyboard.press("Tab");
       const box = page.getByRole("textbox", { name: "Your share text" });
       await expect(box).toBeFocused();
@@ -557,10 +563,8 @@ test.describe("RITE round 1", () => {
           el.selectionEnd,
         ]),
       ).toEqual([0, text.length]);
-      await page.keyboard.press("Tab");
-      await expect(
-        page.getByRole("button", { name: "Share", exact: true }),
-      ).toBeFocused();
+      await page.keyboard.press("Shift+Tab");
+      await expect(share).toBeFocused();
       await page.keyboard.press("Enter");
       await expect(statusRegion(page)).toHaveText(
         "Copied. Paste it into your group chat.",
@@ -1058,7 +1062,7 @@ test.describe("RITE round 1", () => {
         await page.reload();
         await expect(page.locator("[data-score]")).toHaveText("9/12");
         await expect(page.locator("[data-legend]")).toHaveText(
-          "🟧 clue used · ✅ solved · ⬜ not needed",
+          "🟧 clue used · ✅ solved · ❌ missed · ⬜ not needed",
         );
         await page.waitForFunction(() =>
           document
@@ -1077,7 +1081,10 @@ test.describe("RITE round 1", () => {
       page,
     }) => {
       const row = page.locator('[data-round-row="encore"]');
-      await expect(row).toContainText("Breaks ties. Scores no points.");
+      // D21 names the order since round 2 (R2-04).
+      await expect(row).toContainText(
+        "Breaks ties: closest Encore first, then time. Scores no points.",
+      );
     });
 
     test("R1-16 the grid paints every clue used before the solve 🟧, never red, and explains itself in one line", async ({
@@ -1089,7 +1096,7 @@ test.describe("RITE round 1", () => {
       await expect(rows).toContainText("Science & Tech 🟧🟧✅⬜");
       await expect(rows).not.toContainText("🟥");
       await expect(page.locator("[data-legend]")).toHaveText(
-        "🟧 clue used · ✅ solved · ⬜ not needed",
+        "🟧 clue used · ✅ solved · ❌ missed · ⬜ not needed",
       );
       // Outside the rows only the eye needs, so a screen reader hears it,
       // and it describes the share box that reads the glyphs by name.
@@ -1099,7 +1106,7 @@ test.describe("RITE round 1", () => {
       await expect(
         page.getByRole("textbox", { name: "Your share text" }),
       ).toHaveAccessibleDescription(
-        "No answers inside. 🟧 clue used · ✅ solved · ⬜ not needed",
+        "No answers inside. 🟧 clue used · ✅ solved · ❌ missed · ⬜ not needed",
       );
     });
 
@@ -1281,6 +1288,8 @@ test.describe("RITE round 1", () => {
 
     /** Leave for Today, then Continue from the Daily card. */
     async function leaveAndContinue(page: Page) {
+      // Left from a reveal, where the stopwatch is stopped, so the X keeps
+      // "Saved" (D19).
       await page
         .getByRole("link", { name: "Leave the Daily. Your progress is saved." })
         .click();
@@ -1362,14 +1371,20 @@ test.describe("RITE round 1", () => {
       await expect(
         page.getByRole("heading", { name: /clue 1/i }),
       ).toBeVisible();
+      // Clue 1 is open, so since round 2 the X and the toast say the
+      // stopwatch keeps running (D19, R2-01); the placement is R1-38's.
       await page
-        .getByRole("link", { name: "Leave the Daily. Your progress is saved." })
+        .getByRole("link", {
+          name: "Leave the Daily. Your progress is saved, and the stopwatch keeps running.",
+        })
         .click();
       await expect(page).toHaveURL("/");
       const toast = page.locator("[data-toast]");
-      await expect(toast).toHaveText("Saved");
+      await expect(toast).toHaveText("Saved. The stopwatch keeps running.");
       await expect(toast).toBeVisible();
-      await expect(statusRegion(page)).toHaveText("Saved");
+      await expect(statusRegion(page)).toHaveText(
+        "Saved. The stopwatch keeps running.",
+      );
       // In forced colours its fill drops out, and its border, painted in
       // the system's text colour, keeps the pill's shape (DESIGN §11).
       await page.emulateMedia({ forcedColors: "active" });

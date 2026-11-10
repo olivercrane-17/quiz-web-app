@@ -13,7 +13,8 @@
  * the share and never the answers around it); the one-line legend under
  * the grid (D3, R1-16), which screen readers hear as well and which
  * describes the share box; the total time, which only breaks ties (D7); the
- * Encore row's "Breaks ties. Scores no points." (D2, R1-07); focus on the
+ * Encore row's "Breaks ties: closest Encore first, then time. Scores no
+ * points." (D21, R2-04); Share straight under the score card (R2-10); focus on the
  * results heading once they load (R1-34); no Past 7 days link until the
  * archive has a route (R1-02); and nothing that scrolls sideways at 200%
  * text or with text spacing (AC-A11Y-04).
