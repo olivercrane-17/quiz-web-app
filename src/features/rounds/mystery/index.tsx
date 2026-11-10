@@ -35,10 +35,14 @@
  * Keys, while shortcuts are on: "/" goes to the guess field from anywhere in
  * the round (R1-32). The option keys belong to the options group, never to
  * the round (D20, R2-02, D28): they act only while focus is in the group,
- * so a letter typed on a heading does nothing. There a key chooses, and
- * Enter or the same key again locks in, and a name typed into the group
- * commits nothing (the typing guard in `MysteryOptions`). While one pick is out, the
- * round sends no other, whatever is pressed next.
+ * so a letter typed on a heading does nothing. There a key, a tap or a
+ * click chooses, and the Lock in button or Enter on the chosen option
+ * locks in (D31), and a name typed into the group commits nothing (the
+ * typing guard in `MysteryOptions`). While one pick is out, the round
+ * sends no other, whatever is pressed next. A round that a reload brings
+ * back with its options showing focuses them, not its heading, so the
+ * keys work as the legend says (R4-11); the group then carries the
+ * `round_heading` focus target, which is where the run's arrival lands.
  *
  * The component renders what the run machine holds and sends intents back;
  * it never calls the backend. Announcements of verdicts come from the
@@ -73,9 +77,11 @@ import { GuessCombobox } from "./combobox";
 import { MYSTERY_COPY } from "./copy";
 import { focusTargetProps, keepFocusOnControls } from "./focus";
 import { categoryName, roundLabel, RoundKicker } from "./kicker";
+import { useKeysInUse } from "./keys";
 import { ClueLadder } from "./ladder";
 import { NextClueButton, nextClueLabel } from "./next-clue";
 import { MysteryOptions } from "./options";
+import { loadLateParts } from "./late";
 import { MysteryRevealCard } from "./reveal";
 import { WithdrawnCard } from "./reveal-parts";
 import { StakeIndicator } from "./stake";
@@ -175,6 +181,15 @@ function MysteryPlay({
   // What the round looked like when it mounted: anything newer animates in.
   const [firstClue] = useState(open.clue);
   const [firstGuesses] = useState(open.wrongGuesses.length);
+  const [firstOptions] = useState(open.options !== null);
+  // From the first round of a run, so a key pressed on any clue counts (D32).
+  const keys = useKeysInUse();
+  // The parts no first screen shows (the reveal's crowd chart, the
+  // Encore's number line) load apart from the rounds: asked for here, as
+  // the Mystery arrives, well before either is due (`late.ts`).
+  useEffect(() => {
+    void loadLateParts();
+  }, []);
 
   const [lastIntent, setLastIntent] = useState<MysteryIntent | null>(null);
   const [fieldFocused, setFieldFocused] = useState(false);
@@ -182,6 +197,10 @@ function MysteryPlay({
   const busy = status === "judging" || status === "checking";
   const offline = status === "offline";
   const optionsShowing = open.options !== null;
+  // A reload or Continue brought the round back with its options showing:
+  // the run's arrival focus goes to them, not to the heading, so A then
+  // Enter works as it did before the reload (R4-11).
+  const restoredAtOptions = firstOptions && firstClue === open.clue;
   const worth = worthOnClue(open.clue);
   const nextLabel = nextClueLabel(open.clue, optionsFromClue, optionsShowing);
   const keyboard = useOnScreenKeyboard(fieldFocused && !optionsShowing);
@@ -223,8 +242,30 @@ function MysteryPlay({
   }
 
   // Arrival: the screen's heading, which reads "The answer is a person".
+  // A round that comes back with its options showing focuses them instead,
+  // once they are drawn (`showOptions`, R4-11).
   useEffect(() => {
-    titleRef.current?.focus();
+    if (!firstOptions) titleRef.current?.focus();
+  }, [firstOptions]);
+
+  /**
+   * The options are there: focus their group, which is labelled by the
+   * clue, so the clue is read first and the option keys work at once
+   * (D28). Show them as well, as far as the clue's top allows, so C and D
+   * aren't left below the fold.
+   */
+  const showOptions = useCallback(() => {
+    optionsGroupRef.current?.focus({ preventScroll: true });
+    const card = clueHeadingRef.current?.closest("[data-clue-card]");
+    const block = optionsRef.current?.getBoundingClientRect();
+    if (card instanceof HTMLElement && block !== undefined && block.height) {
+      keepBetween(
+        viewportBottom(),
+        block.bottom,
+        card.getBoundingClientRect().top,
+        "read",
+      );
+    }
   }, []);
 
   // A new clue: focus, sound and haptics follow what brought it.
@@ -238,21 +279,9 @@ function MysteryPlay({
     if (lastIntent?.kind === "guess" && !optionsShowing) {
       inputRef.current?.focus();
     } else if (optionsShowing) {
-      // The options just arrived under the clue: focus their group, which
-      // is labelled by the clue, so the clue is read first and the option
-      // keys work at once (D28). Show them as well, as far as the clue's
-      // top allows, so C and D aren't left below the fold.
-      optionsGroupRef.current?.focus({ preventScroll: true });
-      const card = clueHeadingRef.current?.closest("[data-clue-card]");
-      const block = optionsRef.current?.getBoundingClientRect();
-      if (card instanceof HTMLElement && block !== undefined && block.height) {
-        keepBetween(
-          viewportBottom(),
-          block.bottom,
-          card.getBoundingClientRect().top,
-          "read",
-        );
-      }
+      // A new clue under options that were already there (options from
+      // clue 3). Options that just arrived say so themselves (`onReady`).
+      showOptions();
     } else {
       clueHeadingRef.current?.focus();
     }
@@ -269,6 +298,7 @@ function MysteryPlay({
     lastIntent,
     optionsShowing,
     settings,
+    showOptions,
   ]);
 
   // While the list is open or the keyboard is up, the combobox keeps the
@@ -336,7 +366,7 @@ function MysteryPlay({
             id={titleId}
             ref={titleRef}
             tabIndex={-1}
-            {...focusTargetProps("round_heading")}
+            {...focusTargetProps(restoredAtOptions ? null : "round_heading")}
             className={cx(
               "mt-0.5 text-[clamp(1.5rem,6.9vw,1.6875rem)] leading-[1.08] font-semibold tracking-[-0.01em] outline-none",
               DISPLAY_FONT,
@@ -385,10 +415,13 @@ function MysteryPlay({
             busy={busy}
             disabled={offline}
             shortcuts={settings.shortcuts}
+            keys={keys}
             sound={settings.sound}
             haptics={settings.haptics}
             labelledBy={clueHeadingId}
             groupRef={optionsGroupRef}
+            focusTarget={restoredAtOptions ? "round_heading" : "clue_heading"}
+            onReady={showOptions}
             onPick={(option) => {
               send({ family: "mystery", kind: "pick", option });
             }}

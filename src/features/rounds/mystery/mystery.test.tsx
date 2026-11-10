@@ -68,6 +68,8 @@ const field = () => screen.getByRole("combobox", { name: "Your guess" });
 const guessButton = () => screen.getByRole("button", { name: "Guess" });
 const nextClue = () =>
   screen.getByRole("button", { name: /^(Next|Last) clue/ });
+/** The button that sends the chosen option (D31). */
+const lockIn = () => screen.getByRole("button", { name: /^Lock in/ });
 const stake = (name: string) => screen.getByRole("img", { name });
 const reveal = () => {
   const card = document.querySelector<HTMLElement>("[data-reveal]");
@@ -330,8 +332,14 @@ describe("MysteryRound, guessing", () => {
   it("tells namesakes apart by the qualifier, and keeps a filled-in row while it is edited", async () => {
     const { user } = play();
     await user.type(field(), "ada morrow s");
-    expect(screen.getAllByRole("option").map((row) => row.textContent)).toEqual(
-      ["Ada Morrow, sculptor"],
+    // Named as written, with no space before the comma (R4-17).
+    expect(
+      screen
+        .getAllByRole("option")
+        .map((row) => row.getAttribute("aria-label")),
+    ).toEqual(["Ada Morrow, sculptor"]);
+    expect(screen.getByRole("option")).toHaveAccessibleName(
+      "Ada Morrow, sculptor",
     );
     await user.keyboard("{ArrowDown}{Enter}");
     expect(field()).toHaveValue("Ada Morrow (sculptor)");
@@ -462,6 +470,7 @@ describe("MysteryRound, the options", () => {
     const { user } = play();
     for (let i = 0; i < 3; i += 1) await user.click(nextClue());
     await user.click(screen.getByRole("button", { name: "A. Odile Marsh" }));
+    await user.click(lockIn());
     const card = reveal();
     expect(within(card).getByText("Got it.")).toBeInTheDocument();
     expect(
@@ -503,8 +512,21 @@ describe("MysteryRound, the options", () => {
       },
     };
     const { rerender } = renderWithUser(<MysteryRound {...props} />);
-    screen.getByRole("button", { name: "C. Ennis Ward" }).click();
+    act(() => {
+      screen.getByRole("button", { name: "C. Ennis Ward" }).click();
+    });
+    act(() => {
+      lockIn().click();
+    });
+    expect(props.onIntent).toHaveBeenCalledWith({
+      family: "mystery",
+      kind: "pick",
+      option: 2,
+    });
     rerender(<MysteryRound {...props} status="judging" />);
+    // The bar keeps the choice's name while it is judged.
+    expect(lockIn()).toHaveAccessibleName(/^Lock in Ennis Ward/);
+    expect(lockIn()).toHaveAttribute("aria-busy", "true");
     const states = screen
       .getAllByRole("button")
       .filter((b) => b.hasAttribute("data-state"))
@@ -594,6 +616,7 @@ describe("MysteryRound, the reveal", () => {
     const { user, clients } = play();
     for (let i = 0; i < 3; i += 1) await user.click(nextClue());
     await user.click(screen.getByRole("button", { name: "D. Mira Tolland" }));
+    await user.click(lockIn());
     const card = reveal();
     expect(within(card).getByText("This one got away.")).toBeInTheDocument();
     expect(within(card).getByText("The answer was")).toBeInTheDocument();
@@ -1481,7 +1504,9 @@ describe("MysteryRound after RITE round 1", () => {
     );
     // Each option names its own key, and no digit while digits don't pick.
     expect(
-      numberOptions.map((option) => option.getAttribute("aria-keyshortcuts")),
+      numberOptions
+        .slice(0, 4)
+        .map((option) => option.getAttribute("aria-keyshortcuts")),
     ).toEqual(["A", "B", "C", "D"]);
     first.unmount();
 
@@ -1494,11 +1519,15 @@ describe("MysteryRound after RITE round 1", () => {
     const second = renderWithUser(<MysteryRound {...names} />);
     const nameOptions = within(optionsGroup()).getAllByRole("button");
     nameOptions[0]?.focus();
-    // "3" chooses C, and "C", the same option's letter, locks it in.
+    // "3" chooses C, and "C", the same option's letter, leaves it chosen
+    // (D31): Enter locks it in.
     await second.user.keyboard("3");
     expect(nameOptions[2]).toHaveFocus();
     expect(names.onIntent).not.toHaveBeenCalled();
     await second.user.keyboard("C");
+    expect(names.onIntent).not.toHaveBeenCalled();
+    expect(nameOptions[2]).toHaveAttribute("aria-pressed", "true");
+    await second.user.keyboard("{Enter}");
     expect(names.onIntent).toHaveBeenCalledOnce();
     expect(names.onIntent).toHaveBeenLastCalledWith({
       family: "mystery",
@@ -1515,6 +1544,7 @@ describe("MysteryRound after RITE round 1", () => {
     expect(
       within(group)
         .getAllByRole("button")
+        .slice(0, 4)
         .map((option) => option.getAttribute("aria-keyshortcuts")),
     ).toEqual(["A 1", "B 2", "C 3", "D 4"]);
   });
@@ -1536,7 +1566,9 @@ describe("MysteryRound after RITE round 1", () => {
     expect(off.onIntent).not.toHaveBeenCalled();
     expect(document.querySelector("[data-chosen]")).toBeNull();
     // Nor is there a legend for keys that do nothing.
-    expect(document.querySelector("[data-keys-legend]")).toBeNull();
+    expect(document.querySelector("[data-keys-legend]")).toHaveTextContent(
+      /^Tap one, then Lock in\.$/,
+    );
     first.unmount();
 
     const guessed = lastClue([
@@ -1596,6 +1628,7 @@ describe("MysteryRound after RITE round 1", () => {
     await view.user.click(
       screen.getByRole("button", { name: "A. Odile Marsh" }),
     );
+    await view.user.click(lockIn());
     expect(within(reveal()).getByText("Got it.")).toBeInTheDocument();
   });
 

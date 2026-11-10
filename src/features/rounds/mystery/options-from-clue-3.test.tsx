@@ -62,6 +62,8 @@ function play() {
 
 const nextClue = () =>
   screen.getByRole("button", { name: /^(Next|Last) clue/ });
+/** The button that sends the chosen option (D31). */
+const lockIn = () => screen.getByRole("button", { name: /^Lock in/ });
 
 describe("MysteryRound with options_from_clue 3", () => {
   it("AC-DLY-36 options replace typing from clue 3, a wrong pick there disables it on clue 4, and the share cells match", async () => {
@@ -80,10 +82,13 @@ describe("MysteryRound with options_from_clue 3", () => {
     ).toBeInTheDocument();
     expect(nextClue()).toHaveAccessibleName("Last clue · then worth 1");
     const group = screen.getByRole("group", { name: /^Clue 3:/ });
-    expect(within(group).getAllByRole("button")).toHaveLength(4);
+    // Four options, and Lock in under them, waiting for a choice (D31).
+    expect(within(group).getAllByRole("button")).toHaveLength(5);
+    expect(lockIn()).toHaveAttribute("aria-disabled", "true");
 
     // A wrong pick on clue 3 reveals clue 4 with that option disabled.
     await user.click(screen.getByRole("button", { name: "B. Liesl Varo" }));
+    await user.click(lockIn());
     expect(
       screen.getByRole("img", { name: "Worth 1 point now" }),
     ).toBeInTheDocument();
@@ -94,8 +99,13 @@ describe("MysteryRound with options_from_clue 3", () => {
       screen.queryByRole("button", { name: /^(Next|Last) clue/ }),
     ).toBeNull();
 
+    // The new set starts with nothing chosen.
+    expect(lockIn()).toHaveAccessibleName("Lock in");
+    expect(lockIn()).toHaveAttribute("aria-disabled", "true");
+
     // Then the right one solves on clue 4 for 1 point.
     await user.click(screen.getByRole("button", { name: "A. Odile Marsh" }));
+    await user.click(lockIn());
     const card = document.querySelector<HTMLElement>("[data-reveal]");
     expect(card).not.toBeNull();
     expect(
@@ -113,6 +123,7 @@ describe("MysteryRound with options_from_clue 3", () => {
     await user.click(nextClue());
     await user.click(nextClue());
     await user.click(screen.getByRole("button", { name: "A. Odile Marsh" }));
+    await user.click(lockIn());
     const card = document.querySelector<HTMLElement>(
       "[data-reveal]",
     ) as HTMLElement;

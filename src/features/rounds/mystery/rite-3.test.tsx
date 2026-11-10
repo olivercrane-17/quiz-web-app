@@ -28,7 +28,12 @@ import type { RoundComponentProps } from "../contracts";
 import { MysteryRound } from ".";
 import { RoundKicker } from "./kicker";
 import { TYPING_MS } from "./options";
-import { MysteryHarness, TEST_SETTINGS, mysteryMeta } from "./testing";
+import {
+  MysteryHarness,
+  TEST_SETTINGS,
+  mysteryMeta,
+  setPointer,
+} from "./testing";
 
 let people: MysteryAnswerList;
 let peopleLookup: EntityLookup;
@@ -47,6 +52,8 @@ beforeAll(async () => {
 
 beforeEach(() => {
   clearAnnouncements();
+  // A desk with a mouse: the key legend shows from the start (D32).
+  setPointer("mouse");
 });
 
 /** A visual viewport the tests can shrink, as an on-screen keyboard does. */
@@ -73,7 +80,9 @@ const optionsGroup = () =>
     name: /^Clue 4:/,
     description: `${LAST_LEAD} ${LEGEND}`,
   });
-const optionButtons = () => within(optionsGroup()).getAllByRole("button");
+/** The four options; the Lock in button comes after them (D31). */
+const optionButtons = () =>
+  within(optionsGroup()).getAllByRole("button").slice(0, 4);
 const legend = () => document.querySelector("[data-keys-legend]");
 
 function picks(onIntent: RoundComponentProps["onIntent"]) {
@@ -133,7 +142,7 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
     // until a key or a focus ring, so nothing moves when one arrives.
     const line = legend();
     expect(line).toHaveTextContent(LEGEND);
-    expect(line).toHaveAttribute("data-keys-legend", "shown");
+    expect(line).toHaveAttribute("data-keys-legend", "keys");
     expect(line?.className).not.toMatch(/(^| )hidden( |$)|:block/);
     const drawn = line?.className;
     await user.keyboard("{Escape}");
@@ -158,7 +167,7 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
     expect(document.querySelector("[data-reveal]")).not.toBeNull();
   });
 
-  it("R3-05 the same key twice from the group locks in that option, one pick", async () => {
+  it("R3-05 the same key twice from the group no longer locks in (D31): it stays chosen, and Enter sends one pick", async () => {
     const { user, onIntent } = play();
     await toClue4(user);
     const c = indexAt(2);
@@ -166,6 +175,9 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
     expect(optionButtons()[2]).toHaveFocus();
     expect(picks(onIntent)).toEqual([]);
     await user.keyboard("c");
+    expect(picks(onIntent)).toEqual([]);
+    expect(optionButtons()[2]).toHaveAttribute("aria-pressed", "true");
+    await user.keyboard("{Enter}");
     expect(picks(onIntent)).toEqual([
       { family: "mystery", kind: "pick", option: c },
     ]);
@@ -276,11 +288,13 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       ]);
     });
 
-    it("R3-05 cc still sends one pick, for C", async () => {
+    it("R3-05 cc sends nothing since D31, and cc then Enter one pick, for C", async () => {
       const { user, onIntent } = play();
       await toClue4(user);
       const c = indexAt(2);
       await user.keyboard("cc");
+      expect(picks(onIntent)).toEqual([]);
+      await user.keyboard("{Enter}");
       expect(picks(onIntent)).toEqual([
         { family: "mystery", kind: "pick", option: c },
       ]);
@@ -325,11 +339,21 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       ]);
     });
 
-    it("R3-05 changing one's mind with keys alone (b, d, a) still marks each, and Enter locks in the last", async () => {
+    it("R3-05 changing one's mind with keys alone (b, d, then a after a beat) still marks each, and Enter locks in the last", async () => {
+      const pause = pausable();
       const { user, onIntent } = play();
       await toClue4(user);
       const a = indexAt(0);
-      await user.keyboard("bda");
+      const d = indexAt(3);
+      // Two keys straight on are a change of mind. A third with no beat
+      // would make a typed word of them (R4-11), so it comes after one.
+      await user.keyboard("bd");
+      expect(document.querySelector("[data-chosen]")).toHaveAttribute(
+        "data-option",
+        String(d),
+      );
+      pause();
+      await user.keyboard("a");
       expect(document.querySelector("[data-chosen]")).toHaveAttribute(
         "data-option",
         String(a),
@@ -356,11 +380,14 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
       ]);
     });
 
-    it("R3-05 Tab to an option with nothing typed, then Enter, locks it in", async () => {
+    it("R3-05 Tab to an option with nothing typed, then Enter, chooses it since D31, and Enter again locks it in", async () => {
       const { user, onIntent } = play();
       await toClue4(user);
       const a = indexAt(0);
       await user.tab();
+      await user.keyboard("{Enter}");
+      expect(picks(onIntent)).toEqual([]);
+      expect(optionButtons()[0]).toHaveAttribute("aria-pressed", "true");
       await user.keyboard("{Enter}");
       expect(picks(onIntent)).toEqual([
         { family: "mystery", kind: "pick", option: a },
@@ -382,7 +409,7 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
     expect(targets[0]).toBe(optionsGroup());
   });
 
-  it("R3-05 with shortcuts off, focus still goes to the group, with no legend and no keys", async () => {
+  it("R3-05 with shortcuts off, focus still goes to the group, with no key legend and no keys", async () => {
     const onIntent = vi.fn<(intent: RoundIntent) => void>();
     const { user } = renderWithUser(
       <MysteryHarness
@@ -397,12 +424,13 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
     await toClue4(user);
     const group = screen.getByRole("group", {
       name: /^Clue 4:/,
-      description: LAST_LEAD,
+      description: `${LAST_LEAD} Tap one, then Lock in.`,
     });
     expect(group).toHaveFocus();
-    expect(legend()).toBeNull();
+    expect(legend()).toHaveTextContent(/^Tap one, then Lock in\.$/);
     await user.keyboard("a{Enter}");
     expect(picks(onIntent)).toEqual([]);
+    expect(document.querySelector("[data-chosen]")).toBeNull();
   });
 
   it("R3-05 typing into the guess field before clue 4 still never reaches an option", async () => {

@@ -76,7 +76,7 @@ export function buildHowToPlay(options: { percentile: boolean }): HowToPlay {
         id: "clue4",
         heading: "Clue 4",
         body: [
-          "The last clue comes with four options. You get one pick, and a wrong pick scores 0.",
+          "The last clue comes with four options. Choose one, then Lock in. You get one pick, and a wrong pick scores 0.",
         ],
       },
       {
