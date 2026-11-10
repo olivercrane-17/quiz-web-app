@@ -1,6 +1,6 @@
 {
   "id": "p.sci.0312",
-  "status": "draft",
+  "status": "checking",
   "category": "sci",
   "tags": ["physics", "units", "inventions"],
   "region": "global",
@@ -54,13 +54,180 @@
     "doubts": true
   },
   "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; c1 to c3 are etymologies ('named after', 'coined'), c4 a number. datasets: none covers SI unit names. c4 is a definition (one mechanical horsepower is 550 foot-pounds per second, about 745.7 W), checkable as a conversion. No writer search spent. rivalTest: all four options are SI units named after people, so the distractors share the key's form; joule and newton tempt as British scientists, volt as a familiar electrical unit. None is Scottish and none measures power. Against the key: the watt is the SI unit of power and Watt was Scottish; no reasonable reading fails. volatility: evergreen. regional: units are taught worldwide, and the steam-engine foothold is global history. style: Oxford spelling, explanation 20 words. myths: screened; no hit (the separate myth that Watt invented the steam engine is avoided: the stem says 'improving'). mystery and encore: not applicable. doubts: c3 is the standard account in reference works; checkers may want a source. Searches used: none.",
-  "format": "mc",
-  "stem": "Which unit of power is named after the Scottish engineer famous for improving the steam engine?",
-  "answer": "Watt",
-  "wrong": ["Joule", "Newton", "Volt"],
-  "order": "shuffle",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "3a883cb6247dbf19ebf19a75d53355d76a74a3699d8fd8716d2fcb48214fbc74",
+          "eeb9a104bb13e578daf517731f3cfc941651b52ca59e45105404ed4f09e7e455"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T04:02:12.136Z"
+        ],
+        "startedAt": "2026-11-10T04:02:01.991Z",
+        "finishedAt": "2026-11-10T04:02:51.276Z",
+        "coldSolve": {
+          "answerGiven": "Watt",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:02:10.032Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The SI derived unit of power, one joule per second, honours James Watt (1736 to 1819), the Scot whose separate condenser made steam engines far more efficient.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Unit named for Watt (adopted by the British Association in 1882, SI later). Watt was born in Greenock, Scotland, and 'improving' (not inventing) the steam engine is the accurate description. Key unique among the options."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The energy unit honours the English physicist J. P. Joule, the force unit the English scientist Isaac Newton, and the potential-difference unit the Italian Alessandro Volta; power is none of their quantities.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "All three distractors are SI units named after people, same kind as the key, but none is a unit of power and none of their namesakes was a Scottish steam engineer, so each is definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "uncertain",
+            "evidence": [
+              {
+                "kind": "web",
+                "query": "horsepower term origin James Watt coined or adopted earlier use Thomas Savery",
+                "results": [
+                  {
+                    "title": "gizmodo.com.au",
+                    "url": "https://gizmodo.com.au/?p=727134"
+                  },
+                  {
+                    "title": "Now Reading",
+                    "url": "https://watershapes.com/?p=29305"
+                  },
+                  {
+                    "title": "www.worldhistory.org",
+                    "url": "https://www.worldhistory.org/audioplayer/en/1-21774/"
+                  },
+                  {
+                    "title": "Published:  12:35 AM, 04 April 2020",
+                    "url": "https://dailyasianage.com/news/225285/the-origins-of-the-term-horsepower"
+                  },
+                  {
+                    "title": "cavac.at",
+                    "url": "https://cavac.at/cavacopedia/HorsePower"
+                  },
+                  {
+                    "title": "Why Engines are Commonly Measured in Horsepower",
+                    "url": "https://www.todayifoundout.com/?p=30551"
+                  },
+                  {
+                    "title": "Watt Steam Engine",
+                    "url": "https://www.worldhistory.org/Watt_Steam_Engine"
+                  },
+                  {
+                    "title": "graphsearch.epfl.ch",
+                    "url": "https://graphsearch.epfl.ch/en/concept/14019"
+                  },
+                  {
+                    "title": "Why Engines are Commonly Measured in Horsepower",
+                    "url": "https://www.todayifoundout.com/index.php/2014/02/engines-commonly-measured-horsepower/"
+                  },
+                  {
+                    "title": "History of Horsepower",
+                    "url": "https://low-offset.com/guides/history-of-horsepower"
+                  },
+                  {
+                    "title": "mathsciencehistory.com",
+                    "url": "https://mathsciencehistory.com/?p=604"
+                  },
+                  {
+                    "title": "Monday, December 30, 2019",
+                    "url": "https://helpmewriteapaper52.blogspot.com/2019/12/where-did-term-horsepower-come-from.html"
+                  },
+                  {
+                    "title": "What is a horsepower?",
+                    "url": "https://www.pistonudos.com/en/what-is-a-horsepower"
+                  },
+                  {
+                    "title": "The History of the Term “Horsepower”",
+                    "url": "https://gesrepair.com/the-history-of-the-term-horsepower/"
+                  },
+                  {
+                    "title": "magazine.primetals.com",
+                    "url": "https://magazine.primetals.com/?p=4919"
+                  },
+                  {
+                    "title": "www.historyhit.com",
+                    "url": "https://www.historyhit.com/?p=5182482"
+                  },
+                  {
+                    "title": "why is called horsepower",
+                    "url": "https://sdp.otoy.com/why-is-called-horsepower"
+                  },
+                  {
+                    "title": "the incredible and useless dog engines of 1895 and 1939 continued",
+                    "url": "https://thesciencebookstore.com/thesciencebookstore/2011/08/the-incredible-and-useless-dog-engines-of-1895-and-1939-continued.html"
+                  },
+                  {
+                    "title": "why do we measure engines terms horsepower",
+                    "url": "https://mentalfloss.com/article/33490/why-do-we-measure-engines-terms-horsepower"
+                  }
+                ],
+                "summaryExcerpt": "Thomas Savery introduced the underlying comparison, and James Watt turned it into the named unit. ... Savery's 1702 book The Miner's Friend compared an engine's output to the number of horses needed to do the same work. ... Sources disagree on when the term appeared.",
+                "citedResult": null,
+                "tiers": ["C"],
+                "conflictReported": true,
+                "retrievedAt": "2026-11-10"
+              },
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Watt defined horsepower as a unit (about 33,000 foot-pounds per minute) in the early 1780s to rate his engines against the horses they replaced, but comparisons of engines with horses, by Savery in 1702, came earlier.",
+                "confidence": "likely"
+              }
+            ],
+            "note": "I am certain Watt defined and popularized horsepower as a unit for marketing his engines, but not certain he coined the word: references I know say he 'adopted' the term, and Savery's 1702 Miner's Friend already rated engines by horses. My one search returned only Tier C pages, which split between 'coined' and 'adopted' and give conflicting dates. So 'coined' is not confirmed. Suggested fix: 'James Watt defined horsepower as a unit to sell his engines, comparing them with draught horses.'"
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Mechanical (imperial) horsepower is defined as 550 foot-pounds-force per second, which works out to 745.7 W.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "550 ft·lbf/s x 0.3048 m/ft x 4.448222 N/lbf = 745.70 W, so 'about 746 watts' is right; the claim correctly specifies mechanical horsepower (metric horsepower is about 735.5 W)."
+          }
+        ],
+        "issues": [
+          {
+            "type": "checker_doubt",
+            "severity": "fix",
+            "note": "c3 uncertain: the explanation says Watt 'coined' horsepower. Watt certainly defined the unit and used it to market his engines, but the word or horse comparison has earlier use (Savery, 1702), and the search found only Tier C pages that conflict. Reword to 'defined' or 'popularized'; the key and distractors are unaffected."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "revise"
+      },
       {
         "checker": "fc-psci03b",
         "model": "claude-sonnet-5-5",
@@ -140,6 +307,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "Which unit of power is named after the Scottish engineer famous for improving the steam engine?",
+  "answer": "Watt",
+  "wrong": ["Joule", "Newton", "Volt"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.8,
+    "spread": 0.177,
+    "estimator": "v0"
   }
 }

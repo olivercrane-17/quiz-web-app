@@ -1,7 +1,6 @@
 {
   "id": "p.lang.0304",
-  "status": "draft",
-  "format": "mc",
+  "status": "checking",
   "category": "lang",
   "tags": ["borrowed-words", "japanese", "earth-science", "word-origins"],
   "region": "global",
@@ -9,10 +8,6 @@
   "reviewBy": null,
   "seededDifficulty": 4,
   "counterintuitive": true,
-  "stem": "The word 'tsunami' comes from Japanese. What does it literally mean?",
-  "answer": "Harbour wave",
-  "wrong": ["Great wave", "Long wave", "Storm wave"],
-  "order": "shuffle",
   "explanation": "Tsu means harbour and nami means wave. Scientists avoid the old name 'tidal wave', because tsunamis are set off by earthquakes, landslides or eruptions, not by tides.",
   "learnMore": "Tsunami",
   "claims": [
@@ -41,8 +36,8 @@
       "id": "c4",
       "role": "explanation",
       "risk": "high",
-      "text": "Scientists discourage the term 'tidal wave' for a tsunami, because tsunamis are not caused by tides.",
-      "riskReason": "quotation"
+      "riskReason": "quotation",
+      "text": "Scientists discourage the term 'tidal wave' for a tsunami, because tsunamis are not caused by tides."
     },
     {
       "id": "c5",
@@ -64,5 +59,215 @@
     "encore": true,
     "doubts": true
   },
-  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 5 listed; the etymologies are high, c4 high at the quotation floor, c5 standard; c1 is also the key of a counterintuitive item. datasets: none covers Japanese words; no search spent (cap 2, used on 0301 and 0302). The tsu and nami gloss is the standard one in English dictionaries and in tsunami science outreach. counterintuitive: Great wave is the trap, pulled by Hokusai's famous print and by the size of these waves; the explanation defuses it. rivalTest: argued for Great wave (o-nami would be 'big wave', not tsunami) and Long wave (tsunamis are long-wavelength waves, but that is physics, not the word's meaning); neither survives. volatility: evergreen. regional: tsunami is a global word, and players around the Indian and Pacific Oceans know it well. style: Oxford spelling (harbour), straight quotes, explanation 27 words. myths: no match in myths.json. mystery and encore: not applicable. doubts: none. An earlier cut item used the same gloss in a different question; nothing Daily overlaps (content:dedupe checked)."
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 5 listed; the etymologies are high, c4 high at the quotation floor, c5 standard; c1 is also the key of a counterintuitive item. datasets: none covers Japanese words; no search spent (cap 2, used on 0301 and 0302). The tsu and nami gloss is the standard one in English dictionaries and in tsunami science outreach. counterintuitive: Great wave is the trap, pulled by Hokusai's famous print and by the size of these waves; the explanation defuses it. rivalTest: argued for Great wave (o-nami would be 'big wave', not tsunami) and Long wave (tsunamis are long-wavelength waves, but that is physics, not the word's meaning); neither survives. volatility: evergreen. regional: tsunami is a global word, and players around the Indian and Pacific Oceans know it well. style: Oxford spelling (harbour), straight quotes, explanation 27 words. myths: no match in myths.json. mystery and encore: not applicable. doubts: none. An earlier cut item used the same gloss in a different question; nothing Daily overlaps (content:dedupe checked).",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "5b0b7a796363b850335d328faf02fc256ad36e1a4865387d3d2e24b831e04562",
+          "f6d0d052c1f020b68b3b81dc600ee08fac455b5ba97e75fcf20d1a8dd8081c04"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:08:24.144Z",
+          "2026-11-10T04:10:56.119Z"
+        ],
+        "startedAt": "2026-11-10T04:10:46.708Z",
+        "finishedAt": "2026-11-10T04:11:18.639Z",
+        "coldSolve": {
+          "answerGiven": "Harbour wave",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:10:54.319Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Written 津波 in Japanese, the word is a compound of 'port' and 'wave', so its literal sense is a wave in the harbour.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Solved cold from the kanji. The usual explanation is that fishermen came home to find their harbour wrecked by a wave they had not noticed at sea. High-risk etymology held at certain confidence; memo 18 requires B's direct confirmation too. No search spent (cap 2); the reading of both characters is basic Japanese."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Nothing in 津波 means big, long or storm; 'big wave' would be ōnami and a storm surge is takashio, so the three distractors are wrong.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Each distractor is a believable gloss (tsunamis are big and have long wavelengths), which makes them good traps, but none is the literal meaning of either character."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The first character, read tsu, denotes a port or ferry landing, and the second, read nami, is the ordinary word for a wave.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard kanji readings: 津 (tsu, harbour/port, as in place names such as Tsu city) and 波 (nami, wave)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Oceanographers and agencies such as NOAA and UNESCO's tsunami programme reject 'tidal wave' as a misnomer, since the tide plays no part in generating these waves.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Textbook earth-science point; the scientific term tsunami was adopted internationally precisely to replace 'tidal wave'. Labelled high-risk for the quoted term only."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "A tsunami starts when a large body of water is suddenly shoved aside, most often by a seafloor earthquake, but also by slides and volcanic explosions.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard risk and textbook. The list is given as examples, so leaving out rarer causes (impacts, meteotsunamis) does not make it wrong, and none of those is tidal either."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "68377009efc0b4df4f31a8d0279226eb836a06f986bd42e369269903921c596a",
+          "0a232e7e2f5ba46c07536af45b2007c0fd71c973153c6f3c26bafad28a6e08bc"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:08:37.851Z",
+          "2026-11-10T04:09:24.090Z"
+        ],
+        "startedAt": "2026-11-10T04:18:40.000Z",
+        "finishedAt": "2026-11-10T04:20:30.000Z",
+        "coldSolve": {
+          "answerGiven": "Harbour wave",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:09:22.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Japanese tsunami is built from the characters for harbour and wave, so its literal sense is harbour wave.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: great wave is the popular gloss (and the Hokusai print comes to mind) but the first element is the harbour character; long wave and storm wave are not readings of it. No second defensible literal translation. High risk, relies on check A's external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "None of great wave, long wave or storm wave is the literal rendering of tsunami.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Another reference gloss sometimes seen is 'harbour wave' only; I know of no standard dictionary that gives great wave literally."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The first part, tsu, is the Japanese word for harbour, and nami is the word for wave.",
+                "confidence": "certain"
+              }
+            ],
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Researchers prefer tsunami to tidal wave, since the tides have nothing to do with causing these waves.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Flagged high risk only by the quotation floor (quote marks around tidal wave)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "A tsunami forms when a large volume of water is suddenly displaced, most often by an undersea quake and also by landslides or volcanic eruptions.",
+                "confidence": "certain"
+              }
+            ],
+            "note": ""
+          }
+        ],
+        "issues": [
+          {
+            "type": "regional",
+            "severity": "note",
+            "note": "Fair worldwide; the stem states the language, so there is no hidden assumption. Options are parallel two-word phrases and none repeats the stem."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang03e",
+        "at": "2026-11-10T04:11:38Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "The word 'tsunami' comes from Japanese. What does it literally mean?",
+  "answer": "Harbour wave",
+  "wrong": ["Great wave", "Long wave", "Storm wave"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.38,
+    "spread": 0.186,
+    "estimator": "v0"
+  }
 }

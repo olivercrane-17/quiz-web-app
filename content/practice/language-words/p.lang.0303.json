@@ -1,7 +1,6 @@
 {
   "id": "p.lang.0303",
-  "status": "draft",
-  "format": "mc",
+  "status": "checking",
   "category": "lang",
   "tags": ["borrowed-words", "swahili", "africa", "arabic"],
   "region": "global",
@@ -9,10 +8,6 @@
   "reviewBy": null,
   "seededDifficulty": 2,
   "counterintuitive": false,
-  "stem": "The word 'safari' came into English from which language?",
-  "answer": "Swahili",
-  "wrong": ["Zulu", "Afrikaans", "Amharic"],
-  "order": "shuffle",
   "explanation": "In Swahili, safari means any journey, not only a trip to see wildlife. Swahili itself borrowed the word from the Arabic safar, travel.",
   "learnMore": "Safari",
   "claims": [
@@ -58,5 +53,189 @@
     "encore": true,
     "doubts": true
   },
-  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 4 listed, all high (etymology). datasets: cldr-languages (languages.json, key sw = 'Swahili') confirms only the language name; no dataset covers etymology, so the checkers need web evidence or two direct confirmations (memo section 18). No search spent here: the batch cap is 2 and both went to claims I was less sure of; the Swahili and Arabic links are standard dictionary etymology (English since the 1890s). rivalTest: Arabic is the ultimate source, so it is left out of the options on purpose; Hindi was also dropped because Hindi-Urdu safar shares the Arabic root and a pedant could argue for it. Zulu, Afrikaans and Amharic are African languages a player might link with safaris, and none gave English the word. volatility: evergreen. regional: safari is a word used worldwide; the foothold is East Africa. style: Oxford spelling, explanation 23 words. myths: no match. mystery and encore: not applicable. doubts: none. C22 flags p.sport.0163 for the same answer: that item asks about Jenga, a different Swahili word, so the facts differ; the editor decides. Checked against every Daily item with content:dedupe."
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 4 listed, all high (etymology). datasets: cldr-languages (languages.json, key sw = 'Swahili') confirms only the language name; no dataset covers etymology, so the checkers need web evidence or two direct confirmations (memo section 18). No search spent here: the batch cap is 2 and both went to claims I was less sure of; the Swahili and Arabic links are standard dictionary etymology (English since the 1890s). rivalTest: Arabic is the ultimate source, so it is left out of the options on purpose; Hindi was also dropped because Hindi-Urdu safar shares the Arabic root and a pedant could argue for it. Zulu, Afrikaans and Amharic are African languages a player might link with safaris, and none gave English the word. volatility: evergreen. regional: safari is a word used worldwide; the foothold is East Africa. style: Oxford spelling, explanation 23 words. myths: no match. mystery and encore: not applicable. doubts: none. C22 flags p.sport.0163 for the same answer: that item asks about Jenga, a different Swahili word, so the facts differ; the editor decides. Checked against every Daily item with content:dedupe.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "a02d4808cacb78fc00f439194f2f55cc18028d9e1cc7b2638b539b9d051ce937",
+          "a19e34110830cb29baf1706ba5228226e24879089d7f7070cfe8f240045cfccf"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:08:24.144Z",
+          "2026-11-10T04:10:25.591Z"
+        ],
+        "startedAt": "2026-11-10T04:10:15.529Z",
+        "finishedAt": "2026-11-10T04:10:46.700Z",
+        "coldSolve": {
+          "answerGiven": "Swahili",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:10:23.787Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "English took safari in the late 19th century from Kiswahili, the trade language of the East African coast, through travellers' accounts of caravan expeditions.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Solved cold. Every major dictionary traces the English word to Swahili, first recorded in English in the 1850s to 1890s (Burton and later East African travel writing). High-risk etymology held at certain confidence; memo 18 needs B's direct confirmation as well. No search spent: the cap is 2 and this etymology is uncontested."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Neither the South African languages Zulu and Afrikaans nor Ethiopian Amharic is the source; the word passed from Arabic to Swahili and from Swahili to English.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Afrikaans is a well-chosen trap (it gave English trek, a close cousin in meaning) and Zulu is the famous southern Bantu language, but neither is in the chain. Amharic is Semitic like Arabic, yet the borrowing into English did not pass through it. None is defensible as the answer."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Swahili speakers use safari for travel in general, from a bus ride to a business trip; 'safari njema' wishes someone a good trip.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Everyday Swahili usage; the wildlife sense is the narrowed English meaning."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The Swahili noun is a loan from the Arabic root s-f-r, as in safar, a journey.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Swahili has a large Arabic loan layer from Indian Ocean trade, and this is one of the standard examples; dictionaries give Arabic safar (journey) as the source. Certain; memo 18 applies to the high-risk label."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "facb989d08d90fe65500382913c4932985dc2323436584052b36c044e7e3b86f",
+          "5e4f60377809c908e07bb128fce25686b1b68cfbdcb42fdb3325ec7c00debdf9"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:08:37.851Z",
+          "2026-11-10T04:09:15.739Z"
+        ],
+        "startedAt": "2026-11-10T04:16:40.000Z",
+        "finishedAt": "2026-11-10T04:18:30.000Z",
+        "coldSolve": {
+          "answerGiven": "Swahili",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:09:13.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "English took safari in the 19th century from Swahili, which itself had it from Arabic.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: Arabic is the ultimate source, but it is not offered, so the immediate-source reading leaves one key. The stem asks which language it came into English from, and standard dictionaries give Swahili. High risk (etymology) so it relies on check A's external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Safari is not a Zulu, Afrikaans or Amharic word in origin; Afrikaans and Zulu use other words for a trip, and the English borrowing is from East African Swahili.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Afrikaans is the likeliest lure because of South African game reserves, but the word reached English from East Africa."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "In Swahili safari is a general word for a journey or trip, not only a wildlife expedition.",
+                "confidence": "certain"
+              }
+            ],
+            "note": ""
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Swahili safari is a loanword from Arabic safar, whose meaning is travel or a journey.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High risk (etymology); needs check A external evidence."
+          }
+        ],
+        "issues": [
+          {
+            "type": "regional",
+            "severity": "note",
+            "note": "Fair worldwide. The only residual argument is Arabic as origin, but it is absent from the options and the explanation states the Arabic step."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang03e",
+        "at": "2026-11-10T04:11:38Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "The word 'safari' came into English from which language?",
+  "answer": "Swahili",
+  "wrong": ["Zulu", "Afrikaans", "Amharic"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.247,
+    "estimator": "v0"
+  }
 }

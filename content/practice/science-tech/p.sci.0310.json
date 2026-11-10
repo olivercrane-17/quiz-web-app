@@ -1,6 +1,6 @@
 {
   "id": "p.sci.0310",
-  "status": "draft",
+  "status": "checking",
   "category": "sci",
   "tags": ["computing", "word-origins", "screens"],
   "region": "global",
@@ -60,13 +60,100 @@
     "doubts": true
   },
   "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; c1 to c4 are etymologies (high). datasets: none covers word origins. One writer search for c1 and c3: query 'pixel word origin \"picture element\" etymology'; results included etymonline.com, merriam-webster.com, radiopaedia.org, dictionary.obspm.fr and wiktionary.com; the summary said the word is a blend of 'pix' and 'element', that Variety used 'pix' for movie pictures in 1932 and photojournalists for still pictures by 1938, and that sources disagree on when 'pixel' was coined (around 1965 at JPL, or 1969). Because of that conflict the item gives no coinage date and names no coiner. rivalTest: 'cell' tempts because screens are grids of cells, 'level' because it also ends in 'el', 'particle' because a pixel is the smallest part of an image; none is the source. volatility: evergreen. regional: screens and pixels are universal. style: Oxford spelling, straight single quotes, explanation 21 words. myths: screened; no hit. mystery and encore: not applicable. doubts: none on the key; c4 is standard computer-graphics usage. Searches used: 1 (this item).",
-  "format": "mc",
-  "stem": "The word 'pixel', for one dot on a screen, blends 'picture' with which other word?",
-  "answer": "Element",
-  "wrong": ["Cell", "Level", "Particle"],
-  "order": "shuffle",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "03f737cfb6362946eac3c9e7c248ec1ff52f1865dd17bae384848ad7bfc67899",
+          "4dbbe0837b7415baebb1ce2036f8b4850600b765f039bb22665d37b33dbd9eb7"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T04:01:03.678Z"
+        ],
+        "startedAt": "2026-11-10T04:00:55.875Z",
+        "finishedAt": "2026-11-10T04:01:20.704Z",
+        "coldSolve": {
+          "answerGiven": "Element",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:01:01.928Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Dictionaries derive pixel from pix (plural shortening of picture) joined to the first syllable of element, giving 'picture element'; it appeared in image-processing work around 1965.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "'Picture element' is the textbook expansion of pixel and the dictionary etymology (Merriam-Webster, OED). The stem's 'blends picture with' is a fair player-facing paraphrase since pix stands for pictures."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "No recognized derivation of pixel involves cell, level or particle; the -el ending comes from element.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Each distractor ends in or contains an '-el' or 'cell' sound that tempts (level, cell) or fits the 'dot' idea (particle), but none is the documented source, so all are definitely wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Pix as informal shorthand for pictures, especially films and photos, was in use from the early 20th century (Variety-style headlines of the 1930s), decades before pixel was coined in the 1960s.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Pix is attested from the 1930s at the latest; pixel dates from the mid-1960s, so the 'already' ordering holds."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "A voxel, short for volume element (sometimes glossed volumetric pixel), is a value on a regular 3D grid, the solid analogue of a 2D picture element.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard definition in computer graphics and medical imaging. Both glosses point the same way, and the claim's 'volume element' is the common one."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "CT and MRI reconstructions are volumetric data sets made of voxels, each holding a measured value for a small cube of tissue.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Basic medical imaging fact."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psci03b",
         "model": "claude-sonnet-5-5",
@@ -159,6 +246,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "The word 'pixel', for one dot on a screen, blends 'picture' with which other word?",
+  "answer": "Element",
+  "wrong": ["Cell", "Level", "Particle"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.48,
+    "spread": 0.151,
+    "estimator": "v0"
   }
 }

@@ -1,13 +1,8 @@
 {
   "id": "p.soc.0305",
-  "status": "draft",
+  "status": "checking",
   "category": "soc",
-  "tags": [
-    "institutions",
-    "law",
-    "courts",
-    "latin"
-  ],
+  "tags": ["institutions", "law", "courts", "latin"],
   "region": "global",
   "volatility": "evergreen",
   "reviewBy": null,
@@ -57,7 +52,6 @@
       "text": "A writ of habeas corpus requires those holding a prisoner to bring them before a court and justify the detention, or release them."
     }
   ],
-  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Subtopic: how institutions work (courts and law). lint: content:check clean for this item. claims: all listed; c5 is high for its etymology and its quotation. datasets: none covers legal concepts. No search spent; the concept and its translation are standard reference material. rivalTest: double jeopardy and forced confessions are the classic neighbouring rights that people mix up; seizure of property is another civil-liberty protection. Argued against the key: habeas corpus is precisely the remedy against unlawful detention, so nothing survives. volatility: evergreen, a centuries-old legal principle. regional: the term exists across common-law countries and is widely known from news and drama; civil-law players can reason from the Latin 'corpus'. style: Oxford spelling, 'jailers' is standard in Oxford usage too, explanation of 31 words. myths: screened, no match. mystery and encore: nothing to check. seed: 4. doubts: translations vary ('you may have the body', 'that you have the body', 'you shall have the body'); 'roughly' covers them all. Category check: knowledge of law and institutions, so soc rather than lang, as the Latin is only the explanation.",
   "selfCheck": {
     "lint": true,
     "claims": true,
@@ -71,13 +65,241 @@
     "encore": true,
     "doubts": true
   },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Subtopic: how institutions work (courts and law). lint: content:check clean for this item. claims: all listed; c5 is high for its etymology and its quotation. datasets: none covers legal concepts. No search spent; the concept and its translation are standard reference material. rivalTest: double jeopardy and forced confessions are the classic neighbouring rights that people mix up; seizure of property is another civil-liberty protection. Argued against the key: habeas corpus is precisely the remedy against unlawful detention, so nothing survives. volatility: evergreen, a centuries-old legal principle. regional: the term exists across common-law countries and is widely known from news and drama; civil-law players can reason from the Latin 'corpus'. style: Oxford spelling, 'jailers' is standard in Oxford usage too, explanation of 31 words. myths: screened, no match. mystery and encore: nothing to check. seed: 4. doubts: translations vary ('you may have the body', 'that you have the body', 'you shall have the body'); 'roughly' covers them all. Category check: knowledge of law and institutions, so soc rather than lang, as the Latin is only the explanation.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "8bfe9c3b313d3807fa9e53970ce3828ad88d2c6c8ca8da6d0bd8b94e69364fdb",
+          "afa105f2de6e77c5dc3a75bc1d8851bba7fbf4c62a2e686e20a9602976be051a"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:04:41.828Z",
+          "2026-11-10T04:06:10.291Z"
+        ],
+        "startedAt": "2026-11-10T04:06:01.842Z",
+        "finishedAt": "2026-11-10T04:06:30.628Z",
+        "coldSolve": {
+          "answerGiven": "Unlawful detention",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:06:08.291Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The writ lets a court test whether someone is being held lawfully, so its purpose is to stop imprisonment without legal grounds.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Checked against the common-law writ as codified in the Habeas Corpus Act 1679 and carried into many constitutions. Its object is the legality of custody, which is exactly the key."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Not being prosecuted a second time for one offence is a separate protection (double jeopardy, ne bis in idem), distinct from the writ.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: both are famous Latin-flavoured legal protections, which is the pull, but they cover different things, so the distractor is wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Coerced confessions are kept out by the right to silence and exclusion rules, not by the writ that tests custody.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: a habeas petition can be the route by which a coerced-confession conviction is challenged in some systems (US federal habeas), but the writ itself protects against unlawful detention, not confessions. Under the stem's 'meant to protect against' the distractor is clearly wrong."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Guarding possessions from confiscation falls to property rights and limits on searches and seizures, not to habeas corpus.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Habeas corpus concerns the person, not goods, so this distractor fails under any reading."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "In Latin, habeas is a subjunctive form of habere (to have) and corpus is body, so the phrase reads as 'you should have the body'.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High-risk (etymology). This is a plain Latin parse, not a folk etymology: the writ's opening words order the custodian to have the body before the court. 'Roughly' covers the may/should/that nuance of the subjunctive. No dataset covers it, so under memo 18 it needs B's direct confirmation too."
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Under the writ, the custodian must produce the detainee in court and show lawful cause, failing which the person is freed.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Matches the writ's operation in English and US law. The explanation's 'jailers' is an informal but fair word for the custodian."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "2085e61264c273e433891bbcffe327270219bdd6ba52811c9ee409f7489dd103",
+          "ec8d058ea178fc62a081009d1660389117ed7d7c09bd149c8a31eb580358a2df"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:04:55.716Z",
+          "2026-11-10T04:04:56.012Z"
+        ],
+        "startedAt": "2026-11-10T04:04:05.000Z",
+        "finishedAt": "2026-11-10T04:06:43.000Z",
+        "coldSolve": {
+          "answerGiven": "Unlawful detention",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:04:54.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Habeas corpus is the court order that lets a detained person challenge whether their imprisonment is lawful.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Cold solve immediate. Refute: forced confessions or property seizure are protected by other doctrines; a US-centric reader might link habeas to post-conviction review, but that is still challenge to unlawful custody. The stem 'in law' is general, with no jurisdiction issue."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Being tried again for an offence already decided is barred by the double jeopardy rule, a separate doctrine.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Plausible legal distractor yet clearly distinct."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Compelled confessions are handled by the right against self-incrimination and exclusion rules, not the writ.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Closest to detention in a police context, so a good distractor, but the writ concerns custody."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Seizure of property is addressed by search, due-process and takings rules rather than habeas corpus.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Not defensible as a second answer."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The Latin phrase can be rendered 'you should have the body', i.e. produce the person.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High risk (etymology). Certain: 'habeas' is the subjunctive of 'habere' and 'corpus' means body; 'roughly' covers translation variants ('may you have')."
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The writ orders the custodian to bring the prisoner to court and show lawful grounds for holding them, otherwise release follows.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard definition."
+          }
+        ],
+        "issues": [
+          {
+            "type": "ambiguity",
+            "severity": "note",
+            "note": "Forced confessions is the nearest distractor for a police-focused reader but is not what the writ is for; no second answer."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc03e",
+        "at": "2026-11-10T04:07:38Z"
+      }
+    ]
+  },
   "format": "mc",
   "stem": "In law, what is habeas corpus meant to protect people against?",
   "answer": "Unlawful detention",
-  "wrong": [
-    "Double jeopardy",
-    "Forced confessions",
-    "Seizure of property"
-  ],
-  "order": "shuffle"
+  "wrong": ["Double jeopardy", "Forced confessions", "Seizure of property"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.219,
+    "estimator": "v0"
+  }
 }

@@ -1,6 +1,6 @@
 {
   "id": "p.sci.0309",
-  "status": "draft",
+  "status": "checking",
   "category": "sci",
   "tags": ["inventions", "chemistry", "materials"],
   "region": "global",
@@ -58,13 +58,100 @@
     "doubts": true
   },
   "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; c4 is a date and c5 an etymology (high); the rest are textbook chemistry. datasets: none covers this. c4 is US Patent 3,633, granted to Goodyear in June 1844. No writer search spent. rivalTest: the stem says 'Goodyear's process', not 'who invented', because Thomas Hancock patented vulcanization in Britain at about the same time; the item never claims a first. Steel tempts as the toughest everyday material, leather because it is also treated to make it last, glass because it is also heat-treated (tempered); none is vulcanized. The Goodyear tyre brand gives the foothold. volatility: evergreen. regional: Goodyear tyres are sold worldwide, but the item is gettable from 'sulfur and heat' alone. style: Oxford spelling (vulcanization, honours, IUPAC sulfur), explanation 33 words, hemisphere-neutral wording ('hot weather', not 'summer'). myths: screened; no hit. mystery and encore: not applicable. doubts: none. Searches used: none. C22 note: the lint flags p.hist.0145 because both answers are rubber; that item is about the Mesoamerican ball game, this one about vulcanization, so the facts differ.",
-  "format": "mc",
-  "stem": "Charles Goodyear's vulcanization process, using sulfur and heat, toughened which material?",
-  "answer": "Rubber",
-  "wrong": ["Steel", "Glass", "Leather"],
-  "order": "shuffle",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "ac1d733e60cc29bfd732e505eb846128522cc772562257963638a038b7a3d905",
+          "cf3a28860d0d3a5e8b6bb9fb250d92ba23aff2b2ae76c6dbe6978b08b11cf217"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T04:00:41.342Z"
+        ],
+        "startedAt": "2026-11-10T04:00:32.835Z",
+        "finishedAt": "2026-11-10T04:00:55.862Z",
+        "coldSolve": {
+          "answerGiven": "Rubber",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:00:39.387Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Heating natural rubber with sulfur forms sulfur cross-links between its polymer chains, giving a durable, elastic material that keeps its properties over a range of temperatures.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Vulcanization is by definition a rubber process (sulfur cross-linking of polyisoprene), so Rubber is the single correct key."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Steel is hardened by heat treatment and quenching, glass by tempering, and leather by tanning; none of these is vulcanization.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Each distractor has its own toughening process (tempering, tanning) that tempts by analogy but is not vulcanization. No reasonable reading makes any of them right."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Before cross-linking, natural rubber goods softened and grew tacky in summer heat and stiffened and cracked in winter, which ruined early rubber businesses.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "This is the well-known problem Goodyear set out to solve; standard in histories of rubber."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Goodyear's vulcanization was protected by US Patent No. 3,633, issued on 15 June 1844.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The US patent date (June 1844) is well documented; Thomas Hancock took a British patent the same year, but the claim names Goodyear's US patent, which is correct."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The term vulcanization, coined in England (credited to William Brockedon), alludes to Vulcan, Roman deity of fire and the forge, because the process uses heat.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The derivation from Vulcan is undisputed; the explanation does not claim who coined it, so no attribution risk."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psci03b",
         "model": "claude-sonnet-5-5",
@@ -163,6 +250,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "Charles Goodyear's vulcanization process, using sulfur and heat, toughened which material?",
+  "answer": "Rubber",
+  "wrong": ["Steel", "Glass", "Leather"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.85,
+    "spread": 0.269,
+    "estimator": "v0"
   }
 }

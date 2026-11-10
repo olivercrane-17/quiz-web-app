@@ -1,13 +1,8 @@
 {
   "id": "p.soc.0302",
-  "status": "draft",
+  "status": "checking",
   "category": "soc",
-  "tags": [
-    "money",
-    "banknotes",
-    "china",
-    "inventions"
-  ],
+  "tags": ["money", "banknotes", "china", "inventions"],
   "region": "global",
   "volatility": "evergreen",
   "reviewBy": null,
@@ -50,7 +45,6 @@
       "text": "The first banknotes in Europe were issued by Stockholms Banco, a Swedish bank, in 1661."
     }
   ],
-  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Subtopic: money and trade. lint: content:check clean for this item. claims: key, distractors and explanation facts listed; first and date claims high. datasets: none covers this (currency-codes holds modern codes only). Writer search 2 of 2 (query: jiaozi Song dynasty government issued first paper money 1023 Sichuan iron coins; Stockholms Banco 1661 first European banknotes): the summary says jiaozi began as private notes in Sichuan, where large iron coins were heavy because copper was scarce; that the government took over production in 1023 (Jiaozi wu set up in 1023); and that in 1661 Johan Palmstruch's Stockholms Banco introduced the first European banknotes, a date consistent across sources. Most results were Wikipedia mirrors and Tier C pages (citeco.fr, Guinness, worldhistory.org), so I count this as Tier B at best and not attributed. The summary noted that private jiaozi date back to the 990s and that some point to Tang dynasty 'flying cash'; the stem therefore says 'first official', meaning issued by a government, which is the Song notes either way; earlier private and Tang forms are Chinese too and do not compete with the key. rivalTest: postage stamps, passports and identity cards are all official paper documents, so each tempts a player who does not know the word; jiaozi were money and nothing else. The stem first asked which country issued the first paper money, with China as the key, but that answer collided with a Daily item's answer under X29 (no shared fact), so I turned the question round to keep it clear. volatility: evergreen. regional: fair everywhere. style: Oxford spelling, no time words, explanation of 33 words. myths: screened, no match. mystery and encore: nothing to check. seed: 3, the word 'jiaozi' is unfamiliar to most, but 'official' plus China's fame for paper money gives a foothold. doubts: c4's exact year; the explanation says 'the 1020s' to stay on the safe side of the ladder. Overlap note: the guide's worked comparison example p.soc.0002 uses the same jiaozi fact (dedupe score 0.36, below the threshold); guide examples never ship, so no player meets both, but the editor may want to know.",
   "selfCheck": {
     "lint": true,
     "claims": true,
@@ -64,13 +58,242 @@
     "encore": true,
     "doubts": true
   },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Subtopic: money and trade. lint: content:check clean for this item. claims: key, distractors and explanation facts listed; first and date claims high. datasets: none covers this (currency-codes holds modern codes only). Writer search 2 of 2 (query: jiaozi Song dynasty government issued first paper money 1023 Sichuan iron coins; Stockholms Banco 1661 first European banknotes): the summary says jiaozi began as private notes in Sichuan, where large iron coins were heavy because copper was scarce; that the government took over production in 1023 (Jiaozi wu set up in 1023); and that in 1661 Johan Palmstruch's Stockholms Banco introduced the first European banknotes, a date consistent across sources. Most results were Wikipedia mirrors and Tier C pages (citeco.fr, Guinness, worldhistory.org), so I count this as Tier B at best and not attributed. The summary noted that private jiaozi date back to the 990s and that some point to Tang dynasty 'flying cash'; the stem therefore says 'first official', meaning issued by a government, which is the Song notes either way; earlier private and Tang forms are Chinese too and do not compete with the key. rivalTest: postage stamps, passports and identity cards are all official paper documents, so each tempts a player who does not know the word; jiaozi were money and nothing else. The stem first asked which country issued the first paper money, with China as the key, but that answer collided with a Daily item's answer under X29 (no shared fact), so I turned the question round to keep it clear. volatility: evergreen. regional: fair everywhere. style: Oxford spelling, no time words, explanation of 33 words. myths: screened, no match. mystery and encore: nothing to check. seed: 3, the word 'jiaozi' is unfamiliar to most, but 'official' plus China's fame for paper money gives a foothold. doubts: c4's exact year; the explanation says 'the 1020s' to stay on the safe side of the ladder. Overlap note: the guide's worked comparison example p.soc.0002 uses the same jiaozi fact (dedupe score 0.36, below the threshold); guide examples never ship, so no player meets both, but the editor may want to know.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "f9d6e63f15212499133285cf9c11e82ffda5bcea3c88c9e97558bc68e1d4218a",
+          "8f940315f992a6fa54cfdb2fd7a7b30da92576d6da8d801cafcee7cb99b5ee89"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:04:41.828Z",
+          "2026-11-10T04:04:15.194Z"
+        ],
+        "startedAt": "2026-11-10T04:04:05.375Z",
+        "finishedAt": "2026-11-10T04:04:35.480Z",
+        "coldSolve": {
+          "answerGiven": "Paper money",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:04:13.468Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Song China was the first state anywhere to put out banknotes of its own, the jiaozi, in the early 1000s.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High-risk (first). Checked against the standard account of Chinese monetary history: the Tang 'flying money' were remittance drafts, not circulating currency, so they do not compete, and nothing earlier was state-issued paper currency. The word 'official' in the stem is what makes the first claim safe, since private notes in Sichuan came slightly before."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The jiaozi were exchangeable notes standing for coin, not stamps for mail, travel papers or personal ID documents.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: postage stamps begin with the Penny Black in 1840, and the other two are documents of identity rather than money. None could be a jiaozi under any reading."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Sichuan's coinage was iron, awkward to carry in bulk, so Chengdu traders began passing deposit receipts known as jiaozi instead of the coins themselves.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Matches the standard story of the Chengdu merchant houses and Sichuan's iron currency zone; the explanation's 'swapped heavy iron coins for paper notes' is a fair gloss."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The Song court set up a state Jiaozi Office at Yizhou (Chengdu) in 1023, and its first notes came out the following year.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High-risk (date). The explanation says only 'in the 1020s', which holds whether one dates the takeover to the office (1023) or the first official issue (1024)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Johan Palmstruch's Stockholm bank put out Europe's earliest banknotes in 1661.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High-risk (first, date). Stockholms Banco's credit notes of 1661 are the usual European first; earlier goldsmiths' receipts in London were not banknotes in this sense. The explanation's 'a Swedish bank in 1661' matches."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "fcf9d30a6294e07bd9d1ae668526e619a7ef0aa40c1a7b6977b9f7fff6a8fd94",
+          "75c50aee698af1717bb0df0605b029be4b65e3bc3b7e317a656f533cc555d8b3"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:04:55.716Z",
+          "2026-11-10T04:04:56.012Z"
+        ],
+        "startedAt": "2026-11-10T04:04:05.000Z",
+        "finishedAt": "2026-11-10T04:06:43.000Z",
+        "coldSolve": {
+          "answerGiven": "Paper money",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:04:54.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The Song state took over the Sichuan merchant notes and issued them officially in the 1020s, making them the first paper currency issued by a government.",
+                "confidence": "certain"
+              },
+              {
+                "kind": "web",
+                "query": "Jiaozi Song dynasty first government-issued paper money Sichuan 1023 Britannica",
+                "results": [
+                  {
+                    "title": "Jiaozi (currency)",
+                    "url": "https://en.wikipedia.org/wiki/Jiaozi_(currency)"
+                  },
+                  {
+                    "title": "First paper money",
+                    "url": "https://www.guinnessworldrecords.com/world-records/first-paper-money/"
+                  },
+                  {
+                    "title": "World's First Paper Currency",
+                    "url": "https://muzi.com/p/H/EN/HE132.html"
+                  },
+                  {
+                    "title": "www.hoover.org",
+                    "url": "https://www.hoover.org/node/368899"
+                  }
+                ],
+                "summaryExcerpt": "After efforts to regulate private paper bills failed, in 1023 the Song government took over the issue of jiaozi as state-issued paper currency. Numismatists regard it as the first paper money in history.",
+                "citedResult": null,
+                "tiers": ["B", "B", "C"],
+                "conflictReported": false,
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "Refute attempt: an earlier paper money. Tang 'flying cash' was a remittance draft, not circulating state currency, and the stem's 'official' plus 'government' already excludes private Sichuan notes, which came first but were not official. The search agrees on the 1023 takeover (one source says the first standard series was 1024, a detail that does not touch the claim). Counts at Tier C by tool rule because the summary did not attribute the sentence, so the confirmation rests on my certain knowledge plus the search as support."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Jiaozi were currency notes; none of passports, stamps or ID cards describes them.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Distractors are different document types; none is defensible as an answer."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Sichuan used iron cash because copper was scarce, and merchants there circulated paper notes (jiaozi) to avoid hauling the heavy iron coins.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "The summary also reports private merchants issuing notes to replace heavy iron coins, matching this."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The state's jiaozi office was founded in 1023, so the government was issuing them by the 1020s.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "1023 for the takeover and 1020s for the claim both fit; a source's 1024 for the first standard series is within 'the 1020s'. Wording is safe."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Sweden's Stockholms Banco put the first European banknotes into circulation in 1661.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High risk (first, date). Certain: Stockholms Banco, Johan Palmstruch, 1661 is the standard account. Not an actual 'first in the world' claim, so scoped safely to Europe."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "'First official paper money' is a contested-first area, but the 'official, government' qualifier is exactly what makes it defensible; no change needed."
+          }
+        ],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc03e",
+        "at": "2026-11-10T04:07:38Z"
+      }
+    ]
+  },
   "format": "mc",
   "stem": "Jiaozi, issued by the government of China's Song dynasty in the 11th century, were the world's first official what?",
   "answer": "Paper money",
-  "wrong": [
-    "Postage stamps",
-    "Passports",
-    "Identity cards"
-  ],
-  "order": "shuffle"
+  "wrong": ["Postage stamps", "Passports", "Identity cards"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.66,
+    "spread": 0.21,
+    "estimator": "v0"
+  }
 }

@@ -1,7 +1,6 @@
 {
   "id": "p.lang.0305",
-  "status": "draft",
-  "format": "mc",
+  "status": "checking",
   "category": "lang",
   "tags": ["wordplay", "grammar", "greek", "puzzles"],
   "region": "global",
@@ -9,10 +8,6 @@
   "reviewBy": null,
   "seededDifficulty": 1,
   "counterintuitive": false,
-  "stem": "What is the name for a word made by rearranging the letters of another, as 'silent' is from 'listen'?",
-  "answer": "Anagram",
-  "wrong": ["Palindrome", "Homophone", "Acronym"],
-  "order": "shuffle",
   "explanation": "Rearranged, 'dormitory' gives 'dirty room' and 'astronomer' gives 'moon starer'. The word comes from Greek ana, 'back' or 'anew', and gramma, 'letter'.",
   "learnMore": "Anagram",
   "claims": [
@@ -20,8 +15,8 @@
       "id": "c1",
       "role": "key",
       "risk": "high",
-      "text": "A word formed by rearranging the letters of another word is called an anagram, and 'silent' is an anagram of 'listen'.",
-      "riskReason": "quotation"
+      "riskReason": "quotation",
+      "text": "A word formed by rearranging the letters of another word is called an anagram, and 'silent' is an anagram of 'listen'."
     },
     {
       "id": "c2",
@@ -33,8 +28,8 @@
       "id": "c3",
       "role": "explanation",
       "risk": "high",
-      "text": "'Dormitory' and 'dirty room' use exactly the same letters, as do 'astronomer' and 'moon starer'.",
-      "riskReason": "quotation"
+      "riskReason": "quotation",
+      "text": "'Dormitory' and 'dirty room' use exactly the same letters, as do 'astronomer' and 'moon starer'."
     },
     {
       "id": "c4",
@@ -57,5 +52,189 @@
     "encore": true,
     "doubts": true
   },
-  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 4 listed; the etymology is high, c1 and c3 high at the quotation floor; the letter counts are a calculation anyone can redo. I counted twice: listen and silent each have e, i, l, n, s, t; dormitory and dirty room each have d, i, m, t, y once and o, r twice (9 letters); astronomer and moon starer each have a, e, m, n, s, t once and o, r twice (10 letters). datasets: none covers wordplay. rivalTest: palindrome, homophone and acronym are the word-type names players mix up; none means a rearrangement, so the key stands. volatility: evergreen. regional: the term is taught in schools and puzzles everywhere English is used. style: Oxford spelling, straight quotes, explanation 22 words. myths: no match. mystery and encore: not applicable. doubts: the bank already has a palindrome item (anagram is a distractor there) and homophone and acronym items; this one asks for a different term, so it is not a duplicate. Checked against every Daily item with content:dedupe."
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 4 listed; the etymology is high, c1 and c3 high at the quotation floor; the letter counts are a calculation anyone can redo. I counted twice: listen and silent each have e, i, l, n, s, t; dormitory and dirty room each have d, i, m, t, y once and o, r twice (9 letters); astronomer and moon starer each have a, e, m, n, s, t once and o, r twice (10 letters). datasets: none covers wordplay. rivalTest: palindrome, homophone and acronym are the word-type names players mix up; none means a rearrangement, so the key stands. volatility: evergreen. regional: the term is taught in schools and puzzles everywhere English is used. style: Oxford spelling, straight quotes, explanation 22 words. myths: no match. mystery and encore: not applicable. doubts: the bank already has a palindrome item (anagram is a distractor there) and homophone and acronym items; this one asks for a different term, so it is not a duplicate. Checked against every Daily item with content:dedupe.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "8b6d195d2f13cb1d628f1b11b9cbf5e06f8d2123ba9caa33e3a03ec88954c526",
+          "21c8231ff62db47098294e2c502b82864f9df4644856829e036f052745074194"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:08:24.144Z",
+          "2026-11-10T04:11:27.275Z"
+        ],
+        "startedAt": "2026-11-10T04:11:18.655Z",
+        "finishedAt": "2026-11-10T04:11:51.164Z",
+        "coldSolve": {
+          "answerGiven": "Anagram",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:11:25.248Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Reordering all the letters of one word to spell a different word produces what is termed an anagram; listen and silent share the letters e, i, l, n, s and t, each once.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Solved cold. The definition is textbook, and I counted the letters of both words by hand: six letters, identical multiset. High-risk only for the quoted words; the letter check is mechanical and certain."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Palindromes read identically in both directions (level), homophones are words pronounced alike (pair and pear) and acronyms are built from the first letters of a phrase (NATO); rearranging letters defines none of them.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "All three are real wordplay terms of the same kind, so each is a fair trap, and each definition clearly excludes letter rearrangement. Palindrome is the strongest lure because it also involves letter order, but it keeps the same word rather than making a new one."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Counting by hand, dormitory and dirtyroom each hold one d, i, m, t and y and two each of o and r; astronomer and moonstarer each hold one a, e, m, n, s and t and two each of o and r.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Verified letter by letter: 9 letters in each of the first pair, 10 in each of the second, with identical counts. These are two of the best-known English anagram pairs. The space in the phrases does not matter for an anagram."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Anagram reached English through French and Latin from Greek, combining the prefix ana- (back, again) with gramma (a written letter).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "This is the etymology dictionaries give (via French anagramme and New Latin anagramma, from Greek ana- plus gramma). High-risk etymology held at certain confidence; under memo 18 B's direct confirmation completes it. No search spent (cap 2)."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "b611ae0496c9481f162e0eef0b92758c4bf7fb38e9d20a85fa7dd3e426a27e57",
+          "b47a752d4d55a0414b96761dd87ebca6790cc8fa0bc60305689720a974244f83"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:08:37.851Z",
+          "2026-11-10T04:09:33.213Z"
+        ],
+        "startedAt": "2026-11-10T04:20:40.000Z",
+        "finishedAt": "2026-11-10T04:22:30.000Z",
+        "coldSolve": {
+          "answerGiven": "Anagram",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:09:31.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Shuffling the letters of one word to spell a different word is an anagram, and silent and listen use the same letters.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Sorted the letters of both words in the shell and they match. Rival test: acronym, homophone and palindrome each define a different thing, so there is no second answer. A rearranged-letter wordplay called 'transposition' is not offered. (Sorted the letters of each pair in the shell: they match.)"
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "A palindrome is the same forwards and back, a homophone is a same-sounding word, an acronym is built from initial letters; none rearranges letters.",
+                "confidence": "certain"
+              }
+            ],
+            "note": ""
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "Dirty room can be spelled from the letters of dormitory, and moon starer from astronomer.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Counted by sorting letters of each pair; both pairs are exact anagrams. (Sorted the letters of each pair in the shell: they match.)"
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Anagram traces to Greek ana (back, again) plus gramma (letter), via the verb for transposing letters.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Etymology is high risk by rule; I am certain, and check A should carry external evidence."
+          }
+        ],
+        "issues": [
+          {
+            "type": "wording",
+            "severity": "note",
+            "note": "The stem defines the word without using it, and no option echoes the stem. Easy item by design; not a giveaway since all four options are real wordplay terms."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang03e",
+        "at": "2026-11-10T04:11:38Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "What is the name for a word made by rearranging the letters of another, as 'silent' is from 'listen'?",
+  "answer": "Anagram",
+  "wrong": ["Palindrome", "Homophone", "Acronym"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.9,
+    "spread": 0.348,
+    "estimator": "v0"
+  }
 }

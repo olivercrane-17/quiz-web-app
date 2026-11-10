@@ -1,6 +1,6 @@
 {
   "id": "p.sci.0304",
-  "status": "draft",
+  "status": "checking",
   "category": "sci",
   "tags": ["physics", "gravity", "space-station"],
   "region": "global",
@@ -53,12 +53,152 @@
     "doubts": true
   },
   "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; c1 is the key of a counterintuitive item (and holds a number), c3 and c4 hold numbers. datasets: none covers orbits. c1 follows from the inverse-square law: with Earth's mean radius about 6,371 km and an altitude of 400 km, (6,371 / 6,771) squared is about 0.885; at 420 km it is about 0.880, so 'about 90%' holds at the stated precision. c3 and c4 are standard published figures for the station (orbital speed about 7.66 km/s, altitude usually between about 370 and 460 km). No search spent. rivalTest: the myth that there is no gravity in orbit makes most players answer false, which is the point of a surprising truth; against the key, the exact figure varies with altitude between about 87% and 90%, so I wrote 'about 90%' and not an exact value. volatility: evergreen (the station's altitude drifts and is reboosted, but the claim is written loosely enough to survive that, and it is a physics fact about that height). regional: no local knowledge. style: statement, no question mark, no negation, 101 characters; explanation 29 words. myths: screened; content/reference/myths.json has no-gravity-in-orbit, whose match needs 'no gravity', 'zero gravity', 'gravity free' or 'without gravity' with a station word; none of my claims uses those phrases, though the item deliberately debunks that myth, so checkers may want external evidence for c1. mystery and encore: not applicable. doubts: if the station is ever retired the statement still describes that orbital height. Searches used: none.",
-  "format": "tf",
-  "stem": "Where the International Space Station orbits, Earth's gravity is about 90% as strong as on the ground.",
-  "answer": true,
-  "tfKind": "surprising_truth",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "a361fba05ffb109f01bfb425109df4e43ab111a39f8bdc8330e4ad4f0a25346d",
+          "02cc51501346eceb416614421a000ebfdb8bb2ec39549cccb44be610298cb310"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T03:58:08.168Z"
+        ],
+        "startedAt": "2026-11-10T03:58:00.243Z",
+        "finishedAt": "2026-11-10T03:58:45.776Z",
+        "coldSolve": {
+          "answerGiven": "True",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:58:06.612Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "By the inverse-square law, at roughly 400 km up (about 6,770 km from Earth's centre versus 6,371 km at the surface) gravitational acceleration is close to nine tenths of its sea-level value, about 8.7 m/s².",
+                "confidence": "certain"
+              },
+              {
+                "kind": "calculation",
+                "expression": "(6371 / (6371 + 400)) ** 2",
+                "result": 0.8853,
+                "constants": [],
+                "claimIds": ["c4"]
+              },
+              {
+                "kind": "web",
+                "query": "gravity at International Space Station altitude percent of surface gravity NASA",
+                "results": [
+                  {
+                    "title": "Is There Zero Gravity On The ISS? Here's How It Works",
+                    "url": "https://bgr.com/2005601/is-there-zero-gravity-iss-microgravity-explained"
+                  },
+                  {
+                    "title": "Is There Zero Gravity On The ISS? Here's How It Works",
+                    "url": "https://www.yahoo.com/news/articles/zero-gravity-iss-heres-works-181700116.html"
+                  },
+                  {
+                    "title": "Problem C: Gravity at the ISS (5 Points)",
+                    "url": "https://materials.thinkorange.com/realm/50323531"
+                  },
+                  {
+                    "title": "Table of Contents (click to expand)",
+                    "url": "https://www.scienceabc.com/nature/universe/if-there-is-no-gravity-in-space-why-dont-things-fly-off"
+                  },
+                  {
+                    "title": "lemmy.cadence.moe",
+                    "url": "https://lemmy.cadence.moe/mander.xyz/p/8796483"
+                  },
+                  {
+                    "title": "Chapter 4: Problem 24",
+                    "url": "https://vaia.com/en-us/textbooks/physics/essential-university-physics-global-edition-4-edition/chapter-4/problem-24-the-gravitational-acceleration-at-the-internation"
+                  },
+                  {
+                    "title": "Acceleration Due To Gravity Interactive Calculator",
+                    "url": "https://www.firgelliauto.com/blogs/engineering-calculators/acceleration-due-to-gravity-calculator"
+                  },
+                  {
+                    "title": "orbitalradar.com",
+                    "url": "https://orbitalradar.com/glossary/microgravity"
+                  },
+                  {
+                    "title": "Weightlessness in Outer Space:",
+                    "url": "https://ataridogdaze.com/weightless/outer-space.shtml"
+                  },
+                  {
+                    "title": "api.orbitalradar.com",
+                    "url": "https://api.orbitalradar.com/glossary/microgravity"
+                  }
+                ],
+                "summaryExcerpt": "Most sources put gravity at ISS altitude at roughly 89–90% of surface gravity, but none of the results is an official NASA page.",
+                "citedResult": null,
+                "tiers": ["C"],
+                "conflictReported": false,
+                "retrievedAt": "2026-11-10"
+              }
+            ],
+            "note": "Inverse-square from Earth's mean radius (6,371 km) gives 88.5% at 400 km and 88.0% at 420 km, so 'about 90%' is right at that precision. The one search I spent returned only Tier C pages (news explainers, homework sites), so it does not count as external evidence; it agrees (89 to 90%) and reports no conflict. Confirmation rests on certain textbook knowledge plus the arithmetic; this counterintuitive key therefore needs B's direct confirmation under memo 18."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Weightlessness aboard the station is apparent: crew and spacecraft fall freely together, their sideways speed carrying them around the planet instead of into it.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard orbital mechanics; defuses the 'no gravity in space' belief the true/false targets."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The ISS moves at roughly 7.66 km/s, about 27,600 km/h (some 17,500 mph), circling Earth about every 92 minutes.",
+                "confidence": "certain"
+              },
+              {
+                "kind": "calculation",
+                "expression": "7.66 * 3600",
+                "result": 27576,
+                "constants": ["s_per_hour"],
+                "claimIds": []
+              }
+            ],
+            "note": "7.66 km/s times 3,600 s/h is about 27,600 km/h, which rounds to 'about 28,000 km/h'."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The station's orbit is kept at an altitude of roughly 400 to 420 km, with reboosts countering atmospheric drag.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Its altitude drifts over time between about 370 and 420 km historically, so 'roughly 400 km' is the right, durable precision."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 1,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psci03b",
         "model": "claude-sonnet-5-5",
@@ -138,6 +278,21 @@
         "searchesUsed": 1,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
     ]
+  },
+  "format": "tf",
+  "stem": "Where the International Space Station orbits, Earth's gravity is about 90% as strong as on the ground.",
+  "answer": true,
+  "tfKind": "surprising_truth",
+  "predicted": {
+    "p": 0.32,
+    "spread": 0.221,
+    "estimator": "v0"
   }
 }

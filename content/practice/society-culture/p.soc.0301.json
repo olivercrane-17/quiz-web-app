@@ -1,13 +1,8 @@
 {
   "id": "p.soc.0301",
-  "status": "draft",
+  "status": "checking",
   "category": "soc",
-  "tags": [
-    "institutions",
-    "united-nations",
-    "flags",
-    "symbols"
-  ],
+  "tags": ["institutions", "united-nations", "flags", "symbols"],
   "region": "global",
   "volatility": "evergreen",
   "reviewBy": null,
@@ -64,7 +59,6 @@
       "text": "The UN General Assembly adopted the UN flag in 1947, by resolution 167 (II) of 20 October 1947."
     }
   ],
-  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Subtopic: how institutions work (the UN), with a symbols angle. lint: content:check clean for this item. claims: stem, key, each distractor and every explanation fact listed; c6 and c7 high by the C26 floor. datasets: no pinned dataset covers flags of organizations. Writer search 1 of 2 (query: UN emblem azimuthal equidistant projection centred North Pole 60 degrees south latitude olive branches flag adopted 1947): the summary attributes to research.un.org (UN Library, Tier A) that the map is an azimuthal equidistant projection centred on the North Pole extending to 60 degrees south latitude, that the olive branches symbolize peace, that the emblem is white on light blue, and that the flag was adopted by resolution 167 (II) on 20 October 1947 (the emblem in December 1946). Antarctica lies almost wholly south of 60 degrees south, so a map that stops there leaves it off; this is my inference from the 60 degree limit and the reason c6 is high. rivalTest: the EU flag is blue with stars, so it tempts on colour only; the AU flag carries a map, but of Africa; the Red Cross is a famous humanitarian emblem; none has a world map with olive branches, and the WHO flag (which reuses the UN emblem) is not an option. volatility: evergreen, a fixed design adopted in 1947. regional: the UN flag is seen worldwide. style: Oxford spelling, straight quotes, no time words, explanation of 31 words. myths: screened against content/reference/myths.json, no entry matches. mystery and encore: nothing of either kind in a practice item. seed: 2, olive branches point most players to the UN. doubts: c6's Antarctica consequence is derived, not quoted; if a checker objects, the explanation can say 'stops at 60 degrees south' alone. C22: content:check flags p.hist.0121 (which organization replaced the League of Nations) only because both keys are the same answer; the facts asked differ entirely, so this is not a duplicate.",
   "selfCheck": {
     "lint": true,
     "claims": true,
@@ -78,13 +72,267 @@
     "encore": true,
     "doubts": true
   },
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). Subtopic: how institutions work (the UN), with a symbols angle. lint: content:check clean for this item. claims: stem, key, each distractor and every explanation fact listed; c6 and c7 high by the C26 floor. datasets: no pinned dataset covers flags of organizations. Writer search 1 of 2 (query: UN emblem azimuthal equidistant projection centred North Pole 60 degrees south latitude olive branches flag adopted 1947): the summary attributes to research.un.org (UN Library, Tier A) that the map is an azimuthal equidistant projection centred on the North Pole extending to 60 degrees south latitude, that the olive branches symbolize peace, that the emblem is white on light blue, and that the flag was adopted by resolution 167 (II) on 20 October 1947 (the emblem in December 1946). Antarctica lies almost wholly south of 60 degrees south, so a map that stops there leaves it off; this is my inference from the 60 degree limit and the reason c6 is high. rivalTest: the EU flag is blue with stars, so it tempts on colour only; the AU flag carries a map, but of Africa; the Red Cross is a famous humanitarian emblem; none has a world map with olive branches, and the WHO flag (which reuses the UN emblem) is not an option. volatility: evergreen, a fixed design adopted in 1947. regional: the UN flag is seen worldwide. style: Oxford spelling, straight quotes, no time words, explanation of 31 words. myths: screened against content/reference/myths.json, no entry matches. mystery and encore: nothing of either kind in a practice item. seed: 2, olive branches point most players to the UN. doubts: c6's Antarctica consequence is derived, not quoted; if a checker objects, the explanation can say 'stops at 60 degrees south' alone. C22: content:check flags p.hist.0121 (which organization replaced the League of Nations) only because both keys are the same answer; the facts asked differ entirely, so this is not a duplicate.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-psoc03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "f7bc3c9e8f47b6c3bd9d04a5a12bfd379a4fea53f6d308bac6d244827da497d3",
+          "c41941d091c4a917ff53092ebeb41572ee6dc47b496ed5f75fd57498bb50ddf0"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:04:41.828Z",
+          "2026-11-10T04:03:21.644Z"
+        ],
+        "startedAt": "2026-11-10T04:03:07.282Z",
+        "finishedAt": "2026-11-10T04:04:01.080Z",
+        "coldSolve": {
+          "answerGiven": "The United Nations",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:03:13.567Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The UN's banner puts its emblem in white on UN blue: a polar-projection globe inside a wreath of two crossed olive sprigs.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Checked the key against the UN emblem as described in the UN Flag Code: a world map ringed by crossed olive branches, shown white on light blue. The stem names both features and only the UN flag carries them together, so the key holds."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The EU (originally Council of Europe) banner is twelve golden stars in a ring on a blue background, with no map or branches.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: the EU flag is blue, which could pull a player who remembers only the colour, but it has stars and nothing else, so the distractor is wrong."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The AU banner adopted in 2010 is green with a green outline of Africa on a white sun, ringed by gold stars; it has a continent, not a globe, and no olive sprigs.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: the AU flag does carry a map, which is the tempting part, but it is Africa alone. The older AU emblem has palm fronds, not olive, so no reading of the AU makes it right."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The Red Cross emblem is a plain red cross on a white field; neither it nor the ICRC's ringed logo shows a map or branches.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Checked both the protective emblem and the ICRC logo; neither has a map or olive branches, so the distractor is definitely wrong."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The globe on the UN emblem is drawn in azimuthal equidistant form with the North Pole at its centre, the view you would get looking down on the pole.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Matches the official emblem description adopted with resolution 92 (I) in 1946. The explanation's 'as if seen from above the North Pole' is a fair plain-words gloss of that projection."
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The emblem's projection runs down to latitude 60 degrees South, which cuts off Antarctica, and carries five concentric circles.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High-risk (number). The 60 degrees South cut-off is written into the emblem's official description, and Antarctica lies almost wholly south of 60 S, so 'Antarctica is left off' follows. Confirmed from knowledge at certain confidence; no dataset covers it, so under memo 18 it needs B's direct confirmation too."
+          },
+          {
+            "claimId": "c7",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The flag was approved by General Assembly resolution 167 (II), passed on 20 October 1947, a year after the emblem.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High-risk (date). The UN Flag Code's preamble cites resolution 167 (II) of 20 October 1947 for the flag, distinct from resolution 92 (I) of 7 December 1946 for the emblem. The explanation states only the year 1947, which holds either way."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-psoc03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "17bdb501be2607777286605bab5f384e017b8e83ce6f7c7f789914497282dd31",
+          "2129a6ed7fec870b8405330b3f86b7fd5e329db95524dfff88b2767c54ddffd5"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:04:55.716Z",
+          "2026-11-10T04:04:56.012Z"
+        ],
+        "startedAt": "2026-11-10T04:04:05.000Z",
+        "finishedAt": "2026-11-10T04:06:43.000Z",
+        "coldSolve": {
+          "answerGiven": "The United Nations",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:04:54.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The UN banner is pale blue and carries the organization's white emblem: a world map surrounded by a pair of olive branches.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Cold solve hit it at once from the stem alone. Refute attempt: another organization with a world map and olive wreath among the options. The AU flag has an Africa map and palm leaves, the EU stars, the Red Cross a plain cross, so only the UN fits. The stem names two features and the measure is unambiguous."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The EU banner is a ring of twelve gold stars on a blue ground, nothing else.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Twelve gold stars on blue; no map, no wreath. Cannot be argued as a second answer."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The African Union flag has a map of Africa inside a ring of palm leaves with a circle of stars, so its map is continental, not global.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Closest distractor: it has a map in a wreath. But the map is of Africa and the wreath is palm, so it fails 'world' and 'olive'. The stem's 'world' keeps it wrong; a careless reader could hesitate, which is a good distractor, not a defect."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "The Red Cross flag is simply the red cross on white, the Swiss flag with colours swapped.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "No map or branches in the flag."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The UN emblem's map uses an azimuthal equidistant projection with the North Pole at its centre.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard description in the UN's own emblem and flag notes; I am certain of it."
+          },
+          {
+            "claimId": "c6",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The mapped area stops at the 60th parallel south, which is why Antarctica is missing from the emblem.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High risk (number). I am certain of the 60 degrees south cut-off from the UN's emblem description; no external call spent because it is a single, long-stable, widely documented figure and checker A carries the external evidence under memo 18."
+          },
+          {
+            "claimId": "c7",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "The General Assembly approved the flag on 20 October 1947 through resolution 167 (II).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "High risk (date). Certain of 1947 and resolution 167 (II); the explanation says only 1947, which also holds."
+          }
+        ],
+        "issues": [
+          {
+            "type": "giveaway",
+            "severity": "note",
+            "note": "The stem's two visual features are enough for a player who knows the UN logo, but that is the item's intended foothold; the options give no stem echo or length cue."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-psoc03e",
+        "at": "2026-11-10T04:07:38Z"
+      }
+    ]
+  },
   "format": "mc",
   "stem": "Which organization's flag shows a white map of the world framed by olive branches?",
   "answer": "The United Nations",
-  "wrong": [
-    "The European Union",
-    "The African Union",
-    "The Red Cross"
-  ],
-  "order": "shuffle"
+  "wrong": ["The European Union", "The African Union", "The Red Cross"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.85,
+    "spread": 0.214,
+    "estimator": "v0"
+  }
 }

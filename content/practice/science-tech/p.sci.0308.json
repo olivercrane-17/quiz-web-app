@@ -1,6 +1,6 @@
 {
   "id": "p.sci.0308",
-  "status": "draft",
+  "status": "checking",
   "category": "sci",
   "tags": ["maths", "puzzles", "counting"],
   "region": "global",
@@ -47,13 +47,83 @@
     "doubts": true
   },
   "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; each holds a number. datasets: none needed; c1 and c3 are a calculation anyone can re-run (5 x 4 x 3 x 2 x 1 = 120), and c2 follows from it. No search spent. rivalTest: 25 tempts players who multiply five by five, 60 those who stop after three spots (5 x 4 x 3), and 100 those who guess a round number. 'Different books' and 'in a row' rule out readings with identical books or circular shelves. Against the key: no reasonable reading gives another count. Ascending order puts the key at D, which the bank's ascending items have used only once (X34 spread). volatility: evergreen. regional: no local knowledge. style: Oxford spelling; the explanation uses words instead of multiplication signs so it reads aloud well, 32 words, and avoids the exclamation-mark notation. myths: screened; no hit. mystery and encore: not applicable. doubts: none. Searches used: none.",
-  "format": "mc",
-  "stem": "In how many different orders can five different books be arranged in a row on a shelf?",
-  "answer": "120",
-  "wrong": ["25", "60", "100"],
-  "order": "ascending",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "eccd95dc88471958c2d8f56dc15fdb4e3b192b582d8bfb2b7ddd749194f86895",
+          "5021babad43a85564288ad6501fc0d04b369cd0692397ba9ca55f0fd521732a8"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T04:00:22.035Z"
+        ],
+        "startedAt": "2026-11-10T04:00:13.449Z",
+        "finishedAt": "2026-11-10T04:00:32.824Z",
+        "coldSolve": {
+          "answerGiven": "120",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:00:20.316Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "5 * 4 * 3 * 2 * 1",
+                "result": 120,
+                "constants": [],
+                "claimIds": []
+              },
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The count of linear arrangements of n distinct objects is n!, so five distinct books give 5! = 120 permutations.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Pure combinatorics: permutations of 5 distinct items = 5! = 120. 'Different books' and 'in a row' rule out the circular or identical-object readings that would change the count."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "5 * 4 * 3 * 2 * 1",
+                "result": 120,
+                "constants": [],
+                "claimIds": ["c1"]
+              }
+            ],
+            "note": "Since the count is exactly 120, the options 25 (5 squared, a plausible slip), 60 (5x4x3, stopping early, or half of 120) and 100 are all wrong. Each is a believable error, none is right under any reasonable reading."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "calculation",
+                "expression": "5 * 4 * 3 * 2 * 1",
+                "result": 120,
+                "constants": [],
+                "claimIds": []
+              }
+            ],
+            "note": "The product is 120, and the product of the integers 1 to n is by definition n factorial, written 5!."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psci03b",
         "model": "claude-sonnet-5-5",
@@ -120,6 +190,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "In how many different orders can five different books be arranged in a row on a shelf?",
+  "answer": "120",
+  "wrong": ["25", "60", "100"],
+  "order": "ascending",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.176,
+    "estimator": "v0"
   }
 }

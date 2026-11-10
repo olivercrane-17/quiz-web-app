@@ -1,6 +1,6 @@
 {
   "id": "p.sci.0303",
-  "status": "draft",
+  "status": "checking",
   "category": "sci",
   "tags": ["chemistry", "molecules", "gases"],
   "region": "global",
@@ -49,24 +49,91 @@
     "doubts": true
   },
   "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; each holds a number, so all are high. datasets: c3 is arithmetic on ptable atomic masses (Carbon atomic_mass 12.011, Oxygen 15.999, Hydrogen 1.008): CO2 is 12.011 + 2 x 15.999 = 44.009 and CH4 is 12.011 + 4 x 1.008 = 16.043. c1 and c2 are the standard formulas taught in school chemistry. No search spent. rivalTest: players who think of carbon dioxide as the bigger, heavier gas pick it; the explanation confirms that intuition about mass while showing the atom count runs the other way. Exact counts, so any difference passes the guard. Against the key: no isotope or bonding convention changes the number of atoms in either molecule. volatility: evergreen. regional: school chemistry worldwide. style: formulas written without subscripts as plain text, explanation 32 words. myths: screened; no hit. mystery and encore: not applicable. doubts: none. Searches used: none.",
-  "format": "comparison",
-  "stem": "Which has more atoms?",
-  "a": "A methane molecule",
-  "b": "A carbon dioxide molecule",
-  "answer": "a",
-  "relation": "more",
-  "measure": "atoms in one molecule",
-  "unit": "atoms",
-  "values": {
-    "a": 5,
-    "b": 3
-  },
-  "valueDisplay": {
-    "a": "5 atoms (CH4)",
-    "b": "3 atoms (CO2)"
-  },
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "ed9b7d4aed71aafcfd1aee934a8d8a97777abd194a4014ba4f91f62b408224fe",
+          "b4ed54df59840e2f3bb56cebe4c27e0e3b27cc027f66be4d6c1e9953d226cd4e"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T03:57:42.726Z"
+        ],
+        "startedAt": "2026-11-10T03:57:31.952Z",
+        "finishedAt": "2026-11-10T03:58:00.232Z",
+        "coldSolve": {
+          "answerGiven": "A methane molecule",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:57:39.575Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Methane's formula CH4 means a single carbon bonded tetrahedrally to four hydrogens, five atoms altogether.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Basic chemistry formula; the atom count follows directly from CH4 (1 + 4 = 5). No alternative reading of 'methane molecule'."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "CO2 is a linear molecule of one carbon between two oxygens, so it contains three atoms.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Follows from the formula CO2 (1 + 2 = 3). The comparison 5 versus 3 is exact and unambiguous."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "dataset",
+                "dataset": "ptable",
+                "version": "a78c7a48fe7235cebd6153161a9e7fa70f0cfb30",
+                "file": "PeriodicTableJSON.json",
+                "locator": "elements[symbol=H,C,O].atomic_mass",
+                "excerpt": "H 1.008; C 12.011; O 15.999",
+                "retrievedAt": "2026-11-10"
+              },
+              {
+                "kind": "calculation",
+                "expression": "12.011 + 2 * 15.999",
+                "result": 44.009,
+                "constants": [],
+                "claimIds": ["c2"]
+              },
+              {
+                "kind": "calculation",
+                "expression": "12.011 + 4 * 1.008",
+                "result": 16.043,
+                "constants": [],
+                "claimIds": ["c1"]
+              }
+            ],
+            "note": "Summing ptable's standard atomic masses over each formula gives 44.01 u for CO2 and 16.04 u for CH4, matching 'about 44' and 'about 16'. The twist (fewer atoms yet heavier) is correct."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psci03b",
         "model": "claude-sonnet-5-5",
@@ -142,6 +209,33 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
     ]
+  },
+  "format": "comparison",
+  "stem": "Which has more atoms?",
+  "a": "A methane molecule",
+  "b": "A carbon dioxide molecule",
+  "answer": "a",
+  "relation": "more",
+  "measure": "atoms in one molecule",
+  "unit": "atoms",
+  "values": {
+    "a": 5,
+    "b": 3
+  },
+  "valueDisplay": {
+    "a": "5 atoms (CH4)",
+    "b": "3 atoms (CO2)"
+  },
+  "predicted": {
+    "p": 0.58,
+    "spread": 0.205,
+    "estimator": "v0"
   }
 }

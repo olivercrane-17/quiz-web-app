@@ -1,7 +1,6 @@
 {
   "id": "p.lang.0302",
-  "status": "draft",
-  "format": "mc",
+  "status": "checking",
   "category": "lang",
   "tags": ["punctuation", "diacritics", "french", "spelling"],
   "region": "global",
@@ -9,10 +8,6 @@
   "reviewBy": null,
   "seededDifficulty": 4,
   "counterintuitive": false,
-  "stem": "What is the name of the mark above the letter e in the word 'café'?",
-  "answer": "Acute accent",
-  "wrong": ["Grave accent", "Circumflex", "Umlaut"],
-  "order": "shuffle",
   "explanation": "A grave accent slopes the other way, as in 'à la carte'. The hook under the c of 'façade' is a cedilla, from Spanish for 'little z'.",
   "learnMore": "Acute accent",
   "claims": [
@@ -20,29 +15,29 @@
       "id": "c1",
       "role": "key",
       "risk": "high",
-      "text": "The mark over the e in 'café' is an acute accent.",
-      "riskReason": "quotation"
+      "riskReason": "quotation",
+      "text": "The mark over the e in 'café' is an acute accent."
     },
     {
       "id": "c2",
       "role": "distractor",
       "risk": "high",
-      "text": "The mark in 'café' is not a grave accent, a circumflex or an umlaut.",
-      "riskReason": "quotation"
+      "riskReason": "quotation",
+      "text": "The mark in 'café' is not a grave accent, a circumflex or an umlaut."
     },
     {
       "id": "c3",
       "role": "explanation",
       "risk": "high",
-      "text": "A grave accent slopes the opposite way to an acute accent, and the a of 'à la carte' carries a grave accent.",
-      "riskReason": "quotation"
+      "riskReason": "quotation",
+      "text": "A grave accent slopes the opposite way to an acute accent, and the a of 'à la carte' carries a grave accent."
     },
     {
       "id": "c4",
       "role": "explanation",
       "risk": "high",
-      "text": "The mark under the c of 'façade' is a cedilla.",
-      "riskReason": "quotation"
+      "riskReason": "quotation",
+      "text": "The mark under the c of 'façade' is a cedilla."
     },
     {
       "id": "c5",
@@ -65,5 +60,215 @@
     "encore": true,
     "doubts": true
   },
-  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 5 listed, all high: the cedilla etymology (etymology) and c1 to c4 at the C26 quotation floor, though they are typographic facts anyone can see. datasets: none covers diacritics. One WebSearch, 'cedilla etymology Spanish zedilla diminutive of zeda letter z': Etymonline (English since the 1590s, from Spanish cedilla, zedilla, literally 'little z'), Merriam-Webster (diminutive of ceda, zeda, the letter z) and Wiktionary agree. The Visigothic-z story of the mark's shape is disputed, so the item says nothing about the shape's origin. rivalTest: argued for grave (the commonest confusion; it slopes down to the right, café's slopes up), circumflex (a hat shape, as in 'crêpe') and umlaut (two dots); none fits. 'Café' in English and French is always written with the acute when the accent is kept. volatility: evergreen. regional: café is written this way across the English-speaking world and in French, Spanish and Portuguese; the accent names are school knowledge in many countries. style: Oxford spelling, straight quotes, explanation 27 words. myths: no match in myths.json. mystery and encore: not applicable to a practice item. doubts: none. Checked against every Daily item with content:dedupe."
+  "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch until clean. claims: 5 listed, all high: the cedilla etymology (etymology) and c1 to c4 at the C26 quotation floor, though they are typographic facts anyone can see. datasets: none covers diacritics. One WebSearch, 'cedilla etymology Spanish zedilla diminutive of zeda letter z': Etymonline (English since the 1590s, from Spanish cedilla, zedilla, literally 'little z'), Merriam-Webster (diminutive of ceda, zeda, the letter z) and Wiktionary agree. The Visigothic-z story of the mark's shape is disputed, so the item says nothing about the shape's origin. rivalTest: argued for grave (the commonest confusion; it slopes down to the right, café's slopes up), circumflex (a hat shape, as in 'crêpe') and umlaut (two dots); none fits. 'Café' in English and French is always written with the acute when the accent is kept. volatility: evergreen. regional: café is written this way across the English-speaking world and in French, Spanish and Portuguese; the accent names are school knowledge in many countries. style: Oxford spelling, straight quotes, explanation 27 words. myths: no match in myths.json. mystery and encore: not applicable to a practice item. doubts: none. Checked against every Daily item with content:dedupe.",
+  "verification": {
+    "checks": [
+      {
+        "checker": "fc-plang03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "68d4eef3343983dc2a6f6069a005b6ac331b31346461b65c9cf774afe4bffe05",
+          "c4f0e8a60f86bcc69011e4ca9f43de3d6aadbfae7a23483fb1a719b122bcefe1"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:08:24.144Z",
+          "2026-11-10T04:09:41.057Z"
+        ],
+        "startedAt": "2026-11-10T04:09:32.102Z",
+        "finishedAt": "2026-11-10T04:10:15.519Z",
+        "coldSolve": {
+          "answerGiven": "Acute accent",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:09:39.179Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Café is written with é, the e carrying a stroke that rises to the right: the acute.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Solved cold. The word is borrowed from French café, whose é is the textbook example of the acute accent. Labelled high-risk only for the quoted word; nothing about it is uncertain or variable, so I confirm at certain confidence and rely on memo 18 for the second direct confirmation."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "A grave falls to the right (è), a circumflex is a small roof (ê) and an umlaut is two dots (ë); the e of café shows none of these.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Each distractor is a real diacritic of the same kind, so all three are plausible, and each is visibly a different shape from the mark in café. No reading makes any of them right."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The grave leans down from left to right, the mirror image of the acute, and the French preposition à in the phrase à la carte bears it.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Both halves are basic French orthography: à (preposition) always takes the grave, distinguishing it from a (has)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "In façade the c has a small hook beneath it, the cedilla, which marks a soft s sound before a.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard French spelling, also kept in English in the form façade (often dropped as facade, which does not affect the claim)."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Cedilla is a Spanish diminutive built on ceda or zeda, the old name of the letter z, because the mark began as a small z written under the c.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "This is the etymology given by the standard dictionaries (Spanish cedilla / zedilla, diminutive of ceda 'z'), and it matches the palaeographic history of the mark as a reduced subscript z in Visigothic script. High-risk etymology, held at certain confidence; under memo 18 it needs pass B's direct confirmation too. 'From Spanish for little z' in the explanation is a fair compression. No search spent given the cap of 2."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
+      {
+        "checker": "fc-plang03b",
+        "model": "claude-sonnet-5-5",
+        "pass": "B",
+        "brief": "refute",
+        "packetSha256": [
+          "7041b264ca5561ea343c043ee506a78155028a4576a5f8bc88a4ef119eea4051",
+          "d551e4417c5ebd8ab6cfa8cabb24e82678625afb867dbac4ba26df75c44c5e89"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:08:37.851Z",
+          "2026-11-10T04:09:06.055Z"
+        ],
+        "startedAt": "2026-11-10T04:14:10.000Z",
+        "finishedAt": "2026-11-10T04:16:30.000Z",
+        "coldSolve": {
+          "answerGiven": "Acute accent",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T04:09:04.000Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "everyday",
+                "restatement": "In the spelling café the e carries a stroke rising to the right, which is the acute accent (accent aigu).",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Rival test: the French word is fixed as café with an acute; the Spanish and Portuguese cafe variants are also acute. No variant with a grave or diaeresis exists. High risk only by C26's quotation floor; check A carries external evidence."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "Café has neither a downward-left grave, a hat-shaped circumflex nor a two-dot umlaut or diaeresis over the e.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Argued for umlaut (a learner might see a diacritic as an umlaut): wrong, as an umlaut is two dots. Grave versus acute is the only real confusion and it is settled by the direction of the stroke."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The grave accent leans the other way from the acute, and the à in à la carte carries one.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Phrase is written à la carte in English and French dictionaries."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The little hook beneath the c in façade is called a cedilla.",
+                "confidence": "certain"
+              }
+            ],
+            "note": ""
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Cedilla is a Spanish diminutive of zeda, the name of the letter z, so it means little z; the mark was a small z written under c.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Etymology is high risk by rule; I am certain, and check A should supply external evidence."
+          }
+        ],
+        "issues": [
+          {
+            "type": "regional",
+            "severity": "note",
+            "note": "Fair everywhere: café is printed on signs worldwide, and the names of accents are taught in many school systems. Players who never learned accent names face a guess between acute and grave, which is the intended difficulty."
+          }
+        ],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      }
+    ],
+    "estimates": [
+      {
+        "by": "es-plang03e",
+        "at": "2026-11-10T04:11:38Z"
+      }
+    ]
+  },
+  "format": "mc",
+  "stem": "What is the name of the mark above the letter e in the word 'café'?",
+  "answer": "Acute accent",
+  "wrong": ["Grave accent", "Circumflex", "Umlaut"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.55,
+    "spread": 0.266,
+    "estimator": "v0"
+  }
 }

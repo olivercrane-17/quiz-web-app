@@ -1,6 +1,6 @@
 {
   "id": "p.sci.0306",
-  "status": "draft",
+  "status": "checking",
   "category": "sci",
   "tags": ["space", "moons", "saturn"],
   "region": "global",
@@ -60,13 +60,100 @@
     "doubts": true
   },
   "writerNotes": "Self-check (CONTENT_GUIDE 9.3). lint: content:check run on the batch. claims: all listed; c1 is a uniqueness claim made high by my choice ('only' sense), c3 and c4 hold numbers, c5 a date. datasets: no pinned dataset covers moons. These are standard NASA and ESA figures from the Cassini-Huygens mission: Titan's diameter about 5,150 km against Mercury's 4,879 km; surface pressure about 1.45 bar; Huygens landed on 14 January 2005. No writer search spent. rivalTest: Europa tempts players who know it has a hidden ocean, Io those who know its volcanoes, Ganymede as the biggest moon. None has a thick atmosphere (Io's and Ganymede's are extremely thin) or surface lakes. Neptune's moon Triton has a thin atmosphere and no lakes, so it is no rival even though it is not an option. Against the key: Titan's lakes are confirmed by Cassini radar, and its atmosphere is the thickest of any moon. volatility: evergreen (settled mission results, no growing counts). regional: no local knowledge. style: Oxford spelling, explanation 29 words; 'January 2005' is a dated event, not a time word. myths: screened; no hit. mystery and encore: not applicable. doubts: none on the key. Searches used: none. Replaces my first draft for this id (a planet's tilt), which overlapped a sealed room question.",
-  "format": "mc",
-  "stem": "Which moon has a thick, hazy atmosphere and lakes of liquid methane on its surface?",
-  "answer": "Titan",
-  "wrong": ["Europa", "Io", "Ganymede"],
-  "order": "shuffle",
   "verification": {
     "checks": [
+      {
+        "checker": "fc-psci03a",
+        "model": "claude-opus-5-5",
+        "pass": "A",
+        "brief": "confirm",
+        "packetSha256": [
+          "67382a074843590830ab0ea9e953af6c812de6acd43030f5da229339fa35d5c1",
+          "63dc6fb27109a34c7081748408b4e9e2550712fc1e7bc9aacc1b6f1d82c5b640"
+        ],
+        "stagesServedAt": [
+          "2026-11-10T03:00:20.264Z",
+          "2026-11-10T03:59:28.857Z"
+        ],
+        "startedAt": "2026-11-10T03:59:19.520Z",
+        "finishedAt": "2026-11-10T03:59:45.393Z",
+        "coldSolve": {
+          "answerGiven": "Titan",
+          "confidence": "high",
+          "matchedKey": true,
+          "recordedAt": "2026-11-10T03:59:27.287Z"
+        },
+        "claimResults": [
+          {
+            "claimId": "c1",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Saturn's largest moon is unique among Solar System moons in having a dense nitrogen atmosphere with orange organic haze, and Cassini radar mapped hydrocarbon seas and lakes (methane and ethane) near its poles.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Titan is the only moon with a substantial atmosphere; Triton's and Io's are extremely thin. Cassini (2004 to 2017) confirmed stable surface liquids such as Kraken Mare and Ligeia Mare; Titan and Earth are the only bodies known to have stable surface liquid. The 'only' holds over a fixed, well-surveyed set and is the established fact."
+          },
+          {
+            "claimId": "c2",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "textbook",
+                "restatement": "The three Galilean moons offered as distractors have at most tenuous atmospheres (Io's thin sulfur dioxide, Europa's and Ganymede's faint oxygen exospheres) and icy or volcanic surfaces with no methane lakes.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Each distractor is definitely wrong: Europa and Ganymede have subsurface water oceans, not surface methane lakes; Io has lava lakes of silicate rock. None has a thick atmosphere."
+          },
+          {
+            "claimId": "c3",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Titan measures roughly 5,150 km across (mean radius about 2,575 km), exceeding Mercury's diameter of about 4,880 km (radius about 2,440 km), though Mercury is far more massive.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Standard NASA figures: Titan radius 2,574.7 km, Mercury radius 2,439.7 km. The explanation says 'wider', which is correct (by mass Mercury is about twice Titan)."
+          },
+          {
+            "claimId": "c4",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "Huygens measured about 1.47 bar at Titan's surface, roughly half again Earth's sea-level pressure.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Huygens' measured value was about 146.7 kPa versus Earth's 101.3 kPa, a ratio of about 1.45, so 'about 1.5 times' and 'higher than on Earth' hold."
+          },
+          {
+            "claimId": "c5",
+            "verdict": "confirmed",
+            "evidence": [
+              {
+                "kind": "knowledge",
+                "basis": "reference",
+                "restatement": "ESA's Huygens lander, carried by NASA's Cassini, parachuted to Titan's surface on 14 January 2005, the first landing in the outer Solar System.",
+                "confidence": "certain"
+              }
+            ],
+            "note": "Landing date 14 January 2005 is well established."
+          }
+        ],
+        "issues": [],
+        "searchesUsed": 0,
+        "verdict": "pass"
+      },
       {
         "checker": "fc-psci03b",
         "model": "claude-sonnet-5-5",
@@ -159,6 +246,22 @@
         "searchesUsed": 0,
         "verdict": "pass"
       }
+    ],
+    "estimates": [
+      {
+        "by": "es-psci03e",
+        "at": "2026-11-10T04:02:05Z"
+      }
     ]
+  },
+  "format": "mc",
+  "stem": "Which moon has a thick, hazy atmosphere and lakes of liquid methane on its surface?",
+  "answer": "Titan",
+  "wrong": ["Europa", "Io", "Ganymede"],
+  "order": "shuffle",
+  "predicted": {
+    "p": 0.5,
+    "spread": 0.129,
+    "estimator": "v0"
   }
 }
