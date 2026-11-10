@@ -139,8 +139,8 @@ const request = (
 ): RetireRequest => ({
   itemId,
   editor: RETIRER,
-  reason: "It shares its fact with a Daily item.",
-  kind: "cross_pool",
+  reason: "Overlaps another item; replaced.",
+  kind: "other",
   at: AT,
   today: "2026-11-05",
   allowFrozen: false,
@@ -190,8 +190,8 @@ describe("retire (CNT-2b)", () => {
         expect(after.retired).toEqual({
           at: AT,
           by: RETIRER,
-          kind: "cross_pool",
-          reason: "It shares its fact with a Daily item.",
+          kind: "other",
+          reason: "Overlaps another item; replaced.",
         });
         // Everything else is as it was: the id, the checks, the history.
         const { status: _s, retired: _r, ...rest } = after;
@@ -300,7 +300,7 @@ describe("retire (CNT-2b)", () => {
     "needs a reason and a known kind, and keeps anything sealed out of a public item's reason",
     { timeout: 60_000 },
     async () => {
-      const bank = await decidedBank(["fx.p.geo.0101", "fx.m.geo.0101"]);
+      const bank = await decidedBank(["fx.p.geo.0101", "fx.m.geo.0101", ROOM]);
       expect(await refusal(bank, "fx.p.geo.0101", { reason: "  " })).toBe(
         "--reason says why the item leaves play",
       );
@@ -320,17 +320,58 @@ describe("retire (CNT-2b)", () => {
         "Same fact as Daily #42.",
         "Same fact as daily number 42.",
         "It overlaps the 2026-12-01 Daily.",
+        // Dates in prose, and the sealed side by name.
+        "Overlaps the item played on 1 December 2026.",
+        "Same fact as the one from Dec 1.",
+        "Same fact as the one from 01/12/2026.",
+        "Same fact as the one from the 3rd of March.",
+        "Shares its fact with a Daily item.",
+        "Overlaps a mystery clue.",
+        "Same value as an encore.",
+        "Overlaps a sealed item.",
       ]) {
         expect(namesSealedContent(reason), reason).toBe(true);
         expect(await refusal(bank, "fx.p.geo.0101", { reason })).toMatch(
-          /^the reason names sealed content \(a sealed item, batch, list request or spare set, or a Daily by its number or date\), and fx\.p\.geo\.0101's file is public/,
+          /^the reason names sealed content \(a sealed item, batch, list request or spare set, a Daily by its number or date, or the words Daily, mystery, encore or sealed\), and fx\.p\.geo\.0101's file is public/,
         );
       }
       for (const reason of [
-        "Shares its fact with a Daily item.",
+        "Overlaps another item; replaced.",
         "Replaced by p.geo.0144 after a key change (e.g. 2026).",
+        "The key changed in May 2026; replaced.",
+        "The mayor's term ended; a decade of data moved.",
+        "Freshness re-check failed claim 3 of 4.",
       ])
         expect(namesSealedContent(reason), reason).toBe(false);
+      // A practice item never takes kind cross_pool: its public record
+      // would say a Daily item shares its fact.
+      expect(
+        await refusal(bank, "fx.p.geo.0101", {
+          kind: "cross_pool",
+          reason: "Overlaps another item; replaced.",
+        }),
+      ).toBe(
+        `fx.p.geo.0101's file is public, and --kind cross_pool there would tell any reader that a Daily item shares its fact (ARCHITECTURE §5.4): retire it with --kind other and a neutral reason ("Overlaps another item; replaced.")`,
+      );
+      // A room question's file is sealed, so it takes cross_pool.
+      expect(
+        await refusal(bank, ROOM, {
+          kind: "cross_pool",
+          reason: "Shares its fact with a Daily item.",
+        }),
+      ).toBe("accepted");
+      // What a retired practice file holds says nothing of the sealed side.
+      await retire(bank, "fx.p.geo.0101");
+      const file = readFileSync(itemOf(bank, "fx.p.geo.0101").file.abs, "utf8");
+      expect(file).not.toContain("cross_pool");
+      // (The C22 record's nearestId "sealed" is older and names no score.)
+      expect(file.toLowerCase()).not.toMatch(/\b(daily|mystery|encore)\b/);
+      expect((JSON.parse(file) as { retired: unknown }).retired).toEqual({
+        at: AT,
+        by: RETIRER,
+        kind: "other",
+        reason: "Overlaps another item; replaced.",
+      });
       // A sealed item's file is sealed, so its reason may name what it likes.
       expect(
         await refusal(bank, "fx.m.geo.0101", {
@@ -526,6 +567,93 @@ describe("the schedule guard (CNT-2b)", () => {
   );
 
   it(
+    "stops when the workspace lacks a schedule, spare or challenge-pack file that content/sealed/ holds, with or without --allow-frozen",
+    { timeout: 60_000 },
+    async () => {
+      // An accepted mystery, as content:decide leaves it in the workspace.
+      const item = itemOf(await decidedBank([MYSTERY]), MYSTERY).item;
+      const base: FxFiles = {
+        "batches.json": fxRegister(),
+        "answer-lists/country.json": fxCountryList(),
+        [`.sealed-plain/mysteries/${MYSTERY}.json`]: item,
+      };
+      const envelope = "not opened: only its name counts\n";
+      const rounds = [
+        { type: "mystery", difficulty: "easy", contentId: MYSTERY },
+      ];
+      const workspace: Record<string, FxFiles> = {
+        "schedule/2027-01": {
+          ".sealed-plain/schedule/2027-01.json": {
+            track: "main",
+            dailies: [{ ...daily("2027-01-05"), rounds }],
+          },
+        },
+        "spares/spare.01": {
+          ".sealed-plain/spares/spare.01.json": {
+            id: "spare.01",
+            track: "main",
+            rounds,
+            status: "assembled",
+            predictedPoints: 3.4,
+            dayCheck: null,
+          },
+        },
+        "challenge-packs/fx-week-one": {
+          ".sealed-plain/challenge-packs/fx-week-one.json": {
+            id: "fx-week-one",
+            track: "main",
+            title: "Week one",
+            theme: "The first week's Dailies",
+            rounds,
+          },
+        },
+      };
+      const lock = {
+        "schedule/2027-01": "1 main-track Daily(ies) that have not closed",
+        "spares/spare.01": "1 spare set(s)",
+        "challenge-packs/fx-week-one": "1 challenge pack(s)",
+      } as const;
+      for (const [stem, plain] of Object.entries(workspace)) {
+        const sealed = { [`sealed/${stem}.json.enc`]: envelope };
+        const lacking = await loadContentTree({ ...base, ...sealed });
+        for (const allowFrozen of [false, true])
+          expect(
+            await refusal(lacking, MYSTERY, { allowFrozen }),
+            `${stem} ${String(allowFrozen)}`,
+          ).toBe(
+            "the workspace lacks 1 schedule, spare or challenge-pack file(s) that content/sealed/ holds, so the schedule guard cannot see every Daily: run npm run content:unseal first",
+          );
+        // Unsealed, the guard sees the file and meets only the ordinary lock.
+        const unsealed = await loadContentTree({
+          ...base,
+          ...sealed,
+          ...plain,
+        });
+        expect(await refusal(unsealed, MYSTERY), stem).toBe(
+          `${MYSTERY} is on ${lock[stem as keyof typeof lock]}. Pass --allow-frozen for a correction, as content:release takes it for frozen Dailies, and have the scheduler replace it there before the next release`,
+        );
+        expect(
+          await refusal(unsealed, MYSTERY, { allowFrozen: true }),
+          stem,
+        ).toBe("accepted");
+      }
+      // With every envelope unsealed and naming nothing, it retires freely.
+      const free = await loadContentTree({
+        ...base,
+        "sealed/challenge-packs/fx-other.json.enc": envelope,
+        ".sealed-plain/challenge-packs/fx-other.json": {
+          id: "fx-other",
+          track: "main",
+          title: "Other",
+          theme: "Other Dailies",
+          rounds: [],
+        },
+      });
+      expect(await refusal(free, MYSTERY)).toBe("accepted");
+    },
+  );
+
+  it(
     "X10 lets an item retired after it played stay on the Dailies that have closed, and fails it on one still to close",
     { timeout: 60_000 },
     async () => {
@@ -694,19 +822,19 @@ describe("content:batch -- retire (CNT-2b)", () => {
         "--editor",
         RETIRER,
         "--reason",
-        "Shares its fact with a Daily item.",
+        "Overlaps another item; replaced.",
         "--kind",
-        "cross_pool",
+        "other",
       ];
       const done = fixture(...args);
       expect(done.code, done.err).toBe(0);
       for (const line of [
-        `fx.p.geo.0101 retired (cross_pool) by ${RETIRER}: it leaves every pack, pool count and release, and X29 no longer reads it.`,
+        `fx.p.geo.0101 retired (other) by ${RETIRER}: it leaves every pack, pool count and release, and X29 no longer reads it.`,
         "p.geo.b01 stays closed: accepted 2 -> 1, retired 0 -> 1.",
         "Next: npm run content:build",
       ])
         expect(done.out).toContain(line);
-      expect(done.out).not.toContain("Shares its fact");
+      expect(done.out).not.toContain("Overlaps another item");
       // Again: refused, exit 1, nothing changes.
       const again = fixture(...args);
       expect(again.code).toBe(1);
@@ -759,6 +887,8 @@ describe("content:batch -- retire (CNT-2b)", () => {
       [["retire", "--item", "fx.p.geo.0101"], "--editor is required"],
       [[...base, "--kind", "duplicate"], "--kind for retire is cross_pool"],
       [[...base, "--today", "soon"], "--today is a date"],
+      [[...base, "--today", "2026-02-31"], "--today is a date"],
+      [[...base, "--today", "2099-01-01"], "--today 2099-01-01 is after today"],
       [[...base, "--note", "x"], "retire does not take --note"],
       [
         ["close", "--batch", "p.geo.b01", "--item", "x"],

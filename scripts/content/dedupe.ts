@@ -372,7 +372,9 @@ runReported(
     const judged = stateCounts(x29?.pairs ?? []);
     if (!crossPoolRan)
       notes.push(
-        "Cross-pool check: not run, because no sealed Daily items are loaded.",
+        layout.kind === "fixtures"
+          ? "Cross-pool check: not run on a fixture tree (X29 runs on the content layout only)."
+          : "Cross-pool check: not run, because no sealed Daily items are loaded.",
       );
     else {
       if (judged.holds > 0)

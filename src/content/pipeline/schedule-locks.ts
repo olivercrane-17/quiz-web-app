@@ -15,7 +15,7 @@ import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 
 import { ChallengePackSchema } from "../schema/challenge-packs.ts";
-import { listEnvelopes, type Bank, type BankItem } from "./bank.ts";
+import type { Bank, BankItem } from "./bank.ts";
 
 function addDays(date: string, days: number): string {
   return new Date(Date.parse(`${date}T00:00:00Z`) + days * 86_400_000)
@@ -46,8 +46,9 @@ export interface ScheduleLocks {
   /** Main-track challenge packs naming the item. */
   challengePacks: number;
   /**
-   * Schedule and spare envelopes in content/sealed/ with no workspace
-   * file, so the guard cannot see them: run content:unseal first.
+   * Schedule, spare and challenge-pack envelopes in content/sealed/ with
+   * no workspace file, so the guard cannot see them: run content:unseal
+   * first.
    */
   unsealed: number;
 }
@@ -95,20 +96,31 @@ async function challengePacksNaming(
   return found;
 }
 
-/** Schedule and spare envelopes the workspace has no plaintext file for. */
+/** The folders of content/sealed/ whose files the guard reads. */
+const GUARDED_FOLDERS = ["schedule", "spares", "challenge-packs"] as const;
+
+/**
+ * Schedule, spare and challenge-pack envelopes the workspace has no
+ * plaintext file for. Every guarded folder is compared file by file with
+ * its workspace folder, so a challenge pack left sealed counts as much as
+ * a schedule month (challenge packs are not among the bank's sealed item
+ * folders, so they are listed here directly).
+ */
 async function unsealedSchedule(bank: Bank): Promise<number> {
-  if (bank.layout.kind !== "content" || bank.sealedSource === "envelopes")
+  const { envelopeDir, kind, workspaceDir } = bank.layout;
+  if (kind !== "content" || !envelopeDir || bank.sealedSource === "envelopes")
     return 0;
-  const present = new Set(
-    bank.files
-      .filter((file) => file.kind === "schedule" || file.kind === "spare")
-      .map((file) => `${file.kind}/${file.stem}`),
-  );
-  return (await listEnvelopes(bank.layout)).filter(
-    ({ folder, stem }) =>
-      (folder === "schedule" || folder === "spares") &&
-      !present.has(`${folder === "spares" ? "spare" : "schedule"}/${stem}`),
-  ).length;
+  let missing = 0;
+  for (const folder of GUARDED_FOLDERS) {
+    const dir = join(envelopeDir, folder);
+    if (!existsSync(dir)) continue;
+    for (const name of await readdir(dir)) {
+      if (!name.endsWith(".json.enc")) continue;
+      const stem = name.slice(0, -".json.enc".length);
+      if (!existsSync(join(workspaceDir, folder, `${stem}.json`))) missing += 1;
+    }
+  }
+  return missing;
 }
 
 /**

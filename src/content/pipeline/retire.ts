@@ -27,8 +27,9 @@
  *
  * Sealed items are read from and written to the plaintext workspace
  * (content:unseal first, content:seal after). A practice item's file is
- * public, so its retirement reason may not name a sealed item, a sealed
- * batch or a list request (ARCHITECTURE §5.4). Messages name ids, statuses
+ * public, so its retirement may not be of kind `cross_pool` and its reason
+ * may not name a sealed item, a sealed batch, a list request, a Daily or
+ * the sealed pools (ARCHITECTURE §5.4). Messages name ids, statuses
  * and counts only: never item text, and never the reason.
  */
 import { BatchRegisterSchema, type BatchEntry } from "../schema/batches.ts";
@@ -57,11 +58,17 @@ import { editableCopy, saveItems, type SaveOptions } from "./store.ts";
 
 export { RETIRE_KINDS, type RetireKind };
 
+const MONTH = String.raw`(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?`;
+
 /**
  * Anything sealed a public file must never name: a mystery, encore or room
  * question id, a batch of those pools, a list request or a spare set (with
- * or without the fixtures' `fx.` prefix), and a Daily by its number or its
- * date, which would tie the public item to one day's answers.
+ * or without the fixtures' `fx.` prefix); a Daily by its number or its
+ * date, in ISO form or in prose ("1 December 2026", "Dec 1", "01/12/2026"),
+ * which would tie the public item to one day's answers; and the sealed
+ * side itself by name (Daily, mystery, encore, sealed), since a public
+ * record saying a Daily item shares this item's fact is close to that
+ * Daily's answer.
  */
 const SEALED_REFERENCES: readonly RegExp[] = [
   new RegExp(
@@ -77,6 +84,14 @@ const SEALED_REFERENCES: readonly RegExp[] = [
   ),
   /\bdaily\s*(?:#|no\.?|number)?\s*\d+/i,
   /\b\d{4}-\d{2}-\d{2}\b/,
+  /\b\d{4}[/.]\d{1,2}[/.]\d{1,2}\b/,
+  /\b\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}\b/,
+  new RegExp(
+    String.raw`\b\d{1,2}(?:st|nd|rd|th)?\s+(?:of\s+)?${MONTH}(?![a-z])`,
+    "i",
+  ),
+  new RegExp(String.raw`\b${MONTH}\s+\d{1,2}(?:st|nd|rd|th)?\b`, "i"),
+  /\b(?:daily|dailies|mystery|mysteries|encores?|sealed)\b/i,
 ];
 
 /** True when `text` names something sealed (see SEALED_REFERENCES). */
@@ -220,15 +235,19 @@ export async function planRetirement(
     );
   const role = editorRefusal(bank, record, request.editor);
   if (role !== null) refuse(role);
+  if (!record.file.sealed && request.kind === "cross_pool")
+    refuse(
+      `${itemId}'s file is public, and --kind cross_pool there would tell any reader that a Daily item shares its fact (ARCHITECTURE §5.4): retire it with --kind other and a neutral reason ("Overlaps another item; replaced.")`,
+    );
   if (!record.file.sealed && namesSealedContent(request.reason))
     refuse(
-      `the reason names sealed content (a sealed item, batch, list request or spare set, or a Daily by its number or date), and ${itemId}'s file is public: nothing public names sealed content (ARCHITECTURE §5.4), so describe it without them`,
+      `the reason names sealed content (a sealed item, batch, list request or spare set, a Daily by its number or date, or the words Daily, mystery, encore or sealed), and ${itemId}'s file is public: nothing public names sealed content (ARCHITECTURE §5.4), so describe it without them`,
     );
 
   const locks = await scheduleLocks(bank, record, request.today);
   if (locks.unsealed > 0)
     refuse(
-      `the workspace lacks ${locks.unsealed} schedule or spare file(s) that content/sealed/ holds, so the schedule guard cannot see every Daily: run npm run content:unseal first`,
+      `the workspace lacks ${locks.unsealed} schedule, spare or challenge-pack file(s) that content/sealed/ holds, so the schedule guard cannot see every Daily: run npm run content:unseal first`,
     );
   if (isLocked(locks) && !request.allowFrozen)
     refuse(

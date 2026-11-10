@@ -73,10 +73,12 @@ const USAGE = `Usage: npm run content:batch -- <command> [options]
                                                    every pack, count and release; its id, checks and
                                                    history stay. A sealed item is retired in the
                                                    workspace (content:unseal first, content:seal
-                                                   after). --kind defaults to other. --allow-frozen
+                                                   after). --kind defaults to other; a practice
+                                                   item takes recheck or other. --allow-frozen
                                                    retires an item a Daily still to close, a spare
                                                    set or a challenge pack names; --today sets the
-                                                   date that guard reads (default: today, UTC)
+                                                   past or present date that guard reads (default:
+                                                   today, UTC)
 
   Common: --root <dir> (default content/), --fixtures`;
 
@@ -217,9 +219,24 @@ run("content:batch", async () => {
       return 2;
     }
     const today = str(values, "today") ?? todayUtc();
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(today) || Number.isNaN(Date.parse(today))) {
+    // A round trip, so an impossible date (2026-02-31) is refused rather
+    // than read as the day it rolls over to.
+    const parsedToday = new Date(`${today}T00:00:00Z`);
+    if (
+      !/^\d{4}-\d{2}-\d{2}$/.test(today) ||
+      Number.isNaN(parsedToday.getTime()) ||
+      parsedToday.toISOString().slice(0, 10) !== today
+    ) {
       console.error(
         `content:batch: --today is a date (YYYY-MM-DD), not ${today}.\n\n${USAGE}`,
+      );
+      return 2;
+    }
+    // A later date would show Dailies still to close as closed and let the
+    // item past the schedule guard: --today only ever looks back.
+    if (today > todayUtc()) {
+      console.error(
+        `content:batch: --today ${today} is after today (${todayUtc()}); the schedule guard reads past or present dates only.\n\n${USAGE}`,
       );
       return 2;
     }

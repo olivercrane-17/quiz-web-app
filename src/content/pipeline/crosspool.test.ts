@@ -328,8 +328,8 @@ describe("X29 with the editor's judgments (CNT-2b)", () => {
       const retired = {
         at: AT,
         by: EDITOR,
-        kind: "cross_pool",
-        reason: "Shares its fact with a Daily item.",
+        kind: "other",
+        reason: "Overlaps another item; replaced.",
       } as const;
       const checked = {
         predicted: { p: 0.6, spread: 0.3, estimator: "v0" },
@@ -697,6 +697,18 @@ describe("content:dedupe -- --cross-pool-ok (CNT-2b)", () => {
       expect(writer.err).toContain(`ed-fx-writer wrote ${MYSTERY}`);
       for (const result of [sealed, missing, stray, alone, writer])
         expectNoJoin(`${result.out}\n${result.err}`, TWIN);
+      // On a fixture tree X29 never runs, and the note says why.
+      const fixtures = cli(
+        REPO_ROOT,
+        "--cross-pool",
+        "--root",
+        "src/content/pipeline/__fixtures__/bank",
+        "--fixtures",
+      );
+      expect(fixtures.code, fixtures.err).toBe(0);
+      expect(fixtures.out).toContain(
+        "Cross-pool check: not run on a fixture tree (X29 runs on the content layout only).",
+      );
       // Nothing was written by any of them.
       const stored = JSON.parse(
         readFileSync(
