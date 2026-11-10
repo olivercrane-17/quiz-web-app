@@ -235,8 +235,10 @@ scripts/
                                       content:lists) (CNT-2); schedule.ts, weekly.ts (CNT-3);
                                       release.ts, dedupe.ts (SQL-3);
                                       enrich-wikidata.ts (ENR-1)
-  sql/                                bundle-tests.ts, gen-parity.ts, drift-check.ts, advisors-diff.ts
-  codegen/                            analytics-sql.ts, moderation-sql.ts
+  sql/                                bundle-tests.ts, drift-check.ts, advisors-diff.ts; gen-parity.ts
+                                      and `npm run sql:gen` arrive with SQL-5
+  codegen/                            moderation-sql.ts; analytics-sql.ts and `npm run
+                                      codegen:analytics` arrive with SQL-10 (after ANA-1)
   checks/                             forbidden-imports.mjs, lazy-markers.mjs, secret-scan.mjs
   check-bundle-budget.mjs             (exists; extended by SEC-1)
 supabase/
