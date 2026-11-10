@@ -13,6 +13,8 @@ const round = (page: Page) => page.locator('[data-round="choice"]');
 const stem = (page: Page) => round(page).getByRole("heading", { level: 1 });
 const options = (page: Page) =>
   round(page).locator("[data-question] ol").getByRole("button");
+/** The options group, where each question puts focus (D30). */
+const group = (page: Page) => round(page).locator("[data-options]");
 const sheet = (page: Page) => round(page).getByRole("region");
 const feedbackHeading = (page: Page) =>
   sheet(page).getByRole("heading", { level: 2 });
@@ -29,7 +31,7 @@ async function startQuickPlay(page: Page) {
     .getByRole("link", { name: "Quick play" })
     .click();
   await expect(page).toHaveURL("/practice/run");
-  await expect(stem(page)).toBeFocused();
+  await expect(group(page)).toBeFocused();
 }
 
 /** D28's words for the options on screen, naming only their letters (§25). */
@@ -81,7 +83,100 @@ test.describe("RITE round 3: practice", () => {
     // other control.
     await page.keyboard.press("Enter");
     await expect(round(page).getByText("Question 2 of 10")).toBeVisible();
-    await expect(stem(page)).toBeFocused();
+    await expect(group(page)).toBeFocused();
+  });
+
+  test("D30 each question focuses its options group, labelled by the question, with the legend shown from the start, and b answers B with no Tab", async ({
+    page,
+  }) => {
+    await startQuickPlay(page);
+    for (let n = 1; n <= 3; n += 1) {
+      await expect(round(page).getByText(`Question ${n} of 10`)).toBeVisible();
+      // Focus is on the group, which reads the question first, then the keys.
+      await expect(group(page)).toBeFocused();
+      const question = (await stem(page).textContent()) ?? "";
+      await expect(group(page)).toHaveAccessibleName(question);
+      await expect(legend(page)).toBeVisible();
+      await expect(legend(page)).toHaveText(await expectedLegend(page));
+      await expect(group(page)).toHaveAccessibleDescription(
+        await expectedLegend(page),
+      );
+      await expect(legend(page)).toBeInViewport({ ratio: 1 });
+      const before = await options(page).first().boundingBox();
+      // No Tab: the letter answers from where the question put focus.
+      await page.keyboard.press("b");
+      await expect(options(page).nth(1)).toBeFocused({ timeout: 800 });
+      await expect(options(page).nth(1)).toHaveAttribute(
+        "data-state",
+        /^(locked|correct|your-answer)$/,
+      );
+      // Nothing shifted under the key (from 768 px the options stay put).
+      const after = await options(page).first().boundingBox();
+      if ((page.viewportSize()?.width ?? 0) >= 768) {
+        expect(after?.y).toBe(before?.y);
+      }
+      await expect(feedbackHeading(page)).toBeFocused();
+      await expect(legend(page)).toHaveCount(0);
+      await page.keyboard.press("Enter");
+    }
+    await expect(round(page).getByText("Question 4 of 10")).toBeVisible();
+  });
+
+  test("D30 a key on anything outside the options group still answers nothing (WCAG 2.1.4), and focus the player moved stays put", async ({
+    page,
+  }) => {
+    await startQuickPlay(page);
+    await expect(group(page)).toBeFocused();
+    // The player moves focus to Leave: letters there do nothing.
+    await page.keyboard.press("Shift+Tab");
+    const leave = page.getByRole("link", { name: "Leave practice" });
+    await expect(leave).toBeFocused();
+    for (const key of ["a", "b", "1", "d"]) await page.keyboard.press(key);
+    // Nor on the page itself.
+    await page.evaluate(() => {
+      (document.activeElement as HTMLElement | null)?.blur();
+    });
+    for (const key of ["a", "b", "1", "d"]) await page.keyboard.press(key);
+    await page.waitForTimeout(600);
+    const count = await options(page).count();
+    for (let i = 0; i < count; i += 1) {
+      await expect(options(page).nth(i)).toHaveAttribute("data-state", "idle");
+    }
+    await expect(sheet(page)).toHaveCount(0);
+    await expect(group(page)).not.toBeFocused();
+  });
+
+  test.describe("D30 on a 390 x 844 phone at 200% text", () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+
+    test("D30 the legend is on screen from the start, above option A, and a letter from the group moves nothing before it answers", async ({
+      page,
+    }) => {
+      await startQuickPlay(page);
+      await page.evaluate(() => {
+        document.documentElement.style.fontSize = "200%";
+      });
+      await expect(group(page)).toBeFocused();
+      await expect(legend(page)).toBeVisible();
+      const line = await legend(page).boundingBox();
+      const first = await options(page).first().boundingBox();
+      expect(line).not.toBeNull();
+      expect(first).not.toBeNull();
+      if (line === null || first === null) return;
+      expect(line.y + line.height).toBeLessThanOrEqual(first.y);
+      const scrolled = await page.evaluate(() => window.scrollY);
+      // The key goes down on the group: pressed, not yet answered, and
+      // neither the options nor the page moved.
+      await page.keyboard.down("a");
+      await expect(options(page).first()).toHaveAttribute("data-pressed", "");
+      expect((await options(page).first().boundingBox())?.y).toBe(first.y);
+      expect(await page.evaluate(() => window.scrollY)).toBe(scrolled);
+      await page.keyboard.up("a");
+      await expect(options(page).first()).toHaveAttribute(
+        "data-state",
+        /^(locked|correct|your-answer)$/,
+      );
+    });
   });
 
   test("R3-07 the legend reads Keys A to D answer at once. above the options (D28)", async ({

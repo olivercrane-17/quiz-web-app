@@ -19,22 +19,24 @@
  *   the options follow the stem and the sheet follows the options.
  * - Commit on release: AnswerButton paints the press on `pointerdown` and
  *   commits on `click`, so sliding off cancels (WCAG 2.5.2).
- * - Keys (decisions D6 and D20, R1-13, R2-02): the letters A to D answer,
- *   matching the badges, one key per answer. The digits 1 to 4 answer too,
- *   except on a question where an option holds a number, so "4" meant as
- *   four bridges never locks in option D. A key acts only while focus is on
- *   an option, inside the options group: on the question's heading, where
- *   each question puts focus, or anywhere else on the page it commits
+ * - Keys (decisions D6, D20 and D30; R1-13, R2-02): the letters A to D
+ *   answer, matching the badges, one key per answer. The digits 1 to 4
+ *   answer too, except on a question where an option holds a number, so "4"
+ *   meant as four bridges never locks in option D. A key acts only while
+ *   focus is in the options group: on the group itself, where each question
+ *   puts focus (D30, as D28 did at the Daily's clue 4), or on an option.
+ *   On the question's heading or anywhere else on the page it commits
  *   nothing (WCAG 2.1.4's "active only on focus", until SET-1's switch).
  *   Pressed on keydown and committed on keyup, never with shortcuts off.
  *   Each option names the keys that answer it in `aria-keyshortcuts` ("A
- *   1"), and the badge's letter is its one hint on the option itself. Once
- *   a keyboard is in use in the options (a key pressed there, or an option
- *   focused by keyboard), a line above them says "Keys A to D answer at
- *   once." (D28; it names only the letters on screen) while the question is
- *   open; it is drawn here, not in AnswerButton, in a line held for the
- *   whole round so nothing moves (R3-07). A letter answers the option it
- *   names even with focus on another, and the ring moves to the answer.
+ *   1"), and the badge's letter is its one hint on the option itself. While
+ *   the question is open and shortcuts are on, a line above the options
+ *   says "Keys A to D answer at once." (D28; it names only the letters on
+ *   screen), from the start (D30); it is drawn here, not in AnswerButton,
+ *   in a line held for the whole round so nothing moves (R3-07), and it is
+ *   the group's description, so a screen reader hears it after the
+ *   question. A letter answers the option it names wherever in the group
+ *   focus is, and the ring moves to the answer.
  * - The beat: the pick locks at once and the verdict shows 400 ms
  *   (TUNABLES.answers.revealMs) after the commit, even when it came back
  *   sooner. A slower verdict shows when it lands, with "Checking…" past
@@ -64,9 +66,11 @@
  *   speech in progress; a tap that opens the sheet before the verdict has
  *   been spoken leaves the heading as the only telling. The heading's
  *   pieces join without stray spaces (R1-34).
- * - Focus: the question's heading when a round opens, without the browser's
- *   scroll; the question's top is then kept below a sticky header, so the
- *   kicker and the stem's first line never open under it (R1-12). The
+ * - Focus: the options group when a round opens (D30), without the
+ *   browser's scroll; the group is labelled by the question's heading, so
+ *   the question is read first. The question's top is then kept below a
+ *   sticky header, so the kicker and the stem's first line never open under
+ *   it (R1-12). The
  *   sheet's title when the sheet opens (the reveal heading, as AC-DLY-18
  *   asks), but only while focus is still where the answer left it: on the
  *   answered option or elsewhere in the round, or on the page itself. A
@@ -87,7 +91,6 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
-  type FocusEvent,
   type KeyboardEvent,
 } from "react";
 
@@ -208,24 +211,14 @@ function isControl(target: EventTarget): boolean {
 }
 
 /**
- * True when a key event inside the options group comes from an option, the
- * only thing there that takes focus (D20: keys act only on an option).
+ * True when a key event comes from inside the options group: from the group
+ * itself, where a question puts focus (D30), or from an option (D20).
  */
-function onOption(target: EventTarget): boolean {
-  return target instanceof Element && target.closest("button") !== null;
-}
-
-/**
- * True when focus reached `target` the way a keyboard brings it, which the
- * browser marks `:focus-visible`. False where the selector isn't supported.
- */
-function focusedByKeyboard(target: EventTarget): boolean {
-  if (!(target instanceof Element)) return false;
-  try {
-    return target.matches(":focus-visible");
-  } catch {
-    return false;
-  }
+function inOptions(event: KeyboardEvent<HTMLElement>): boolean {
+  return (
+    event.target === event.currentTarget ||
+    (event.target instanceof Element && event.target.closest("button") !== null)
+  );
 }
 
 function Pips({ filled }: { filled: number }) {
@@ -264,12 +257,6 @@ function ChoiceRoundView({
   const [picked, setPicked] = useState<number | null>(null);
   /** The option whose shortcut key is down. */
   const [held, setHeld] = useState<number | null>(null);
-  /**
-   * A keyboard is in use in the options: a key went down or up on one, or
-   * one took focus from the keyboard (D20). Each question starts without
-   * it, as its focus starts on the heading, where the keys do nothing.
-   */
-  const [keyboardInUse, setKeyboardInUse] = useState(false);
   const [autoCancelled, setAutoCancelled] = useState(false);
   /** Mounted with its reveal there: no beat, no speech, no auto-advance. */
   const [startedRevealed] = useState(reveal?.family === "choice");
@@ -283,7 +270,7 @@ function ChoiceRoundView({
   const pressClaimedFocus = useRef(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const questionRef = useRef<HTMLDivElement>(null);
-  const stemRef = useRef<HTMLHeadingElement>(null);
+  const groupRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const sheetBodyRef = useRef<HTMLDivElement>(null);
   const continueRef = useRef<HTMLButtonElement>(null);
@@ -358,14 +345,15 @@ function ChoiceRoundView({
   });
 
   // A round that opens without its reveal starts on its question: focus on
-  // the stem without the browser's scroll, which would leave the question's
-  // top under a sticky header, then the question's top just below it. A
-  // layout effect, so the new question never paints in the wrong place.
+  // the options group (D30), which the stem labels, without the browser's
+  // scroll, which would leave the question's top under a sticky header,
+  // then the question's top just below it. A layout effect, so the new
+  // question never paints in the wrong place.
   useLayoutEffect(() => {
     if (startedRevealed) return;
     if (!focusIsElsewhere(rootRef.current)) {
       // The ring shows when a key press brought the question (R1-34).
-      focusWithRing(stemRef.current, { preventScroll: true });
+      focusWithRing(groupRef.current, { preventScroll: true });
     }
     keepTopBelowHeader(questionRef.current);
   }, [startedRevealed]);
@@ -506,12 +494,11 @@ function ChoiceRoundView({
     }
   };
 
-  // D20: the option keys listen on the options group, so they act only
-  // while focus is on an option. A key on the heading, the page or a sheet
-  // never reaches these handlers.
-  const onOptionsKeyDown = (event: KeyboardEvent<HTMLOListElement>) => {
-    if (!onOption(event.target)) return;
-    setKeyboardInUse(true);
+  // D20, D30: the option keys listen on the options group, so they act only
+  // while focus is on it or on an option. A key on the heading, the page or
+  // a sheet never reaches these handlers.
+  const onOptionsKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!inOptions(event)) return;
     if (!shortcutsOn || event.altKey || event.ctrlKey || event.metaKey) return;
     const index = optionForKey(event.key);
     if (index < 0) return;
@@ -519,17 +506,15 @@ function ChoiceRoundView({
     if (!event.repeat) setHeld(index);
   };
 
-  const onOptionsKeyUp = (event: KeyboardEvent<HTMLOListElement>) => {
-    if (!onOption(event.target)) return;
-    // The Tab that brought focus here lets go on an option: a keyboard.
-    setKeyboardInUse(true);
+  const onOptionsKeyUp = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!inOptions(event)) return;
     const index = optionForKey(event.key);
     if (held === null || index !== held) return;
     event.preventDefault();
     commit(index);
-    // R3-07: a letter answers whichever option has focus, so the ring
-    // follows the answer, as it does for Enter: it never stays on an option
-    // the key didn't answer, and the sheet's title takes it from there.
+    // R3-07: a letter answers wherever in the group focus is, so the ring
+    // follows the answer, as it does for Enter: it never stays on the group
+    // or an option the key didn't answer, and the sheet's title takes it.
     const answered =
       event.currentTarget.querySelectorAll<HTMLButtonElement>("button")[index];
     if (answered !== undefined && answered !== event.target) {
@@ -537,12 +522,8 @@ function ChoiceRoundView({
     }
   };
 
-  const onOptionsFocus = (event: FocusEvent<HTMLOListElement>) => {
-    if (focusedByKeyboard(event.target)) setKeyboardInUse(true);
-  };
-
-  /** D20's legend (D28's words): the keys while the question is open, once a keyboard is in use. */
-  const legendShown = keyboardInUse && shortcutsOn;
+  /** D20's legend (D28's words): the keys, from the start, while the question is open (D30). */
+  const legendShown = shortcutsOn;
 
   const grid =
     open.format !== "mc" ||
@@ -591,56 +572,34 @@ function ChoiceRoundView({
               </>
             )}
           </p>
-          {/* It takes focus for each new question, and shows the app's one
-              3 px ring when that came from the keyboard (R1-34). */}
           <h1
-            ref={stemRef}
             id={stemId}
-            tabIndex={-1}
             className="text-2xl leading-snug font-bold text-balance"
           >
             {open.stem}
           </h1>
         </div>
-        {/* R3-07: the legend sits above the options, so at 200% text it
-            shows before them rather than below the screen's edge. Its line
-            is held while shortcuts are on, so its first showing never moves
-            the options (PRD §3.0.3, §25), and from 768 px neither does the
-            lock-in; only its text appears and goes. With the line, the
-            options' anchor at the foot of the thumb zone moves up to it. */}
-        {settings.shortcuts ? (
-          <p
-            data-keys-line=""
-            data-keys-legend={legendShown ? "" : undefined}
-            aria-hidden={legendShown ? undefined : true}
-            className={cx(
-              // Half the round's gap on either side, so it reads with the
-              // options. Once the answer locks on a phone, the options close
-              // up under the stem anyway (R1-21), and the empty line goes
-              // with the spacer, leaving no band between them; from 768 px,
-              // where nothing else moves at the lock, it stays held.
-              "-mb-2 min-h-5 text-sm font-semibold text-muted-foreground",
-              settled ? "-mt-2 max-md:hidden" : "mt-auto md:-mt-2",
-              !legendShown && "invisible",
-            )}
-          >
-            {CHOICE_COPY.keysLegend(open.options.length)}
-          </p>
-        ) : null}
-        <ol
-          // Preflight's list-style: none would cost the list its role in WebKit.
-          role="list"
+        {/* D30: the group takes focus for each new question, labelled by
+            the stem, which is read first, and described by the legend; it
+            shows the app's one 3 px ring when that came from the keyboard
+            (R1-34). Its keys act from here as from an option (D20). */}
+        <div
+          ref={groupRef}
+          role="group"
+          tabIndex={-1}
           aria-labelledby={stemId}
-          // grid-cols-1 is minmax(0, 1fr): a revealed option's tag can't
-          // widen the column past the screen.
+          aria-describedby={legendShown ? `${stemId}-keys` : undefined}
+          data-options=""
+          // With the legend's line, the options' anchor at the foot of the
+          // thumb zone moves up to it; half the round's gap on either side
+          // of the line, so it reads with the options.
           className={cx(
-            "grid grid-cols-1 gap-3",
-            !settled && !settings.shortcuts && "mt-auto md:mt-0",
-            grid && "md:grid-cols-2",
+            "flex flex-col gap-2 rounded-[14px]",
+            !settled && "mt-auto",
+            settings.shortcuts ? "md:-mt-2" : "md:mt-0",
           )}
           onKeyDown={onOptionsKeyDown}
           onKeyUp={onOptionsKeyUp}
-          onFocus={onOptionsFocus}
           onBlur={(event) => {
             // A key held while focus leaves the options never commits.
             if (
@@ -650,32 +609,64 @@ function ChoiceRoundView({
             }
           }}
         >
-          {open.options.map((option) => (
-            <li key={option.index} className="min-w-0">
-              <AnswerButton
-                index={option.index}
-                state={optionState(option.index)}
-                pressed={held === option.index}
-                shortcut={keysFor(option.index)}
-                onCommit={() => commit(option.index)}
-                onPressStart={
-                  settings.sound ? () => playEffect("tap") : undefined
-                }
-                // D6: one key hint per option, the badge's letter; the keys
-                // themselves are in `aria-keyshortcuts`, and AnswerButton
-                // draws no second hint since FIX-DS.
-                className="h-full"
-              >
-                {labelIn(labels, option.index)}
-                {values === null ? null : (
-                  <span className="block text-base font-normal">
-                    {values[option.index]}
-                  </span>
-                )}
-              </AnswerButton>
-            </li>
-          ))}
-        </ol>
+          {/* R3-07: the legend sits above the options, so at 200% text it
+              shows before them rather than below the screen's edge. Its
+              line is held while shortcuts are on, so nothing moves when its
+              words go at the lock-in from 768 px (PRD §3.0.3, §25). Once
+              the answer locks on a phone, the options close up under the
+              stem anyway (R1-21), and the empty line goes with the spacer,
+              leaving no band between them. Screen readers hear it as the
+              group's description. */}
+          {settings.shortcuts ? (
+            <p
+              id={`${stemId}-keys`}
+              data-keys-line=""
+              data-keys-legend={legendShown ? "" : undefined}
+              aria-hidden="true"
+              className={cx(
+                "min-h-5 text-sm font-semibold text-muted-foreground",
+                settled && "max-md:hidden",
+                !legendShown && "invisible",
+              )}
+            >
+              {CHOICE_COPY.keysLegend(open.options.length)}
+            </p>
+          ) : null}
+          <ol
+            // Preflight's list-style: none would cost the list its role in WebKit.
+            role="list"
+            aria-labelledby={stemId}
+            // grid-cols-1 is minmax(0, 1fr): a revealed option's tag can't
+            // widen the column past the screen.
+            className={cx("grid grid-cols-1 gap-3", grid && "md:grid-cols-2")}
+          >
+            {open.options.map((option) => (
+              <li key={option.index} className="min-w-0">
+                <AnswerButton
+                  index={option.index}
+                  state={optionState(option.index)}
+                  pressed={held === option.index}
+                  shortcut={keysFor(option.index)}
+                  onCommit={() => commit(option.index)}
+                  onPressStart={
+                    settings.sound ? () => playEffect("tap") : undefined
+                  }
+                  // D6: one key hint per option, the badge's letter; the keys
+                  // themselves are in `aria-keyshortcuts`, and AnswerButton
+                  // draws no second hint since FIX-DS.
+                  className="h-full"
+                >
+                  {labelIn(labels, option.index)}
+                  {values === null ? null : (
+                    <span className="block text-base font-normal">
+                      {values[option.index]}
+                    </span>
+                  )}
+                </AnswerButton>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
 
       {status === "checking" && !shown ? (

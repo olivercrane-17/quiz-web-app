@@ -18,6 +18,8 @@ const round = (page: Page) => page.locator('[data-round="choice"]');
 const stem = (page: Page) => round(page).getByRole("heading", { level: 1 });
 const options = (page: Page) =>
   round(page).locator("[data-question] ol").getByRole("button");
+/** The options group, where each question puts focus (D30). */
+const group = (page: Page) => round(page).locator("[data-options]");
 const progress = (page: Page) =>
   page.getByRole("list", { name: /^Question \d+ of \d+\./ });
 const continueButton = (page: Page) =>
@@ -120,7 +122,7 @@ test.describe("practice greybox", () => {
     await expect(page).toHaveURL("/practice/run");
     await expect(round(page).getByText("Question 1 of 10")).toBeVisible();
     await expect(stem(page)).toBeVisible();
-    await expect(stem(page)).toBeFocused();
+    await expect(group(page)).toBeFocused();
     await expect(
       page.getByRole("list", {
         name: "Question 1 of 10. 0 right, 0 wrong so far.",
@@ -368,11 +370,12 @@ test.describe("practice greybox", () => {
 
   test("keys A to D answer while an option has focus", async ({ page }) => {
     await startQuickPlay(page);
-    await expect(stem(page)).toBeFocused();
-    // D20: the keys act only on an option (e2e/practice/rite-2.spec.ts
-    // checks the heading), so a keyboard player Tabs there first. The
-    // letters always pick (D6); the digits only when no option is a
-    // number, which e2e/practice/rite-1.spec.ts covers.
+    await expect(group(page)).toBeFocused();
+    // D20: the keys act only inside the options group
+    // (e2e/practice/rite-2.spec.ts checks the heading); here from an
+    // option, and e2e/practice/rite-3.spec.ts answers from the group
+    // (D30). The letters always pick (D6); the digits only when no option
+    // is a number, which e2e/practice/rite-1.spec.ts covers.
     await page.keyboard.press("Tab");
     await expect(options(page).first()).toBeFocused();
     await page.keyboard.press("b");
@@ -387,7 +390,7 @@ test.describe("practice greybox", () => {
     await expect(title).toHaveText(/^(Right|Not quite)\./);
     await page.keyboard.press("Enter");
     await expect(round(page).getByText("Question 2 of 10")).toBeVisible();
-    await expect(stem(page)).toBeFocused();
+    await expect(group(page)).toBeFocused();
   });
 
   test("Play again starts a new run with the same settings, and Back from its results reaches Today", async ({

@@ -265,8 +265,9 @@ export function PracticeRunScreen({
     round.open !== null;
   const note = playing ? runNote(state, category) : null;
 
-  // The note sits above the question's heading, which takes focus, so a
-  // screen reader would never reach it: say it once, after the heading.
+  // The note sits above the question, whose options group takes focus and
+  // is read by the question's name (D30), so a screen reader would never
+  // reach it: say it once, after the question.
   // This runs after ChoiceRound's focus effect, so it queues behind it.
   const announcedFor = useRef<string | null>(null);
   useEffect(() => {

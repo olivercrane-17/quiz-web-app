@@ -223,9 +223,12 @@ const legend = () => document.querySelector("[data-keys-legend]");
 /** The legend's held line, shown or not: there while shortcuts are on. */
 const keyLine = () => document.querySelector<HTMLElement>("[data-keys-line]");
 
+/** The options group, where each question puts focus (D30). */
+const group = () => screen.getByRole("group");
+
 /**
- * D20: the option keys act only on an option, so a keyboard player Tabs
- * from the stem, where each question puts focus, to option A first.
+ * Tab from the options group, where each question puts focus (D30), to
+ * option A: the keys act from either (D20).
  */
 async function tabToOptions(user: ReturnType<typeof userEvent.setup>) {
   await user.tab();
@@ -296,16 +299,101 @@ describe("ChoiceRound", () => {
     );
   });
 
-  it("R1-34 gives the stem no outline-none, so it shows the app's one ring when focused from the keyboard", () => {
+  it("R1-34 gives the options group no outline-none, so it shows the app's one ring when focused from the keyboard", () => {
     setup();
-    const stem = screen.getByRole("heading", { level: 1 });
-    expect(stem).toHaveAttribute("tabindex", "-1");
-    expect(stem.className).not.toMatch(/\boutline-none\b/);
+    expect(group()).toHaveAttribute("tabindex", "-1");
+    expect(group().className).not.toMatch(/\boutline-none\b/);
   });
 
-  it("moves focus to the question's heading when the round opens", () => {
+  it("D30 moves focus to the options group, labelled by the question, when the round opens", () => {
     setup();
-    expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
+    expect(group()).toHaveFocus();
+    // The question is read first, then the keys.
+    expect(group()).toHaveAccessibleName(PLANETS.stem);
+    expect(group()).toHaveAccessibleDescription("Keys A to D answer at once.");
+    // The stem stays the page's heading, and Tab still reaches option A.
+    const stem = screen.getByRole("heading", { level: 1 });
+    expect(stem).toHaveTextContent(PLANETS.stem);
+    expect(group().contains(stem)).toBe(false);
+    expect(group().contains(screen.getByRole("list"))).toBe(true);
+  });
+
+  it("D30 a letter answers from the options group, with no Tab, and the ring moves to the answer", async () => {
+    const { user, onIntent, option } = setup();
+    expect(group()).toHaveFocus();
+    await user.keyboard("{b>}");
+    expect(option(/Uranus/)).toHaveAttribute("data-pressed");
+    expect(onIntent).not.toHaveBeenCalled();
+    await user.keyboard("{/b}");
+    expect(onIntent).toHaveBeenCalledExactlyOnceWith({
+      family: "choice",
+      kind: "answer",
+      option: 1,
+    });
+    expect(option(/Uranus/)).toHaveFocus();
+    wait(SHEET_AFTER_MS);
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Right. It's Uranus." }),
+    ).toHaveFocus();
+  });
+
+  it("D30 D6's digits answer from the group too, and stand down on a number question", async () => {
+    const words = setup();
+    await words.user.keyboard("3");
+    expect(words.onIntent).toHaveBeenCalledExactlyOnceWith({
+      family: "choice",
+      kind: "answer",
+      option: 2,
+    });
+    words.unmount();
+    const numbers = setup({ content: BRIDGES });
+    for (const digit of ["1", "2", "3", "4"]) {
+      await numbers.user.keyboard(digit);
+    }
+    expect(numbers.onIntent).not.toHaveBeenCalled();
+  });
+
+  it("D30 shows the legend from the start, in its reserved line, until the answer locks", async () => {
+    const { user } = setup();
+    const line = keyLine();
+    expect(legend()).toBe(line);
+    expect(line).toHaveTextContent(/^Keys A to D answer at once\.$/);
+    expect(line).toBeVisible();
+    expect(line?.className).not.toContain("invisible");
+    expect(screen.getByRole("list").previousElementSibling).toBe(line);
+    await user.keyboard("a");
+    expect(legend()).toBeNull();
+    expect(keyLine()).toBe(line);
+    expect(group()).not.toHaveAttribute("aria-describedby");
+  });
+
+  it("D30 keys outside the group still do nothing: on the stem, the page or another control (WCAG 2.1.4)", async () => {
+    const { user, onIntent, option } = setup();
+    const outside = screen.getByRole("button", { name: "Outside the round" });
+    act(() => {
+      outside.focus();
+    });
+    for (const key of ["a", "B", "3", "d"]) await user.keyboard(key);
+    act(() => {
+      outside.blur();
+    });
+    expect(document.body).toHaveFocus();
+    for (const key of ["a", "B", "3", "d"]) await user.keyboard(key);
+    fireEvent.keyDown(screen.getByRole("heading", { level: 1 }), { key: "c" });
+    fireEvent.keyUp(screen.getByRole("heading", { level: 1 }), { key: "c" });
+    wait(SHEET_AFTER_MS);
+    expect(onIntent).not.toHaveBeenCalled();
+    expect(option(/Neptune/)).not.toHaveAttribute("data-pressed");
+    expect(screen.queryByRole("region")).toBeNull();
+  });
+
+  it("D30 with shortcuts off, the group still takes focus, and no key answers from it", async () => {
+    const { user, onIntent } = setup({ settings: { shortcuts: false } });
+    expect(group()).toHaveFocus();
+    expect(group()).not.toHaveAttribute("aria-describedby");
+    await user.keyboard("b");
+    expect(onIntent).not.toHaveBeenCalled();
+    expect(keyLine()).toBeNull();
   });
 
   it("commits on release: the press shows on pointerdown and the answer waits for the click", async () => {
@@ -353,7 +441,6 @@ describe("ChoiceRound", () => {
     screen.getByRole("button", { name: "Outside the round" }).focus();
     await user.keyboard("2");
     expect(onIntent).not.toHaveBeenCalled();
-    expect(legend()).toBeNull();
   });
 
   it("drops a held key when focus leaves the options before it is released", async () => {
@@ -448,9 +535,13 @@ describe("ChoiceRound", () => {
     it("R2-02 with focus on the question's heading, c commits nothing", async () => {
       const { user, onIntent, option } = setup();
       const stem = screen.getByRole("heading", { level: 1 });
+      // Sam's stray key: held and let go on the heading, outside the
+      // options group. So do a digit and the other letters.
+      stem.tabIndex = -1;
+      act(() => {
+        stem.focus();
+      });
       expect(stem).toHaveFocus();
-      // Sam's stray key: held and let go on the heading, where each
-      // question puts focus. So do a digit and the other letters.
       await user.keyboard("{c>}");
       expect(option(/Neptune/)).not.toHaveAttribute("data-pressed");
       await user.keyboard("{/c}");
@@ -464,8 +555,6 @@ describe("ChoiceRound", () => {
       }
       expect(screen.queryByRole("region")).toBeNull();
       expect(stem).toHaveFocus();
-      // A key on the heading isn't a keyboard in the options: no legend.
-      expect(legend()).toBeNull();
     });
 
     it("R2-02 with focus on option A, c commits C, the one answer for the one key", async () => {
@@ -484,13 +573,12 @@ describe("ChoiceRound", () => {
       expect(onIntent).toHaveBeenCalledOnce();
     });
 
-    it("R2-02 shows Keys A to D answer at once. above the options after the first key in them, until the answer locks", async () => {
+    it("R2-02 shows Keys A to D answer at once. above the options, until the answer locks", async () => {
       const { user, container } = setup();
-      // A new question: focus on the heading, nothing typed yet.
-      expect(legend()).toBeNull();
-      // The first key in the options is the Tab that reaches option A.
-      await tabToOptions(user);
+      // A new question: the legend is there from the start (D30).
       const line = legend();
+      await tabToOptions(user);
+      expect(legend()).toBe(line);
       expect(line).toHaveTextContent(/^Keys A to D answer at once\.$/);
       expect(line).toBeVisible();
       // A line of its own, above the options (R3-07), drawn by the round,
@@ -509,7 +597,7 @@ describe("ChoiceRound", () => {
       expect(legend()).toBeNull();
     });
 
-    it("R2-02 shows the legend after a key on an option that reached focus another way", async () => {
+    it("R2-02 keeps the legend after a key on an option that reached focus another way", async () => {
       const { user, onIntent, option } = setup();
       act(() => {
         option(/Uranus/).focus();
@@ -528,8 +616,9 @@ describe("ChoiceRound", () => {
       expect(CHOICE_COPY.keysLegend(4)).toBe("Keys A to D answer at once.");
     });
 
-    it("R2-02 a tap or a click answers without ever showing the legend", async () => {
+    it("R2-02 a tap or a click answers, and the legend goes with the lock-in", async () => {
       const { user, option } = setup();
+      expect(legend()).not.toBeNull();
       await user.click(option(/Venus/));
       expect(legend()).toBeNull();
       wait(SHEET_AFTER_MS);
@@ -621,17 +710,17 @@ describe("ChoiceRound", () => {
       const { user } = setup();
       const list = screen.getByRole("list");
       const line = keyLine();
-      // Held, and hidden from everyone, before any key.
+      // Held and shown from the start (D30): read as the group's
+      // description, so the line itself is hidden from screen readers.
       expect(line).not.toBeNull();
       expect(list.previousElementSibling).toBe(line);
       expect(line).toHaveAttribute("aria-hidden", "true");
-      expect(line?.className).toContain("invisible");
+      expect(line?.className).not.toContain("invisible");
       expect(line?.className).toContain("min-h-5");
       expect(line?.className).not.toContain("hidden ");
       expect(line?.className).not.toContain("max-md:hidden");
       await tabToOptions(user);
       expect(keyLine()).toBe(line);
-      expect(line).not.toHaveAttribute("aria-hidden");
       expect(line?.className).not.toContain("invisible");
       await user.keyboard("c");
       // The answer is in: the words go, the line stays from 768 px. On a
@@ -656,10 +745,10 @@ describe("ChoiceRound", () => {
     });
   });
 
-  it("R1-12 focuses the stem without the browser's scroll when a question opens", () => {
+  it("R1-12 focuses the options group without the browser's scroll when a question opens", () => {
     const focus = vi.spyOn(HTMLElement.prototype, "focus");
     setup();
-    const stem = screen.getByRole("heading", { level: 1 });
+    const stem = group();
     expect(stem).toHaveFocus();
     expect(
       focus.mock.contexts.some(
@@ -696,7 +785,7 @@ describe("ChoiceRound", () => {
         top: -120,
         behavior: "instant",
       });
-      expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
+      expect(group()).toHaveFocus();
     } finally {
       header.remove();
     }
@@ -958,24 +1047,25 @@ describe("ChoiceRound", () => {
     // Open: the question fills the column and the options anchor at its foot.
     expect(question).not.toHaveAttribute("data-settled");
     expect(question?.className).toContain("flex-1");
-    // With shortcuts on, the legend's held line sits on top of the options
-    // and carries their anchor (R3-07).
-    const keysLine = keyLine();
-    expect(keysLine?.className).toContain("mt-auto");
+    // The options group, with the legend's held line on top of the options
+    // (R3-07), carries their anchor (D30).
+    const keysLine = group();
+    expect(keysLine.contains(keyLine())).toBe(true);
+    expect(keysLine.className).toContain("mt-auto");
     expect(list.className).not.toContain("mt-auto");
     await user.click(option(/Venus/));
     // Locked in: the options close up under the stem at once.
     expect(option(/Venus/)).toHaveAttribute("data-state", "locked");
     expect(question).toHaveAttribute("data-settled");
     expect(question?.className).not.toContain("flex-1");
-    expect(keysLine?.className).not.toContain("mt-auto");
+    expect(keysLine.className).not.toContain("mt-auto");
     expect(list.className).not.toContain("mt-auto");
   });
 
   it("R1-21 anchors the options themselves at the thumb zone's foot with shortcuts off", () => {
     setup({ settings: { shortcuts: false } });
     expect(keyLine()).toBeNull();
-    expect(screen.getByRole("list").className).toContain("mt-auto");
+    expect(group().className).toContain("mt-auto");
   });
 
   it("R1-21 puts the sheet at the foot of the round, where the answers were", async () => {

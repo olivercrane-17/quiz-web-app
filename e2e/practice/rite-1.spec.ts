@@ -14,6 +14,8 @@ const round = (page: Page) => page.locator('[data-round="choice"]');
 const stem = (page: Page) => round(page).getByRole("heading", { level: 1 });
 const options = (page: Page) =>
   round(page).locator("[data-question] ol").getByRole("button");
+/** The options group, where each question puts focus (D30). */
+const group = (page: Page) => round(page).locator("[data-options]");
 const sheet = (page: Page) => round(page).getByRole("region");
 const continueButton = (page: Page) =>
   sheet(page).getByRole("button", {
@@ -200,8 +202,8 @@ async function textAt200(page: Page) {
 }
 
 /**
- * Tabs from the stem, where each question puts focus, to option A: since
- * D20 (RITE round 2, R2-02) the option keys act only on an option.
+ * Tabs from the options group, where each question puts focus (D30), to
+ * option A: the option keys act from either (D20).
  */
 async function tabToOptions(page: Page) {
   await page.keyboard.press("Tab");
@@ -277,7 +279,7 @@ test.describe("RITE round 1: practice", () => {
   test.describe("at 640 by 400 (200% zoom on 1280 by 800)", () => {
     test.use({ viewport: { width: 640, height: 400 } });
 
-    test("R1-12 every new question opens with its top below the sticky header, focus on its stem", async ({
+    test("R1-12 every new question opens with its top below the sticky header, focus on its options group", async ({
       page,
     }) => {
       await startQuickPlay(page);
@@ -285,7 +287,7 @@ test.describe("RITE round 1: practice", () => {
         await expect(
           round(page).getByText(`Question ${n} of 10`),
         ).toBeVisible();
-        await expect(stem(page)).toBeFocused();
+        await expect(group(page)).toBeFocused();
         const view = await layout(page);
         // "Question N of 10" and the stem's first line are never under it.
         expect(view.question?.top, `question ${n}`).toBeGreaterThanOrEqual(
@@ -328,7 +330,7 @@ test.describe("RITE round 1: practice", () => {
       await expect(
         round(page).getByText(`Question ${n} of ${total}`),
       ).toBeVisible();
-      await expect(stem(page)).toBeFocused();
+      await expect(group(page)).toBeFocused();
       // The labels alone: no badge, and no key hint beside them.
       const labels = await options(page).evaluateAll((buttons) =>
         buttons.map((button) => {
@@ -399,7 +401,7 @@ test.describe("RITE round 1: practice", () => {
     page,
   }) => {
     await startQuickPlay(page);
-    await expect(stem(page)).toBeFocused();
+    await expect(group(page)).toBeFocused();
     await tabToOptions(page);
     await page.keyboard.press("a");
     // Within 300 ms of the answer.
@@ -576,7 +578,7 @@ test.describe("RITE round 1: practice", () => {
     });
   });
 
-  test("R1-34 played by keyboard, each new question's stem and the results' score show the app's one 3 px ring", async ({
+  test("R1-34 played by keyboard, each new question's options group and the results' score show the app's one 3 px ring", async ({
     page,
   }) => {
     test.setTimeout(60_000);
@@ -589,11 +591,11 @@ test.describe("RITE round 1: practice", () => {
       });
     for (let n = 1; n <= 10; n += 1) {
       await expect(round(page).getByText(`Question ${n} of 10`)).toBeVisible();
-      await expect(stem(page)).toBeFocused();
+      await expect(group(page)).toBeFocused();
       // From question 2 the focus move follows a key press, so it is
-      // :focus-visible, and the heading keeps the global ring (DESIGN §11).
+      // :focus-visible, and the group keeps the global ring (DESIGN §11).
       if (n > 1)
-        expect(await ring(stem(page)), `question ${n}`).toBe("3px solid 3px");
+        expect(await ring(group(page)), `question ${n}`).toBe("3px solid 3px");
       await answerByKey(page, "a");
     }
     await expect(page).toHaveURL("/practice/results");

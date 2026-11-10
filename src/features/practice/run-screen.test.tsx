@@ -182,10 +182,13 @@ describe("the practice run screen", () => {
     expect(screen.queryByText(/toughest ones left/)).toBeNull();
   });
 
-  it("says the note once, since it sits above the heading that takes focus", async () => {
+  it("says the note once, since it sits above the question, whose options group takes focus", async () => {
     wire();
     await mount(hardGeo);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
+    expect(screen.getByRole("group")).toHaveFocus();
+    expect(screen.getByRole("group")).toHaveAccessibleName(
+      screen.getByRole("heading", { level: 1 }).textContent,
+    );
     expect(spoken()).toBe(
       "You've played every Hard Geography question. Here are the toughest ones left.",
     );
