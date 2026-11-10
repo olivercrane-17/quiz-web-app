@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import { getSettingsStore } from "@/platform/settings/store";
 import { announce } from "@/ui/announce";
 
-import { SHELL_CLIENT_COPY } from "./client-copy";
+import { SHELL_PLAY_COPY } from "./play-copy";
 
 export function StopwatchChoice() {
   useEffect(() => {
@@ -27,7 +27,7 @@ export function StopwatchChoice() {
     let shown = store.get().stopwatch !== "hidden";
     return store.subscribe((settings) => {
       const now = settings.stopwatch !== "hidden";
-      if (shown && !now) announce(SHELL_CLIENT_COPY.stopwatchHidden);
+      if (shown && !now) announce(SHELL_PLAY_COPY.stopwatchHidden);
       shown = now;
     });
   }, []);
