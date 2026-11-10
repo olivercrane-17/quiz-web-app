@@ -310,6 +310,7 @@ session that returned no report. M1 doesn't exit yet; round 4 runs five complete
   by the clue, and the key legend shows from then on, so A then Enter works with no Tab. Typing a name from an option still
   commits nothing (D20's typing guard stays). The practice legend reads "Keys A to D answer at once."
 - **D29, unfinished tabs.** Placeholder tabs are hidden or clearly marked before launch; not needed for M1.
+- **D30, practice keys.** D28 extends to practice; a question focuses its options group and the legend shows from the start.
 - **One clock, properly.** The stopwatch, recorded rounds and the stop screen use one rounding rule, and the header freezes on
   the value shown when Lock in is pressed. The stop screen shows that same value.
 - **Help pages promise only what exists.** Sentences about a player count, Settings and Reduce motion show once those ship.
