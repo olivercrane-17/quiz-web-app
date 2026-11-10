@@ -363,3 +363,38 @@ describe("Leave's words, by whether the stopwatch keeps running (D19, R2-01)", (
     expect(statusText()).toBe("Saved");
   });
 });
+
+describe("RITE round 4 on the Daily screen", () => {
+  afterEach(() => {
+    wiring.deps = null;
+  });
+
+  it("R4-04 the X carries its tooltip: what leaving does, by whether the stopwatch keeps running", async () => {
+    wire(NOW);
+    await playing();
+    const link = screen.getByRole("link", {
+      name: "Leave the Daily. Your progress is saved, and the stopwatch keeps running.",
+    });
+    const tip = link.parentElement?.querySelector("[data-leave-tip]");
+    expect(tip).toHaveTextContent(
+      /^Your progress is saved, and the stopwatch keeps running\.$/,
+    );
+    expect(tip).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("AC-DLY-30 How to play opens from the More menu though its sheet loads apart from the screen, pressed before the chunk was fetched", async () => {
+    wire(NOW);
+    await playing();
+    // Nothing of the sheet is in the page until it is asked for or warmed.
+    expect(document.querySelector("#qz-how-to-play")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: /^More/ }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "How to play" }));
+    // The chunk is a real import() here: the sheet shows once it lands.
+    await act(async () => {
+      await vi.dynamicImportSettled();
+    });
+    const sheet = screen.getByRole("dialog", { name: "How to play" });
+    expect(sheet).toHaveTextContent("The clue ladder");
+    expect(sheet).toHaveAttribute("id", "qz-how-to-play");
+  });
+});
