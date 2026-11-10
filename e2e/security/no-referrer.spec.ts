@@ -62,7 +62,7 @@ async function keepsSecureCookieHere(
     test.info().annotations.push({
       type: "webkit-cookie-gap",
       description:
-        "WebKit keeps no Secure cookie on http://127.0.0.1: the backup cookie assertion runs on Chromium and Firefox (ARCHITECTURE §9.3)",
+        "WebKit keeps no Secure cookie on http://127.0.0.1: the assertion that the browser stored the backup cookie runs on Chromium and Firefox (ARCHITECTURE §9.3)",
     });
   }
   return kept;
@@ -108,7 +108,12 @@ test.describe("Referrer-Policy: no-referrer on round 5's pages", () => {
     const headers = await request.allHeaders();
     expect(headers.origin).toBe(new URL(baseURL ?? "").origin);
     expect(headers.referer).toBeUndefined();
-    expect((await request.response())?.status()).toBe(204);
+    const response = await request.response();
+    expect(response?.status()).toBe(204);
+    // Issued in every browser, whether or not this one keeps it.
+    expect(await response?.headerValue("set-cookie")).toMatch(
+      /^__Host-pid=v1\./m,
+    );
     // Today took over, as the restored player, with its note.
     await expect(page.locator("[data-restore-notice] p")).toBeVisible();
     const cookies = (await context.cookies()).map((cookie) => cookie.name);

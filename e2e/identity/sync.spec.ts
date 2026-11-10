@@ -49,7 +49,7 @@ async function keepsSecureCookieHere(
     test.info().annotations.push({
       type: "webkit-cookie-gap",
       description:
-        "WebKit keeps no Secure cookie on http://127.0.0.1: the backup cookie assertion runs on Chromium and Firefox (ARCHITECTURE §9.3)",
+        "WebKit keeps no Secure cookie on http://127.0.0.1: the assertion that the browser stored the backup cookie runs on Chromium and Firefox (ARCHITECTURE §9.3)",
     });
   }
   return kept;
@@ -367,10 +367,26 @@ test.describe("sync codes (PRD §3.10.2)", () => {
         response.request().method() === "POST",
     );
     await restore(page, code);
-    expect((await posted).status()).toBe(204);
+    const response = await posted;
+    expect(response.status()).toBe(204);
     await expect(page.locator(NOTE)).toBeVisible();
     const restored = await identityOf(page, null);
     expect(restored).toMatchObject({ playerId, source: "sync" });
+    // What the server issued, in every browser: the header doesn't depend on
+    // whether this browser keeps the cookie, so the webkit-cookie-gap probe
+    // below covers the browser's storage alone.
+    // Playwright joins several Set-Cookie headers with newlines.
+    const issued =
+      (await response.headerValue("set-cookie"))
+        ?.split("\n")
+        .find((line) => line.startsWith("__Host-pid=")) ?? "";
+    const [pair, ...attributes] = issued.split(";").map((part) => part.trim());
+    expect(pair).toBe(
+      `__Host-pid=v1.${restored?.playerId}.${restored?.secret}`,
+    );
+    expect(attributes.map((part) => part.toLowerCase())).toEqual(
+      expect.arrayContaining(["secure", "path=/"]),
+    );
     const cookies = await context.cookies();
     if (await keepsSecureCookieHere(page, browserName)) {
       expect(cookies.map((cookie) => cookie.name)).toEqual(["__Host-pid"]);

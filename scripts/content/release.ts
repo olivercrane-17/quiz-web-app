@@ -900,12 +900,12 @@ function packed<T>(
  * statement. Every chunk is one call to a private.release_* loader, or the
  * answer-entity upsert, whose only variable part is a JSON literal; the
  * escapes live inside that literal and decode to the very text the content
- * holds. A release never drops, deletes or truncates anything, decoded or
- * not, and release.test.ts proves it for every chunk the main and fixture
- * releases write: no DROP, DELETE or TRUNCATE outside a string literal in
- * either form, and decoded values equal to the source rows. Escaping a
- * keyword of a real statement to dodge the prompt stays forbidden; such a
- * change belongs in an `*_attended.sql` migration.
+ * holds. A release never drops, deletes or truncates anything, and
+ * release.test.ts proves it for every chunk the main and fixture releases
+ * write: no DROP, DELETE or TRUNCATE outside a string literal, with decoded
+ * values equal to the source rows. Escaping a keyword of a real statement
+ * to dodge the prompt stays forbidden; such a change belongs in an
+ * `*_attended.sql` migration.
  */
 export function jsonText(value: unknown): string {
   return JSON.stringify(value)

@@ -95,7 +95,7 @@ jobs:
       # .next/static, .next/server/app or public/ (ARCHITECTURE §5.4, §10.9;
       # AC-CNT-07). Sealed text needs the content key, which only the
       # content-sealed job may hold, so this step scans for ids alone; that
-      # job scans a build of its own for the text (decisions memo §17).
+      # job scans a build of its own for the text (ARCHITECTURE §5.4, §5.7).
       - name: Lazy markers and sealed scan
         run: npm run check:lazy
 
@@ -104,10 +104,12 @@ jobs:
   # the latest audit record validated; and the cross-pool dedupe (X29,
   # AC-CNT-06). Every line goes through the redacting reporter of §5.4, so
   # these public logs show ids, rule codes and counts, never content. Only
-  # the one step below receives the key, a repository secret (decisions memo
-  # §17). Without it the same command prints "Sealed content validation:
-  # not run" and checks the plaintext content alone. Pull requests from
-  # forks never receive secrets, so they skip that step.
+  # two steps receive the key, a repository secret (decisions memo §17):
+  # this check and the sealed text scan below, each running one in-memory
+  # command that secret-scan.mjs allows. Without it the same command prints
+  # "Sealed content validation: not run" and checks the plaintext content
+  # alone. Pull requests from forks never receive secrets, so they skip
+  # both steps.
   #
   # Then the sealed half of AC-CNT-07's bundle scan (§5.4). The verify job's
   # check:lazy looks for sealed ids alone, since the key stays out of that
@@ -142,6 +144,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
+        id: install
         run: npm ci
 
       - name: Sealed content check and cross-pool dedupe
@@ -161,7 +164,7 @@ jobs:
       # Without the key, so nothing sealed can reach the build or its log.
       - name: Build for the sealed text scan
         id: build
-        if: "!cancelled() && steps.key.outputs.present == 'true'"
+        if: "!cancelled() && steps.install.outcome == 'success' && steps.key.outputs.present == 'true'"
         timeout-minutes: 10
         run: npm run build
 
@@ -217,7 +220,9 @@ jobs:
       - name: Read the Playwright version
         id: playwright
         run: |
-          echo "version=$(node -p 'require("@playwright/test/package.json").version')" >> "$GITHUB_OUTPUT"
+          version=$(node -p 'require("@playwright/test/package.json").version')
+          test -n "$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "image=${ImageOS:-unknown}" >> "$GITHUB_OUTPUT"
 
       - name: Restore Playwright ${{ matrix.browser }}

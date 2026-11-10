@@ -410,20 +410,15 @@ function decodedSql(lexed: LexedSql): string {
 const DESTRUCTIVE = /\b(?:drop|delete|truncate)\b/i;
 
 /**
- * What memo §24 allows: neither the text as written nor the text with
- * every value decoded holds a DROP, DELETE or TRUNCATE outside a string
- * literal, and decoding changes no statement (the same code, the same
- * count). Returns the lexed form as written.
+ * What memo §24 allows: no DROP, DELETE or TRUNCATE outside a string
+ * literal. Re-lexing the decoded text would prove nothing more (decodedSql
+ * quotes every value again, so the code is the same by construction); the
+ * callers instead compare the decoded values with the source rows and pin
+ * which literal may carry escaped text. Returns the lexed form.
  */
 function expectNoDestructiveStatement(sql: string, what: string): LexedSql {
   const written = lexSql(sql);
-  expect(written.code, `${what}, as written`).not.toMatch(DESTRUCTIVE);
-  const decoded = lexSql(decodedSql(written));
-  expect(decoded.code, `${what}, decoded`).not.toMatch(DESTRUCTIVE);
-  expect(decoded.code, `${what}: decoding changed a statement`).toBe(
-    written.code,
-  );
-  expect(decoded.statements, what).toBe(written.statements);
+  expect(written.code, what).not.toMatch(DESTRUCTIVE);
   return written;
 }
 
@@ -458,8 +453,10 @@ const CHUNK_SHAPE =
 
 /**
  * Every chunk of `file` is one statement of a shape a release writes, with
- * no destructive statement as written or decoded, and the values it
- * carries, decoded, are the release's own rows.
+ * no destructive statement outside a string literal, and the values it
+ * carries, decoded, are the release's own rows. In a loader chunk every
+ * literal but the jsonb rows is the release's version or track, so the
+ * only escaped text sits inside that one argument.
  */
 function expectFaithfulChunks(file: string, release: Release): void {
   const chunks = chunksOfFile(file);
@@ -474,6 +471,11 @@ function expectFaithfulChunks(file: string, release: Release): void {
     const key = LOADER_KEYS[chunk.label];
     if (key !== undefined) {
       // The loader's arguments: version, track, then the rows as jsonb.
+      expect(lexed.literals.length, what).toBe(3);
+      expect(lexed.literals.slice(0, 2), what).toEqual([
+        release.version,
+        release.track,
+      ]);
       const rows = JSON.parse(lexed.literals[2] ?? "") as unknown[];
       loaded.set(key, [...(loaded.get(key) ?? []), ...rows]);
     } else if (chunk.label === "answer entities") {
@@ -578,7 +580,7 @@ describe("memo §24: a release encodes data and never a destructive statement", 
     };
   }
 
-  it("OPS-1 every chunk of a main-track release holds no DROP, DELETE or TRUNCATE statement, as written or decoded, and decodes to the source rows", () => {
+  it("OPS-1 every chunk of a main-track release holds no DROP, DELETE or TRUNCATE statement outside a string literal, with decoded values equal to the source rows", () => {
     const release = hostileMainRelease();
     for (const options of [{}, { chunkBytes: 8000, allowFrozen: true }]) {
       const chunks = releaseChunks(release, options);
@@ -592,7 +594,7 @@ describe("memo §24: a release encodes data and never a destructive statement", 
     }
   });
 
-  it("OPS-1 every chunk of the fixture release, and its SQL test, holds no DROP, DELETE or TRUNCATE statement, as written or decoded, and the seed decodes to the fixture rows", () => {
+  it("OPS-1 every chunk of the fixture release, and its SQL test, holds no DROP, DELETE or TRUNCATE statement outside a string literal, with decoded values equal to the fixture rows", () => {
     expectFaithfulChunks(fixtures.seed.content, fixtures.release);
     // The SQL test runs inside begin ... rollback and asserts with do blocks.
     const test = expectNoDestructiveStatement(
