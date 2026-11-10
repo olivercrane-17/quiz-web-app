@@ -85,6 +85,19 @@ async function playToResults(
   return stems;
 }
 
+/** The item ids of each finished run in the device's history, newest first. */
+async function finishedRunItemIds(page: Page): Promise<string[][]> {
+  return page.evaluate(() => {
+    const key = Object.keys(localStorage).find((name) =>
+      name.endsWith("qz:history"),
+    );
+    const stored = JSON.parse(
+      (key === undefined ? null : localStorage.getItem(key)) ?? "{}",
+    ) as { runs?: { questions: [string, number, number | null][] }[] };
+    return (stored.runs ?? []).map((run) => run.questions.map(([id]) => id));
+  });
+}
+
 /** The bottom of the sticky header, and boxes of the round, in viewport pixels. */
 async function layout(page: Page) {
   return page.evaluate(() => {
@@ -684,12 +697,17 @@ test.describe("RITE round 1: practice", () => {
   test("R1-36 Play again keeps the last run's questions out of the next", async ({
     page,
   }) => {
+    // By item id, as the device's history keeps them: two fixture items
+    // share the stem "Which is heavier?", so stems alone can't tell.
     await startQuickPlay(page);
-    const first = await playToResults(page);
+    await playToResults(page);
     await page.getByRole("button", { name: "Play again" }).click();
     await expect(page).toHaveURL("/practice/run");
-    const second = await playToResults(page);
-    expect(second.filter((text) => first.includes(text))).toEqual([]);
+    await playToResults(page);
+    const [second, first] = await finishedRunItemIds(page);
+    expect(first).toHaveLength(10);
+    expect(second).toHaveLength(10);
+    expect(second?.filter((id) => first?.includes(id))).toEqual([]);
   });
 
   test("R1-36 while a run is open, Quick play reads Continue practice · 3 of 10 and carries it on", async ({
