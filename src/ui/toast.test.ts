@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { LIVE_REGION_IDS, clearRouteAnnouncements } from "./announce";
 import { signalRouteChange } from "./route-change";
-import { showToast } from "./toast";
+import { choosePlace, showToast } from "./toast";
 
 const toasts = () => [
   ...document.querySelectorAll<HTMLElement>("[data-toast]"),
@@ -160,6 +160,114 @@ describe("showToast", () => {
     expect(toast?.style.getPropertyValue("--kn-toast-bottom")).toBe(
       "calc(16px + env(safe-area-inset-bottom))",
     );
+  });
+
+  it("R3-08 moves under the header when a control is under its place above the bar, and back once the bottom is clear", () => {
+    Object.defineProperty(Element.prototype, "checkVisibility", {
+      configurable: true,
+      value: () => true,
+    });
+    const height = window.innerHeight;
+    const width = window.innerWidth;
+    // Today at 200% text: Continue at the bottom of the screen, where a
+    // toast with no bar to rise above would sit.
+    const toastBox = function (this: HTMLElement) {
+      const top = this.dataset.place === "top" ? 72 : height - 16 - 40;
+      return {
+        top,
+        bottom: top + 40,
+        left: width / 2 - 150,
+        right: width / 2 + 150,
+        width: 300,
+        height: 40,
+      } as DOMRect;
+    };
+    const original = HTMLElement.prototype.getBoundingClientRect;
+    HTMLElement.prototype.getBoundingClientRect = function (this: HTMLElement) {
+      if (this.dataset.toast !== undefined) return toastBox.call(this);
+      if (this.dataset.continue !== undefined) {
+        return {
+          top: height - 70,
+          bottom: height - 22,
+          left: 16,
+          right: width - 16,
+          width: width - 32,
+          height: 48,
+        } as DOMRect;
+      }
+      return original.call(this);
+    };
+    try {
+      const button = document.createElement("button");
+      button.dataset.continue = "";
+      button.textContent = "Continue";
+      document.body.append(button);
+      showToast("Saved. The stopwatch keeps running.");
+      const [toast] = toasts();
+      expect(toast).toHaveAttribute("data-place", "top");
+      expect(toast?.style.getPropertyValue("--kn-toast-top")).toBe("72px");
+
+      // Continue leaves the screen: the toast stays where it is, since the
+      // top is clear too.
+      button.remove();
+      signalRouteChange();
+      expect(toast).toHaveAttribute("data-place", "top");
+    } finally {
+      HTMLElement.prototype.getBoundingClientRect = original;
+    }
+  });
+
+  it("R3-08 chooses the place with no control under it, and stays put when both or neither have one", () => {
+    const viewport = { width: 390, height: 844 };
+    const size = { width: 300, height: 40 };
+    const spots = { bottom: 80, top: 72 };
+    const share = { left: 16, right: 374, top: 700, bottom: 748 };
+    const heading = { left: 16, right: 374, top: 80, bottom: 120 };
+    expect(choosePlace("bottom", size, spots, [], viewport).place).toBe(
+      "bottom",
+    );
+    expect(choosePlace("bottom", size, spots, [share], viewport).place).toBe(
+      "top",
+    );
+    expect(choosePlace("top", size, spots, [heading], viewport).place).toBe(
+      "bottom",
+    );
+    expect(
+      choosePlace("bottom", size, spots, [share, heading], viewport).place,
+    ).toBe("bottom");
+    expect(choosePlace("top", size, spots, [share], viewport).place).toBe(
+      "top",
+    );
+    // A control beside the centred pill, not under it, doesn't count.
+    const corner = { left: 0, right: 40, top: 730, bottom: 760 };
+    expect(choosePlace("bottom", size, spots, [corner], viewport).place).toBe(
+      "bottom",
+    );
+  });
+
+  it("R3-08 with a control under both places, sinks toward the bar, no closer than 4 px, until it clears", () => {
+    // 320 x 568 at 200% text: the pill is 141 px tall, Share sits at
+    // 204-263 and the dock's top at 419, so the pill's usual place is
+    // 262-403, a pixel onto Share.
+    const viewport = { width: 320, height: 568 };
+    const size = { width: 288, height: 141 };
+    const spots = { bottom: 568 - 419 + 16, top: 72 };
+    const share = { left: 16, right: 304, top: 204, bottom: 263 };
+    const sink = { anchorTop: 419, gap: 16, minGap: 4 };
+    expect(choosePlace("bottom", size, spots, [share], viewport)).toEqual({
+      place: "bottom",
+      bottom: spots.bottom,
+    });
+    // 15 px above the dock is the first gap that clears Share: 263-404.
+    expect(choosePlace("bottom", size, spots, [share], viewport, sink)).toEqual(
+      { place: "bottom", bottom: 568 - 419 + 15 },
+    );
+    // A control it cannot clear even 4 px above the bar: it stays put.
+    const tall = { left: 16, right: 304, top: 204, bottom: 300 };
+    expect(choosePlace("top", size, spots, [tall], viewport, sink)).toEqual({
+      place: "top",
+      bottom: spots.bottom,
+    });
   });
 
   it("ignores empty text and returns a dismiss function", () => {

@@ -194,19 +194,33 @@ const MARK_PAIRS: [string, string, number][] = [
  */
 const INSET_PAIRS: [string, string, number][] = [
   ["card-inset", "ticket", 3],
-  ["ink", "card-inset", 4.5],
+  ["on-card-inset", "card-inset", 4.5],
 ];
 
 /**
  * 🟧 is drawn by the emoji font, not by a token: approximate fills of the
  * orange square in the fonts `--kn-font-emoji` names (Apple, Segoe UI and
  * Noto Color Emoji). On the orange card it nearly vanished (about 1.1 to
- * 1.5:1, R2-09). On the inset it holds 3:1 in dark. In light no cream can
- * reach 3:1 against a mid orange, so the inset more than doubles the
- * card's contrast there and keeps at least 2.2:1, with the legend's words
- * beside the squares (PRD §3.5.1).
+ * 1.5:1, R2-09). No cream can reach 3:1 against a mid orange, so in light
+ * the cream inset at least multiplies the card's contrast by 1.5 and keeps
+ * 2.2:1, with the legend's words beside the squares (PRD §3.5.1), as a
+ * light chat shows it.
+ * The dark inset token is charcoal, where it holds 4:1 (SHARE_GLYPHS), but
+ * that is a proposal pending a design ruling: the stop screen's card still
+ * draws cream in dark, as rite-2.md's R2-09 asks.
  */
 const EMOJI_ORANGES = ["#f4900c", "#f7630c", "#f57c00"];
+
+/**
+ * Approximate fills of every share glyph in the same three emoji fonts
+ * (D3, D22): 🟧 clue used, ✅ solved, ❌ missed, ⬜ not needed.
+ */
+const SHARE_GLYPHS = {
+  orange: EMOJI_ORANGES,
+  solved: ["#77b255", "#43a047", "#3fb54a"],
+  missed: ["#dd2e44", "#f44336", "#e53935"],
+  blank: ["#e6e7e8", "#fafafa", "#eeeeee"],
+} as const;
 
 /** Readable text changes the paper; text on it must still hold. */
 const READABLE_PAIRS: [string, string, number][] = [
@@ -248,6 +262,62 @@ describe("design tokens", () => {
     it.each(INSET_PAIRS)("%s on %s holds %s:1", (fg, bg, target) => {
       expect(ratio(tokens, fg, bg)).toBeGreaterThanOrEqual(target);
     });
+  });
+
+  it.each([
+    ["dark", dark],
+    ["dark, from the system", { ...light, ...darkSystem }],
+  ])(
+    "R2-09 (proposal, pending a design ruling) every share glyph holds 4:1 on the %s inset token, and would not on cream",
+    (_name, tokens) => {
+      // The case for a charcoal inset in dark, raised for a §26 ruling; the
+      // stop screen keeps cream in both themes until then. On the dark
+      // theme's cream (on-ticket) 🟧 falls to about 2.1:1, ✅ to 2.2:1 and
+      // ⬜ to 1:1; on charcoal the weakest is ❌ at 4:1. The 4:1 floor is
+      // for dark only: light is the documented exception below.
+      const cream = tokens["on-ticket"] ?? "";
+      for (const [glyph, fills] of Object.entries(SHARE_GLYPHS)) {
+        for (const fill of fills) {
+          const withFill = { ...tokens, fill, cream };
+          expect(
+            ratio(withFill, "fill", "card-inset"),
+            glyph,
+          ).toBeGreaterThanOrEqual(4);
+        }
+      }
+      const onCream = (fill: string) =>
+        ratio({ ...tokens, fill, cream }, "fill", "cream");
+      expect(Math.min(...SHARE_GLYPHS.orange.map(onCream))).toBeLessThan(3);
+      expect(Math.min(...SHARE_GLYPHS.blank.map(onCream))).toBeLessThan(1.5);
+    },
+  );
+
+  it("R2-09 light is the exception to the 4:1 floor: 🟧 keeps 2.2:1 on the light cream, and ⬜ relies on its outline", () => {
+    // The same fills on the light inset: 🟧 2.3 to 3:1, ✅ 2.5 to 3.2:1,
+    // ❌ 3.6 to 4.5:1, ⬜ 1.0 to 1.2:1. ⬜'s fill nearly matches the cream;
+    // the emoji fonts draw it with a grey outline, which is what shows, and
+    // the legend names every square in words (PRD §3.5.1).
+    const onLight = (fill: string) =>
+      ratio({ ...light, fill }, "fill", "card-inset");
+    expect(
+      Math.min(...SHARE_GLYPHS.orange.map(onLight)),
+    ).toBeGreaterThanOrEqual(2.2);
+    expect(Math.min(...SHARE_GLYPHS.blank.map(onLight))).toBeLessThan(1.5);
+  });
+
+  it("R3-08 the toast's ring holds 3:1 on its own fill and on the dark theme's cream inset", () => {
+    // A toast at the top can sit on the score card, whose inset is cream in
+    // dark like the pill; the ring in the pill's ink keeps them apart.
+    for (const tokens of [light, dark]) {
+      expect(ratio(tokens, "on-primary", "primary")).toBeGreaterThanOrEqual(3);
+    }
+    expect(ratio(dark, "on-primary", "on-ticket")).toBeGreaterThanOrEqual(3);
+  });
+
+  it("R2-09 the light inset is the light surface with ink, as the stop screen's card draws it", () => {
+    expect(light["card-inset"]).toBe(light.surface);
+    expect(light["on-card-inset"]).toBe(light.ink);
+    expect(dark["on-card-inset"]).toBe(dark.ink);
   });
 
   it.each(EMOJI_ORANGES)(
@@ -323,10 +393,11 @@ describe("design tokens", () => {
   });
 
   it("every --kn-* token the code reads is defined", () => {
-    // Set from script, each read with a fallback: the toast's offset
+    // Set from script, each read with a fallback: the toast's offsets
     // (toast.ts) and the bars' measured heights (shell/scroll-inset.tsx).
     const defined = new Set<string>([
       "toast-bottom",
+      "toast-top",
       "inset-top",
       "inset-bottom",
     ]);

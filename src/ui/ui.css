@@ -1157,9 +1157,12 @@ button.kn-watch::after {
   width: max-content;
   max-width: min(420px, calc(100vw - 2 * var(--kn-gutter)));
   padding: 10px 16px 10px 12px;
-  /* Transparent until forced colours paint it in CanvasText, so the pill
-   * keeps its shape when its fill drops out (DESIGN §11). */
-  border: 2px solid transparent;
+  /* A ring in the pill's own ink, so it stands apart from anything of its
+   * fill's colour under it: at the top (R3-08) the dark theme's cream pill
+   * can sit on the score card's cream inset. Forced colours paint it in
+   * CanvasText, so the pill keeps its shape when its fill drops out
+   * (DESIGN §11). */
+  border: 2px solid var(--kn-on-primary);
   border-radius: var(--kn-radius-pill);
   background-color: var(--kn-primary);
   color: var(--kn-on-primary);
@@ -1177,6 +1180,17 @@ button.kn-watch::after {
   .kn-toast {
     opacity: 0;
     translate: -50% calc(8px * var(--kn-motion-distance));
+  }
+}
+/* R3-08: with a control under its place above the bar, it sits 16 px
+ * under the sticky header instead (./toast.ts), and rises in from above. */
+.kn-toast[data-place="top"] {
+  top: var(--kn-toast-top, calc(72px + env(safe-area-inset-top)));
+  bottom: auto;
+}
+@starting-style {
+  .kn-toast[data-place="top"] {
+    translate: -50% calc(-8px * var(--kn-motion-distance));
   }
 }
 .kn-toast[data-leaving] {

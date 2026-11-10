@@ -23,6 +23,11 @@
  * - The row never runs wider than the screen (R1-03): the progress shrinks
  *   first (the Daily's pills give up their spare width), and the end slot
  *   keeps its size.
+ * - The stopwatch in its end slot renders nothing once its route is hidden
+ *   (`@/ui/stopwatch`), so a results page carries no "Time so far" region
+ *   (R3-09); hiding it is said aloud by the play layout's
+ *   `StopwatchChoice`, not here, since this module reaches every route
+ *   that imports the shell's barrel, Today included.
  */
 import type { Route } from "next";
 import Link from "next/link";

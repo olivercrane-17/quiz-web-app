@@ -1,17 +1,19 @@
 /**
  * The shell's words (DESIGN §1.4, §6.13, §10.4, §12.40, §12.42). The
  * design team edits them here, and in `client-copy.ts` for the few that
- * client components render (the skip link and the tab labels), which this
- * object includes. Client code imports `client-copy.ts` only, so this file
+ * client components render (the skip link and the tab labels) and in
+ * `play-copy.ts` for the play header's, which this object includes. Client code imports `client-copy.ts` only, so this file
  * never reaches a client chunk.
  */
 import { SHELL_CLIENT_COPY } from "./client-copy";
+import { SHELL_PLAY_COPY } from "./play-copy";
 
 /** The top bar's gear and the page it opens (PRD §6.1). */
 const SETTINGS = "Settings";
 
 export const SHELL_COPY = {
   ...SHELL_CLIENT_COPY,
+  ...SHELL_PLAY_COPY,
   /** The product name (DESIGN §0.2). */
   brand: "Knewt",
   /**

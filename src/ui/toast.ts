@@ -1,10 +1,22 @@
 /**
  * Toasts (DESIGN §6.9): an ink pill that confirms something happened
  * ("Copied. Paste it into your group chat.", "Saved", "Report sent"). One
- * at a time, 4 s, tap to dismiss, 16 px above the tab bar or the dock, so
- * it never covers a primary button. Its text also goes to the polite status
- * region, which is what screen readers hear; the pill itself is decorative
- * for them.
+ * at a time, 4 s, tap to dismiss, 16 px above the tab bar or the dock. Its
+ * text also goes to the polite status region, which is what screen readers
+ * hear; the pill itself is decorative for them.
+ *
+ * It never sits on a control (RITE round 3, R3-08). At 200% text Today's
+ * Continue reached the bottom of the screen, under "Saved. The stopwatch
+ * keeps running." for its 4 s while the clock ran, and the copy toast sat
+ * on Share. So while it shows, the toast checks the controls on screen:
+ * if one is under its place above the bar and none is under the top place
+ * (16 px below the sticky header), it moves to the top, and back once the
+ * bottom is clear and the top isn't. When both places cover a control (at
+ * 320 px and 200% text, Share sat between them), it sinks toward the bar,
+ * down to 4 px above it, as far as it must to clear every control. It
+ * checks again when the page
+ * changes under it (Today's card arrives after the address does), scrolls
+ * or resizes.
  *
  * A toast with an action (the editor's Undo) has no time limit, because a
  * keyboard or screen-reader user reaches it last, at the end of the page
@@ -29,7 +41,7 @@
 import { announce, withdrawAnnouncement } from "./announce";
 import { UI_COPY } from "./copy";
 import { onRouteChange } from "./route-change";
-import { firstShown } from "./shown";
+import { firstShown, isShown } from "./shown";
 
 export type ToastIcon = "check" | "offline" | "none";
 
@@ -46,6 +58,13 @@ export interface ToastOptions {
 export const TOAST_ANCHOR = "[data-toast-anchor]";
 
 const GAP_PX = 16;
+/** The closest a toast sinks toward its bar when both places cover a control. */
+const MIN_GAP_PX = 4;
+/** The usual sticky header, before the shell has measured the real one. */
+const TOP_BAR_PX = 56;
+/** What a toast must not cover. */
+const CONTROLS =
+  'a[href], button, input, select, textarea, summary, [role="button"], [role="link"], [tabindex]:not([tabindex="-1"])';
 const LEAVE_MS = 200;
 const DURATION_MS = 4_000;
 
@@ -68,12 +87,111 @@ function sentence(message: string): string {
 
 let current: { element: HTMLElement; dismiss: () => void } | null = null;
 
-/** Where the toast sits: 16 px above the first anchor on screen, else above the safe area. */
-function bottomOffset(): string {
+/**
+ * Where the toast sits at the bottom: 16 px above the first anchor on
+ * screen, else above the safe area; with the anchor's top, when there is
+ * one on screen, for a toast that must sink toward it.
+ */
+function bottomOffset(): { css: string; anchorTop: number | null } {
   const anchor = firstShown<HTMLElement>(TOAST_ANCHOR);
-  if (anchor === null) return `calc(${GAP_PX}px + env(safe-area-inset-bottom))`;
+  if (anchor === null) {
+    return {
+      css: `calc(${GAP_PX}px + env(safe-area-inset-bottom))`,
+      anchorTop: null,
+    };
+  }
   const top = anchor.getBoundingClientRect().top;
-  return `${Math.max(GAP_PX, window.innerHeight - top + GAP_PX)}px`;
+  const onScreen = top < window.innerHeight;
+  return {
+    css: `${Math.max(GAP_PX, window.innerHeight - top + GAP_PX)}px`,
+    anchorTop: onScreen ? top : null,
+  };
+}
+
+/** Where it sits at the top: 16 px under the sticky header the shell measured (`--kn-inset-top`). */
+function topOffset(): number {
+  const measured = Number.parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue(
+      "--kn-inset-top",
+    ),
+  );
+  return (Number.isFinite(measured) ? measured : TOP_BAR_PX) + GAP_PX;
+}
+
+export type ToastPlace = "bottom" | "top";
+
+interface Box {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+}
+
+function overlaps(a: Box, b: Box): boolean {
+  return (
+    a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom
+  );
+}
+
+/** The boxes of the controls on screen, apart from the toast's own. */
+function controlBoxes(toast: HTMLElement): Box[] {
+  const boxes: Box[] = [];
+  for (const control of document.querySelectorAll(CONTROLS)) {
+    if (toast.contains(control) || !isShown(control)) continue;
+    const box = control.getBoundingClientRect();
+    if (box.width > 0 && box.height > 0) boxes.push(box);
+  }
+  return boxes;
+}
+
+/**
+ * The place for a toast `height` px tall and `width` px wide, centred, given
+ * the controls on screen: it stays where it is unless a control is under it
+ * and the other place is clear (R3-08). When both places cover a control
+ * and `sink` gives the bar's top, it tries the bottom place nearer the bar,
+ * a pixel at a time from `sink.gap` down to `sink.minGap`, and takes the
+ * first that clears every control. `bottom` is the offset from the
+ * viewport's bottom to use: `spots.bottom` unless it sank.
+ */
+export function choosePlace(
+  current: ToastPlace,
+  size: { width: number; height: number },
+  spots: { bottom: number; top: number },
+  controls: readonly Box[],
+  viewport: { width: number; height: number },
+  sink?: { anchorTop: number; gap: number; minGap: number },
+): { place: ToastPlace; bottom: number } {
+  const left = (viewport.width - size.width) / 2;
+  const right = left + size.width;
+  const boxes: Record<ToastPlace, Box> = {
+    bottom: {
+      left,
+      right,
+      bottom: viewport.height - spots.bottom,
+      top: viewport.height - spots.bottom - size.height,
+    },
+    top: { left, right, top: spots.top, bottom: spots.top + size.height },
+  };
+  const covers = (place: ToastPlace) =>
+    controls.some((box) => overlaps(boxes[place], box));
+  const other: ToastPlace = current === "bottom" ? "top" : "bottom";
+  if (!covers(current)) return { place: current, bottom: spots.bottom };
+  if (!covers(other)) return { place: other, bottom: spots.bottom };
+  if (sink !== undefined) {
+    for (let gap = sink.gap; gap >= sink.minGap; gap -= 1) {
+      const bottom = viewport.height - sink.anchorTop + gap;
+      const sunk: Box = {
+        left,
+        right,
+        bottom: viewport.height - bottom,
+        top: viewport.height - bottom - size.height,
+      };
+      if (!controls.some((box) => overlaps(sunk, box))) {
+        return { place: "bottom", bottom };
+      }
+    }
+  }
+  return { place: current, bottom: spots.bottom };
 }
 
 /** Shows `message` as the only toast; returns a function that dismisses it early. */
@@ -93,13 +211,60 @@ export function showToast(
   // The status region speaks it; the pill would only repeat it, unless it
   // holds an action that keyboard and screen-reader users must reach.
   if (action === undefined) element.setAttribute("aria-hidden", "true");
+  element.dataset.place = "bottom";
   const place = () => {
-    element.style.setProperty("--kn-toast-bottom", bottomOffset());
+    const { css: bottom, anchorTop } = bottomOffset();
+    const top = topOffset();
+    element.style.setProperty("--kn-toast-bottom", bottom);
+    element.style.setProperty("--kn-toast-top", `${top}px`);
+    if (!element.isConnected) return;
+    const box = element.getBoundingClientRect();
+    const bottomPx = Number.parseFloat(bottom);
+    // The safe-area form starts with its 16 px; close enough to choose by.
+    const spotBottom = Number.isFinite(bottomPx) ? bottomPx : GAP_PX;
+    const chosen = choosePlace(
+      element.dataset.place === "top" ? "top" : "bottom",
+      { width: box.width, height: box.height },
+      { bottom: spotBottom, top },
+      controlBoxes(element),
+      { width: window.innerWidth, height: window.innerHeight },
+      anchorTop === null
+        ? undefined
+        : { anchorTop, gap: GAP_PX, minGap: MIN_GAP_PX },
+    );
+    element.dataset.place = chosen.place;
+    if (chosen.bottom !== spotBottom) {
+      element.style.setProperty("--kn-toast-bottom", `${chosen.bottom}px`);
+    }
   };
   place();
   // A toast that outlives its page rises above the next page's bar, not
   // the old page's dock (Share, then "Done for today").
-  const stopFollowing = onRouteChange(place);
+  const stopRoute = onRouteChange(place);
+  // The page may change under it: Today's Daily card, with Continue,
+  // arrives after the address does. One check per frame at most.
+  let frame = 0;
+  const schedule = () => {
+    if (frame !== 0) return;
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      place();
+    });
+  };
+  const observer =
+    typeof MutationObserver === "function"
+      ? new MutationObserver(schedule)
+      : null;
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+  const stopFollowing = () => {
+    stopRoute();
+    observer?.disconnect();
+    window.removeEventListener("scroll", schedule);
+    window.removeEventListener("resize", schedule);
+    if (frame !== 0) cancelAnimationFrame(frame);
+    frame = 0;
+  };
   if (icon !== "none") element.insertAdjacentHTML("afterbegin", iconSvg(icon));
   const text = document.createElement("span");
   text.textContent = message;
@@ -157,6 +322,9 @@ export function showToast(
   }
 
   document.body.append(element);
+  // Now that it has a size, choose between the two places.
+  place();
+  observer?.observe(document.body, { childList: true, subtree: true });
   current = { element, dismiss };
   spoken = announce(
     action === undefined

@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * The stopwatch (DESIGN §6.7): the timer icon and `m:ss` in tabular
  * figures, `ink-2`, 36 px tall. Silent to screen readers as it ticks
@@ -13,11 +15,18 @@
  * ARIA (`aria-haspopup`, `aria-expanded`, `aria-controls`) and a `ref` to
  * return focus to; without, it is a flat reading with no edge, so it never
  * looks like something to tap (RITE round 1, R1-27).
+ *
+ * It belongs to the play screen alone (RITE round 3, R3-09). Next keeps a
+ * visited route in the document, hidden, so the results page carried the
+ * Daily's "Time so far 6:33" as a hidden region with `aria-live`. Once its
+ * route is hidden the stopwatch renders nothing, and it comes back with
+ * the route (`useRouteShown`).
  */
 import type { MouseEvent, Ref } from "react";
 
 import { cx } from "./cx";
 import { TimerIcon } from "./icons";
+import { useRouteShown } from "./use-route-shown";
 
 export interface StopwatchProps {
   /** The time as shown, `m:ss`: "1:12". */
@@ -47,6 +56,8 @@ export function Stopwatch({
   ref,
   className,
 }: StopwatchProps) {
+  const shown = useRouteShown();
+  if (!shown) return null;
   const body = (
     <>
       <TimerIcon size={17} />
