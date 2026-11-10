@@ -85,7 +85,7 @@ const optionsGroup = () =>
     name: /^Clue 4:/,
     description: (text: string) => text.startsWith(LAST_LEAD),
   });
-const LEGEND = "Keys A to D choose. Enter locks in.";
+const LEGEND = "Keys A to D choose. Enter on your choice locks in.";
 
 /** A Mystery on clue `clue` with the four options showing, rendered from props. */
 function withOptions(

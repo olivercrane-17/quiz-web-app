@@ -83,9 +83,10 @@ afterEach(() => {
 
 const LAST_LEAD =
   "Last clue. Pick one of four. One pick: a wrong one scores 0.";
-const KEYS = "Keys A to D choose. Enter locks in.";
+const KEYS = "Keys A to D choose. Enter on your choice locks in.";
 const TAP = "Tap one, then Lock in.";
-const TYPED_LEGEND = "Typing chooses nothing. Press Esc, then A to D.";
+const TYPED_LEGEND =
+  "Typing chooses nothing and clears your choice. Press Esc, then A to D.";
 const NAMES = ["Odile Marsh", "Liesl Varo", "Ennis Ward", "Mira Tolland"];
 
 const liveText = () =>
@@ -462,7 +463,7 @@ describe("the line above the options says what is true for the device (D32, R4-0
     expect(legend()).toHaveTextContent(new RegExp(`^${TAP}$`));
   });
 
-  it("R4-01 after a keydown anywhere in the round the line reads Keys A to D choose. Enter locks in., in the same line, which held room for it", async () => {
+  it("R4-01 after a keydown anywhere in the round the line reads Keys A to D choose. Enter on your choice locks in., in the same line, which held room for it", async () => {
     const { user } = play();
     await tapToClue4(user);
     const line = legend()?.parentElement;
@@ -661,7 +662,8 @@ describe("clue 4's keyboard edges (R4-11)", () => {
     ]);
   });
 
-  // Integration 9: the verifier's desk runs. A word is a word at any pace.
+  // Integration 9: the verifier's desk runs. A word is a word at any ordinary
+  // pace (D38 restarts the count only after 1.5 s without a key).
   for (const word of [
     "abba",
     "Abba",
@@ -753,7 +755,8 @@ describe("clue 4's keyboard edges (R4-11)", () => {
     // And a click on an option chooses it, wherever focus already was.
     await user.keyboard("bc");
     expect(legend()).toHaveTextContent(TYPED_LEGEND);
-    expect(option(2)).toHaveFocus();
+    // Focus is back on the group (D38, R5-04), not on the last letter's option.
+    expect(optionsGroup()).toHaveFocus();
     await user.click(option(2));
     expect(legend()).toHaveTextContent(KEYS);
     expect(pressed()).toEqual([2]);

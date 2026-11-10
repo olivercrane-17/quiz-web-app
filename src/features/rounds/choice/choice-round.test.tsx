@@ -331,7 +331,9 @@ describe("ChoiceRound", () => {
     expect(group()).toHaveFocus();
     // The question is read first, then the keys.
     expect(group()).toHaveAccessibleName(PLANETS.stem);
-    expect(group()).toHaveAccessibleDescription("A tap or a key A to D answers at once.");
+    expect(group()).toHaveAccessibleDescription(
+      "A tap or a key A to D answers at once.",
+    );
     // The stem stays the page's heading, and Tab still reaches option A.
     const stem = screen.getByRole("heading", { level: 1 });
     expect(stem).toHaveTextContent(PLANETS.stem);
@@ -608,7 +610,9 @@ describe("ChoiceRound", () => {
       const line = legend();
       await tabToOptions(user);
       expect(legend()).toBe(line);
-      expect(line).toHaveTextContent(/^A tap or a key A to D answers at once\.$/);
+      expect(line).toHaveTextContent(
+        /^A tap or a key A to D answers at once\.$/,
+      );
       expect(line).toBeVisible();
       // A line of its own, above the options (R3-07), drawn by the round,
       // not by an option's AnswerButton.
@@ -634,17 +638,23 @@ describe("ChoiceRound", () => {
       // A key that answers nothing still says a keyboard is in use.
       await user.keyboard("x");
       expect(onIntent).not.toHaveBeenCalled();
-      expect(legend()).toHaveTextContent("A tap or a key A to D answers at once.");
+      expect(legend()).toHaveTextContent(
+        "A tap or a key A to D answers at once.",
+      );
     });
 
     it("R2-02 names only the letters on screen: A tap or a key A or B answers at once. on true or false", async () => {
       const { user } = setup({ content: TRUE_FALSE });
       await tabToOptions(user);
-      expect(legend()).toHaveTextContent(/^A tap or a key A or B answers at once\.$/);
+      expect(legend()).toHaveTextContent(
+        /^A tap or a key A or B answers at once\.$/,
+      );
       expect(CHOICE_COPY.keysLine(3)).toBe(
         "A tap or a key A to C answers at once.",
       );
-      expect(CHOICE_COPY.keysLine(4)).toBe("A tap or a key A to D answers at once.");
+      expect(CHOICE_COPY.keysLine(4)).toBe(
+        "A tap or a key A to D answers at once.",
+      );
     });
 
     it("R2-02 a tap or a click answers, and the legend goes with the lock-in", async () => {
@@ -672,7 +682,9 @@ describe("ChoiceRound", () => {
       await numbers.user.keyboard("4");
       expect(numbers.onIntent).not.toHaveBeenCalled();
       // The legend names the letters, which do answer here.
-      expect(legend()).toHaveTextContent("A tap or a key A to D answers at once.");
+      expect(legend()).toHaveTextContent(
+        "A tap or a key A to D answers at once.",
+      );
     });
   });
 
@@ -768,11 +780,15 @@ describe("ChoiceRound", () => {
     it("R3-07 the legend reads A tap or a key A to D answers at once. (D28), naming only the letters on screen", async () => {
       const four = setup();
       await tabToOptions(four.user);
-      expect(legend()).toHaveTextContent(/^A tap or a key A to D answers at once\.$/);
+      expect(legend()).toHaveTextContent(
+        /^A tap or a key A to D answers at once\.$/,
+      );
       four.unmount();
       const two = setup({ content: COMPARISON });
       await tabToOptions(two.user);
-      expect(legend()).toHaveTextContent(/^A tap or a key A or B answers at once\.$/);
+      expect(legend()).toHaveTextContent(
+        /^A tap or a key A or B answers at once\.$/,
+      );
     });
   });
 
@@ -817,7 +833,9 @@ describe("ChoiceRound", () => {
       const list = screen.getByRole("list");
       await user.keyboard("{Shift}");
       expect(legend()).toBe(line);
-      expect(line).toHaveTextContent(/^A tap or a key A to D answers at once\.$/);
+      expect(line).toHaveTextContent(
+        /^A tap or a key A to D answers at once\.$/,
+      );
       expect(line?.className).not.toContain("invisible");
       expect(line?.className).toContain("min-h-5");
       expect(screen.getByRole("list")).toBe(list);
@@ -844,7 +862,9 @@ describe("ChoiceRound", () => {
       await first.user.keyboard("{Shift}");
       first.unmount();
       setup({ content: COMPARISON });
-      expect(legend()).toHaveTextContent(/^A tap or a key A or B answers at once\.$/);
+      expect(legend()).toHaveTextContent(
+        /^A tap or a key A or B answers at once\.$/,
+      );
     });
 
     it("R4-03 typing in a text field, an on-screen keyboard's keys and a Ctrl shortcut aren't key presses", () => {
@@ -868,7 +888,9 @@ describe("ChoiceRound", () => {
 
     it("R4-03 D30 with a fine pointer and hover the legend still shows from the start, before any key", () => {
       setup();
-      expect(legend()).toHaveTextContent(/^A tap or a key A to D answers at once\.$/);
+      expect(legend()).toHaveTextContent(
+        /^A tap or a key A to D answers at once\.$/,
+      );
       expect(legend()).toBeVisible();
     });
 
