@@ -19,7 +19,7 @@ export { DisplaySettingsSync } from "../display-settings-sync";
 
 /**
  * Every page's title says Knewt (DESIGN §11; RITE round 1, R1-20): "Daily
- * No. 42 · Knewt", and Today's is the name alone. A link preview names it
+ * No. 42 · Knewt", and Today's "Today · Knewt" (R3-08). A link preview names it
  * too: the site name, title and description of the Open Graph and card
  * tags, which every page inherits until it sets its own (SHR-2 gives the
  * share landing its image).

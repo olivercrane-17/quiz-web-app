@@ -1179,6 +1179,17 @@ button.kn-watch::after {
     translate: -50% calc(8px * var(--kn-motion-distance));
   }
 }
+/* R3-08: with a control under its place above the bar, it sits 16 px
+ * under the sticky header instead (./toast.ts), and rises in from above. */
+.kn-toast[data-place="top"] {
+  top: var(--kn-toast-top, calc(72px + env(safe-area-inset-top)));
+  bottom: auto;
+}
+@starting-style {
+  .kn-toast[data-place="top"] {
+    translate: -50% calc(-8px * var(--kn-motion-distance));
+  }
+}
 .kn-toast[data-leaving] {
   opacity: 0;
 }
