@@ -579,9 +579,13 @@ test.describe("R2-17 no hyphens in questions and options", () => {
     // The open clue's title, the clues before it and any note under it.
     const clueText = page
       .getByRole("list", { name: "Clues" })
-      .locator("[data-clue-card] h2, li > p:not([data-stamp])");
+      .locator("[data-clue-card] h2, [data-rung] p:not([data-stamp])");
     await expect(clueText.first()).toBeVisible();
-    expect(await clueText.count()).toBeGreaterThanOrEqual(4);
+    await expect
+      .poll(() => clueText.count(), {
+        message: "the open clue and three before it",
+      })
+      .toBeGreaterThanOrEqual(4);
     const hyphens = await clueText.evaluateAll((parts) => [
       ...new Set(parts.map((part) => getComputedStyle(part).hyphens)),
     ]);
