@@ -27,7 +27,7 @@ export interface ManifestList {
 }
 
 /** Changes whenever any pack or list does. */
-export const CONTENT_VERSION = "044f1eac";
+export const CONTENT_VERSION = "1485ad4f";
 
 /** One pack per category with active items, keyed by category id. */
 export const PRACTICE_PACKS: Readonly<
@@ -44,19 +44,19 @@ export const PRACTICE_PACKS: Readonly<
     items: 101,
   },
   sci: {
-    url: "/content/packs/science-tech.bb9d3aa2.json",
-    version: "bb9d3aa2",
-    items: 94,
+    url: "/content/packs/science-tech.28a51e62.json",
+    version: "28a51e62",
+    items: 103,
   },
   nat: {
-    url: "/content/packs/nature-animals.cf16cea1.json",
-    version: "cf16cea1",
-    items: 133,
+    url: "/content/packs/nature-animals.2188eb18.json",
+    version: "2188eb18",
+    items: 132,
   },
   film: {
-    url: "/content/packs/film-tv.c1c59f70.json",
-    version: "c1c59f70",
-    items: 112,
+    url: "/content/packs/film-tv.a4f44d65.json",
+    version: "a4f44d65",
+    items: 111,
   },
   music: {
     url: "/content/packs/music.612615b2.json",
@@ -74,9 +74,9 @@ export const PRACTICE_PACKS: Readonly<
     items: 115,
   },
   sport: {
-    url: "/content/packs/sport-games.9991f322.json",
-    version: "9991f322",
-    items: 88,
+    url: "/content/packs/sport-games.7293dc63.json",
+    version: "7293dc63",
+    items: 108,
   },
   food: {
     url: "/content/packs/food-drink.b7c35e2d.json",
@@ -84,14 +84,14 @@ export const PRACTICE_PACKS: Readonly<
     items: 108,
   },
   lang: {
-    url: "/content/packs/language-words.b2ae6fc5.json",
-    version: "b2ae6fc5",
-    items: 100,
+    url: "/content/packs/language-words.8f4cfda4.json",
+    version: "8f4cfda4",
+    items: 99,
   },
   soc: {
-    url: "/content/packs/society-culture.624a174c.json",
-    version: "624a174c",
-    items: 99,
+    url: "/content/packs/society-culture.8ef56f07.json",
+    version: "8ef56f07",
+    items: 104,
   },
 };
 
