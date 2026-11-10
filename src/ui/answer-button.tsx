@@ -103,6 +103,12 @@ export interface AnswerButtonProps {
   id?: string;
   className?: string;
   "aria-describedby"?: string;
+  /**
+   * True on the option a key has chosen and not yet locked in (D20, R3-09).
+   * Exposed only while the option is `idle`, and only as "true": the other
+   * options are plain buttons, not toggles that read "not pressed".
+   */
+  "aria-pressed"?: boolean;
   ref?: Ref<HTMLButtonElement>;
 }
 
@@ -118,6 +124,7 @@ export function AnswerButton({
   id,
   className,
   "aria-describedby": describedBy,
+  "aria-pressed": ariaPressed = false,
   ref,
 }: AnswerButtonProps) {
   const interactive = state === "idle";
@@ -151,6 +158,7 @@ export function AnswerButton({
       aria-disabled={interactive ? undefined : true}
       aria-keyshortcuts={interactive && shortcut ? shortcut : undefined}
       aria-describedby={describedBy}
+      aria-pressed={interactive && ariaPressed ? true : undefined}
       onClick={() => {
         if (interactive) onCommit?.();
       }}

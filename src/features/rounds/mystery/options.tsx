@@ -260,12 +260,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     keyFocusing.current = false;
   }, [chosen]);
 
-  /**
-   * The chosen option's pressed state, for assistive tech (R3-09).
-   * AnswerButton draws the pressed look but takes no ARIA beyond its own,
-   * so the attribute is set here, on the option that is marked and idle,
-   * and removed from every other.
-   */
+  /** The option that is marked and still idle: AnswerButton exposes it as `aria-pressed` (R3-09). */
   const marked =
     chosen !== null &&
     options.some(
@@ -273,13 +268,6 @@ export function MysteryOptions(props: MysteryOptionsProps) {
     )
       ? chosen
       : null;
-  useLayoutEffect(() => {
-    for (const [index, button] of buttons.current) {
-      if (index === marked) button.setAttribute("aria-pressed", "true");
-      else button.removeAttribute("aria-pressed");
-    }
-  });
-
   function lockIn(index: number) {
     if (haptics) vibrate(HAPTICS.lockIn);
     onPick(index);
@@ -492,6 +480,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
                 pressed={isMarked}
                 className={isMarked ? CHOSEN_BADGE : undefined}
                 aria-describedby={isMarked ? chosenId : undefined}
+                aria-pressed={isMarked}
                 // The badge is the key hint (D6); AnswerButton names the keys
                 // to assistive tech, only while the option is idle.
                 shortcut={shortcuts ? keysFor(position, digits) : null}

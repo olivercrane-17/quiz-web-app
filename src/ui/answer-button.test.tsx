@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { cleanup, fireEvent, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { TUNABLES } from "@/config/tunables";
@@ -140,6 +140,22 @@ describe("AnswerButton", () => {
     it("can be forced on, such as while a shortcut key is held", () => {
       const { button } = renderOption("idle", { pressed: true });
       expect(button).toHaveAttribute("data-pressed");
+    });
+
+    it("R3-09 exposes aria-pressed only as true, and only while idle", () => {
+      const chosen = renderOption("idle", { "aria-pressed": true });
+      expect(chosen.button).toHaveAttribute("aria-pressed", "true");
+      cleanup();
+      // Not chosen: a plain button, not a toggle that reads "not pressed".
+      const plain = renderOption("idle", { "aria-pressed": false });
+      expect(plain.button).not.toHaveAttribute("aria-pressed");
+      cleanup();
+      const unset = renderOption("idle");
+      expect(unset.button).not.toHaveAttribute("aria-pressed");
+      cleanup();
+      // Locked in or revealed, it is no longer something a key can press.
+      const locked = renderOption("locked", { "aria-pressed": true });
+      expect(locked.button).not.toHaveAttribute("aria-pressed");
     });
   });
 
