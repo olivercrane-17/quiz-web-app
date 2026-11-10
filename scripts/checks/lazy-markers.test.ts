@@ -135,7 +135,19 @@ function fakeBuild(mode: "supabase" | "mock" | "off" = "mock"): FakeBuild {
 
 interface FixtureMystery {
   id: string;
+  answer: string;
   clues: string[];
+}
+
+interface FixtureRoomPack {
+  questions: { id: string; stem: string; answer: string }[];
+}
+
+interface FixtureEntity {
+  id: string;
+  name: string;
+  display: string;
+  aliases: string[];
 }
 
 interface FixtureEncore {
@@ -150,6 +162,14 @@ function fixture<T>(path: string): T {
 
 const mystery = fixture<FixtureMystery>("mysteries/fx.m.geo.0101.json");
 const encore = fixture<FixtureEncore>("encores/fx.e.0101.json");
+const roomQuestion = fixture<FixtureRoomPack>("room-packs/dly.json")
+  .questions[0] as FixtureRoomPack["questions"][number];
+const countries = fixture<{ entities: FixtureEntity[] }>(
+  "answer-lists/country.json",
+);
+const key = countries.entities.find(
+  (entity) => entity.id === mystery.answer,
+) as FixtureEntity;
 
 /**
  * The scan reported `field` of `itemId` in `file`, and nothing about any
@@ -561,7 +581,9 @@ describe("the sealed-content scan", () => {
       mystery.id,
       "clues[1]",
     );
-    expect(lines[2]).toMatch(/^sealed text: \d+ texts and \d+ Encore answers/);
+    expect(lines[2]).toMatch(
+      /^sealed text: \d+ texts, \d+ Encore answers and \d+ Mystery keys and room answers/,
+    );
     for (const line of [...problems, ...lines]) {
       expect(line).not.toContain(clue);
       expect(line.toLowerCase()).not.toContain(clue.slice(0, 20).toLowerCase());
@@ -683,6 +705,136 @@ describe("the sealed-content scan", () => {
       "m.geo.9001",
       "clues[0]",
     );
+  });
+
+  it("AC-CNT-07 fails on a Mystery's key beside its clue, by entity name, alias or id, and never on the key alone", async () => {
+    const build = fakeBuild();
+    const clue = mystery.clues[0] ?? "";
+    build.write(
+      ".next/server/app/daily.html",
+      `<p>${htmlEscape(clue)}</p><p>It was ${htmlEscape(key.display.toUpperCase())}.</p>`,
+    );
+    build.write(
+      ".next/static/chunks/lazy-3.js",
+      `var c=${JSON.stringify(clue)},a=${JSON.stringify(key.aliases[0])};`,
+    );
+    build.write("public/round.json", JSON.stringify({ c: clue, k: key.id }));
+    // Every key is a name in a shipped list: alone, it gives nothing away.
+    build.write(
+      "public/content/lists/country.json",
+      JSON.stringify([[key.id, key.display, [key.name.toLowerCase()], 0]]),
+    );
+
+    const { problems } = await runCheck({
+      root: build.root,
+      fixtures: FIXTURES,
+    });
+
+    for (const file of [
+      ".next/server/app/daily.html",
+      ".next/static/chunks/lazy-3.js",
+      "public/round.json",
+    ]) {
+      expect(problems).toContain(
+        `${file} holds ${mystery.id} clues[0], which is sealed.`,
+      );
+      expect(problems).toContain(
+        `${file} holds ${mystery.id} answer beside its clues, which is sealed.`,
+      );
+    }
+    // The clue claim restates the clue, rightly; the list alone is clean.
+    for (const problem of problems) {
+      expect(problem).toMatch(/^(?:\.next|public\/round\.json)/);
+    }
+    for (const problem of problems) {
+      expect(problem).not.toContain(key.display);
+      expect(problem).not.toContain(key.id);
+    }
+  });
+
+  it("AC-CNT-07 fails on a room question's answer beside its stem", async () => {
+    const build = fakeBuild();
+    build.write(
+      ".next/server/app/host.html",
+      `<h2>${htmlEscape(roomQuestion.stem)}</h2><p>${htmlEscape(roomQuestion.answer)}</p>`,
+    );
+    build.write("public/answers.json", JSON.stringify([roomQuestion.answer]));
+
+    const { problems } = await runCheck({
+      root: build.root,
+      fixtures: FIXTURES,
+    });
+
+    expect(problems.sort()).toEqual(
+      [
+        `.next/server/app/host.html holds ${roomQuestion.id} stem, which is sealed.`,
+        `.next/server/app/host.html holds ${roomQuestion.id} answer beside its stem, which is sealed.`,
+      ].sort(),
+    );
+  });
+
+  it("AC-CNT-07 from the command line with --sealed, decrypts in memory, fails on a sealed string planted in a fake output file, and prints counts and file paths but no sealed text", () => {
+    const build = fakeBuild();
+    const master = randomBytes(32);
+    const keys = deriveSealKeys(master);
+    // A sealed Mystery whose key is in the answer list beside it, as in content/.
+    const plain = (id: string) => id.replace(/^fx\./, "");
+    const sealed = { ...mystery, id: "m.geo.9002", answer: plain(key.id) };
+    build.write(
+      "content/sealed/mysteries/m.geo.9002.json.enc",
+      envelopeText(sealBytes(keys, Buffer.from(JSON.stringify(sealed)))),
+    );
+    build.write(
+      "content/answer-lists/country.json",
+      JSON.stringify({
+        ...countries,
+        entities: countries.entities.map((entity) => ({
+          ...entity,
+          id: plain(entity.id),
+        })),
+      }),
+    );
+    const clue = sealed.clues[2] ?? "";
+    build.write(
+      ".next/server/app/practice.html",
+      `<p>${htmlEscape(clue)}</p><p>${htmlEscape(key.display)}</p>`,
+    );
+
+    const result = spawnSync(process.execPath, [SCRIPT, "--sealed"], {
+      cwd: build.root,
+      encoding: "utf8",
+      // Never the machine's own key: HOME is the throwaway build.
+      env: {
+        NODE_ENV: "test",
+        PATH: process.env.PATH ?? "",
+        HOME: build.root,
+        QZ_CONTENT_KEY: master.toString("base64"),
+      },
+    });
+    const output = `${result.stdout}\n${result.stderr}`;
+
+    expect(result.status, output).toBe(1);
+    expect(result.stderr).toContain(
+      "check:lazy: .next/server/app/practice.html holds m.geo.9002 clues[2], which is sealed.",
+    );
+    expect(result.stderr).toContain(
+      "check:lazy: .next/server/app/practice.html holds m.geo.9002 answer beside its clues, which is sealed.",
+    );
+    expect(result.stdout).toMatch(
+      /check:lazy: sealed text: \d+ texts, 0 Encore answers and 1 Mystery keys and room answers from content\/sealed\/, \d+ text\(s\) under 4 words left out; 3 finding\(s\)\./,
+    );
+    for (const text of [
+      ...sealed.clues,
+      key.display,
+      ...key.aliases,
+      plain(key.id),
+      master.toString("base64"),
+    ]) {
+      expect(output).not.toContain(text);
+    }
+    for (const word of clue.split(" ").filter((w) => w.length > 6)) {
+      expect(output).not.toContain(word);
+    }
   });
 
   it("with --sealed and no key, stops with the key hint", async () => {

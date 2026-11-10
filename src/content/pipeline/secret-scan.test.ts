@@ -222,6 +222,15 @@ describe("secret-scan", () => {
         ),
         // Sequences at their parent key's own column, which YAML allows.
         GOOD.map((line) => (line.startsWith("      ") ? line.slice(2) : line)),
+        // OPS-1: a second step scans a build for sealed text with the key.
+        [
+          ...GOOD,
+          "      - run: npm run build",
+          "      - name: Sealed text scan",
+          "        env:",
+          KEY_ENV,
+          "        run: npm run check:lazy -- --sealed",
+        ],
       ]) {
         const passed = scanWorkflow(lines);
         expect(passed.status, passed.stderr).toBe(0);
@@ -295,6 +304,36 @@ describe("secret-scan", () => {
           ],
         ],
         "gzip",
+      ],
+      [
+        "OPS-1 the build scan with anything beside --sealed in the key step",
+        replace(
+          KEY_RUN,
+          "        run: npm run check:lazy -- --sealed --verbose",
+        ),
+        [
+          [
+            "--verbose",
+            "the step that receives QZ_CONTENT_KEY must run npm run content:check -- --sealed and nothing else",
+          ],
+        ],
+        "--verbose",
+      ],
+      [
+        "OPS-1 a build in the step that receives the key",
+        replace(
+          KEY_RUN,
+          "        run: |",
+          "          npm run build",
+          "          npm run check:lazy -- --sealed",
+        ),
+        [
+          [
+            "        run: |",
+            "the step that receives QZ_CONTENT_KEY must run npm run content:check -- --sealed and nothing else",
+          ],
+        ],
+        "npm run build",
       ],
       [
         "--reveal on the sealed check",

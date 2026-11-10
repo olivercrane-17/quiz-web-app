@@ -893,6 +893,19 @@ function packed<T>(
  * x of "execute" therefore travel as \u escapes, which jsonb decodes on the
  * way in: the stored values, and the content_hash the loaders compute from
  * them, are the same.
+ *
+ * Why this is allowed (decisions memo §24, the orchestrator's ruling on
+ * §21): §21 forbids rewriting or disguising a destructive statement so it
+ * slips past the tool's confirmation prompt, and this encodes data, never a
+ * statement. Every chunk is one call to a private.release_* loader, or the
+ * answer-entity upsert, whose only variable part is a JSON literal; the
+ * escapes live inside that literal and decode to the very text the content
+ * holds. A release never drops, deletes or truncates anything, and
+ * release.test.ts proves it for every chunk the main and fixture releases
+ * write: no DROP, DELETE or TRUNCATE outside a string literal, with decoded
+ * values equal to the source rows. Escaping a keyword of a real statement
+ * to dodge the prompt stays forbidden; such a change belongs in an
+ * `*_attended.sql` migration.
  */
 export function jsonText(value: unknown): string {
   return JSON.stringify(value)

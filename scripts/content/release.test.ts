@@ -66,10 +66,13 @@ import {
   numberOf,
   readyOn,
   releaseChunks,
+  releaseFile,
   releaseSummary,
   safeToWrite,
   spareBreaks,
   type FixtureOutputs,
+  type Release,
+  type ReleaseRows,
 } from "./release.ts";
 
 afterAll(removeTempDirs);
@@ -281,6 +284,339 @@ describe("the release's statements", () => {
       expect(text).not.toContain(row.question);
       expect(text).not.toMatch(new RegExp(`\\b${row.answer}\\b`));
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Decisions memo §24: encoding data is not disguising a statement
+// ---------------------------------------------------------------------------
+
+/**
+ * A SQL text split the way Postgres reads it: `code` is everything outside
+ * string literals and comments, with each standard string literal replaced
+ * by a numbered placeholder; `literals` holds their contents, quotes
+ * undoubled. A dollar-quoted body (a `do $$ ... $$` block) is code, since
+ * Postgres runs it, so it stays in `code` with its quotes, its own literals
+ * taken out too.
+ * `statements` counts the top-level statements.
+ */
+interface LexedSql {
+  code: string;
+  literals: string[];
+  statements: number;
+}
+
+const PLACEHOLDER = (index: number) => `'\u0000${index}\u0000'`;
+
+function lexSql(sql: string): LexedSql {
+  const literals: string[] = [];
+  const walk = (text: string, top: boolean) => {
+    let code = "";
+    let statements = 0;
+    let pending = false;
+    let index = 0;
+    while (index < text.length) {
+      const char = text[index] as string;
+      const next = text[index + 1];
+      if (char === "-" && next === "-") {
+        const end = text.indexOf("\n", index);
+        index = end === -1 ? text.length : end;
+        continue;
+      }
+      if (char === "/" && next === "*") {
+        let depth = 1;
+        index += 2;
+        while (index < text.length && depth > 0) {
+          if (text.startsWith("/*", index)) {
+            depth += 1;
+            index += 2;
+          } else if (text.startsWith("*/", index)) {
+            depth -= 1;
+            index += 2;
+          } else index += 1;
+        }
+        code += " ";
+        continue;
+      }
+      if (char === "'") {
+        let value = "";
+        index += 1;
+        for (;;) {
+          if (index >= text.length) throw new Error("unterminated literal");
+          if (text[index] === "'") {
+            if (text[index + 1] === "'") {
+              value += "'";
+              index += 2;
+              continue;
+            }
+            index += 1;
+            break;
+          }
+          value += text[index];
+          index += 1;
+        }
+        literals.push(value);
+        code += PLACEHOLDER(literals.length - 1);
+        pending = true;
+        continue;
+      }
+      const dollar = /^\$([A-Za-z_][A-Za-z0-9_]*)?\$/.exec(text.slice(index));
+      if (dollar !== null) {
+        const tag = dollar[0];
+        const end = text.indexOf(tag, index + tag.length);
+        if (end === -1) throw new Error("unterminated dollar quote");
+        const body = walk(text.slice(index + tag.length, end), false);
+        code += `${tag}${body.code}${tag}`;
+        index = end + tag.length;
+        pending = true;
+        continue;
+      }
+      if (char === ";" && top) {
+        statements += 1;
+        pending = false;
+      } else if (!/\s/.test(char)) pending = true;
+      code += char;
+      index += 1;
+    }
+    if (pending && top) statements += 1;
+    return { code, statements };
+  };
+  const { code, statements } = walk(sql, true);
+  return { code, literals, statements };
+}
+
+/**
+ * A literal's contents as jsonb decodes them: a JSON value has its \u
+ * escapes undone, so the `;` and the x of "execute" are plain again.
+ * Anything else (a display name, a version) is returned as it is.
+ */
+function decodeLiteral(value: string): string {
+  try {
+    return JSON.stringify(JSON.parse(value) as unknown);
+  } catch {
+    return value;
+  }
+}
+
+/** `sql` with every literal replaced by its decoded form, quoted again. */
+function decodedSql(lexed: LexedSql): string {
+  return lexed.code.replace(
+    /'\u0000(\d+)\u0000'/g,
+    (_, index: string) =>
+      `'${decodeLiteral(lexed.literals[Number(index)] ?? "").replaceAll("'", "''")}'`,
+  );
+}
+
+const DESTRUCTIVE = /\b(?:drop|delete|truncate)\b/i;
+
+/**
+ * What memo §24 allows: no DROP, DELETE or TRUNCATE outside a string
+ * literal. Re-lexing the decoded text would prove nothing more (decodedSql
+ * quotes every value again, so the code is the same by construction); the
+ * callers instead compare the decoded values with the source rows and pin
+ * which literal may carry escaped text. Returns the lexed form.
+ */
+function expectNoDestructiveStatement(sql: string, what: string): LexedSql {
+  const written = lexSql(sql);
+  expect(written.code, what).not.toMatch(DESTRUCTIVE);
+  return written;
+}
+
+/** The chunks of a written release file, by the headers chunkFile writes. */
+function chunksOfFile(text: string): { label: string; sql: string }[] {
+  const header =
+    /^-- ===== chunk \d+\/\d+: (.+?)(?:, \d+ row\(s\))?, [\d.]+ kB =====$/gm;
+  const marks = [...text.matchAll(header)];
+  return marks.map((mark, index) => ({
+    label: mark[1] ?? "",
+    sql: text
+      .slice(
+        (mark.index ?? 0) + mark[0].length,
+        marks[index + 1]?.index ?? text.length,
+      )
+      .trim(),
+  }));
+}
+
+const LOADER_KEYS: Record<string, keyof ReleaseRows> = {
+  mysteries: "mysteries",
+  encores: "encores",
+  "sealed questions": "questions",
+  "room packs": "roomPacks",
+  "challenge packs": "challengePacks",
+  Dailies: "dailies",
+  "spare sets": "spares",
+};
+
+const CHUNK_SHAPE =
+  /^\s*(?:select private\.(?:release_[a-z_]+|verify_release|record_release)\(|insert into private\.answer_entities \()/;
+
+/**
+ * Every chunk of `file` is one statement of a shape a release writes, with
+ * no destructive statement outside a string literal, and the values it
+ * carries, decoded, are the release's own rows. In a loader chunk every
+ * literal but the jsonb rows is the release's version or track, so the
+ * only escaped text sits inside that one argument.
+ */
+function expectFaithfulChunks(file: string, release: Release): void {
+  const chunks = chunksOfFile(file);
+  expect(chunks.length).toBeGreaterThan(2);
+  const loaded = new Map<keyof ReleaseRows, unknown[]>();
+  const entities: string[] = [];
+  chunks.forEach((chunk, index) => {
+    const what = `chunk ${index + 1} (${chunk.label})`;
+    const lexed = expectNoDestructiveStatement(chunk.sql, what);
+    expect(lexed.statements, what).toBe(1);
+    expect(lexed.code, what).toMatch(CHUNK_SHAPE);
+    const key = LOADER_KEYS[chunk.label];
+    if (key !== undefined) {
+      // The loader's arguments: version, track, then the rows as jsonb.
+      expect(lexed.literals.length, what).toBe(3);
+      expect(lexed.literals.slice(0, 2), what).toEqual([
+        release.version,
+        release.track,
+      ]);
+      const rows = JSON.parse(lexed.literals[2] ?? "") as unknown[];
+      loaded.set(key, [...(loaded.get(key) ?? []), ...rows]);
+    } else if (chunk.label === "answer entities") {
+      entities.push(...lexed.literals);
+    } else if (chunk.label === "record_release") {
+      expect(lexed.literals).toEqual([
+        release.version,
+        release.track,
+        release.hash,
+        expect.any(String),
+      ]);
+      expect(JSON.parse(lexed.literals[3] ?? "")).toEqual(release.counts);
+    }
+  });
+  for (const key of Object.values(LOADER_KEYS)) {
+    expect(loaded.get(key) ?? [], key).toEqual(release[key]);
+  }
+  expect(entities).toEqual(
+    release.entities.flatMap((row) => [
+      row.answer_type,
+      row.entity_id,
+      row.display,
+      row.option_label,
+    ]),
+  );
+}
+
+describe("memo §24: a release encodes data and never a destructive statement", () => {
+  /** Text built to stop a naive statement splitter, or to look like SQL. */
+  const HOSTILE = [
+    "'; DROP TABLE private.dailies; --",
+    'x"); delete from private.mysteries; --',
+    "Execute the plan; truncate private.encores",
+    "EXECUTE 'drop schema private cascade'",
+    "$$; drop function private.verify_release(text, text); $$",
+    "*/ drop table x; /* -- truncate",
+    "back\\slash \\u003b; DELETE",
+    "Ünïcödé ‘quotes’, a semicolon; then Drop it",
+  ];
+  const hostile = HOSTILE.join(" ");
+
+  /**
+   * A main-track release as content:release builds it (no entities, a
+   * plain version), carrying the fixture content with hostile text planted
+   * in every loader's rows.
+   */
+  function hostileMainRelease(): Release {
+    const base = fixtures.release;
+    const [mystery, ...mysteries] = base.mysteries;
+    const [encore, ...encores] = base.encores;
+    const [question, ...questions] = base.questions;
+    const [pack, ...packs] = base.roomPacks;
+    const [daily, ...dailies] = base.dailies;
+    if (
+      mystery === undefined ||
+      encore === undefined ||
+      question === undefined ||
+      pack === undefined ||
+      daily === undefined
+    )
+      throw new Error("the fixture release is missing a loader's rows");
+    return {
+      ...base,
+      track: "main",
+      version: "7",
+      entities: [],
+      mysteries: [
+        {
+          ...mystery,
+          clues: HOSTILE.slice(0, 4),
+          explanation: hostile,
+          learn_more: HOSTILE[4] ?? "",
+          source_labels: HOSTILE.slice(4),
+        },
+        ...mysteries,
+      ],
+      encores: [
+        { ...encore, question: hostile, unit_label: HOSTILE[2] ?? "" },
+        ...encores,
+      ],
+      questions: [
+        { ...question, stem: hostile, options: HOSTILE.slice(0, 4) },
+        ...questions,
+      ],
+      roomPacks: [
+        { ...pack, title: HOSTILE[0] ?? "", theme: HOSTILE[3] ?? "" },
+        ...packs,
+      ],
+      challengePacks: [
+        {
+          id: "cp.01",
+          title: HOSTILE[1] ?? "",
+          theme: hostile,
+          rounds: daily.rounds,
+        },
+      ],
+      dailies: [
+        { ...daily, spare_order: [{ spare: "spare.01", breaks: HOSTILE }] },
+        ...dailies,
+      ],
+      counts: { ...base.counts, challenge_packs: 1 },
+    };
+  }
+
+  it("OPS-1 every chunk of a main-track release holds no DROP, DELETE or TRUNCATE statement outside a string literal, with decoded values equal to the source rows", () => {
+    const release = hostileMainRelease();
+    for (const options of [{}, { chunkBytes: 8000, allowFrozen: true }]) {
+      const chunks = releaseChunks(release, options);
+      // Sendable unattended, and still holding the hostile text once decoded.
+      expect(chunkProblems(chunks, DEFAULT_CHUNK_BYTES)).toEqual([]);
+      const file = releaseFile(release, chunks);
+      const decoded = decodedSql(lexSql(file));
+      expect(decoded).toContain("; DROP TABLE private.dailies; --");
+      expect(decoded).toContain("Execute the plan; truncate");
+      expectFaithfulChunks(file, release);
+    }
+  });
+
+  it("OPS-1 every chunk of the fixture release, and its SQL test, holds no DROP, DELETE or TRUNCATE statement outside a string literal, with decoded values equal to the fixture rows", () => {
+    expectFaithfulChunks(fixtures.seed.content, fixtures.release);
+    // The SQL test runs inside begin ... rollback and asserts with do blocks.
+    const test = expectNoDestructiveStatement(
+      fixtures.test.content,
+      fixtures.test.path,
+    );
+    expect(test.statements).toBeGreaterThan(2);
+  });
+
+  it("OPS-1 the check itself sees a destructive statement, however it is written", () => {
+    for (const sql of [
+      "select 1; drop table private.dailies;",
+      "do $$ begin delete from private.mysteries where true; end $$;",
+      "select 'a'; /* c */ TRUNCATE private.encores;",
+    ]) {
+      expect(lexSql(sql).code).toMatch(DESTRUCTIVE);
+    }
+    // Inside a literal, as data, it is no statement.
+    const data = lexSql("select private.f('[\"x; drop table y\"]'::jsonb);");
+    expect(data.code).not.toMatch(DESTRUCTIVE);
+    expect(data.statements).toBe(1);
+    expect(data.literals).toEqual(['["x; drop table y"]']);
   });
 });
 
