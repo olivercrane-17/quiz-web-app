@@ -330,7 +330,7 @@ describe("X29 with the editor's judgments (CNT-2b)", () => {
         by: EDITOR,
         kind: "cross_pool",
         reason: "Shares its fact with a Daily item.",
-      };
+      } as const;
       const checked = {
         predicted: { p: 0.6, spread: 0.3, estimator: "v0" },
         verification: { checks: [] },

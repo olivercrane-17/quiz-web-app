@@ -374,7 +374,8 @@ describe("item schemas", () => {
             estimator: "v0",
           },
           verification: { checks: [] },
-          retired: { ...RETIRED, ...patch },
+          // A wrong shape on purpose: the schema must refuse it.
+          retired: { ...RETIRED, ...patch } as unknown as typeof RETIRED,
         }),
       );
       expect(messages(result).map((m) => m.split(":")[0])).toEqual([path]);
@@ -382,9 +383,10 @@ describe("item schemas", () => {
   });
 
   it("keeps cross-pool judgments on Daily items only, one per pair, naming a practice item or a room question (CNT-2b)", () => {
+    // Shapes the schema may refuse, typed loosely on purpose.
     const verification = (crossPool: unknown) => ({
       checks: [],
-      crossPool,
+      crossPool: crossPool as (typeof JUDGMENT)[],
     });
     // A mystery or an encore holds them.
     expect(
