@@ -157,7 +157,7 @@ describe("every destination the shell draws", () => {
       "utf8",
     );
     const title = /<PagePlaceholder\s+title="([^"]+)"/.exec(source);
-    if (title !== null) shellStubs.set(href, title[1]);
+    if (title?.[1] !== undefined) shellStubs.set(href, title[1]);
   }
 
   it("R2-07 each placeholder shell a link opens has its own line too, never the general one", async () => {
