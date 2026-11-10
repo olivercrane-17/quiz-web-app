@@ -99,6 +99,29 @@ test.describe("RITE round 3: practice", () => {
     expect(line.y + line.height).toBeLessThanOrEqual(first.y);
   });
 
+  test("R3-07 from 768 px, neither the legend nor the lock-in moves the options", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await startQuickPlay(page);
+    const top = async () => {
+      const box = await options(page).first().boundingBox();
+      const scrolled = await page.evaluate(() => window.scrollY);
+      return (box?.y ?? Number.NaN) + scrolled;
+    };
+    const before = await top();
+    await page.keyboard.press("Tab");
+    await expect(legend(page)).toBeVisible();
+    expect(await top()).toBeCloseTo(before, 0);
+    await page.keyboard.press("a");
+    await expect(options(page).first()).toHaveAttribute(
+      "data-state",
+      /^(locked|correct|your-answer)$/,
+    );
+    await expect(legend(page)).toHaveCount(0);
+    expect(await top()).toBeCloseTo(before, 0);
+  });
+
   test.describe("on a phone at 200% text", () => {
     test.use({ viewport: { width: 390, height: 844 } });
 

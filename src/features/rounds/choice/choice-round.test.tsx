@@ -617,7 +617,7 @@ describe("ChoiceRound", () => {
       expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
     });
 
-    it("R3-07 holds the legend's line above the options for the whole round, so neither the first key nor the lock-in moves them", async () => {
+    it("R3-07 holds the legend's line above the options, so the first key never moves them, nor the lock-in from 768 px", async () => {
       const { user } = setup();
       const list = screen.getByRole("list");
       const line = keyLine();
@@ -627,15 +627,20 @@ describe("ChoiceRound", () => {
       expect(line).toHaveAttribute("aria-hidden", "true");
       expect(line?.className).toContain("invisible");
       expect(line?.className).toContain("min-h-5");
+      expect(line?.className).not.toContain("hidden ");
+      expect(line?.className).not.toContain("max-md:hidden");
       await tabToOptions(user);
       expect(keyLine()).toBe(line);
       expect(line).not.toHaveAttribute("aria-hidden");
       expect(line?.className).not.toContain("invisible");
       await user.keyboard("c");
-      // The answer is in: the words go, the line stays.
+      // The answer is in: the words go, the line stays from 768 px. On a
+      // phone it goes with the thumb-zone spacer, as the options close up
+      // under the stem (R1-21).
       expect(keyLine()).toBe(line);
       expect(line).toHaveAttribute("aria-hidden", "true");
       expect(line?.className).toContain("invisible");
+      expect(line?.className).toContain("max-md:hidden");
       wait(SHEET_AFTER_MS);
       expect(keyLine()).toBe(line);
     });

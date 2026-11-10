@@ -604,9 +604,9 @@ function ChoiceRoundView({
         </div>
         {/* R3-07: the legend sits above the options, so at 200% text it
             shows before them rather than below the screen's edge. Its line
-            is held for the whole round while shortcuts are on, so neither
-            its first showing nor the lock-in moves the options (PRD §3.0.3,
-            §25); only its text appears and goes. With the line, the
+            is held while shortcuts are on, so its first showing never moves
+            the options (PRD §3.0.3, §25), and from 768 px neither does the
+            lock-in; only its text appears and goes. With the line, the
             options' anchor at the foot of the thumb zone moves up to it. */}
         {settings.shortcuts ? (
           <p
@@ -614,8 +614,13 @@ function ChoiceRoundView({
             data-keys-legend={legendShown ? "" : undefined}
             aria-hidden={legendShown ? undefined : true}
             className={cx(
+              // Half the round's gap on either side, so it reads with the
+              // options. Once the answer locks on a phone, the options close
+              // up under the stem anyway (R1-21), and the empty line goes
+              // with the spacer, leaving no band between them; from 768 px,
+              // where nothing else moves at the lock, it stays held.
               "-mb-2 min-h-5 text-sm font-semibold text-muted-foreground",
-              !settled && "mt-auto md:mt-0",
+              settled ? "-mt-2 max-md:hidden" : "mt-auto md:-mt-2",
               !legendShown && "invisible",
             )}
           >
