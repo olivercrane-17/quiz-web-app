@@ -206,9 +206,9 @@ describe("clue 4's keys from where focus lands (D28, R3-05)", () => {
   it("R3-05 while the options show, the run machine's clue focus lands on their group, not the heading", async () => {
     const { user } = play();
     // Before the options, the clue's heading is the target.
-    expect(
-      document.querySelector('[data-focus-target="clue_heading"]'),
-    ).toBe(screen.getByRole("heading", { level: 2 }));
+    expect(document.querySelector('[data-focus-target="clue_heading"]')).toBe(
+      screen.getByRole("heading", { level: 2 }),
+    );
     await toClue4(user);
     const targets = document.querySelectorAll(
       '[data-focus-target="clue_heading"]',

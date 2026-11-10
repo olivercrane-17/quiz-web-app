@@ -238,8 +238,7 @@ export function MysteryOptions(props: MysteryOptionsProps) {
   const marked =
     chosen !== null &&
     options.some(
-      (option) =>
-        option.index === chosen && stateOf(option, props) === "idle",
+      (option) => option.index === chosen && stateOf(option, props) === "idle",
     )
       ? chosen
       : null;

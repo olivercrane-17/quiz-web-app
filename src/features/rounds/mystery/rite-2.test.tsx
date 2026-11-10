@@ -116,8 +116,7 @@ function withOptions(
   };
 }
 
-const optionButtons = () =>
-  within(optionsGroup()).getAllByRole("button");
+const optionButtons = () => within(optionsGroup()).getAllByRole("button");
 const option = (position: number) => {
   const button = optionButtons()[position];
   if (button === undefined) throw new Error(`no option ${String(position)}`);

@@ -10,12 +10,14 @@
  * outside the kicker's box, which clips it: no line starts or ends on a
  * lone dot (R1-33).
  *
- * Screen readers hear commas instead, with no stray separators (R3-09): the
- * comma ends the part before it, inside that part's box, because each part
- * is a flex item and assistive tech puts a space between items, so a comma
- * that opened the next part read "Mystery 1 of 3 , Easy". The dot is drawn
- * as generated content with empty alternative text (`content: "·" / ""`),
- * so it is in no accessible name and in no copied or read-aloud text.
+ * Screen readers hear the parts joined by commas, as one string, "Mystery 1
+ * of 3, Easy", with no stray separators (R3-09). The drawn parts are hidden
+ * from them: each is a flex item, and assistive tech puts a space at every
+ * block-level box (a flex item, or a visually hidden span, which is
+ * absolutely positioned), so commas placed among the parts read "Mystery 1
+ * of 3 , Easy" whichever part held them. The dot is drawn as generated
+ * content with empty alternative text (`content: "·" / ""`), so it is in no
+ * copied or read-aloud text either.
  */
 import type { ReactNode } from "react";
 
@@ -61,28 +63,23 @@ export function Pips({ difficulty }: { difficulty: DifficultyBand }) {
   );
 }
 
-/** The comma screen readers hear after a part that has another after it. */
-function Comma({ shown }: { shown: boolean }) {
-  return shown ? <span className="sr-only">,</span> : null;
-}
-
-/**
- * One part of the kicker after the first, with its dot in the gap before
- * it. `more` says another part follows, so this one ends on a comma.
- */
-function Part({ children, more }: { children: ReactNode; more: boolean }) {
+/** One drawn part of the kicker after the first, with its dot in the gap before it. */
+function Part({ children }: { children: ReactNode }) {
   return (
     // A part that wraps inside itself starts its own line, at the box's edge.
-    <span data-kicker-part="" className="relative min-w-0">
+    <span aria-hidden="true" data-kicker-part="" className="relative min-w-0">
       <span
-        aria-hidden="true"
         data-kicker-dot=""
         className="absolute top-0 right-full mr-[0.42em] before:content-['·'_/_'']"
       />
       {children}
-      <Comma shown={more} />
     </span>
   );
+}
+
+/** What the kicker says to assistive tech: its parts, joined by commas (R3-09). */
+export function kickerText(parts: readonly string[]): string {
+  return parts.join(", ");
 }
 
 export function RoundKicker({
@@ -95,21 +92,11 @@ export function RoundKicker({
   const category = categoryName(meta);
   const typeLine =
     meta.answerType === null ? null : answerWords(meta.answerType).line;
-  const rest: ReactNode[] = withCategory
+  const words: string[] = withCategory
     ? [category, typeLine].filter((part) => part !== null)
     : meta.difficulty === null
       ? []
-      : [
-          <span
-            key="difficulty"
-            className="inline-flex items-center gap-1.5 whitespace-nowrap"
-          >
-            <span className={TONE.ink2}>
-              <Pips difficulty={meta.difficulty} />
-            </span>
-            {MYSTERY_COPY.difficulty[meta.difficulty]}
-          </span>,
-        ];
+      : [MYSTERY_COPY.difficulty[meta.difficulty]];
   return (
     <p
       data-kicker=""
@@ -119,15 +106,24 @@ export function RoundKicker({
         TONE.ink3,
       )}
     >
-      <span className="min-w-0">
-        {roundLabel(meta)}
-        <Comma shown={rest.length > 0} />
+      <span className="sr-only">
+        {kickerText([roundLabel(meta), ...words])}
       </span>
-      {rest.map((part, i) => (
-        <Part key={i} more={i < rest.length - 1}>
-          {part}
+      <span aria-hidden="true" className="min-w-0">
+        {roundLabel(meta)}
+      </span>
+      {withCategory || meta.difficulty === null ? (
+        words.map((word) => <Part key={word}>{word}</Part>)
+      ) : (
+        <Part>
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+            <span className={TONE.ink2}>
+              <Pips difficulty={meta.difficulty} />
+            </span>
+            {MYSTERY_COPY.difficulty[meta.difficulty]}
+          </span>
         </Part>
-      ))}
+      )}
     </p>
   );
 }

@@ -1449,9 +1449,7 @@ describe("MysteryRound after RITE round 1", () => {
     // Dee pressed 4 for "four bridges" and locked in option D, 15.
     const numbers = lastClue(["2", "4", "9", "15"]);
     const first = renderWithUser(<MysteryRound {...numbers} />);
-    const numberOptions = within(
-      optionsGroup(),
-    ).getAllByRole("button");
+    const numberOptions = within(optionsGroup()).getAllByRole("button");
     numberOptions[0]?.focus();
     await first.user.keyboard("4");
     expect(numberOptions[0]).toHaveFocus();
@@ -1469,9 +1467,7 @@ describe("MysteryRound after RITE round 1", () => {
       kind: "pick",
       option: 1,
     });
-    expect(
-      optionsGroup(),
-    ).toHaveAccessibleDescription(
+    expect(optionsGroup()).toHaveAccessibleDescription(
       `${LAST_LEAD} Keys A to D choose. Enter locks in.`,
     );
     // Each option names its own key, and no digit while digits don't pick.
@@ -1487,9 +1483,7 @@ describe("MysteryRound after RITE round 1", () => {
       "Mira Tolland",
     ]);
     const second = renderWithUser(<MysteryRound {...names} />);
-    const nameOptions = within(
-      optionsGroup(),
-    ).getAllByRole("button");
+    const nameOptions = within(optionsGroup()).getAllByRole("button");
     nameOptions[0]?.focus();
     // "3" chooses C, and "C", the same option's letter, locks it in.
     await second.user.keyboard("3");
@@ -1502,9 +1496,7 @@ describe("MysteryRound after RITE round 1", () => {
       kind: "pick",
       option: 2,
     });
-    expect(
-      optionsGroup(),
-    ).toHaveAccessibleDescription(
+    expect(optionsGroup()).toHaveAccessibleDescription(
       `${LAST_LEAD} Keys A to D choose. Enter locks in.`,
     );
     // One key hint per option, the badge's letter, with no key cap drawn
@@ -1730,7 +1722,8 @@ describe("MysteryRound after RITE round 1", () => {
     const kicker = screen.getByText("Mystery 2 of 3").parentElement;
     expect(kicker?.className).toMatch(/\boverflow-hidden\b/);
     const dot = kicker?.querySelector("[data-kicker-dot]");
-    expect(dot).toHaveAttribute("aria-hidden", "true");
+    // Drawn only: screen readers hear the kicker's one spoken string (R3-09).
+    expect(dot?.closest('[aria-hidden="true"]')).not.toBeNull();
     expect(dot?.className).toMatch(/\babsolute\b/);
     expect(dot?.className).toMatch(/\bright-full\b/);
   });
