@@ -78,13 +78,16 @@ import {
 import { rememberFinished } from "../model/handoff";
 import { openRoundNumber } from "../model/labels";
 import { HeaderStatus } from "./header-status";
-import { HowToPlaySheet } from "./how-to-play-sheet";
+import type { HowToPlaySheet } from "./how-to-play-sheet";
 import { leaveWords, showToastAfterLeaving } from "./leave-toast";
 import { MoreMenu, type MoreMenuItem } from "./more-menu";
 import { RoundArea, screenTitle } from "./round-area";
 import { Stopwatch } from "./stopwatch";
 
 const COPY = DAILY_SCREEN_COPY;
+/** How long after the Daily mounts How to play's chunk is fetched, clear of the start's own requests. */
+export const HOW_TO_PLAY_WARM_MS = 1_500;
+
 /** Where the Daily lives: Leave's toast waits until the address leaves it. */
 const DAILY_PATH = "/daily";
 
@@ -295,6 +298,28 @@ export function DailyScreen() {
   const stopwatchShown = useStopwatchShown();
   const [menu, setMenu] = useState<MenuState | null>(null);
   const [howToPlay, setHowToPlay] = useState(false);
+  /**
+   * How to play's sheet, from a chunk of its own: the Daily's first paint
+   * needs neither its words nor the modal sheet's code (§10.9, R4's bundle
+   * work). It loads once the Daily has settled, well before the More menu
+   * can ask for it, and again on asking if that load failed.
+   */
+  const [HowTo, setHowTo] = useState<typeof HowToPlaySheet | null>(null);
+  const loadHowTo = useCallback(() => {
+    void import("./how-to-play-sheet")
+      .then((sheet) => {
+        setHowTo(() => sheet.HowToPlaySheet);
+      })
+      .catch(() => {
+        // Asked for again when How to play is pressed.
+      });
+  }, []);
+  useEffect(() => {
+    const timer = setTimeout(loadHowTo, HOW_TO_PLAY_WARM_MS);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [loadHowTo]);
   const opener = useRef<HTMLElement | null>(null);
   const moreRef = useRef<HTMLButtonElement>(null);
   const backToRound = useRef(false);
@@ -373,6 +398,7 @@ export function DailyScreen() {
   const showHowToPlay = () => {
     setMenu(null);
     backToRound.current = true;
+    if (HowTo === null) loadHowTo();
     setHowToPlay(true);
     track("how_to_play_open", {
       round: openRoundNumber(run),
@@ -465,12 +491,14 @@ export function DailyScreen() {
           </>
         )}
       </div>
-      <HowToPlaySheet
-        open={howToPlay}
-        onClose={() => {
-          setHowToPlay(false);
-        }}
-      />
+      {HowTo === null ? null : (
+        <HowTo
+          open={howToPlay}
+          onClose={() => {
+            setHowToPlay(false);
+          }}
+        />
+      )}
     </PlayFrame>
   );
 }

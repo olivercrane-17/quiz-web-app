@@ -115,7 +115,7 @@ import { cx } from "@/ui/cx";
 import { focusWithRing } from "@/ui/focus-ring";
 import { CheckIcon, CrossIcon } from "@/ui/icons";
 import { useKeyLegend } from "@/ui/key-legend";
-import { Sheet } from "@/ui/sheet";
+import { InlineSheet } from "@/ui/sheet-inline";
 
 import type { PlaySettings, RoundComponentProps } from "../contracts";
 import { keepTopBelowHeader } from "../viewport";
@@ -686,9 +686,9 @@ function ChoiceRoundView({
         <p className="text-base font-semibold">{CHOICE_COPY.error}</p>
       ) : null}
 
-      <Sheet
+      {/* The inline sheet by itself: practice loads no dialog code. */}
+      <InlineSheet
         open={sheetOpen}
-        modal={false}
         compact={compact}
         titleAs="h2"
         // At the bottom of the round on phones, where the answers were.
@@ -782,7 +782,7 @@ function ChoiceRoundView({
             ) : null}
           </div>
         )}
-      </Sheet>
+      </InlineSheet>
     </div>
   );
 }
